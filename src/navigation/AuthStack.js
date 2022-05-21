@@ -4,7 +4,7 @@ import React from 'react'
 const authStack = () => {
   return (
     <View>
-      <Text>authStack sdj</Text>
+      <Text>authStack jkhjkhj</Text>
     </View>
   )
 }
