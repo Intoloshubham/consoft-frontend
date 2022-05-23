@@ -16,7 +16,7 @@ const HomeScreen = () => {
       <Text onPress={onSignInPressed} > Sign In  
       fdgdf saurabh </Text>
     </View>
-  )
+  ) 
 }
 
 export default HomeScreen
