@@ -13,7 +13,7 @@ const HomeScreen = () => {
   return (
     <View>
       <Text style={{fontSize:24, alignSelf:'center'}}>index home screen</Text>
-      <Text onPress={onSignInPressed} > Sign In  again gfdg
+      <Text onPress={onSignInPressed} > Sign In  agai dsfs   fdgdfg n gfdg
       fdgdf </Text>
     </View>
   )
