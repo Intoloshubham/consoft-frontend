@@ -21,14 +21,31 @@ const SignUpScreen = () => {
 
     const onRegisterPressed = (data) => {
         //validate user
-        // navigation.navigate('Home');
-        axios.post('http://localhost:8000/api/register', data)
-            .then((res) => {
-                console.log(res.data)
-            }).catch((error) => {
-                console.log(error)
-            });
-        // console.log(data);
+        axios.post('http://192.168.1.99:8000/api/register', data)
+        .then((res) => {
+            navigation.navigate('SignIn');
+              // console.log(res.data)
+          }).catch((error) => {
+              console.log(error)
+          });
+
+
+        // fetch('http://192.168.1.99:8000/api/register', {
+        //   method: 'POST', // or 'PUT'
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify(data),
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //   console.log('Success:', data);
+        // })
+        // .catch((error) => {
+        //   console.error('Error:', error);
+        // });
+
+        console.log(data);
     };
     const onSignInPress = () => {
         navigation.navigate('SignIn');
