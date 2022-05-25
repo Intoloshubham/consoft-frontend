@@ -32,8 +32,18 @@ const inprogress = require("../assets/icons/inprogress.png");
 const done = require("../assets/icons/done.png");
 const todo = require("../assets/icons/todo.png");
 
+const account = require('../assets/icons/account.png');
+const report = require('../assets/icons/report.png');
+const tasks = require('../assets/icons/tasks.png');
+const dashboard = require('../assets/icons/dashboard.png');
+const tracker = require('../assets/icons/tracker.png');
 
 export default {
+  account,
+  report,
+  tasks,
+  dashboard,
+  tracker,
   coupon,
   cross,
   cart,
