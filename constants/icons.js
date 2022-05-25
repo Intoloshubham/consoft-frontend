@@ -27,8 +27,18 @@ const wallet = require('../assets/icons/wallet.png');
 const help = require('../assets/icons/help.png');
 const cancel = require('../assets/icons/cancel.png');
 const arr_down = require('../assets/icons/arr_down.png');
+const account = require('../assets/icons/account.png');
+const report = require('../assets/icons/report.png');
+const tasks = require('../assets/icons/tasks.png');
+const dashboard = require('../assets/icons/dashboard.png');
+const tracker = require('../assets/icons/tracker.png');
 
 export default {
+  account,
+  report,
+  tasks,
+  dashboard,
+  tracker,
   coupon,
   cross,
   cart,
