@@ -4,6 +4,13 @@ const myProfile = {
     address: "No. 88, Jln Padungan, Kuching"
 }
 
+const reports=[
+    { id: 1, name: 'quality' },
+    { id: 2, name: 'quantity' },
+    { id: 3, name: 'stock keeper' },
+    { id: 4, name: 'other' }    
+]
+
 const categories = [
     {
         id: 1,
@@ -117,4 +124,5 @@ export default {
     myProfile,
     categories,
     menu,
+    reports
 }
