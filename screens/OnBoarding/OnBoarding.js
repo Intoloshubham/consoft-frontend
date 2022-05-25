@@ -138,7 +138,7 @@ const OnBoarding = ({navigation}) => {
               marginVertical: SIZES.padding,
             }}>
             <TextButton
-              label="Let's Get Started "
+              label="Let's Get Started With ConSoft"
               buttonContainerStyle={{
                 height: 45,
                 borderRadius: SIZES.radius,
