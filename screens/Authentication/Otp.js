@@ -7,7 +7,7 @@ import {
 const Otp = () => {
     return (
         <View>
-            <Text>Otps</Text>
+            <Text>Otp</Text>
         </View>
     )
 }
