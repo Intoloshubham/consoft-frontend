@@ -93,9 +93,7 @@ const ProjectTeam = () => {
             alignItems: 'center',
             paddingVertical: SIZES.base,
           }}
-          onPress={() => {
-            index == item.id ? toggleExpanded : null;
-          }}>
+          onPress={toggleExpanded}>
           <View style={{flex: 1}}>
             <Text
               style={{
