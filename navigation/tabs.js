@@ -3,7 +3,7 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
-import {Home, Account, Tracker, Reports, Tasks} from '../screens';
+import {Home, Account, Tracker, Reports, Tasks} from '../screens/admin_screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +18,7 @@ const TabBarCustomButton = ({children, onPress}) => {
       }}
       onPress={onPress}>
       <LinearGradient
-        colors={[COLORS.blue, COLORS.blue]}
+        colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
         style={{
           width: 60,
           height: 60,
@@ -45,9 +45,27 @@ const Tabs = () => {
           borderTopColor: 'transparent',
           height: 100,
         },
+        headerStyle: {
+          // height: 60,
+        },
+        headerTitleAlign: 'left',
+        headerRight: () => (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginHorizontal: SIZES.radius,
+            }}>
+            <Image
+              source={images.cons_logo}
+              resizeMode="contain"
+              style={{height: 80, width: 100}}
+            />
+          </View>
+        ),
       }}>
       <Tab.Screen
-        name="Dashboard"
+        name="Dahsboard"
         component={Home}
         options={{
           tabBarIcon: ({focused}) => (
@@ -56,14 +74,14 @@ const Tabs = () => {
                 source={icons.dashboard}
                 resizeMode="contain"
                 style={{
-                  height: 20,
-                  width: 20,
-                  tintColor: focused ? COLORS.primary : COLORS.black,
+                  height: 18,
+                  width: 18,
+                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.primary : COLORS.black,
+                  color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Dashboard
@@ -81,14 +99,14 @@ const Tabs = () => {
               <Image
                 source={icons.tasks}
                 style={{
-                  height: 20,
-                  width: 20,
-                  tintColor: focused ? COLORS.primary : COLORS.black,
+                  height: 18,
+                  width: 18,
+                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.primary : COLORS.black,
+                  color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Tasks
@@ -124,14 +142,14 @@ const Tabs = () => {
               <Image
                 source={icons.tracker}
                 style={{
-                  height: 20,
-                  width: 20,
-                  tintColor: focused ? COLORS.primary : COLORS.black,
+                  height: 18,
+                  width: 18,
+                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.primary : COLORS.black,
+                  color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Tracker
@@ -149,14 +167,14 @@ const Tabs = () => {
               <Image
                 source={icons.account}
                 style={{
-                  height: 20,
-                  width: 20,
-                  tintColor: focused ? COLORS.primary : COLORS.black,
+                  height: 18,
+                  width: 18,
+                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.primary : COLORS.black,
+                  color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Account
