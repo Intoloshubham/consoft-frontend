@@ -1,15 +1,29 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
+import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 
 const Account = () => {
+  function renderCreateUser() {
+    return (
+      <View
+        style={{
+          height: 100,
+          backgroundColor: COLORS.lightblue_800,
+          borderRadius: SIZES.radius,
+          paddingHorizontal: SIZES.padding,
+          paddingVertical: SIZES.padding,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}></View>
+    );
+  }
   return (
     <View
       style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        marginHorizontal: SIZES.padding,
+        marginVertical: SIZES.padding,
       }}>
-      <Text>Account</Text>
+      {renderCreateUser()}
     </View>
   );
 };
