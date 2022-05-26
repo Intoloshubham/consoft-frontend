@@ -20,19 +20,13 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'Home'}>
+        initialRouteName={'OnBoarding'}>
         <Stack.Screen name="Home" component={Tabs} />
-
         <Stack.Screen name="OnBoarding" component={OnBoarding} />
-
         <Stack.Screen name="SignIn" component={SignIn} />
-
         <Stack.Screen name="SignUp" component={SignUp} />
-
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-
         <Stack.Screen name="Otp" component={Otp} />
-
         {/* <Stack.Screen name="Home" component={Home} /> */}
       </Stack.Navigator>
     </NavigationContainer>
