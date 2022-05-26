@@ -1,15 +1,20 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, LogBox} from 'react-native';
+import {FONTS, SIZES, COLORS} from '../../../constants';
+import ProjectsBanner from './ProjectsBanner';
 
 const Home = () => {
+  React.useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  });
+
   return (
     <View
       style={{
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: COLORS.lightblue_50,
       }}>
-      <Text>Admin Dashboard</Text>
+      <ProjectsBanner />
     </View>
   );
 };
