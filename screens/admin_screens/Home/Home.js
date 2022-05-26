@@ -3,7 +3,12 @@ import {View, Text} from 'react-native';
 
 const Home = () => {
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
       <Text>Admin Dashboard</Text>
     </View>
   );
