@@ -17,7 +17,7 @@ const HeaderBar = ({right}) => {
           style={{flexDirection: 'row', alignItems: 'center'}}
           onPress={() => navigation.goBack()}>
           <Image
-            source={icons.back_icon}
+            source={icons.back}
             resizeMode="contain"
             style={{
               height: 20,
