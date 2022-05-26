@@ -28,6 +28,36 @@ const categories = [
         icon: require("../assets/icons/rice.png")
     }
 ]
+const Active_tasks = [
+    {
+        id: 1,
+        name: "Task 1",
+        icon: require("../assets/icons/active_task.png")
+    },
+    {
+        id: 2,
+        name: "Task 2",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 3,
+        name: "task 3",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 4,
+        name: "task 4",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 5,
+        name: "task 5",
+        icon: require("../assets/icons/active_task.png")
+    }
+]
 
 const hamburger = {
     id: 1,
@@ -124,5 +154,6 @@ export default {
     myProfile,
     categories,
     menu,
-    reports
+    reports,
+    Active_tasks
 }
