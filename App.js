@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 
-import {OnBoarding, SignIn, SignUp, ForgotPassword, Otp, Home} from './screens';
+import {OnBoarding, SignUp, SignIn, Otp, ForgotPassword} from './screens';
 
 import Tabs from './navigation/tabs';
 
@@ -32,8 +32,6 @@ const App = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
 
         <Stack.Screen name="Otp" component={Otp} />
-
-        {/* <Stack.Screen name="Home" component={Home} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
