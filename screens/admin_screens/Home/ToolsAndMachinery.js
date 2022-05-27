@@ -11,6 +11,7 @@ const ToolsAndMachinery = () => {
         backgroundColor: COLORS.lightblue_50,
       }}>
       <HeaderBar right={true} />
+      <Text> TAM</Text>
     </View>
   );
 };

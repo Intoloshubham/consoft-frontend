@@ -16,6 +16,10 @@ import ProjectTeam from './Home/ProjectTeam';
 import ProjectReports from './Home/ProjectReports';
 import StocksAndInventry from './Home/StocksAndInventry';
 import ToolsAndMachinery from './Home/ToolsAndMachinery';
+import ProjectProgressReview from './Home/ProjectProgressReview';
+import ProjectProgressReviewTop20 from './Home/ProjectProgressReviewTop20';
+import AssignedWorks from './Home/AssignedWorks';
+import ProjectWorksIdentifier from './Home/ProjectWorksIdentifier';
 
 export {
   Home,
@@ -35,4 +39,8 @@ export {
   ProjectReports,
   StocksAndInventry,
   ToolsAndMachinery,
+  ProjectProgressReview,
+  ProjectProgressReviewTop20,
+  AssignedWorks,
+  ProjectWorksIdentifier,
 };
