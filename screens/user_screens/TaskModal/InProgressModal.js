@@ -11,7 +11,7 @@ import {
     Image
 } from 'react-native'
 import React from 'react'
-import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../../constants';
+import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 import PieChart from 'react-native-pie-chart';
 

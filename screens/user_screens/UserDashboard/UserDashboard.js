@@ -5,7 +5,7 @@ import { FONTS, icons, SIZES } from '../../../constants'
 import LinearGradient from 'react-native-linear-gradient'
 import { dummyData } from '../../../constants'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { Todo, InProgressModal, DoneModal } from './TaskModal'
+import { Todo, InProgressModal, DoneModal } from '../TaskModal'
 import { COLORS } from '../../../constants'
 
 
@@ -15,7 +15,7 @@ import { COLORS } from '../../../constants'
 
 
 const Tasks = () => {
-  const val = "helo worl"
+
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
   const [doneModal, setdoneModal] = useState(false)
@@ -226,7 +226,8 @@ const styles = StyleSheet.create({
     marginVertical: 30
   },
   scroll: {
-    borderRadius: 15
+    borderRadius: 15,
+    marginTop:10
   },
   centeredView: {
     flex: 1,

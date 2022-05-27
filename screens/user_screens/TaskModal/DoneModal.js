@@ -2,7 +2,7 @@ import {
     View, Text, Modal, TouchableOpacity, Alert, Pressable, StyleSheet, ScrollView, FlatList, Image
 } from 'react-native'
 import React from 'react'
-import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../../constants';
+import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 import { CheckBox, Layout, Card } from '@ui-kitten/components';
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -15,22 +15,22 @@ function DoneModal({ doneModal, setdoneModal }) {
         {
             id: 1,
             name: "Task 1",
-            icon: require("../../../../assets/icons/completed.png")
+            icon: require("../../../assets/icons/completed.png")
         },
         {
             id: 2,
             name: "Task 2",
-            icon: require("../../../../assets/icons/completed.png")
+            icon: require("../../../assets/icons/completed.png")
         },
         {
             id: 3,
             name: "Task 3",
-            icon: require("../../../../assets/icons/completed.png")
+            icon: require("../../../assets/icons/completed.png")
         },
         {
             id: 4,
             name: "Task 4",
-            icon: require("../../../../assets/icons/completed.png")
+            icon: require("../../../assets/icons/completed.png")
         }
 
     ]
