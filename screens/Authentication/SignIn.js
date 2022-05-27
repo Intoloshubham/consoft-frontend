@@ -7,7 +7,7 @@ import {
   TextButton,
   TextIconButton,
 } from '../../Components';
-import {utils} from '../../utils';
+import utils from '../../utils';
 import {icons, SIZES, COLORS, FONTS} from '../../constants';
 
 const SignIn = ({navigation}) => {
@@ -114,7 +114,7 @@ const SignIn = ({navigation}) => {
             marginTop: SIZES.padding,
             borderRadius: SIZES.radius,
             backgroundColor: isEnableSignIn()
-              ? COLORS.primary
+              ? COLORS.lightblue_700
               : COLORS.transparentPrimary,
           }}
           onPress={() => navigation.replace('Otp')}

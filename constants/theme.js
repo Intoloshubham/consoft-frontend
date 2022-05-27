@@ -2,8 +2,34 @@ import {Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
 
 export const COLORS = {
+  lightblue_50: '#f0f9ff',
+  lightblue_100: '#e0f2fe',
+  lightblue_200: '#bae6fd',
+  lightblue_300: '#7dd3fc',
+  lightblue_400: '#38bdf8',
+  lightblue_500: '#0ea5e9',
+  lightblue_600: '#0284c7',
+  lightblue_700: '#0369a1',
+  lightblue_800: '#075985',
+  lightblue_900: '#0c4a6e',
+  yellow_50: '#fefce8',
+  yellow_100: '#fef9c3',
+  yellow_200: '#fef08a',
+  yellow_300: '#fde047',
+  yellow_400: '#facc15',
+  yellow_500: '#eab308',
+  yellow_600: '#ca8a04',
+  yellow_700: '#b45309',
+  yellow_800: '#92400e',
+  yellow_900: '#78350f',
+
+  success_300: '#86efac',
+  success_400: '#4ade80',
+  rose_600: '#e11d48',
+
   primary: '#FF6C44', //orange
-  transparentPrimary: 'rgba(227, 120, 75, 0.4)',
+  // transparentPrimary: 'rgba(227, 120, 75, 0.4)',
+  transparentPrimary: '#7dd3fc',
   orange: '#FFA133',
   lightOrange: '#FFA133',
   lightOrange2: '#FDDED4',

@@ -1,2 +1,2 @@
 import utils from './Utils';
-export {utils};
+export default utils;
