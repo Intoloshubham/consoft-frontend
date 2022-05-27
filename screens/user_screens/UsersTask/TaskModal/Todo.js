@@ -12,7 +12,7 @@ import {
 import React from 'react'
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
-import { icons, COLORS, SIZES,FONTS } from '../../../constants';
+import { icons, COLORS, SIZES,FONTS } from '../../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 Entypo.loadFont()
 const data =
@@ -31,7 +31,7 @@ const data =
     ]
 }
 
-function TaskModal({ taskModal, settaskModal }) {
+function Todo({ taskModal, settaskModal }) {
 
     const [perticuler, setperticuler] = React.useState('')
 
@@ -156,7 +156,7 @@ function TaskModal({ taskModal, settaskModal }) {
         </>
     )
 }
-export default TaskModal
+export default Todo
 const styles = StyleSheet.create({
     header: {
         borderWidth: 1,

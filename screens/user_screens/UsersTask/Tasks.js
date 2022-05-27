@@ -5,7 +5,7 @@ import { icons } from '../../../constants'
 import LinearGradient from 'react-native-linear-gradient'
 import { dummyData } from '../../../constants'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { TaskModal, InProgressModal, DoneModal } from '../TaskModal'
+import { Todo, InProgressModal, DoneModal } from './TaskModal'
 import { COLORS } from '../../../constants'
 
 
@@ -14,8 +14,8 @@ import { COLORS } from '../../../constants'
 // console.log(dummyData.reports);
 
 
-const HomeScreen = () => {
-  const val = "helo world"
+const Tasks = () => {
+  const val = "helo worl"
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
   const [doneModal, setdoneModal] = useState(false)
@@ -60,7 +60,7 @@ const HomeScreen = () => {
           />
           <Text style={styles.num_task}>To do</Text>
         </TouchableOpacity>
-        {taskModalnum ? (<TaskModal taskModal={taskModal} settaskModal={settaskModal} />) : null}
+        {taskModalnum ? (<Todo taskModal={taskModal} settaskModal={settaskModal} />) : null}
 
         <View><Text >5 tasks </Text></View>
         <TouchableOpacity style={styles.Intask} onPress={() => handleInProgressTask()}>
@@ -270,4 +270,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default HomeScreen
+export default Tasks
