@@ -12,7 +12,6 @@ import {
 import React from 'react'
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
-import FormInput from '../../../Components/FormInput'
 import { icons, COLORS, SIZES,FONTS } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 Entypo.loadFont()
