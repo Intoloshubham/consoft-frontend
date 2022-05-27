@@ -154,7 +154,7 @@ const CreateProjects = () => {
             marginTop: SIZES.padding,
             borderRadius: SIZES.radius,
             backgroundColor: isEnableSubmit()
-              ? COLORS.button_blue
+              ? COLORS.lightblue_700
               : COLORS.lightblue_100,
           }}
           onPress={OnSubmit}
