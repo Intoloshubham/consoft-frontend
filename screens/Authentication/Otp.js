@@ -91,7 +91,7 @@ const Otp = ({navigation}) => {
             height: 55,
             alignItems: 'center',
             borderRadius: SIZES.radius,
-            backgroundColor: COLORS.primary,
+            backgroundColor: COLORS.lightblue_700,
           }}
           onPress={() => navigation.replace('Home')}
         />

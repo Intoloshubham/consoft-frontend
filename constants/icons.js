@@ -37,6 +37,15 @@ const report = require('../assets/icons/report.png');
 const tasks = require('../assets/icons/tasks.png');
 const dashboard = require('../assets/icons/dashboard.png');
 const tracker = require('../assets/icons/tracker.png');
+const right_arr = require('../assets/icons/right_arr.png');
+const back = require('../assets/icons/back.png');
+//pd
+const stock = require('../assets/icons/pd/stock.png');
+const report1 = require('../assets/icons/pd/report.png');
+const contr = require('../assets/icons/pd/contr.png');
+const machine = require('../assets/icons/pd/machine.png');
+const p_team = require('../assets/icons/pd/p_team.png');
+const time_seh = require('../assets/icons/pd/time_seh.png');
 
 export default {
   account,
@@ -76,5 +85,13 @@ export default {
   task,
   inprogress,
   done,
-  todo
+  todo,
+  right_arr,
+  back,
+  stock,
+  report1,
+  time_seh,
+  machine,
+  p_team,
+  contr,
 };
