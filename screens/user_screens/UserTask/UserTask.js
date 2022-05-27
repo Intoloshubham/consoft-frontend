@@ -4,7 +4,7 @@ import {View, Text} from 'react-native';
 function UserTask() {
   return (
     <div>
-      <Text>User Task</Text>
+      <Text>User Tasks</Text>
     </div>
   )
 }
