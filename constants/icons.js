@@ -39,7 +39,7 @@ const dashboard = require('../assets/icons/dashboard.png');
 const tracker = require('../assets/icons/tracker.png');
 const right_arr = require('../assets/icons/right_arr.png');
 const back = require('../assets/icons/back.png');
-const comp_tasks = require('../assets/icons/completed.png');
+const completed = require('../assets/icons/completed.png');
 //pd
 const stock = require('../assets/icons/pd/stock.png');
 const report1 = require('../assets/icons/pd/report.png');
@@ -102,7 +102,7 @@ export default {
   machine,
   p_team,
   contr,
-  comp_tasks,
+  completed,
   mall,
   apartment,
   garage,

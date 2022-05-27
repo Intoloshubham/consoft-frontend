@@ -101,13 +101,13 @@ const Tasks = () => {
                   backgroundColor="#3d5875" >
                   {
                     (fill) => (
-                      <Text>
+                      <Text style={{color:COLORS.blue}} >
                         10%
                       </Text>
                     )
                   }
                 </AnimatedCircularProgress>
-                <Text>8 hours </Text>
+                <Text style={{color:COLORS.blue}}>8 hours </Text>
               </View>
             </TouchableOpacity>
           ))}

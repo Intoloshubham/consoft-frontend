@@ -5,10 +5,10 @@ const myProfile = {
 }
 
 const reports=[
-    { id: 1, name: 'quality' },
-    { id: 2, name: 'quantity' },
-    { id: 3, name: 'stock keeper' },
-    { id: 4, name: 'other' }    
+    { id: 1, name: 'Quality' },
+    { id: 2, name: 'Quantity' },
+    { id: 3, name: 'Stock keeper' },
+    { id: 4, name: 'Other' }    
 ]
 
 const categories = [
