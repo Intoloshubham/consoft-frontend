@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, ScrollView, Modal, Pressable, TouchableHighlight, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { icons } from '../../../constants'
+import { FONTS, icons, SIZES } from '../../../constants'
 import LinearGradient from 'react-native-linear-gradient'
 import { dummyData } from '../../../constants'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -62,7 +62,7 @@ const Tasks = () => {
         </TouchableOpacity>
         {taskModalnum ? (<Todo taskModal={taskModal} settaskModal={settaskModal} />) : null}
 
-        <View><Text >5 tasks </Text></View>
+        <View><Text style={styles.tag} >5 tasks </Text></View>
         <TouchableOpacity style={styles.Intask} onPress={() => handleInProgressTask()}>
           <Image
             style={styles.icon1}
@@ -71,7 +71,7 @@ const Tasks = () => {
           <Text style={styles.num_task}>In Progress</Text>
         </TouchableOpacity>
         {inProgressModalnum ? (<InProgressModal inProgressModal={inProgressModal} setinProgressModal={setinProgressModal} />) : null}
-        <Text >2 tasks in Progress</Text>
+        <Text  style={styles.tag}>2 tasks in Progress</Text>
         <TouchableOpacity style={styles.Intask} onPress={() => handleDoneTask()}>
           <Image
             style={styles.icon1}
@@ -80,7 +80,7 @@ const Tasks = () => {
           <Text style={styles.num_task}>Done</Text>
         </TouchableOpacity>
         {doneModalnum ? (<DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />) : null}
-        <Text>3 tasks  Done</Text>
+        <Text style={styles.tag}>3 tasks  Done</Text>
       </View>
       <View style={styles.report_section_title}>
         <Text style={styles.avai_text}>Available Reports</Text>
@@ -89,8 +89,8 @@ const Tasks = () => {
       <ScrollView style={styles.scroll}>
         <View style={styles.report_section}>
           {dummyData.reports.map((item, index) => (
-            <View style={styles.eng} key={index}>
-              <Text style={{ textAlign: "center" }} >{item.name}</Text>
+            <TouchableOpacity style={styles.eng} key={index}>
+              <Text style={{ textAlign: "center",color:COLORS.black,fontWeight:"bold",letterSpacing:1 }} >{item.name}</Text>
               <View style={styles.circular_progress}>
                 <AnimatedCircularProgress
                   padding={2}
@@ -109,7 +109,7 @@ const Tasks = () => {
                 </AnimatedCircularProgress>
                 <Text>8 hours </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
     marginTop: 4,
     padding: 5,
     paddingHorizontal: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    color:COLORS.black
 
   },
   icon1: {
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 10,
     padding: 12,
-    backgroundColor: COLORS.white2,
+    backgroundColor: "#E4E9F2",
     justifyContent: "center",
     elevation: 3
   },
@@ -182,27 +183,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     marginHorizontal: 50,
-    fontSize: 15
+    fontSize: 15,
+    color:COLORS.black
   },
   report_section_title: {
-    margin: 10,
+    margin: SIZES.h5,
     padding: 5,
     width: 350,
-    marginTop: 8,
-    marginBottom: 6,
-    marginLeft: 20,
+    marginTop: SIZES.body3,
+    marginBottom: -SIZES.h5,
+    marginLeft: SIZES.h2,
   },
   report_section: {
-    backgroundColor: COLORS.gray1, 
+    backgroundColor: "#E4E9F2", 
     elevation: 1,
     flexWrap: "wrap",
     margin: 10,
-    marginLeft: 25,
-    marginRight: 25,
-    borderTopLeftRadius:10,
-    borderTopRightRadius:10,
-    borderBottomLeftRadius:10,
-    padding: 12,    
+    marginLeft: SIZES.padding,
+    marginRight: SIZES.padding,
+    borderTopLeftRadius:SIZES.h5,
+    borderTopRightRadius:SIZES.h5,
+    borderBottomLeftRadius:SIZES.h5,
+    padding: SIZES.h5,    
     flexDirection: "row",
     justifyContent: "flex-start"
   },
@@ -266,6 +268,11 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
+  },
+  tag:{
+    ...FONTS.h5,
+    fontWeight:"bold",
+    color:COLORS.blue
   }
 
 })
