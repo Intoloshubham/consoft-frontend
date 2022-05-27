@@ -21,7 +21,7 @@ const Dropdown = ({data, defaultButtonText}) => {
         buttonStyle={{
           width: '100%',
           height: 45,
-          backgroundColor: COLORS.lightGray2,
+          backgroundColor: COLORS.lightGray1,
           // paddingHorizontal: SIZES.radius*1.7,
           paddingLeft: SIZES.padding,
           paddingRight: SIZES.radius * 1.7,

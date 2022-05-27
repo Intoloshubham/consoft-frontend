@@ -9,18 +9,57 @@ import {
 } from '../../Components';
 import utils from '../../utils';
 import {icons, SIZES, COLORS, FONTS} from '../../constants';
+import axios from 'axios';
+const url = 'http://192.168.1.99:8000/api/login';
 
 const SignIn = ({navigation}) => {
   const [mobileNo, setMobileNo] = React.useState('');
-  // const [password, setPassword] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
-  // const [showPass, setShowPass] = React.useState(false);
+  const [showPass, setShowPass] = React.useState(false);
 
   const [saveMe, setSaveMe] = React.useState(false);
 
   function isEnableSignIn() {
     return mobileNo != '' && mobileNoError == '';
   }
+
+  const onSubmit = () => {
+    const data = {
+      mobile: mobileNo,
+      password: password,
+    };
+    console.log(data);
+    // axios
+    //   .post(url, data)
+    //   .then(res => {
+    //     console.log(res.data);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.role == 'Administrator' || data.role == 'Editor') {
+          navigation.navigate('Home');
+        } else if (data.role == 'User') {
+          navigation.navigate('UserDashboard');
+        } else {
+          console.log(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
   return (
     <AuthLayout
@@ -60,7 +99,7 @@ const SignIn = ({navigation}) => {
             </View>
           }
         />
-        {/* <FormInput
+        <FormInput
           placeholder="Password"
           secureTextEntry={!showPass}
           autoCompleteType="password"
@@ -84,7 +123,7 @@ const SignIn = ({navigation}) => {
               />
             </TouchableOpacity>
           }
-        /> */}
+        />
         {/* save me & forgot password  */}
         <View
           style={{
@@ -117,7 +156,7 @@ const SignIn = ({navigation}) => {
               ? COLORS.lightblue_700
               : COLORS.transparentPrimary,
           }}
-          onPress={() => navigation.replace('Otp')}
+          onPress={onSubmit}
         />
         {/* <View
           style={{
