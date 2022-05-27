@@ -14,6 +14,11 @@ import Reports from './Reports/Reports';
 import Tasks from './Tasks/Tasks';
 import Tracker from './Tracker/Tracker';
 
+
+//rahul
+import StockMangement from './Stock/StockMangement';
+
+
 export {
   OnBoarding,
   AuthLayout,
@@ -26,4 +31,5 @@ export {
   Reports,
   Tasks,
   Tracker,
+  StockMangement
 };

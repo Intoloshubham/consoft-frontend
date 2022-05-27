@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <View
       style={{
@@ -9,7 +9,7 @@ const Home = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Text>Dashboard</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('StockMangement')}><Text>Dashboard</Text></TouchableOpacity>
     </View>
   );
 };
