@@ -8,12 +8,12 @@ import {
     StyleSheet,
     Button,
     Image
-} from 'react-native'
+} from 'react-native';
 import React from 'react'
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
 import FormInput from '../../../Components/FormInput'
-import { icons, COLORS, SIZES } from '../../../constants';
+import { icons, COLORS, SIZES,FONTS } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 Entypo.loadFont()
 const data =
@@ -73,8 +73,7 @@ function TaskModal({ taskModal, settaskModal }) {
     };
 
     // decrease counter
-    const decrease = () => {
-        // console.log(e.target);
+    const decrease = () => {     
         if (count > 0) {
             setCount(count => count - 1);
         } else {
@@ -105,12 +104,12 @@ function TaskModal({ taskModal, settaskModal }) {
         return (
             <View style={styles.body_container} key={item.key}>
                 <View style={[styles.form_container,{borderRadius:10,shadowOffset:{width:0,height:1},shadowColor:"#99CCC0",shadowOpacity:1.5}]}>
-                    <View style={{ backgroundColor: "#99CCC0", flexDirection: "row", justifyContent: "space-between" }}>
+                    <View style={{ backgroundColor: COLORS.gray3, flexDirection: "row", justifyContent: "space-between" }}>
                         <Text style={{fontWeight:"bold"}} >Date: </Text>
                         <Text style={{fontWeight:"bold"}}  >Time: </Text>
                     </View>
                     <View>                     
-                        <TextInput placeholder="Particular"   style={{height:30,marginTop:12, backgroundColor: "#99CCC0",fontWeight:"bold"}} ></TextInput>                      
+                        <TextInput placeholder="Particular"   style={{height:30,marginTop:12, backgroundColor: COLORS.gray3,fontWeight:"bold"}} ></TextInput>                      
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "flex-start", marginTop: 30 }}>
                         <View>
@@ -123,9 +122,9 @@ function TaskModal({ taskModal, settaskModal }) {
                             <TouchableOpacity style={styles.plus_btn} onPress={increase} ><Text style={{color:COLORS.white,padding:3,fontSize:15,marginTop:-3,paddingHorizontal:4}}>+</Text></TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{  backgroundColor: "#99CCC0", marginTop: 50, alignItems: "center" }}>
+                    <View style={{  backgroundColor: COLORS.gray3, marginTop: 50, alignItems: "center" }}>
                         <TouchableOpacity style={styles.sub_btn} >
-                            <Text style={{color:"#000",padding:3,fontWeight:"bold"}}>Submit</Text>
+                            <Text style={[FONTS.h4,{fontWeight:"bold",color:COLORS.black}]}>Submit</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -162,7 +161,7 @@ export default TaskModal
 const styles = StyleSheet.create({
     header: {
         borderWidth: 1,
-        borderColor: "whitesmoke",
+        borderColor: COLORS.white2,
         padding: 8,
         borderRadius: 25,
         margin: 2,
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 3 },
         shadowRadius: 10,
         shadowColor: '#000000',
-        backgroundColor:"#86D9C5",
+        backgroundColor:COLORS.gray3,
         marginTop:1
   
     },
@@ -189,7 +188,7 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.padding,
         flex: 1,
         borderColor: "#B7EEE1",
-        backgroundColor:"#B7EEE1",
+        backgroundColor:COLORS.white,
         borderTopWidth:1,
         borderLeftWidth:1,
         borderRightWidth:1,
@@ -217,7 +216,7 @@ const styles = StyleSheet.create({
     sub_btn: {
         borderWidth: 1,
         borderColor: COLORS.gray2,
-        backgroundColor: COLORS.gray,
+        backgroundColor: COLORS.white,
         borderRadius: 5,
         padding:3,
         elevation: 1,
@@ -231,7 +230,7 @@ const styles = StyleSheet.create({
         padding: 10, 
         justifyContent: "center",
         borderRadius: 12,    
-        backgroundColor:"#99CCC0",   
+        backgroundColor:COLORS.gray3,   
         flexDirection: "column",    
         
         

@@ -3,9 +3,10 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { icons } from '../../constants'
 import LinearGradient from 'react-native-linear-gradient'
-import {dummyData} from '../../constants'
+import { dummyData } from '../../constants'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import {TaskModal,InProgressModal,DoneModal} from './TaskModal'
+import { TaskModal, InProgressModal, DoneModal } from './TaskModal'
+import { COLORS } from '../../constants'
 
 
 // Icons.loadFont();
@@ -22,22 +23,22 @@ const HomeScreen = () => {
   const [inProgressModalnum, setinProgressModalNum] = useState(false)
   const [doneModalnum, setdoneModalNum] = useState(false)
 
-  const handleTask = () => {   
-   settaskModalNum(true);
-   settaskModal(true);  
+  const handleTask = () => {
+    settaskModalNum(true);
+    settaskModal(true);
   }
   const handleInProgressTask = () => {
     setinProgressModalNum(true)
-    setinProgressModal(true); 
+    setinProgressModal(true);
   }
   const handleDoneTask = () => {
-    setdoneModalNum(true); 
+    setdoneModalNum(true);
     setdoneModal(true);
   }
 
 
   return (
-    <LinearGradient colors={['#aec', '#aec', '#5df']} style={styles.container}>
+    <LinearGradient colors={[COLORS.lightGray2, COLORS.lightGray2, COLORS.lightGray2]} style={styles.container}>
       <View style={styles.header}>
         <View style={styles.avai_task}>
           <Text style={styles.avai_text}>Available Tasks</Text>
@@ -59,8 +60,8 @@ const HomeScreen = () => {
           />
           <Text style={styles.num_task}>To do</Text>
         </TouchableOpacity>
-        {taskModalnum ? (<TaskModal taskModal={taskModal} settaskModal={settaskModal} />) :null}
-    
+        {taskModalnum ? (<TaskModal taskModal={taskModal} settaskModal={settaskModal} />) : null}
+
         <View><Text >5 tasks </Text></View>
         <TouchableOpacity style={styles.Intask} onPress={() => handleInProgressTask()}>
           <Image
@@ -69,7 +70,7 @@ const HomeScreen = () => {
           />
           <Text style={styles.num_task}>In Progress</Text>
         </TouchableOpacity>
-        {inProgressModalnum ? (<InProgressModal inProgressModal={inProgressModal} setinProgressModal={setinProgressModal} />) :null}
+        {inProgressModalnum ? (<InProgressModal inProgressModal={inProgressModal} setinProgressModal={setinProgressModal} />) : null}
         <Text >2 tasks in Progress</Text>
         <TouchableOpacity style={styles.Intask} onPress={() => handleDoneTask()}>
           <Image
@@ -85,7 +86,7 @@ const HomeScreen = () => {
         <Text style={styles.avai_text}>Available Reports</Text>
       </View>
 
-      <ScrollView>
+      <ScrollView style={styles.scroll}>
         <View style={styles.report_section}>
           {dummyData.reports.map((item, index) => (
             <View style={styles.eng} key={index}>
@@ -96,7 +97,7 @@ const HomeScreen = () => {
                   size={55}
                   width={6}
                   fill={35}
-                  tintColor="red"              
+                  tintColor="red"
                   backgroundColor="#3d5875" >
                   {
                     (fill) => (
@@ -127,9 +128,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   avai_task: {
-    borderWidth: 1,
+
     margin: 10,
-    borderRadius: 5,
     padding: 4,
     width: 300,
     borderColor: "transparent",
@@ -165,18 +165,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 10,
     padding: 12,
-    backgroundColor: "#cff",
+    backgroundColor: COLORS.white2,
     justifyContent: "center",
     elevation: 3
   },
   Intask: {
-    backgroundColor: "transparent",
+    backgroundColor: COLORS.gray3,
     marginTop: 10,
     flexDirection: "row",
     justifyContent: "flex-start",
     padding: 7,
     borderRadius: 5,
-    elevation: 3
+    elevation: 4
   },
   num_task: {
     fontWeight: "bold",
@@ -185,30 +185,24 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
   report_section_title: {
-    borderWidth: 1,
     margin: 10,
-    borderRadius: 5,
     padding: 5,
     width: 350,
-    borderColor: "transparent",
-    elevation: 2,
     marginTop: 8,
     marginBottom: 6,
     marginLeft: 20,
-    backgroundColor: "transparent"
   },
   report_section: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
+    backgroundColor: COLORS.gray1, 
     elevation: 1,
     flexWrap: "wrap",
     margin: 10,
     marginLeft: 25,
     marginRight: 25,
-    borderColor: "black",
-    padding: 12,
-    borderRadius: 5,
-    borderColor: "transparent",
+    borderTopLeftRadius:10,
+    borderTopRightRadius:10,
+    borderBottomLeftRadius:10,
+    padding: 12,    
     flexDirection: "row",
     justifyContent: "flex-start"
   },
@@ -216,9 +210,8 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderWidth: 1,
-
-    backgroundColor: "transparent",
-    margin: 2,
+    backgroundColor: COLORS.gray3,
+    margin: 5,
     marginLeft: 5,
     marginRight: 2,
     borderColor: "whitesmoke",
@@ -229,6 +222,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     marginVertical: 30
+  },
+  scroll: {
+    borderRadius: 15
   },
   centeredView: {
     flex: 1,
