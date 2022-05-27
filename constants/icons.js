@@ -41,6 +41,12 @@ const contr = require('../assets/icons/pd/contr.png');
 const machine = require('../assets/icons/pd/machine.png');
 const p_team = require('../assets/icons/pd/p_team.png');
 const time_seh = require('../assets/icons/pd/time_seh.png');
+//PPR
+const apartment = require('../assets/icons/PPR/flat.png');
+const bungalow = require('../assets/icons/PPR/bungalow.png');
+const mall = require('../assets/icons/PPR/mall.png');
+const garage = require('../assets/icons/PPR/garage.png');
+const duplex = require('../assets/icons/PPR/duplex.png');
 
 export default {
   account,
@@ -85,4 +91,9 @@ export default {
   machine,
   p_team,
   contr,
+  mall,
+  apartment,
+  garage,
+  duplex,
+  bungalow,
 };
