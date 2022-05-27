@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
 import {Home, Account, Tracker, Reports} from '../screens/admin_screens';
-import Tasks from '../screens/user_screens/UsersTask/Tasks.js'
+import UserDashboard from '../screens/user_screens/UserDashboard/UserDashboard.js'
 
 const Tab = createBottomTabNavigator();
 
@@ -92,8 +92,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Tasks"
-        component={Tasks}
+        name="UserDashboard"
+        component={UserDashboard}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
