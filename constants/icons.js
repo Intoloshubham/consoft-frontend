@@ -27,6 +27,11 @@ const wallet = require('../assets/icons/wallet.png');
 const help = require('../assets/icons/help.png');
 const cancel = require('../assets/icons/cancel.png');
 const arr_down = require('../assets/icons/arr_down.png');
+const task = require("../assets/icons/task.png");
+const inprogress = require("../assets/icons/inprogress.png");
+const done = require("../assets/icons/done.png");
+const todo = require("../assets/icons/todo.png");
+
 const account = require('../assets/icons/account.png');
 const report = require('../assets/icons/report.png');
 const tasks = require('../assets/icons/tasks.png');
@@ -83,6 +88,10 @@ export default {
   help,
   cancel,
   arr_down,
+  task,
+  inprogress,
+  done,
+  todo,
   right_arr,
   back,
   stock,

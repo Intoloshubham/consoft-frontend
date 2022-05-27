@@ -4,6 +4,13 @@ const myProfile = {
     address: "No. 88, Jln Padungan, Kuching"
 }
 
+const reports=[
+    { id: 1, name: 'quality' },
+    { id: 2, name: 'quantity' },
+    { id: 3, name: 'stock keeper' },
+    { id: 4, name: 'other' }    
+]
+
 const categories = [
     {
         id: 1,
@@ -19,6 +26,36 @@ const categories = [
         id: 3,
         name: "Rice Item",
         icon: require("../assets/icons/rice.png")
+    }
+]
+const Active_tasks = [
+    {
+        id: 1,
+        name: "Task 1",
+        icon: require("../assets/icons/active_task.png")
+    },
+    {
+        id: 2,
+        name: "Task 2",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 3,
+        name: "task 3",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 4,
+        name: "task 4",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 5,
+        name: "task 5",
+        icon: require("../assets/icons/active_task.png")
     }
 ]
 
@@ -117,4 +154,6 @@ export default {
     myProfile,
     categories,
     menu,
+    reports,
+    Active_tasks
 }
