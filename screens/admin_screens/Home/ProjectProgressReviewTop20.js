@@ -8,22 +8,22 @@ import {
   StyleSheet,
 } from 'react-native';
 import {COLORS, FONTS, SIZES, icons, images} from '../../../constants';
-// import FilterModal from '../FilterModal/FilterModal';
 
-const ProjectProgressReview = ({customContainerStyle, history}) => {
-  //   const [showProgressFilterModal, setProgressFilterModal] = React.useState(false);
-
-  const renderItem = ({item}) => (
+const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
+  const renderItem = ({item, index}) => (
     <TouchableOpacity
       style={{
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: SIZES.base,
       }}>
-      <Image
-        source={item.img}
-        style={{height: 25, width: 25, tintColor: COLORS.darkGray}}
-      />
+      <Text
+        style={{
+          ...FONTS.h3,
+          color: COLORS.darkGray,
+        }}>
+        {item.id}
+      </Text>
       <View
         style={{
           flex: 1,
@@ -39,12 +39,21 @@ const ProjectProgressReview = ({customContainerStyle, history}) => {
       </View>
       <View
         style={{flexDirection: 'row', alignItems: 'center', height: '100%'}}>
+        <Image
+          source={icons.location}
+          style={{
+            height: 20,
+            width: 20,
+            tintColor: COLORS.red,
+            marginRight: SIZES.base,
+          }}
+        />
         <Text
           style={{
             ...FONTS.h3,
             color: COLORS.darkGray,
           }}>
-          {item.data}%
+          {item.location}
         </Text>
       </View>
     </TouchableOpacity>
@@ -67,16 +76,8 @@ const ProjectProgressReview = ({customContainerStyle, history}) => {
           marginBottom: SIZES.base,
         }}>
         <Text style={{...FONTS.h2, color: COLORS.darkGray, flex: 1}}>
-          Progress Review
+          Top 20 Progress
         </Text>
-        <TouchableOpacity
-        // onPress={() => setProgressFilterModal(true)}
-        >
-          <Image
-            source={icons.filter}
-            style={{height: 20, width: 20, tintColor: COLORS.darkGray}}
-          />
-        </TouchableOpacity>
       </View>
       <FlatList
         contentContainerStyle={{marginTop: SIZES.radius}}
@@ -97,12 +98,6 @@ const ProjectProgressReview = ({customContainerStyle, history}) => {
           );
         }}
       />
-      {/* {showProgressFilterModal && (
-        <FilterModal
-          isVisible={showProgressFilterModal}
-          onClose={() => setProgressFilterModal(false)}
-        />
-      )} */}
     </View>
   );
 };
@@ -119,4 +114,4 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 });
-export default ProjectProgressReview;
+export default ProjectProgressReviewTop20;

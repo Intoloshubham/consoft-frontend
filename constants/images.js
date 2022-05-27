@@ -12,6 +12,9 @@ const back_banner_01 = require('../assets/images/back_banner_01.png');
 const backg_01 = require('../assets/images/backg_01.png');
 const backg_02 = require('../assets/images/backg_02.png');
 const Profile7 = require('../assets/images/Profile7.jpg');
+const green = require('../assets/images/green.png');
+const yellow = require('../assets/images/yellow.png');
+const red = require('../assets/images/red.png');
 
 export default {
   background_01,
@@ -28,4 +31,7 @@ export default {
   backg_01,
   backg_02,
   Profile7,
+  green,
+  yellow,
+  red,
 };
