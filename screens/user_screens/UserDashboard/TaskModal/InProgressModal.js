@@ -11,7 +11,7 @@ import {
     Image
 } from 'react-native'
 import React from 'react'
-import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
+import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 import PieChart from 'react-native-pie-chart';
 
@@ -37,12 +37,12 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
 
 
     const renderItem = ({ item }) => (
-        <View style={{ backgroundColor: "#B7EEE1", paddingHorizontal: 10, paddingTop: 10, bottom: 5, marginBottom: 10 }}>
+        <View style={{ backgroundColor: COLORS.transparent, paddingHorizontal: 10, paddingTop: 10, bottom: 5, marginBottom: 10 }}>
             <View >
                 <TouchableOpacity
                     onPress={() => OnSelectedActiveItem(item)}
                     style={[styles.active_task_view,
-                    { backgroundColor: (SelectedActiveItem?.id == item.id) ? "#26D1B2" : COLORS.white }
+                    { backgroundColor: (SelectedActiveItem?.id == item.id) ? "#26D1B2" : COLORS.gray3 }
                     ]}
                 >
                     <Image
@@ -69,12 +69,12 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                     setinProgressModal(!inProgressModal);
                 }}>
                 <View style={styles.modal_container}>
-                    <View style={{ flex: 1, backgroundColor: "#B7EEE1", marginTop: 20 }}>
-                        <View style={{ backgroundColor: "#B7EEE1", marginLeft: 5 }}>
+                    <View style={{ flex: 1, backgroundColor: COLORS.white2, marginTop: 20 }}>
+                        <View style={{ backgroundColor: COLORS.white, marginLeft: 5 }}>
                             <Pressable style={{ alignSelf: "flex-end", marginLeft: 320, marginTop: 9, left: -8, top: -12 }} onPress={() => setinProgressModal(!inProgressModal)}><Entypo name="cross" color={"#106853"} size={25} /></Pressable>
                         </View>
                         <View style={styles.act_tsk_stat_view}>
-                            <Text style={[styles.act_tsk_stat, { color: COLORS.transparentBlack7 }]}>Active Task Statistic:</Text>
+                            <Text style={[styles.act_tsk_stat, { color: COLORS.black,fontWeight:"bold" }]}>Active Task Statistic</Text>
                         </View>
                         <View style={{ flexDirection: "row", backgroundColor: COLORS.transparentBlack1, borderRadius: 10, marginTop: 10, padding: 10 }}>
                             <View style={{ marginLeft: 15 }}>
@@ -89,34 +89,34 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                                 />
                             </View>
                             <View style={{ marginHorizontal: 80, marginTop: 20 }}>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
                                     <View style={[styles.circle, { backgroundColor: "yellow" }]}></View>
-                                    <Text style={{ marginLeft: 10 }}>Task 1</Text>
+                                    <Text style={styles.pie_tag}>Task 1</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
                                     <View style={[styles.circle, { backgroundColor: "green" }]}>
                                     </View>
-                                    <Text style={{ marginLeft: 10 }}>Task 2</Text>
+                                    <Text style={styles.pie_tag}>Task 2</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
                                     <View style={[styles.circle, { backgroundColor: "#F44336" }]}>
                                     </View>
-                                    <Text style={{ marginLeft: 10 }}>Task 3</Text>
+                                    <Text style={styles.pie_tag}>Task 3</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
                                     <View style={[styles.circle, { backgroundColor: "#2196F3" }]}>
                                     </View>
-                                    <Text style={{ marginLeft: 10 }}>Task 4</Text>
+                                    <Text style={styles.pie_tag}>Task 4</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
                                     <View style={[styles.circle, { backgroundColor: "#FF9800" }]}>
                                     </View>
-                                    <Text style={{ marginLeft: 10 }}>Task 4</Text>
+                                    <Text style={styles.pie_tag}>Task 4</Text>
                                 </View>
                             </View>
                         </View>
                         <View style={[styles.act_tsk_list_view, styles.act_tsk_stat_view]}>
-                            <Text style={[FONTS.h2, { color: COLORS.transparentBlack7, }]}>List of Active Task:</Text>
+                            <Text style={[FONTS.h2, { color: COLORS.black, fontWeight:"bold",textAlign:"center" }]}>List of Active Task</Text>
                         </View>
 
                         <View style={{ marginTop: 12, marginLeft: -15 }} >
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         borderColor: "#B7EEE1",
-        backgroundColor: "#B7EEE1",
+        backgroundColor: COLORS.white,
         borderTopWidth: 1,
         borderLeftWidth: 1,
         borderRightWidth: 1,
@@ -167,11 +167,9 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     active_task_view: {
-        margin: 1,
-        // backgroundColor: "#26D1B2",
-
-        paddingVertical: 40,
-        paddingHorizontal: 20,
+        margin: 1,     
+        paddingVertical: SIZES.largeTitle,
+        paddingHorizontal: SIZES.h2,
         borderRadius: 10,
         alignItems: "center",
         elevation: 4,
@@ -183,28 +181,34 @@ const styles = StyleSheet.create({
     active_task_title: {
         elevation: 2,
         fontSize: SIZES.h4,
-        fontWeight: "bold",
-        // color:COLORS.transparentBlack7,
-        paddingHorizontal: 12,
+        fontWeight: "bold",    
+        paddingHorizontal: SIZES.font,
         textAlign: "center",
-        bottom: -15
+        bottom: -15,
+        color:COLORS.black
     },
     act_tsk_stat: {
-        padding: 5,
-        paddingHorizontal: 10,
+       
+        ...FONTS.h2,
+        textAlign:"center"
     },
     act_tsk_stat_view: {
         backgroundColor: "#0000",
-        borderColor: "transparent",
-        borderWidth: 1,
-        margin: 5,
-        borderRadius: 3,
-        elevation: 2
+        margin: 5,    
+                 
+   
     },
     act_tsk_list_view: {
-        marginTop: 10,
+        marginTop: SIZES.body1,
         padding: SIZES.base,
+        marginBottom:-SIZES.base
 
+    },
+    pie_tag:{
+        marginLeft:SIZES.base,
+        color:COLORS.blue,
+        ...FONTS.h4,
+        fontWeight:"bold"
     }
 
 })
