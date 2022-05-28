@@ -11,11 +11,11 @@ import {
   ProjectReports,
   ToolsAndMachinery,
   ProjectSeheduleTime,
+  Account,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
-import {Account} from './screens/admin_screens';
 
 const Stack = createStackNavigator();
 
@@ -51,6 +51,9 @@ const App = () => {
         <Stack.Screen name="Demo" component={Demo} />
         <Stack.Screen name="Demo1" component={Demo1} />
         <Stack.Screen name="Demo2" component={Demo2} />
+
+
+        
         <Stack.Screen
           name="ProjectSeheduleTime"
           component={ProjectSeheduleTime}
