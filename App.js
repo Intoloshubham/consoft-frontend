@@ -12,8 +12,9 @@ import {
   ToolsAndMachinery,
   ProjectSeheduleTime,
 } from './screens/admin_screens';
-import {UserDashboard} from './screens/user_screens';
+import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
+import UserTabs from './navigation/user_tabs';
 import {Account} from './screens/admin_screens';
 
 const Stack = createStackNavigator();
@@ -29,7 +30,7 @@ const App = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'Home'}>
+        initialRouteName={'OnBoarding'}>
         <Stack.Screen name="Home" component={Tabs} />
         <Stack.Screen name="OnBoarding" component={OnBoarding} />
         <Stack.Screen name="SignIn" component={SignIn} />
@@ -45,7 +46,11 @@ const App = () => {
         <Stack.Screen name="ToolsAndMachinery" component={ToolsAndMachinery} />
 
         {/* User  */}
-        <Stack.Screen name="UserDashboard" component={UserDashboard} />
+        <Stack.Screen name="UserDashboard" component={UserTabs} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Demo" component={Demo} />
+        <Stack.Screen name="Demo1" component={Demo1} />
+        <Stack.Screen name="Demo2" component={Demo2} />
         <Stack.Screen
           name="ProjectSeheduleTime"
           component={ProjectSeheduleTime}
