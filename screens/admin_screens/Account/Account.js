@@ -15,6 +15,7 @@ import {
   LineDivider,
   ProgressBar,
   ProfileValue,
+  UploadImage,
 } from '../../../Components';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 // import Collapsible from 'react-native-collapsible';
@@ -68,6 +69,9 @@ const Account = () => {
           style={{
             width: 80,
             height: 80,
+          }}
+          onPress={() => {
+            return <UploadImage />;
           }}>
           <Image
             source={images.Profile7}
@@ -163,10 +167,43 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer,
         }}>
-        <ProfileValue icon={icons.profile} value="Create New Project" />
+        <ProfileValue
+          icon={icons.profile}
+          value="Create New Project"
+          image={icons.right_arr}
+        />
         <LineDivider />
-        <ProfileValue icon={icons.contr} value="Contractors" />
-        <ProfileValue icon={icons.p_team} value="Project Team" />
+        <ProfileValue
+          icon={icons.contr}
+          value="Contractors"
+          image={icons.right_arr}
+        />
+        <ProfileValue
+          icon={icons.p_team}
+          value="Project Team"
+          image={icons.right_arr}
+        />
+        <ProfileValue
+          icon={icons.contr}
+          value="Contractors sat"
+          image={icons.right_arr}
+        />
+        <ProfileValue
+          icon={icons.camera}
+          value="Project Team"
+          image={icons.right_arr}
+        />
+      </View>
+    );
+  }
+
+  function renderProfileSection2() {
+    return (
+      <View
+        style={{
+          ...styles.profileSectionContainer1,
+        }}>
+        <ProfileValue icon={icons.logout} value="LogOut" />
       </View>
     );
   }
@@ -190,6 +227,8 @@ const Account = () => {
 
         {/* profile section 1  */}
         {renderProfileSection1()}
+        {/* section 2  */}
+        {renderProfileSection2()}
       </ScrollView>
     </View>
   );
@@ -208,7 +247,14 @@ const styles = StyleSheet.create({
   },
   profileSectionContainer: {
     marginTop: SIZES.padding,
-    paddingHorizontal: SIZES.padding,
+    paddingHorizontal: SIZES.radius,
+    borderWidth: 1,
+    borderRadius: SIZES.radius,
+    borderColor: COLORS.gray2,
+  },
+  profileSectionContainer1: {
+    marginTop: SIZES.padding,
+    paddingHorizontal: SIZES.radius,
     borderWidth: 1,
     borderRadius: SIZES.radius,
     borderColor: COLORS.gray2,
