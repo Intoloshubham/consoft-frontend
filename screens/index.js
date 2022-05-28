@@ -7,17 +7,4 @@ import SignUp from './Authentication/SignUp';
 import Otp from './Authentication/Otp';
 import ForgotPassword from './Authentication/ForgotPassword';
 
-//rahul
-import StockMangement from './Stock/StockMangement';
-import Deeler from './Stock/Deeler';
-
-export {
-  OnBoarding,
-  AuthLayout,
-  SignIn,
-  SignUp,
-  Otp,
-  ForgotPassword,
-  StockMangement,
-  Deeler,
-};
+export {OnBoarding, AuthLayout, SignIn, SignUp, Otp, ForgotPassword};

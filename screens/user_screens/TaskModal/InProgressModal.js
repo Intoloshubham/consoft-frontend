@@ -2,7 +2,7 @@ import {
     View,
     Text,
     Modal,
-    TouchableOpacity,
+    TouchableOpacity, 
     Alert,
     Pressable,
     StyleSheet,
@@ -11,10 +11,10 @@ import {
     Image
 } from 'react-native'
 import React from 'react'
-import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../../constants';
+import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 import PieChart from 'react-native-pie-chart';
-
+import styles from './css/InProgressModalStyle'
 
 
 Entypo.loadFont()
@@ -26,8 +26,8 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
     const [SelectedData, setSelectedData] = React.useState(dummyData.Active_tasks)
 
     const widthAndHeight = 130
-    const series = [123, 321, 123, 789, 537, 125]
-    const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800', "#5b45"]
+    const series = [100, 150, 120]
+    const sliceColor = ["#4caf50", '#2196F3', '#FFEB3B']
 
     const OnSelectedActiveItem = (activeItem) => {
 
@@ -88,31 +88,21 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                                     style={{ paddingBottom: 10, paddingHorizontal: 21 }}
                                 />
                             </View>
-                            <View style={{ marginHorizontal: 80, marginTop: 20 }}>
+                            <View style={{ marginHorizontal: 70, marginTop: 30,marginVertical:30,justifyContent:"space-evenly" }}>
                                 <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
                                     <View style={[styles.circle, { backgroundColor: "yellow" }]}></View>
-                                    <Text style={styles.pie_tag}>Task 1</Text>
+                                    <Text style={styles.pie_tag}>No. of Task</Text>
                                 </View>
                                 <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
-                                    <View style={[styles.circle, { backgroundColor: "green" }]}>
+                                    <View style={[styles.circle, { backgroundColor:"#2196F3"  }]}>
                                     </View>
-                                    <Text style={styles.pie_tag}>Task 2</Text>
+                                    <Text style={styles.pie_tag}>In Progress !</Text>
                                 </View>
                                 <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
-                                    <View style={[styles.circle, { backgroundColor: "#F44336" }]}>
+                                    <View style={[styles.circle, { backgroundColor: "#4caf50" }]}>
                                     </View>
-                                    <Text style={styles.pie_tag}>Task 3</Text>
-                                </View>
-                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
-                                    <View style={[styles.circle, { backgroundColor: "#2196F3" }]}>
-                                    </View>
-                                    <Text style={styles.pie_tag}>Task 4</Text>
-                                </View>
-                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
-                                    <View style={[styles.circle, { backgroundColor: "#FF9800" }]}>
-                                    </View>
-                                    <Text style={styles.pie_tag}>Task 4</Text>
-                                </View>
+                                    <Text style={styles.pie_tag}>Done !</Text>
+                                </View>     
                             </View>
                         </View>
                         <View style={[styles.act_tsk_list_view, styles.act_tsk_stat_view]}>
@@ -136,79 +126,4 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
     )
 }
 export default InProgressModal
-const styles = StyleSheet.create({
-    modal_container: {
-        paddingHorizontal: SIZES.padding,
-        flex: 1,
-        flexDirection: "row",
-        borderColor: "#B7EEE1",
-        backgroundColor: COLORS.white,
-        borderTopWidth: 1,
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderTopRightRadius: 77,
-        borderTopLeftRadius: 77,
-        shadowColor: "#470000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 1,
-        marginTop: 200
-    },
-    circle: {
-        height: 10,
-        width: 10,
-        marginVertical: 4,
-        borderRadius: 20,
-        borderColor: "black",
-        borderWidth: 1
-    },
-    active_task_view: {
-        margin: 1,     
-        paddingVertical: SIZES.largeTitle,
-        paddingHorizontal: SIZES.h2,
-        borderRadius: 10,
-        alignItems: "center",
-        elevation: 4,
-        shadowOffset: { width: 0, height: 2 },
-        shadowColor: "#000",
-        shadowOpacity: 1.2,
-        bottom: -10
-    },
-    active_task_title: {
-        elevation: 2,
-        fontSize: SIZES.h4,
-        fontWeight: "bold",    
-        paddingHorizontal: SIZES.font,
-        textAlign: "center",
-        bottom: -15,
-        color:COLORS.black
-    },
-    act_tsk_stat: {
-       
-        ...FONTS.h2,
-        textAlign:"center"
-    },
-    act_tsk_stat_view: {
-        backgroundColor: "#0000",
-        margin: 5,    
-                 
-   
-    },
-    act_tsk_list_view: {
-        marginTop: SIZES.body1,
-        padding: SIZES.base,
-        marginBottom:-SIZES.base
 
-    },
-    pie_tag:{
-        marginLeft:SIZES.base,
-        color:COLORS.blue,
-        ...FONTS.h4,
-        fontWeight:"bold"
-    }
-
-})
