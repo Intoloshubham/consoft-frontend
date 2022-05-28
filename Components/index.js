@@ -5,6 +5,9 @@ import TextIconButton from './TextIconButton';
 import Dropdown from './Dropdown';
 import IconButton from './IconButton';
 import HeaderBar from './HeaderBar';
+import LineDivider from './LineDivider';
+import ProgressBar from './ProgressBar';
+import ProfileValue from './ProfileValue';
 
 export {
   TextButton,
@@ -14,4 +17,7 @@ export {
   Dropdown,
   IconButton,
   HeaderBar,
+  LineDivider,
+  ProgressBar,
+  ProfileValue,
 };

@@ -7,8 +7,15 @@ import {
   ScrollView,
   StyleSheet,
   LogBox,
+  FlatList,
 } from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {
+  IconButton,
+  TextButton,
+  LineDivider,
+  ProgressBar,
+  ProfileValue,
+} from '../../../Components';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import Collapsible from 'react-native-collapsible';
 
@@ -22,6 +29,7 @@ const Account = () => {
     {id: 2, name: 'Stocks', img: icons.account},
     {id: 3, name: 'Contractors', img: icons.dashboard},
     {id: 4, name: 'FAQ', img: icons.report},
+    // {id: 5, name: 'LogOut', img: icons.logout},
   ];
 
   const list = [
@@ -38,189 +46,168 @@ const Account = () => {
     setCollapsed(!collapsed);
   };
 
-  function renderUser() {
+  function renderHeader() {
     return (
-      <TouchableOpacity
+      <View
         style={{
-          marginTop: SIZES.padding,
+          flexDirection: 'row',
+          // marginTop: 30,
+          paddingHorizontal: SIZES.padding,
+          justifyContent: 'space-between',
         }}>
+        <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
+          Profile
+        </Text>
+        <IconButton
+          icon={icons.sun}
+          iconStyle={{
+            tintColor: COLORS.black,
+          }}
+        />
+      </View>
+    );
+  }
+
+  function renderProfileCard() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: SIZES.padding,
+          paddingHorizontal: SIZES.radius,
+          paddingVertical: 20,
+          borderRadius: SIZES.radius,
+          backgroundColor: COLORS.lightblue_800,
+        }}>
+        {/* profile image  */}
+        <TouchableOpacity
+          style={{
+            width: 80,
+            height: 80,
+          }}>
+          <Image
+            source={images.Profile7}
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: 40,
+              borderWidth: 2,
+              borderColor: COLORS.white,
+            }}
+          />
+          <View
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            }}>
+            <View
+              style={{
+                width: 30,
+                height: 30,
+                marginBottom: -15,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 15,
+                backgroundColor: COLORS.success_300,
+              }}>
+              <Image
+                source={icons.camera}
+                resizeMode="contain"
+                style={{
+                  width: 17,
+                  height: 17,
+                }}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+        {/* Details  */}
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingTop: SIZES.padding,
-            marginHorizontal: SIZES.padding,
-            paddingVertical: SIZES.padding,
-            paddingHorizontal: SIZES.padding,
-            backgroundColor: COLORS.lightblue_700,
-            borderRadius: SIZES.radius,
-            ...styles.shadow,
+            flex: 1,
+            marginLeft: SIZES.padding,
+            alignItems: 'flex-start',
           }}>
-          <View style={{flex: 1}}>
+          <Text
+            style={{
+              color: COLORS.white,
+              ...FONTS.h2,
+            }}>
+            Anurag Shrikhande
+          </Text>
+          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+            Administrator
+          </Text>
+          {/* progress  */}
+          <ProgressBar
+            progress="40%"
+            containerStyle={{
+              marginTop: SIZES.radius,
+            }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
             <Text
               style={{
-                color: COLORS.success_300,
-                ...FONTS.h2,
-                fontWeight: 'bold',
+                flex: 1,
+                color: COLORS.white,
+                ...FONTS.body4,
               }}>
-              Consoft App
+              Overall Progress
             </Text>
             <Text
               style={{
                 color: COLORS.white,
                 ...FONTS.body4,
-                marginTop: 2,
               }}>
-              consoft99@gmail.com
+              40%
             </Text>
           </View>
-          <Image
-            source={images.Profile7}
-            resizeMode="contain"
-            style={{
-              height: 50,
-              width: 50,
-              borderRadius: 50,
-            }}
-          />
         </View>
-      </TouchableOpacity>
-    );
-  }
-
-  function renderLists() {
-    const renderItem = ({item}) => (
-      <TouchableOpacity
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingVertical: SIZES.base,
-        }}>
-        <Text
-          style={{
-            ...FONTS.h3,
-            color: COLORS.white,
-          }}>
-          {item.name}
-        </Text>
-        <Image
-          source={icons.right_arr}
-          style={{
-            height: 20,
-            width: 20,
-            tintColor: COLORS.white,
-          }}
-        />
-      </TouchableOpacity>
-    );
-    return (
-      <View
-        style={{
-          marginVertical: SIZES.radius,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.lightblue_800,
-          paddingHorizontal: SIZES.padding,
-        }}>
-        <FlatList
-          contentContainerStyle={{marginVertical: SIZES.base}}
-          scrollEnabled={false}
-          data={collList}
-          keyExtracto={item => `${item.id}`}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.lightGray1,
-                }}></View>
-            );
-          }}
-        />
       </View>
     );
   }
 
-  function renderAccountCompList() {
-    const renderItem = ({item}) => (
-      <>
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: SIZES.radius,
-          }}
-          onPress={toggleExpanded}>
-          <Image
-            source={item.img}
-            style={{width: 20, height: 20, tintColor: COLORS.success_300}}
-          />
-          <View style={{flex: 1, marginLeft: SIZES.radius}}>
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.h3,
-              }}>
-              {item.name}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              height: '100%',
-              alignItems: 'center',
-            }}>
-            <Image
-              source={icons.down_arrow}
-              style={{height: 18, width: 18, tintColor: COLORS.white}}
-            />
-          </View>
-        </TouchableOpacity>
-        <View>
-          <Collapsible collapsed={collapsed}>{renderLists()}</Collapsible>
-        </View>
-      </>
-    );
+  function renderProfileSection1() {
     return (
       <View
         style={{
-          marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
+          ...styles.profileSectionContainer,
         }}>
-        <FlatList
-          contentContainerStyle={{marginVertical: SIZES.padding}}
-          scrollEnabled={false}
-          data={accList}
-          keyExtracto={item => `${item.id}`}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.lightGray1,
-                }}></View>
-            );
-          }}
-        />
+        <ProfileValue icon={icons.profile} value="Create New Project" />
+        <LineDivider />
+        <ProfileValue icon={icons.contr} value="Contractors" />
+        <ProfileValue icon={icons.p_team} value="Project Team" />
       </View>
     );
   }
+
   return (
-    <ScrollView style={{backgroundColor: COLORS.lightblue_900}}>
-      <View
-        style={{
-          flex: 1,
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: COLORS.white,
+      }}>
+      {/* Header  */}
+      {/* {renderHeader()} */}
+
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: SIZES.padding,
+          paddingBottom: 150,
         }}>
-        {renderUser()}
-        {renderAccountCompList()}
-      </View>
-    </ScrollView>
+        {/* profile card  */}
+        {renderProfileCard()}
+
+        {/* profile section 1  */}
+        {renderProfileSection1()}
+      </ScrollView>
+    </View>
   );
 };
 
@@ -234,6 +221,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+  },
+  profileSectionContainer: {
+    marginTop: SIZES.padding,
+    paddingHorizontal: SIZES.padding,
+    borderWidth: 1,
+    borderRadius: SIZES.radius,
+    borderColor: COLORS.gray2,
   },
 });
 export default Account;
