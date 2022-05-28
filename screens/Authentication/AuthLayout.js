@@ -34,7 +34,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
           </View>
           <View
             style={{
-              marginTop: SIZES.padding,
+              marginTop: SIZES.base,
               ...titleContainerStyle,
             }}>
             <Text

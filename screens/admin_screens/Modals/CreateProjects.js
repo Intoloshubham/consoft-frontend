@@ -6,7 +6,7 @@ import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 import {TextButton, FormInput} from '../../../Components';
 import {COLORS, FONTS, SIZES, images, icons} from '../../../constants';
-const url = 'http://192.168.1.99:8000/api/add-project';
+const url = 'http://192.168.1.99:8000/api/projects';
 
 const CreateProjects = () => {
   const navigation = useNavigation();
