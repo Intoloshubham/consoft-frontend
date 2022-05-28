@@ -13,11 +13,18 @@ import {
   ProjectReports,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  Account,
+  
 } from './screens/admin_screens';
+<<<<<<< dev
+import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
+import Tabs from './navigation/tabs';
+import UserTabs from './navigation/user_tabs';
+import Account from './screens/admin_screens'
+=======
 import { UserDashboard } from './screens/user_screens';
 import Tabs from './navigation/tabs';
 
+>>>>>>> master
 
 const Stack = createStackNavigator();
 
