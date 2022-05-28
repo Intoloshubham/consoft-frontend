@@ -19,6 +19,7 @@ import Tabs from './navigation/tabs';
 import { Account } from './screens/admin_screens';
 
 
+
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -34,7 +35,7 @@ const App = () => {
             headerShown: false,
           }}
           initialRouteName={'OnBoarding'}>
-          <Stack.Screen name="Home" component={Tabs} />
+          <Stack.Screen name="Home" component={Tabs} />      
           <Stack.Screen name="OnBoarding" component={OnBoarding} />
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />

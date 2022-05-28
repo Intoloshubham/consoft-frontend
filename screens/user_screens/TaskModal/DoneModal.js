@@ -6,36 +6,11 @@ import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 import { CheckBox, Layout, Card } from '@ui-kitten/components';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import styles from './css/DoneModalStyle'
 
 
 
 function DoneModal({ doneModal, setdoneModal }) {
-
-    const comp_tasks_var = [
-        {
-            id: 1,
-            name: "Task 1",
-            icon: require("../../../assets/icons/completed.png")
-        },
-        {
-            id: 2,
-            name: "Task 2",
-            icon: require("../../../assets/icons/completed.png")
-        },
-        {
-            id: 3,
-            name: "Task 3",
-            icon: require("../../../assets/icons/completed.png")
-        },
-        {
-            id: 4,
-            name: "Task 4",
-            icon: require("../../../assets/icons/completed.png")
-        }
-
-    ]
-
-
 
     const renderItem = ({ item }) => (
         <View style={{ backgroundColor: COLORS.gray3, padding: SIZES.base, borderRadius: 10, margin: 5}}>
@@ -68,7 +43,7 @@ function DoneModal({ doneModal, setdoneModal }) {
 
                 <View style={{ marginTop: SIZES.h1, marginLeft: -15 }} >
                     <FlatList
-                        data={comp_tasks_var}
+                        data={dummyData.comp_tasks_var}
                         renderItem={renderItem}
                         keyExtractor={item => item.id}
                     />
@@ -96,12 +71,7 @@ function DoneModal({ doneModal, setdoneModal }) {
         </>
     )
 }
+
 export default DoneModal
 
-const styles = StyleSheet.create({
-    title: {
-        fontWeight: "bold",
-        color: COLORS.black
-    }
 
-})

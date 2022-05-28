@@ -90,7 +90,7 @@ function Todo({ taskModal, settaskModal }) {
         setNum(number)
 
 
-        if (number > 0 && number < 100 && number) {
+        if (number > 0 && number <= 100 && number) {
 
             setCount(parseInt(number))
         } else {
@@ -115,16 +115,15 @@ function Todo({ taskModal, settaskModal }) {
                             <Text style={{ fontWeight: "bold", color: COLORS.black,letterSpacing:1 }}>Working Percent:</Text>
                         </View>
                         <View style={{ flexDirection: "row", height: 25, marginLeft: 5, marginTop: -6 }}>
-
                             <TouchableOpacity style={styles.minus_btn} color={COLORS.black} onPress={decrease} ><Text style={{ color: COLORS.black, padding: 3, fontSize: 20, marginTop: -7 }}>-</Text></TouchableOpacity>
                             <TextInput placeholder="%" value={tempNum} onChangeText={handleOnTextChange} style={[styles.plus_minus_text, { backgroundColor: COLORS.gray3 }]} >{count}</TextInput>
                             <TouchableOpacity style={styles.plus_btn} onPress={increase} ><Text style={{ color: COLORS.black, padding: 3, fontSize: 15, marginTop: -3, paddingHorizontal: 4 }}>+</Text></TouchableOpacity>
                         </View>
-                    </View>
-                    <View style={{ backgroundColor: COLORS.gray3, marginTop: 10, alignItems: "center" }}>
+                    <View style={{ backgroundColor: COLORS.gray3,marginVertical:-5,marginLeft:SIZES.base }}>
                         <TouchableOpacity style={styles.sub_btn} >
-                            <Text style={[FONTS.h5, { fontWeight: "bold", color: COLORS.black,letterSpacing:1 }]}>Submit</Text>
+                            <Text style={{ fontWeight: "bold", color: COLORS.black,letterSpacing:1,fontFamily: 'Poppins-SemiBold', fontSize: 11, lineHeight: 20 }}>Submit</Text>
                         </TouchableOpacity>
+                    </View>
                     </View>
                 </View>
             </View>
@@ -220,9 +219,10 @@ const styles = StyleSheet.create({
         padding: 3,
         elevation: 1,
         alignItems: "center",
-        height: 28,
-        width: 55,
-        paddingBottom:5
+        height: 25,
+        width: 50,
+        paddingBottom:-11,
+        paddingTop:2
     },
     form_container: {
         flex: 1,

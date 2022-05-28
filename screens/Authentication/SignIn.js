@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import AuthLayout from './AuthLayout';
 import {
   FormInput,
@@ -8,11 +8,11 @@ import {
   TextIconButton,
 } from '../../Components';
 import utils from '../../utils';
-import {icons, SIZES, COLORS, FONTS} from '../../constants';
+import { icons, SIZES, COLORS, FONTS } from '../../constants';
 import axios from 'axios';
 const url = 'http://192.168.1.99:8000/api/login';
 
-const SignIn = ({navigation}) => {
+const SignIn = ({ navigation }) => {
   const [mobileNo, setMobileNo] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
@@ -65,7 +65,7 @@ const SignIn = ({navigation}) => {
     <AuthLayout
       title="Let's Sign You In"
       subtitle="Welcome Back You on Consoft">
-      <View style={{flex: 1, marginTop: SIZES.padding * 4}}>
+      <View style={{ flex: 1, marginTop: SIZES.padding * 4 }}>
         <FormInput
           placeholder="Mobile No."
           // keyboardType="email-address"
@@ -78,7 +78,7 @@ const SignIn = ({navigation}) => {
           }}
           errorMsg={mobileNoError}
           appendComponent={
-            <View style={{justifyContent: 'center'}}>
+            <View style={{ justifyContent: 'center' }}>
               <Image
                 source={
                   mobileNo == '' || (mobileNo != '' && mobileNoError == '')
@@ -92,8 +92,8 @@ const SignIn = ({navigation}) => {
                     mobileNo == ''
                       ? COLORS.gray
                       : mobileNo != '' && mobileNoError == ''
-                      ? COLORS.green
-                      : COLORS.red,
+                        ? COLORS.green
+                        : COLORS.red,
                 }}
               />
             </View>
@@ -103,7 +103,7 @@ const SignIn = ({navigation}) => {
           placeholder="Password"
           secureTextEntry={!showPass}
           autoCompleteType="password"
-          containerStyle={{marginTop: SIZES.radius}}
+          containerStyle={{ marginTop: SIZES.radius }}
           onChange={value => setPassword(value)}
           appendComponent={
             <TouchableOpacity
@@ -201,7 +201,7 @@ const SignIn = ({navigation}) => {
           }}
           onPress={() => navigation.navigate('ForgotPassword')}
         /> */}
-        <View style={{paddingBottom: SIZES.padding * 13}}></View>
+        <View style={{ paddingBottom: SIZES.padding * 13 }}></View>
       </View>
       {/* footer  */}
     </AuthLayout>
