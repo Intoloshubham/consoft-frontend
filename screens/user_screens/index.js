@@ -1,12 +1,7 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import UserDashboard from './UserDashboard/UserDashboard';
+import Profile from './Profile/Profile';
+import Demo from './Demo/Demo';
+import Demo1 from './Demo1/Demo1';
+import Demo2 from './Demo2/Demo2';
 
-const index = () => {
-  return (
-    <View>
-      <Text>user screens</Text>
-    </View>
-  );
-};
-
-export default index;
+export {UserDashboard, Profile, Demo, Demo1, Demo2};

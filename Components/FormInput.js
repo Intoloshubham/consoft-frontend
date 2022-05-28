@@ -25,11 +25,11 @@ const FormInput = ({
       <View
         style={{
           flexDirection: 'row',
-          height: 45,
+          height: 55,
           paddingHorizontal: SIZES.padding,
           // marginTop: SIZES.base,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.lightGray2,
+          borderRadius: SIZES.base,
+          backgroundColor: COLORS.lightGray1,
         }}>
         {prependComponent}
         <TextInput

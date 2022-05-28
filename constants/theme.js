@@ -28,7 +28,8 @@ export const COLORS = {
   rose_600: '#e11d48',
 
   primary: '#FF6C44', //orange
-  transparentPrimary: 'rgba(227, 120, 75, 0.4)',
+  // transparentPrimary: 'rgba(227, 120, 75, 0.4)',
+  transparentPrimary: '#bae6fd',
   orange: '#FFA133',
   lightOrange: '#FFA133',
   lightOrange2: '#FDDED4',
