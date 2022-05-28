@@ -65,14 +65,15 @@ const SignIn = ({ navigation }) => {
     <AuthLayout
       title="Let's Sign You In"
       subtitle="Welcome Back You on Consoft">
-      <View style={{ flex: 1, marginTop: SIZES.padding * 4 }}>
+
+      <View style={{flex: 1, marginTop: SIZES.padding * 2}}>
+
         <FormInput
           placeholder="Mobile No."
-          // keyboardType="email-address"
-          // autoCompleteType="email"
+          keyboardType="phone-pad"
+          autoCompleteType="tel"
           onChange={value => {
             //validate email
-
             utils.validateNumber(value, setMobileNoError);
             setMobileNo(value);
           }}
@@ -102,8 +103,11 @@ const SignIn = ({ navigation }) => {
         <FormInput
           placeholder="Password"
           secureTextEntry={!showPass}
+          keyboardType="default"
           autoCompleteType="password"
-          containerStyle={{ marginTop: SIZES.radius }}
+
+          containerStyle={{marginTop: SIZES.base}}
+
           onChange={value => setPassword(value)}
           appendComponent={
             <TouchableOpacity
@@ -125,14 +129,14 @@ const SignIn = ({ navigation }) => {
           }
         />
         {/* save me & forgot password  */}
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             marginTop: SIZES.radius,
             justifyContent: 'flex-end',
           }}>
-          {/* <CustomSwitch value={saveMe} onChange={value => setSaveMe(value)} /> */}
-          {/* <TextButton
+          <CustomSwitch value={saveMe} onChange={value => setSaveMe(value)} />
+          <TextButton
             label="Forgot Password"
             buttonContainerStyle={{
               backgroundColor: null,
@@ -142,16 +146,16 @@ const SignIn = ({ navigation }) => {
               ...FONTS.body4,
             }}
             onPress={() => navigation.navigate('ForgotPassword')}
-          /> */}
-        </View>
+          />
+        </View> */}
         <TextButton
           label="Sign In"
           disabled={isEnableSignIn() ? false : true}
           buttonContainerStyle={{
             height: 55,
             alignItems: 'center',
-            marginTop: SIZES.padding,
-            borderRadius: SIZES.radius,
+            marginTop: SIZES.padding * 2,
+            borderRadius: SIZES.base,
             backgroundColor: isEnableSignIn()
               ? COLORS.lightblue_700
               : COLORS.transparentPrimary,

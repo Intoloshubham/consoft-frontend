@@ -29,7 +29,7 @@ export const COLORS = {
 
   primary: '#FF6C44', //orange
   // transparentPrimary: 'rgba(227, 120, 75, 0.4)',
-  transparentPrimary: '#7dd3fc',
+  transparentPrimary: '#bae6fd',
   orange: '#FFA133',
   lightOrange: '#FFA133',
   lightOrange2: '#FDDED4',

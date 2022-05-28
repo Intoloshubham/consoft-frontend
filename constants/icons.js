@@ -39,7 +39,13 @@ const dashboard = require('../assets/icons/dashboard.png');
 const tracker = require('../assets/icons/tracker.png');
 const right_arr = require('../assets/icons/right_arr.png');
 const back = require('../assets/icons/back.png');
+
 const completed = require('../assets/icons/completed.png');
+
+
+const sun = require('../assets/icons/sun.png');
+const camera = require('../assets/icons/camera.png');
+
 //pd
 const stock = require('../assets/icons/pd/stock.png');
 const report1 = require('../assets/icons/pd/report.png');
@@ -108,4 +114,6 @@ export default {
   garage,
   duplex,
   bungalow,
+  sun,
+  camera,
 };
