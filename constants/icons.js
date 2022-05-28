@@ -31,7 +31,7 @@ const task = require("../assets/icons/task.png");
 const inprogress = require("../assets/icons/inprogress.png");
 const done = require("../assets/icons/done.png");
 const todo = require("../assets/icons/todo.png");
-const todo = require("../assets/icons/completed.png");
+const completed = require("../assets/icons/completed.png");
 
 const account = require('../assets/icons/account.png');
 const report = require('../assets/icons/report.png');
