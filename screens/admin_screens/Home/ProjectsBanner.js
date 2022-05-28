@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,33 +13,34 @@ import {TextButton} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import ProjectsCreateModal from '../Modals/ProjectsCreateModal';
 import {COLORS, FONTS, icons, SIZES, images} from '../../../constants';
+import axios from 'axios';
+const url = 'http://192.168.1.99:8000/api/projects';
 
 const ProjectsBanner = () => {
   const navigation = useNavigation();
-  const ProjectsName = [
-    {id: 1, title: 'Project 1', img: images.profile},
-    {id: 2, title: 'Project 2', img: images.profile},
-    {id: 3, title: 'Project 3', img: images.profile},
-    {id: 4, title: 'Project 4', img: images.profile},
-    {id: 5, title: 'Project 5', img: images.profile},
-  ];
 
   const [collapsed, setCollapsed] = React.useState(true);
-  const [projects, setProjects] = React.useState(ProjectsName);
+  const [projects, setProjects] = React.useState([]);
   const [showCreateProjectModal, setCreateProjectModal] = React.useState(false);
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
 
+  useEffect(() => {
+    axios.get(url).then(response => setProjects(response.data));
+  }, []);
+
   function renderProjects() {
-    const renderItem = ({item}) => (
+    const renderItem = ({item, index}) => (
       <TouchableOpacity
         style={{
           marginVertical: SIZES.base,
           width: SIZES.width / 2.8,
         }}
-        onPress={() => navigation.navigate('ProjectsDetails')}>
+        onPress={() => {
+          navigation.navigate('ProjectsDetails');
+        }}>
         <View
           style={{
             alignItems: 'center',
@@ -54,7 +55,7 @@ const ProjectsBanner = () => {
               textAlign: 'center',
               color: COLORS.darkGray,
             }}>
-            {item.title}
+            {item.project_name}
           </Text>
         </View>
       </TouchableOpacity>
@@ -66,7 +67,7 @@ const ProjectsBanner = () => {
           justifyContent: 'space-between',
         }}
         data={projects}
-        keyExtractor={item => `${item.id}`}
+        keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />

@@ -94,10 +94,12 @@ const ProjectTeam = () => {
             paddingVertical: SIZES.base,
           }}
           onPress={toggleExpanded}>
-          <View style={{flex: 1}}>
+          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
+          <View style={{flex: 1, marginLeft: SIZES.radius}}>
             <Text
               style={{
                 ...FONTS.h3,
+                color: COLORS.darkGray,
               }}>
               {item.name}
             </Text>
