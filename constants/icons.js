@@ -108,4 +108,6 @@ export default {
   garage,
   duplex,
   bungalow,
+  sun,
+  camera,
 };
