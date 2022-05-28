@@ -3,7 +3,7 @@ const onboarding_screens = [
     id: 1,
     backgroundImage: require('../assets/images/backg_02.png'),
     bannerImage: require('../assets/images/building_01.png'),
-    title: 'CONSTRUCTION COMPANY',
+    title: 'SIPL',
     description: 'Truthful & Trustworthy We Are, That’s Why We Are Best.',
   },
   {
