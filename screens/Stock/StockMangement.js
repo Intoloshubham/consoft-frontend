@@ -6,78 +6,159 @@ import {
   Button,
   Modal,
   ScrollView,
-  SafeAreaView,
-  SectionList,
   StyleSheet,
   StatusBar,
   FlatList,
 } from 'react-native';
-import {FormInput, TextButton} from '../../Components';
-import {FONTS, SIZES, COLORS, icons, images} from '../../constants';
-import {Card, Title, Paragraph, DataTable} from 'react-native-paper';
-import CollapseView from 'react-native-collapse-view';
-
-import {colours} from 'nodemon/lib/config/defaults';
+import {FormInput, TextButton, Dropdown} from '../../Components';
+import {SIZES, COLORS, icons} from '../../constants';
+import {Card, Title, DataTable} from 'react-native-paper';
+import {IndexPath, Select, SelectItem, Icon} from '@ui-kitten/components';
+// import SelectDropdown from 'react-native-select-dropdown'
+// import  Deeler from '../Stock/Deeler'
 
 const DATA = [
   {
-    id: "1",
+    id: '1',
     title: 'Sand',
   },
   {
-    id: "2",
+    id: '2',
     title: 'Cement',
   },
   {
-    id: "3",
+    id: '3',
     title: 'Stone',
   },
   {
-    id: "4",
+    id: '4',
     title: 'Iron',
   },
 ];
 
-const Item = ({title}) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-    
-    <Button title="add" />
-  </View>
-);
-
 // create  a table  const
 // const optionsPerPage = [2, 3, 4];
 
-const StockMangement = props => {
+//  const CalendarIcon = props => <Icon {...props} name="calendar" />;
+const countries = ['Jabalpur', 'Bhopal', 'Katni', 'Indore'];
+const DeelerName = ['Anurag', 'Abhishek', 'Anmol', 'Rohit'];
+
+function StockMangement() {
+  // modal stock city useState
+  const [selectedIndex, setSelectedIndex] = React.useState();
   const [modal, setModal] = React.useState(false);
+  const [show, setShow] = React.useState(false);
 
   const [sand, setSand] = React.useState('');
   const [cement, setCement] = React.useState('');
   const [stone, setStone] = React.useState('');
   const [iron, setIron] = React.useState('');
 
+  const [value, setValue] = React.useState('');
+
+  const [date, setDate] = React.useState(new Date());
+
   const renderItem = ({item}) => <Item title={item.title} />;
 
   // const [page, setPage] = React.useState(0);
   // const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
-
   // React.useEffect(() => {
   //   setPage(0);
   // }, [itemsPerPage]);
+
+  const Item = ({title}) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{title}</Text>
+      <View>
+        <Button title="addItem" onPress={() => setShow(true)} />
+        <Modal visible={show} transparent={false}>
+          <View style={{backgroundColor: '#000000aa', flex: 1}}>
+            <View
+              style={{
+                backgroundColor: '',
+                margin: 10,
+                padding: 10,
+                borderRadius: 10,
+                flex:1
+              }}>
+              <ScrollView>
+              <Card>
+                <Card.Content>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      justifyContent: 'space-between',
+                     
+                    }}>
+                    <Title style={{fontSize: 20, textAlign: 'center'}}>
+                      StockItem
+                    </Title>
+                    <Button title="closed" onPress={() => setShow(false)} />
+                  </View>
+                </Card.Content>
+              </Card>
+
+              <Card style={{backgroundColor: 'rgba(171, 170, 158, 0.8)',flex:1}}>
+                <Card.Content>
+                  <View>
+                    <Title style={styles.itemText}>StockItem_id</Title>
+                    <FormInput />
+                    <Title style={styles.itemText}>Date</Title>
+                    <FormInput />
+                    <Title style={styles.itemText}>DeelerName</Title>
+                    <Dropdown
+                      data={DeelerName}
+                      onSelect={(selectedItem, index) => {
+                        console.log(selectedItem, index);
+                      }}
+                      buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                      }}
+                      rowTextForSelection={(item, index) => {
+                        return item;
+                      }}
+                    />
+                    <Title style={styles.itemText}>City</Title>
+                    <Dropdown
+                      data={countries}
+                      onSelect={(selectedItem, index) => {
+                        console.log(selectedItem, index);
+                      }}
+                      buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                      }}
+                      rowTextForSelection={(item, index) => {
+                        return item;
+                      }}
+                    />
+                    <TextButton
+                      label="Submit"
+                      buttonContainerStyle={{
+                        height: 45,
+                        borderRadius: SIZES.radius,
+                        marginTop: SIZES.padding,
+                      }}
+                      onPress={() => console.log('fgj')}
+                    />
+                  </View>
+                </Card.Content>
+              </Card>
+             </ScrollView>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </View>
+  );
 
   return (
     <View
       style={{
         flex: 1,
-        // margin:10,
-        // backgroundColor:"rgba(239, 11, 227, 0.27)",
-        // marginHorizontal: SIZES.padding,
-        // marginVertical: SIZES.padding,
-
-        // flexWrap: 'wrap',
+        margin: 10,
       }}>
-      <Card style={{backgroundColor: ""}}>
+      <Card style={{backgroundColor: ''}}>
         <Card.Content>
           <View
             style={{
@@ -92,14 +173,21 @@ const StockMangement = props => {
       </Card>
 
       {/* <Text style={{fontSize: 20}}>StockItemModal</Text>
-        <Button title="StockItemModal" onPress={() => setModal(true)} /> */}
+              <Button title="StockItemModal" onPress={() => setModal(true)} /> */}
+            {/* <Card>
+              <Card.Content>
+                
+              </Card.Content>
+            </Card> */}
+
+
       <View>
         <Modal visible={modal} animationType="slide" transparent={true}>
           <View style={{backgroundColor: '#000000aa', flex: 1}}>
             <View
               style={{
                 margin: 30,
-                backgroundColor: 'pink',
+                backgroundColor: 'rgba(171, 170, 158, 0.8)',
                 flex: 1,
                 borderRadius: 10,
               }}>
@@ -244,37 +332,16 @@ const StockMangement = props => {
           </Card.Content>
         </Card>
       </View>
-      {/* <View style={{flex:1,flexDirection:"row",margin:10,flexWrap:"wrap"}}>
-        <Card style={{backgroundColor:"",height:100,width:"50%",borderRadius:10,}}>
-          <Card.Content>
-                  <Title style={{textAlign:"center"}}>Sand</Title>
-                      <Text>10Ten</Text>
-                  </Card.Content>
-              </Card>
-        <Card style={{backgroundColor:"",height:100,width:"50%",borderRadius:10,}}>
-          <Card.Content>
-                  <Title>Cement</Title>          
-                  </Card.Content>
-              </Card>
-              <Card style={{backgroundColor:"",height:100,width:"50%",borderRadius:10,}}>
-          <Card.Content>
-                  <Title style={{textAlign:"center"}}>Stone</Title>
-                      <Text>10Ten</Text>
-                  </Card.Content>
-              </Card>
-        <Card style={{backgroundColor:"",height:100,width:"50%",borderRadius:10,}}>
-          <Card.Content>
-                  <Title>Iron</Title>          
-                  </Card.Content>
-              </Card>
-        </View> */}
+      {/* Table create stock item  */}
       <View style={{marginTop: 5}}>
-        <Card style={{backgroundColor:""}}>
+        <Card style={{backgroundColor: ''}}>
           <Card.Content>
             <Title>StockItemTable</Title>
             <DataTable>
               <DataTable.Header>
-                <DataTable.Title style={{fontSize:15}}>StockItem</DataTable.Title>
+                <DataTable.Title style={{fontSize: 15}}>
+                  StockItem
+                </DataTable.Title>
                 <DataTable.Title numeric>Quantity</DataTable.Title>
                 <DataTable.Title numeric>Abelable</DataTable.Title>
               </DataTable.Header>
@@ -306,7 +373,7 @@ const StockMangement = props => {
       </View>
     </View>
   );
-};
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -320,7 +387,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
-   
   },
   header: {
     fontSize: 15,
@@ -328,8 +394,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight:"bold",
-   
+    fontWeight: 'bold',
   },
+  itemText:{
+    color:"white"
+  }
 });
 export default StockMangement;

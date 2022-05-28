@@ -17,6 +17,8 @@ import Tracker from './Tracker/Tracker';
 
 //rahul
 import StockMangement from './Stock/StockMangement';
+import Deeler from './Stock/Deeler';
+
 
 
 export {
@@ -31,5 +33,6 @@ export {
   Reports,
   Tasks,
   Tracker,
-  StockMangement
+  StockMangement,
+  Deeler
 };
