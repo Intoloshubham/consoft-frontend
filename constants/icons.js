@@ -31,15 +31,12 @@ const task = require("../assets/icons/task.png");
 const inprogress = require("../assets/icons/inprogress.png");
 const done = require("../assets/icons/done.png");
 const todo = require("../assets/icons/todo.png");
-const todo = require("../assets/icons/completed.png");
 
 const account = require('../assets/icons/account.png');
 const report = require('../assets/icons/report.png');
 const tasks = require('../assets/icons/tasks.png');
 const dashboard = require('../assets/icons/dashboard.png');
 const tracker = require('../assets/icons/tracker.png');
-
-
 const right_arr = require('../assets/icons/right_arr.png');
 const back = require('../assets/icons/back.png');
 const sun = require('../assets/icons/sun.png');
@@ -57,7 +54,6 @@ const bungalow = require('../assets/icons/PPR/bungalow.png');
 const mall = require('../assets/icons/PPR/mall.png');
 const garage = require('../assets/icons/PPR/garage.png');
 const duplex = require('../assets/icons/PPR/duplex.png');
-
 
 
 export default {
@@ -107,7 +103,6 @@ export default {
   machine,
   p_team,
   contr,
-  completed,
   mall,
   apartment,
   garage,
