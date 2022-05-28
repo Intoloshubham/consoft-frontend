@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {FONTS, COLORS, SIZES, icons, images, constants} from '../../constants';
 import {TextButton} from '../../Components';
+import LinearGradient from 'react-native-linear-gradient';
 
 const OnBoarding = ({navigation}) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
@@ -72,19 +73,13 @@ const OnBoarding = ({navigation}) => {
           justifyContent: 'center',
         }}>
         <Image
-          source={images.cons_logo}
+          source={images.conSoftLogo}
           resizeMode="contain"
           style={{
             width: SIZES.width * 0.5,
             height: 100,
           }}
         />
-        <Text
-          style={{
-            ...FONTS.body3,
-          }}>
-          Powered by Intolo
-        </Text>
       </View>
     );
   }
