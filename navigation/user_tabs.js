@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
-import {COLORS, FONTS, SIZES, icons, images} from '../constants';
+import { COLORS, FONTS, SIZES, icons, images } from '../constants';
 import {
   UserDashboard,
   Profile,
@@ -10,10 +10,11 @@ import {
   Demo1,
   Demo2,
 } from '../screens/user_screens';
+import Reports from '../screens/user_screens/Reports/Reports'
 
 const Tab = createBottomTabNavigator();
 
-const TabBarCustomButton = ({children, onPress}) => {
+const TabBarCustomButton = ({ children, onPress }) => {
   return (
     <TouchableOpacity
       style={{
@@ -23,6 +24,7 @@ const TabBarCustomButton = ({children, onPress}) => {
         ...styles.shadow,
       }}
       onPress={onPress}>
+
       <LinearGradient
         colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
         style={{
@@ -65,17 +67,20 @@ const UserTabs = () => {
             <Image
               source={images.cons_logo}
               resizeMode="contain"
-              style={{height: 80, width: 100}}
+              style={{ height: 80, width: 100 }}
             />
           </View>
         ),
       }}>
       <Tab.Screen
         name="User Dahsboard"
+        screenOptions={{
+          tabBarShowLabel: false
+        }}  
         component={UserDashboard}
         options={{
-          tabBarIcon: ({focused}) => (
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 source={icons.dashboard}
                 resizeMode="contain"
@@ -94,14 +99,15 @@ const UserTabs = () => {
               </Text>
             </View>
           ),
+          headerShown:false
         }}
       />
       <Tab.Screen
         name="Demo"
         component={Demo}
         options={{
-          tabBarIcon: ({focused}) => (
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 source={icons.tasks}
                 style={{
@@ -122,10 +128,11 @@ const UserTabs = () => {
         }}
       />
       <Tab.Screen
-        name="Demo1"
-        component={Demo1}
+        name="Reports"
+        component={Reports}
+
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <Image
               source={icons.report}
               resizeMode="contain"
@@ -137,14 +144,15 @@ const UserTabs = () => {
             />
           ),
           tabBarButton: props => <TabBarCustomButton {...props} />,
+          // headerShown:false
         }}
       />
       <Tab.Screen
         name="Demo2"
         component={Demo2}
         options={{
-          tabBarIcon: ({focused}) => (
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 source={icons.tracker}
                 style={{
@@ -168,8 +176,8 @@ const UserTabs = () => {
         name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: ({focused}) => (
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 source={icons.account}
                 style={{
