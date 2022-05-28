@@ -3,8 +3,15 @@ const onboarding_screens = [
     id: 1,
     backgroundImage: require('../assets/images/backg_02.png'),
     bannerImage: require('../assets/images/building_01.png'),
-    title: 'Contruction Company',
-    description: 'Truthful and trustworthy we are, that’s why we are best.',
+    title: 'CONSTRUCTION COMPANY',
+    description: 'Truthful & Trustworthy We Are, That’s Why We Are Best.',
+  },
+  {
+    id: 2,
+    backgroundImage: require('../assets/images/backg_02.png'),
+    bannerImage: require('../assets/images/building_02.png'),
+    title: 'Civil Engineering - ConSoft',
+    description: "It's A Best Construction Company In Jabalpur Area.",
   },
 ];
 
@@ -113,6 +120,8 @@ const tags = [
     label: 'Taccos',
   },
 ];
+
+//saurabh
 
 export default {
   onboarding_screens,

@@ -21,7 +21,7 @@ const Dropdown = ({data, defaultButtonText}) => {
         buttonStyle={{
           width: '100%',
           height: 45,
-          backgroundColor: COLORS.lightGray2,
+          backgroundColor: COLORS.lightGray1,
           // paddingHorizontal: SIZES.radius*1.7,
           paddingLeft: SIZES.padding,
           paddingRight: SIZES.radius * 1.7,
@@ -43,14 +43,14 @@ const Dropdown = ({data, defaultButtonText}) => {
             <Image
               source={icons.arr_down}
               style={{
-                height: 18,
-                width: 18,
+                height: 15,
+                width: 16,
                 tintColor: COLORS.gray,
               }}
             />
           );
         }}
-        dropdownBackgroundColor={COLORS.blue}
+        dropdownBackgroundColor={COLORS.lightblue_900}
         dropdownOverlayColor={COLORS.transparentBlack1}
         rowTextStyle={{
           marginHorizontal: SIZES.padding,

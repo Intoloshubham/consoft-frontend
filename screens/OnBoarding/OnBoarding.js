@@ -138,7 +138,7 @@ const OnBoarding = ({navigation}) => {
               marginVertical: SIZES.padding,
             }}>
             <TextButton
-              label="Let's Get Started With ConSoft"
+              label="Let's Get Started"
               buttonContainerStyle={{
                 height: 45,
                 borderRadius: SIZES.radius,
@@ -193,8 +193,8 @@ const OnBoarding = ({navigation}) => {
                     source={item.bannerImage}
                     resizeMode="contain"
                     style={{
-                      width: SIZES.width * 0.8,
-                      height: SIZES.width * 0.8,
+                      width: SIZES.width * 0.7,
+                      height: SIZES.width * 0.7,
                       marginBottom: -SIZES.padding,
                     }}
                   />
@@ -209,14 +209,21 @@ const OnBoarding = ({navigation}) => {
                   justifyContent: 'center',
                   paddingHorizontal: SIZES.radius,
                 }}>
-                <Text style={{...FONTS.h1, fontSize: 25}}>{item.title}</Text>
+                <Text
+                  style={{
+                    ...FONTS.h2,
+                    color: COLORS.darkGray,
+                    // fontWeight: 'bold',
+                  }}>
+                  {item.title}
+                </Text>
                 <Text
                   style={{
                     marginTop: SIZES.radius,
                     textAlign: 'center',
-                    color: COLORS.darkGray,
+                    color: COLORS.darkGray2,
                     paddingHorizontal: SIZES.padding,
-                    ...FONTS.body3,
+                    ...FONTS.body4,
                   }}>
                   {item.description}
                 </Text>
