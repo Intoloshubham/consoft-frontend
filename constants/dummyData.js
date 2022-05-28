@@ -5,10 +5,10 @@ const myProfile = {
 }
 
 const reports=[
-    { id: 1, name: 'quality' },
-    { id: 2, name: 'quantity' },
-    { id: 3, name: 'stock keeper' },
-    { id: 4, name: 'other' }    
+    { id: 1, name: 'Quality' },
+    { id: 2, name: 'Quantity' },
+    { id: 3, name: 'Stock keeper' },
+    { id: 4, name: 'Other' }    
 ]
 
 const categories = [
@@ -59,6 +59,29 @@ const Active_tasks = [
     }
 ]
 
+const comp_tasks_var = [
+    {
+        id: 1,
+        name: "Task 1",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 2,
+        name: "Task 2",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 3,
+        name: "Task 3",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 4,
+        name: "Task 4",
+        icon: require("../assets/icons/completed.png")
+    }
+
+]
 
 
 const hamburger = {
@@ -157,5 +180,6 @@ export default {
     categories,
     menu,
     reports,
-    Active_tasks
+    Active_tasks,
+    comp_tasks_var
 }
