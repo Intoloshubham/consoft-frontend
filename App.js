@@ -52,8 +52,6 @@ const App = () => {
         <Stack.Screen name="Demo1" component={Demo1} />
         <Stack.Screen name="Demo2" component={Demo2} />
 
-
-        
         <Stack.Screen
           name="ProjectSeheduleTime"
           component={ProjectSeheduleTime}

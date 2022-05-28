@@ -99,5 +99,5 @@ export default {
   duplex,
   bungalow,
   sun,
-  camera
+  camera,
 };
