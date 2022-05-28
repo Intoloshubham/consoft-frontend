@@ -23,7 +23,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
               alignItems: 'center',
             }}>
             <Image
-              source={images.cons_logo}
+              source={images.conSoftLogo}
               resizeMode="contain"
               style={{
                 // marginTop: SIZES.padding,

@@ -17,34 +17,18 @@ import {
   ProfileValue,
 } from '../../../Components';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
-import Collapsible from 'react-native-collapsible';
+// import Collapsible from 'react-native-collapsible';
 
 const Account = () => {
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  const AccountList = [
-    {id: 1, name: 'Users', img: icons.profile},
-    {id: 2, name: 'Stocks', img: icons.account},
-    {id: 3, name: 'Contractors', img: icons.dashboard},
-    {id: 4, name: 'FAQ', img: icons.report},
-    // {id: 5, name: 'LogOut', img: icons.logout},
-  ];
+  // const [collapsed, setCollapsed] = React.useState(true);
 
-  const list = [
-    {id: 1, name: 'See Users'},
-    {id: 2, name: 'Update Users Details'},
-    {id: 3, name: 'Delete Users'},
-  ];
-
-  const [collapsed, setCollapsed] = React.useState(true);
-  const [accList, setAccList] = React.useState(AccountList);
-  const [collList, setCollList] = React.useState(list);
-
-  const toggleExpanded = () => {
-    setCollapsed(!collapsed);
-  };
+  // const toggleExpanded = () => {
+  //   setCollapsed(!collapsed);
+  // };
 
   function renderHeader() {
     return (
@@ -136,19 +120,19 @@ const Account = () => {
               color: COLORS.white,
               ...FONTS.h2,
             }}>
-            Anurag Shrikhande
+            Admin Demo
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             Administrator
           </Text>
           {/* progress  */}
-          <ProgressBar
+          {/* <ProgressBar
             progress="40%"
             containerStyle={{
               marginTop: SIZES.radius,
             }}
-          />
-          <View
+          /> */}
+          {/* <View
             style={{
               flexDirection: 'row',
             }}>
@@ -167,7 +151,7 @@ const Account = () => {
               }}>
               40%
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     );
