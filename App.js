@@ -48,7 +48,7 @@ const App = () => {
         <Stack.Screen name="ProjectReports" component={ProjectReports} />
         <Stack.Screen name="ToolsAndMachinery" component={ToolsAndMachinery} />
 
-        {/* User  */}
+        {/* User  tabs */}
         <Stack.Screen name="UserDashboard" component={UserTabs} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Demo" component={Demo} />
