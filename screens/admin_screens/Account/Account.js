@@ -185,7 +185,7 @@ const Account = () => {
         />
         <ProfileValue
           icon={icons.contr}
-          value="Contractors Team"
+          value="Contractors sat"
           image={icons.right_arr}
         />
         <ProfileValue
