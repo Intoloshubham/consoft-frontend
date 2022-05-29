@@ -16,6 +16,8 @@ import {
   ToolsAndMachinery,
   ProjectSeheduleTime,
   CheckList,
+  Items,
+  Unit,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -57,6 +59,8 @@ const App = () => {
             component={ToolsAndMachinery}
           />
           <Stack.Screen name="CheckList" component={CheckList} />
+          <Stack.Screen name="Items" component={Items} />
+          <Stack.Screen name="Unit" component={Unit} />
 
           {/* User  */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />

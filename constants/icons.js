@@ -43,6 +43,7 @@ const completed = require('../assets/icons/completed.png');
 const sun = require('../assets/icons/sun.png');
 const camera = require('../assets/icons/camera.png');
 const checklist = require('../assets/icons/clipboard.png');
+const stock_manage = require('../assets/icons/inventory.png');
 
 //pd
 const stock = require('../assets/icons/pd/stock.png');
@@ -114,4 +115,5 @@ export default {
   sun,
   camera,
   checklist,
+  stock_manage,
 };
