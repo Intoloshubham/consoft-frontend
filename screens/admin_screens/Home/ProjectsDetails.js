@@ -22,6 +22,7 @@ const ProjectsDetails = () => {
     {id: 4, img: icons.report1, name: 'Reports'},
     {id: 5, img: icons.machine, name: 'Tools & Machinery'},
     {id: 6, img: icons.time_seh, name: 'Project Sehedule & Timeline'},
+    {id: 7, img: icons.checklist, name: 'Checklist'},
   ];
   const ProjectData = [
     {
@@ -88,6 +89,8 @@ const ProjectsDetails = () => {
             ? navigation.navigate('ToolsAndMachinery')
             : item.id == 6
             ? navigation.navigate('ProjectSeheduleTime')
+            : item.id == 7
+            ? navigation.navigate('CheckList')
             : null;
         }}>
         <Image

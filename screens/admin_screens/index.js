@@ -20,6 +20,7 @@ import ProjectProgressReview from './Home/ProjectProgressReview';
 import ProjectProgressReviewTop20 from './Home/ProjectProgressReviewTop20';
 import AssignedWorks from './Home/AssignedWorks';
 import ProjectWorksIdentifier from './Home/ProjectWorksIdentifier';
+import CheckList from './CheckList/CheckList';
 
 export {
   Home,
@@ -43,4 +44,5 @@ export {
   ProjectProgressReviewTop20,
   AssignedWorks,
   ProjectWorksIdentifier,
+  CheckList,
 };
