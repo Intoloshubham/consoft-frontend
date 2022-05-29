@@ -6,7 +6,7 @@ const Items = () => {
   return (
     <View>
       <HeaderBar right={true} />
-      <Text>Items stock</Text>
+      <Text>Items account stock</Text>
     </View>
   );
 };
