@@ -58,11 +58,11 @@ const WorkAssignModal = ({isVisible, onClose}) => {
             // height: '50%',
             padding: SIZES.padding,
             borderRadius: SIZES.radius,
-            backgroundColor: COLORS.lightblue_200,
+            backgroundColor: COLORS.white,
           }}>
           {/* header */}
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{flex: 1, ...FONTS.h2, color: COLORS.black}}>
+            <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
               Assign Work
             </Text>
             <IconButton
@@ -73,7 +73,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               }}
               icon={icons.cross}
               iconStyle={{
-                tintColor: COLORS.darkGray,
+                tintColor: COLORS.gray,
               }}
               onPress={() => setCreateProjectModal(false)}
             />

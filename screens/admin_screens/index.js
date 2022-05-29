@@ -21,6 +21,10 @@ import ProjectProgressReviewTop20 from './Home/ProjectProgressReviewTop20';
 import AssignedWorks from './Home/AssignedWorks';
 import ProjectWorksIdentifier from './Home/ProjectWorksIdentifier';
 import CheckList from './CheckList/CheckList';
+import AddProjectTeamModal from './Modals/AddProjectTeamModal';
+import AddProjectTeam from './Modals/AddProjectTeam';
+import Items from './Stock/Items/Items';
+import Unit from './Stock/Unit/Unit';
 
 export {
   Home,
@@ -45,4 +49,8 @@ export {
   AssignedWorks,
   ProjectWorksIdentifier,
   CheckList,
+  AddProjectTeamModal,
+  AddProjectTeam,
+  Items,
+  Unit,
 };

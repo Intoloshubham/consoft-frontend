@@ -81,7 +81,7 @@ const ProjectsBanner = () => {
         marginHorizontal: SIZES.padding,
         paddingVertical: SIZES.padding,
         paddingHorizontal: SIZES.padding,
-        backgroundColor: COLORS.lightblue_700,
+        backgroundColor: COLORS.lightblue_600,
         borderRadius: SIZES.radius,
         ...styles.shadow,
       }}
@@ -119,7 +119,7 @@ const ProjectsBanner = () => {
                 alignItems: 'center',
                 marginBottom: SIZES.radius,
                 borderRadius: SIZES.radius,
-                backgroundColor: COLORS.yellow_500,
+                backgroundColor: COLORS.yellow_400,
               }}
               labelStyle={{
                 color: COLORS.black,

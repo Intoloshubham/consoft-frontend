@@ -3,16 +3,14 @@ import {
   View,
   Text,
   Animated,
-  ScrollView,
-  Image,
   TouchableWithoutFeedback,
   Modal,
 } from 'react-native';
-import {COLORS, SIZES, FONTS, icons, images} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {IconButton} from '../../../Components';
-import CreateProjects from './CreateProjects';
+import AddProjectTeam from './AddProjectTeam';
 
-const ProjectsCreateModal = ({isVisible, onClose}) => {
+const AddProjectTeamModal = ({isVisible, onClose}) => {
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
   const [showCreateProjectModal, setCreateProjectModal] =
     React.useState(isVisible);
@@ -35,7 +33,7 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
 
   const modalY = modalAnimatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [SIZES.height, SIZES.height - 680],
+    outputRange: [SIZES.height, SIZES.height - 720],
   });
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
@@ -54,19 +52,18 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
         <Animated.View
           style={{
             position: 'absolute',
-            left: 0,
+            left: SIZES.padding,
             top: modalY,
-            width: '100%',
-            height: '100%',
+            width: '90%',
+            // height: '50%',
             padding: SIZES.padding,
-            borderTopRightRadius: SIZES.padding,
-            borderTopLeftRadius: SIZES.padding,
+            borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
           }}>
           {/* header */}
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
-              Create New Project
+              Add new team
             </Text>
             <IconButton
               containerStyle={{
@@ -81,17 +78,11 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
               onPress={() => setCreateProjectModal(false)}
             />
           </View>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: 250,
-            }}>
-            <CreateProjects />
-          </ScrollView>
+          <AddProjectTeam />
         </Animated.View>
       </View>
     </Modal>
   );
 };
 
-export default ProjectsCreateModal;
+export default AddProjectTeamModal;
