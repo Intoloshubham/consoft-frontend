@@ -8,6 +8,7 @@ import HeaderBar from './HeaderBar';
 import LineDivider from './LineDivider';
 import ProgressBar from './ProgressBar';
 import ProfileValue from './ProfileValue';
+import UploadImage from './UplaodImage';
 
 export {
   TextButton,
@@ -20,4 +21,5 @@ export {
   LineDivider,
   ProgressBar,
   ProfileValue,
+  UploadImage,
 };
