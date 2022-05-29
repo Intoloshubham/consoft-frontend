@@ -9,7 +9,7 @@ const Dropdown = ({data, defaultButtonText}) => {
       <SelectDropdown
         data={data}
         onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index);
+          console.log(selectedItem);
         }}
         defaultButtonText={defaultButtonText}
         buttonTextAfterSelection={(selectedItem, index) => {
@@ -20,8 +20,8 @@ const Dropdown = ({data, defaultButtonText}) => {
         }}
         buttonStyle={{
           width: '100%',
-          height: 45,
-          backgroundColor: COLORS.lightGray1,
+          height: 55,
+          backgroundColor: COLORS.gray3,
           // paddingHorizontal: SIZES.radius*1.7,
           paddingLeft: SIZES.padding,
           paddingRight: SIZES.radius * 1.7,
@@ -31,7 +31,7 @@ const Dropdown = ({data, defaultButtonText}) => {
         }}
         buttonTextStyle={{
           textAlign: 'left',
-          color: COLORS.gray,
+          color: COLORS.darkGray,
           ...FONTS.body3,
         }}
         dropdownStyle={{
@@ -59,7 +59,7 @@ const Dropdown = ({data, defaultButtonText}) => {
           textAlign: 'justify',
           ...FONTS.body3,
         }}
-        // rowStyle={{height: 45}}
+        rowStyle={{height: 40}}
       />
     </View>
   );

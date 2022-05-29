@@ -29,13 +29,13 @@ const FormInput = ({
           paddingHorizontal: SIZES.padding,
           // marginTop: SIZES.base,
           borderRadius: SIZES.base,
-          backgroundColor: COLORS.lightGray1,
+          backgroundColor: COLORS.gray3,
         }}>
         {prependComponent}
         <TextInput
           style={{flex: 1, ...inputStyle}}
           placeholder={placeholder}
-          placeholderTextColor={COLORS.gray}
+          placeholderTextColor={COLORS.darkGray}
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}
           autoCompleteType={autoCompleteType}
