@@ -57,6 +57,7 @@ const ProfileValue = ({icon, value, onPress, image}) => {
         style={{
           height: 18,
           width: 18,
+          tintColor: COLORS.darkGray,
         }}
       />
     </TouchableOpacity>
