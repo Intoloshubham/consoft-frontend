@@ -2,20 +2,20 @@ import React from 'react';
 import {Text, View, Image, TouchableOpacity} from 'react-native';
 import {COLORS, SIZES, FONTS, icons, images} from '../constants';
 
-const ProfileValue = ({icon, value, onPress}) => {
+const ProfileValue = ({icon, value, onPress, image}) => {
   return (
     <TouchableOpacity
       style={{
         flexDirection: 'row',
-        height: 80,
+        height: 60,
         alignItems: 'center',
       }}
       onPress={onPress}>
       {/* icon  */}
       <View
         style={{
-          width: 40,
-          height: 40,
+          width: 35,
+          height: 35,
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: 20,
@@ -25,8 +25,8 @@ const ProfileValue = ({icon, value, onPress}) => {
           source={icon}
           resizeMode="contain"
           style={{
-            height: 25,
-            width: 25,
+            height: 20,
+            width: 20,
             tintColor: COLORS.lightblue_800,
           }}
         />
@@ -53,10 +53,11 @@ const ProfileValue = ({icon, value, onPress}) => {
       </View>
       {/* icon  */}
       <Image
-        source={icons.right_arr}
+        source={image}
         style={{
           height: 18,
           width: 18,
+          tintColor: COLORS.darkGray,
         }}
       />
     </TouchableOpacity>

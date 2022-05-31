@@ -15,32 +15,19 @@ import {
   LineDivider,
   ProgressBar,
   ProfileValue,
+  UploadImage,
 } from '../../../Components';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
 
 const Account = () => {
+  const navigation = useNavigation();
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  const AccountList = [
-    {id: 1, name: 'Users', img: icons.profile},
-    {id: 2, name: 'Stocks', img: icons.account},
-    {id: 3, name: 'Contractors', img: icons.dashboard},
-    {id: 4, name: 'FAQ', img: icons.report},
-    // {id: 5, name: 'LogOut', img: icons.logout},
-  ];
-
-  const list = [
-    {id: 1, name: 'See Users'},
-    {id: 2, name: 'Update Users Details'},
-    {id: 3, name: 'Delete Users'},
-  ];
-
   const [collapsed, setCollapsed] = React.useState(true);
-  const [accList, setAccList] = React.useState(AccountList);
-  const [collList, setCollList] = React.useState(list);
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
@@ -84,6 +71,9 @@ const Account = () => {
           style={{
             width: 80,
             height: 80,
+          }}
+          onPress={() => {
+            return <UploadImage />;
           }}>
           <Image
             source={images.Profile7}
@@ -136,19 +126,19 @@ const Account = () => {
               color: COLORS.white,
               ...FONTS.h2,
             }}>
-            Anurag Shrikhande
+            Admin Demo
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             Administrator
           </Text>
           {/* progress  */}
-          <ProgressBar
+          {/* <ProgressBar
             progress="40%"
             containerStyle={{
               marginTop: SIZES.radius,
             }}
-          />
-          <View
+          /> */}
+          {/* <View
             style={{
               flexDirection: 'row',
             }}>
@@ -167,7 +157,7 @@ const Account = () => {
               }}>
               40%
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     );
@@ -179,10 +169,73 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer,
         }}>
-        <ProfileValue icon={icons.profile} value="Create New Project" />
+        <ProfileValue
+          icon={icons.profile}
+          value="Create New Project"
+          image={icons.right_arr}
+        />
         <LineDivider />
-        <ProfileValue icon={icons.contr} value="Contractors" />
-        <ProfileValue icon={icons.p_team} value="Project Team" />
+        <ProfileValue
+          icon={icons.stock_manage}
+          value="Stock Mangement"
+          image={icons.down_arrow}
+          onPress={toggleExpanded}
+        />
+        <Collapsible collapsed={collapsed} duration={300}>
+          <View style={{marginLeft: SIZES.padding * 1.8}}>
+            {/* <Text
+              style={{
+                ...FONTS.h3,
+                fontSize: 18,
+                color: COLORS.darkGray,
+                marginVertical: SIZES.base,
+              }}>
+              Items
+            </Text> */}
+            {/* <Text style={{...FONTS.h3, fontSize: 18, color: COLORS.darkGray}}>
+              Unit
+            </Text> */}
+            <ProfileValue
+              icon={icons.stock_manage}
+              value="Items"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('Items')}
+            />
+            <LineDivider />
+            <ProfileValue
+              icon={icons.stock_manage}
+              value="Unit"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('Unit')}
+            />
+          </View>
+        </Collapsible>
+        <ProfileValue
+          icon={icons.p_team}
+          value="Project Team"
+          image={icons.right_arr}
+        />
+        <ProfileValue
+          icon={icons.contr}
+          value="Contractors sat"
+          image={icons.right_arr}
+        />
+        <ProfileValue
+          icon={icons.camera}
+          value="Project Team"
+          image={icons.right_arr}
+        />
+      </View>
+    );
+  }
+
+  function renderProfileSection2() {
+    return (
+      <View
+        style={{
+          ...styles.profileSectionContainer1,
+        }}>
+        <ProfileValue icon={icons.logout} value="LogOut" />
       </View>
     );
   }
@@ -206,6 +259,8 @@ const Account = () => {
 
         {/* profile section 1  */}
         {renderProfileSection1()}
+        {/* section 2  */}
+        {renderProfileSection2()}
       </ScrollView>
     </View>
   );
@@ -224,7 +279,14 @@ const styles = StyleSheet.create({
   },
   profileSectionContainer: {
     marginTop: SIZES.padding,
-    paddingHorizontal: SIZES.padding,
+    paddingHorizontal: SIZES.radius,
+    borderWidth: 1,
+    borderRadius: SIZES.radius,
+    borderColor: COLORS.gray2,
+  },
+  profileSectionContainer1: {
+    marginTop: SIZES.padding,
+    paddingHorizontal: SIZES.radius,
     borderWidth: 1,
     borderRadius: SIZES.radius,
     borderColor: COLORS.gray2,

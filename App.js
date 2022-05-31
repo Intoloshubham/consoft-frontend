@@ -1,10 +1,12 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
-import { OnBoarding, SignUp, SignIn, Otp, ForgotPassword } from './screens';
+
+import {ApplicationProvider, Layout, Text} from '@ui-kitten/components';
+import {OnBoarding, SignUp, SignIn, Otp, ForgotPassword} from './screens';
+
 import {
   ProjectsDetails,
   ProjectTeam,
@@ -13,14 +15,14 @@ import {
   ProjectReports,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  
+  CheckList,
+  Items,
+  Unit,
 } from './screens/admin_screens';
-
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
-import Account from './screens/admin_screens/Account/Account'
-
+import Account from './screens/admin_screens/Account/Account';
 
 const Stack = createStackNavigator();
 
@@ -30,14 +32,13 @@ const App = () => {
   }, []);
 
   return (
-
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'OnBoarding'}>
+          initialRouteName={'Home'}>
           <Stack.Screen name="Home" component={Tabs} />
           <Stack.Screen name="OnBoarding" component={OnBoarding} />
           <Stack.Screen name="SignIn" component={SignIn} />
@@ -48,9 +49,18 @@ const App = () => {
           <Stack.Screen name="ProjectsDetails" component={ProjectsDetails} />
           <Stack.Screen name="ProjectTeam" component={ProjectTeam} />
           <Stack.Screen name="Contractors" component={Contractors} />
-          <Stack.Screen name="StocksAndInventry" component={StocksAndInventry} />
+          <Stack.Screen
+            name="StocksAndInventry"
+            component={StocksAndInventry}
+          />
           <Stack.Screen name="ProjectReports" component={ProjectReports} />
-          <Stack.Screen name="ToolsAndMachinery" component={ToolsAndMachinery} />
+          <Stack.Screen
+            name="ToolsAndMachinery"
+            component={ToolsAndMachinery}
+          />
+          <Stack.Screen name="CheckList" component={CheckList} />
+          <Stack.Screen name="Items" component={Items} />
+          <Stack.Screen name="Unit" component={Unit} />
 
           {/* User  */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />
@@ -58,7 +68,6 @@ const App = () => {
           <Stack.Screen name="Demo" component={Demo} />
           <Stack.Screen name="Demo1" component={Demo1} />
           <Stack.Screen name="Demo2" component={Demo2} />
-
           <Stack.Screen
             name="ProjectSeheduleTime"
             component={ProjectSeheduleTime}
@@ -66,7 +75,6 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>
-
   );
 };
 

@@ -4,7 +4,7 @@ import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
-import {TextButton, FormInput} from '../../../Components';
+import {TextButton, FormInput, Dropdown} from '../../../Components';
 import {COLORS, FONTS, SIZES, images, icons} from '../../../constants';
 const url = 'http://192.168.1.99:8000/api/projects';
 
@@ -16,6 +16,14 @@ const CreateProjects = () => {
   const [projectLocationError, setProjectLocationError] = React.useState('');
   const [projectplotarea, setProjectPlotArea] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
+
+  const projectType = [
+    'Bungalow',
+    'Duplex/House',
+    'Hi-rise apartments',
+    'Mid-rise apartments',
+    'Township',
+  ];
 
   function isEnableSubmit() {
     return (
@@ -33,25 +41,34 @@ const CreateProjects = () => {
       project_name: projectname,
       project_location: projectlocation,
       plot_area: projectplotarea,
+      project_type: protype,
     };
 
-    axios
-      .post(url, data)
-      .then(res => {
-        console.log(res.data);
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        alert('Project Created Succcessfully');
       })
       .catch(error => {
-        console.log(error);
+        console.error('Error:', error);
       });
   };
 
   return (
     <AuthLayout
-      title="Let's Create a New Projects"
-      subtitle="Welcome back to ConSoft">
+    // title="Let's Create a New Projects"
+    // subtitle="Welcome back to ConSoft"
+    >
       <View style={{flex: 1, marginTop: SIZES.padding * 2}}>
         <FormInput
-          placeholder="Create Project"
+          placeholder="Project name"
           keyboardType="default"
           autoCompleteType="username"
           onChange={value => {
@@ -113,18 +130,24 @@ const CreateProjects = () => {
             </View>
           }
         />
+        <Dropdown data={projectType} defaultButtonText="Select type..." />
         <FormInput
           placeholder="Plot area"
-          keyboardType="numeric"
+          keyboardType="default"
           autoCompleteType="cc-number"
           onChange={value => {
-            utils.validateNumber(value, setProjectPlotAreaError);
+            // utils.validateNumber(value, setProjectPlotAreaError);
             setProjectPlotArea(value);
           }}
-          errorMsg={projectPlotAreaError}
+          // errorMsg={projectPlotAreaError}
           appendComponent={
-            <View style={{justifyContent: 'center'}}>
-              <Image
+            <View
+              style={{
+                justifyContent: 'center',
+                marginTop: SIZES.base,
+                height: 40,
+              }}>
+              {/* <Image
                 source={
                   projectplotarea == '' ||
                   (projectplotarea != '' && projectPlotAreaError == '')
@@ -141,7 +164,10 @@ const CreateProjects = () => {
                       ? COLORS.green
                       : COLORS.red,
                 }}
-              />
+              /> */}
+              <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
+                H/A/Sqm/Sft
+              </Text>
             </View>
           }
         />

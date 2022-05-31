@@ -9,21 +9,21 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
       <View
         style={{
           flex: 1,
-          paddingVertical: SIZES.padding,
+          // paddingVertical: SIZES.padding,
           backgroundColor: COLORS.white,
         }}>
         <KeyboardAwareScrollView
           keyboardDismissMode="on-drag"
           contentContainerStyle={{
             flex: 1,
-            paddingHorizontal: SIZES.padding,
+            paddingHorizontal: SIZES.radius,
           }}>
-          <View
+          {/* <View
             style={{
               alignItems: 'center',
             }}>
             <Image
-              source={images.cons_logo}
+              source={images.conSoftLogo}
               resizeMode="contain"
               style={{
                 // marginTop: SIZES.padding,
@@ -31,8 +31,8 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
                 width: 200,
               }}
             />
-          </View>
-          <View
+          </View> */}
+          {/* <View
             style={{
               marginTop: SIZES.base,
               ...titleContainerStyle,
@@ -53,7 +53,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
               }}>
               {subtitle}
             </Text>
-          </View>
+          </View> */}
           {children}
         </KeyboardAwareScrollView>
       </View>
