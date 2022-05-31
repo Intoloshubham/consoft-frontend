@@ -18,18 +18,20 @@ import {
   UploadImage,
 } from '../../../Components';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
-// import Collapsible from 'react-native-collapsible';
+import {useNavigation} from '@react-navigation/native';
+import Collapsible from 'react-native-collapsible';
 
 const Account = () => {
+  const navigation = useNavigation();
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  // const [collapsed, setCollapsed] = React.useState(true);
+  const [collapsed, setCollapsed] = React.useState(true);
 
-  // const toggleExpanded = () => {
-  //   setCollapsed(!collapsed);
-  // };
+  const toggleExpanded = () => {
+    setCollapsed(!collapsed);
+  };
 
   function renderHeader() {
     return (
@@ -174,10 +176,40 @@ const Account = () => {
         />
         <LineDivider />
         <ProfileValue
-          icon={icons.contr}
-          value="Contractors"
-          image={icons.right_arr}
+          icon={icons.stock_manage}
+          value="Stock Mangement"
+          image={icons.down_arrow}
+          onPress={toggleExpanded}
         />
+        <Collapsible collapsed={collapsed} duration={300}>
+          <View style={{marginLeft: SIZES.padding * 1.8}}>
+            {/* <Text
+              style={{
+                ...FONTS.h3,
+                fontSize: 18,
+                color: COLORS.darkGray,
+                marginVertical: SIZES.base,
+              }}>
+              Items
+            </Text> */}
+            {/* <Text style={{...FONTS.h3, fontSize: 18, color: COLORS.darkGray}}>
+              Unit
+            </Text> */}
+            <ProfileValue
+              icon={icons.stock_manage}
+              value="Items"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('Items')}
+            />
+            <LineDivider />
+            <ProfileValue
+              icon={icons.stock_manage}
+              value="Unit"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('Unit')}
+            />
+          </View>
+        </Collapsible>
         <ProfileValue
           icon={icons.p_team}
           value="Project Team"

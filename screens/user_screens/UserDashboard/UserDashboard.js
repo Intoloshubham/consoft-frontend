@@ -39,15 +39,15 @@ const UserDashboard = () => {
     <>
       <LinearGradient colors={[COLORS.lightGray2, COLORS.lightGray2, COLORS.lightGray2]} style={styles.container}>
         <View style={styles.header}>
-          <View style={styles.avai_task}>
+          {/* <View style={styles.avai_task}>
             <Text style={styles.avai_text}>Available Tasks</Text>
-          </View>
-          <View>
+          </View> */}
+          {/* <View>
             <Image
               style={styles.icon1}
               source={icons.task}
             />
-          </View>
+          </View> */}
         </View>
         <View style={styles.tasks}>
           <TouchableOpacity style={styles.Intask} onPress={() => handleTask()}>
@@ -56,9 +56,9 @@ const UserDashboard = () => {
               style={styles.icon1}
               source={icons.todo}
             />
-            <Text style={styles.num_task}>To do</Text>
+            <Text style={styles.num_task}>New Task</Text>
             <View>
-              <Text style={styles.tag} >5</Text>
+              <Text style={[styles.tag,{color:"red"}]} >5</Text>
             </View>
           </TouchableOpacity>
           {taskModalnum ? (<Todo taskModal={taskModal} settaskModal={settaskModal} />) : null}
@@ -68,7 +68,7 @@ const UserDashboard = () => {
               style={styles.icon1}
               source={icons.inprogress}
             />
-            <Text style={styles.num_task}>In Progress</Text>
+            <Text style={styles.num_task}>Task In Progress</Text>
             <View>
               <Text style={styles.tag}>2</Text>
             </View>
@@ -79,15 +79,15 @@ const UserDashboard = () => {
               style={styles.icon1}
               source={icons.done}
             />
-            <Text style={styles.num_task}>Done</Text>
+            <Text style={styles.num_task}>  Completed </Text>
             <View>
-              <Text style={styles.tag}>3</Text>
+              <Text style={[styles.tag,{color:"green"}]}>3</Text>
             </View>
           </TouchableOpacity>
           {doneModalnum ? (<DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />) : null}
         </View>
         <View style={styles.report_section_title}>
-          <Text style={styles.avai_text}>Available Reports</Text>
+          <Text style={styles.avai_text}>Reports</Text>
         </View>
 
         <ScrollView style={styles.scroll}>

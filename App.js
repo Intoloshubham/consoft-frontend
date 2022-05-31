@@ -15,6 +15,9 @@ import {
   ProjectReports,
   ToolsAndMachinery,
   ProjectSeheduleTime,
+  CheckList,
+  Items,
+  Unit,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -35,7 +38,7 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'OnBoarding'}>
+          initialRouteName={'Home'}>
           <Stack.Screen name="Home" component={Tabs} />
           <Stack.Screen name="OnBoarding" component={OnBoarding} />
           <Stack.Screen name="SignIn" component={SignIn} />
@@ -55,6 +58,9 @@ const App = () => {
             name="ToolsAndMachinery"
             component={ToolsAndMachinery}
           />
+          <Stack.Screen name="CheckList" component={CheckList} />
+          <Stack.Screen name="Items" component={Items} />
+          <Stack.Screen name="Unit" component={Unit} />
 
           {/* User  */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />

@@ -14,6 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
 import {HeaderBar, TextButton} from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
+import AddProjectTeamModal from '../Modals/AddProjectTeamModal';
 
 const ProjectTeam = () => {
   const navigation = useNavigation();
@@ -21,8 +22,7 @@ const ProjectTeam = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  // const [showTeamModal, setTeamModal] = React.useState(false);
-
+  const [showAddTeamModal, setShowAddTeamModal] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
     if (collapsed) {
@@ -101,7 +101,7 @@ const ProjectTeam = () => {
                 ...FONTS.h3,
                 color: COLORS.darkGray,
               }}>
-              {item.name}
+              Mr.{item.name}
             </Text>
           </View>
           <Image
@@ -170,14 +170,14 @@ const ProjectTeam = () => {
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
         }}
-        // onPress={() => setTeamModal(true)}
+        onPress={() => setShowAddTeamModal(true)}
       />
-      {/* {showTeamModal && (
-        <ProjectTeamModal
-          isVisible={showTeamModal}
-          onClose={() => setTeamModal(false)}
+      {showAddTeamModal && (
+        <AddProjectTeamModal
+          isVisible={showAddTeamModal}
+          onClose={() => setShowAddTeamModal(false)}
         />
-      )} */}
+      )}
       <ScrollView>{renderTeamList()}</ScrollView>
     </View>
   );
