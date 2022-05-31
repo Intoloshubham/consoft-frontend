@@ -58,12 +58,12 @@ const Account = () => {
         <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
           Profile
         </Text>
-        <IconButton
+        {/* <IconButton
           icon={icons.sun}
           iconStyle={{
             tintColor: COLORS.black,
           }}
-        />
+        /> */}
       </View>
     );
   }

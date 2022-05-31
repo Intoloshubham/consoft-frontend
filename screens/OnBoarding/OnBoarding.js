@@ -79,6 +79,12 @@ const OnBoarding = ({navigation}) => {
             height: 100,
           }}
         />
+        <Text
+          style={{
+            ...FONTS.body3,
+          }}>
+          Powered by Intolo
+        </Text>
       </View>
     );
   }
