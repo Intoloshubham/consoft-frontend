@@ -108,7 +108,13 @@ function Todo({ taskModal, settaskModal }) {
                         <Text style={{ fontWeight: "bold", color: COLORS.black }}  >Time: </Text>
                     </View>
                     <View>
-                        <TextInput placeholder="Particular" style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold" }} ></TextInput>
+                        <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold" }} >Particular</Text>
+                    </View>
+                    <View>
+                        <TextInput  placeholder="Completion time" style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold",width:150 }} ></TextInput>
+                    </View>
+                    <View>
+                        <TextInput placeholder="Expected time"  style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold",width:150 }} ></TextInput>
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 30 }}>
                         <View >
@@ -116,7 +122,7 @@ function Todo({ taskModal, settaskModal }) {
                         </View>
                         <View style={{ flexDirection: "row", height: 25, marginLeft: 5, marginTop: -6 }}>
                             <TouchableOpacity style={styles.minus_btn} color={COLORS.black} onPress={decrease} ><Text style={{ color: COLORS.black, padding: 3, fontSize: 20, marginTop: -7 }}>-</Text></TouchableOpacity>
-                            <TextInput placeholder="%" value={tempNum} onChangeText={handleOnTextChange} style={[styles.plus_minus_text, { backgroundColor: COLORS.gray3 }]} >{count}</TextInput>
+                            <TextInput placeholder="%" value={tempNum} onChangeText={handleOnTextChange} style={[styles.plus_minus_text, { backgroundColor: COLORS.gray3,fontWeight:"bold",fontSize:14 }]} >{count} %</TextInput>
                             <TouchableOpacity style={styles.plus_btn} onPress={increase} ><Text style={{ color: COLORS.black, padding: 3, fontSize: 15, marginTop: -3, paddingHorizontal: 4 }}>+</Text></TouchableOpacity>
                         </View>
                     <View style={{ backgroundColor: COLORS.gray3,marginVertical:-5,marginLeft:SIZES.base }}>

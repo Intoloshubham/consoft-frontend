@@ -54,7 +54,7 @@ const UserTabs = () => {
           height: 100,
         },
         headerStyle: {
-          // height: 60,
+          height: 60,
         },
         headerTitleAlign: 'left',
         headerRight: () => (
@@ -73,7 +73,7 @@ const UserTabs = () => {
         ),
       }}>
       <Tab.Screen
-        name="User Dahsboard"
+        name="Tasks"
         screenOptions={{
           tabBarShowLabel: false
         }}  
@@ -99,7 +99,7 @@ const UserTabs = () => {
               </Text>
             </View>
           ),
-          headerShown:false
+          headerShown:true
         }}
       />
       <Tab.Screen
