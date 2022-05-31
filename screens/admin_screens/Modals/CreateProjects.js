@@ -41,7 +41,7 @@ const CreateProjects = () => {
       project_name: projectname,
       project_location: projectlocation,
       plot_area: projectplotarea,
-      project_type: projectType,
+      project_type: protype,
     };
 
     fetch(url, {
