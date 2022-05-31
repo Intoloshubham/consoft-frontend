@@ -14,7 +14,14 @@ import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
 import { icons, COLORS, SIZES, FONTS } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import DatePicker from 'react-native-neat-date-picker'
+
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 Entypo.loadFont()
+EvilIcons.loadFont()
 const data =
 {
     list: [
@@ -33,7 +40,10 @@ const data =
 
 function Todo({ taskModal, settaskModal }) {
 
-    const [perticuler, setperticuler] = React.useState('')
+    const [showDatePicker, setShowDatePicker] = React.useState(false)
+    const [ExpCalendar, setExpCalendar] = React.useState(false)
+    const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
+    const [comp_time, setcomp_time] = React.useState('YYYY-MM-DD')
 
     const [list, setlist] = React.useState(data.list)
     const [count, setCount] = React.useState(0)
@@ -98,6 +108,18 @@ function Todo({ taskModal, settaskModal }) {
         }
     }
 
+    const onConfirm = (output) => {
+
+        setShowDatePicker(false)
+        console.log(output.date)
+        console.log(output.dateString)
+        setcomp_time(output.dateString)
+
+    }
+    const onConfirmexp = (output) => {
+        setExp_date(output.dateString)
+        setExpCalendar(false)
+    }
 
     const _body = (item) => {
         return (
@@ -110,26 +132,58 @@ function Todo({ taskModal, settaskModal }) {
                     <View>
                         <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold" }} >Particular</Text>
                     </View>
-                    <View>
-                        <TextInput  placeholder="Completion time" style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold",width:150 }} ></TextInput>
+                    <View style={{ flexDirection: "row", alignItems: "baseline", justifyContent: "space-around" }}>
+                        <TextInput placeholder="Completion time" style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold", width: 150 }} ></TextInput>
+                        <View style={{ flexDirection: "row", alignItems: "baseline", borderTopLeftRadius: 8, borderTopRightRadius: 8, width: 115, justifyContent: "space-around", marginBottom: 5 }}>
+                            <View style={{backgroundColor:COLORS.gray2,padding:4,borderRadius:5}} >
+                                <Text style={{ fontWeight: "bold", color: "#000" }}>{comp_time}</Text>
+                            </View>
+                            <View style={{ width: 30, borderRadius: 5, backgroundColor: COLORS.gray3, top: 8 }}>
+                                <Pressable onPress={() => { setShowDatePicker(true) }} style={{ borderColor: COLORS.gray }}>
+                                    <EvilIcons name="calendar" color={"#106853"} size={35} />
+                                </Pressable>
+                            </View>
+                        </View>
+                        <DatePicker
+                            isVisible={showDatePicker}
+                            mode={'single'}
+                            onCancel={() => { setShowDatePicker(false) }}
+                            onConfirm={onConfirm}
+                        />
                     </View>
-                    <View>
-                        <TextInput placeholder="Expected time"  style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold",width:150 }} ></TextInput>
+                    <View style={{ flexDirection: "row", alignItems: "baseline", justifyContent: "space-around" }}>
+                        <TextInput placeholder="Expected time" style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold", width: 150 }} ></TextInput>
+                        <View style={{ flexDirection: "row", alignItems: "baseline", borderTopLeftRadius: 8, borderTopRightRadius: 8, width: 115, justifyContent: "space-around", marginBottom: 5 }}>
+                            <View style={{backgroundColor:COLORS.gray2,borderRadius:5}}>
+                                <Text style={{ fontWeight: "bold", color: "#000",padding:4 }} >{Exp_date}</Text>
+                            </View>
+                            <View style={{ width: 30, borderRadius: 5, backgroundColor: COLORS.gray3, top: 12 }}>
+                                <Pressable onPress={() => { setExpCalendar(true) }}  >
+                                    <EvilIcons name="calendar" color={"#106853"} size={35} />
+                                </Pressable>
+                            </View>
+                        </View>
+                        <DatePicker
+                            isVisible={ExpCalendar}
+                            mode={'single'}
+                            onCancel={() => { setExpCalendar(false) }}
+                            onConfirm={onConfirmexp}
+                        />
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 30 }}>
                         <View >
-                            <Text style={{ fontWeight: "bold", color: COLORS.black,letterSpacing:1 }}>Working Percent:</Text>
+                            <Text style={{ fontWeight: "bold", color: COLORS.black, letterSpacing: 1 }}>Working Percent:</Text>
                         </View>
                         <View style={{ flexDirection: "row", height: 25, marginLeft: 5, marginTop: -6 }}>
                             <TouchableOpacity style={styles.minus_btn} color={COLORS.black} onPress={decrease} ><Text style={{ color: COLORS.black, padding: 3, fontSize: 20, marginTop: -7 }}>-</Text></TouchableOpacity>
-                            <TextInput placeholder="%" value={tempNum} onChangeText={handleOnTextChange} style={[styles.plus_minus_text, { backgroundColor: COLORS.gray3,fontWeight:"bold",fontSize:14 }]} >{count} %</TextInput>
+                            <TextInput placeholder="%" value={tempNum} onChangeText={handleOnTextChange} style={[styles.plus_minus_text, { backgroundColor: COLORS.gray3, fontWeight: "bold", fontSize: 14 }]} >{count} %</TextInput>
                             <TouchableOpacity style={styles.plus_btn} onPress={increase} ><Text style={{ color: COLORS.black, padding: 3, fontSize: 15, marginTop: -3, paddingHorizontal: 4 }}>+</Text></TouchableOpacity>
                         </View>
-                    <View style={{ backgroundColor: COLORS.gray3,marginVertical:-5,marginLeft:SIZES.base }}>
-                        <TouchableOpacity style={styles.sub_btn} >
-                            <Text style={{ fontWeight: "bold", color: COLORS.black,letterSpacing:1,fontFamily: 'Poppins-SemiBold', fontSize: 11, lineHeight: 20 }}>Submit</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={{ backgroundColor: COLORS.gray3, marginVertical: -5, marginLeft: SIZES.base }}>
+                            <TouchableOpacity style={styles.sub_btn} >
+                                <Text style={{ fontWeight: "bold", color: COLORS.black, letterSpacing: 1, fontFamily: 'Poppins-SemiBold', fontSize: 11, lineHeight: 20 }}>Submit</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -227,8 +281,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: 25,
         width: 50,
-        paddingBottom:-11,
-        paddingTop:2
+        paddingBottom: -11,
+        paddingTop: 2
     },
     form_container: {
         flex: 1,
