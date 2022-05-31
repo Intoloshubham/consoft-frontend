@@ -1,10 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
+import {HeaderBar} from '../../../../Components';
 
 const Unit = () => {
   return (
     <View>
-      <Text>Unit</Text>
+      <HeaderBar right={true} />
+      <Text>Unit screen</Text>
     </View>
   );
 };
