@@ -7,7 +7,7 @@ import { dummyData } from '../../../constants'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Todo, InProgressModal, DoneModal } from '../TaskModal'
 import styles from './css/UserDashboardStyle'
-import Reports from '../Reports/Reports'
+import Reports from '../UserReports/UserReports'
 
 
 // Icons.loadFont();

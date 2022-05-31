@@ -132,30 +132,14 @@ function Todo({ taskModal, settaskModal }) {
                     <View>
                         <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold" }} >Particular</Text>
                     </View>
-                    <View style={{ flexDirection: "row", alignItems: "baseline", justifyContent: "space-around" }}>
-                        <TextInput placeholder="Completion time" style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold", width: 150 }} ></TextInput>
-                        <View style={{ flexDirection: "row", alignItems: "baseline", borderTopLeftRadius: 8, borderTopRightRadius: 8, width: 115, justifyContent: "space-around", marginBottom: 5 }}>
-                            <View style={{backgroundColor:COLORS.gray2,padding:4,borderRadius:5}} >
-                                <Text style={{ fontWeight: "bold", color: "#000" }}>{comp_time}</Text>
-                            </View>
-                            <View style={{ width: 30, borderRadius: 5, backgroundColor: COLORS.gray3, top: 8 }}>
-                                <Pressable onPress={() => { setShowDatePicker(true) }} style={{ borderColor: COLORS.gray }}>
-                                    <EvilIcons name="calendar" color={"#106853"} size={35} />
-                                </Pressable>
-                            </View>
+
+                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+                        <View>
+                            <Text style={{ height: 40, marginTop: 15, backgroundColor: COLORS.gray3, fontWeight: "bold", width: 150 }} >Expected Completion time</Text>
                         </View>
-                        <DatePicker
-                            isVisible={showDatePicker}
-                            mode={'single'}
-                            onCancel={() => { setShowDatePicker(false) }}
-                            onConfirm={onConfirm}
-                        />
-                    </View>
-                    <View style={{ flexDirection: "row", alignItems: "baseline", justifyContent: "space-around" }}>
-                        <TextInput placeholder="Expected time" style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3, fontWeight: "bold", width: 150 }} ></TextInput>
                         <View style={{ flexDirection: "row", alignItems: "baseline", borderTopLeftRadius: 8, borderTopRightRadius: 8, width: 115, justifyContent: "space-around", marginBottom: 5 }}>
-                            <View style={{backgroundColor:COLORS.gray2,borderRadius:5}}>
-                                <Text style={{ fontWeight: "bold", color: "#000",padding:4 }} >{Exp_date}</Text>
+                            <View style={{ backgroundColor: COLORS.gray2, borderRadius: 5 }}>
+                                <Text style={{ fontWeight: "bold", color: "#000", padding: 4 }} >{Exp_date}</Text>
                             </View>
                             <View style={{ width: 30, borderRadius: 5, backgroundColor: COLORS.gray3, top: 12 }}>
                                 <Pressable onPress={() => { setExpCalendar(true) }}  >
@@ -170,8 +154,11 @@ function Todo({ taskModal, settaskModal }) {
                             onConfirm={onConfirmexp}
                         />
                     </View>
+                    <View style={{backgroundColor:COLORS.gray3,top:10}}>
+                        <TextInput placeholder='Comment section' placeholderTextColor={COLORS.gray} style={{   height: 35,top:5,fontWeight:"bold",backgroundColor:COLORS.gray3,letterSpacing: 1, fontFamily: 'Poppins-SemiBold', fontSize: 15, lineHeight: 15 }}></TextInput>
+                    </View>
                     <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 30 }}>
-                        <View >
+                        <View style={{marginVertical:2}}>
                             <Text style={{ fontWeight: "bold", color: COLORS.black, letterSpacing: 1 }}>Working Percent:</Text>
                         </View>
                         <View style={{ flexDirection: "row", height: 25, marginLeft: 5, marginTop: -6 }}>
@@ -179,12 +166,12 @@ function Todo({ taskModal, settaskModal }) {
                             <TextInput placeholder="%" value={tempNum} onChangeText={handleOnTextChange} style={[styles.plus_minus_text, { backgroundColor: COLORS.gray3, fontWeight: "bold", fontSize: 14 }]} >{count} %</TextInput>
                             <TouchableOpacity style={styles.plus_btn} onPress={increase} ><Text style={{ color: COLORS.black, padding: 3, fontSize: 15, marginTop: -3, paddingHorizontal: 4 }}>+</Text></TouchableOpacity>
                         </View>
-                        <View style={{ backgroundColor: COLORS.gray3, marginVertical: -5, marginLeft: SIZES.base }}>
+                    </View>
+                        <View style={{ backgroundColor: COLORS.gray3, marginVertical: 10,alignItems:"center" }}>
                             <TouchableOpacity style={styles.sub_btn} >
                                 <Text style={{ fontWeight: "bold", color: COLORS.black, letterSpacing: 1, fontFamily: 'Poppins-SemiBold', fontSize: 11, lineHeight: 20 }}>Submit</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
                 </View>
             </View>
         );

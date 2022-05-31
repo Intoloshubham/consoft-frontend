@@ -82,6 +82,29 @@ const comp_tasks_var = [
     }
 
 ]
+const Reports_part = [
+    {
+        id: 1,
+        name: "Company Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 2,
+        name: "Project Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 3,
+        name: "Contractor Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 4,
+        name: "Contractor's Labour",
+        // icon: require("../assets/icons/completed.png")
+    }
+
+]
 
 
 const hamburger = {
@@ -181,5 +204,6 @@ export default {
     menu,
     reports,
     Active_tasks,
-    comp_tasks_var
+    comp_tasks_var,
+    Reports_part
 }
