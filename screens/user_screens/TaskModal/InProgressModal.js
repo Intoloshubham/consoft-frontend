@@ -13,7 +13,7 @@ import {
 import React from 'react'
 import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
-import { BarChart, LineChart, PieChart } from "react-native-gifted-charts";
+import { BarChart } from "react-native-gifted-charts";
 import styles from './css/InProgressModalStyle'
 import { color } from 'react-native-reanimated';
 

@@ -4,6 +4,9 @@ import { COLORS, FONTS, SIZES, dummyData } from '../../../constants'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { CheckBox, Layout, Card } from '@ui-kitten/components';
 import { Divider } from '@ui-kitten/components';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
+MaterialCommunityIcons.loadFont()
 
 
 
@@ -12,13 +15,13 @@ import { Divider } from '@ui-kitten/components';
 
 
 const UserReports = () => {
-  const [selectedId,setSelectedId] = React.useState(null)
+  const [selectedId, setSelectedId] = React.useState(null)
 
   const OnSelectedActiveItem = (activeItem) => {
 
     console.log(activeItem);
     setSelectedId(activeItem)
-}
+  }
 
 
 
@@ -27,12 +30,15 @@ const UserReports = () => {
     const color = item.id === selectedId ? 'white' : 'black';
 
     return (
-      <TouchableOpacity  
-      // style={{backgroundColor:COLORS.transparentBlack1,padding:SIZES.largeTitle}}
-      style={[styles.rend_rep_card,{   backgroundColor: (selectedId?.id == item.id) ? "#26D1B2" : COLORS.gray3}]}
-      onPress={() => OnSelectedActiveItem(item)}
+      <TouchableOpacity
+        // style={{backgroundColor:COLORS.transparentBlack1,padding:SIZES.largeTitle}}
+        style={[styles.rend_rep_card, { backgroundColor: (selectedId?.id == item.id) ? "#26D1B2" : COLORS.gray3 }]}
+        onPress={() => OnSelectedActiveItem(item)}
       >
-        <Text style={{...FONTS.body4}}>{item.name}</Text>
+        <Text style={{ ...FONTS.body4 }}>{item.name}</Text>
+        <Pressable>
+          <MaterialCommunityIcons name="toggle-switch-off" color={"red"} size={35} />
+        </Pressable>
       </TouchableOpacity>
     );
   };
@@ -72,13 +78,9 @@ const UserReports = () => {
           horizontal
         />
       </View>
-      <Text>Name of selected Report</Text>
-      <View>
-        <Text>Give + icon and tag </Text>
-      </View>
+
       <Divider style={{ backgroundColor: COLORS.black, marginHorizontal: 8 }} />
       {/* some space then start selected report sections */}
-
       <View>
         <Text>section/container of selected report </Text>
       </View>
@@ -88,10 +90,11 @@ const UserReports = () => {
 
 export default UserReports
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
 
-  rend_rep_card:{
-    padding:SIZES.body1,
-    margin:5
+  rend_rep_card: {
+    padding: SIZES.largeTitle,
+    margin: 5,
+    borderRadius: 10
   }
 })
