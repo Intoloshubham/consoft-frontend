@@ -4,6 +4,13 @@ const myProfile = {
     address: "No. 88, Jln Padungan, Kuching"
 }
 
+const reports=[
+    { id: 1, name: 'Quality' },
+    { id: 2, name: 'Quantity' },
+    { id: 3, name: 'Stock keeper' },
+    { id: 4, name: 'Other' }    
+]
+
 const categories = [
     {
         id: 1,
@@ -21,6 +28,84 @@ const categories = [
         icon: require("../assets/icons/rice.png")
     }
 ]
+const Active_tasks = [
+    {
+        id: 1,
+        name: "Task 1",
+        icon: require("../assets/icons/active_task.png")
+    },
+    {
+        id: 2,
+        name: "Task 2",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 3,
+        name: "task 3",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 4,
+        name: "task 4",
+        icon: require("../assets/icons/active_task.png")
+    }
+    ,
+    {
+        id: 5,
+        name: "task 5",
+        icon: require("../assets/icons/active_task.png")
+    }
+]
+
+const comp_tasks_var = [
+    {
+        id: 1,
+        name: "Task 1",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 2,
+        name: "Task 2",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 3,
+        name: "Task 3",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 4,
+        name: "Task 4",
+        icon: require("../assets/icons/completed.png")
+    }
+
+]
+const Reports_part = [
+    {
+        id: 1,
+        name: "Company Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 2,
+        name: "Project Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 3,
+        name: "Contractor Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 4,
+        name: "Contractor's Labour",
+        // icon: require("../assets/icons/completed.png")
+    }
+
+]
+
 
 const hamburger = {
     id: 1,
@@ -117,4 +202,8 @@ export default {
     myProfile,
     categories,
     menu,
+    reports,
+    Active_tasks,
+    comp_tasks_var,
+    Reports_part
 }
