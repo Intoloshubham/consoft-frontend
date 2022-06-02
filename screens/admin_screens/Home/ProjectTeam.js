@@ -24,6 +24,7 @@ const ProjectTeam = () => {
 
   const [showAddTeamModal, setShowAddTeamModal] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(true);
+
   const toggleExpanded = () => {
     if (collapsed) {
       setCollapsed(false);
@@ -31,6 +32,7 @@ const ProjectTeam = () => {
       setCollapsed(true);
     }
   };
+
   const teamdetail = [
     {
       id: 1,
@@ -76,7 +78,7 @@ const ProjectTeam = () => {
     },
     {
       id: 7,
-      name: 'Jeet Singh',
+      name: 'Jeet',
       email: 'singh@gmail.com',
       mobile: 9988776655,
       designation: 'Engineer',
@@ -93,7 +95,9 @@ const ProjectTeam = () => {
             alignItems: 'center',
             paddingVertical: SIZES.base,
           }}
-          onPress={toggleExpanded}>
+          onPress={() => {
+            item.id == index + 1 ? toggleExpanded : null;
+          }}>
           <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
           <View style={{flex: 1, marginLeft: SIZES.radius}}>
             <Text
@@ -159,7 +163,7 @@ const ProjectTeam = () => {
       style={{
         flex: 1,
       }}>
-      <HeaderBar right={true} />
+      <HeaderBar right={true} title="Team"/>
       <TextButton
         label="Add New Team"
         buttonContainerStyle={{

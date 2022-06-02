@@ -21,6 +21,9 @@ import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
 
+//auth
+import {AuthContext} from '../../Authentication/Context';
+
 const Account = () => {
   const navigation = useNavigation();
   React.useEffect(() => {
@@ -32,7 +35,8 @@ const Account = () => {
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
-
+  // auth
+  const {signOut} = React.useContext(AuthContext);
   function renderHeader() {
     return (
       <View
@@ -212,12 +216,13 @@ const Account = () => {
         </Collapsible>
         <ProfileValue
           icon={icons.p_team}
-          value="Project Team"
+          value="Create Company Team"
           image={icons.right_arr}
+          onPress={() => navigation.navigate('CompanyTeam')}
         />
         <ProfileValue
           icon={icons.contr}
-          value="Contractors sat"
+          value="Contractors"
           image={icons.right_arr}
         />
         <ProfileValue
@@ -235,7 +240,13 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" />
+        <ProfileValue
+          icon={icons.logout}
+          value="LogOut"
+          onPress={() => {
+            signOut();
+          }}
+        />
       </View>
     );
   }
@@ -281,14 +292,14 @@ const styles = StyleSheet.create({
     marginTop: SIZES.padding,
     paddingHorizontal: SIZES.radius,
     borderWidth: 1,
-    borderRadius: SIZES.radius,
+    borderRadius: SIZES.base,
     borderColor: COLORS.gray2,
   },
   profileSectionContainer1: {
     marginTop: SIZES.padding,
     paddingHorizontal: SIZES.radius,
     borderWidth: 1,
-    borderRadius: SIZES.radius,
+    borderRadius: SIZES.base,
     borderColor: COLORS.gray2,
   },
 });

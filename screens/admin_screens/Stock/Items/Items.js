@@ -5,7 +5,7 @@ import {HeaderBar} from '../../../../Components';
 const Items = () => {
   return (
     <View>
-      <HeaderBar right={true} />
+      <HeaderBar right={true} title="Items"/>
       <Text>Items account stock</Text>
     </View>
   );
