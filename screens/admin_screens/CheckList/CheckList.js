@@ -5,7 +5,7 @@ import {HeaderBar} from '../../../Components';
 const CheckList = () => {
   return (
     <View>
-      <HeaderBar right={true} />
+      <HeaderBar right={true} title="Project Checklist" />
       <Text>CheckList</Text>
     </View>
   );

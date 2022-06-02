@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
-import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 import {TextButton, FormInput, Dropdown} from '../../../Components';
 import {COLORS, FONTS, SIZES, images, icons} from '../../../constants';
@@ -17,13 +16,8 @@ const CreateProjects = () => {
   const [projectplotarea, setProjectPlotArea] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
 
-  const projectType = [
-    'Bungalow',
-    'Duplex/House',
-    'Hi-rise apartments',
-    'Mid-rise apartments',
-    'Township',
-  ];
+  const [projectType, setProjectType] = React.useState('');
+  const [projectTypeError, setProjectTypeError] = React.useState('');
 
   function isEnableSubmit() {
     return (
@@ -32,7 +26,9 @@ const CreateProjects = () => {
       projectlocation != '' &&
       projectLocationError == '' &&
       projectplotarea != '' &&
-      projectPlotAreaError == ''
+      projectPlotAreaError == '' &&
+      projectType != '' &&
+      projectTypeError == ''
     );
   }
 
@@ -41,7 +37,7 @@ const CreateProjects = () => {
       project_name: projectname,
       project_location: projectlocation,
       plot_area: projectplotarea,
-      project_type: protype,
+      project_type: projectType,
     };
 
     fetch(url, {
@@ -54,7 +50,6 @@ const CreateProjects = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
-        alert('Project Created Succcessfully');
       })
       .catch(error => {
         console.error('Error:', error);
@@ -62,92 +57,125 @@ const CreateProjects = () => {
   };
 
   return (
-    <AuthLayout
-    // title="Let's Create a New Projects"
-    // subtitle="Welcome back to ConSoft"
-    >
-      <View style={{flex: 1, marginTop: SIZES.padding * 2}}>
-        <FormInput
-          placeholder="Project name"
-          keyboardType="default"
-          autoCompleteType="username"
-          onChange={value => {
-            utils.validateText(value, setProjectError);
-            setProjectName(value);
-          }}
-          errorMsg={projectError}
-          appendComponent={
-            <View style={{justifyContent: 'center'}}>
-              <Image
-                source={
-                  projectname == '' || (projectname != '' && projectError == '')
-                    ? icons.correct
-                    : icons.cancel
-                }
-                style={{
-                  height: 20,
-                  width: 20,
-                  tintColor:
-                    projectname == ''
-                      ? COLORS.gray
-                      : projectname != '' && projectError == ''
-                      ? COLORS.green
-                      : COLORS.red,
-                }}
-              />
-            </View>
-          }
-        />
-        <FormInput
-          placeholder="Location"
-          keyboardType="default"
-          autoCompleteType="username"
-          onChange={value => {
-            utils.validateText(value, setProjectLocationError);
-            setProjectLocation(value);
-          }}
-          errorMsg={projectLocationError}
-          appendComponent={
-            <View style={{justifyContent: 'center'}}>
-              <Image
-                source={
-                  projectlocation == '' ||
-                  (projectlocation != '' && projectLocationError == '')
-                    ? icons.correct
-                    : icons.cancel
-                }
-                style={{
-                  height: 20,
-                  width: 20,
-                  tintColor:
-                    projectlocation == ''
-                      ? COLORS.gray
-                      : projectlocation != '' && projectLocationError == ''
-                      ? COLORS.green
-                      : COLORS.red,
-                }}
-              />
-            </View>
-          }
-        />
-        <Dropdown data={projectType} defaultButtonText="Select type..." />
-        <FormInput
-          placeholder="Plot area"
-          keyboardType="default"
-          autoCompleteType="cc-number"
-          onChange={value => {
-            // utils.validateNumber(value, setProjectPlotAreaError);
-            setProjectPlotArea(value);
-          }}
-          // errorMsg={projectPlotAreaError}
-          appendComponent={
-            <View
+    // <AuthLayout>
+    <View style={{flex: 1, marginTop: SIZES.padding}}>
+      <FormInput
+        // placeholder="Project name"
+        label="Project name"
+        keyboardType="default"
+        autoCompleteType="username"
+        onChange={value => {
+          utils.validateText(value, setProjectError);
+          setProjectName(value);
+        }}
+        errorMsg={projectError}
+        appendComponent={
+          <View style={{justifyContent: 'center'}}>
+            <Image
+              source={
+                projectname == '' || (projectname != '' && projectError == '')
+                  ? icons.correct
+                  : icons.cancel
+              }
               style={{
-                justifyContent: 'center',
-                marginTop: SIZES.base,
-                height: 40,
-              }}>
-              {/* <Image
+                height: 20,
+                width: 20,
+                tintColor:
+                  projectname == ''
+                    ? COLORS.gray
+                    : projectname != '' && projectError == ''
+                    ? COLORS.green
+                    : COLORS.red,
+              }}
+            />
+          </View>
+        }
+      />
+      <FormInput
+        // placeholder="Location"
+        label="Location"
+        keyboardType="default"
+        autoCompleteType="username"
+        onChange={value => {
+          utils.validateText(value, setProjectLocationError);
+          setProjectLocation(value);
+        }}
+        errorMsg={projectLocationError}
+        appendComponent={
+          <View style={{justifyContent: 'center'}}>
+            <Image
+              source={
+                projectlocation == '' ||
+                (projectlocation != '' && projectLocationError == '')
+                  ? icons.correct
+                  : icons.cancel
+              }
+              style={{
+                height: 20,
+                width: 20,
+                tintColor:
+                  projectlocation == ''
+                    ? COLORS.gray
+                    : projectlocation != '' && projectLocationError == ''
+                    ? COLORS.green
+                    : COLORS.red,
+              }}
+            />
+          </View>
+        }
+      />
+      <FormInput
+        // placeholder="Project Type"
+        label="Project type"
+        keyboardType="default"
+        autoCompleteType="username"
+        onChange={value => {
+          utils.validateText(value, setProjectTypeError);
+          setProjectType(value);
+        }}
+        errorMsg={projectTypeError}
+        appendComponent={
+          <View style={{justifyContent: 'center'}}>
+            <Image
+              source={
+                projectType == '' ||
+                (projectType != '' && projectTypeError == '')
+                  ? icons.correct
+                  : icons.cancel
+              }
+              style={{
+                height: 20,
+                width: 20,
+                tintColor:
+                  projectType == ''
+                    ? COLORS.gray
+                    : projectType != '' && projectTypeError == ''
+                    ? COLORS.green
+                    : COLORS.red,
+              }}
+            />
+          </View>
+        }
+      />
+
+      <FormInput
+        // placeholder="Plot area"
+        label="Plot area"
+        keyboardType="default"
+        autoCompleteType="cc-number"
+        onChange={value => {
+          // utils.validateNumber(value, setProjectPlotAreaError);
+          setProjectPlotArea(value);
+        }}
+        // errorMsg={projectPlotAreaError}
+        appendComponent={
+          <View
+            style={{
+              justifyContent: 'center',
+              marginTop: SIZES.base,
+              height: 30,
+            }}>
+            {/* <Image
                 source={
                   projectplotarea == '' ||
                   (projectplotarea != '' && projectPlotAreaError == '')
@@ -165,28 +193,28 @@ const CreateProjects = () => {
                       : COLORS.red,
                 }}
               /> */}
-              <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
-                H/A/Sqm/Sft
-              </Text>
-            </View>
-          }
-        />
-        <TextButton
-          label="Submit"
-          disabled={isEnableSubmit() ? false : true}
-          buttonContainerStyle={{
-            height: 55,
-            alignItems: 'center',
-            marginTop: SIZES.padding,
-            borderRadius: SIZES.radius,
-            backgroundColor: isEnableSubmit()
-              ? COLORS.lightblue_700
-              : COLORS.lightblue_100,
-          }}
-          onPress={OnSubmit}
-        />
-      </View>
-    </AuthLayout>
+            <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
+              H/A/Sqm/Sft
+            </Text>
+          </View>
+        }
+      />
+      <TextButton
+        label="Submit"
+        disabled={isEnableSubmit() ? false : true}
+        buttonContainerStyle={{
+          height: 55,
+          alignItems: 'center',
+          marginTop: SIZES.padding,
+          borderRadius: SIZES.radius,
+          backgroundColor: isEnableSubmit()
+            ? COLORS.lightblue_700
+            : COLORS.lightblue_100,
+        }}
+        onPress={OnSubmit}
+      />
+    </View>
+    // </AuthLayout>
   );
 };
 

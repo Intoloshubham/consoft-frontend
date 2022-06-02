@@ -79,7 +79,7 @@ const ProjectsBanner = () => {
       style={{
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
-        paddingVertical: SIZES.padding,
+        paddingVertical: SIZES.base * 2,
         paddingHorizontal: SIZES.padding,
         backgroundColor: COLORS.lightblue_600,
         borderRadius: SIZES.radius,

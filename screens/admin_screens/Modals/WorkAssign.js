@@ -19,7 +19,8 @@ const WorkAssign = () => {
 
       <FormInput
         inputStyle={{width: 200}}
-        placeholder="Work Details..."
+        // placeholder="Work Details..."
+        label="Work details"
         keyboardType="default"
         autoCompleteType="username"
         onChange={value => {

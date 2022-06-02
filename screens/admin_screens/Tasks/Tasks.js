@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import {Dropdown2} from '../../../Components';
 
 const Tasks = () => {
   return (
@@ -10,8 +9,7 @@ const Tasks = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Text>Tasks</Text>
-      <Dropdown2 />
+      {/* <Text>Tasks</Text> */}
     </View>
   );
 };

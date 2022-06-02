@@ -73,7 +73,7 @@ const OnBoarding = ({navigation}) => {
           justifyContent: 'center',
         }}>
         <Image
-          source={images.conSoftLogo}
+          source={images.consoft_PNG}
           resizeMode="contain"
           style={{
             width: SIZES.width * 0.5,

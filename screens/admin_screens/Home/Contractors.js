@@ -10,7 +10,7 @@ const Contractors = () => {
         flex: 1,
         backgroundColor: COLORS.lightblue_50,
       }}>
-      <HeaderBar right={true} />
+      <HeaderBar right={true} title="Contractors"/>
       <Text> Contractors</Text>
     </View>
   );
