@@ -67,8 +67,8 @@ function validateNumber(value, setNumberError) {
   }
 }
 function validatePassword(value, setPasswordError) {
-  if (value.length < 9) {
-    setPasswordError('Password must be 9 characters');
+  if (value.length < 6) {
+    setPasswordError('Password must be 6 characters');
   } else {
     setPasswordError('');
   }

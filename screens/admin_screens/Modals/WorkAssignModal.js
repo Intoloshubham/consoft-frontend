@@ -78,7 +78,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               onPress={() => setCreateProjectModal(false)}
             />
           </View>
-          <WorkAssign />
+          {/* <WorkAssign /> */}
         </Animated.View>
       </View>
     </Modal>

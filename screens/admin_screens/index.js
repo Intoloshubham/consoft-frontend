@@ -25,6 +25,9 @@ import AddProjectTeamModal from './Modals/AddProjectTeamModal';
 import AddProjectTeam from './Modals/AddProjectTeam';
 import Items from './Stock/Items/Items';
 import Unit from './Stock/Unit/Unit';
+import ProjectCategory from './Project/ProjectCategory';
+import ProjectTypes from './Project/ProjectTypes';
+import CompanyTeam from './CompanyTeam/CompanyTeam';
 
 export {
   Home,
@@ -53,4 +56,7 @@ export {
   AddProjectTeam,
   Items,
   Unit,
+  ProjectCategory,
+  ProjectTypes,
+  CompanyTeam,
 };
