@@ -3,6 +3,12 @@ import {View, StyleSheet, Image} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown-reanimated';
 import {FONTS, COLORS, SIZES, icons} from '../constants';
 
+
+  
+    
+  
+
+
 const Dropdown = ({data, defaultButtonText}) => {
   return (
     <View>
