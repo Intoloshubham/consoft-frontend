@@ -2,16 +2,14 @@ const onboarding_screens = [
   {
     id: 1,
     backgroundImage: require('../assets/images/backg_02.png'),
-    bannerImage: require('../assets/images/building_01.png'),
+    bannerImage: require('../assets/images/build_f.png'),
     title: 'SIPL',
-    description: 'Truthful & Trustworthy We Are, That’s Why We Are Best.',
   },
   {
     id: 2,
     backgroundImage: require('../assets/images/backg_02.png'),
-    bannerImage: require('../assets/images/building_02.png'),
-    title: 'Consoft',
-    description: "It's A Best Construction Company In Jabalpur Area.",
+    bannerImage: require('../assets/images/build_f.png'),
+    title: 'SIPL',
   },
 ];
 

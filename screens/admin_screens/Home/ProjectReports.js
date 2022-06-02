@@ -9,7 +9,7 @@ const ProjectReports = () => {
         flex: 1,
         backgroundColor: COLORS.lightblue_50,
       }}>
-      <HeaderBar right={true} />
+      <HeaderBar right={true} title="Reports"/>
       <Text> ProjectReports</Text>
     </View>
   );

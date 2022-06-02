@@ -20,6 +20,10 @@ const red = require('../assets/images/red.png');
 const b1 = require('../assets/images/building/b1.png');
 const b2 = require('../assets/images/building/b2.png');
 const b3 = require('../assets/images/building/b3.png');
+const consof = require('../assets/images/consof.png');
+const consoft_PNG = require('../assets/images/consoft_PNG.png');
+const build_f = require('../assets/images/build_f.png');
+const build_f1 = require('../assets/images/build_f1.jpg');
 
 export default {
   background_01,
@@ -43,4 +47,8 @@ export default {
   b1,
   b2,
   b3,
+  consof,
+  consoft_PNG,
+  build_f,
+  build_f1,
 };

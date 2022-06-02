@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const Dropdown2 = () => {
+const ProjectTypes = () => {
   return (
     <View>
-      <Text>Dropdown2</Text>
+      <Text>ProjectTypes</Text>
     </View>
   );
 };
 
-export default Dropdown2;
+export default ProjectTypes;
