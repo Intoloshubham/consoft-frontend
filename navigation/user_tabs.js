@@ -9,7 +9,7 @@ import {
   Demo,
   Demo1,
   Demo2,
-  Reports
+  UserReports
 } from '../screens/user_screens';
 
 
@@ -131,7 +131,7 @@ const UserTabs = () => {
       />
       <Tab.Screen
         name="Reports"
-        component={Reports}
+        component={UserReports}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
