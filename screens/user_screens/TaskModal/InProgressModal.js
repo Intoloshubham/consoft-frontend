@@ -2,7 +2,7 @@ import {
     View,
     Text,
     Modal,
-    TouchableOpacity, 
+    TouchableOpacity,
     Alert,
     Pressable,
     StyleSheet,
@@ -13,8 +13,9 @@ import {
 import React from 'react'
 import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
-import PieChart from 'react-native-pie-chart';
+import { BarChart } from "react-native-gifted-charts";
 import styles from './css/InProgressModalStyle'
+import { color } from 'react-native-reanimated';
 
 
 Entypo.loadFont()
@@ -35,6 +36,25 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
         setSelectedActiveItem(activeItem)
     }
 
+    const barData = [
+        {
+            value: 50, label: 'T1', topLabelComponent: () => (
+                <Text style={{ color: 'blue', fontSize: 18, marginBottom: 6 }}>50</Text>
+            ),
+        },
+        { value: 40, label: 'T2', frontColor: '#177AD5', labelTextStyle: { color: 'red' } },
+        { value: 50, label: 'T3', frontColor: '#177AD5' },
+        { value: 80, label: 'T4' },
+        { value: 60, label: 'T5', frontColor: '#177AD5' },
+        { value: 10, label: 'T6', frontColor: '#177AD5' },
+        { value: 50, label: 'T7', frontColor: '#177AD5' },
+        { value: 16, label: 'T8', frontColor: '#177AD5' },
+        { value: 60, label: 'T9', frontColor: '#177AD5' },
+        { value: 10, label: 'T10', frontColor: '#177AD5' },
+        { value: 60, label: 'T11', frontColor: '#177AD5' },
+        { value: 20, label: 'T12', frontColor: '#177AD5' },
+        { value: 15, label: 'T13', frontColor: '#177AD5' },
+    ];
 
     const renderItem = ({ item }) => (
         <View style={{ backgroundColor: COLORS.transparent, paddingHorizontal: 10, paddingTop: 10, bottom: 5, marginBottom: 10 }}>
@@ -68,48 +88,82 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                     Alert.alert("Modal has been closed.");
                     setinProgressModal(!inProgressModal);
                 }}>
+                <Pressable style={{ position: "relative", backgroundColor: "transparent", paddingTop: SIZES.width * 0.7, bottom: 5 }} onPress={() => setinProgressModal(!inProgressModal)}>
+
+                </Pressable>
                 <View style={styles.modal_container}>
                     <View style={{ flex: 1, backgroundColor: COLORS.white2, marginTop: 20 }}>
                         <View style={{ backgroundColor: COLORS.white, marginLeft: 5 }}>
                             <Pressable style={{ alignSelf: "flex-end", marginLeft: 320, marginTop: 9, left: -8, top: -12 }} onPress={() => setinProgressModal(!inProgressModal)}><Entypo name="cross" color={"#106853"} size={25} /></Pressable>
+                            <View style={styles.act_tsk_stat_view}>
+                                <Text style={[styles.act_tsk_stat, { color: COLORS.black, ...FONTS.body2, textAlign: "center" }]}>Active Task Statistic</Text>
+                            </View>
                         </View>
-                        <View style={styles.act_tsk_stat_view}>
-                            <Text style={[styles.act_tsk_stat, { color: COLORS.black,fontWeight:"bold" }]}>Active Task Statistic</Text>
-                        </View>
-                        <View style={{ flexDirection: "row", backgroundColor: COLORS.transparentBlack1, borderRadius: 10, marginTop: 10, padding: 10 }}>
-                            <View style={{ marginLeft: 15 }}>
-                                <PieChart
-                                    widthAndHeight={widthAndHeight}
-                                    series={series}
-                                    sliceColor={sliceColor}
-                                    doughnut={true}
-                                    coverRadius={0}
-                                    coverFill={'#FFF'}
-                                    style={{ paddingBottom: 10, paddingHorizontal: 21 }}
+                        <View style={{ flex: 1, flexDirection: "row", backgroundColor: COLORS.white2,alignContent:"space-between",alignItems:"baseline",left:-12,top:32 }}>
+                            <View style={{flex:2,  backgroundColor: COLORS.white2 }}>
+                                <BarChart
+                                    barWidth={20}
+                                    noOfSections={3}
+                                    barBorderRadius={40}
+                                    frontColor="#177AD5"
+                                    data={barData}
+                                    width={450}
+                                    height={120}
+                                    cappedBars={true}
+                                    capColor={COLORS.blue}
+                                    roundedTop={true}
+                                    roundedBottom={true}
+                                    showGradient={true}
+                                    activeOpacity={0.8}
+                                    isAnimated={true}
+                                    animationDuration={600}
+                                    animationEasing={'Easing.ease'}
+                                    sideColor={COLORS.blue}
+                                    topColor={COLORS.transparentBlack7}
+                                    isThreeD={true}
+                                    // onPress={() => alert("i am task")}
+                                    spacing={20}
+                                    sideWidth={15}
+                                    initialSpacing={40}
+                                    // renderTooltip={() => alert("tool tip")}
+                                    horizontal={true}
+                                    labelWidth={20}
+                                    yAxisThickness={0}
+                                    hideYAxisText={true}
+                                    yAxisLabelSuffix={" %"}
+                                    yAxisTextStyle={{ color: 'blue', fontWeight: "bold" }}
+                                    xAxisLabelTextStyle={{ color: 'blue', fontWeight: "bold" }}
+                                    // showScrollIndicator={true}
+                                    // indicatorColor={'black'}
+                                    // scrollToEnd={true}
+                                    scrollAnimation={true}
+                                    yAxisAtTop={false}
+                                    // yAxisLabelContainerStyle={{color:COLORS.red}}
+                                    xAxisThickness={0}
                                 />
                             </View>
-                            <View style={{ marginHorizontal: 70, marginTop: 30,marginVertical:30,justifyContent:"space-evenly" }}>
-                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
+                            <View style={{ flexDirection: "column", alignItems: "baseline", justifyContent: "space-around", backgroundColor: "transparent", height: 72, top: -45, right: 0 }}>
+                                <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <View style={[styles.circle, { backgroundColor: "yellow" }]}></View>
                                     <Text style={styles.pie_tag}>No. of Task</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
-                                    <View style={[styles.circle, { backgroundColor:"#2196F3"  }]}>
+                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                    <View style={[styles.circle, { backgroundColor: "#2196F3" }]}>
                                     </View>
                                     <Text style={styles.pie_tag}>In Progress !</Text>
                                 </View>
-                                <View style={{ flexDirection: "row", alignItems: "center",marginBottom:-5 }}>
+                                <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <View style={[styles.circle, { backgroundColor: "#4caf50" }]}>
                                     </View>
                                     <Text style={styles.pie_tag}>Done !</Text>
-                                </View>     
+                                </View>
                             </View>
                         </View>
-                        <View style={[styles.act_tsk_list_view, styles.act_tsk_stat_view]}>
-                            <Text style={[FONTS.h2, { color: COLORS.black, fontWeight:"bold",textAlign:"center" }]}>List of Active Task</Text>
-                        </View>
+                        {/* <View style={[styles.act_tsk_list_view, styles.act_tsk_stat_view,{bottom:0}]}>
+                            <Text style={[FONTS.body2, { color: COLORS.black,  textAlign: "center" }]}>List of Active Task</Text>
+                        </View> */}
 
-                        <View style={{ marginTop: 12, marginLeft: -15 }} >
+                        {/* <View style={{ marginTop: 10, marginLeft: -15 }} >
                             <FlatList
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
@@ -117,7 +171,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                                 renderItem={renderItem}
                                 keyExtractor={item => item.id}
                             />
-                        </View>
+                        </View> */}
 
                     </View>
                 </View>
