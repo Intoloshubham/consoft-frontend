@@ -1,53 +1,43 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
-import AuthLayout from '../Authentication/AuthLayout';
-import {FONTS, SIZES, COLORS, icons, images} from '../../constants';
-import {
-  FormInput,
-  TextButton,
-  TextIconButton,
-  Dropdown,
-} from '../../Components';
-import utils from '../../utils';
-const url = 'http://192.168.1.99:8000/api/register';
+import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
+import AuthLayout from '../../Authentication/AuthLayout';
+import {FONTS, SIZES, COLORS, icons} from '../../../constants';
+import {FormInput, TextButton, CustomDropdown} from '../../../Components';
+import utils from '../../../utils';
+import {add_users} from '../../../ApiStore/ApiStore';
+// const url = 'http://192.168.1.99:8000/api/register';
+import {HeaderBar} from '../../../Components';
 
 const SignUp = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
-  // const [password, setPassword] = React.useState('');
-  // const [showPass, setShowPass] = React.useState(false);
+  const [password, setPassword] = React.useState('');
+  const [showPass, setShowPass] = React.useState(false);
 
   const [emailError, setEmailError] = React.useState('');
   const [usernameError, setUsernameError] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
-  // const [passwordError, setPasswordError] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
 
-  const designations = ['Engineer', 'Supervisor', 'Asst. Supervisor'];
-  const defaultButtonText = React.useState('');
-
-  function isEnableSignUp() {
-    return (
-      email != '' &&
-      username != '' &&
-      mobileNo != '' &&
-      // password != '' &&
-      emailError == '' &&
-      // passwordError == '' &&
-      usernameError == '' &&
-      mobileNoError == ''
-    );
-  }
+  // dropdown
+  const data = [
+    {label: 'Engineer', value: '1'},
+    {label: 'Supervisor', value: '2'},
+    {label: 'Asst. Superviosr', value: '3'},
+  ];
+  const [dropdown, setDropdown] = React.useState(null);
 
   const OnSubmit = () => {
     const data = {
-      role: designations,
+      role: dropdown,
       name: username,
       email: email,
       mobile: mobileNo,
+      password: password,
     };
 
-    fetch(url, {
+    fetch(add_users, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,26 +46,40 @@ const SignUp = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
+        console.log(data);
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error(error.message);
       });
   };
 
   return (
-    <AuthLayout
-      title="Getting Started"
-      subtitle="welcome back to consoft"
-      titleContainerStyle={{marginTop: SIZES.radius}}>
+    <View
+      style={{
+        flex: 1,
+      }}>
+      <HeaderBar right={true} title="Company Team" />
+
       <View
         style={{
           flex: 1,
-          marginTop: SIZES.padding,
+          marginTop: SIZES.padding * 2,
+          marginHorizontal: SIZES.padding,
         }}>
-        <Dropdown data={designations} defaultButtonText="Select Designation" />
+        <CustomDropdown
+          data={data}
+          // labelField="label"
+          // valueField="value"
+          label="Dropdown"
+          value={dropdown}
+          onChange={item => {
+            setDropdown(item.value);
+            console.log('selected', item);
+          }}
+        />
         <FormInput
-          placeholder="Username"
+          label="Name"
+          // placeholder="Username"
           // containerStyle={{marginTop: SIZES.base}}
           //   keyboardType="email-address"
           //   autoCompleteType="email"
@@ -108,16 +112,17 @@ const SignUp = ({navigation}) => {
           }
         />
         <FormInput
-          placeholder="Email"
+          label="Email"
+          // placeholder="Email"
           keyboardType="email-address"
           autoCompleteType="email"
           onChange={value => {
             //validate email
 
-            utils.validateEmail(value, setEmailError);
+            // utils.validateEmail(value, setEmailError);
             setEmail(value);
           }}
-          errorMsg={emailError}
+          // errorMsg={emailError}
           appendComponent={
             <View style={{justifyContent: 'center'}}>
               <Image
@@ -142,15 +147,16 @@ const SignUp = ({navigation}) => {
         />
 
         <FormInput
-          placeholder="Mobile No."
+          label="Mobile No."
+          // placeholder="Mobile No."
           // keyboardType="email-address"
           // autoCompleteType="email"
           onChange={value => {
             //validate number
-            utils.validateNumber(value, setMobileNoError);
+            // utils.validateNumber(value, setMobileNoError);
             setMobileNo(value);
           }}
-          errorMsg={mobileNoError}
+          // errorMsg={mobileNoError}
           appendComponent={
             <View style={{justifyContent: 'center'}}>
               <Image
@@ -174,15 +180,16 @@ const SignUp = ({navigation}) => {
           }
         />
 
-        {/* <FormInput
-          placeholder="Password"
+        <FormInput
+          label="Password"
+          // placeholder="Password"
           secureTextEntry={!showPass}
           autoCompleteType="password"
           onChange={value => {
-            utils.validatePassword(value, setPasswordError);
+            // utils.validatePassword(value, setPasswordError);
             setPassword(value);
           }}
-          errorMsg={passwordError}
+          // errorMsg={passwordError}
           appendComponent={
             <TouchableOpacity
               style={{
@@ -201,53 +208,20 @@ const SignUp = ({navigation}) => {
               />
             </TouchableOpacity>
           }
-        /> */}
+        />
         {/* SignIn & SignUp section  */}
         <TextButton
-          label="Sign Up"
-          disabled={isEnableSignUp() ? false : true}
+          label="Submit"
           buttonContainerStyle={{
             height: 55,
             alignItems: 'center',
             marginTop: SIZES.padding,
             borderRadius: SIZES.radius,
-            backgroundColor: isEnableSignUp()
-              ? COLORS.lightblue_700
-              : COLORS.transparentPrimary,
           }}
           onPress={OnSubmit}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: SIZES.radius,
-            justifyContent: 'center',
-            paddingBottom: SIZES.padding * 8,
-          }}>
-          <Text
-            style={{
-              color: COLORS.darkGray,
-              ...FONTS.body3,
-            }}>
-            Already have an account?
-          </Text>
-          <TextButton
-            label="Sign In"
-            buttonContainerStyle={{
-              marginLeft: 3,
-              backgroundColor: null,
-            }}
-            labelStyle={{
-              color: COLORS.primary,
-              ...FONTS.h3,
-              fontWeight: 'bold',
-            }}
-            onPress={() => navigation.goBack()}
-          />
-        </View>
       </View>
-      {/* footer  */}
-    </AuthLayout>
+    </View>
   );
 };
 

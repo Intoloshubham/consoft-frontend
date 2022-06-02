@@ -9,9 +9,10 @@ import {
   Demo,
   Demo1,
   Demo2,
+  UserReports
 } from '../screens/user_screens';
 
-import Reports from '../screens/user_screens/Reports/Reports'
+
 
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +56,7 @@ const UserTabs = () => {
           height: 100,
         },
         headerStyle: {
-          // height: 60,
+          height: 60,
         },
         headerTitleAlign: 'left',
         headerRight: () => (
@@ -74,7 +75,7 @@ const UserTabs = () => {
         ),
       }}>
       <Tab.Screen
-        name="User Dahsboard"
+        name="Tasks"
         screenOptions={{
           tabBarShowLabel: false
         }}  
@@ -100,7 +101,7 @@ const UserTabs = () => {
               </Text>
             </View>
           ),
-          headerShown:false
+          headerShown:true
         }}
       />
       <Tab.Screen
@@ -130,8 +131,7 @@ const UserTabs = () => {
       />
       <Tab.Screen
         name="Reports"
-        component={Reports}
-
+        component={UserReports}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image

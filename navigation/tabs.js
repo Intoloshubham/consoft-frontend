@@ -57,9 +57,9 @@ const Tabs = () => {
               marginHorizontal: SIZES.radius,
             }}>
             <Image
-              source={images.cons_logo}
+              source={images.consoft_PNG}
               resizeMode="contain"
-              style={{height: 80, width: 100}}
+              style={{height: 100, width: 100}}
             />
           </View>
         ),

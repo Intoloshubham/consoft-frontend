@@ -22,9 +22,10 @@ export default StyleSheet.create({
       backgroundColor: "transparent"
     },
     avai_text: {
-      fontWeight: "bold",
+      // fontWeight: "bold",
       textAlign: "left",
-      fontSize: 20,
+      // fontSize: 20,
+      ...FONTS.body2,
       marginTop: 4,
       padding: 5,
       paddingHorizontal: 10,
@@ -41,6 +42,7 @@ export default StyleSheet.create({
       height: 30,
       marginTop: 7,
       justifyContent:"flex-start",
+      left:5,
   
       marginHorizontal: SIZES.largeTitle
     },
@@ -55,19 +57,20 @@ export default StyleSheet.create({
     },
     Intask: {
       backgroundColor: COLORS.gray3,
-      marginTop: 10,
+      margin:SIZES.base,
       flexDirection: "row",
-      justifyContent: "space-around",   
+      justifyContent: "space-between",   
       alignItems:"center",
       padding: 7,
       borderRadius: 5,
       elevation: 4
     },
     num_task: {
-      fontWeight: "bold",
-      alignSelf: "center",
+      ...FONTS.body3,
+      // alignSelf: "center",
       marginHorizontal: 50,
-      fontSize: 15,
+      
+      // fontSize: 15,
       color: COLORS.black
     },
     report_section_title: {
@@ -78,19 +81,21 @@ export default StyleSheet.create({
       marginBottom: -SIZES.h5,
       marginLeft: SIZES.h2,
     },
-    report_section: {
-      backgroundColor: "#E4E9F2",
-      elevation: 1,
-      flexWrap: "wrap",
+    create_new_report_btn: {
+      // backgroundColor: "#E4E9F2",
+      backgroundColor: COLORS.lightGray1,
+      opacity:1.2,
+      elevation: 3,
       margin: 10,
+      borderColor:"#0000",
+      borderWidth:1,
+      width:SIZES.width*0.4,
       marginLeft: SIZES.padding,
       marginRight: SIZES.padding,
       borderTopLeftRadius: SIZES.h5,
       borderTopRightRadius: SIZES.h5,
       borderBottomLeftRadius: SIZES.h5,
       padding: SIZES.h5,
-      flexDirection: "row",
-      justifyContent: "flex-start"
     },
     eng: {
       width: 150,
@@ -108,10 +113,6 @@ export default StyleSheet.create({
       textAlign: "center",
       alignItems: "center",
       marginVertical: 30
-    },
-    scroll: {
-      borderRadius: 15,
-      marginTop: 10
     },
     centeredView: {
       flex: 1,
@@ -156,8 +157,7 @@ export default StyleSheet.create({
     },
     tag: {
       ...FONTS.h5,
-      fontWeight: "bold",
-      color: COLORS.blue,
+      fontWeight: "bold"
     }
   
   })
