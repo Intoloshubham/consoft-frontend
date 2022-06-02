@@ -1359,7 +1359,11 @@
     "merge-options" "^3.0.4"
 
 "@react-native-community/art@^1.2.0", "@react-native-community/art@>=1.1.2":
+<<<<<<< HEAD
 >>>>>>> 612a179d9a5781eb02e792a23d8028cab883a601
+=======
+>>>>>>> upstream/master
+>>>>>>> 466be65175f289d547e93ccf0152dcf973ad6933
   "integrity" "sha512-a+ZcRGl/BzLa89yi33Mbn5SHavsEXqKUMdbfLf3U8MDLElndPqUetoJyGkv63+BcPO49UMWiQRP1YUz6/zfJ+A=="
   "resolved" "https://registry.npmjs.org/@react-native-community/art/-/art-1.2.0.tgz"
   "version" "1.2.0"
@@ -5559,7 +5563,11 @@
   "version" "5.2.1"
 >>>>>>> acfc3e2d40600874121ba5da1ed02b3dc86d1418
 
+<<<<<<< HEAD
 >>>>>>> 612a179d9a5781eb02e792a23d8028cab883a601
+=======
+>>>>>>> upstream/master
+>>>>>>> 466be65175f289d547e93ccf0152dcf973ad6933
 "merge-stream@^2.0.0":
   "integrity" "sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w=="
   "resolved" "https://registry.npmjs.org/merge-stream/-/merge-stream-2.0.0.tgz"
@@ -6842,7 +6850,11 @@
 =======
 "react-native@*", "react-native@>= 0.30.0", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.58.0", "react-native@>=0.61.5", "react-native@0.68.1":
 >>>>>>> acfc3e2d40600874121ba5da1ed02b3dc86d1418
+<<<<<<< HEAD
 >>>>>>> 612a179d9a5781eb02e792a23d8028cab883a601
+=======
+>>>>>>> upstream/master
+>>>>>>> 466be65175f289d547e93ccf0152dcf973ad6933
   "integrity" "sha512-5gfvslo5NO2Ece2k/q41eVOK3ca4u1QAOf+qM+auvOiUA4/QR5Yr0WfSGbRpUr2GaFgv7qP11F4+elCravg7uQ=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.68.1.tgz"
   "version" "0.68.1"
