@@ -92,7 +92,7 @@ const App = () => {
         // setIsLoading(false);
         let userToken;
         userToken = null;
-        if (mobileNo == 1234567890 && password == 1234) {
+        if (mobileNo == 1234567892 && password == 1234) {
           userToken = 'dfgdfg';
           try {
             await AsyncStorage.setItem('userToken', userToken);

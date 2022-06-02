@@ -12,34 +12,56 @@ const UserReports = () => {
 
   const [selectedId, setSelectedId] = React.useState(null)
   const [isEnabled, setIsEnabled] = React.useState(false);
+  const [isEnabledPro, setIsEnabledPro] = React.useState(false);
+  const [isEnabledCont, setIsEnabledCont] = React.useState(false);
+  const [isEnabledContLab, setIsEnabledContLab] = React.useState(false);
   const [comp_team, setcomp_team] = React.useState(false);
   const [pro_team, setpro_team] = React.useState(false);
   const [contract_team, setcontract_team] = React.useState(false);
   const [contract_lab_team, setcontract_lab_team] = React.useState(false);
-  const [toggle_report, settoggle_report] = React.useState(true);
+  // const [toggle_report, settoggle_report] = React.useState(false);
   // console.log(selectedId);
   let opacity = new Animated.Value(0);
 
-  const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
+  const toggleSwitch = (set_state_props) => {
+    console.log(set_state_props);
+    set_state_props(previousState => !previousState);
+    // {isEnabled?}
   };
 
-  const OnSelectedActiveItem = (activeItem,index) => {
+  const OnSelectedActiveItem = (activeItem, index) => {
     console.log(activeItem);
     console.log(index);
 
     setSelectedId(activeItem)
     // console.log(selectedId);
-    if (activeItem.name == 'Company Team' && activeItem.id==index+1) {
-      // settoggle_report(!toggle_report)
+    if (activeItem.name == 'Company Team') {
+
+      // settoggle_report(toggle_report=>!toggle_report);
       setcomp_team(true)
-      isEnabled?animate(Easing.out(Easing.exp)):animate(Easing.out(Easing.exp))
+      animate(Easing.out(Easing.exp));
+      // animate(Easing.out(Easing.exp))
+      // toggle_report?animate(Easing.out(Easing.exp)):null
+      // settoggle_report(!toggle_report)?(toggle_report?alert(" toggle true"):alert('toggle false')):(alert("set not runing running"))
+      //  console.log(toggle_report);
+      //   if(toggle_report>0){
+      //   alert("true");
+      //   animate(Easing.out(Easing.exp));
+      //  }
+      //  else{
+      //   // alert("false")
+      //  }
+
+
+      //  }
+      // {settoggle_report(!toggle_report)==toggle_report?(alert("true")):(alert("set not runing running"))}
+      // console.log(toggle_report);
       // alert("com team");
       setpro_team(false)
       setcontract_team(false)
       setcontract_lab_team(false)
     }
-    else if(activeItem.name == 'Project Team') {
+    else if (activeItem.name == 'Project Team') {
       setpro_team(true)
       animate(Easing.out(Easing.exp))
       setcomp_team(false)
@@ -47,7 +69,7 @@ const UserReports = () => {
       setcontract_lab_team(false)
       // alert("pro team");
     }
-    else if(activeItem.name == 'Contractor Team') {
+    else if (activeItem.name == 'Contractor Team') {
       setcontract_team(true)
       animate(Easing.out(Easing.exp))
       setcomp_team(false)
@@ -55,7 +77,7 @@ const UserReports = () => {
       setcontract_lab_team(false)
       // alert("contra team");
     }
-    else if(activeItem.name == "Contractor's Labour") {
+    else if (activeItem.name == "Contractor's Labour") {
       setcontract_lab_team(true)
       animate(Easing.out(Easing.exp))
       setcomp_team(false)
@@ -64,7 +86,7 @@ const UserReports = () => {
       // alert("con labour");
     }
 
-    
+
   }
 
   const animate = easing => {
@@ -131,40 +153,49 @@ const UserReports = () => {
 
   // }
 
-  const renderItem = ({ item,index }) => {
+  const switch_btn = (state_props,set_state_props) => {
+    console.log(state_props)
+    return (
+      <View>
+        <Switch
+          trackColor={{ false: "#767577", true: "gray" }}
+          thumbColor={state_props ? "#30a566" : "#f4f3f4"}
+          disabled={false}
+          onValueChange={()=>toggleSwitch(set_state_props)}
+          value={state_props}
+          activeText={'On'}
+          inActiveText={'Off'}
+          backgroundActive={'green'}
+          backgroundInactive={'gray'}
+        // circleActiveColor={'#30a566'}
+        // circleInActiveColor={'#000000'}
+        />
+      </View>
+    )
+  }
+
+  const renderItem = ({ item, index }) => {
 
 
     return (
-      <View style={{ flex: 1, backgroundColor: COLORS.white2, position: "relative" }}>
+      <View style={{ flex: 1, backgroundColor: COLORS.red, position: "relative",height:SIZES.width*2 }}>
         <View style={{
-          paddingHorizontal: 110, paddingVertical: 70
+          paddingHorizontal: 110, paddingVertical: 70,backgroundColor:COLORS.gray
 
         }}>
           <TouchableOpacity
             style={[styles.rend_rep_card, { backgroundColor: (selectedId?.id == item.id) ? "#26D1B2" : COLORS.gray3 }]}
             onPress={
               () => {
-                OnSelectedActiveItem(item,index);     
+                OnSelectedActiveItem(item, index);
               }
             }
           >
             <Text style={{ ...FONTS.body4 }}>{item.name}</Text>
 
             {
-              (item.name == 'Company Team') ?
-                (<Switch
-                  trackColor={{ false: "#767577", true: "gray" }}
-                  thumbColor={isEnabled ? "#30a566" : "#f4f3f4"}
-                  disabled={false}
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
-                  activeText={'On'}
-                  inActiveText={'Off'}
-                  backgroundActive={'green'}
-                  backgroundInactive={'gray'}
-                // circleActiveColor={'#30a566'}
-                // circleInActiveColor={'#000000'}
-                />) : null
+              (item.name == 'Company Team') ?(switch_btn(isEnabled,setIsEnabled)):(item.name == 'Project Team')?(switch_btn(isEnabledPro,setIsEnabledPro)):
+              (item.name == 'Contractor Team')?(switch_btn(isEnabledCont,setIsEnabledCont)):(item.name == "Contractor's Labour")?(switch_btn(isEnabledContLab,setIsEnabledContLab)):null
             }
           </TouchableOpacity>
 
@@ -172,10 +203,10 @@ const UserReports = () => {
 
         <Divider style={{ backgroundColor: COLORS.transparentPrimary, marginHorizontal: 8 }} />
         {/* <View> */}
-        {comp_team?item.name=='Company Team' && (Company_view()) :null}
-        {pro_team?item.name=='Project Team' && (Project_view()) :null}
-        {contract_team?item.name=='Contractor Team' && (Contract_team_view()) :null}
-        {contract_lab_team?item.name=="Contractor's Labour" && (Contract_labour_view()) :null}
+        {(comp_team && isEnabled) ? item.name == 'Company Team' && (Company_view()) : null}
+        {(pro_team && isEnabledPro) ? item.name == 'Project Team' && (Project_view()) : null}
+        {(contract_team && isEnabledCont) ? item.name == 'Contractor Team' && (Contract_team_view()) : null}
+        {(contract_lab_team && isEnabledContLab )? item.name == "Contractor's Labour" && (Contract_labour_view()) : null}
         {/* </View> */}
       </View>
     );
@@ -211,7 +242,7 @@ const UserReports = () => {
         <Animated.FlatList />
         <FlatList
           data={dummyData.Reports_part}
-          renderItem={( item, index ) => renderItem(item, index)}
+          renderItem={(item, index) => renderItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
           extraData={selectedId}
           horizontal
@@ -231,7 +262,7 @@ export default UserReports
 const styles = StyleSheet.create({
 
   rend_rep_card: {
-    padding: SIZES.largeTitle,
+    padding: SIZES.width*0.2,
     margin: 5,
     borderRadius: 10,
     position: "absolute",
