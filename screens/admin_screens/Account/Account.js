@@ -212,6 +212,13 @@ const Account = () => {
               image={icons.right_arr}
               onPress={() => navigation.navigate('Unit')}
             />
+            <LineDivider />
+            <ProfileValue
+              icon={icons.stock_manage}
+              value="ManageStock"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('ManageStock')}
+            />
           </View>
         </Collapsible>
         <ProfileValue

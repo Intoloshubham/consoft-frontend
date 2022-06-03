@@ -1,7 +1,7 @@
 const onboarding_screens = [
   {
     id: 1,
-    backgroundImage: require('../assets/images/backg_02.png'),
+    backgroundImage: require('../assets/images/backg_06.png'),
     bannerImage: require('../assets/images/build_f.png'),
     title: 'SIPL',
   },
