@@ -153,7 +153,7 @@ const UserReports = () => {
 
   // }
 
-  const switch_btn = (state_props,set_state_props) => {
+  const switch_btn = (state_props, set_state_props) => {
     console.log(state_props)
     return (
       <View>
@@ -161,7 +161,7 @@ const UserReports = () => {
           trackColor={{ false: "#767577", true: "gray" }}
           thumbColor={state_props ? "#30a566" : "#f4f3f4"}
           disabled={false}
-          onValueChange={()=>toggleSwitch(set_state_props)}
+          onValueChange={() => toggleSwitch(set_state_props)}
           value={state_props}
           activeText={'On'}
           inActiveText={'Off'}
@@ -178,37 +178,41 @@ const UserReports = () => {
 
 
     return (
-      <View style={{ flex: 1, backgroundColor: COLORS.red, position: "relative",height:SIZES.width*2 }}>
-        <View style={{
-          paddingHorizontal: 110, paddingVertical: 70,backgroundColor:COLORS.gray
+      <>
+        <View style={{ flex: 1, backgroundColor: COLORS.lightGray1, position: "relative", height: SIZES.width * 2 }}>
+          <View style={{
+            paddingHorizontal: 195, paddingVertical: 100, backgroundColor: COLORS.lightGray1
 
-        }}>
-          <TouchableOpacity
-            style={[styles.rend_rep_card, { backgroundColor: (selectedId?.id == item.id) ? "#26D1B2" : COLORS.gray3 }]}
-            onPress={
-              () => {
-                OnSelectedActiveItem(item, index);
+          }}>
+            <TouchableOpacity
+              style={[styles.rend_rep_card, { backgroundColor: (selectedId?.id == item.id) ? "#26D1B2" : COLORS.gray3 }]}
+              onPress={
+                () => {
+                  OnSelectedActiveItem(item, index);
+                }
               }
-            }
-          >
-            <Text style={{ ...FONTS.body4 }}>{item.name}</Text>
+            >
+              <View style={{alignSelf:"flex-start",left:-SIZES.largeTitle,top:-SIZES.base}}>
+                <Text style={{ ...FONTS.body4, textAlign: "left" }}>{item.name}</Text>
+              </View>
+              {
+                (item.name == 'Company Team') ? (switch_btn(isEnabled, setIsEnabled)) : (item.name == 'Project Team') ? (switch_btn(isEnabledPro, setIsEnabledPro)) :
+                  (item.name == 'Contractor Team') ? (switch_btn(isEnabledCont, setIsEnabledCont)) : (item.name == "Contractor's Labour") ? (switch_btn(isEnabledContLab, setIsEnabledContLab)) : null
+              }
+            </TouchableOpacity>
 
-            {
-              (item.name == 'Company Team') ?(switch_btn(isEnabled,setIsEnabled)):(item.name == 'Project Team')?(switch_btn(isEnabledPro,setIsEnabledPro)):
-              (item.name == 'Contractor Team')?(switch_btn(isEnabledCont,setIsEnabledCont)):(item.name == "Contractor's Labour")?(switch_btn(isEnabledContLab,setIsEnabledContLab)):null
-            }
-          </TouchableOpacity>
+          </View>
 
+          <Divider style={{ backgroundColor: COLORS.transparentPrimary, marginHorizontal: 8 }} />
+          {/* <View> */}
+          {/* </View> */}
+          {(comp_team && isEnabled) ? item.name == 'Company Team' && (Company_view()) : null}
+          {(pro_team && isEnabledPro) ? item.name == 'Project Team' && (Project_view()) : null}
+          {(contract_team && isEnabledCont) ? item.name == 'Contractor Team' && (Contract_team_view()) : null}
+          {(contract_lab_team && isEnabledContLab) ? item.name == "Contractor's Labour" && (Contract_labour_view()) : null}
         </View>
+      </>
 
-        <Divider style={{ backgroundColor: COLORS.transparentPrimary, marginHorizontal: 8 }} />
-        {/* <View> */}
-        {(comp_team && isEnabled) ? item.name == 'Company Team' && (Company_view()) : null}
-        {(pro_team && isEnabledPro) ? item.name == 'Project Team' && (Project_view()) : null}
-        {(contract_team && isEnabledCont) ? item.name == 'Contractor Team' && (Contract_team_view()) : null}
-        {(contract_lab_team && isEnabledContLab )? item.name == "Contractor's Labour" && (Contract_labour_view()) : null}
-        {/* </View> */}
-      </View>
     );
   };
 
@@ -262,9 +266,9 @@ export default UserReports
 const styles = StyleSheet.create({
 
   rend_rep_card: {
-    padding: SIZES.width*0.2,
+    padding: SIZES.width * 0.2,
     margin: 5,
-    borderRadius: 10,
+    borderRadius: 30,
     position: "absolute",
     top: 0,
     right: 0,
