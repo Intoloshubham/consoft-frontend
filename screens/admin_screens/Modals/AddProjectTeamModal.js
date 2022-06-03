@@ -6,14 +6,46 @@ import {
   TouchableWithoutFeedback,
   Modal,
 } from 'react-native';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import {IconButton} from '../../../Components';
-import AddProjectTeam from './AddProjectTeam';
+import { COLORS, SIZES, FONTS, icons } from '../../../constants';
+import { IconButton } from '../../../Components';
+// import AddProjectTeam from './AddProjectTeam';
+const team_var = [
+  {
+    id: 1,
+    name: "Manager",
+    Number_of_man: [
+      'Man_1', 'Man_2', 'Man_3'
+    ]
+  },
+  {
+    id: 2,
+    name: "Supervisor",
+    Number_of_Sup: [
+      'Sup_1', 'Sup_2', 'Sup_3'
+    ]
+  },
+  {
+    id: 3,
+    name: "Contractor",
+    Number_of_Con: [
+      'Con_1', 'Con_2', 'Con_3'
+    ]
+  },
+  {
+    id: 4,
+    name: "Technical_team",
+    Number: [
+      'Tech_1', 'Tech_2', 'Tech_3'
+    ]
+  },
+]
+const AddProjectTeamModal = ({ isVisible, onClose }) => {
 
-const AddProjectTeamModal = ({isVisible, onClose}) => {
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
   const [showCreateProjectModal, setCreateProjectModal] =
     React.useState(isVisible);
+  const [team_var_state, setteamvar] = React.useState(team_var)
+
 
   React.useEffect(() => {
     if (showCreateProjectModal) {
@@ -35,9 +67,22 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
     inputRange: [0, 1],
     outputRange: [SIZES.height, SIZES.height - 720],
   });
+
+
+  const Team_category_list = () => {
+    return team_var_state.map((element) => {
+      console.log(element.Number);
+      return (
+        <View key={element.id} style={{margin: 10}}>
+          <Text>{element.name}</Text>
+          <Text>{element.Number_of_man}</Text>
+        </View>
+      );
+    });
+  };
   return (
-    <Modal animationType="fade" transparent={true} visible={isVisible}>
-      <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
+    <Modal animationType="fade" transparent={true} visible={isVisible} >
+      <View style={{ flex: 1, backgroundColor: COLORS.transparentBlack7 }}>
         {/* transparent background */}
         <TouchableWithoutFeedback onPress={() => setCreateProjectModal(false)}>
           <View
@@ -55,14 +100,14 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
             left: SIZES.padding,
             top: modalY,
             width: '90%',
-            // height: '50%',
+            height: '50%',
             padding: SIZES.padding,
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
           }}>
           {/* header */}
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ flex: 1, ...FONTS.h2, color: COLORS.darkGray }}>
               Add new team
             </Text>
             <IconButton
@@ -78,7 +123,12 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
               onPress={() => setCreateProjectModal(false)}
             />
           </View>
-          <AddProjectTeam />
+          <View>
+          {Team_category_list()}
+          </View>
+
+
+          {/* <AddProjectTeam /> */}
         </Animated.View>
       </View>
     </Modal>

@@ -10,11 +10,13 @@ import {
   ScrollView,
   LogBox,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-import {HeaderBar, TextButton} from '../../../Components';
-import {COLORS, FONTS, icons, SIZES} from '../../../constants';
-import AddProjectTeamModal from '../Modals/AddProjectTeamModal';
+import { HeaderBar, TextButton } from '../../../Components';
+import { COLORS, FONTS, icons, SIZES } from '../../../constants';
+import AddProjectTeamModal from '../Modals/AddProjectTeamModal.js';
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { Divider } from '@ui-kitten/components';
 
 const ProjectTeam = () => {
   const navigation = useNavigation();
@@ -87,7 +89,7 @@ const ProjectTeam = () => {
   const [teamdetails, setTeamDetails] = React.useState(teamdetail);
 
   function renderTeamList() {
-    const renderItem = ({item, index}) => (
+    const renderItem = ({ item, index }) => (
       <View>
         <TouchableOpacity
           style={{
@@ -98,8 +100,8 @@ const ProjectTeam = () => {
           onPress={() => {
             item.id == index + 1 ? toggleExpanded : null;
           }}>
-          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
-          <View style={{flex: 1, marginLeft: SIZES.radius}}>
+          <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>{index + 1}</Text>
+          <View style={{ flex: 1, marginLeft: SIZES.radius }}>
             <Text
               style={{
                 ...FONTS.h3,
@@ -111,16 +113,16 @@ const ProjectTeam = () => {
           <Image
             source={icons.down_arrow}
             resizeMode="contain"
-            style={{height: 15, width: 15, tintColor: COLORS.darkGray}}
+            style={{ height: 15, width: 15, tintColor: COLORS.darkGray }}
           />
         </TouchableOpacity>
         <Collapsible
           collapsed={collapsed}
           duration={300}
-          style={{marginBottom: SIZES.base}}>
-          <Text style={{...FONTS.body4}}>Designation - {item.designation}</Text>
-          <Text style={{...FONTS.body4}}>Email - {item.email}</Text>
-          <Text style={{...FONTS.body4}}>Mobile No. - {item.mobile}</Text>
+          style={{ marginBottom: SIZES.base }}>
+          <Text style={{ ...FONTS.body4 }}>Designation - {item.designation}</Text>
+          <Text style={{ ...FONTS.body4 }}>Email - {item.email}</Text>
+          <Text style={{ ...FONTS.body4 }}>Mobile No. - {item.mobile}</Text>
         </Collapsible>
       </View>
     );
@@ -134,9 +136,47 @@ const ProjectTeam = () => {
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Team List</Text>
+
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <View>
+            <TextButton
+              label="New Team"
+              labelStyle={{color:COLORS.black}}
+              buttonContainerStyle={{
+                height: 34,
+                alignItems: "center",
+                marginHorizontal: SIZES.base,
+                paddingHorizontal: SIZES.base * 0.5,
+                padding:5,
+                borderColor:COLORS.transparent,
+                elevation:1,
+                borderWidth:1,
+                borderBottomRightRadius:0,
+                width: SIZES.width * 0.25,
+                borderRadius: SIZES.radius,
+                backgroundColor: COLORS.lightGray1,
+              }}
+         
+            />
+          </View>
+          <TouchableOpacity
+           style={{ opacity: 0.9,elevation:6,backgroundColor:COLORS.white }}
+           onPress={() => setShowAddTeamModal(true)}
+           >
+            <AntDesign name="pluscircle" color={"#106853"} size={25} />
+          </TouchableOpacity>
+        </View>
+        <Divider style={{
+          backgroundColor: COLORS.lightGray1,
+          marginVertical: SIZES.base,
+          marginHorizontal: -SIZES.base,
+          top: SIZES.base,
+          marginBottom:SIZES.body2,
+          height: 2
+        }} />
+        <Text style={{ ...FONTS.h2, color: COLORS.darkGray, textAlign: "center" }}>Team List</Text>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius}}
+          contentContainerStyle={{ marginTop: SIZES.radius }}
           scrollEnabled={false}
           data={teamdetails}
           keyExtractor={item => `${item.id}`}
@@ -163,8 +203,8 @@ const ProjectTeam = () => {
       style={{
         flex: 1,
       }}>
-      <HeaderBar right={true} title="Team"/>
-      <TextButton
+      <HeaderBar right={true} title="Team" />
+      {/* <TextButton
         label="Add New Team"
         buttonContainerStyle={{
           height: 50,
@@ -175,12 +215,12 @@ const ProjectTeam = () => {
           backgroundColor: COLORS.lightblue_700,
         }}
         onPress={() => setShowAddTeamModal(true)}
-      />
+      /> */}
       {showAddTeamModal && (
         <AddProjectTeamModal
           isVisible={showAddTeamModal}
           onClose={() => setShowAddTeamModal(false)}
-        />
+        />      
       )}
       <ScrollView>{renderTeamList()}</ScrollView>
     </View>
