@@ -157,7 +157,6 @@ const Unit = (props) => {
             </View>
           </Card.Content>
         </Card>
-<<<<<<< HEAD
         <View
       style={{
         marginBottom: SIZES.padding,
@@ -189,18 +188,6 @@ const Unit = (props) => {
       />
     </View>
     </View>
-=======
-        <View>
-          <Title>UnitList</Title>
-          <FlatList
-
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={item => `${item._id}`}
-          />
-        </View>
-      </View>
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
     </View>
   );
 };
