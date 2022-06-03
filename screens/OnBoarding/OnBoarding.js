@@ -2,73 +2,44 @@ import React from 'react';
 import {
   View,
   Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
   Image,
-  Animated,
-  ImageBackground,
+  TextInput,
+  Modal,
   FlatList,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  ImageBackground,
+  StyleSheet,
 } from 'react-native';
 import {FONTS, COLORS, SIZES, icons, images, constants} from '../../constants';
-import {TextButton} from '../../Components';
 import LinearGradient from 'react-native-linear-gradient';
+import {FormInput, TextButton} from '../../Components';
+import {useNavigation} from '@react-navigation/native';
 
-const OnBoarding = ({navigation}) => {
-  const scrollX = React.useRef(new Animated.Value(0)).current;
-  const flatListRef = React.useRef();
-  const [currentIndex, setCurrentIndex] = React.useState(0);
+const btn = [
+  {id: 1, btnName: 'User Login', uName: 'User Login'},
+  {id: 2, btnName: 'Company Login', uName: 'Company Login'},
+];
 
-  const onViewChangeRef = React.useRef(({viewableItems, changed}) => {
-    setCurrentIndex(viewableItems[0].index);
-  });
-
-  const Dots = () => {
-    const dotPosition = Animated.divide(scrollX, SIZES.width);
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        {constants.onboarding_screens.map((item, index) => {
-          const dotColor = dotPosition.interpolate({
-            inputRange: [index - 1, index, index + 1],
-            outputRange: [
-              COLORS.lightOrange,
-              COLORS.primary,
-              COLORS.lightOrange,
-            ],
-            extrapolate: 'clamp',
-          });
-          const dotWidth = dotPosition.interpolate({
-            inputRange: [index - 1, index, index + 1],
-            outputRange: [10, 30, 10],
-            extrapolate: 'clamp',
-          });
-          return (
-            <Animated.View
-              key={`dot-${index}`}
-              style={{
-                borderRadius: 5,
-                marginHorizontal: 6,
-                width: dotWidth,
-                height: 10,
-                backgroundColor: dotColor,
-              }}
-            />
-          );
-        })}
-      </View>
-    );
-  };
+const OnBoarding = () => {
+  const navigation = useNavigation();
+  const [mobileNo, setMobileNo] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [mobileNoError, setMobileNoError] = React.useState('');
+  const [showPass, setShowPass] = React.useState(false);
+  function isEnableSignIn() {
+    return mobileNo != '' && mobileNoError == '';
+  }
 
   function renderHeaderLogo() {
     return (
       <View
         style={{
-          position: 'absolute',
-          top: SIZES.height > 800 ? 50 : 25,
-          left: 0,
-          right: 0,
+          marginTop: SIZES.padding,
+          flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
@@ -76,166 +47,195 @@ const OnBoarding = ({navigation}) => {
           source={images.consoft_PNG}
           resizeMode="contain"
           style={{
-            width: SIZES.width * 0.5,
+            // width: SIZES.width * 0.5,
             height: 100,
           }}
         />
       </View>
     );
   }
-
-  function renderFooter() {
+  function renderHeaderImage() {
     return (
       <View
         style={{
-          height: 160,
+          marginTop: SIZES.base,
+          height: 50,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
-        {/* Pagination  */}
-
+        <Image
+          source={images.build_f}
+          resizeMode="contain"
+          style={{
+            width: '40%',
+          }}
+        />
+      </View>
+    );
+  }
+  function renderForm() {
+    return (
+      <View
+        style={{
+          marginTop: SIZES.padding * 2,
+          marginHorizontal: SIZES.radius * 3,
+        }}>
         <View
           style={{
-            flex: 1,
+            alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Dots />
+          <Text
+            style={{
+              ...FONTS.h3,
+              color: COLORS.black,
+            }}>
+            User Login
+          </Text>
         </View>
-        {/* buttons  */}
-        {currentIndex < constants.onboarding_screens.length - 1 && (
+        <View>
+          <FormInput
+            placeholder="Mobile No."
+            keyboardType="phone-pad"
+            autoCompleteType="tel"
+            onChange={value => {
+              //validate email
+              utils.validateNumber(value, setMobileNoError);
+              setMobileNo(value);
+            }}
+            errorMsg={mobileNoError}
+            appendComponent={
+              <View style={{justifyContent: 'center'}}>
+                <Image
+                  source={
+                    mobileNo == '' || (mobileNo != '' && mobileNoError == '')
+                      ? icons.correct
+                      : icons.cancel
+                  }
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor:
+                      mobileNo == ''
+                        ? COLORS.gray
+                        : mobileNo != '' && mobileNoError == ''
+                        ? COLORS.green
+                        : COLORS.red,
+                  }}
+                />
+              </View>
+            }
+          />
+          <FormInput
+            placeholder="Password"
+            secureTextEntry={!showPass}
+            keyboardType="default"
+            autoCompleteType="password"
+            // containerStyle={{marginTop: SIZES.base}}
+            onChange={value => setPassword(value)}
+            appendComponent={
+              <TouchableOpacity
+                style={{
+                  width: 40,
+                  alignItems: 'flex-end',
+                  justifyContent: 'center',
+                }}
+                onPress={() => setShowPass(!showPass)}>
+                <Image
+                  source={showPass ? icons.eye_close : icons.eye}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor: COLORS.gray,
+                  }}
+                />
+              </TouchableOpacity>
+            }
+          />
+          <TextButton
+            label="Sign In"
+            // disabled={isEnableSignIn() ? false : true}
+            buttonContainerStyle={{
+              height: 55,
+              alignItems: 'center',
+              marginTop: SIZES.padding,
+              borderRadius: SIZES.base,
+              // backgroundColor: isEnableSignIn()
+              //   ? COLORS.lightblue_900
+              //   : COLORS.transparentPrimary,
+            }}
+            // onPress={onSubmit}
+          />
+        </View>
+      </View>
+    );
+  }
+  function renderButton() {
+    const renderItem = ({item}) => {
+      return (
+        <TouchableOpacity
+          style={{
+            // flexDirection: 'row',
+            paddingHorizontal: SIZES.padding * 2,
+          }}
+          onPress={() => {
+            item.id == 1 ? navigation.navigate('SignIn') : null;
+          }}>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: SIZES.padding,
-              marginVertical: SIZES.padding,
+              marginTop: SIZES.base,
+              backgroundColor: COLORS.green,
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingVertical: SIZES.base,
+              borderRadius: SIZES.base,
             }}>
-            <TextButton
-              label="Skip"
-              buttonContainerStyle={{backgroundColor: null}}
-              labelStyle={{
-                color: COLORS.darkGray2,
-              }}
-              onPress={() => navigation.replace('SignIn')}
-            />
-            <TextButton
-              label="Next"
-              buttonContainerStyle={{
-                height: 45,
-                width: 120,
-                borderRadius: SIZES.radius,
-              }}
-              onPress={() => {
-                flatListRef?.current?.scrollToIndex({
-                  index: currentIndex + 1,
-                  animated: true,
-                });
-              }}
-            />
+            <Text style={{...FONTS.h3, color: COLORS.white}}>
+              {item.btnName}
+            </Text>
           </View>
-        )}
-        {currentIndex == constants.onboarding_screens.length - 1 && (
-          <View
-            style={{
-              paddingHorizontal: SIZES.padding,
-              marginVertical: SIZES.padding,
-            }}>
-            <TextButton
-              label="Let's Get Started"
-              buttonContainerStyle={{
-                height: 45,
-                borderRadius: SIZES.radius,
-              }}
-              onPress={() => navigation.replace('SignIn')}
-            />
-          </View>
-        )}
+        </TouchableOpacity>
+      );
+    };
+
+    const renderFooterComp = () => <View>{renderForm()}</View>;
+    const renderFooter1Comp = () => {
+      return (
+        <View>
+          <Text>Second</Text>
+        </View>
+      );
+    };
+    return (
+      <View
+        style={{
+          marginTop: SIZES.padding * 2,
+          // marginHorizontal: SIZES.padding * 2,
+        }}>
+        <FlatList
+          data={btn}
+          keyExtractor={item => `${item.id}`}
+          renderItem={renderItem}
+          ListFooterComponent={renderFooterComp}
+        />
       </View>
     );
   }
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.white,
-      }}>
-      <Animated.FlatList
-        ref={flatListRef}
-        horizontal
-        pagingEnabled
-        data={constants.onboarding_screens}
-        scrollEventThrottle={15}
-        showsHorizontalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {x: scrollX}}}],
-          {useNativeDriver: false},
-        )}
-        onViewableItemsChanged={onViewChangeRef.current}
-        keyExtractor={item => `${item.id}`}
-        renderItem={({item, index}) => {
-          return (
-            <View
-              style={{
-                width: SIZES.width,
-              }}>
-              {/* Header  */}
-              <View
-                style={{
-                  flex: 3,
-                }}>
-                <ImageBackground
-                  source={item.backgroundImage}
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                    height: index == 1 ? '92%' : '100%',
-                    width: '100%',
-                  }}>
-                  <Image
-                    source={item.bannerImage}
-                    resizeMode="contain"
-                    style={{
-                      width: SIZES.width * 0.7,
-                      height: SIZES.width * 0.7,
-                      marginBottom: -SIZES.padding,
-                    }}
-                  />
-                </ImageBackground>
-              </View>
-              {/* Details  */}
-              <View
-                style={{
-                  flex: 1,
-                  marginTop: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingHorizontal: SIZES.radius,
-                }}>
-                <Text
-                  style={{
-                    ...FONTS.h2,
-                    color: COLORS.darkGray,
-                    // fontWeight: 'bold',
-                  }}>
-                  {item.title}
-                </Text>
-                <Text
-                  style={{
-                    marginTop: SIZES.radius,
-                    textAlign: 'center',
-                    color: COLORS.darkGray2,
-                    paddingHorizontal: SIZES.padding,
-                    ...FONTS.body4,
-                  }}>
-                  {item.description}
-                </Text>
-              </View>
-            </View>
-          );
-        }}
-      />
-      {renderHeaderLogo()}
-      {renderFooter()}
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      style={{flex: 1}}>
+      <LinearGradient
+        colors={[COLORS.lightblue_50, COLORS.lightblue_300]}
+        style={{flex: 1}}>
+        <ScrollView>
+          {renderHeaderLogo()}
+          {renderHeaderImage()}
+          {renderButton()}
+          {/* {renderForm()} */}
+        </ScrollView>
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 };
 
