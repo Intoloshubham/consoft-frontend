@@ -18,7 +18,7 @@ import {
   HeaderBar,
   TextButton,
 } from '../../../../Components';
-import {SIZES, COLORS, icons, Images} from '../../../../constants';
+import {SIZES, COLORS, icons, Images, FONTS} from '../../../../constants';
 import {
   Autocomplete,
   IndexPath,
@@ -79,15 +79,17 @@ const Unit = (props) => {
 
   const renderItem = ({item}) => {
     return (
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.item}>
-          <Text style={styles.title}>{item.unit_name}</Text>
-          <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-            <Button title="edit" />
-            <Button title="X" />
-          </View>
+    <ScrollView contentContainerStyle={styles.contentContainer}>
+     
+          <View style={styles.item}>
+           <Text style={styles.title}>{item.unit_name}</Text>
+              <View style={{justifyContent:"space-evenly", flexDirection: 'row',}}>
+                <Button title="edit"/>
+                <Button title="X" />
+            </View>
         </View>
-      </ScrollView>
+       
+       </ScrollView>
     );
   };
 
@@ -155,48 +157,64 @@ const Unit = (props) => {
             </View>
           </Card.Content>
         </Card>
-        <View>
-          <Title>UnitList</Title>
-          <FlatList
-
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={item => `${item._id}`}
-          />
-        </View>
-      </View>
+        <View
+      style={{
+        marginBottom: SIZES.padding,
+        marginTop:5,
+        padding: 20,
+        borderRadius: SIZES.radius,
+        backgroundColor: COLORS.white,
+        ...styles.shadow,
+      }}>
+      <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Unit List</Text>
+      <FlatList
+        contentContainerStyle={{marginTop: SIZES.radius}}
+        scrollEnabled={false}
+        data={data}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 5,
+              }}></View>
+          );
+        }}
+      />
+    </View>
+    </View>
     </View>
   );
 };
 
 export default Unit;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight,
-  },
-  scrollView: {
-    // backgroundColor: 'pink',
-    marginHorizontal: 20,
-  },
   input: {
     borderWidth: 1,
     borderRadius: 10,
   },
 
   item: {
-    // backgroundColor: '#f9c2ff',
+     flexDirection: 'row',
+     justifyContent: 'space-between',
+    //  width:"80%",
+    //  textAlign:"center",
+    //  marginHorizontal:30,
+    //  marginTop:10,
+    //  borderWidth:1,
+    //  padding:5,
+    
+     
 
-    padding: 20,
-    marginVertical: 2,
-    marginHorizontal: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 5,
-    borderWidth: 1,
   },
-  title: {
-    fontSize: 20,
+  title:{
+    fontSize:20,
+    fontWeight:"bold",  
   },
   input: {
     backgroundColor: 'white',
@@ -205,7 +223,22 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gray2,
     color: 'black',
   },
-  scrollView: {
-    height: 60,
+  // listcard:{
+  //   backgroundColor:"#FDF6EC",
+  //   borderWidth:2,
+  //   shadowColor:"#787A91",
+  //   margin:5,
+  //   elevation:50
+  // },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
 });
+  
