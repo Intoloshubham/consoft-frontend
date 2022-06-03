@@ -14,14 +14,7 @@ import {
 import {Card, Title} from 'react-native-paper';
 import {Dropdown, FormInput, HeaderBar, TextButton,} from '../../../../Components';
 import {COLORS, FONTS, SIZES} from '../../../../constants';
-import {
-  IndexPath,
-  Layout,
-  Select,
-  SelectGroup,
-  SelectItem,
-} from '@ui-kitten/components';
-import { color } from 'react-native-reanimated';
+
 
 const url = 'http://192.168.1.99:8000/api/item';
 
