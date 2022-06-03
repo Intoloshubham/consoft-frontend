@@ -174,7 +174,7 @@ const UserReports = () => {
     )
   }
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item, index }) => { 
 
 
     return (

@@ -1356,11 +1356,6 @@
     "merge-options" "^3.0.4"
 
 "@react-native-community/art@^1.2.0":
-<<<<<<< HEAD
-=======
-  "integrity" "sha512-a+ZcRGl/BzLa89yi33Mbn5SHavsEXqKUMdbfLf3U8MDLElndPqUetoJyGkv63+BcPO49UMWiQRP1YUz6/zfJ+A=="
-  "resolved" "https://registry.npmjs.org/@react-native-community/art/-/art-1.2.0.tgz"
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
   "version" "1.2.0"
   dependencies:
     "art" "^0.10.3"
@@ -2394,11 +2389,6 @@
     "shallow-clone" "^3.0.0"
 
 "clone-response@^1.0.2":
-<<<<<<< HEAD
-=======
-  "integrity" "sha1-0dyXOSAxTfZ/vrlCI7TuNQI56Ws="
-  "resolved" "https://registry.npmjs.org/clone-response/-/clone-response-1.0.2.tgz"
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
   "version" "1.0.2"
   dependencies:
     "mimic-response" "^1.0.0"
@@ -2627,11 +2617,6 @@
   "version" "0.2.0"
 
 "decompress-response@^3.3.0":
-<<<<<<< HEAD
-=======
-  "integrity" "sha1-gKTdMjdIOEv6JICDYirt7Jgq3/M="
-  "resolved" "https://registry.npmjs.org/decompress-response/-/decompress-response-3.3.0.tgz"
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
   "version" "3.3.0"
   dependencies:
     "mimic-response" "^1.0.0"
@@ -2746,11 +2731,6 @@
     "is-obj" "^2.0.0"
 
 "duplexer3@^0.1.4":
-<<<<<<< HEAD
-=======
-  "integrity" "sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI="
-  "resolved" "https://registry.npmjs.org/duplexer3/-/duplexer3-0.1.4.tgz"
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
   "version" "0.1.4"
 
 "ee-first@1.1.1":
@@ -2768,14 +2748,11 @@
 "encodeurl@~1.0.2":
   "version" "1.0.2"
 
-<<<<<<< HEAD
 "encoding@^0.1.0":
   "version" "0.1.13"
   dependencies:
     "iconv-lite" "^0.6.2"
 
-=======
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
 "end-of-stream@^1.1.0":
   "version" "1.4.4"
   dependencies:
@@ -3442,14 +3419,11 @@
 "human-signals@^1.1.1":
   "version" "1.1.1"
 
-<<<<<<< HEAD
 "iconv-lite@^0.6.2":
   "version" "0.6.3"
   dependencies:
     "safer-buffer" ">= 2.1.2 < 3.0.0"
 
-=======
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
 "iconv-lite@0.4.24":
   "version" "0.4.24"
   dependencies:
@@ -5343,13 +5317,7 @@
     "react-native-animatable" "1.3.3"
 
 "react-native-neat-date-picker@^1.2.2":
-<<<<<<< HEAD
   "version" "1.2.2"
-=======
-  "integrity" "sha512-bN6BS0TmiVtfkEGE6oZAL4MCvtZjKz6245lqpEDr73kHbd2pdYsySkFctTaQ+/UUEgWKWTyxv0cL5gazx5tTGA=="
-  "resolved" "https://registry.npmjs.org/react-native-neat-date-picker/-/react-native-neat-date-picker-1.2.4.tgz"
-  "version" "1.2.4"
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
   dependencies:
     "react-native-modal" "^12.1.0"
     "react-native-vector-icons" "^8.1.0"
@@ -5421,11 +5389,6 @@
     "yargs" "^16.1.1"
 
 "react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.68 || 1000.0.0", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
-<<<<<<< HEAD
-=======
-  "integrity" "sha512-5gfvslo5NO2Ece2k/q41eVOK3ca4u1QAOf+qM+auvOiUA4/QR5Yr0WfSGbRpUr2GaFgv7qP11F4+elCravg7uQ=="
-  "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.68.1.tgz"
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
   "version" "0.68.1"
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
@@ -5690,13 +5653,7 @@
   dependencies:
     "ret" "~0.1.10"
 
-<<<<<<< HEAD
 "safer-buffer@>= 2.1.2 < 3", "safer-buffer@>= 2.1.2 < 3.0.0":
-=======
-"safer-buffer@>= 2.1.2 < 3":
-  "integrity" "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="
-  "resolved" "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
->>>>>>> 04b5877a954634f33f2425f8c684d0c6a279384b
   "version" "2.1.2"
 
 "sane@^4.0.3":
