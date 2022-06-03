@@ -158,7 +158,9 @@ const App = () => {
             screenOptions={{
               headerShown: false,
             }}
-            initialRouteName={'OnBoarding'}>
+            //  initialRouteName={'OnBoarding'}>
+                initialRouteName={'OnBoarding'}>       
+
             {loginState.userToken == null ? (
               <React.Fragment>
                 <Stack.Screen name="OnBoarding" component={OnBoarding} />
