@@ -28,6 +28,7 @@ import Unit from './Stock/Unit/Unit';
 import ProjectCategory from './Project/ProjectCategory';
 import ProjectTypes from './Project/ProjectTypes';
 import CompanyTeam from './CompanyTeam/CompanyTeam';
+import ManageStock from './Stock/ManageStock/ManageStock';
 
 export {
   Home,
@@ -59,4 +60,5 @@ export {
   ProjectCategory,
   ProjectTypes,
   CompanyTeam,
+  ManageStock,
 };

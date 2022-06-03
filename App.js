@@ -20,6 +20,7 @@ import {
   Items,
   Unit,
   CompanyTeam,
+  ManageStock,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -92,7 +93,7 @@ const App = () => {
         // setIsLoading(false);
         let userToken;
         userToken = null;
-        if (mobileNo == 1234567890 && password == 1234) {
+        if (mobileNo == 1234567892 && password == 1234) {
           userToken = 'dfgdfg';
           try {
             await AsyncStorage.setItem('userToken', userToken);
@@ -201,6 +202,8 @@ const App = () => {
                 <Stack.Screen name="Items" component={Items} />
                 <Stack.Screen name="Unit" component={Unit} />
                 <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
+                <Stack.Screen name="ManageStock" component={ManageStock} />
+
                 {/* User  */}
                 <Stack.Screen name="UserDashboard" component={UserTabs} />
                 <Stack.Screen name="Profile" component={Profile} />
