@@ -6,11 +6,9 @@ import {
   Animated,
   ImageBackground,
   FlatList,
-  TouchableOpacity,
-  StyleSheet,
 } from 'react-native';
 import {FONTS, COLORS, SIZES, icons, images, constants} from '../../constants';
-import {TextButton, FormInput} from '../../Components';
+import {TextButton} from '../../Components';
 import LinearGradient from 'react-native-linear-gradient';
 
 const OnBoarding = ({navigation}) => {
@@ -159,105 +157,86 @@ const OnBoarding = ({navigation}) => {
         flex: 1,
         backgroundColor: COLORS.white,
       }}>
-      <View
-        style={{
-          flex: 1.5,
-        }}>
-        <ImageBackground
-          source={images.backg_05}
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            height: '100%',
-            width: '100%',
-          }}>
-          <Image
-            source={images.build_f}
-            resizeMode="contain"
-            style={{
-              width: SIZES.width * 0.7,
-              height: SIZES.width * 0.7,
-              marginBottom: -SIZES.padding,
-            }}
-          />
-        </ImageBackground>
-      </View>
-      <View style={{flex: 2, marginTop: SIZES.radius}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <View>
-            <TextButton
-              label="User Login"
-              buttonContainerStyle={{
-                paddingVertical: SIZES.base,
-                paddingHorizontal: SIZES.radius,
-                backgroundColor: COLORS.lightblue_600,
-              }}
-              onPress={() => navigation.replace('SignIn')}
-            />
-          </View>
-          <View style={{marginLeft: SIZES.padding}}>
-            <TextButton
-              label="Company Login"
-              buttonContainerStyle={{
-                paddingHorizontal: SIZES.radius,
-                paddingVertical: SIZES.base,
-                backgroundColor: COLORS.lightblue_600,
-              }}
-              onPress={() => navigation.replace('SignIn')}
-            />
-          </View>
-        </View>
-        <View
-          style={{
-            marginTop: SIZES.padding * 2,
-            marginHorizontal: SIZES.padding,
-            ...styles.container,
-          }}>
-          <FormInput
-            placeholder="Mobile"
-            keyboardType="default"
-            autoCompleteType="username"
-            onChange={value => {
-              setProjectTeamName(value);
-            }}
-          />
-          <FormInput
-            placeholder="Password"
-            keyboardType="default"
-            autoCompleteType="username"
-            onChange={value => {
-              setProjectTeamName(value);
-            }}
-          />
-          <TextButton
-            label="Submit"
-            buttonContainerStyle={{
-              height: 45,
-              alignItems: 'center',
-              marginTop: SIZES.padding * 2,
-              borderRadius: SIZES.radius,
-            }}
-            onPress={() => alert('Okay...')}
-          />
-        </View>
-      </View>
+      <Animated.FlatList
+        ref={flatListRef}
+        horizontal
+        pagingEnabled
+        data={constants.onboarding_screens}
+        scrollEventThrottle={15}
+        showsHorizontalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: false},
+        )}
+        onViewableItemsChanged={onViewChangeRef.current}
+        keyExtractor={item => `${item.id}`}
+        renderItem={({item, index}) => {
+          return (
+            <View
+              style={{
+                width: SIZES.width,
+              }}>
+              {/* Header  */}
+              <View
+                style={{
+                  flex: 3,
+                }}>
+                <ImageBackground
+                  source={item.backgroundImage}
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    height: index == 1 ? '92%' : '100%',
+                    width: '100%',
+                  }}>
+                  <Image
+                    source={item.bannerImage}
+                    resizeMode="contain"
+                    style={{
+                      width: SIZES.width * 0.7,
+                      height: SIZES.width * 0.7,
+                      marginBottom: -SIZES.padding,
+                    }}
+                  />
+                </ImageBackground>
+              </View>
+              {/* Details  */}
+              <View
+                style={{
+                  flex: 1,
+                  marginTop: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingHorizontal: SIZES.radius,
+                }}>
+                <Text
+                  style={{
+                    ...FONTS.h2,
+                    color: COLORS.darkGray,
+                    // fontWeight: 'bold',
+                  }}>
+                  {item.title}
+                </Text>
+                <Text
+                  style={{
+                    marginTop: SIZES.radius,
+                    textAlign: 'center',
+                    color: COLORS.darkGray2,
+                    paddingHorizontal: SIZES.padding,
+                    ...FONTS.body4,
+                  }}>
+                  {item.description}
+                </Text>
+              </View>
+            </View>
+          );
+        }}
+      />
       {renderHeaderLogo()}
-      {/* {renderFooter()} */}
+      {renderFooter()}
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1,
-    borderRadius: SIZES.base,
-    paddingHorizontal: SIZES.padding,
-    paddingBottom: SIZES.padding,
-  },
-});
+
 export default OnBoarding;
