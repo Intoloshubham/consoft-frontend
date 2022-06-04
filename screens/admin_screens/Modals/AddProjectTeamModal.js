@@ -12,12 +12,15 @@ import {
 import { COLORS, SIZES, FONTS, icons } from '../../../constants';
 import { IconButton } from '../../../Components';
 import { AccordionList } from 'accordion-collapse-react-native';
+import dummyData from '../../../constants/dummyData'
 const url = 'http://192.168.1.99:8000/api/role';
+
 // import AddProjectTeam from './AddProjectTeam';
 
 const AddProjectTeamModal = ({ isVisible, onClose }) => {
 
   const [role_var_state, setroleteamvar] = React.useState([])
+  const [dummy_state, set_dummy_state] = React.useState(dummyData.reports)
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
   const [showCreateProjectModal, setCreateProjectModal] =
     React.useState(isVisible);
@@ -53,7 +56,7 @@ const AddProjectTeamModal = ({ isVisible, onClose }) => {
       .then(response => response.json())
       .then(data => {
         setroleteamvar(data);
-        // console.log(role_var_state);
+        console.log(role_var_state);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -146,23 +149,24 @@ const AddProjectTeamModal = ({ isVisible, onClose }) => {
   }
 
   return (
-    <Modal animationType="fade" transparent={true} visible={isVisible} >
-      <View style={{ flex: 1, backgroundColor: COLORS.transparentBlack7 }}>
+    <Modal animationType="fade" transparent={true} visible={isVisible}  >
+      <View style={{ flex: 1, backgroundColor: COLORS.transparentBlack7}}>
         {/* transparent background */}
         <TouchableWithoutFeedback onPress={() => setCreateProjectModal(false)}>
           <View
             style={{
-              position: 'absolute',
+              position: 'relative',
               top: 0,
               left: 0,
               right: 0,
-              bottom: 0,
+              bottom: 0,              
+              paddingVertical:SIZES.height              
             }}></View>
         </TouchableWithoutFeedback>
         <Animated.View
           style={{
             position: 'absolute',
-            left: SIZES.padding,
+            left: SIZES.h4*2,            
             top: modalY,
             width: '85%',
             height: '60%',
