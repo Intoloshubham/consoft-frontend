@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import utils from '../../../utils';
 import {useNavigation} from '@react-navigation/native';
 import {TextButton, FormInput, CustomDropdown} from '../../../Components';
 const url = 'http://192.168.1.99:8000/api/projects';
+import Toast from 'react-native-toast-message';
 
 const ProjectsCreateModal = ({isVisible, onClose}) => {
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
@@ -52,9 +53,11 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
   const [projectplotarea, setProjectPlotArea] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
   const data = [
-    {label: 'Engineer', value: '1'},
-    {label: 'Supervisor', value: '2'},
-    {label: 'Asst. Superviosr', value: '3'},
+    {label: 'Bungalow', value: '1'},
+    {label: 'Apartment', value: '2'},
+    {label: 'Flat', value: '3'},
+    {label: 'Mall', value: '4'},
+    {label: 'Duplex', value: '5'},
   ];
   const [dropdown, setDropdown] = React.useState(null);
 
@@ -68,6 +71,15 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
       projectPlotAreaError == ''
     );
   }
+
+  const showToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'Login Successfully',
+      text2: 'Success',
+      visibilityTime: 400,
+    });
 
   const OnSubmit = () => {
     const data = {
@@ -87,6 +99,7 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
+        showToast();
       })
       .catch(error => {
         console.error('Error:', error);
@@ -96,6 +109,10 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
       setCreateProjectModal(false);
     }, 1000);
   };
+
+  // useEffect(() => {
+  //   OnSubmit();
+  // });
 
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
@@ -111,6 +128,7 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
               bottom: 0,
             }}></View>
         </TouchableWithoutFeedback>
+        <Toast config={showToast} />
         <Animated.View
           style={{
             position: 'absolute',
@@ -119,8 +137,8 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
             width: '100%',
             height: '100%',
             padding: SIZES.padding,
-            borderTopRightRadius: SIZES.padding,
-            borderTopLeftRadius: SIZES.padding,
+            borderTopRightRadius: SIZES.radius,
+            borderTopLeftRadius: SIZES.radius,
             backgroundColor: COLORS.white,
           }}>
           {/* header */}
@@ -148,105 +166,105 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
             }}>
             {/* <CreateProjects /> */}
 
-            <AuthLayout>
-              <View
-                style={{
-                  flex: 1,
-                  marginTop: SIZES.padding,
-                  marginHorizontal: SIZES.base,
-                }}>
-                <CustomDropdown
-                  data={data}
-                  label="Dropdown"
-                  value={dropdown}
-                  onChange={item => {
-                    setDropdown(item.value);
-                    console.log('selected', item);
-                  }}
-                />
-                <FormInput
-                  label="Project name"
-                  keyboardType="default"
-                  autoCompleteType="username"
-                  onChange={value => {
-                    utils.validateText(value, setProjectError);
-                    setProjectName(value);
-                  }}
-                  errorMsg={projectError}
-                  appendComponent={
-                    <View style={{justifyContent: 'center'}}>
-                      <Image
-                        source={
-                          projectname == '' ||
-                          (projectname != '' && projectError == '')
-                            ? icons.correct
-                            : icons.cancel
-                        }
-                        style={{
-                          height: 20,
-                          width: 20,
-                          tintColor:
-                            projectname == ''
-                              ? COLORS.gray
-                              : projectname != '' && projectError == ''
-                              ? COLORS.green
-                              : COLORS.red,
-                        }}
-                      />
-                    </View>
-                  }
-                />
-                <FormInput
-                  label="Location"
-                  keyboardType="default"
-                  autoCompleteType="username"
-                  onChange={value => {
-                    utils.validateText(value, setProjectLocationError);
-                    setProjectLocation(value);
-                  }}
-                  errorMsg={projectLocationError}
-                  appendComponent={
-                    <View style={{justifyContent: 'center'}}>
-                      <Image
-                        source={
-                          projectlocation == '' ||
-                          (projectlocation != '' && projectLocationError == '')
-                            ? icons.correct
-                            : icons.cancel
-                        }
-                        style={{
-                          height: 20,
-                          width: 20,
-                          tintColor:
-                            projectlocation == ''
-                              ? COLORS.gray
-                              : projectlocation != '' &&
-                                projectLocationError == ''
-                              ? COLORS.green
-                              : COLORS.red,
-                        }}
-                      />
-                    </View>
-                  }
-                />
-
-                <FormInput
-                  label="Plot area"
-                  keyboardType="default"
-                  autoCompleteType="cc-number"
-                  onChange={value => {
-                    utils.validateNumber(value, setProjectPlotAreaError);
-                    setProjectPlotArea(value);
-                  }}
-                  errorMsg={projectPlotAreaError}
-                  appendComponent={
-                    <View
+            {/* <AuthLayout> */}
+            <View
+              style={{
+                flex: 1,
+                marginTop: SIZES.padding,
+                marginHorizontal: SIZES.base,
+              }}>
+              <CustomDropdown
+                data={data}
+                label="Dropdown"
+                value={dropdown}
+                onChange={item => {
+                  setDropdown(item.value);
+                  console.log('selected', item);
+                }}
+              />
+              <FormInput
+                label="Project name"
+                keyboardType="default"
+                autoCompleteType="username"
+                onChange={value => {
+                  utils.validateText(value, setProjectError);
+                  setProjectName(value);
+                }}
+                errorMsg={projectError}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        projectname == '' ||
+                        (projectname != '' && projectError == '')
+                          ? icons.correct
+                          : icons.cancel
+                      }
                       style={{
-                        justifyContent: 'center',
-                        marginTop: SIZES.base,
-                        height: 30,
-                      }}>
-                      {/* <Image
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          projectname == ''
+                            ? COLORS.gray
+                            : projectname != '' && projectError == ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <FormInput
+                label="Location"
+                keyboardType="default"
+                autoCompleteType="username"
+                onChange={value => {
+                  utils.validateText(value, setProjectLocationError);
+                  setProjectLocation(value);
+                }}
+                errorMsg={projectLocationError}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        projectlocation == '' ||
+                        (projectlocation != '' && projectLocationError == '')
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          projectlocation == ''
+                            ? COLORS.gray
+                            : projectlocation != '' &&
+                              projectLocationError == ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+
+              <FormInput
+                label="Plot area"
+                keyboardType="default"
+                autoCompleteType="cc-number"
+                onChange={value => {
+                  utils.validateNumber(value, setProjectPlotAreaError);
+                  setProjectPlotArea(value);
+                }}
+                errorMsg={projectPlotAreaError}
+                appendComponent={
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      marginTop: SIZES.base,
+                      height: 30,
+                    }}>
+                    {/* <Image
                 source={
                   projectplotarea == '' ||
                   (projectplotarea != '' && projectPlotAreaError == '')
@@ -264,28 +282,28 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
                       : COLORS.red,
                 }}
               /> */}
-                      <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
-                        H/A/Sqm/Sft
-                      </Text>
-                    </View>
-                  }
-                />
-                <TextButton
-                  label="Submit"
-                  disabled={isEnableSubmit() ? false : true}
-                  buttonContainerStyle={{
-                    height: 55,
-                    alignItems: 'center',
-                    marginTop: SIZES.padding,
-                    borderRadius: SIZES.radius,
-                    backgroundColor: isEnableSubmit()
-                      ? COLORS.lightblue_700
-                      : COLORS.lightblue_100,
-                  }}
-                  onPress={OnSubmit}
-                />
-              </View>
-            </AuthLayout>
+                    <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
+                      H/A/Sqm/Sft
+                    </Text>
+                  </View>
+                }
+              />
+              <TextButton
+                label="Submit"
+                disabled={isEnableSubmit() ? false : true}
+                buttonContainerStyle={{
+                  height: 55,
+                  alignItems: 'center',
+                  marginTop: SIZES.padding,
+                  borderRadius: SIZES.radius,
+                  backgroundColor: isEnableSubmit()
+                    ? COLORS.lightblue_700
+                    : COLORS.lightblue_100,
+                }}
+                onPress={OnSubmit}
+              />
+            </View>
+            {/* </AuthLayout> */}
           </ScrollView>
         </Animated.View>
       </View>

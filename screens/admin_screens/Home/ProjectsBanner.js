@@ -29,7 +29,7 @@ const ProjectsBanner = () => {
 
   useEffect(() => {
     axios.get(url).then(response => setProjects(response.data));
-  }, []);
+  });
 
   function renderProjects() {
     const renderItem = ({item, index}) => (

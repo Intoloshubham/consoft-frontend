@@ -68,8 +68,6 @@ const SignUp = ({navigation}) => {
         }}>
         <CustomDropdown
           data={data}
-          // labelField="label"
-          // valueField="value"
           label="Dropdown"
           value={dropdown}
           onChange={item => {
