@@ -4,17 +4,17 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {icons, COLORS, SIZES, FONTS} from '../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const CustomDropdown = ({data, value, onChange}) => {
-  const _renderItem = item => {
-    return (
-      <View style={{marginHorizontal: SIZES.radius, marginTop: SIZES.base}}>
-        <Text style={{...FONTS.body4}}>{item.label}</Text>
-        {item.value === value && (
-          <AntDesign color={COLORS.blue} name="check" size={20} />
-        )}
-      </View>
-    );
-  };
+const CustomDropdown = ({data, value, onChange, renderItem}) => {
+  // const _renderItem = item => {
+  //   return (
+  //     <View style={{marginHorizontal: SIZES.radius, marginTop: SIZES.base}}>
+  //       <Text style={{...FONTS.body4}}>{item.label}</Text>
+  //       {item.value === value && (
+  //         <AntDesign color={COLORS.blue} name="check" size={20} />
+  //       )}
+  //     </View>
+  //   );
+  // };
 
   return (
     <View>
@@ -34,7 +34,7 @@ const CustomDropdown = ({data, value, onChange}) => {
         label="Dropdown"
         value={value}
         onChange={onChange}
-        renderItem={item => _renderItem(item)}
+        renderItem={renderItem}
         textError="Error"
       />
     </View>
