@@ -158,8 +158,8 @@ const App = () => {
             screenOptions={{
               headerShown: false,
             }}
-            //  initialRouteName={'OnBoarding'}>
-                initialRouteName={'OnBoarding'}>       
+              initialRouteName={'ManageStock'}>
+                {/* // initialRouteName={'OnBoarding'}>        */}
 
             {loginState.userToken == null ? (
               <React.Fragment>
