@@ -25,6 +25,8 @@ const consof = require('../assets/images/consof.png');
 const consoft_PNG = require('../assets/images/consoft_PNG.png');
 const build_f = require('../assets/images/build_f.png');
 const build_f1 = require('../assets/images/build_f1.jpg');
+const create_company = require('../assets/images/create_company.png');
+const product_key = require('../assets/images/product_key.png');
 
 export default {
   background_01,
@@ -53,4 +55,6 @@ export default {
   consoft_PNG,
   build_f,
   build_f1,
+  create_company,
+  product_key,
 };
