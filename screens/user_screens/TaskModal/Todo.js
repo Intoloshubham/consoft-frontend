@@ -45,8 +45,6 @@ function Todo({ taskModal, settaskModal }) {
     const [showDatePicker, setShowDatePicker] = React.useState(false)
     const [ExpCalendar, setExpCalendar] = React.useState(false)
     const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
-    const [comp_time, setcomp_time] = React.useState('YYYY-MM-DD')
-
     const [list, setlist] = React.useState(data.list)
     const [count, setCount] = React.useState(0)
     const [Num, setNum] = React.useState(0)
