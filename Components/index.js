@@ -11,6 +11,7 @@ import ProfileValue from './ProfileValue';
 import UploadImage from './UplaodImage';
 import Accordian1 from './Accordian';
 import MultiSelectDropdown from './MultiSelectDropdown';
+import ToastPopup from './Toast';
 
 export {
   TextButton,
@@ -26,4 +27,5 @@ export {
   UploadImage,
   Accordian1,
   MultiSelectDropdown,
+  ToastPopup,
 };

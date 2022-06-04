@@ -11,9 +11,6 @@ import utils from '../../utils';
 import {icons, SIZES, COLORS, FONTS, images} from '../../constants';
 const url = 'http://192.168.1.99:8000/api/login';
 
-// auth
-import {AuthContext} from './Context';
-
 const SignIn = ({navigation}) => {
   const [mobileNo, setMobileNo] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -25,18 +22,11 @@ const SignIn = ({navigation}) => {
     return mobileNo != '' && mobileNoError == '';
   }
 
-  //auth
-  const {signIn} = React.useContext(AuthContext);
-  const loginHandle = (mobileNo, password) => {
-    signIn(mobileNo, password);
-  };
-
   const onSubmit = () => {
     const data = {
       mobile: mobileNo,
       password: password,
     };
-    loginHandle(data.mobile, data.password);
     console.log(data);
     // axios
     //   .post(url, data)

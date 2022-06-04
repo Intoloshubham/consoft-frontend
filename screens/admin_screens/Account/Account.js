@@ -21,9 +21,6 @@ import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
 
-//auth
-import {AuthContext} from '../../Authentication/Context';
-
 const Account = () => {
   const navigation = useNavigation();
   React.useEffect(() => {
@@ -35,8 +32,7 @@ const Account = () => {
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
-  // auth
-  const {signOut} = React.useContext(AuthContext);
+
   function renderHeader() {
     return (
       <View
@@ -247,13 +243,7 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue
-          icon={icons.logout}
-          value="LogOut"
-          onPress={() => {
-            signOut();
-          }}
-        />
+        <ProfileValue icon={icons.logout} value="LogOut" onPress={() => {}} />
       </View>
     );
   }
