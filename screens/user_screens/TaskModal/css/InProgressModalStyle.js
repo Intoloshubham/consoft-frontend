@@ -79,5 +79,44 @@ export default StyleSheet.create({
         color:COLORS.black,
         ...FONTS.h4,
         // fontWeight:"bold"
+    },
+    plus_btn: {
+        backgroundColor: COLORS.white,
+        color: "white",
+        borderRadius: 10,
+        paddingHorizontal: 1,
+        borderColor: COLORS.transparentBlack7,
+        justifyContent: "center",
+        margin: 3,
+        // borderRadius: 20,
+        // borderWidth:1,
+        marginTop: 2,
+
+
+
+    },
+    minus_btn: {
+        backgroundColor: COLORS.white, 
+        color: "white",
+        borderColor: COLORS.transparentBlack7,
+        paddingHorizontal: 3,
+        marginTop: 2,
+        // borderRadius: 20,
+        // borderWidth:1,
+        fontSize: 20,
+        alignItems: "center",
+        alignSelf: "center",
+        margin: 3,
+        justifyContent: "center"
+
+    },
+    plus_minus_text: { 
+        textAlign: "center",
+        width: 60,  
+        backgroundColor: COLORS.white2, 
+        fontWeight: "bold", 
+        fontSize: 14,
+        color:COLORS.darkBlue
     }
+
 })
