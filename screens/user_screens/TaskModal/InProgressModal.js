@@ -12,15 +12,18 @@ import {
     TextInput
 } from 'react-native'
 import React from 'react'
-import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
+import { icons, COLORS, SIZES, FONTS, dummyData, images } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 import { BarChart } from "react-native-gifted-charts";
 import styles from './css/InProgressModalStyle'
-import { color } from 'react-native-reanimated';
-import { FalsyFC } from '@ui-kitten/components/devsupport';
+
+
 
 
 Entypo.loadFont()
+
+
+
 
 
 function InProgressModal({ inProgressModal, setinProgressModal }) {
@@ -30,6 +33,36 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
     const [count, setCount] = React.useState(0)
     const [Num, setNum] = React.useState(0)
     const [tempNum, settempNum] = React.useState(null)
+
+    const [dumybardata, setdumybardata] = React.useState(dummyData.barData)
+
+
+    const barData = dumybardata.map((element) =>  {
+        return  {
+        value: element.value,
+        label: '1',
+        frontColor: "#177AD5",
+        topLabelComponent: () => (
+            <View style={{ flexDirection: "row", justifyContent: "flex-start", backgroundColor: COLORS.white, }}>
+                <View style={{ backgroundColor: COLORS.white, left: -146, top: -5, position: "absolute" }}>
+                    <Text style={{ color: 'blue', fontFamily: 'Poppins-Bold', fontSize: 15, fontWeight: "bold" }}>{element.code}</Text>
+                </View>
+                {/* {console.log(dumybardata)} */}
+                <View style={{ backgroundColor: COLORS.white, left: -50, top: -7 }}>
+                    <Text style={{ color: 'blue', fontFamily: 'Poppins-Bold', fontSize: 15, fontWeight: "bold" }}>{element.date}</Text>
+                </View>
+            </View>
+        ),
+        topLabelContainerStyle: { width: 100, height: 60, top: -40, paddingTop: -40, marginLeft: -17 }
+
+    }}
+    )//map close
+
+    const [bardatastate, setbardata] = React.useState(barData)
+
+
+
+    console.log(bardatastate);
 
     const increase = () => {
         // setCount(count => count + 1);
@@ -64,124 +97,6 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
 
 
 
-
-
-
-
-
-
-
-
-    // const OnSelectedActiveItem = (activeItem) => {
-
-    //     console.log(activeItem);
-    //     setSelectedActiveItem(activeItem)
-    // }
-
-    {/* <View style={{ marginVertical: 2, backgroundColor: "yellow" }}>
-        <Text style={{ color: COLORS.black, letterSpacing: 1 }}>Working Percent:</Text>
-    </View> */}
-    function bar_percent() {
-        return (
-            <View style={{ alignSelf: "flex-start", position: "absolute", left: 82 }}>
-                <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white2, alignItems: "center" }}>
-                    <TouchableOpacity style={styles.minus_btn} color={COLORS.black} onPress={decrease} >
-                        <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -15 }}>-</Text>
-                    </TouchableOpacity>
-                    <Text placeholder="%" style={styles.plus_minus_text} >{count} %</Text>
-                    <TouchableOpacity style={styles.plus_btn} onPress={increase} >
-                        <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        
-        )
-    }
-
-    const barData = [
-        {
-            value: 40, label: 'T1', frontColor: "#177AD5", topLabelComponent: () => (
-                bar_percent()
-            ),
-            topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 40, label: 'T2', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 100, marginTop: 0 }
-        },
-        {
-            value: 50, label: 'T3', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 80, label: 'T4', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 60, label: 'T5', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 10, label: 'T6', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: -SIZES.width * 0.4 }
-        },
-        {
-            value: 50, label: 'T7', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: -SIZES.width * 0.4 }
-        },
-        {
-            value: 16, label: 'T8', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 100, label: 'T9', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 100, marginTop: -SIZES.base }
-        },
-        {
-            value: 10, label: 'T10', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 60, label: 'T11', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 20, label: 'T12', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 15, label: 'T14', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 15, label: 'T15', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 15, label: 'T16', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-        {
-            value: 12, label: 'T17', frontColor: '#177AD5', topLabelComponent: () => (
-                bar_percent()
-            ), topLabelContainerStyle: { width: 110, marginTop: 0 }
-        },
-    ];
-
     // const renderItem = ({ item }) => (
     //     <View style={{ backgroundColor: COLORS.transparent, paddingHorizontal: 10, paddingTop: 10, bottom: 5, marginBottom: 10 }}>
     //         <View >
@@ -214,7 +129,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                     Alert.alert("Modal has been closed.");
                     setinProgressModal(!inProgressModal);
                 }}>
-                <Pressable style={{ position: "relative", backgroundColor: "transparent", paddingTop: SIZES.width * 0.7, bottom: 5 }} onPress={() => setinProgressModal(!inProgressModal)}>
+                <Pressable style={{ position: "relative", backgroundColor: COLORS.transparentBlack7, paddingTop: SIZES.width * 0.7, bottom: 5 }} onPress={() => setinProgressModal(!inProgressModal)}>
 
                 </Pressable>
                 <View style={styles.modal_container}>
@@ -229,87 +144,98 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                             flex: 1,
                             flexDirection: "row",
                             backgroundColor: COLORS.white,
-                            marginTop: -15,
-                            marginRight: -22,
                             height: "100%",
-                            marginLeft: -54,
-                            position: "relative"
+                            justifyContent: "space-around",
+                            left: -35,
+                            marginBottom: 0,
+                            marginTop: -20,
+                            marginRight: -55,
+                            paddingTop: -22,
+                            paddingBottom: -10
                         }}>
                             <View style={{
-                                flex: 1,
+                                // flex: 1,
                                 backgroundColor: COLORS.white,
-                                height: 800,
-                                width: "100%",
-                                position: "absolute",
-                                top: 0,
-                                paddingTop: 55,
-                                paddingLeft: -60,
-                                marginLeft: -25,
-                                paddingBottom: 100,
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                // marginRight:-22
-                            }}>
+                                height: 560,
+                                width: "70%",
+                                paddingLeft: 60,
+                                marginBottom: -12,
+                                paddingTop: -5,
+                                marginTop: -30,
+                                top: 34,
+                                left: -30
 
+                            }}>
                                 <BarChart
-                                    barWidth={20}
-                                    noOfSections={4}
+                                    barWidth={4}
+                                    noOfSections={-1}
                                     barBorderRadius={2}
                                     frontColor="#177AD5"
-                                    data={barData}
-                                    width={500}
-                                    autoShiftLabels={true}
-                                    height={200}
-                                    showGradient={false}
-                                    activeOpacity={0.8}
+                                    // isAnimated={true}
+                                    data={bardatastate}
+                                    width={390}
+                                    // autoShiftLabels={true}
+                                    height={150}
+                                    showGradient={true}
+                                    // activeOpacity={0.8}
                                     // roundedTop={0.2}
+                                    gradientColor={COLORS.green}
                                     // roundedBottom={5}
                                     maxValue={100}
                                     stepValue={5}
                                     stepHeight={5}
-                                    backgroundColor={COLORS.white}
-                                    isAnimated={true}
-                                    animationDuration={600}
-                                    animationEasing={'Easing.ease'}
+                                    // backgroundColor={COLORS.white}
+                                    barMarginBottom={-15}
+
+
+                                    animationDuration={800}
+                                    // animationEasing={'Easing.cubic'}
                                     // onPress={() => alert("i am task")}
-                                    spacing={30}
-                                    initialSpacing={15}
+                                    spacing={45}
+                                    initialSpacing={45}
                                     // renderTooltip={() => alert("tool tip")}
                                     horizontal={true}
-                                    labelWidth={15}
+                                    labelWidth={12}
+
                                     yAxisThickness={0}
                                     hideYAxisText={true}
-                                    yAxisLabelSuffix={" %"}
-                                    yAxisTextStyle={{ color: 'blue', fontWeight: "bold" }}
-                                    xAxisLabelTextStyle={{ color: 'blue', fontWeight: "bold" }}
+                                    // yAxisLabelSuffix={" %"}
+                                    yAxisTextStyle={{ color: 'black' }}
+                                    xAxisLabelTextStyle={{ color: 'black', marginTop: -10, bottom: 0 }}
                                     // showScrollIndicator={true}
                                     // indicatorColor={'black'}
                                     // scrollToEnd={true}
                                     scrollAnimation={true}
-                                    yAxisAtTop={false}
+                                // yAxisAtTop={true}
 
-                                    // yAxisLabelContainerStyle={{color:COLORS.red}}
-                                    xAxisThickness={0}
+
+                                // xAxisThickness={0}
                                 />
                             </View>
+                            <View >
+                                <Text>sdfsdfsdf</Text>
+                            </View>
 
-                            {/* <View style={{ flexDirection: "column", alignItems: "center", justifyContent: "space-around", backgroundColor: "red", height: 72, top: -45, right: 0 }}>                         
-                               
-                                    <View style={{ marginVertical: 2,backgroundColor:"yellow" }}>
-                                        <Text style={{ color: COLORS.black, letterSpacing: 1 }}>Working Percent:</Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row", height: 25,backgroundColor:"gray" , marginLeft: 5, marginTop: 16, alignItems: "center" }}>
-                                        <TouchableOpacity style={styles.minus_btn} color={COLORS.black} onPress={decrease} >
-                                            <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -15 }}>-</Text>
-                                        </TouchableOpacity>
+                            <View style={{ alignItems: "center", backgroundColor: COLORS.white, marginTop: 2, marginLeft: -100, marginRight: -6 }}>
+                                <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, marginTop: 55, alignItems: "center" }}>
+                                    <TouchableOpacity style={styles.minus_btn} color={COLORS.black} onPress={decrease} >
+                                        <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
                                         <Text placeholder="%" style={styles.plus_minus_text} >{count} %</Text>
-                                        <TouchableOpacity style={styles.plus_btn} onPress={increase} >
-                                            <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
-                                        </TouchableOpacity>
                                     </View>
-                              
-                            </View> */}
+                                    <TouchableOpacity style={styles.plus_btn} onPress={increase} >
+                                        <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity>
+                                        <Image
+                                            resizeMode='contain'
+                                            style={{ height: 14, width: 14, marginTop: 3 }}
+                                            source={icons.forward_arrow}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                         </View>
                     </View>
                 </View>

@@ -1,14 +1,15 @@
+
 const myProfile = {
     name: "ByProgrammers",
     profile_image: require("../assets/images/profile.png"),
     address: "No. 88, Jln Padungan, Kuching"
 }
 
-const reports=[
+const reports = [
     { id: 1, name: 'Quality' },
     { id: 2, name: 'Quantity' },
     { id: 3, name: 'Stock keeper' },
-    { id: 4, name: 'Other' }    
+    { id: 4, name: 'Other' }
 ]
 
 const categories = [
@@ -57,6 +58,39 @@ const Active_tasks = [
         name: "task 5",
         icon: require("../assets/icons/active_task.png")
     }
+]
+
+const barData = [
+    {
+        label: "0",
+        value: 20,
+        date: '10/05/2021',
+        code: '1050'
+    },
+    {
+        label: "1",
+        value: 30,
+        date: '11/05/2021',
+        code: '1051'
+    },
+    {
+        label: "2",
+        value: 40,
+        date: '12/05/2021',
+        code: '1052'
+    },
+    {
+        label: "3",
+        value: 50,
+        date: '13/05/2021',
+        code: '1053'
+    },
+    {
+        label: "4",
+        value: 60,
+        date: '14/05/2021',
+        code: '1055'
+    },
 ]
 
 const comp_tasks_var = [
@@ -205,5 +239,6 @@ export default {
     reports,
     Active_tasks,
     comp_tasks_var,
-    Reports_part
+    Reports_part,
+    barData
 }

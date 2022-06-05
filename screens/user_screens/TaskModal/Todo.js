@@ -144,7 +144,7 @@ function Todo({ taskModal, settaskModal }) {
                     Alert.alert("Modal has been closeds.");
                     settaskModal(!taskModal);
                 }}>
-                <Pressable style={{ position: "relative", backgroundColor: "transparent", paddingTop: SIZES.width * 0.7, bottom: 5 }} onPress={() => settaskModal(!taskModal)}>
+                <Pressable style={{ position: "relative", backgroundColor: COLORS.transparentBlack7, paddingTop: SIZES.width * 0.7, bottom: 5 }} onPress={() => settaskModal(!taskModal)}>
 
                 </Pressable>
                 <View style={styles.modal_container}>

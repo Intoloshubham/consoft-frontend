@@ -1,14 +1,14 @@
-import {StyleSheet} from 'react-native'
-import { FONTS, icons, SIZES,COLORS } from '../../../../constants'
+import { StyleSheet } from 'react-native'
+import { FONTS, icons, SIZES, COLORS } from '../../../../constants'
 
 export default StyleSheet.create({
     modal_container: {
         paddingHorizontal: SIZES.padding,
-        position:"absolute",
-        top:0,
-        right:0,
-        left:0,
-        bottom:0,
+        position: "absolute",
+        top: 0,
+        right: 0,
+        left: 0,
+        bottom: 0,
         flex: 1,
         flexDirection: "row",
         borderColor: "#B7EEE1",
@@ -37,7 +37,7 @@ export default StyleSheet.create({
         borderWidth: 1
     },
     active_task_view: {
-        margin: 1,     
+        margin: 1,
         paddingVertical: SIZES.largeTitle,
         paddingHorizontal: SIZES.h2,
         borderRadius: 10,
@@ -51,32 +51,32 @@ export default StyleSheet.create({
     active_task_title: {
         elevation: 2,
         fontSize: SIZES.h4,
-        fontWeight: "bold",    
+        fontWeight: "bold",
         paddingHorizontal: SIZES.font,
         textAlign: "center",
         bottom: -15,
-        color:COLORS.black
+        color: COLORS.black
     },
     act_tsk_stat: {
-       
+
         ...FONTS.h2,
-        textAlign:"center"
+        textAlign: "center"
     },
     act_tsk_stat_view: {
         backgroundColor: "#0000",
-        margin: 5,  
-        bottom:25        
+        margin: 5,
+        bottom: 25
     },
-    
+
     act_tsk_list_view: {
         marginTop: SIZES.body1,
         padding: SIZES.base,
-        marginBottom:-SIZES.base
+        marginBottom: -SIZES.base
     },
 
-    pie_tag:{
-        marginLeft:SIZES.base,
-        color:COLORS.black,
+    pie_tag: {
+        marginLeft: SIZES.base,
+        color: COLORS.black,
         ...FONTS.h4,
         // fontWeight:"bold"
     },
@@ -88,35 +88,37 @@ export default StyleSheet.create({
         borderColor: COLORS.transparentBlack7,
         justifyContent: "center",
         margin: 3,
-        // borderRadius: 20,
-        // borderWidth:1,
-        marginTop: 2,
-
-
+        marginLeft: -14,
+        marginRight: 14,
+        marginTop: 3
 
     },
     minus_btn: {
-        backgroundColor: COLORS.white, 
+ 
+        backgroundColor: COLORS.white,
         color: "white",
+        borderRadius: 10,
+        paddingHorizontal: 1,
+        paddingRight:5,
         borderColor: COLORS.transparentBlack7,
-        paddingHorizontal: 3,
-        marginTop: 2,
-        // borderRadius: 20,
-        // borderWidth:1,
-        fontSize: 20,
-        alignItems: "center",
-        alignSelf: "center",
-        margin: 3,
-        justifyContent: "center"
+        justifyContent: "center",
+        margin: 3,   
+        marginRight: 15,
+        marginTop: 5,
+
+
 
     },
-    plus_minus_text: { 
+    plus_minus_text: {
         textAlign: "center",
-        width: 60,  
-        backgroundColor: COLORS.white2, 
-        fontWeight: "bold", 
+        width: 50,
+        paddingRight:15,
+        backgroundColor: COLORS.white,
+        fontWeight: "bold",
         fontSize: 14,
-        color:COLORS.darkBlue
+        // marginHorizontal:-14,
+        marginLeft:-9,
+        color: COLORS.darkBlue
     }
 
 })
