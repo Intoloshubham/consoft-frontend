@@ -5136,13 +5136,7 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-<<<<<<< HEAD
-"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.5.9", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
-  "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
-  "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
-=======
 "prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
->>>>>>> IntoloIndia-master
   "version" "15.8.1"
   dependencies:
     "loose-envify" "^1.4.0"
@@ -5230,6 +5224,11 @@
 "react-native-collapsible@^1.6.0":
   "version" "1.6.0"
 
+"react-native-dropdown-picker@^5.4.2":
+  "integrity" "sha512-cZBPyN+k52jA9XguFnKoF5tLf31z6gjZ8GijO/pfVNSSEtPwZ14UTUrr87JiiOnMh5K/O2kRzZ/jZN8D0MmUMA=="
+  "resolved" "https://registry.npmjs.org/react-native-dropdown-picker/-/react-native-dropdown-picker-5.4.2.tgz"
+  "version" "5.4.2"
+
 "react-native-element-dropdown@^1.8.12":
   "integrity" "sha512-tADlqE9YK08t9d+wgT9Zfvlt3xjqGMv3qgDkbyqfz3TUy8y1R9itPrhiZmH2zVs3b7utfQmpzDGvl1V5mvtKjA=="
   "resolved" "https://registry.npmjs.org/react-native-element-dropdown/-/react-native-element-dropdown-1.8.12.tgz"
@@ -5275,45 +5274,6 @@
 
 "react-native-linear-gradient@^2.5.6":
   "version" "2.5.6"
-
-"react-native-material-buttons@^0.5.0":
-  "integrity" "sha1-qys+P8P1AMpxP1Hp11l4r/YCFSo="
-  "resolved" "https://registry.npmjs.org/react-native-material-buttons/-/react-native-material-buttons-0.5.0.tgz"
-  "version" "0.5.0"
-  dependencies:
-    "prop-types" "^15.5.9"
-    "react-native-material-ripple" "^0.7.0"
-
-"react-native-material-dropdown@^0.11.1":
-  "integrity" "sha1-wP5DSo5heUHvkQukTS8HyPN1hP4="
-  "resolved" "https://registry.npmjs.org/react-native-material-dropdown/-/react-native-material-dropdown-0.11.1.tgz"
-  "version" "0.11.1"
-  dependencies:
-    "prop-types" "^15.5.9"
-    "react-native-material-buttons" "^0.5.0"
-    "react-native-material-ripple" "^0.8.0"
-    "react-native-material-textfield" "^0.12.0"
-
-"react-native-material-ripple@^0.7.0":
-  "integrity" "sha1-4q9REGgFMvFK6jw6Q4JHvi/+9lk="
-  "resolved" "https://registry.npmjs.org/react-native-material-ripple/-/react-native-material-ripple-0.7.5.tgz"
-  "version" "0.7.5"
-  dependencies:
-    "prop-types" "^15.5.10"
-
-"react-native-material-ripple@^0.8.0":
-  "integrity" "sha1-uMJOb96iryoh6EaLH0CzVIMBni8="
-  "resolved" "https://registry.npmjs.org/react-native-material-ripple/-/react-native-material-ripple-0.8.0.tgz"
-  "version" "0.8.0"
-  dependencies:
-    "prop-types" "^15.5.10"
-
-"react-native-material-textfield@^0.12.0":
-  "integrity" "sha1-P7oZ12q4n2cFLIHgghUvwkPYKj8="
-  "resolved" "https://registry.npmjs.org/react-native-material-textfield/-/react-native-material-textfield-0.12.0.tgz"
-  "version" "0.12.0"
-  dependencies:
-    "prop-types" "^15.5.9"
 
 "react-native-modal@^12.1.0":
   "version" "12.1.0"

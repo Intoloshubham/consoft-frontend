@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -18,16 +18,14 @@ const url = 'http://192.168.1.99:8000/api/projects';
 
 const ProjectsBanner = () => {
   const navigation = useNavigation();
-
-  const [collapsed, setCollapsed] = React.useState(true);
   const [projects, setProjects] = React.useState([]);
   const [showCreateProjectModal, setCreateProjectModal] = React.useState(false);
-
+  const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     axios.get(url).then(response => setProjects(response.data));
   });
 
@@ -35,41 +33,132 @@ const ProjectsBanner = () => {
     const renderItem = ({item, index}) => (
       <TouchableOpacity
         style={{
-          marginVertical: SIZES.base,
-          width: SIZES.width / 2.8,
+          flexDirection: 'row',
+          paddingVertical: SIZES.base,
         }}
         onPress={() => {
           navigation.navigate('ProjectsDetails');
         }}>
+        {/* n.no  */}
         <View
           style={{
+            flex: 1,
+            flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'center',
-            padding: SIZES.radius,
-            backgroundColor: COLORS.lightblue_100,
-            borderRadius: SIZES.radius,
+          }}>
+          <Text style={{color: COLORS.white, ...FONTS.body5}}>{index + 1}</Text>
+          <Text
+            style={{
+              marginLeft: 30,
+              color: COLORS.white,
+              ...FONTS.body5,
+            }}>
+            {item.project_name}
+          </Text>
+        </View>
+        {/* p.code  */}
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
           <Text
             style={{
-              ...FONTS.h3,
-              textAlign: 'center',
-              color: COLORS.darkGray,
+              marginLeft: -10,
+              color: COLORS.white,
+              ...FONTS.body5,
             }}>
-            {item.project_name}
+            {index + 1}
+          </Text>
+          <Text
+            style={{
+              marginLeft: 35,
+              color: COLORS.white,
+              ...FONTS.body5,
+            }}>
+            55%
+          </Text>
+          <Text
+            style={{
+              marginLeft: 60,
+              color: COLORS.white,
+              ...FONTS.body5,
+            }}>
+            4
           </Text>
         </View>
       </TouchableOpacity>
     );
     return (
       <FlatList
-        numColumns={2}
-        columnWrapperStyle={{
-          justifyContent: 'space-between',
-        }}
         data={projects}
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 5,
+              }}></View>
+          );
+        }}
+        ListHeaderComponent={
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: SIZES.padding,
+            }}>
+            <Text
+              style={{
+                flex: 1,
+                color: COLORS.white,
+                ...FONTS.body5,
+              }}>
+              S.N
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                marginLeft: -25,
+                color: COLORS.white,
+                ...FONTS.body5,
+              }}>
+              Name
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                marginLeft: 30,
+                color: COLORS.white,
+                ...FONTS.body5,
+              }}>
+              Pc
+            </Text>
+
+            <Text
+              style={{
+                flex: 1,
+                marginLeft: -30,
+                color: COLORS.white,
+                ...FONTS.body5,
+              }}>
+              Progress
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                color: COLORS.white,
+                ...FONTS.body5,
+              }}>
+              Notification
+            </Text>
+          </View>
+        }
       />
     );
   }
@@ -79,76 +168,52 @@ const ProjectsBanner = () => {
       style={{
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
-        paddingVertical: SIZES.base * 2,
+        paddingVertical: SIZES.radius,
         paddingHorizontal: SIZES.padding,
         backgroundColor: COLORS.lightblue_600,
-        borderRadius: SIZES.radius,
+        borderRadius: SIZES.base,
         ...styles.shadow,
       }}
       onPress={toggleExpanded}>
       <View
         style={{
+          flex: 1,
           flexDirection: 'row',
-          justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <Text
-          style={{
-            ...FONTS.h2,
-            textAlign: 'center',
-            color: COLORS.white,
-          }}>
-          Project
-        </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={{...FONTS.body2, color: COLORS.white}}>Projects</Text>
+          <TextButton
+            label="Create New"
+            disabled={false}
+            buttonContainerStyle={{
+              marginLeft: SIZES.padding * 3.7,
+              alignItems: 'center',
+              paddingHorizontal: 5,
+              paddingVertical: 2,
+              borderRadius: 8,
+              backgroundColor: COLORS.yellow_400,
+            }}
+            labelStyle={{
+              color: COLORS.black,
+              ...FONTS.body4,
+            }}
+            onPress={() => setCreateProjectModal(true)}
+          />
+        </View>
         <Image
           source={icons.down_arrow}
-          style={{height: 18, width: 18, tintColor: COLORS.white}}
+          style={{
+            height: 18,
+            width: 18,
+            tintColor: COLORS.white,
+            marginLeft: SIZES.padding,
+          }}
         />
       </View>
-
-      <View>
-        <Collapsible
-          collapsed={collapsed}
-          style={{marginVertical: SIZES.padding}}>
-          <View style={{}}>
-            <TextButton
-              label="Create New Project"
-              disabled={false}
-              buttonContainerStyle={{
-                height: 40,
-                alignItems: 'center',
-                marginBottom: SIZES.radius,
-                borderRadius: SIZES.radius,
-                backgroundColor: COLORS.yellow_400,
-              }}
-              labelStyle={{
-                color: COLORS.black,
-              }}
-              onPress={() => setCreateProjectModal(true)}
-            />
-            <View
-              style={{
-                borderBottomColor: COLORS.lightGray1,
-                borderBottomWidth: 1,
-                marginBottom: SIZES.radius,
-              }}
-            />
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.h3,
-                marginBottom: SIZES.radius,
-              }}>
-              Existing Projects
-            </Text>
-          </View>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{marginBottom: SIZES.padding}}>
-            {renderProjects()}
-          </ScrollView>
-        </Collapsible>
-      </View>
+      <Collapsible collapsed={collapsed}>
+        <View>{renderProjects()}</View>
+      </Collapsible>
       {showCreateProjectModal && (
         <ProjectsCreateModal
           isVisible={showCreateProjectModal}

@@ -9,7 +9,7 @@ import {
   Modal,
 } from 'react-native';
 import {COLORS, SIZES, FONTS, icons, images} from '../../../constants';
-import {IconButton} from '../../../Components';
+import {Drop, IconButton} from '../../../Components';
 import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
 import {useNavigation} from '@react-navigation/native';
@@ -52,14 +52,62 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
   const [projectLocationError, setProjectLocationError] = React.useState('');
   const [projectplotarea, setProjectPlotArea] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
-  const data = [
-    {label: 'Bungalow', value: '1'},
-    {label: 'Apartment', value: '2'},
-    {label: 'Flat', value: '3'},
-    {label: 'Mall', value: '4'},
-    {label: 'Duplex', value: '5'},
+
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState([]);
+  const [items, setItems] = React.useState([
+    {label: 'Residential', value: '1'},
+    {label: 'Mid-rise apertment', value: '7', parent: '1'},
+    {label: 'Hi-rise apertment', value: '6', parent: '1'},
+    {label: 'Township', value: '5', parent: '1'},
+    {label: 'House', value: '4', parent: '1'},
+    {label: 'Apartment', value: '3', parent: '1'},
+    {label: 'Bungalow', value: '2', parent: '1'},
+
+    {label: 'Commercial', value: '8'},
+    {label: 'Showroom / Office', value: '9', parent: '8'},
+    {label: 'Mall/Multiplxer', value: '10', parent: '8'},
+    {label: 'Health Care', value: '11'},
+    {label: 'Hospitals', value: '12', parent: '11'},
+    {label: 'Hospitality', value: '13'},
+    {label: 'Hotels', value: '14', parent: '13'},
+    {label: 'Resorts', value: '15', parent: '13'},
+    {label: 'Mixed Used', value: '16', parent: '13'},
+  ]);
+
+  // const data = [
+  // {label: 'Bungalow', value: '1'},
+  // {label: 'Apartment', value: '2', parent: '1'},
+  // {label: 'Flat', value: '3'},
+  // {label: 'Mall', value: '4'},
+  // {label: 'Duplex', value: '5'},
+  // {label: 'Office', value: '6'},
+  // {label: 'Residential', value: '1'},
+  // {label: 'Mid-rise apertment', value: '7', parent: '1'},
+  // {label: 'Hi-rise apertment', value: '6', parent: '1'},
+  // {label: 'Township', value: '5', parent: '1'},
+  // {label: 'House', value: '4', parent: '1'},
+  // {label: 'Apartment', value: '3', parent: '1'},
+  // {label: 'Bungalow', value: '2', parent: '1'},
+
+  // {label: 'Commercial', value: '8'},
+  // {label: 'Showroom / Office', value: '9', parent: '8'},
+  // {label: 'Mall/Multiplxer', value: '10', parent: '8'},
+  // {label: 'Health Care', value: '11'},
+  // {label: 'Hospitals', value: '12', parent: '11'},
+  // {label: 'Hospitality', value: '13'},
+  // {label: 'Hotel', value: '14', parent: '13'},
+  // ];
+
+  const unitData = [
+    {label: 'Hectare', value: '1'},
+    {label: 'Acre', value: '2'},
+    {label: 'Sqm', value: '3'},
+    {label: 'Sqf', value: '4'},
   ];
-  const [dropdown, setDropdown] = React.useState(null);
+
+  const [dropdown, setDropdown] = React.useState('');
+  const [unitDropdown, setUnitDropdown] = React.useState('');
 
   function isEnableSubmit() {
     return (
@@ -86,7 +134,7 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
       project_name: projectname,
       project_location: projectlocation,
       plot_area: projectplotarea,
-      project_type: dropdown,
+      project_type: value,
     };
 
     fetch(url, {
@@ -109,10 +157,6 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
       setCreateProjectModal(false);
     }, 1000);
   };
-
-  // useEffect(() => {
-  //   OnSubmit();
-  // });
 
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
@@ -173,17 +217,8 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
                 marginTop: SIZES.padding,
                 marginHorizontal: SIZES.base,
               }}>
-              <CustomDropdown
-                data={data}
-                label="Dropdown"
-                value={dropdown}
-                onChange={item => {
-                  setDropdown(item.value);
-                  console.log('selected', item);
-                }}
-              />
               <FormInput
-                label="Project name"
+                label="Name"
                 keyboardType="default"
                 autoCompleteType="username"
                 onChange={value => {
@@ -247,47 +282,60 @@ const ProjectsCreateModal = ({isVisible, onClose}) => {
                   </View>
                 }
               />
-
-              <FormInput
-                label="Plot area"
-                keyboardType="default"
-                autoCompleteType="cc-number"
-                onChange={value => {
-                  utils.validateNumber(value, setProjectPlotAreaError);
-                  setProjectPlotArea(value);
-                }}
-                errorMsg={projectPlotAreaError}
-                appendComponent={
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      marginTop: SIZES.base,
-                      height: 30,
-                    }}>
-                    {/* <Image
-                source={
-                  projectplotarea == '' ||
-                  (projectplotarea != '' && projectPlotAreaError == '')
-                    ? icons.correct
-                    : icons.cancel
-                }
-                style={{
-                  height: 20,
-                  width: 20,
-                  tintColor:
-                    projectplotarea == ''
-                      ? COLORS.gray
-                      : projectplotarea != '' && projectPlotAreaError == ''
-                      ? COLORS.green
-                      : COLORS.red,
+              {/* <CustomDropdown
+                data={data}
+                placeholder="Select project types"
+                value={dropdown}
+                onChange={item => {
+                  setDropdown(item.value);
+                  console.log('selected', item);
                 }}
               /> */}
-                    <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
-                      H/A/Sqm/Sft
-                    </Text>
-                  </View>
-                }
+              <Drop
+                placeholder="Select project types"
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+                categorySelectable={false}
+                listParentLabelStyle={{
+                  fontWeight: 'bold',
+                  color: COLORS.white,
+                  fontSize: 18,
+                }}
               />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <FormInput
+                  label="Plot area"
+                  keyboardType="default"
+                  autoCompleteType="cc-number"
+                  containerStyle={{width: 215}}
+                  onChange={value => {
+                    utils.validateNumber(value, setProjectPlotAreaError);
+                    setProjectPlotArea(value);
+                  }}
+                  errorMsg={projectPlotAreaError}
+                />
+                <View
+                  style={{marginLeft: SIZES.radius, width: 100, marginTop: 5}}>
+                  <CustomDropdown
+                    data={unitData}
+                    placeholder="Units"
+                    label="Dropdown"
+                    value={unitDropdown}
+                    onChange={item => {
+                      setUnitDropdown(item.value);
+                      console.log('selected', item);
+                    }}
+                  />
+                </View>
+              </View>
               <TextButton
                 label="Submit"
                 disabled={isEnableSubmit() ? false : true}

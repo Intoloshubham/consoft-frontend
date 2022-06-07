@@ -10,32 +10,29 @@ import {
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {IconButton, Drop, FormInput, TextButton} from '../../../Components';
 
-const AddProjectTeamModal = ({isVisible, onClose}) => {
-  // project team states
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [mobileNo, setMobileNo] = React.useState('');
-  const [emailError, setEmailError] = React.useState('');
-  const [nameError, setNameError] = React.useState('');
-  const [mobileNoError, setMobileNoError] = React.useState('');
+const AddStockModal = ({isVisible, onClose}) => {
+  // company team states
+  const [quantity, setQuantity] = React.useState('');
+  const [location, setLocation] = React.useState('');
+  const [vehicleNo, setVehicleNo] = React.useState('');
 
   //drop
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState([]);
   const [items, setItems] = React.useState([
-    {label: 'Engineer', value: '1'},
-    {label: 'Supervisor', value: '2'},
-    {label: 'Asst. Supervisor', value: '3'},
-    {label: 'Site Engineer', value: '4'},
-    {label: 'Other staff', value: '5'},
+    {label: 'Sand', value: '1'},
+    {label: 'iron', value: '2'},
+    {label: 'Oil', value: '3'},
+    {label: 'Cement', value: '4'},
+    {label: 'Bricks', value: '5'},
   ]);
 
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const [showProjectTeamModal, setShowProjectTeamModal] =
+  const [showCompanyTeamModal, setShowCompanyTeamModal] =
     React.useState(isVisible);
 
   React.useEffect(() => {
-    if (showProjectTeamModal) {
+    if (showCompanyTeamModal) {
       Animated.timing(modalAnimatedValue, {
         toValue: 1,
         duration: 500,
@@ -48,7 +45,7 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
         useNativeDriver: false,
       }).start(() => onClose());
     }
-  }, [showProjectTeamModal]);
+  }, [showCompanyTeamModal]);
 
   const modalY = modalAnimatedValue.interpolate({
     inputRange: [0, 1],
@@ -59,7 +56,7 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
       <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
         {/* transparent background */}
         <TouchableWithoutFeedback
-          onPress={() => setShowProjectTeamModal(false)}>
+          onPress={() => setShowCompanyTeamModal(false)}>
           <View
             style={{
               position: 'absolute',
@@ -83,7 +80,7 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
           {/* header */}
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
-              Add New Team
+              Add Material
             </Text>
             <IconButton
               containerStyle={{
@@ -95,13 +92,13 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
               iconStyle={{
                 tintColor: COLORS.gray,
               }}
-              onPress={() => setShowProjectTeamModal(false)}
+              onPress={() => setShowCompanyTeamModal(false)}
             />
           </View>
           {/* <WorkAssign /> */}
           <View>
             <Drop
-              placeholder="Select Role"
+              placeholder="Select Item"
               open={open}
               value={value}
               items={items}
@@ -114,75 +111,16 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
               }}
             />
             <FormInput
-              label="Name"
-              keyboardType="default"
-              autoCompleteType="username"
-              onChange={value => {
-                setName(value);
-              }}
-              appendComponent={
-                <View style={{justifyContent: 'center'}}>
-                  <Image
-                    source={
-                      name == '' || (name != '' && nameError == '')
-                        ? icons.correct
-                        : icons.cancel
-                    }
-                    style={{
-                      height: 20,
-                      width: 20,
-                      tintColor:
-                        name == ''
-                          ? COLORS.gray
-                          : name != '' && nameError == ''
-                          ? COLORS.green
-                          : COLORS.red,
-                    }}
-                  />
-                </View>
-              }
-            />
-            <FormInput
-              label="Email"
-              keyboardType="email-address"
-              autoCompleteType="email"
-              onChange={value => {
-                setEmail(value);
-              }}
-              appendComponent={
-                <View style={{justifyContent: 'center'}}>
-                  <Image
-                    source={
-                      email == '' || (email != '' && emailError == '')
-                        ? icons.correct
-                        : icons.cancel
-                    }
-                    style={{
-                      height: 20,
-                      width: 20,
-                      tintColor:
-                        email == ''
-                          ? COLORS.gray
-                          : email != '' && emailError == ''
-                          ? COLORS.green
-                          : COLORS.red,
-                    }}
-                  />
-                </View>
-              }
-            />
-            <FormInput
-              label="Mobile No."
+              label="Quantity"
               keyboardType="numeric"
               onChange={value => {
-                setMobileNo(value);
+                setQuantity(value);
               }}
-              errorMsg={mobileNoError}
               appendComponent={
                 <View style={{justifyContent: 'center'}}>
                   <Image
                     source={
-                      mobileNo == '' || (mobileNo != '' && mobileNoError == '')
+                      quantity == '' || quantity != ''
                         ? icons.correct
                         : icons.cancel
                     }
@@ -190,9 +128,9 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
                       height: 20,
                       width: 20,
                       tintColor:
-                        mobileNo == ''
+                        quantity == ''
                           ? COLORS.gray
-                          : mobileNo != '' && mobileNoError == ''
+                          : quantity != ''
                           ? COLORS.green
                           : COLORS.red,
                     }}
@@ -200,6 +138,63 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
                 </View>
               }
             />
+            <FormInput
+              label="Location"
+              keyboardType="default"
+              onChange={value => {
+                setLocation(value);
+              }}
+              appendComponent={
+                <View style={{justifyContent: 'center'}}>
+                  <Image
+                    source={
+                      location == '' || location != ''
+                        ? icons.correct
+                        : icons.cancel
+                    }
+                    style={{
+                      height: 20,
+                      width: 20,
+                      tintColor:
+                        location == ''
+                          ? COLORS.gray
+                          : location != ''
+                          ? COLORS.green
+                          : COLORS.red,
+                    }}
+                  />
+                </View>
+              }
+            />
+            <FormInput
+              label="Vehicle No"
+              keyboardType="default"
+              onChange={value => {
+                setVehicleNo(value);
+              }}
+              appendComponent={
+                <View style={{justifyContent: 'center'}}>
+                  <Image
+                    source={
+                      vehicleNo == '' || vehicleNo != ''
+                        ? icons.correct
+                        : icons.cancel
+                    }
+                    style={{
+                      height: 20,
+                      width: 20,
+                      tintColor:
+                        vehicleNo == ''
+                          ? COLORS.gray
+                          : vehicleNo != ''
+                          ? COLORS.green
+                          : COLORS.red,
+                    }}
+                  />
+                </View>
+              }
+            />
+
             <TextButton
               label="Submit"
               buttonContainerStyle={{
@@ -217,4 +212,4 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
   );
 };
 
-export default AddProjectTeamModal;
+export default AddStockModal;
