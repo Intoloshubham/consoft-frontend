@@ -56,26 +56,26 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
         { value: 15, label: 'T13', frontColor: '#177AD5' },
     ];
 
-    const renderItem = ({ item }) => (
-        <View style={{ backgroundColor: COLORS.transparent, paddingHorizontal: 10, paddingTop: 10, bottom: 5, marginBottom: 10 }}>
-            <View >
-                <TouchableOpacity
-                    onPress={() => OnSelectedActiveItem(item)}
-                    style={[styles.active_task_view,
-                    { backgroundColor: (SelectedActiveItem?.id == item.id) ? "#26D1B2" : COLORS.gray3 }
-                    ]}
-                >
-                    <Image
-                        resizeMode='contain'
-                        style={{ width: 50, height: 50 }}
-                        source={item.icon} />
-                    <View style={{ marginBottom: -12 }}>
-                        <Text style={[styles.active_task_title, { color: (SelectedActiveItem?.id == item.id) ? COLORS.red : COLORS.transparentBlack7 }]}>{item.name}</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
+    // const renderItem = ({ item }) => (
+    //     <View style={{ backgroundColor: COLORS.transparent, paddingHorizontal: 10, paddingTop: 10, bottom: 5, marginBottom: 10 }}>
+    //         <View >
+    //             <TouchableOpacity
+    //                 onPress={() => OnSelectedActiveItem(item)}
+    //                 style={[styles.active_task_view,
+    //                 { backgroundColor: (SelectedActiveItem?.id == item.id) ? "#26D1B2" : COLORS.gray3 }
+    //                 ]}
+    //             >
+    //                 <Image
+    //                     resizeMode='contain'
+    //                     style={{ width: 50, height: 50 }}
+    //                     source={item.icon} />
+    //                 <View style={{ marginBottom: -12 }}>
+    //                     <Text style={[styles.active_task_title, { color: (SelectedActiveItem?.id == item.id) ? COLORS.red : COLORS.transparentBlack7 }]}>{item.name}</Text>
+    //                 </View>
+    //             </TouchableOpacity>
+    //         </View>
+    //     </View>
+    // );
 
 
     return (
