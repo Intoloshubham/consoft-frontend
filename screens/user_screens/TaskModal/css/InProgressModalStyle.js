@@ -2,31 +2,10 @@ import { StyleSheet } from 'react-native'
 import { FONTS, icons, SIZES, COLORS } from '../../../../constants'
 
 export default StyleSheet.create({
-    modal_container: {
-        paddingHorizontal: SIZES.padding,
-        position: "absolute",
-        top: 0,
-        right: 0,
-        left: 0,
-        bottom: 0,
-        flex: 1,
-        flexDirection: "row",
-        borderColor: "#B7EEE1",
-        backgroundColor: COLORS.white,
-        borderTopWidth: 1,
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderTopRightRadius: 77,
-        borderTopLeftRadius: 77,
-        shadowColor: "#470000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 1,
-        marginTop: 200
+    modal_container: {    
+        flex: 1,      
+        backgroundColor: COLORS.blue,        
+   
     },
     circle: {
         height: 10,
