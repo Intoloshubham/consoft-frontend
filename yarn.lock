@@ -5136,7 +5136,17 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 "prop-types@*", "prop-types@^15.5.10", "prop-types@^15.5.9", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
+  "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
+  "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
+=======
+"prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
+>>>>>>> 5fa7b5e331168e78bb214d9bb0c5bf3ca74f884e
+=======
+"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.5.9", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
+>>>>>>> c808e34394c550ca7b85004c3ee724f7b2da51cd
   "version" "15.8.1"
   dependencies:
     "loose-envify" "^1.4.0"
