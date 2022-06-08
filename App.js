@@ -53,8 +53,8 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'OnBoarding'}>
-          <Stack.Screen name="OnBoarding" component={OnBoarding} />
+          initialRouteName={'UserTabs'}>
+          <Stack.Screen name="UserTabs" component={UserTabs} />
           <Stack.Screen name="CreateCompany" component={CreateCompany} />
           <Stack.Screen name="CompanyPayment" component={CompanyPayment} />
           <Stack.Screen name="VerifyProductKey" component={VerifyProductKey} />
