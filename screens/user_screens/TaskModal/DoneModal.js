@@ -41,7 +41,7 @@ function DoneModal({ doneModal, setdoneModal }) {
     function Modalfunction() {
         return (
             <>
-                <Pressable style={{ backgroundColor: "transparent", position: "relative", paddingTop: SIZES.width * 2 }} onPress={() => setdoneModal(!doneModal)}></Pressable>
+                <Pressable style={{ backgroundColor: COLORS.transparentBlack7, position: "relative", paddingTop: SIZES.width * 2 }} onPress={() => setdoneModal(!doneModal)}></Pressable>
                 <Card style={{ flex: 1, position: "absolute", top: 0, bottom: 0, right: 0, left: 0, borderColor: "whitesmoke", backgroundColor: COLORS.gray2, marginVertical: SIZES.width * 0.55, marginHorizontal: SIZES.base, borderRadius: SIZES.largeTitle }}>
                     <View style={{ marginVertical: SIZES.base, marginRight: -250 }}>
                         <Pressable style={{ backgroundColor: COLORS.gray2, borderRadius: SIZES.padding, marginLeft: SIZES.width * 0.8, marginTop: -15 }} onPress={() => setdoneModal(!doneModal)}><Entypo name="cross" color={COLORS.black} size={25} /></Pressable>
