@@ -31,6 +31,9 @@ const task = require('../assets/icons/task.png');
 const inprogress = require('../assets/icons/inprogress.png');
 const done = require('../assets/icons/done.png');
 const todo = require('../assets/icons/todo.png');
+const submit1 = require('../assets/icons/submit1.webp');
+const forward_arrow = require('../assets/icons/forward_arrow.png');
+
 
 const account = require('../assets/icons/account.png');
 const report = require('../assets/icons/report.png');
@@ -120,7 +123,12 @@ export default {
   camera,
   checklist,
   stock_manage,
+
+  submit1,
+  forward_arrow,
+
   plus,
   unit,
   items,
+
 };

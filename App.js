@@ -54,9 +54,11 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
+
           initialRouteName={'Home'}>
 
           <Stack.Screen name="OnBoarding" component={OnBoarding} />
+
           <Stack.Screen name="CreateCompany" component={CreateCompany} />
           <Stack.Screen name="CompanyPayment" component={CompanyPayment} />
           <Stack.Screen name="VerifyProductKey" component={VerifyProductKey} />
