@@ -29,7 +29,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
     const [count, setCount] = React.useState(0)
     const [Num, setNum] = React.useState(0)
     const [dumybardata, setdumybardata] = React.useState(dummyData.barData)
-    const [SelectedActiveItem, setSelectedActiveItem] = React.useState(null)
+    const [SelectedActiveItem, setSelectedActiveItem] = React.useState()
 
 
 
@@ -38,23 +38,38 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
 
 
 
-    const increase = () => {
-        if (count < 100) {
-            setCount(count => count + 5);
-        }
+    const __handle_increase_counter = (activeItem) => {
+        const new_data = dumybardata.map(item => {
+            if (item.label == activeItem) {
+                console.log("activeItem = " + activeItem + " label= " + item.label);
+                if (count < 100) {
+                    setCount(count => count + 5);
+                }
+            }
+        })
+    }
+
+    const increase = (e,activeItem) => {
+        __handle_increase_counter(activeItem)
+
     };
 
-    const decrease = (e,activeItem) => {
+    const __handle_decrease_counter = (activeItem) => {
+        const new_data = dumybardata.map(item => {
+            if (item.label == activeItem) {
+                console.log("activeItem = " + activeItem + " label= " + item.label);
+                if (count > 0) {
+                    setCount(count => count - 5);
+                }
+            }
+        })
+    }
+
+    const decrease = (e, activeItem) => {
         alert(activeItem)
-        setSelectedActiveItem(e.currentTarget._internalFiberInstanceHandleDEV.index)
-        // console.log(SelectedActiveItem);
-        console.log(e.currentTarget._internalFiberInstanceHandleDEV.index);
-            // (SelectedActiveItem == 0) && (count > 100) ? : alert("null")
-            // (SelectedActiveItem == activeItem) && (count > 0) ? alert("true") : alert("null")
+        __handle_decrease_counter(activeItem)
         // console.log(activeItem.currentTarget._internalFiberInstanceHandleDEV.index);
-        // if (count > 0) {
-        //     setCount(count => count - 5);
-        // }
+
     };
 
     // const counter = React.useRef(new Animated.Value(0)).current;
@@ -97,6 +112,29 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
     //     dumybardata[index].label = text;
     //     setdumy(dumybardata)
     // }
+    const __handle_counter_buttons = (item,index) => {
+        return (
+            <>
+                <TouchableOpacity style={styles.minus_btn} key={item.label} color={COLORS.black}
+                    onPress={(e) => decrease(e, index)} >
+                    <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
+                </TouchableOpacity>
+                <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
+                    <TextInput placeholder="%" style={{ width: 60, height: 40, fontSize: 15, top: 5, color: COLORS.black }}
+                        // onChange={(target) => setCount(target.value)}
+                        onChangeText={(text) => onChangeText(item, text)}
+                        // onChange={(target)=>handle_setCount(target.value)}
+                        editable={false}
+                        value={String(`${count}%`)}  ></TextInput>
+                </View>
+                <TouchableOpacity style={styles.plus_btn}
+                    onPress={(e) => increase(e, index)} >
+                    <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
+                </TouchableOpacity>
+            </>
+        )
+    }
+
 
     const renderItem = ({ item, index }) => {
         return (
@@ -146,11 +184,9 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                 {/* //COUNTER */}
                 <View style={{ backgroundColor: COLORS.white, left: -8, height: 35, flexDirection: "row", alignContent: "flex-start", marginRight: 5 }}>
                     <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, alignItems: "center" }}>
-                        <TouchableOpacity style={styles.minus_btn} color={COLORS.black}
-                            onPress={(e) => decrease(e,index)
-                                //  (SelectedActiveItem?.index == 0) && (count>100) ? setCount(count => count - 5) :alert("null")
-                            }
-                        >
+                    {__handle_counter_buttons(item,index)}
+                        {/* <TouchableOpacity style={styles.minus_btn} color={COLORS.black}
+                            onPress={(e) => decrease(e, index)} >
                             <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
                         </TouchableOpacity>
                         <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
@@ -161,9 +197,10 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                                 editable={false}
                                 value={String(`${count}%`)}  ></TextInput>
                         </View>
-                        <TouchableOpacity style={styles.plus_btn} onPress={increase} >
+                        <TouchableOpacity style={styles.plus_btn}
+                            onPress={(e) => increase(e, index)} >
                             <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <View style={{ backgroundColor: COLORS.white, height: 25, marginRight: -2, alignContent: "center" }}>
                         <TouchableOpacity >
