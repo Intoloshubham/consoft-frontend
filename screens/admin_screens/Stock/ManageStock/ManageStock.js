@@ -238,7 +238,7 @@ const ManageStock = () => {
                                   paddingLeft: 10,
                                   paddingRight: 10,
                                   fontWeight: 'bold',
-                                  borderRadius: 10,
+                                  borderRadius: 5,
                                 }}>
                                 add item
                               </Text>
@@ -336,7 +336,7 @@ const ManageStock = () => {
                                               // )}
                                             />
                                             <TextButton
-                                              label="AddItem"
+                                              label="Add item"
                                               buttonContainerStyle={{
                                                 height: 45,
                                                 borderRadius: SIZES.radius,
