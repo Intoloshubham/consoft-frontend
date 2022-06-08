@@ -53,7 +53,7 @@ const App = () => {
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
-          }}s
+          }}
           initialRouteName={'Home'}>
           <Stack.Screen name="OnBoarding" component={OnBoarding} />
           <Stack.Screen name="CreateCompany" component={CreateCompany} />
