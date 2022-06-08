@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from 'react';
-<<<<<<< HEAD
 import {StyleSheet, Text, View, Button, Modal, Pressable} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-=======
 
->>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
 import {
   StyleSheet,
   Text,
@@ -17,10 +14,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-<<<<<<< HEAD
-=======
 
->>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
 import {Card, Title} from 'react-native-paper';
 import {
   FormInput,
@@ -28,11 +22,8 @@ import {
   TextButton,
   HeaderBar,
 } from '../../../../Components';
-<<<<<<< HEAD
 import {COLORS, FONTS, SIZES} from '../../../../constants';
-=======
 
->>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
 import {FONTS, SIZES, COLORS, Image, icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -69,15 +60,12 @@ const ManageStock = () => {
     try {
       const resp = await fetch('http://192.168.1.99:8000/api/item');
       const data = await resp.json();
-<<<<<<< HEAD
       console.log(data);
       //  console.log(data);
-=======
 
 
       //  console.log(data);
 
->>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
       setdata(data);
     } catch (error) {
       console.log(error);
@@ -208,7 +196,6 @@ const ManageStock = () => {
   return (
     <View>
       <HeaderBar right={true} title="Manage Stock" />
-<<<<<<< HEAD
       <View
         style={{
           marginHorizontal: SIZES.padding,
@@ -327,7 +314,6 @@ const ManageStock = () => {
                   </Card>
                 </ScrollView>
               </View>
-=======
 
       <View style={{marginHorizontal: SIZES.padding}}>
         <Card style={styles.card}>
@@ -570,7 +556,6 @@ const ManageStock = () => {
                 </View>
               </Modal>
 
->>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
             </View>
           </Modal>
         </View>
@@ -844,13 +829,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
   },
-<<<<<<< HEAD
   card2: {
     borderWidth: 1,
   },
-=======
 
->>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
   container: {
     backgroundColor: 'white',
     padding: 16,
