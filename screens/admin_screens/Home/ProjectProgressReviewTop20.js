@@ -6,58 +6,83 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  LogBox,
 } from 'react-native';
 import {COLORS, FONTS, SIZES, icons, images} from '../../../constants';
+import axios from 'axios';
+const url = 'http://192.168.1.99:8000/api/projects';
+import {useNavigation} from '@react-navigation/native';
 
 const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
+  const [projects, setProjects] = React.useState([]);
+
+  React.useEffect(() => {
+    axios.get(url).then(response => setProjects(response.data));
+  });
+
+  const navigation = useNavigation();
+
   const renderItem = ({item, index}) => (
     <TouchableOpacity
       style={{
         flexDirection: 'row',
-        alignItems: 'center',
         paddingVertical: SIZES.base,
+      }}
+      onPress={() => {
+        navigation.navigate('ProjectsDetails');
       }}>
-      <Text
-        style={{
-          ...FONTS.h3,
-          color: COLORS.darkGray,
-        }}>
-        {item.id}
-      </Text>
+      {/* n.no  */}
       <View
         style={{
           flex: 1,
-          marginLeft: SIZES.radius,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Text style={{color: COLORS.gray, ...FONTS.body5}}>{index + 1}</Text>
+        <Text
+          style={{
+            marginLeft: 30,
+            color: COLORS.gray,
+            ...FONTS.body5,
+          }}>
+          {item.project_name}
+        </Text>
+      </View>
+      {/* p.code  */}
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
         }}>
         <Text
           style={{
-            ...FONTS.h3,
-            color: COLORS.darkGray,
+            marginLeft: -10,
+            color: COLORS.gray,
+            ...FONTS.body5,
           }}>
-          {item.name}
+          {index + 1}
         </Text>
-      </View>
-      <View
-        style={{flexDirection: 'row', alignItems: 'center', height: '100%'}}>
-        <Image
-          source={icons.location}
-          style={{
-            height: 20,
-            width: 20,
-            tintColor: COLORS.red,
-            marginRight: SIZES.base,
-          }}
-        />
         <Text
           style={{
-            ...FONTS.h3,
-            color: COLORS.darkGray,
+            marginLeft: 35,
+            color: COLORS.gray,
+            ...FONTS.body5,
           }}>
-          {item.location}
+          55%
+        </Text>
+        <Text
+          style={{
+            marginLeft: 60,
+            color: COLORS.gray,
+            ...FONTS.body5,
+          }}>
+          4
         </Text>
       </View>
     </TouchableOpacity>
   );
+
   return (
     <View
       style={{
@@ -75,17 +100,69 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
           alignItems: 'center',
           marginBottom: SIZES.base,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray, flex: 1}}>
-          Top 20 Progress
+        <Text style={{...FONTS.h3, color: COLORS.darkGray, flex: 1}}>
+          Top 3 Projects
         </Text>
       </View>
       <FlatList
         contentContainerStyle={{marginTop: SIZES.radius}}
         scrollEnabled={false}
-        data={history}
-        keyExtractor={item => `${item.id}`}
+        data={projects}
+        listKey="top3"
+        keyExtractor={item => `top3-${item._id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <Text
+              style={{
+                flex: 1,
+                color: COLORS.darkGray,
+                ...FONTS.body5,
+              }}>
+              S.N
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                marginLeft: -25,
+                color: COLORS.darkGray,
+                ...FONTS.body5,
+              }}>
+              Name
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                marginLeft: 30,
+                color: COLORS.darkGray,
+                ...FONTS.body5,
+              }}>
+              Pc
+            </Text>
+
+            <Text
+              style={{
+                flex: 1,
+                marginLeft: -30,
+                color: COLORS.darkGray,
+                ...FONTS.body5,
+              }}>
+              Progress
+            </Text>
+            <Text
+              style={{
+                flex: 1,
+                color: COLORS.darkGray,
+                ...FONTS.body5,
+              }}>
+              Notification
+            </Text>
+          </View>
+        }
         ItemSeparatorComponent={() => {
           return (
             <View

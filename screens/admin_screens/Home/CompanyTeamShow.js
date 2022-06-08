@@ -11,26 +11,17 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {HeaderBar, TextButton} from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
-import AddProjectTeamModal from '../Modals/AddProjectTeamModal.js';
+import CompanyTeamModal from '../Modals/CompanyTeamModal';
 
-const ProjectTeam = () => {
+const ProjectCompanyShow = () => {
   const navigation = useNavigation();
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
   const [showAddTeamModal, setShowAddTeamModal] = React.useState(false);
-  const [collapsed, setCollapsed] = React.useState(true);
 
-  const toggleExpanded = () => {
-    if (collapsed) {
-      setCollapsed(false);
-    } else {
-      setCollapsed(true);
-    }
-  };
-
-  const teamdetail = [
+  const CompanyTeam = [
     {
       id: 1,
       name: 'Shivam Verma',
@@ -66,64 +57,27 @@ const ProjectTeam = () => {
       mobile: 9988776655,
       designation: 'Engineer',
     },
-    {
-      id: 6,
-      name: 'Anup Patil',
-      email: 'patil@gmail.com',
-      mobile: 9988776655,
-      designation: 'Engineer',
-    },
-    {
-      id: 7,
-      name: 'Jeet',
-      email: 'singh@gmail.com',
-      mobile: 9988776655,
-      designation: 'Engineer',
-    },
-    {
-      id: 8,
-      name: 'Demo',
-      email: 'demo@gmail.com',
-      mobile: 9988776655,
-      designation: 'Engineer',
-    },
-    {
-      id: 9,
-      name: 'Demo1',
-      email: 'demo1@gmail.com',
-      mobile: 9988776655,
-      designation: 'Engineer',
-    },
   ];
-  const [teamdetails, setTeamDetails] = React.useState(teamdetail);
+  const [comTeamDetails, setComTeamDetails] = React.useState(CompanyTeam);
 
   function renderTeamList() {
     const renderItem = ({item, index}) => (
-      <View>
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            paddingVertical: SIZES.base,
-          }}>
-          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
-          <View style={{flex: 1, marginLeft: SIZES.radius}}>
-            <Text
-              style={{
-                ...FONTS.h3,
-                color: COLORS.darkGray,
-              }}>
-              Mr.{item.name}
-            </Text>
-            <Text style={{...FONTS.body4}}>
-              Designation - {item.designation}
-            </Text>
-          </View>
-          {/* <Image
-            source={icons.down_arrow}
-            resizeMode="contain"
-            style={{height: 15, width: 15, tintColor: COLORS.darkGray}}
-          /> */}
-        </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: 'row',
+          paddingVertical: SIZES.base,
+        }}>
+        <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
+        <View style={{flex: 1, marginLeft: SIZES.radius}}>
+          <Text
+            style={{
+              ...FONTS.h3,
+              color: COLORS.darkGray,
+            }}>
+            Mr.{item.name}
+          </Text>
+          <Text style={{...FONTS.body4}}>Designation - {item.designation}</Text>
+        </View>
       </View>
     );
     return (
@@ -136,11 +90,17 @@ const ProjectTeam = () => {
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>List</Text>
+        <Text
+          style={{
+            ...FONTS.h2,
+            color: COLORS.darkGray,
+          }}>
+          List
+        </Text>
         <FlatList
           contentContainerStyle={{marginTop: SIZES.radius}}
           scrollEnabled={false}
-          data={teamdetails}
+          data={comTeamDetails}
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
@@ -165,7 +125,7 @@ const ProjectTeam = () => {
       style={{
         flex: 1,
       }}>
-      <HeaderBar right={true} title="Project Team" />
+      <HeaderBar right={true} title="Company Team" />
       <TextButton
         label="Add New Team"
         buttonContainerStyle={{
@@ -179,7 +139,7 @@ const ProjectTeam = () => {
         onPress={() => setShowAddTeamModal(true)}
       />
       {showAddTeamModal && (
-        <AddProjectTeamModal
+        <CompanyTeamModal
           isVisible={showAddTeamModal}
           onClose={() => setShowAddTeamModal(false)}
         />
@@ -202,4 +162,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProjectTeam;
+export default ProjectCompanyShow;

@@ -10,8 +10,8 @@ import {
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {IconButton, Drop, FormInput, TextButton} from '../../../Components';
 
-const AddProjectTeamModal = ({isVisible, onClose}) => {
-  // project team states
+const CompanyTeamModal = ({isVisible, onClose}) => {
+  // company team states
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
@@ -31,11 +31,11 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
   ]);
 
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const [showProjectTeamModal, setShowProjectTeamModal] =
+  const [showCompanyTeamModal, setShowCompanyTeamModal] =
     React.useState(isVisible);
 
   React.useEffect(() => {
-    if (showProjectTeamModal) {
+    if (showCompanyTeamModal) {
       Animated.timing(modalAnimatedValue, {
         toValue: 1,
         duration: 500,
@@ -48,7 +48,7 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
         useNativeDriver: false,
       }).start(() => onClose());
     }
-  }, [showProjectTeamModal]);
+  }, [showCompanyTeamModal]);
 
   const modalY = modalAnimatedValue.interpolate({
     inputRange: [0, 1],
@@ -59,7 +59,7 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
       <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
         {/* transparent background */}
         <TouchableWithoutFeedback
-          onPress={() => setShowProjectTeamModal(false)}>
+          onPress={() => setShowCompanyTeamModal(false)}>
           <View
             style={{
               position: 'absolute',
@@ -95,7 +95,7 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
               iconStyle={{
                 tintColor: COLORS.gray,
               }}
-              onPress={() => setShowProjectTeamModal(false)}
+              onPress={() => setShowCompanyTeamModal(false)}
             />
           </View>
           {/* <WorkAssign /> */}
@@ -217,4 +217,4 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
   );
 };
 
-export default AddProjectTeamModal;
+export default CompanyTeamModal;
