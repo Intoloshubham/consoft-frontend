@@ -199,6 +199,7 @@ const ManageStock = () => {
       <View style={{marginHorizontal: SIZES.padding}}>
         <Card style={styles.card}>
           <Card.Content>
+            <Modal>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Title>Stock entry</Title>
@@ -439,7 +440,8 @@ const ManageStock = () => {
 
             </View>
           </Modal>
-        </View>
+          </Card.Content>
+        </Card>
       </View>
     </View>
   );
