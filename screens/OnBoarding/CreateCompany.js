@@ -5,6 +5,7 @@ import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
 import {COLORS, images, icons, SIZES} from '../../constants';
 import {FormInput, TextButton} from '../../Components';
+import Toast from 'react-native-toast-message';
 
 const url = 'http://192.168.1.99:8000/api/company';
 
@@ -32,6 +33,25 @@ const CreateCompany = ({navigation}) => {
     );
   }
 
+  const showToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'Successfully Created Company',
+      text2: 'Success',
+      visibilityTime: 400,
+    });
+
+  const showToastError = () =>
+    Toast.show({
+      position: 'top',
+      topOffset: 50,
+      type: 'error',
+      text1: 'Please Enter all details',
+      text2: 'Error',
+      visibilityTime: 4000,
+    });
+
   const onSubmit = () => {
     const data = {
       company_name: cName,
@@ -52,7 +72,16 @@ const CreateCompany = ({navigation}) => {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        navigation.navigate('CompanyPayment');
+
+        // if (data.response == 200) {
+        showToast();
+        setTimeout(() => {
+          navigation.navigate('CompanyPayment');
+        }, 200);
+        // }
+        // if (data.response != 200) {
+        //   showToastError();
+        // }
       })
       .catch(error => {
         console.error('Error:', error);
@@ -66,6 +95,10 @@ const CreateCompany = ({navigation}) => {
         backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Create Company" />
+
+      <Toast config={showToast} />
+      <Toast config={showToastError} />
+
       <AuthLayout image={images.create_company} title="Let's Create Company">
         <View
           style={{

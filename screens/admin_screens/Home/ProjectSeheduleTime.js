@@ -8,9 +8,8 @@ const ProjectSeheduleTime = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.lightblue_50,
       }}>
-      <HeaderBar right={true} title="Sehedule Time"/>
+      <HeaderBar right={true} title="Sehedule Time" />
       <Text> PST</Text>
     </View>
   );

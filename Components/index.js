@@ -12,6 +12,8 @@ import UploadImage from './UplaodImage';
 import Accordian1 from './Accordian';
 import MultiSelectDropdown from './MultiSelectDropdown';
 import ToastPopup from './Toast';
+import FloatingButton from './FloatingButton';
+import Drop from './Drop';
 
 export {
   TextButton,
@@ -28,4 +30,6 @@ export {
   Accordian1,
   MultiSelectDropdown,
   ToastPopup,
+  FloatingButton,
+  Drop,
 };

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+
 import {
   StyleSheet,
   Text,
@@ -11,6 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+
 import {Card, Title} from 'react-native-paper';
 import {
   FormInput,
@@ -18,6 +20,7 @@ import {
   TextButton,
   HeaderBar,
 } from '../../../../Components';
+
 import {FONTS, SIZES, COLORS, Image, icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -54,7 +57,10 @@ const ManageStock = () => {
     try {
       const resp = await fetch('http://192.168.1.99:8000/api/item');
       const data = await resp.json();
+
+
       //  console.log(data);
+
       setdata(data);
     } catch (error) {
       console.log(error);
@@ -189,6 +195,7 @@ const ManageStock = () => {
   return (
     <View>
       <HeaderBar right={true} title="Manage Stock" />
+
       <View style={{marginHorizontal: SIZES.padding}}>
         <Card style={styles.card}>
           <Card.Content>
@@ -429,9 +436,10 @@ const ManageStock = () => {
                   </View>
                 </View>
               </Modal>
+
             </View>
-          </Card.Content>
-        </Card>
+          </Modal>
+        </View>
       </View>
     </View>
   );
@@ -440,16 +448,17 @@ const ManageStock = () => {
 export default ManageStock;
 
 const styles = StyleSheet.create({
-  card: {
-    borderWidth: 5,
-    elevation: 20,
-    borderRadius: 5,
-    shadowOpacity: 10,
-    shadowColor: 'black',
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
-  card2: {
-    borderWidth: 1,
-  },
+
   container: {
     backgroundColor: 'white',
     padding: 16,
@@ -502,4 +511,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginTop: 20,
   },
+
 });
