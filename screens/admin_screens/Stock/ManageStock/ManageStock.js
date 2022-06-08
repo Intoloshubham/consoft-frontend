@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
+<<<<<<< HEAD
 import {StyleSheet, Text, View, Button, Modal, Pressable} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+=======
+
+>>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
 import {
   StyleSheet,
   Text,
@@ -13,6 +17,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
 import {Card, Title} from 'react-native-paper';
 import {
   FormInput,
@@ -20,7 +28,11 @@ import {
   TextButton,
   HeaderBar,
 } from '../../../../Components';
+<<<<<<< HEAD
 import {COLORS, FONTS, SIZES} from '../../../../constants';
+=======
+
+>>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
 import {FONTS, SIZES, COLORS, Image, icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -57,8 +69,15 @@ const ManageStock = () => {
     try {
       const resp = await fetch('http://192.168.1.99:8000/api/item');
       const data = await resp.json();
+<<<<<<< HEAD
       console.log(data);
       //  console.log(data);
+=======
+
+
+      //  console.log(data);
+
+>>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
       setdata(data);
     } catch (error) {
       console.log(error);
@@ -189,6 +208,7 @@ const ManageStock = () => {
   return (
     <View>
       <HeaderBar right={true} title="Manage Stock" />
+<<<<<<< HEAD
       <View
         style={{
           marginHorizontal: SIZES.padding,
@@ -307,6 +327,250 @@ const ManageStock = () => {
                   </Card>
                 </ScrollView>
               </View>
+=======
+
+      <View style={{marginHorizontal: SIZES.padding}}>
+        <Card style={styles.card}>
+          <Card.Content>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Title>Stock entry</Title>
+              <Button title="voucher" onPress={() => setmodalstock(true)} />
+              <Modal
+                animationType="slide"
+                transparent={false}
+                visible={modalstock}>
+                <View style={{backgroundColor: '#000000aa', flex: 1}}>
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: '#fff',
+                      marginTop: 50,
+                      padding: 30,
+                      borderTopRightRadius: 30,
+                      borderTopLeftRadius: 30,
+                    }}>
+                    <View>
+                      <Pressable onPress={setmodalstock}>
+                        <Text
+                          style={{
+                            alignSelf: 'flex-end',
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                          }}>
+                          X
+                        </Text>
+                      </Pressable>
+                    </View>
+                    <ScrollView>
+                      <Card style={styles.card2}>
+                        <Card.Content>
+                          <TouchableOpacity onPress={() => setunitmodal(true)}>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-end',
+                              }}>
+                              <Text
+                                style={{
+                                  ...FONTS.body3,
+                                  borderWidth: 1,
+                                  paddingLeft: 10,
+                                  paddingRight: 10,
+                                  fontWeight: 'bold',
+                                  borderRadius: 10,
+                                }}>
+                                add item
+                              </Text>
+                              <Modal
+                                animationType="slide"
+                                transparent={false}
+                                visible={unitmodal}>
+                                <View
+                                  style={{
+                                    backgroundColor: '#000000aa',
+                                    flex: 1,
+                                  }}>
+                                  <View
+                                    style={{
+                                      backgroundColor: '#fff',
+                                      flex: 1,
+                                      marginTop: 40,
+                                      padding: 20,
+                                      borderRadius: 20,
+                                    }}>
+                                    <View>
+                                      <Pressable onPress={setunitmodal}>
+                                        <Text
+                                          style={{
+                                            alignSelf: 'flex-end',
+                                            fontSize: 20,
+                                            fontWeight: 'bold',
+                                          }}>
+                                          X
+                                        </Text>
+                                      </Pressable>
+                                    </View>
+                                    <View>
+                                      <Card>
+                                        <Card.Content>
+                                          <Title>Item</Title>
+                                        </Card.Content>
+                                      </Card>
+                                      <View>
+                                        <Card style={{borderWidth: 1}}>
+                                          <Card.Content>
+                                            <FormInput
+                                              label="Item name"
+                                              onChange={itemname => {
+                                                setItemname(itemname);
+                                              }}
+                                            />
+                                            
+                                            <Dropdown
+                                              style={[
+                                                styles.dropdowns,
+                                                isFocusunit && {
+                                                  borderColor: 'blue',
+                                                },
+                                              ]}
+                                              placeholderStyle={
+                                                styles.placeholderStyle
+                                              }
+                                              selectedTextStyle={
+                                                styles.selectedTextStyle
+                                              }
+                                              inputSearchStyle={
+                                                styles.inputSearchStyle
+                                              }
+                                              iconStyle={styles.iconStyle}
+                                              data={dataunit}
+                                              search
+                                              maxHeight={300}
+                                              labelField="unit_name"
+                                              valueField="_id"
+                                              placeholder={
+                                                !isFocus ? 'Select unit' : '...'
+                                              }
+                                              searchPlaceholder="Search..."
+                                              value={valueunit}
+                                              onFocus={() =>
+                                                setIsFocusunit(true)
+                                              }
+                                              onBlur={() =>
+                                                setIsFocusunit(false)
+                                              }
+                                              onChange={item => {
+                                                console.log(item);
+                                                setValueunit(item._id);
+
+                                                setIsFocusunit(false);
+                                              }}
+                                              // renderLeftIcon={() => (
+                                              //   <AntDesign
+                                              //     style={styles.icon}
+                                              //     color={isFocus ? 'blue' : 'black'}
+                                              //     name="Safety"
+                                              //     size={20}
+                                              //   />
+                                              // )}
+                                            />
+                                            <TextButton
+                                              label="AddItem"
+                                              buttonContainerStyle={{
+                                                height: 45,
+                                                borderRadius: SIZES.radius,
+                                                marginTop: SIZES.padding,
+                                              }}
+                                              onPress={() => addstockitem()}
+                                            />
+                                          </Card.Content>
+                                        </Card>
+                                      </View>
+                                    </View>
+                                  </View>
+                                </View>
+                              </Modal>
+                            </View>
+                          </TouchableOpacity>
+                          <Dropdown
+                            style={[
+                              styles.dropdown,
+                              isFocus && {borderColor: 'blue'},
+                            ]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            data={data}
+                            search
+                            maxHeight={300}
+                            labelField="item_name"
+                            valueField="_id"
+                            placeholder={!isFocus ? 'Select item' : '...'}
+                            searchPlaceholder="Search..."
+                            value={value}
+                            onFocus={() => setIsFocus(true)}
+                            onBlur={() => setIsFocus(false)}
+                            onChange={item => {
+                              // console.log(item.unit_id);
+                              setValue(item._id);
+                              setunitname(item.unit_id);
+                              setIsFocus(false);
+                            }}
+                            // renderLeftIcon={() => (
+                            //   <AntDesign
+                            //     style={styles.icon}
+                            //     color={isFocus ? 'blue' : 'black'}
+                            //     name="Safety"
+                            //     size={20}
+                            //   />
+                            // )}
+                          />
+                          <View style={{justifyContent: 'space-between'}}>
+                            <TextInput
+                              style={styles.input}
+                              editable={false}
+                              selectTextOnFocus={false}
+                              placeholder={unitname}
+                            />
+                            <FormInput
+                              label="Quantity"
+                              onChange={qty => {
+                                setqty(qty);
+                              }}
+                            />
+                          </View>
+                          <FormInput
+                            label="Supplier/Vendor"
+                            onChange={location => {
+                              setlocation(location);
+                            }}
+                          />
+                          <FormInput
+                            label="Vehicle no"
+                            onChange={vehicle => {
+                              setvehicle(vehicle);
+                            }}
+                          />
+
+                          <TextButton
+                            label="save"
+                            buttonContainerStyle={{
+                              height: 45,
+                              borderRadius: SIZES.radius,
+                              marginTop: SIZES.padding,
+                            }}
+                            onPress={() => saveStock()}
+                          />
+                        </Card.Content>
+                      </Card>
+                    </ScrollView>
+                  </View>
+                </View>
+              </Modal>
+
+>>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
             </View>
           </Modal>
         </View>
@@ -580,9 +844,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
   },
+<<<<<<< HEAD
   card2: {
     borderWidth: 1,
   },
+=======
+
+>>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
   container: {
     backgroundColor: 'white',
     padding: 16,
@@ -635,4 +903,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginTop: 20,
   },
+<<<<<<< HEAD
+=======
+
+>>>>>>> 743e1aa2fffd371b276ad3b8b9873afdfa36b0a1
 });
