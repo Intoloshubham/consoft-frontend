@@ -8,34 +8,18 @@ import {
   Image,
 } from 'react-native';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import {IconButton, Drop, FormInput, TextButton} from '../../../Components';
+import {FormInput, IconButton, TextButton, Drop} from '../../../Components';
 
-const AddProjectTeamModal = ({isVisible, onClose}) => {
-  // project team states
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [mobileNo, setMobileNo] = React.useState('');
-  const [emailError, setEmailError] = React.useState('');
-  const [nameError, setNameError] = React.useState('');
-  const [mobileNoError, setMobileNoError] = React.useState('');
-
-  //drop
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
-  const [items, setItems] = React.useState([
-    {label: 'Engineer', value: '1'},
-    {label: 'Supervisor', value: '2'},
-    {label: 'Asst. Supervisor', value: '3'},
-    {label: 'Site Engineer', value: '4'},
-    {label: 'Other staff', value: '5'},
-  ]);
-
+const ToolsAndMachineryModal = ({isVisible, onClose}) => {
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const [showProjectTeamModal, setShowProjectTeamModal] =
-    React.useState(isVisible);
+  const [showModal, setShowModal] = React.useState(isVisible);
+
+  //Form data
+  const [toolsName, setToolsName] = React.useState('');
+  const [toolsQty, setToolsQty] = React.useState('');
 
   React.useEffect(() => {
-    if (showProjectTeamModal) {
+    if (showModal) {
       Animated.timing(modalAnimatedValue, {
         toValue: 1,
         duration: 500,
@@ -48,7 +32,7 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
         useNativeDriver: false,
       }).start(() => onClose());
     }
-  }, [showProjectTeamModal]);
+  }, [showModal]);
 
   const modalY = modalAnimatedValue.interpolate({
     inputRange: [0, 1],
@@ -58,8 +42,7 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
         {/* transparent background */}
-        <TouchableWithoutFeedback
-          onPress={() => setShowProjectTeamModal(false)}>
+        <TouchableWithoutFeedback onPress={() => setShowModal(false)}>
           <View
             style={{
               position: 'absolute',
@@ -82,8 +65,14 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
           }}>
           {/* header */}
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
-              Add New Team
+            <Text
+              style={{
+                flex: 1,
+                // ...FONTS.h4,
+                fontSize: 20,
+                color: COLORS.darkGray,
+              }}>
+              Add New Tools & Machines
             </Text>
             <IconButton
               containerStyle={{
@@ -95,36 +84,27 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
               iconStyle={{
                 tintColor: COLORS.gray,
               }}
-              onPress={() => setShowProjectTeamModal(false)}
+              onPress={() => setShowModal(false)}
             />
           </View>
-          {/* <WorkAssign /> */}
-          <View>
-            <Drop
-              placeholder="Select Role"
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              categorySelectable={true}
-              listParentLabelStyle={{
-                color: COLORS.white,
-              }}
-            />
+
+          {/* ToolsAndMachinery data  */}
+          <View
+            style={{
+              marginTop: SIZES.padding,
+            }}>
             <FormInput
-              label="Name"
+              label="Item name"
               keyboardType="default"
               autoCompleteType="username"
               onChange={value => {
-                setName(value);
+                setToolsName(value);
               }}
               appendComponent={
                 <View style={{justifyContent: 'center'}}>
                   <Image
                     source={
-                      name == '' || (name != '' && nameError == '')
+                      toolsName == '' || toolsName != ''
                         ? icons.correct
                         : icons.cancel
                     }
@@ -132,9 +112,9 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
                       height: 20,
                       width: 20,
                       tintColor:
-                        name == ''
+                        toolsName == ''
                           ? COLORS.gray
-                          : name != '' && nameError == ''
+                          : toolsName != ''
                           ? COLORS.green
                           : COLORS.red,
                     }}
@@ -143,46 +123,16 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
               }
             />
             <FormInput
-              label="Email"
-              keyboardType="email-address"
-              autoCompleteType="email"
-              onChange={value => {
-                setEmail(value);
-              }}
-              appendComponent={
-                <View style={{justifyContent: 'center'}}>
-                  <Image
-                    source={
-                      email == '' || (email != '' && emailError == '')
-                        ? icons.correct
-                        : icons.cancel
-                    }
-                    style={{
-                      height: 20,
-                      width: 20,
-                      tintColor:
-                        email == ''
-                          ? COLORS.gray
-                          : email != '' && emailError == ''
-                          ? COLORS.green
-                          : COLORS.red,
-                    }}
-                  />
-                </View>
-              }
-            />
-            <FormInput
-              label="Mobile No."
+              label="Quantity"
               keyboardType="numeric"
               onChange={value => {
-                setMobileNo(value);
+                setToolsQty(value);
               }}
-              errorMsg={mobileNoError}
               appendComponent={
                 <View style={{justifyContent: 'center'}}>
                   <Image
                     source={
-                      mobileNo == '' || (mobileNo != '' && mobileNoError == '')
+                      toolsQty == '' || toolsQty != ''
                         ? icons.correct
                         : icons.cancel
                     }
@@ -190,9 +140,9 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
                       height: 20,
                       width: 20,
                       tintColor:
-                        mobileNo == ''
+                        toolsQty == ''
                           ? COLORS.gray
-                          : mobileNo != '' && mobileNoError == ''
+                          : toolsQty != ''
                           ? COLORS.green
                           : COLORS.red,
                     }}
@@ -201,14 +151,15 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
               }
             />
             <TextButton
-              label="Submit"
+              label="Add New"
               buttonContainerStyle={{
-                height: 55,
+                height: 45,
+                marginTop: SIZES.padding * 1.5,
                 alignItems: 'center',
-                marginTop: SIZES.padding,
                 borderRadius: SIZES.radius,
+                backgroundColor: COLORS.lightblue_700,
               }}
-              // onPress={OnSubmit}
+              onPress={() => alert('Okay...')}
             />
           </View>
         </Animated.View>
@@ -217,4 +168,4 @@ const AddProjectTeamModal = ({isVisible, onClose}) => {
   );
 };
 
-export default AddProjectTeamModal;
+export default ToolsAndMachineryModal;

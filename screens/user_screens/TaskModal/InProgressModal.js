@@ -4,79 +4,197 @@ import {
     Modal,
     TouchableOpacity,
     Alert,
-    Pressable,
     StyleSheet,
-    ScrollView,
     FlatList,
-    Image
+    Image,
+    Animated,
+    TextInput
 } from 'react-native'
-import React from 'react'
-import { icons, COLORS, SIZES, FONTS, dummyData } from '../../../constants';
+import React, { useState } from 'react'
+import { icons, COLORS, SIZES, FONTS, dummyData, images } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
-import { BarChart } from "react-native-gifted-charts";
 import styles from './css/InProgressModalStyle'
-import { color } from 'react-native-reanimated';
-
+import { log } from 'react-native-reanimated';
 
 Entypo.loadFont()
 
-
 function InProgressModal({ inProgressModal, setinProgressModal }) {
 
-    const [SelectedActiveItem, setSelectedActiveItem] = React.useState(null)
-    const [SelectedData, setSelectedData] = React.useState(dummyData.Active_tasks)
+    const [count, setCount] = React.useState(0)
+    const [Num, setNum] = React.useState(0)
+    const [dumybardata, setdumybardata] = React.useState(dummyData.barData)
+    const [ShowCounterbutton, setShowCounterbutton] = useState(false)
+    const [ShowCounterid, setShowCounterid] = useState(0)
+    const ShowCounteridRef=React.useRef()
+    const [Data, setData] = useState(null)
+    const GetPercentIdRef = React.useRef()
 
-    const widthAndHeight = 130
-    const series = [100, 150, 120]
-    const sliceColor = ["#4caf50", '#2196F3', '#FFEB3B']
 
-    const OnSelectedActiveItem = (activeItem) => {
 
-        console.log(activeItem);
-        setSelectedActiveItem(activeItem)
+    const __handle_increase_counter = (item, id,index) => {
+        // console.log(id);
+        ShowCounteridRef.current=id
+        setShowCounterid(id)
+        console.log('showcounterref='+ShowCounteridRef.current+''+'Showcounterid='+ShowCounterid);
+        if (index ==  ShowCounterid) {
+            if (count < 100) {
+                setCount(count => count + 5);
+            }
+        } else {
+            setCount(0);
+        }
     }
 
-    const barData = [
-        {
-            value: 50, label: 'T1', topLabelComponent: () => (
-                <Text style={{ color: 'blue', fontSize: 18, marginBottom: 6 }}>50</Text>
-            ),
-        },
-        { value: 40, label: 'T2', frontColor: '#177AD5', labelTextStyle: { color: 'red' } },
-        { value: 50, label: 'T3', frontColor: '#177AD5' },
-        { value: 80, label: 'T4' },
-        { value: 60, label: 'T5', frontColor: '#177AD5' },
-        { value: 10, label: 'T6', frontColor: '#177AD5' },
-        { value: 50, label: 'T7', frontColor: '#177AD5' },
-        { value: 16, label: 'T8', frontColor: '#177AD5' },
-        { value: 60, label: 'T9', frontColor: '#177AD5' },
-        { value: 10, label: 'T10', frontColor: '#177AD5' },
-        { value: 60, label: 'T11', frontColor: '#177AD5' },
-        { value: 20, label: 'T12', frontColor: '#177AD5' },
-        { value: 15, label: 'T13', frontColor: '#177AD5' },
-    ];
 
-    // const renderItem = ({ item }) => (
-    //     <View style={{ backgroundColor: COLORS.transparent, paddingHorizontal: 10, paddingTop: 10, bottom: 5, marginBottom: 10 }}>
-    //         <View >
-    //             <TouchableOpacity
-    //                 onPress={() => OnSelectedActiveItem(item)}
-    //                 style={[styles.active_task_view,
-    //                 { backgroundColor: (SelectedActiveItem?.id == item.id) ? "#26D1B2" : COLORS.gray3 }
-    //                 ]}
-    //             >
-    //                 <Image
-    //                     resizeMode='contain'
-    //                     style={{ width: 50, height: 50 }}
-    //                     source={item.icon} />
-    //                 <View style={{ marginBottom: -12 }}>
-    //                     <Text style={[styles.active_task_title, { color: (SelectedActiveItem?.id == item.id) ? COLORS.red : COLORS.transparentBlack7 }]}>{item.name}</Text>
-    //                 </View>
-    //             </TouchableOpacity>
-    //         </View>
-    //     </View>
-    // );
 
+    const __handle_decrease_counter = (item, id) => {
+        setShowCounterid(id+1)
+        if (id == ShowCounterid) {
+            if (count > 0) {
+                setCount(count => count - 5);
+            }
+        } else {
+            setCount(0);
+        }
+
+    }
+
+    const __handleonchange = (e, target) => {
+
+        setTextid(text_id)
+    }
+
+    const Text_Counter = (item, id) => {
+        return (
+
+            <TextInput placeholder="%" style={{ width: 60, height: 40, fontSize: 15, top: 5, color: COLORS.black }}
+                editable={false}
+                value={String(`${count}%`)}
+
+            // onChange={(e) => __handleonchange(e)} 
+            >
+            </TextInput>
+        )
+    }
+    const Text_Counter2 = (item, id) => {
+        return (
+
+            <TextInput placeholder=" " style={{ width: 60, height: 40, fontSize: 15, top: 5, color: COLORS.black }}
+                editable={false}
+                value={String(`${0}%`)}
+            >
+            </TextInput>
+        )
+    }
+
+    const __getPercent = (item, id) => {
+        const new_data = dumybardata.findIndex((i) => i.label === item.label)
+        GetPercentIdRef.current = new_data
+        // GetPercentIdRef
+        // console.log(new_data);
+        // console.log(GetPercentIdRef.current);
+        if (GetPercentIdRef.current == id) {
+            console.log(count);
+            setCount(0)
+        } else {
+            return null
+        }
+    }
+
+    const Handle_counter_buttons = ({ item, id,index }) => {
+        // console.log('ShowCounteridRef= '+ShowCounteridRef.current+'ShowCounterid= '+ShowCounterid+'id= '+id);
+        return (
+            <>
+                <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, alignItems: "center" }}>
+                    <TouchableOpacity style={styles.minus_btn} key={item.label} color={COLORS.black}
+                        onPress={() => {
+                            __handle_decrease_counter(item, id)
+                        }} >
+                        <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
+                        {/* {( ShowCounteridRef.current == id ? Text_Counter(item, id) : Text_Counter2(item, id))} */}
+                        {(ShowCounterid == id ? Text_Counter(item, id) : Text_Counter2(item, id))}
+                    </View>
+                    <TouchableOpacity style={styles.plus_btn}
+                        onPress={() => {
+                            __handle_increase_counter(item, id,index)
+                        }} >
+                        <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
+                    </TouchableOpacity>
+                    <View style={{ backgroundColor: COLORS.white, height: 25, marginRight: -2, alignContent: "center" }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                __getPercent(item, id)
+                            }}
+                        >
+                            <Image
+                                resizeMode='contain'
+                                style={{ height: 14, width: 20, marginTop: 7 }}
+                                source={icons.forward_arrow}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </>
+        )
+    }
+
+
+
+    const CountingComponent = ({ item, id }) => {
+        return (
+            <View style={{ flex: 1, backgroundColor: COLORS.gray, flexDirection: "row", justifyContent: "space-around", top: 5 }}>
+                <View style={{}}>
+                    <Text style={{ color: COLORS.black }}>{item.label}</Text>
+                </View>
+                <View style={{ width: "55%", height: "35%" }}>
+                    <TouchableOpacity
+                        style={{
+                            width: '100%',
+                            height: 20,
+                            top: 0,
+                            left: -15,
+                            borderTopRightRadius: 10,
+                            borderBottomRightRadius: 10,
+                            flex: 1,
+                            alignSelf: "flex-end",
+                            alignItems: "center",
+                            backgroundColor: COLORS.white
+                        }}
+                        key={id}
+
+                    >
+                        <View
+                            style={{
+                                position: 'absolute',
+                                left: 0,
+                                height: '100%',
+                                width: `${item.value}%`,
+                                borderTopRightRadius: 10,
+                                borderBottomRightRadius: 10,
+                                justifyContent: "center",
+                                alignItems: "flex-start",
+                                backgroundColor: COLORS.success_300,
+                            }}>
+                        </View>
+                        <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-between", right: 2 }}>
+                            <View style={{}}>
+                                <Text style={{}}>{item.date}</Text>
+                            </View>
+                            <View>
+                                <Text style={{}}>{item.code}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                {/* //COUNTER */}
+                <View style={{ backgroundColor: COLORS.gray2, left: -8, height: 35, flexDirection: "row", alignContent: "flex-start", marginRight: 5 }}>
+                    <Handle_counter_buttons item={item} id={id} index={index}/>
+                </View>
+            </View>
+        )
+    }
 
     return (
         <>
@@ -87,92 +205,62 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
                     setinProgressModal(!inProgressModal);
+                    clearInterval(countInterval);
                 }}>
-                <Pressable style={{ position: "relative", backgroundColor: "transparent", paddingTop: SIZES.width * 0.7, bottom: 5 }} onPress={() => setinProgressModal(!inProgressModal)}>
-
-                </Pressable>
                 <View style={styles.modal_container}>
-                    <View style={{ flex: 1, backgroundColor: COLORS.white2, marginTop: 20 }}>
-                        <View style={{ backgroundColor: COLORS.white, marginLeft: 5 }}>
-                            <Pressable style={{ alignSelf: "flex-end", marginLeft: 320, marginTop: 9, left: -8, top: -12 }} onPress={() => setinProgressModal(!inProgressModal)}><Entypo name="cross" color={"#106853"} size={25} /></Pressable>
-                            <View style={styles.act_tsk_stat_view}>
-                                <Text style={[styles.act_tsk_stat, { color: COLORS.black, ...FONTS.body2, textAlign: "center" }]}>Active Task Statistic</Text>
-                            </View>
+                    <View style={{ backgroundColor: COLORS.gray3 }}>
+                        <TouchableOpacity style={{ alignSelf: "flex-end", marginLeft: 320, left: -5, marginTop: 5, padding: 5 }} onPress={() => setinProgressModal(!inProgressModal)}>
+                            <Entypo name="cross" color={"#106853"} size={25} />
+                        </TouchableOpacity>
+                        <View style={styles.act_tsk_stat_view}>
+                            <Text style={[styles.act_tsk_stat, { color: COLORS.black, ...FONTS.body2, textAlign: "center" }]}>Active Task Statistic</Text>
                         </View>
-                        <View style={{ flex: 1, flexDirection: "row", backgroundColor: COLORS.white2,alignContent:"space-between",alignItems:"baseline",left:-12,top:32 }}>
-                            <View style={{flex:2,  backgroundColor: COLORS.white2 }}>
-                                <BarChart
-                                    barWidth={20}
-                                    noOfSections={3}
-                                    barBorderRadius={40}
-                                    frontColor="#177AD5"
-                                    data={barData}
-                                    width={450}
-                                    height={120}
-                                    cappedBars={true}
-                                    capColor={COLORS.blue}
-                                    roundedTop={true}
-                                    roundedBottom={true}
-                                    showGradient={true}
-                                    activeOpacity={0.8}
-                                    isAnimated={true}
-                                    animationDuration={600}
-                                    animationEasing={'Easing.ease'}
-                                    sideColor={COLORS.blue}
-                                    topColor={COLORS.transparentBlack7}
-                                    isThreeD={true}
-                                    // onPress={() => alert("i am task")}
-                                    spacing={20}
-                                    sideWidth={15}
-                                    initialSpacing={40}
-                                    // renderTooltip={() => alert("tool tip")}
-                                    horizontal={true}
-                                    labelWidth={20}
-                                    yAxisThickness={0}
-                                    hideYAxisText={true}
-                                    yAxisLabelSuffix={" %"}
-                                    yAxisTextStyle={{ color: 'blue', fontWeight: "bold" }}
-                                    xAxisLabelTextStyle={{ color: 'blue', fontWeight: "bold" }}
-                                    // showScrollIndicator={true}
-                                    // indicatorColor={'black'}
-                                    // scrollToEnd={true}
-                                    scrollAnimation={true}
-                                    yAxisAtTop={false}
-                                    // yAxisLabelContainerStyle={{color:COLORS.red}}
-                                    xAxisThickness={0}
-                                />
-                            </View>
-                            <View style={{ flexDirection: "column", alignItems: "baseline", justifyContent: "space-around", backgroundColor: "transparent", height: 72, top: -45, right: 0 }}>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                    <View style={[styles.circle, { backgroundColor: "yellow" }]}></View>
-                                    <Text style={styles.pie_tag}>No. of Task</Text>
-                                </View>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                    <View style={[styles.circle, { backgroundColor: "#2196F3" }]}>
-                                    </View>
-                                    <Text style={styles.pie_tag}>In Progress !</Text>
-                                </View>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                    <View style={[styles.circle, { backgroundColor: "#4caf50" }]}>
-                                    </View>
-                                    <Text style={styles.pie_tag}>Done !</Text>
-                                </View>
-                            </View>
-                        </View>
-                        {/* <View style={[styles.act_tsk_list_view, styles.act_tsk_stat_view,{bottom:0}]}>
-                            <Text style={[FONTS.body2, { color: COLORS.black,  textAlign: "center" }]}>List of Active Task</Text>
-                        </View> */}
-
-                        {/* <View style={{ marginTop: 10, marginLeft: -15 }} >
+                    </View>
+                    <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around", backgroundColor: COLORS.white }}>
+                        <View style={{ flex: 2, backgroundColor: COLORS.white }}>
                             <FlatList
-                                horizontal
+                                data={dumybardata}
+                                contentContainerStyle={{ flexGrow: 1 }}
+                                pagingEnabled={true}
+                                horizontal={false}
                                 showsHorizontalScrollIndicator={false}
-                                data={dummyData.Active_tasks}
-                                renderItem={renderItem}
-                                keyExtractor={item => item.id}
-                            />
-                        </View> */}
+                                showsVerticalScrollIndicator={true}
+                                legacyImplementation={false}
 
+                                renderItem={({ item, index }) => (
+                                    <CountingComponent item={item} id={item.label} />
+                                )}
+                                keyExtractor={(item, index) => index.toString()}
+                                extraData={count}
+                            />
+
+                            <View style={{ backgroundColor: "red" }}>
+                                <Text>dsf</Text>
+                            </View>
+                        </View>
+
+
+
+                        {/* <View style={{ alignItems: "center", backgroundColor: COLORS.white, marginTop: 2, marginLeft: -100, marginRight: -6 }}>
+                                <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, marginTop: 55, alignItems: "center" }}>
+                                    <TouchableOpacity style={styles.minus_btn} color={COLORS.black} onPress={decrease} >
+                                        <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
+                                    </TouchableOpacity>
+                                    <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
+                                        <Text placeholder="%" style={styles.plus_minus_text} >{count} %</Text>
+                                    </View>
+                                    <TouchableOpacity style={styles.plus_btn} onPress={increase} >
+                                        <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity>
+                                        <Image
+                                            resizeMode='contain'
+                                            style={{ height: 14, width: 14, marginTop: 3 }}
+                                            source={icons.forward_arrow}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </View> */}
                     </View>
                 </View>
             </Modal>

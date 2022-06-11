@@ -25,6 +25,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 const url = 'http://192.168.1.99:8000/api/stock-entry';
 
 const ManageStock = () => {
+
   const [modalstock, setmodalstock] = useState(false);
   // fix unit state
   const [unitname, setunitname] = useState('');
@@ -57,7 +58,10 @@ const ManageStock = () => {
     try {
       const resp = await fetch('http://192.168.1.99:8000/api/item');
       const data = await resp.json();
+
+
       //  console.log(data);
+
       setdata(data);
     } catch (error) {
       console.log(error);
@@ -223,9 +227,11 @@ const ManageStock = () => {
   return (
     <View>
       <HeaderBar right={true} title="Manage Stock" />
+
       <View style={{marginHorizontal: SIZES.padding}}>
         <Card style={styles.card}>
           <Card.Content>
+            <Modal>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Title>Stock entry</Title>
@@ -463,7 +469,9 @@ const ManageStock = () => {
                   </View>
                 </View>
               </Modal>
+
             </View>
+          </Modal>
           </Card.Content>
         </Card>
         <View style={{
@@ -499,6 +507,7 @@ const ManageStock = () => {
       </View>
     </View>
   );
+
 };
 
 export default ManageStock;
