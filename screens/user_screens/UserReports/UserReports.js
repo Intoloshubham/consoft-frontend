@@ -5,6 +5,13 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { CheckBox, Layout, Card } from '@ui-kitten/components';
 import { Divider } from '@ui-kitten/components';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import {
+  Svg,
+  LinearGradient,
+  Mask,
+  Rect,
+  ForeignObject,
+} from 'react-native-svg';
 
 MaterialCommunityIcons.loadFont()
 
@@ -19,44 +26,25 @@ const UserReports = () => {
   const [pro_team, setpro_team] = React.useState(false);
   const [contract_team, setcontract_team] = React.useState(false);
   const [contract_lab_team, setcontract_lab_team] = React.useState(false);
-  // const [toggle_report, settoggle_report] = React.useState(false);
-  // console.log(selectedId);
+  const ref = React.useRef(0)
+
   let opacity = new Animated.Value(0);
 
-  const toggleSwitch = (set_state_props) => {
-    console.log(set_state_props);
-    set_state_props(previousState => !previousState);
-    // {isEnabled?}
-  };
+  // const toggleSwitch = (set_state_props) => {
+  //   console.log(set_state_props);
+  //   set_state_props(previousState => !previousState);
+
+  // };
 
   const OnSelectedActiveItem = (activeItem, index) => {
-    console.log(activeItem);
-    console.log(index);
-
+    // console.log(activeItem);
+    // console.log(index);
+    ref.current = activeItem;
     setSelectedId(activeItem)
-    // console.log(selectedId);
     if (activeItem.name == 'Company Team') {
 
-      // settoggle_report(toggle_report=>!toggle_report);
       setcomp_team(true)
       animate(Easing.out(Easing.exp));
-      // animate(Easing.out(Easing.exp))
-      // toggle_report?animate(Easing.out(Easing.exp)):null
-      // settoggle_report(!toggle_report)?(toggle_report?alert(" toggle true"):alert('toggle false')):(alert("set not runing running"))
-      //  console.log(toggle_report);
-      //   if(toggle_report>0){
-      //   alert("true");
-      //   animate(Easing.out(Easing.exp));
-      //  }
-      //  else{
-      //   // alert("false")
-      //  }
-
-
-      //  }
-      // {settoggle_report(!toggle_report)==toggle_report?(alert("true")):(alert("set not runing running"))}
-      // console.log(toggle_report);
-      // alert("com team");
       setpro_team(false)
       setcontract_team(false)
       setcontract_lab_team(false)
@@ -67,7 +55,6 @@ const UserReports = () => {
       setcomp_team(false)
       setcontract_team(false)
       setcontract_lab_team(false)
-      // alert("pro team");
     }
     else if (activeItem.name == 'Contractor Team') {
       setcontract_team(true)
@@ -75,7 +62,6 @@ const UserReports = () => {
       setcomp_team(false)
       setpro_team(false)
       setcontract_lab_team(false)
-      // alert("contra team");
     }
     else if (activeItem.name == "Contractor's Labour") {
       setcontract_lab_team(true)
@@ -83,7 +69,6 @@ const UserReports = () => {
       setcomp_team(false)
       setpro_team(false)
       setcontract_team(false)
-      // alert("con labour");
     }
 
 
@@ -115,12 +100,30 @@ const UserReports = () => {
   ];
 
 
-  function Company_view() {
+  function Company_view(key) {
     return (
-      <View style={styles.boxContainer}>
-        <Animated.View style={animatedStyles} />
-        <Text>Company view function</Text>
+      <View key={key} style={{ flex: 1, flexDirection: "column", position: 'relative', backgroundColor: COLORS.lightGray1 }}>
+      <Svg height="50%">
+        <Rect
+          x="16"
+          y="0"
+          width="100"
+          height="30"
+          fill={COLORS.gray2}
+        />
+      </Svg>
+      <View style={{
+        backgroundColor: COLORS.gray2,
+        top: 10,
+        padding: 155,
+        alignSelf: "center",
+        borderRadius: 5,
+        marginHorizontal: -10,
+        position: "absolute"
+      }}>
+        <Text>Company section</Text>
       </View>
+    </View>
     )
   }
   function Project_view() {
@@ -167,51 +170,86 @@ const UserReports = () => {
           inActiveText={'Off'}
           backgroundActive={'green'}
           backgroundInactive={'gray'}
-        // circleActiveColor={'#30a566'}
-        // circleInActiveColor={'#000000'}
+
         />
       </View>
     )
   }
 
-  const renderItem = ({ item, index }) => { 
+  function Tabs_neck(item,key,x,marginHorizontal) {
+    return (
+      <View key={key} style={{ flex: 1, flexDirection: "column", position: 'relative', backgroundColor: COLORS.lightGray1 }}>
+        <Svg height="50%">
+          <Rect
+            x={x}
+            y="0"
+            width="100"
+            height="30"
+            fill={COLORS.gray2}
+          />
+        </Svg>
+        <View style={{
+          backgroundColor: COLORS.gray2,
+          top: 10,
+          // padding: 168,
+          
+          paddingHorizontal:115,
+          // marginHorizontal:400,
+          paddingVertical:200,
+          alignSelf: "center",
+          borderRadius: 5,
+          marginHorizontal:marginHorizontal,
+          position: "absolute"
+        }}>
+        <View style={{backgroundColor:"white",paddingHorizontal:20}}>
+          <Text>{item.name}</Text>
+        </View>
+        </View>
+      </View>
 
+    )
+
+  }
+
+  const renderItem = ({ item, index }) => {
 
     return (
-      <>
-        <View style={{ flex: 1, backgroundColor: COLORS.lightGray1, position: "relative", height: SIZES.width * 2 }}>
-          <View style={{
-            paddingHorizontal: 195, paddingVertical: 100, backgroundColor: COLORS.lightGray1
+      <View style={{ flex: 1, backgroundColor: COLORS.lightGray1, position: "relative", height: SIZES.width / 5, bottom: -20 }}>
+        <View style={{
+          paddingHorizontal: 60, backgroundColor: COLORS.gray2, margin: 3, marginHorizontal: 5
 
-          }}>
-            <TouchableOpacity
-              style={[styles.rend_rep_card, { backgroundColor: (selectedId?.id == item.id) ? "#26D1B2" : COLORS.gray3 }]}
-              onPress={
-                () => {
-                  OnSelectedActiveItem(item, index);
-                }
+        }}>
+          <TouchableOpacity
+            style={[styles.rend_rep_card, { backgroundColor: (selectedId?.id == item.id) ? "#26D1B2" : COLORS.gray3 }]}
+            onPress={
+              () => {
+                OnSelectedActiveItem(item, index);
               }
-            >
-              <View style={{alignSelf:"flex-start",left:-SIZES.largeTitle,top:-SIZES.base}}>
-                <Text style={{ ...FONTS.body4, textAlign: "left" }}>{item.name}</Text>
-              </View>
-              {
+            }
+          >
+            <View style={{ flexDirection: "column", top: 8, margin: -25, alignSelf: "center" }}>
+              <Text style={{ ...FONTS.body4, textAlign: "center" }}>{item.name}</Text>
+            </View>
+            {/* {
                 (item.name == 'Company Team') ? (switch_btn(isEnabled, setIsEnabled)) : (item.name == 'Project Team') ? (switch_btn(isEnabledPro, setIsEnabledPro)) :
                   (item.name == 'Contractor Team') ? (switch_btn(isEnabledCont, setIsEnabledCont)) : (item.name == "Contractor's Labour") ? (switch_btn(isEnabledContLab, setIsEnabledContLab)) : null
-              }
-            </TouchableOpacity>
+              } */}
 
-          </View>
+          </TouchableOpacity>
 
-          <Divider style={{ backgroundColor: COLORS.transparentPrimary, marginHorizontal: 8 }} />
-          {/* <View> */}
-          {/* </View> */}
-          {(comp_team && isEnabled) ? item.name == 'Company Team' && (Company_view()) : null}
-          {(pro_team && isEnabledPro) ? item.name == 'Project Team' && (Project_view()) : null}
-          {(contract_team && isEnabledCont) ? item.name == 'Contractor Team' && (Contract_team_view()) : null}
-          {(contract_lab_team && isEnabledContLab) ? item.name == "Contractor's Labour" && (Contract_labour_view()) : null}
+
         </View>
-      </>
+
+        {/* <Divider style={{ backgroundColor: COLORS.transparentPrimary, marginHorizontal: 8 }} />  */}
+        {/* <View> */}
+        {/* </View> */}
+        {/* {(comp_team && isEnabled) ? item.name == 'Company Team' && (Company_view()) : null} */}
+        {/* {(pro_team && isEnabledPro) ? item.name == 'Project Team' && (Project_view()) : null} */}
+        {/* {(contract_team && isEnabledCont) ? item.name == 'Contractor Team' && (Contract_team_view()) : null} */}
+        {/* {(contract_lab_team && isEnabledContLab) ? item.name == "Contractor's Labour" && (Contract_labour_view()) : null} */}
+
+      </View>
+
 
     );
   };
@@ -242,20 +280,30 @@ const UserReports = () => {
 
       >Ongoing 8 Reports</Text>
       <Divider style={{ backgroundColor: COLORS.transparentPrimary, marginHorizontal: 8 }} />
-      <View>
-        <Animated.FlatList />
+      <View >
         <FlatList
           data={dummyData.Reports_part}
           renderItem={(item, index) => renderItem(item, index)}
           keyExtractor={(item, index) => index.toString()}
           extraData={selectedId}
           horizontal
+          showsHorizontalScrollIndicator={false}
         />
+      </View>
+      <View style={{ flex: 1, backgroundColor: "dodgerblue" }}>
+        {
+          dummyData.Reports_part.map((item, key) => {
+            return ref.current.name == item.name && comp_team ? Tabs_neck(item,key,16) 
+            :ref.current.name == item.name && pro_team? Tabs_neck(item,key,148,1)
+            :ref.current.name == item.name && contract_team? Tabs_neck(item,key,SIZES.width*0.705,2)
+            :ref.current.name == item.name && contract_lab_team? Tabs_neck(item,key,SIZES.width*0.705,4):null
+
+          })
+
+        }
       </View>
 
 
-      {/* some space then start selected report sections */}
-      {/* {isEnabled?Company_view():null } */}
 
     </>
   )
@@ -266,17 +314,21 @@ export default UserReports
 const styles = StyleSheet.create({
 
   rend_rep_card: {
-    padding: SIZES.width * 0.2,
+    padding: 25,
     margin: 5,
-    borderRadius: 30,
+    marginHorizontal: -2,
+    borderRadius: 5,
     position: "absolute",
     top: 0,
     right: 0,
     left: 0,
     bottom: 0,
+    flexDirection: "column",
+    justifyContent: "flex-start"
   },
   boxContainer: {
     height: 160,
     alignItems: "center"
   },
+
 })
