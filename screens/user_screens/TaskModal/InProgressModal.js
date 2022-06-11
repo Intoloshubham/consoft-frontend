@@ -16,16 +16,9 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import styles from './css/InProgressModalStyle'
 import { log } from 'react-native-reanimated';
 
-
-
 Entypo.loadFont()
 
-
-
-
-
 function InProgressModal({ inProgressModal, setinProgressModal }) {
-
 
     const [count, setCount] = React.useState(0)
     const [Num, setNum] = React.useState(0)

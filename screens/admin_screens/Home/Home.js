@@ -67,7 +67,7 @@ const Home = () => {
           marginBottom: 130,
         }}>
         <ProjectsBanner />
-        {renderProjectProgressReview()}
+        {/* {renderProjectProgressReview()} */}
         {renderProjectProgressReviewTop20()}
         {renderAssignedWorksList()}
         {renderIdentifier()}

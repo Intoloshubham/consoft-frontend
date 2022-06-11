@@ -196,14 +196,14 @@ const Account = () => {
               Unit
             </Text> */}
             <ProfileValue
-              icon={icons.stock_manage}
+              icon={icons.items}
               value="Items"
               image={icons.right_arr}
               onPress={() => navigation.navigate('Items')}
             />
             <LineDivider />
             <ProfileValue
-              icon={icons.stock_manage}
+              icon={icons.unit}
               value="Unit"
               image={icons.right_arr}
               onPress={() => navigation.navigate('Unit')}
@@ -211,7 +211,7 @@ const Account = () => {
             <LineDivider />
             <ProfileValue
               icon={icons.stock_manage}
-              value="ManageStock"
+              value="Manage Stock"
               image={icons.right_arr}
               onPress={() => navigation.navigate('ManageStock')}
             />
