@@ -38,6 +38,7 @@ import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
 import Toast from 'react-native-toast-message';
+import user_tabs from './navigation/user_tabs'
 
 global.apiurl = 'http://192.168.1.99:8000/api';
 
@@ -53,10 +54,10 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            headerShown: false,
+            headerShown: false, 
           }}
-          initialRouteName={'Home'}>
-          <Stack.Screen name="OnBoarding" component={OnBoarding} />
+          initialRouteName={'user_tabs'}> 
+          <Stack.Screen name="user_tabs" component={user_tabs} />
           <Stack.Screen name="CreateCompany" component={CreateCompany} />
           <Stack.Screen name="CompanyPayment" component={CompanyPayment} />
           <Stack.Screen name="VerifyProductKey" component={VerifyProductKey} />
