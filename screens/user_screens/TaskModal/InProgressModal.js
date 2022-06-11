@@ -15,27 +15,14 @@ import { icons, COLORS, SIZES, FONTS, dummyData, images } from '../../../constan
 import Entypo from 'react-native-vector-icons/Entypo'
 import styles from './css/InProgressModalStyle'
 
-
-
 Entypo.loadFont()
 
-
-
-
-
 function InProgressModal({ inProgressModal, setinProgressModal }) {
-
 
     const [count, setCount] = React.useState(0)
     const [Num, setNum] = React.useState(0)
     const [dumybardata, setdumybardata] = React.useState(dummyData.barData)
     const [SelectedActiveItem, setSelectedActiveItem] = React.useState()
-
-
-
-
-
-
 
 
     const __handle_increase_counter = (activeItem) => {
