@@ -50,7 +50,7 @@ export const COLORS = {
   black: '#000000',
 
   transparent: 'transparent',
-  transparentBlack1: 'rgba(0, 0, 0, 0.1)',
+  transparentBlack1: 'rgba(0, 0, 0, 0.3)',
   transparentBlack7: 'rgba(0, 0, 0, 0.7)',
 };
 export const SIZES = {

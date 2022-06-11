@@ -29,6 +29,12 @@ import ProjectCategory from './Project/ProjectCategory';
 import ProjectTypes from './Project/ProjectTypes';
 import CompanyTeam from './CompanyTeam/CompanyTeam';
 import ManageStock from './Stock/ManageStock/ManageStock';
+import CompanyTeamShow from './Home/CompanyTeamShow';
+import CompanyTeamModal from './Modals/CompanyTeamModal';
+import ContractorsModal from './Modals/ContractorsModal';
+import AddStockModal from './Modals/AddStockMatreials';
+import ProjectsOperationModal from './Modals/ProjectsOperationModal';
+import ToolsAndMachineryModal from './Modals/ToolsAndMachineryModal';
 
 export {
   Home,
@@ -61,4 +67,10 @@ export {
   ProjectTypes,
   CompanyTeam,
   ManageStock,
+  CompanyTeamShow,
+  CompanyTeamModal,
+  ContractorsModal,
+  AddStockModal,
+  ProjectsOperationModal,
+  ToolsAndMachineryModal,
 };

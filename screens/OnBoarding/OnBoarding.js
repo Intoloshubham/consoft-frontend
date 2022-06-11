@@ -9,7 +9,6 @@ import {
   Platform,
   StyleSheet,
   Switch,
-  Button,
 } from 'react-native';
 import {FONTS, COLORS, SIZES, icons, images, constants} from '../../constants';
 import LinearGradient from 'react-native-linear-gradient';
@@ -55,9 +54,9 @@ const OnBoarding = ({navigation}) => {
     Toast.show({
       position: 'top',
       type: 'error',
-      text1: 'Please Enter Valid data',
+      text1: 'Please Enter Valid Mobile No. and Password',
       text2: 'Error',
-      visibilityTime: 400,
+      visibilityTime: 4000,
     });
   const userOnSubmit = () => {
     const data = {
@@ -83,9 +82,6 @@ const OnBoarding = ({navigation}) => {
         }
         if (!data.access_token) {
           showToastError();
-          setTimeout(() => {
-            navigation.navigate('UserDashboard');
-          }, 200);
         }
       })
       .catch(error => {
@@ -370,6 +366,7 @@ const OnBoarding = ({navigation}) => {
         {/* <Button title="Show toast" onPress={showToast} /> */}
         {renderHeaderLogo()}
         <Toast config={showToast} />
+        <Toast config={showToastError} />
         <ScrollView>
           {renderHeaderImage()}
           {renderToggleButton()}
