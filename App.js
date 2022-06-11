@@ -53,9 +53,9 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-            initialRouteName={'OnBoarding'}>
-               {/* initialRouteName={'ManageStock'}>
-                  // initialRouteName={'Items'}>  */}
+          //  initialRouteName={'Home'}>
+            //  initialRouteName={'ManageStock'}> 
+             initialRouteName={'Unit'}> 
 
 
           <Stack.Screen name="OnBoarding" component={OnBoarding} />

@@ -28,7 +28,8 @@ const Items = () => {
   const [itemmodal, setItemmodal] = React.useState(false);
   const [unitmodal, setunitmodal] = React.useState(false);
 
-  const [unitname, setUintname] = React.useState('');
+  const [unitname, setUnitname] = React.useState('');
+ 
   const [data, setdata] = React.useState([]);
 
   const [datalist, setdatalist] = React.useState([]);
@@ -103,7 +104,7 @@ const Items = () => {
     })
       .then(response => response.json())
       .then(data => {
-        setUintname('');
+        setUnitname('');
         fetchData();
         console.log('Success:', data);
         {
@@ -119,15 +120,20 @@ const Items = () => {
       });
   }
 
-//   const itemDelete = async (item_id) =>{
-//     var id = item_id;
-//    let result = await fetch('http://192.168.1.99:8000/api/item/'+ id,{
-//               method:"DELETE"
-//    });
-//           result = await result.json();
-//           console.log(result,alert("this unit delete"));
-//           fetchData();
-// }
+        const DeleteItem = async item_id => {
+            var id = item_id;
+            let result = await fetch('http://192.168.1.99:8000/api/item/' + id,{
+              method: 'DELETE',
+            });
+            result = await result.json();
+            listData();
+            console.log(result, alert('this item  deleted '));
+          };
+
+          // edit modal api 
+
+
+
 
   const renderItem = ({item}) => {
     return (
@@ -135,15 +141,15 @@ const Items = () => {
         <View>
           <View style={styles.item}>
             <Text style={styles.title}>{item.item_name}</Text>
-            {/* <View
+            <View
               style={{justifyContent: 'space-between', flexDirection: 'row'}}>
               <View style={{marginRight: 5}}>
-                <Button title="edit" onPress={() => saw(item._id)} />
+                <Button title="edit" onPress={()=>{setItemmodal(true)}}/>
               </View>
               <View style={{marginLeft: 10}}>
-                <Button title="X" onPress={() => itemDelete(item._id)} />
+                <Button title="X" onPress={() => DeleteItem(item._id)} />
               </View>
-            </View> */}
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -164,25 +170,19 @@ const Items = () => {
     <View>
       <HeaderBar right={true} />
       <View style={{marginHorizontal: SIZES.padding}}>
-        <Card style={styles.card}>
-          <Card.Content>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Title>Stock item</Title>
-              <Button title="Add new" onPress={() => setItemmodal(true)} />
+        
               {/* modal start  */}
               <Modal
                 animationType="slide"
                 transparent={false}
                 visible={itemmodal}>
-                <View style={{backgroundColor: '#000000aa', flex: 1}}>
+                <View style={{backgroundColor: '#000000aa', flex: 1,justifyContent:"center"}}>
                   <View
                     style={{
                       backgroundColor: '#fff',
-                      marginTop: 50,
                       padding: 20,
                       borderRadius: 20,
-                      flex: 1,
+                      margin:10
                     }}>
                     <ScrollView>
                       <View
@@ -198,14 +198,14 @@ const Items = () => {
                           animationType="slide"
                           transparent={false}
                           visible={unitmodal}>
-                          <View style={{backgroundColor: '#000000aa', flex: 1}}>
+                          <View style={{backgroundColor: '#000000aa', flex: 1,justifyContent:"center"}}>
                             <View
                               style={{
                                 backgroundColor: '#fff',
-                                flex: 1,
-                                marginTop: 40,
+                              
                                 padding: 20,
                                 borderRadius: 20,
+                                margin:10
                               }}>
                               <View>
                                 <Pressable onPress={setunitmodal}>
@@ -228,12 +228,12 @@ const Items = () => {
                                 <View>
                                   <Card style={{borderWidth: 1}}>
                                     <Card.Content>
-                                      <Title>Unit name</Title>
-                                      <TextInput
-                                        style={styles.input}
-                                        onChangeText={setUintname}
-                                        value={unitname}
-                                      />
+                                        <FormInput
+                                              label="unit name"
+                                              onChange={unitname => {
+                                                setUnitname(unitname);
+                                              }}
+                                            />
 
                                       <TextButton
                                         label="Save"
@@ -265,14 +265,13 @@ const Items = () => {
 
                       <Card style={styles.Itemmodal}>
                         <Card.Content>
-                          <Title style={{...FONTS.h3, color: COLORS.darkGray}}>
-                            Item name
-                          </Title>
-                          <TextInput
-                            placeholder="item name"
-                            style={styles.input}
-                            onChangeText={setItemname}
-                            value={itemname}
+                       
+
+                          <FormInput
+                            label="item name"
+                            onChange={itemname=>{
+                            setItemname(itemname);
+                          }}
                           />
                           <View
                             style={{
@@ -292,8 +291,9 @@ const Items = () => {
                                   paddingRight: 10,
                                   fontWeight: 'bold',
                                   borderRadius: 10,
+                                  marginTop:10
                                 }}>
-                                add unit
+                                Add unit
                               </Text>
                             </TouchableOpacity>
                           </View>
@@ -346,9 +346,7 @@ const Items = () => {
                 </View>
               </Modal>
               {/* modal end  */}
-            </View>
-          </Card.Content>
-        </Card>
+           
         <View
           style={{
             marginBottom: SIZES.padding,
@@ -358,7 +356,10 @@ const Items = () => {
             backgroundColor: COLORS.white,
             ...styles.shadow,
           }}>
+            <View style={{justifyContent:"space-between",flexDirection:"row"}}>
           <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Items</Text>
+          <Button title="Add new" onPress={() => setItemmodal(true)} />
+          </View>
           <FlatList
             maxHeight={410}
             contentContainerStyle={{marginTop: SIZES.radius}}
