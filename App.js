@@ -31,6 +31,7 @@ import {
   CompanyTeam,
   ManageStock,
   CompanyTeamShow,
+  ProjectsOperationModal,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -54,16 +55,12 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-
           initialRouteName={'Home'}>
-
           <Stack.Screen name="OnBoarding" component={OnBoarding} />
-
           <Stack.Screen name="CreateCompany" component={CreateCompany} />
           <Stack.Screen name="CompanyPayment" component={CompanyPayment} />
           <Stack.Screen name="VerifyProductKey" component={VerifyProductKey} />
           <Stack.Screen name="SignIn" component={SignIn} />
-
           <Stack.Screen name="Home" component={Tabs} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
@@ -91,7 +88,10 @@ const App = () => {
           <Stack.Screen name="Unit" component={Unit} />
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />
-
+          <Stack.Screen
+            name="ProjectsOperationModal"
+            component={ProjectsOperationModal}
+          />
           {/* User  */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />
           <Stack.Screen name="Profile" component={Profile} />
