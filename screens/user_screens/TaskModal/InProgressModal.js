@@ -31,38 +31,45 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
     const [Num, setNum] = React.useState(0)
     const [dumybardata, setdumybardata] = React.useState(dummyData.barData)
     const [ShowCounterbutton, setShowCounterbutton] = useState(false)
-    const [ShowCounterid, setShowCounterid] = useState(null)
+    const [ShowCounterid, setShowCounterid] = useState(0)
+    const ShowCounteridRef=React.useRef()
     const [Data, setData] = useState(null)
-    const [GetPercentId, setGetPercentId] = useState(null)
+    const GetPercentIdRef = React.useRef()
 
 
 
-    const __handle_increase_counter = (item, id) => {
+    const __handle_increase_counter = (item, id,index) => {
+        // console.log(id);
+        ShowCounteridRef.current=id
         setShowCounterid(id)
-        if (id == ShowCounterid) {
+        console.log('showcounterref='+ShowCounteridRef.current+''+'Showcounterid='+ShowCounterid);
+        if (index ==  ShowCounterid) {
             if (count < 100) {
                 setCount(count => count + 5);
             }
         } else {
-            setCount(5);
+            setCount(0);
         }
     }
 
 
 
     const __handle_decrease_counter = (item, id) => {
-        setShowCounterid(id)
+        setShowCounterid(id+1)
         if (id == ShowCounterid) {
             if (count > 0) {
                 setCount(count => count - 5);
             }
         } else {
-            setCount(5);
+            setCount(0);
         }
-
 
     }
 
+    const __handleonchange = (e, target) => {
+
+        setTextid(text_id)
+    }
 
     const Text_Counter = (item, id) => {
         return (
@@ -87,17 +94,58 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
         )
     }
 
-
     const __getPercent = (item, id) => {
-        setGetPercentId(id)
-        if (GetPercentId == id) {
-            setCount(0)
+        const new_data = dumybardata.findIndex((i) => i.label === item.label)
+        GetPercentIdRef.current = new_data
+        // GetPercentIdRef
+        // console.log(new_data);
+        // console.log(GetPercentIdRef.current);
+        if (GetPercentIdRef.current == id) {
             console.log(count);
+            setCount(0)
         } else {
             return null
         }
     }
 
+    const Handle_counter_buttons = ({ item, id,index }) => {
+        // console.log('ShowCounteridRef= '+ShowCounteridRef.current+'ShowCounterid= '+ShowCounterid+'id= '+id);
+        return (
+            <>
+                <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, alignItems: "center" }}>
+                    <TouchableOpacity style={styles.minus_btn} key={item.label} color={COLORS.black}
+                        onPress={() => {
+                            __handle_decrease_counter(item, id)
+                        }} >
+                        <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
+                        {/* {( ShowCounteridRef.current == id ? Text_Counter(item, id) : Text_Counter2(item, id))} */}
+                        {(ShowCounterid == id ? Text_Counter(item, id) : Text_Counter2(item, id))}
+                    </View>
+                    <TouchableOpacity style={styles.plus_btn}
+                        onPress={() => {
+                            __handle_increase_counter(item, id,index)
+                        }} >
+                        <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
+                    </TouchableOpacity>
+                    <View style={{ backgroundColor: COLORS.white, height: 25, marginRight: -2, alignContent: "center" }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                __getPercent(item, id)
+                            }}
+                        >
+                            <Image
+                                resizeMode='contain'
+                                style={{ height: 14, width: 20, marginTop: 7 }}
+                                source={icons.forward_arrow}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </>
+        )
+    }
 
 
 
@@ -147,41 +195,9 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {/* //COUNTER */}
                 <View style={{ backgroundColor: COLORS.gray2, left: -8, height: 35, flexDirection: "row", alignContent: "flex-start", marginRight: 5 }}>
-                    {/* <Handle_counter_buttons item={item} id={id} /> */}
-
-                    <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, alignItems: "center" }}>
-                        <TouchableOpacity style={styles.minus_btn} key={item.label} color={COLORS.black}
-                            onPress={() => {
-                                __handle_decrease_counter(item, id)
-                            }}
-                        >
-                            <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
-                        </TouchableOpacity>
-                        <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
-                            {(ShowCounterid == id ? Text_Counter(item, id) : Text_Counter2(item, id))}
-                        </View>
-                        <TouchableOpacity style={styles.plus_btn}
-                            onPress={() => {
-                                __handle_increase_counter(item, id)
-                            }} >
-                            <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
-                        </TouchableOpacity>
-
-                        <View style={{ backgroundColor: COLORS.white, height: 25, marginRight: -2, alignContent: "center" }}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    __getPercent(item, id)
-                                }}
-                            >
-                                <Image
-                                    resizeMode='contain'
-                                    style={{ height: 14, width: 20, marginTop: 7 }}
-                                    source={icons.forward_arrow}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    <Handle_counter_buttons item={item} id={id} index={index}/>
                 </View>
             </View>
         )
