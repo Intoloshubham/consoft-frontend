@@ -1,4 +1,28 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Modal,
+  Pressable,
+  TextInput,
+  Alert,
+  TouchableOpacity,FlatList
+} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {Card, Title} from 'react-native-paper';
+import {
+  FormInput,
+  CustomDropdown,
+  TextButton,
+  HeaderBar,
+} from '../../../../Components';
+import {FONTS, SIZES, COLORS, Image, icons} from '../../../../constants';
+import {Dropdown} from 'react-native-element-dropdown';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+const url = 'http://192.168.1.99:8000/api/stock-entry';
 
 const ManageStock = () => {
 
@@ -25,6 +49,9 @@ const ManageStock = () => {
 
   const [datalist, setdatalist] = React.useState([]);
 
+  const [stocklist, setstocklist] = React.useState([]);
+
+
   // console.log(itemname,qty,place,vehicle);
 
   const itemData = async () => {
@@ -50,19 +77,16 @@ const ManageStock = () => {
 
   useEffect(() => {
     itemData();
-    
   }, []);
- 
-
 
   // post stock item
-  const saveStock = e => {
+  const saveStock = () => {
     // console.log(value, qty, location, vehicle);
     const data = {
       item_id: value,
-      qty: qty,
-      location: location,
-      vehicle_no: vehicle,
+        qty: qty,
+        location: location,
+        vehicle_no: vehicle,
     };
     fetch(url, {
       method: 'POST',
@@ -73,17 +97,18 @@ const ManageStock = () => {
     })
       .then(response => response.json())
       .then(data => {
-        setValue(' ');
-        setqty(' ');
-        setlocation(' ');
-        setvehicle(' ');
-
+        
+        setValue('');
+        setqty('');
+        setlocation('');
+        setvehicle('');
+        setunitname('');
         // fetchData();
         console.log('Success:', data);
         {
-          value == '' || qty == '' || location == '' || vehicle == ''
-            ? alert('all field fill ')
-            : alert(' stock item Created Succcessfully');
+          value === ''||  unitname === '' || qty === '' || location === '' || vehicle === '' 
+          ? alert('all field required')
+          : alert(' stock item Created Succcessfully');
         }
       })
       .catch(error => {
@@ -94,7 +119,7 @@ const ManageStock = () => {
   ////
 
   ////
-
+  
   const addstockitem = e => {
     //  alert("add item")
     const data = {
@@ -112,8 +137,9 @@ const ManageStock = () => {
       .then(data => {
         setItemname('');
         setValueunit('');
-        setdataunit(dataunit);
+        // setdataunit(dataunit);
         listData();
+        itemData();
         console.log('Success:', data);
         {
           itemname == '' || valueunit == ''
@@ -138,7 +164,6 @@ const ManageStock = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
 
   useEffect(() => {
     listData();
@@ -165,7 +190,40 @@ const ManageStock = () => {
     }
     return null;
   };
+//  fetch api calls vaocher list 
+  // const stokItem = async () => {
+  //   const resp = await fetch('http://192.168.1.99:8000/api/stock-entry');
+  //   const datastock = await resp.json();
+  //   // console.log(dataunit);
+  //   setstocklist(datastock);
+  // };
 
+  // useEffect(() => {
+  //   stokItem();
+  // }, [])
+
+  const renderItem = ({item}) => {
+    return( 
+        <ScrollView>
+        <View>
+          <View style={styles.item}>
+           <Text style={styles.title}>{item.item_name}</Text>
+           <Text style={styles.title}>{item.location}</Text>
+              {/* <View style={{justifyContent:"space-between", flexDirection: 'row',}}>
+                <View style={{marginRight:5}}>
+                <Button title="edit" onPress={()=>saw(item._id)
+                    }/>
+                </View>
+                <View style={{marginLeft:10}}>
+                     <Button title="X" onPress={()=>unitDelete(item._id)}/>
+                </View>
+            </View> */}
+        </View>
+        </View>
+      </ScrollView>
+    ); 
+  };
+  
   return (
     <View>
       <HeaderBar right={true} title="Manage Stock" />
@@ -220,7 +278,7 @@ const ManageStock = () => {
                                   paddingLeft: 10,
                                   paddingRight: 10,
                                   fontWeight: 'bold',
-                                  borderRadius: 10,
+                                  borderRadius: 5,
                                 }}>
                                 add item
                               </Text>
@@ -268,7 +326,7 @@ const ManageStock = () => {
                                                 setItemname(itemname);
                                               }}
                                             />
-                                            
+
                                             <Dropdown
                                               style={[
                                                 styles.dropdowns,
@@ -318,7 +376,7 @@ const ManageStock = () => {
                                               // )}
                                             />
                                             <TextButton
-                                              label="AddItem"
+                                              label="Add item"
                                               buttonContainerStyle={{
                                                 height: 45,
                                                 borderRadius: SIZES.radius,
@@ -416,6 +474,36 @@ const ManageStock = () => {
           </Modal>
           </Card.Content>
         </Card>
+        <View style={{
+        marginBottom: SIZES.padding,
+        marginTop:5,
+        padding: 20,
+        borderRadius: SIZES.radius,
+        backgroundColor: COLORS.white,
+        ...styles.shadow,
+         }}>
+        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>voucher list</Text>
+      <FlatList
+        maxHeight={410}
+        contentContainerStyle={{marginTop: SIZES.radius}}
+        scrollEnabled={true}
+        data={data}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={true}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 5,
+              }}></View>
+          );
+        }}
+      />
+    </View>
       </View>
     </View>
   );
@@ -423,3 +511,78 @@ const ManageStock = () => {
 };
 
 export default ManageStock;
+
+const styles = StyleSheet.create({
+  card: {
+    borderWidth: 5,
+    elevation: 20,
+    borderRadius: 5,
+    shadowOpacity: 10,
+    shadowColor: 'black',
+  },
+  card2: {
+    borderWidth: 1,
+  },
+  container: {
+    backgroundColor: 'white',
+    padding: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    marginTop: 5,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  // iconStyle: {
+  //   width: 20,
+  //   height: 20,
+  // },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    fontSize: 20,
+    backgroundColor: COLORS.gray2,
+    color: 'black',
+    marginTop: 20,
+  },
+  dropdowns: {
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    marginTop: 20,
+  },
+  item: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+     paddingBottom:10,
+ },
+ title:{
+   fontSize:18,
+   // fontWeight:"bold",
+     
+ },
+});
