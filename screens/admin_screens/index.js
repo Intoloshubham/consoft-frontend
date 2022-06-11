@@ -33,6 +33,8 @@ import CompanyTeamShow from './Home/CompanyTeamShow';
 import CompanyTeamModal from './Modals/CompanyTeamModal';
 import ContractorsModal from './Modals/ContractorsModal';
 import AddStockModal from './Modals/AddStockMatreials';
+import ProjectsOperationModal from './Modals/ProjectsOperationModal';
+import ToolsAndMachineryModal from './Modals/ToolsAndMachineryModal';
 
 export {
   Home,
@@ -69,4 +71,6 @@ export {
   CompanyTeamModal,
   ContractorsModal,
   AddStockModal,
+  ProjectsOperationModal,
+  ToolsAndMachineryModal,
 };
