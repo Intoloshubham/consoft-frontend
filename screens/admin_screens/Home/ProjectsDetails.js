@@ -13,7 +13,7 @@ import {TextButton, HeaderBar, FloatingButton} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
 
-const ProjectsDetails = () => {
+const ProjectsDetails = ({route}) => {
   const navigation = useNavigation();
   const proDetails = [
     {id: 1, img: icons.p_team, name: 'Company Team'},
@@ -62,6 +62,9 @@ const ProjectsDetails = () => {
       work_progress: '65%',
     },
   ];
+
+  //get name of project from project banner screen using params
+  const {name} = route.params; //
 
   const [showWorkModal, setWorkModal] = React.useState(false);
 
@@ -164,7 +167,7 @@ const ProjectsDetails = () => {
   }
   return (
     <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
-      <HeaderBar right={true} title="Details" />
+      <HeaderBar right={true} title={JSON.stringify(name)} />
       <TextButton
         label="Assign Work"
         buttonContainerStyle={{

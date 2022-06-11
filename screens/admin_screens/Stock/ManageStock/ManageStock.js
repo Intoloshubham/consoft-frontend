@@ -1,33 +1,7 @@
-import React, {useEffect, useState} from 'react';
-
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Modal,
-  Pressable,
-  TextInput,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-
-import {Card, Title} from 'react-native-paper';
-import {
-  FormInput,
-  CustomDropdown,
-  TextButton,
-  HeaderBar,
-} from '../../../../Components';
-
-import {FONTS, SIZES, COLORS, Image, icons} from '../../../../constants';
-import {Dropdown} from 'react-native-element-dropdown';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-
-const url = 'http://192.168.1.99:8000/api/stock-entry';
+import React from 'react';
 
 const ManageStock = () => {
+
   const [modalstock, setmodalstock] = useState(false);
   // fix unit state
   const [unitname, setunitname] = useState('');
@@ -445,73 +419,7 @@ const ManageStock = () => {
       </View>
     </View>
   );
+
 };
 
 export default ManageStock;
-
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-
-  container: {
-    backgroundColor: 'white',
-    padding: 16,
-  },
-  dropdown: {
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    marginTop: 5,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  label: {
-    position: 'absolute',
-    backgroundColor: 'white',
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  // iconStyle: {
-  //   width: 20,
-  //   height: 20,
-  // },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-  },
-  input: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    fontSize: 20,
-    backgroundColor: COLORS.gray2,
-    color: 'black',
-    marginTop: 20,
-  },
-  dropdowns: {
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    marginTop: 20,
-  },
-
-});
