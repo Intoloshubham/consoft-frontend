@@ -1,12 +1,18 @@
 import React from 'react';
 import {View} from 'react-native';
-import {SIZES} from '../../../constants';
-import {TextButton, FormInput, Dropdown} from '../../../Components';
+import {COLORS, SIZES} from '../../../constants';
+import {TextButton, FormInput, Drop} from '../../../Components';
 
 const WorkAssign = () => {
-  const designations = ['Engineer', 'Supervisor', 'Asst. Supervisor'];
-  const defaultButtonText = React.useState('');
-
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState([]);
+  const [items, setItems] = React.useState([
+    {label: 'Engineer', value: '1'},
+    {label: 'Supervisor', value: '2'},
+    {label: 'Asst. Supervisor', value: '3'},
+    {label: 'Site Engineer', value: '4'},
+    {label: 'Other staff', value: '5'},
+  ]);
   const [projectTeamname, setProjectTeamName] = React.useState('');
   const [projectTeamNameError, setProjectTeamNameError] = React.useState('');
 
@@ -15,11 +21,23 @@ const WorkAssign = () => {
   }
   return (
     <View style={{marginVertical: SIZES.radius}}>
-      <Dropdown data={designations} defaultButtonText="Assign to..." />
-
+      <Drop
+        placeholder="Select"
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        categorySelectable={true}
+        listParentLabelStyle={{
+          color: COLORS.white,
+        }}
+      />
       <FormInput
         inputStyle={{width: 200}}
-        placeholder="Work Details..."
+        // placeholder="Work Details..."
+        label="Work details"
         keyboardType="default"
         autoCompleteType="username"
         onChange={value => {

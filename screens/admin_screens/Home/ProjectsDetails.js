@@ -9,19 +9,20 @@ import {
   StyleSheet,
 } from 'react-native';
 import {COLORS, SIZES, FONTS, images, icons} from '../../../constants';
-import {TextButton, HeaderBar} from '../../../Components';
+import {TextButton, HeaderBar, FloatingButton} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
 
 const ProjectsDetails = () => {
   const navigation = useNavigation();
   const proDetails = [
-    {id: 1, img: icons.p_team, name: 'Project Team'},
-    {id: 2, img: icons.contr, name: 'Contractors'},
-    {id: 3, img: icons.stock, name: 'Stock / Inventry'},
-    {id: 4, img: icons.report1, name: 'Reports'},
+    {id: 1, img: icons.p_team, name: 'Company Team'},
+    {id: 2, img: icons.p_team, name: 'Project Team'},
+    {id: 3, img: icons.contr, name: 'Contractors'},
+    {id: 4, img: icons.stock, name: 'Stock / Inventry'},
     {id: 5, img: icons.machine, name: 'Tools & Machinery'},
-    {id: 6, img: icons.time_seh, name: 'Project Sehedule & Timeline'},
+    {id: 6, img: icons.report1, name: 'Reports'},
+    {id: 7, img: icons.time_seh, name: 'Project Sehedule & Timeline'},
   ];
   const ProjectData = [
     {
@@ -77,16 +78,18 @@ const ProjectsDetails = () => {
         }}
         onPress={() => {
           item.id == 1
-            ? navigation.navigate('ProjectTeam')
+            ? navigation.navigate('CompanyTeamShow')
             : item.id == 2
-            ? navigation.navigate('Contractors')
+            ? navigation.navigate('ProjectTeam')
             : item.id == 3
-            ? navigation.navigate('StocksAndInventry')
+            ? navigation.navigate('Contractors')
             : item.id == 4
-            ? navigation.navigate('ProjectReports')
+            ? navigation.navigate('StocksAndInventry')
             : item.id == 5
             ? navigation.navigate('ToolsAndMachinery')
             : item.id == 6
+            ? navigation.navigate('ProjectReports')
+            : item.id == 7
             ? navigation.navigate('ProjectSeheduleTime')
             : null;
         }}>
@@ -161,7 +164,7 @@ const ProjectsDetails = () => {
   }
   return (
     <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
-      <HeaderBar right={true} />
+      <HeaderBar right={true} title="Details" />
       <TextButton
         label="Assign Work"
         buttonContainerStyle={{

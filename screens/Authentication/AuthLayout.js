@@ -3,7 +3,13 @@ import {View, Text, Image, ScrollView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {images, COLORS, FONTS, SIZES} from '../../constants';
 
-const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
+const AuthLayout = ({
+  title,
+  subtitle,
+  image,
+  titleContainerStyle,
+  children,
+}) => {
   return (
     <ScrollView>
       <View
@@ -16,14 +22,14 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
           keyboardDismissMode="on-drag"
           contentContainerStyle={{
             flex: 1,
-            paddingHorizontal: SIZES.padding,
+            paddingHorizontal: SIZES.radius,
           }}>
           <View
             style={{
               alignItems: 'center',
             }}>
             <Image
-              source={images.cons_logo}
+              source={image}
               resizeMode="contain"
               style={{
                 // marginTop: SIZES.padding,
@@ -34,7 +40,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
           </View>
           <View
             style={{
-              marginTop: SIZES.padding,
+              marginTop: SIZES.base,
               ...titleContainerStyle,
             }}>
             <Text

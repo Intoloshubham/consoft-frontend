@@ -27,10 +27,13 @@ const wallet = require('../assets/icons/wallet.png');
 const help = require('../assets/icons/help.png');
 const cancel = require('../assets/icons/cancel.png');
 const arr_down = require('../assets/icons/arr_down.png');
-const task = require("../assets/icons/task.png");
-const inprogress = require("../assets/icons/inprogress.png");
-const done = require("../assets/icons/done.png");
-const todo = require("../assets/icons/todo.png");
+const task = require('../assets/icons/task.png');
+const inprogress = require('../assets/icons/inprogress.png');
+const done = require('../assets/icons/done.png');
+const todo = require('../assets/icons/todo.png');
+const submit1 = require('../assets/icons/submit1.webp');
+const forward_arrow = require('../assets/icons/forward_arrow.png');
+
 
 const account = require('../assets/icons/account.png');
 const report = require('../assets/icons/report.png');
@@ -39,6 +42,16 @@ const dashboard = require('../assets/icons/dashboard.png');
 const tracker = require('../assets/icons/tracker.png');
 const right_arr = require('../assets/icons/right_arr.png');
 const back = require('../assets/icons/back.png');
+const completed = require('../assets/icons/completed.png');
+const sun = require('../assets/icons/sun.png');
+const camera = require('../assets/icons/camera.png');
+const checklist = require('../assets/icons/clipboard.png');
+// const stock_manage = require('../assets/icons/inventory.png');
+const plus = require('../assets/icons/plus.png');
+const unit = require('../assets/icons/unit.png');
+const items = require('../assets/icons/items.png');
+const stock_manage = require('../assets/icons/stock_manage.png');
+
 //pd
 const stock = require('../assets/icons/pd/stock.png');
 const report1 = require('../assets/icons/pd/report.png');
@@ -46,6 +59,12 @@ const contr = require('../assets/icons/pd/contr.png');
 const machine = require('../assets/icons/pd/machine.png');
 const p_team = require('../assets/icons/pd/p_team.png');
 const time_seh = require('../assets/icons/pd/time_seh.png');
+//PPR
+const apartment = require('../assets/icons/PPR/flat.png');
+const bungalow = require('../assets/icons/PPR/bungalow.png');
+const mall = require('../assets/icons/PPR/mall.png');
+const garage = require('../assets/icons/PPR/garage.png');
+const duplex = require('../assets/icons/PPR/duplex.png');
 
 export default {
   account,
@@ -94,4 +113,22 @@ export default {
   machine,
   p_team,
   contr,
+  completed,
+  mall,
+  apartment,
+  garage,
+  duplex,
+  bungalow,
+  sun,
+  camera,
+  checklist,
+  stock_manage,
+
+  submit1,
+  forward_arrow,
+
+  plus,
+  unit,
+  items,
+
 };

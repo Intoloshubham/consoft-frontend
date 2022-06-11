@@ -8,21 +8,20 @@ import {
   TextIconButton,
   Dropdown,
 } from '../../Components';
-import {utils} from '../../utils';
-import axios from 'axios';
+import utils from '../../utils';
 const url = 'http://192.168.1.99:8000/api/register';
 
 const SignUp = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [showPass, setShowPass] = React.useState(false);
+  // const [password, setPassword] = React.useState('');
+  // const [showPass, setShowPass] = React.useState(false);
 
   const [emailError, setEmailError] = React.useState('');
   const [usernameError, setUsernameError] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState('');
+  // const [passwordError, setPasswordError] = React.useState('');
 
   const designations = ['Engineer', 'Supervisor', 'Asst. Supervisor'];
   const defaultButtonText = React.useState('');
@@ -32,9 +31,9 @@ const SignUp = ({navigation}) => {
       email != '' &&
       username != '' &&
       mobileNo != '' &&
-      password != '' &&
+      // password != '' &&
       emailError == '' &&
-      passwordError == '' &&
+      // passwordError == '' &&
       usernameError == '' &&
       mobileNoError == ''
     );
@@ -42,20 +41,25 @@ const SignUp = ({navigation}) => {
 
   const OnSubmit = () => {
     const data = {
+      role: designations,
       name: username,
       email: email,
-      password: password,
+      mobile: mobileNo,
     };
 
-    axios
-      .post(url, data)
-      .then(res => {
-        console.log('Register Success');
-        console.log(res.data);
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
       })
       .catch(error => {
-        console.log('Register Success');
-        console.log(error);
+        console.error('Error:', error);
       });
   };
 
@@ -208,7 +212,7 @@ const SignUp = ({navigation}) => {
             marginTop: SIZES.padding,
             borderRadius: SIZES.radius,
             backgroundColor: isEnableSignUp()
-              ? COLORS.primary
+              ? COLORS.lightblue_700
               : COLORS.transparentPrimary,
           }}
           onPress={OnSubmit}

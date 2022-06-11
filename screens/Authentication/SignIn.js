@@ -8,32 +8,75 @@ import {
   TextIconButton,
 } from '../../Components';
 import utils from '../../utils';
-import {icons, SIZES, COLORS, FONTS} from '../../constants';
+import {icons, SIZES, COLORS, FONTS, images} from '../../constants';
+const url = 'http://192.168.1.99:8000/api/login';
 
 const SignIn = ({navigation}) => {
   const [mobileNo, setMobileNo] = React.useState('');
-  // const [password, setPassword] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
-  // const [showPass, setShowPass] = React.useState(false);
-
+  const [showPass, setShowPass] = React.useState(false);
   const [saveMe, setSaveMe] = React.useState(false);
 
   function isEnableSignIn() {
     return mobileNo != '' && mobileNoError == '';
   }
 
+  const onSubmit = () => {
+    const data = {
+      mobile: mobileNo,
+      password: password,
+    };
+    console.log(data);
+    // axios
+    //   .post(url, data)
+    //   .then(res => {
+    //     console.log(res.data);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.role == 'Administrator' || data.role == 'Editor') {
+          navigation.navigate('Home');
+        } else if (data.role == 'User') {
+          navigation.navigate('UserDashboard');
+        } else {
+          console.log(data.message);
+          alert('Error !');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
   return (
     <AuthLayout
+      image={images.consoft_PNG}
       title="Let's Sign You In"
       subtitle="Welcome Back You on Consoft">
-      <View style={{flex: 1, marginTop: SIZES.padding * 4}}>
+      <View
+        style={{
+          flex: 1,
+          marginTop: SIZES.padding * 2,
+          marginHorizontal: SIZES.radius,
+        }}>
         <FormInput
           placeholder="Mobile No."
-          // keyboardType="email-address"
-          // autoCompleteType="email"
+          keyboardType="phone-pad"
+          autoCompleteType="tel"
           onChange={value => {
             //validate email
-
             utils.validateNumber(value, setMobileNoError);
             setMobileNo(value);
           }}
@@ -60,11 +103,12 @@ const SignIn = ({navigation}) => {
             </View>
           }
         />
-        {/* <FormInput
+        <FormInput
           placeholder="Password"
           secureTextEntry={!showPass}
+          keyboardType="default"
           autoCompleteType="password"
-          containerStyle={{marginTop: SIZES.radius}}
+          containerStyle={{marginTop: SIZES.base}}
           onChange={value => setPassword(value)}
           appendComponent={
             <TouchableOpacity
@@ -84,16 +128,16 @@ const SignIn = ({navigation}) => {
               />
             </TouchableOpacity>
           }
-        /> */}
+        />
         {/* save me & forgot password  */}
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             marginTop: SIZES.radius,
             justifyContent: 'flex-end',
           }}>
-          {/* <CustomSwitch value={saveMe} onChange={value => setSaveMe(value)} /> */}
-          {/* <TextButton
+          <CustomSwitch value={saveMe} onChange={value => setSaveMe(value)} />
+          <TextButton
             label="Forgot Password"
             buttonContainerStyle={{
               backgroundColor: null,
@@ -103,21 +147,21 @@ const SignIn = ({navigation}) => {
               ...FONTS.body4,
             }}
             onPress={() => navigation.navigate('ForgotPassword')}
-          /> */}
-        </View>
+          />
+        </View> */}
         <TextButton
           label="Sign In"
           disabled={isEnableSignIn() ? false : true}
           buttonContainerStyle={{
             height: 55,
             alignItems: 'center',
-            marginTop: SIZES.padding,
-            borderRadius: SIZES.radius,
+            marginTop: SIZES.padding * 2,
+            borderRadius: SIZES.base,
             backgroundColor: isEnableSignIn()
               ? COLORS.lightblue_700
               : COLORS.transparentPrimary,
           }}
-          onPress={() => navigation.replace('Otp')}
+          onPress={onSubmit}
         />
         {/* <View
           style={{

@@ -1,13 +1,9 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const Reports = () => {
+const Reports = ({navigation}) => {
   return (
-    <View  style={{
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Reports</Text>
     </View>
   );

@@ -1,14 +1,15 @@
+
 const myProfile = {
     name: "ByProgrammers",
     profile_image: require("../assets/images/profile.png"),
     address: "No. 88, Jln Padungan, Kuching"
 }
 
-const reports=[
-    { id: 1, name: 'quality' },
-    { id: 2, name: 'quantity' },
-    { id: 3, name: 'stock keeper' },
-    { id: 4, name: 'other' }    
+const reports = [
+    { id: 1, name: 'Quality' },
+    { id: 2, name: 'Quantity' },
+    { id: 3, name: 'Stock keeper' },
+    { id: 4, name: 'Other' }
 ]
 
 const categories = [
@@ -58,6 +59,93 @@ const Active_tasks = [
         icon: require("../assets/icons/active_task.png")
     }
 ]
+
+const barData = [
+    {
+        label: "0",
+        value: 100,
+        date: '10/05/2021',
+        code: '1050'
+    },
+    {
+        label: "1",
+        value: 10, 
+        date: '11/05/2021',
+        code: '1051'
+    },
+    {
+        label: "2",
+        value: 40,
+        date: '12/05/2021',
+        code: '1052'
+    },
+    {
+        label: "3",
+        value: 50,
+        date: '13/05/2021',
+        code: '1053'
+    },
+    {
+        label: "4",
+        value: 60,
+        date: '14/05/2021',
+        code: '1055'
+    },
+    {
+        label: "5",
+        value: 75,
+        date: '14/05/2021',
+        code: '1056'
+    },
+]
+
+const comp_tasks_var = [
+    {
+        id: 1,
+        name: "Task 1",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 2,
+        name: "Task 2",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 3,
+        name: "Task 3",
+        icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 4,
+        name: "Task 4",
+        icon: require("../assets/icons/completed.png")
+    }
+
+]
+const Reports_part = [
+    {
+        id: 1,
+        name: "Company Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 2,
+        name: "Project Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 3,
+        name: "Contractor Team",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 4,
+        name: "Contractor's Labour",
+        // icon: require("../assets/icons/completed.png")
+    }
+
+]
+
 
 const hamburger = {
     id: 1,
@@ -155,5 +243,8 @@ export default {
     categories,
     menu,
     reports,
-    Active_tasks
+    Active_tasks,
+    comp_tasks_var,
+    Reports_part,
+    barData
 }

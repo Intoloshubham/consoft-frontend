@@ -2,18 +2,16 @@ import React from 'react';
 import {
   View,
   Text,
-  Button,
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  Image,
   ScrollView,
   LogBox,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Collapsible from 'react-native-collapsible';
 import {HeaderBar, TextButton} from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
+import AddProjectTeamModal from '../Modals/AddProjectTeamModal.js';
 
 const ProjectTeam = () => {
   const navigation = useNavigation();
@@ -21,9 +19,9 @@ const ProjectTeam = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  // const [showTeamModal, setTeamModal] = React.useState(false);
-
+  const [showAddTeamModal, setShowAddTeamModal] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(true);
+
   const toggleExpanded = () => {
     if (collapsed) {
       setCollapsed(false);
@@ -31,6 +29,7 @@ const ProjectTeam = () => {
       setCollapsed(true);
     }
   };
+
   const teamdetail = [
     {
       id: 1,
@@ -76,8 +75,22 @@ const ProjectTeam = () => {
     },
     {
       id: 7,
-      name: 'Jeet Singh',
+      name: 'Jeet',
       email: 'singh@gmail.com',
+      mobile: 9988776655,
+      designation: 'Engineer',
+    },
+    {
+      id: 8,
+      name: 'Demo',
+      email: 'demo@gmail.com',
+      mobile: 9988776655,
+      designation: 'Engineer',
+    },
+    {
+      id: 9,
+      name: 'Demo1',
+      email: 'demo1@gmail.com',
       mobile: 9988776655,
       designation: 'Engineer',
     },
@@ -90,32 +103,27 @@ const ProjectTeam = () => {
         <TouchableOpacity
           style={{
             flexDirection: 'row',
-            alignItems: 'center',
             paddingVertical: SIZES.base,
-          }}
-          onPress={toggleExpanded}>
-          <View style={{flex: 1}}>
+          }}>
+          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
+          <View style={{flex: 1, marginLeft: SIZES.radius}}>
             <Text
               style={{
                 ...FONTS.h3,
+                color: COLORS.darkGray,
               }}>
-              {item.name}
+              Mr.{item.name}
+            </Text>
+            <Text style={{...FONTS.body4}}>
+              Designation - {item.designation}
             </Text>
           </View>
-          <Image
+          {/* <Image
             source={icons.down_arrow}
             resizeMode="contain"
             style={{height: 15, width: 15, tintColor: COLORS.darkGray}}
-          />
+          /> */}
         </TouchableOpacity>
-        <Collapsible
-          collapsed={collapsed}
-          duration={300}
-          style={{marginBottom: SIZES.base}}>
-          <Text style={{...FONTS.body4}}>Designation - {item.designation}</Text>
-          <Text style={{...FONTS.body4}}>Email - {item.email}</Text>
-          <Text style={{...FONTS.body4}}>Mobile No. - {item.mobile}</Text>
-        </Collapsible>
       </View>
     );
     return (
@@ -128,7 +136,7 @@ const ProjectTeam = () => {
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Team List</Text>
+        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>List</Text>
         <FlatList
           contentContainerStyle={{marginTop: SIZES.radius}}
           scrollEnabled={false}
@@ -157,7 +165,7 @@ const ProjectTeam = () => {
       style={{
         flex: 1,
       }}>
-      <HeaderBar right={true} />
+      <HeaderBar right={true} title="Project Team" />
       <TextButton
         label="Add New Team"
         buttonContainerStyle={{
@@ -168,14 +176,14 @@ const ProjectTeam = () => {
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
         }}
-        // onPress={() => setTeamModal(true)}
+        onPress={() => setShowAddTeamModal(true)}
       />
-      {/* {showTeamModal && (
-        <ProjectTeamModal
-          isVisible={showTeamModal}
-          onClose={() => setTeamModal(false)}
+      {showAddTeamModal && (
+        <AddProjectTeamModal
+          isVisible={showAddTeamModal}
+          onClose={() => setShowAddTeamModal(false)}
         />
-      )} */}
+      )}
       <ScrollView>{renderTeamList()}</ScrollView>
     </View>
   );

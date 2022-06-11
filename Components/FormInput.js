@@ -19,7 +19,14 @@ const FormInput = ({
   return (
     <View style={{...containerStyle}}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text style={{color: COLORS.gray, ...FONTS.body4}}>{label}</Text>
+        <Text
+          style={{
+            color: COLORS.darkGray,
+            ...FONTS.body4,
+            marginTop: SIZES.base,
+          }}>
+          {label}
+        </Text>
         <Text style={{color: COLORS.red, ...FONTS.body4}}>{errorMsg}</Text>
       </View>
       <View
@@ -28,14 +35,14 @@ const FormInput = ({
           height: 45,
           paddingHorizontal: SIZES.padding,
           // marginTop: SIZES.base,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.lightGray1,
+          borderRadius: SIZES.base,
+          backgroundColor: COLORS.gray3,
         }}>
         {prependComponent}
         <TextInput
           style={{flex: 1, ...inputStyle}}
           placeholder={placeholder}
-          placeholderTextColor={COLORS.gray}
+          placeholderTextColor={COLORS.darkGray}
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}
           autoCompleteType={autoCompleteType}

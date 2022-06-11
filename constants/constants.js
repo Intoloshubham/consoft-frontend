@@ -1,10 +1,15 @@
 const onboarding_screens = [
   {
     id: 1,
+    backgroundImage: require('../assets/images/backg_06.png'),
+    bannerImage: require('../assets/images/build_f.png'),
+    title: 'SIPL',
+  },
+  {
+    id: 2,
     backgroundImage: require('../assets/images/backg_02.png'),
-    bannerImage: require('../assets/images/building_01.png'),
-    title: 'Contruction Company',
-    description: 'Truthful and trustworthy we are, that’s why we are best.',
+    bannerImage: require('../assets/images/build_f.png'),
+    title: 'SIPL',
   },
 ];
 
@@ -113,8 +118,6 @@ const tags = [
     label: 'Taccos',
   },
 ];
-
-//saurabh
 
 export default {
   onboarding_screens,
