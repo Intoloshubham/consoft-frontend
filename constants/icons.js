@@ -34,7 +34,6 @@ const todo = require('../assets/icons/todo.png');
 const submit1 = require('../assets/icons/submit1.webp');
 const forward_arrow = require('../assets/icons/forward_arrow.png');
 
-
 const account = require('../assets/icons/account.png');
 const report = require('../assets/icons/report.png');
 const tasks = require('../assets/icons/tasks.png');
@@ -65,6 +64,8 @@ const bungalow = require('../assets/icons/PPR/bungalow.png');
 const mall = require('../assets/icons/PPR/mall.png');
 const garage = require('../assets/icons/PPR/garage.png');
 const duplex = require('../assets/icons/PPR/duplex.png');
+const date = require('../assets/icons/date.png');
+const time = require('../assets/icons/time.png');
 
 export default {
   account,
@@ -130,5 +131,6 @@ export default {
   plus,
   unit,
   items,
-
+  date,
+  time,
 };

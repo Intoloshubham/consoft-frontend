@@ -44,8 +44,9 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
             marginLeft: 30,
             color: COLORS.gray,
             ...FONTS.body5,
+            textTransform: 'capitalize',
           }}>
-          {item.project_name}
+          {item.project_name} ({index + 1})
         </Text>
       </View>
       {/* p.code  */}
@@ -55,14 +56,14 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <Text
+        {/* <Text
           style={{
             marginLeft: -10,
             color: COLORS.gray,
             ...FONTS.body5,
           }}>
           {index + 1}
-        </Text>
+        </Text> */}
         <Text
           style={{
             marginLeft: 35,
@@ -120,21 +121,21 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
             <Text
               style={{
                 flex: 1,
-                color: COLORS.darkGray,
-                ...FONTS.body5,
+                color: COLORS.black,
+                ...FONTS.body4,
               }}>
               S.N
             </Text>
             <Text
               style={{
                 flex: 1,
-                marginLeft: -25,
-                color: COLORS.darkGray,
-                ...FONTS.body5,
+                marginLeft: -35,
+                color: COLORS.black,
+                ...FONTS.body4,
               }}>
               Name
             </Text>
-            <Text
+            {/* <Text
               style={{
                 flex: 1,
                 marginLeft: 30,
@@ -142,22 +143,22 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
                 ...FONTS.body5,
               }}>
               Pc
-            </Text>
+            </Text> */}
 
             <Text
               style={{
                 flex: 1,
-                marginLeft: -30,
-                color: COLORS.darkGray,
-                ...FONTS.body5,
+                marginLeft: 40,
+                color: COLORS.black,
+                ...FONTS.body4,
               }}>
               Progress
             </Text>
             <Text
               style={{
                 flex: 1,
-                color: COLORS.darkGray,
-                ...FONTS.body5,
+                color: COLORS.black,
+                ...FONTS.body4,
               }}>
               Notification
             </Text>

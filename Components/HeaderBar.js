@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {COLORS, SIZES, FONTS, images, icons} from '../constants';
+import {COLORS, SIZES, FONTS, icons} from '../constants';
 
 const HeaderBar = ({right, title}) => {
   const navigation = useNavigation();
@@ -16,15 +16,7 @@ const HeaderBar = ({right, title}) => {
         <TouchableOpacity
           style={{alignItems: 'center', alignItems: 'flex-start'}}
           onPress={() => navigation.goBack()}>
-          <Image
-            source={icons.back}
-            resizeMode="contain"
-            style={{
-              height: 20,
-              width: 20,
-              tintColor: COLORS.black,
-            }}
-          />
+          <Image source={icons.back} style={{width: 20, height: 20}} />
         </TouchableOpacity>
         <Text
           style={{
