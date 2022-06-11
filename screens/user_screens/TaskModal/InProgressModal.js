@@ -16,118 +16,100 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import styles from './css/InProgressModalStyle'
 import { log } from 'react-native-reanimated';
 
+
+
 Entypo.loadFont()
 
+
+
+
+
 function InProgressModal({ inProgressModal, setinProgressModal }) {
+
 
     const [count, setCount] = React.useState(0)
     const [Num, setNum] = React.useState(0)
     const [dumybardata, setdumybardata] = React.useState(dummyData.barData)
+    // const [SelectedActiveItem, setSelectedActiveItem] = React.useState(null)
     const [ShowCounterbutton, setShowCounterbutton] = useState(false)
-    const [ShowCounterid, setShowCounterid] = useState(0)
-    const ShowCounteridRef=React.useRef()
-    const [Data, setData] = useState(null)
-    const GetPercentIdRef = React.useRef()
+    const [ShowCounterid, setShowCounterid] = useState(null)
 
 
 
-    const __handle_increase_counter = (item, id,index) => {
-        // console.log(id);
-        ShowCounteridRef.current=id
-        setShowCounterid(id)
-        console.log('showcounterref='+ShowCounteridRef.current+''+'Showcounterid='+ShowCounterid);
-        if (index ==  ShowCounterid) {
-            if (count < 100) {
-                setCount(count => count + 5);
+
+    const __handle_increase_counter = (id) => {
+
+        const new_data = dumybardata.map((item, key) => {
+            // setSelectedActiveItem(id)
+            // var count  = {count}
+            // count[key]=count[key] || 0;
+            // let myArray = count
+            //     myArray[id] = count+1
+            // setCount({count: myArray });
+            // console.log(target._targetInst._debugOwner.index);
+
+            // ( item.label==id) ?  setCount(count[key]+= 5):null
+            if (key == id) {
+
+                if (count < 100) {
+                    setCount(count => count + 5);
+                }
             }
-        } else {
-            setCount(0);
-        }
+        })
     }
 
 
 
-    const __handle_decrease_counter = (item, id) => {
-        setShowCounterid(id+1)
-        if (id == ShowCounterid) {
-            if (count > 0) {
-                setCount(count => count - 5);
+    const __handle_decrease_counter = (id) => {
+
+        const new_data = dumybardata.map((item, key) => {
+            // setSelectedActiveItem(id)
+            if (item.label == id) {
+
+                if (count > 0) {
+                    setCount(count => count - 5);
+                }
             }
-        } else {
-            setCount(0);
-        }
-
+        })
     }
 
-    const __handleonchange = (e, target) => {
-
-        setTextid(text_id)
-    }
-
-    const Text_Counter = (item, id) => {
+    const Text_Counter = () => {
         return (
-
             <TextInput placeholder="%" style={{ width: 60, height: 40, fontSize: 15, top: 5, color: COLORS.black }}
                 editable={false}
-                value={String(`${count}%`)}
-
-            // onChange={(e) => __handleonchange(e)} 
-            >
-            </TextInput>
-        )
-    }
-    const Text_Counter2 = (item, id) => {
-        return (
-
-            <TextInput placeholder=" " style={{ width: 60, height: 40, fontSize: 15, top: 5, color: COLORS.black }}
-                editable={false}
-                value={String(`${0}%`)}
-            >
+                value={String(`${count}%`)}  >
             </TextInput>
         )
     }
 
-    const __getPercent = (item, id) => {
-        const new_data = dumybardata.findIndex((i) => i.label === item.label)
-        GetPercentIdRef.current = new_data
-        // GetPercentIdRef
-        // console.log(new_data);
-        // console.log(GetPercentIdRef.current);
-        if (GetPercentIdRef.current == id) {
-            console.log(count);
-            setCount(0)
-        } else {
-            return null
-        }
-    }
+    // const Button_counter=()=>{
+    //     return(
 
-    const Handle_counter_buttons = ({ item, id,index }) => {
-        // console.log('ShowCounteridRef= '+ShowCounteridRef.current+'ShowCounterid= '+ShowCounterid+'id= '+id);
+    //     )
+    // }
+
+    const Handle_counter_buttons = ({ item, id }) => {
+
         return (
             <>
                 <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, alignItems: "center" }}>
                     <TouchableOpacity style={styles.minus_btn} key={item.label} color={COLORS.black}
                         onPress={() => {
-                            __handle_decrease_counter(item, id)
+                            __handle_decrease_counter(id)
                         }} >
                         <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
-                        {/* {( ShowCounteridRef.current == id ? Text_Counter(item, id) : Text_Counter2(item, id))} */}
-                        {(ShowCounterid == id ? Text_Counter(item, id) : Text_Counter2(item, id))}
+                        <Text_Counter />
                     </View>
                     <TouchableOpacity style={styles.plus_btn}
                         onPress={() => {
-                            __handle_increase_counter(item, id,index)
+                            __handle_increase_counter(id)
                         }} >
                         <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
                     </TouchableOpacity>
                     <View style={{ backgroundColor: COLORS.white, height: 25, marginRight: -2, alignContent: "center" }}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                __getPercent(item, id)
-                            }}
-                        >
+                        <TouchableOpacity >
                             <Image
                                 resizeMode='contain'
                                 style={{ height: 14, width: 20, marginTop: 7 }}
@@ -144,7 +126,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
 
     const CountingComponent = ({ item, id }) => {
         return (
-            <View style={{ flex: 1, backgroundColor: COLORS.gray, flexDirection: "row", justifyContent: "space-around", top: 5 }}>
+            <View style={{ flex: 1, backgroundColor: COLORS.gray3, flexDirection: "row", justifyContent: "space-around", top: 5 }}>
                 <View style={{}}>
                     <Text style={{ color: COLORS.black }}>{item.label}</Text>
                 </View>
@@ -163,7 +145,12 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                             backgroundColor: COLORS.white
                         }}
                         key={id}
-
+                        onPress={() =>{
+                             setShowCounterbutton(!ShowCounterbutton)
+                             setShowCounterid(id)
+                             }
+                        
+                        }
                     >
                         <View
                             style={{
@@ -190,10 +177,12 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                 </View>
                 {/* //COUNTER */}
                 <View style={{ backgroundColor: COLORS.gray2, left: -8, height: 35, flexDirection: "row", alignContent: "flex-start", marginRight: 5 }}>
-                    <Handle_counter_buttons item={item} id={id} index={index}/>
+                    {
+                            (ShowCounterbutton ? (ShowCounterid == id) : React.useEffect(() => {setCount(0)}, [])) ? (<Handle_counter_buttons item={item} id={id} />) : null
+                    }
                 </View>
             </View>
-        )
+        ) 
     }
 
     return (
@@ -208,7 +197,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                     clearInterval(countInterval);
                 }}>
                 <View style={styles.modal_container}>
-                    <View style={{ backgroundColor: COLORS.gray3 }}>
+                    <View style={{ backgroundColor: COLORS.lightGray1 }}>
                         <TouchableOpacity style={{ alignSelf: "flex-end", marginLeft: 320, left: -5, marginTop: 5, padding: 5 }} onPress={() => setinProgressModal(!inProgressModal)}>
                             <Entypo name="cross" color={"#106853"} size={25} />
                         </TouchableOpacity>
@@ -226,20 +215,57 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                                 showsHorizontalScrollIndicator={false}
                                 showsVerticalScrollIndicator={true}
                                 legacyImplementation={false}
+                                // renderItem={(item, index) =>
+                                //     RenderItem(item, index)
 
+                                // }
                                 renderItem={({ item, index }) => (
                                     <CountingComponent item={item} id={item.label} />
                                 )}
                                 keyExtractor={(item, index) => index.toString()}
-                                extraData={count}
+                                // extraData={count}
                             />
 
                             <View style={{ backgroundColor: "red" }}>
                                 <Text>dsf</Text>
                             </View>
                         </View>
-
-
+                        {/* <View style={{ flex: 1, flexDirection: "row", backgroundColor: COLORS.green, justifyContent: "space-evenly", alignItems: "flex-start", }}>
+                            <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, alignItems: "center", marginTop: 18 }}>
+                                <TouchableOpacity style={styles.minus_btn} color={COLORS.black} onPress={decrease} >
+                                    <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
+                                </TouchableOpacity>
+                                <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
+                                    <Text placeholder="%" style={styles.plus_minus_text} >{count} %</Text>
+                                </View>
+                                <TouchableOpacity style={styles.plus_btn} onPress={increase} >
+                                    <Text style={{ color: COLORS.black, fontSize: 20, marginTop: -3 }}>+</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ height: 25, top: 18, alignContent: "center" }}>
+                                <TouchableOpacity >
+                                    <Image
+                                        resizeMode='contain'
+                                        style={{ height: 14, width: 14, marginTop: 7 }}
+                                        source={icons.forward_arrow}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View> */}
+                        {/* <View>
+                                {
+                                    dumybardata.map((element) => {
+                                        console.log(element)
+                                        return (
+                                            <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap", backgroundColor: "powderblue" }}>
+                                                <View style={{ left: -190 }}>
+                                                    <Progress.Bar progress={0.3} width={200} style={{ left: -20, top: 70 }} />
+                                                </View>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </View> */}
 
                         {/* <View style={{ alignItems: "center", backgroundColor: COLORS.white, marginTop: 2, marginLeft: -100, marginRight: -6 }}>
                                 <View style={{ flexDirection: "row", height: 25, backgroundColor: COLORS.white, marginTop: 55, alignItems: "center" }}>

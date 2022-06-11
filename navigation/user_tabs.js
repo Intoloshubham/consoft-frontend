@@ -12,8 +12,6 @@ import {
   UserReports
 } from '../screens/user_screens';
 
-
-
 const Tab = createBottomTabNavigator();
 
 const TabBarCustomButton = ({ children, onPress }) => {
