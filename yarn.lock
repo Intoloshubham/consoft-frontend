@@ -5109,11 +5109,14 @@
     "sisteransi" "^1.0.5"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
 =======
 <<<<<<< HEAD
 "prop-types@*", "prop-types@^15.5.10", "prop-types@^15.5.9", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
 =======
+=======
+>>>>>>> 1d90781d9f1bdc576acaa5cb7d93721f9d771895
 
 "prop-types@*", "prop-types@^15.5.10", "prop-types@^15.5.9", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
 
@@ -5126,8 +5129,12 @@
 
 
 
+<<<<<<< HEAD
 >>>>>>> IntoloIndia-master
 >>>>>>> d54f4ca5e8438f150486077105b0f5b78d75947b
+=======
+
+>>>>>>> 1d90781d9f1bdc576acaa5cb7d93721f9d771895
   "version" "15.8.1"
   dependencies:
     "loose-envify" "^1.4.0"
