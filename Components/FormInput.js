@@ -15,7 +15,9 @@ const FormInput = ({
   autoCompleteType = 'off',
   autoCapitalize = 'none',
   errorMsg = '',
-  value
+  value,
+  multiline,
+  numberOfLines,
 }) => {
   return (
     <View style={{...containerStyle}}>
@@ -50,6 +52,8 @@ const FormInput = ({
           autoCapitalize={autoCapitalize}
           onChangeText={text => onChange(text)}
           value={value}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
         />
         {appendComponent}
       </View>
