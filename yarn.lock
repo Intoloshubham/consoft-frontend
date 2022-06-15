@@ -1355,6 +1355,11 @@
     "invariant" "^2.2.4"
     "prop-types" "^15.7.2"
 
+"@react-native-community/checkbox@^0.5.12":
+  "integrity" "sha512-Dd3eiAW7AkpRgndwKGdgQ6nNgEmZlVD8+KAOBqwjuZQ/M67BThXJ9Ni+ydpPjNm4e28KXmIILfkvhcDt0ZoFTQ=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/checkbox/-/checkbox-0.5.12.tgz"
+  "version" "0.5.12"
+
 "@react-native-community/cli-debugger-ui@^7.0.3":
   "version" "7.0.3"
   dependencies:
@@ -1689,6 +1694,32 @@
 
 "@types/prettier@^2.0.0":
   "version" "2.6.0"
+
+"@types/prop-types@*":
+  "integrity" "sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w=="
+  "resolved" "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.5.tgz"
+  "version" "15.7.5"
+
+"@types/react-native@^0.67.8":
+  "integrity" "sha512-xA8rYiTHvO6RoZv/LFnmEeqRuhA2y34mGB8zX3bGHe/pCt9jEStUPyUO4q1KcDc9GiGIOBD8ArfRtThprAjSfQ=="
+  "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.67.8.tgz"
+  "version" "0.67.8"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react@*":
+  "integrity" "sha512-duF1OTASSBQtcigUvhuiTB1Ya3OvSy+xORCiEf20H0P0lzx+/KeVsA99U5UjLXSbyo1DRJDlLKqTeM1ngosqtg=="
+  "resolved" "https://registry.npmjs.org/@types/react/-/react-18.0.12.tgz"
+  "version" "18.0.12"
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    "csstype" "^3.0.2"
+
+"@types/scheduler@*":
+  "integrity" "sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew=="
+  "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
+  "version" "0.16.2"
 
 "@types/stack-utils@^2.0.0":
   "version" "2.0.1"
@@ -2526,6 +2557,11 @@
   "version" "2.3.0"
   dependencies:
     "cssom" "~0.3.6"
+
+"csstype@^3.0.2":
+  "integrity" "sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA=="
+  "resolved" "https://registry.npmjs.org/csstype/-/csstype-3.1.0.tgz"
+  "version" "3.1.0"
 
 "data-urls@^2.0.0":
   "version" "2.0.0"
@@ -5108,24 +5144,7 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-<<<<<<< HEAD
-
-
-"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.5.9", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
-
-  "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
-  "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
-
-"prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
-
-
-
-
-
-
-=======
-"prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
->>>>>>> db28d274aa34bb327402596c1b2ac4479155a555
+"prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
   "version" "15.8.1"
   dependencies:
     "loose-envify" "^1.4.0"
@@ -5336,7 +5355,7 @@
     "prop-types" "^15.7.2"
     "yargs" "^16.1.1"
 
-"react-native@*", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
+"react-native@*", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
   "version" "0.68.1"
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
