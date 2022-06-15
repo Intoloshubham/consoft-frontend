@@ -8,7 +8,6 @@ import ProjectsBanner from './Home/ProjectsBanner';
 import ProjectsCreateModal from './Modals/ProjectsCreateModal';
 import ProjectsDetails from './Home/ProjectsDetails';
 import WorkAssignModal from './Modals/WorkAssignModal';
-import WorkAssign from './Modals/WorkAssign';
 import Contractors from './Home/Contractors';
 import ProjectSeheduleTime from './Home/ProjectSeheduleTime';
 import ProjectTeam from './Home/ProjectTeam';
@@ -20,8 +19,6 @@ import ProjectProgressReviewTop20 from './Home/ProjectProgressReviewTop20';
 import AssignedWorks from './Home/AssignedWorks';
 import ProjectWorksIdentifier from './Home/ProjectWorksIdentifier';
 import CheckList from './CheckList/CheckList';
-import AddProjectTeamModal from './Modals/AddProjectTeamModal';
-import AddProjectTeam from './Modals/AddProjectTeam';
 import Items from './Stock/Items/Items';
 import Unit from './Stock/Unit/Unit';
 import ProjectCategory from './Project/ProjectCategory';
@@ -29,11 +26,6 @@ import ProjectTypes from './Project/ProjectTypes';
 import CompanyTeam from './CompanyTeam/CompanyTeam';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import CompanyTeamShow from './Home/CompanyTeamShow';
-import CompanyTeamModal from './Modals/CompanyTeamModal';
-import ContractorsModal from './Modals/ContractorsModal';
-import AddStockModal from './Modals/AddStockMatreials';
-import ProjectsOperationModal from './Modals/ProjectsOperationModal';
-import ToolsAndMachineryModal from './Modals/ToolsAndMachineryModal';
 
 export {
   Home,
@@ -45,7 +37,6 @@ export {
   ProjectsCreateModal,
   ProjectsDetails,
   WorkAssignModal,
-  WorkAssign,
   Contractors,
   ProjectSeheduleTime,
   ProjectTeam,
@@ -57,8 +48,6 @@ export {
   AssignedWorks,
   ProjectWorksIdentifier,
   CheckList,
-  AddProjectTeamModal,
-  AddProjectTeam,
   Items,
   Unit,
   ProjectCategory,
@@ -66,9 +55,4 @@ export {
   CompanyTeam,
   ManageStock,
   CompanyTeamShow,
-  CompanyTeamModal,
-  ContractorsModal,
-  AddStockModal,
-  ProjectsOperationModal,
-  ToolsAndMachineryModal,
 };

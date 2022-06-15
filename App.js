@@ -30,7 +30,6 @@ import {
   CompanyTeam,
   ManageStock,
   CompanyTeamShow,
-  ProjectsOperationModal,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -86,10 +85,7 @@ const App = () => {
           <Stack.Screen name="Unit" component={Unit} />
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />
-          <Stack.Screen
-            name="ProjectsOperationModal"
-            component={ProjectsOperationModal}
-          />
+
           {/* User  */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />
           <Stack.Screen name="Profile" component={Profile} />

@@ -50,8 +50,6 @@ const ProjectsBanner = () => {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log(data);
-        // setProjectCategory(data);
         setProjects(data);
       });
   });
@@ -86,7 +84,32 @@ const ProjectsBanner = () => {
   //     console.error(error);
   //   });
 
-  const [projectCategory, setProjectCategory] = React.useState([]);
+  // fetch multiple api
+  // const fetchReq1 = fetch(`http://192.168.1.99:8000/project-category`).then(
+  //   res => res.json(),
+  // );
+  // const fetchReq2 = fetch(`http://192.168.1.99:8000/project-types`).then(res =>
+  //   res.json(),
+  // );
+  // fetchReq1.then(res => console.log(res));
+  // const allData = Promise.all([fetchReq1, fetchReq2]);
+  // allData.then(res => console.log(res));
+  //
+
+  // React.useEffect(() => {
+  //   fetch('http://192.168.1.99:8000/api/project-category', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log(data);
+  //       setProjectCategory(data);
+  //     });
+  // }, []);
+  // const [projectCategory, setProjectCategory] = React.useState([]);
 
   // create projects
   const [projectname, setProjectName] = React.useState('');
@@ -108,7 +131,6 @@ const ProjectsBanner = () => {
     {label: 'House', value: '4', parent: '1'},
     {label: 'Apartment', value: '3', parent: '1'},
     {label: 'Bungalow', value: '2', parent: '1'},
-
     {label: 'Commercial', value: '8'},
     {label: 'Showroom / Office', value: '9', parent: '8'},
     {label: 'Mall/Multiplxer', value: '10', parent: '8'},
@@ -230,36 +252,11 @@ const ProjectsBanner = () => {
     console.log(type);
   };
 
-  // render category
-  function renderCAt() {
-    const renderItem = item => (
-      <View
-        style={{
-          flexDirection: 'row',
-        }}>
-        <Text style={{color: COLORS.white}}>{item._id}</Text>
-        <Text>{item.category_name}</Text>
-      </View>
-    );
-    return (
-      <View
-        style={{
-          marginTop: SIZES.padding * 5,
-        }}>
-        <FlatList
-          data={projectCategory}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-        />
-      </View>
-    );
-  }
-
   //render projects
   function renderProjects() {
     const renderItem = ({item, index}) => (
       <SafeAreaView>
-        <ScrollView nestedScrollEnabled={true}>
+        <ScrollView nestedScrollEnabled={true} scrollEnabled={true}>
           <TouchableOpacity
             style={{marginVertical: SIZES.base}}
             onPress={() => {
@@ -279,22 +276,29 @@ const ProjectsBanner = () => {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: COLORS.darkGray,
-                    textTransform: 'capitalize',
-                  }}>
-                  {item.project_name}
-                </Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{...FONTS.h3, color: COLORS.black}}>
+                    {index + 1}.
+                  </Text>
+                  <Text
+                    style={{
+                      marginLeft: 4,
+                      fontSize: 18,
+                      color: COLORS.darkGray,
+                      textTransform: 'capitalize',
+                    }}>
+                    {item.project_name}
+                  </Text>
+                </View>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <ImageBackground
+                  {/* <ImageBackground
                     style={{
                       width: 18,
                       height: 18,
@@ -311,7 +315,7 @@ const ProjectsBanner = () => {
                       }}>
                       {index + 1}
                     </Text>
-                  </ImageBackground>
+                  </ImageBackground> */}
                   <TouchableOpacity
                     onPress={() => {
                       alert('All Notification Message Show in here...');
@@ -508,15 +512,7 @@ const ProjectsBanner = () => {
                         </View>
                       }
                     />
-                    {/* <CustomDropdown
-                data={data}
-                placeholder="Select project types"
-                value={dropdown}
-                onChange={item => {
-                  setDropdown(item.value);
-                  console.log('selected', item);
-                }}
-              /> */}
+
                     <Drop
                       placeholder="Select project types"
                       open={open}
@@ -689,46 +685,101 @@ const ProjectsBanner = () => {
           flex: 1,
           flexDirection: 'row',
           alignItems: 'center',
+          justifyContent: 'space-between',
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={{...FONTS.body2, color: COLORS.white}}>Projects</Text>
-          <TextButton
-            label="Create New"
-            disabled={false}
-            buttonContainerStyle={{
-              marginLeft: SIZES.padding * 3.7,
-              alignItems: 'center',
-              paddingHorizontal: SIZES.base,
-              paddingVertical: 3,
-              // padding: 5,
-              borderRadius: 8,
-              backgroundColor: COLORS.yellow_400,
-            }}
-            labelStyle={{
-              color: COLORS.black,
-              ...FONTS.body4,
-            }}
-            onPress={() => setCreateProjectModal(true)}
-          />
-        </View>
+        <Text style={{...FONTS.body2, color: COLORS.white}}>Projects</Text>
+        <TextButton
+          label="Create New"
+          disabled={false}
+          buttonContainerStyle={{
+            marginLeft: SIZES.padding * 4,
+            alignItems: 'center',
+            paddingHorizontal: SIZES.base,
+            paddingVertical: SIZES.base,
+            paddingVertical: 2,
+            borderRadius: 5,
+            backgroundColor: COLORS.yellow_400,
+          }}
+          labelStyle={{
+            color: COLORS.black,
+            ...FONTS.body5,
+          }}
+          onPress={() => setCreateProjectModal(true)}
+        />
         <Image
           source={icons.down_arrow}
           style={{
             height: 18,
             width: 18,
             tintColor: COLORS.white,
-            marginLeft: SIZES.padding,
+            justifyContent: 'flex-end',
           }}
         />
       </View>
       <Collapsible collapsed={collapsed}>
         <View>{renderProjects()}</View>
       </Collapsible>
-
       {/* create project modal  */}
       {renderCreateProjectModal()}
       {renderProjectCrudModal()}
     </TouchableOpacity>
+
+    // <TouchableOpacity
+    //   style={{
+    //     marginTop: SIZES.padding,
+    //     marginHorizontal: SIZES.padding,
+    //     paddingVertical: SIZES.radius,
+    //     paddingHorizontal: SIZES.padding,
+    //     backgroundColor: COLORS.lightblue_600,
+    //     borderRadius: SIZES.base,
+    //     ...styles.shadow,
+    //   }}
+    //   onPress={toggleExpanded}>
+    //   <View
+    //     style={{
+    //       flex: 1,
+    //       flexDirection: 'row',
+    //       alignItems: 'center',
+    //     }}>
+    //     <View style={{flexDirection: 'row', alignItems: 'center'}}>
+    //       <Text style={{...FONTS.body2, color: COLORS.white}}>Projects</Text>
+    //       <TextButton
+    //         label="Create New"
+    //         disabled={false}
+    //         buttonContainerStyle={{
+    //           marginLeft: SIZES.padding * 3.7,
+    //           alignItems: 'center',
+    //           paddingHorizontal: SIZES.base,
+    //           paddingVertical: 3,
+    //           // padding: 5,
+    //           borderRadius: 8,
+    //           backgroundColor: COLORS.yellow_400,
+    //         }}
+    //         labelStyle={{
+    //           color: COLORS.black,
+    //           ...FONTS.body4,
+    //         }}
+    //         onPress={() => setCreateProjectModal(true)}
+    //       />
+    //     </View>
+    //     <Image
+    //       source={icons.down_arrow}
+    //       style={{
+    //         height: 18,
+    //         width: 18,
+    //         tintColor: COLORS.white,
+    //         marginLeft: SIZES.padding,
+    //       }}
+    //     />
+    //   </View>
+    //   <Collapsible collapsed={collapsed}>
+    //     <View>{renderProjects()}</View>
+    //   </Collapsible>
+
+    //   {/* create project modal  */}
+    //   {renderCreateProjectModal()}
+    //   {renderProjectCrudModal()}
+    // </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({

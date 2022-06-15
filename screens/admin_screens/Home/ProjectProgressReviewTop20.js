@@ -131,7 +131,7 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
             <Text
               style={{
                 flex: 1,
-                marginLeft: -35,
+                marginLeft: -30,
                 color: COLORS.gray,
                 ...FONTS.body4,
               }}>
@@ -150,7 +150,7 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
             <Text
               style={{
                 flex: 1,
-                marginLeft: 40,
+                marginLeft: 35,
                 color: COLORS.gray,
                 ...FONTS.body4,
               }}>
