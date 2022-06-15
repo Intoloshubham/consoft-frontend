@@ -231,7 +231,7 @@ const UserReports = () => {
     newData[index].isCheck = !item.isCheck;
     setTech_staff(newData);
   }
-
+ 
 
   const onMasonryChange = (item, index) => {
     const newData = [...Masonry];
