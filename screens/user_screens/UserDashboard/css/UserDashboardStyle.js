@@ -3,7 +3,8 @@ import { FONTS, icons, SIZES,COLORS } from '../../../../constants'
 export default StyleSheet.create({
 
     container: {
-      flex: 1
+      flex: 1,
+      backgroundColor:"red"
     },
     header: {
       flexDirection: "row",
@@ -51,7 +52,9 @@ export default StyleSheet.create({
       marginHorizontal: 20,
       borderRadius: 10,
       padding: 12,
-      backgroundColor: "#E4E9F2",
+      top:5,
+      backgroundColor: COLORS.lightblue_800,
+      // backgroundColor: "#E4E9F2",
       justifyContent: "center",
       elevation: 3
     },
@@ -83,7 +86,7 @@ export default StyleSheet.create({
     },
     create_new_report_btn: {
       // backgroundColor: "#E4E9F2",
-      backgroundColor: COLORS.lightGray1,
+      backgroundColor: COLORS.lightblue_800,
       opacity:1.2,
       elevation: 3,
       margin: 10,
@@ -96,6 +99,7 @@ export default StyleSheet.create({
       borderTopRightRadius: SIZES.h5,
       borderBottomLeftRadius: SIZES.h5,
       padding: SIZES.h5,
+      paddingHorizontal:5
     },
     eng: {
       width: 150,
