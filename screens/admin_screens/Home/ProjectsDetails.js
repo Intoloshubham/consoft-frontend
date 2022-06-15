@@ -167,7 +167,7 @@ const ProjectsDetails = ({route}) => {
   }
   return (
     <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
-      <HeaderBar right={true} title={JSON.stringify(name)} />
+      <HeaderBar right={true} title={name} />
       <TextButton
         label="Assign Work"
         buttonContainerStyle={{

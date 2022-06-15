@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {HeaderBar, FloatingButton} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
@@ -24,12 +31,45 @@ const StocksAndInventry = () => {
           flexDirection: 'row',
           paddingVertical: SIZES.base,
           alignItems: 'center',
-          justifyContent: 'space-between',
+          // justifyContent: 'space-between',
         }}>
         <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{item.name}</Text>
-        <Text style={{right: 20, ...FONTS.h3, color: COLORS.darkGray}}>
+        <Text
+          style={{
+            right: 20,
+            ...FONTS.h3,
+            color: COLORS.darkGray,
+            marginLeft: 80,
+          }}>
           = {item.quantity}
         </Text>
+        <View style={{flexDirection: 'row', marginLeft: 80}}>
+          <TouchableOpacity
+            onPress={() => {
+              alert('edit name');
+            }}>
+            <Image
+              source={icons.edit}
+              style={{
+                width: 18,
+                height: 18,
+                right: 15,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              alert('delete name');
+            }}>
+            <Image
+              source={icons.delete_icon}
+              style={{
+                width: 18,
+                height: 18,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     );
     return (
@@ -64,14 +104,13 @@ const StocksAndInventry = () => {
             <View
               style={{
                 flexDirection: 'row',
-                alignItems: 'center',
                 justifyContent: 'space-between',
+                alignItems: 'center',
                 marginBottom: SIZES.radius,
               }}>
               <Text
                 style={{
                   ...FONTS.h3,
-                  fontWeight: 'bold',
                   color: COLORS.lightblue_800,
                 }}>
                 Name
@@ -79,12 +118,42 @@ const StocksAndInventry = () => {
               <Text
                 style={{
                   ...FONTS.h3,
-                  fontWeight: 'bold',
                   color: COLORS.lightblue_800,
                 }}>
                 Quantity
               </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.lightblue_800,
+                }}>
+                Operations
+              </Text>
             </View>
+            // <View
+            //   style={{
+            //     flexDirection: 'row',
+            //     alignItems: 'center',
+            //     justifyContent: 'space-between',
+            //     marginBottom: SIZES.radius,
+            //   }}>
+            //   <Text
+            //     style={{
+            //       ...FONTS.h3,
+            //       fontWeight: 'bold',
+            //       color: COLORS.lightblue_800,
+            //     }}>
+            //     Name
+            //   </Text>
+            //   <Text
+            //     style={{
+            //       ...FONTS.h3,
+            //       fontWeight: 'bold',
+            //       color: COLORS.lightblue_800,
+            //     }}>
+            //     Quantity
+            //   </Text>
+            // </View>
           }
         />
       </View>

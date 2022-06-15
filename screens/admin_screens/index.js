@@ -6,7 +6,6 @@ import Tasks from './Tasks/Tasks';
 import Tracker from './Tracker/Tracker';
 import ProjectsBanner from './Home/ProjectsBanner';
 import ProjectsCreateModal from './Modals/ProjectsCreateModal';
-import CreateProjects from './Modals/CreateProjects';
 import ProjectsDetails from './Home/ProjectsDetails';
 import WorkAssignModal from './Modals/WorkAssignModal';
 import WorkAssign from './Modals/WorkAssign';
@@ -44,7 +43,6 @@ export {
   Tracker,
   ProjectsBanner,
   ProjectsCreateModal,
-  CreateProjects,
   ProjectsDetails,
   WorkAssignModal,
   WorkAssign,

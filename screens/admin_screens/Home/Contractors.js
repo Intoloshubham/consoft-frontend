@@ -56,13 +56,47 @@ const Contractors = () => {
       }}>
       <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
       <View style={{flex: 1, marginLeft: SIZES.radius}}>
-        <Text
+        <View
           style={{
-            ...FONTS.h3,
-            color: COLORS.darkGray,
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}>
-          Mr.{item.name}
-        </Text>
+          <Text
+            style={{
+              ...FONTS.h3,
+              color: COLORS.darkGray,
+            }}>
+            Mr.{item.name}
+          </Text>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              onPress={() => {
+                alert('edit name');
+              }}>
+              <Image
+                source={icons.edit}
+                style={{
+                  width: 18,
+                  height: 18,
+                  right: 15,
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                alert('delete name');
+              }}>
+              <Image
+                source={icons.delete_icon}
+                style={{
+                  width: 18,
+                  height: 18,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
         <Text style={{...FONTS.body4}}>Designation - {item.designation}</Text>
       </View>
     </View>

@@ -42,7 +42,7 @@ const ProjectsBanner = () => {
   };
   // get projects
   React.useEffect(() => {
-    fetch('http://192.168.1.99:8000/api/projects/', {
+    fetch('http://192.168.1.99:8000/api/projects', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -50,10 +50,43 @@ const ProjectsBanner = () => {
     })
       .then(response => response.json())
       .then(data => {
+        // console.log(data);
+        // setProjectCategory(data);
         setProjects(data);
       });
   });
   const [projects, setProjects] = React.useState([]);
+
+  // // project categories
+  // React.useEffect(() => {
+  //   fetch('http://192.168.1.99:8000/project-category')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log(data);
+  //       // const catData = data.map((item, index) => {
+  //       //   return {
+  //       //     label: item.category_name,
+  //       //     value: index,
+  //       //   };
+  //       // });
+  //       setProjectCategory(data);
+  //     })
+  //     .catch(error => console.log(error.message));
+  // }, []);
+
+  // fetch('http://192.168.1.99:8000/project-category', {
+  //   method: 'GET',
+  //   //Request Type
+  // })
+  //   .then(response => response.json())
+  //   .then(responseJson => {
+  //     console.log(responseJson);
+  //   })
+  //   .catch(error => {
+  //     console.error(error);
+  //   });
+
+  const [projectCategory, setProjectCategory] = React.useState([]);
 
   // create projects
   const [projectname, setProjectName] = React.useState('');
@@ -62,6 +95,8 @@ const ProjectsBanner = () => {
   const [projectLocationError, setProjectLocationError] = React.useState('');
   const [projectplotarea, setProjectPlotArea] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
+
+  // fetch project category
 
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState([]);
@@ -194,6 +229,32 @@ const ProjectsBanner = () => {
     console.log(area);
     console.log(type);
   };
+
+  // render category
+  function renderCAt() {
+    const renderItem = item => (
+      <View
+        style={{
+          flexDirection: 'row',
+        }}>
+        <Text style={{color: COLORS.white}}>{item._id}</Text>
+        <Text>{item.category_name}</Text>
+      </View>
+    );
+    return (
+      <View
+        style={{
+          marginTop: SIZES.padding * 5,
+        }}>
+        <FlatList
+          data={projectCategory}
+          keyExtractor={item => `${item._id}`}
+          renderItem={renderItem}
+        />
+      </View>
+    );
+  }
+
   //render projects
   function renderProjects() {
     const renderItem = ({item, index}) => (
@@ -573,7 +634,7 @@ const ProjectsBanner = () => {
                       OnUpdateSubmit();
                     }}
                   />
-                  <TextButton
+                  {/* <TextButton
                     label="Remove"
                     disabled={false}
                     buttonContainerStyle={{
@@ -587,7 +648,7 @@ const ProjectsBanner = () => {
                       ...FONTS.h3,
                     }}
                     onPress={() => alert('Remove from  list add to database')}
-                  />
+                  /> */}
                   <TextButton
                     label="Delete"
                     disabled={false}
@@ -637,8 +698,9 @@ const ProjectsBanner = () => {
             buttonContainerStyle={{
               marginLeft: SIZES.padding * 3.7,
               alignItems: 'center',
-              paddingHorizontal: 5,
-              paddingVertical: 2,
+              paddingHorizontal: SIZES.base,
+              paddingVertical: 3,
+              // padding: 5,
               borderRadius: 8,
               backgroundColor: COLORS.yellow_400,
             }}

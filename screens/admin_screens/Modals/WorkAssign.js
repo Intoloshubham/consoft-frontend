@@ -1,7 +1,8 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, TextInput} from 'react-native';
 import {COLORS, SIZES} from '../../../constants';
 import {TextButton, FormInput, Drop} from '../../../Components';
+import {Colors} from 'react-native-paper';
 
 const WorkAssign = () => {
   const [open, setOpen] = React.useState(false);
@@ -37,6 +38,8 @@ const WorkAssign = () => {
       <FormInput
         inputStyle={{width: 200}}
         // placeholder="Work Details..."
+        multiline={true}
+        numberOfLines={4}
         label="Work details"
         keyboardType="default"
         autoCompleteType="username"
@@ -44,6 +47,18 @@ const WorkAssign = () => {
           setProjectTeamName(value);
         }}
       />
+
+      {/* <TextInput
+        label="Demo"
+        placeholder="Demo"
+        multiline={true}
+        numberOfLines={4}
+        style={{
+          marginTop: SIZES.padding * 2,
+          backgroundColor: COLORS.gray3,
+          borderRadius: SIZES.base,
+        }}
+      /> */}
 
       <TextButton
         label="Submit"
