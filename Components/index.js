@@ -9,7 +9,6 @@ import LineDivider from './LineDivider';
 import ProgressBar from './ProgressBar';
 import ProfileValue from './ProfileValue';
 import UploadImage from './UplaodImage';
-import Accordian1 from './Accordian';
 import MultiSelectDropdown from './MultiSelectDropdown';
 import ToastPopup from './Toast';
 import FloatingButton from './FloatingButton';
@@ -30,7 +29,6 @@ export {
   ProgressBar,
   ProfileValue,
   UploadImage,
-  Accordian1,
   MultiSelectDropdown,
   ToastPopup,
   FloatingButton,
