@@ -9,12 +9,14 @@ import {
   Alert,
   FlatList,
   ScrollView,
+  TouchableOpacity,
+  TextInput
 } from 'react-native';
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../Components';
 import {SIZES, COLORS, icons, images, FONTS} from '../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const renderLabel = () => {
   if (value || isFocus) {
@@ -50,15 +52,39 @@ const renderItem = ({item}) => {
 
 const CheckList = () => {
   const [list, setlist] = useState(false);
-  const [createlist, setcreatelist] = useState('');
+  const [createlist, setcreatelist] = useState();
   const [data, setdata] = useState([]);
 
   const [value, setValue] = React.useState(null);
   const [isFocus, setIsFocus] = React.useState(false);
 
+  const [fields, setFields] = useState([{value: null}]);
+
+  const [inputs, setInputs] = useState([{key: '', value: ''}]);
+
+  const addHandler = () => {
+    const _inputs = [...inputs];
+    _inputs.push({key: '', value: ''});
+    setInputs(_inputs);
+  };
+
+  const deleteHandler = key => {
+    const _inputs = inputs.filter((input, index) => index != key);
+    setInputs(_inputs);
+  };
+
+  const inputHandler = (text, key) => {
+    const _inputs = [...inputs];
+    _inputs[key].value = text;
+    _inputs[key].key = key;
+    setInputs(_inputs);
+  };
+
+  
+
   // create list funcation
   const createList = () => {
-    console.log(value, createlist)
+    console.log(value, createlist);
   };
 
   const showroll = async () => {
@@ -77,13 +103,13 @@ const CheckList = () => {
       <HeaderBar right={true} title="Project Checklist" />
       <View style={{marginHorizontal: SIZES.padding}}>
         <Modal visible={list} animationType="slide" transparent={false}>
-          <View style={{flex: 1, backgroundColor: '#000000aa',justifyContent:"center"}}>
+          <View style={{flex: 1, backgroundColor: '#000000aa'}}>
             <View
               style={{
                 backgroundColor: '#fff',
                 padding: 30,
                 borderRadius: 20,
-                margin:10
+                margin: 10,
               }}>
               <View>
                 <Pressable onPress={setlist}>
@@ -98,60 +124,112 @@ const CheckList = () => {
                 </Pressable>
               </View>
               <View>
-                <Card style={styles.card}>
-                  <Card.Content>
-                    <Dropdown
-                      style={[
-                        styles.dropdown,
-                        isFocus && {borderColor: 'blue'},
-                      ]}
-                      placeholderStyle={styles.placeholderStyle}
-                      selectedTextStyle={styles.selectedTextStyle}
-                      inputSearchStyle={styles.inputSearchStyle}
-                      iconStyle={styles.iconStyle}
-                      data={data}
-                      search
-                      maxHeight={300}
-                      labelField="user_role"
-                      valueField="_id"
-                      placeholder={!isFocus ? 'Select name' : '...'}
-                      searchPlaceholder="Search..."
-                      value={value}
-                      onFocus={() => setIsFocus(true)}
-                      onBlur={() => setIsFocus(false)}
-                      onChange={item => {
-                        // console.log(item.unit_id);
-                        setValue(item._id);
-                        setIsFocus(false);
-                      }}
-                      // renderLeftIcon={() => (
-                      //   <AntDesign
-                      //     style={styles.icon}
-                      //     color={isFocus ? 'blue' : 'black'}
-                      //     name="Safety"
-                      //     size={20}
-                      //   />
-                      // )}
-                    />
-                    <FormInput
-                      label="Name"
-                      onChange={createlist => {
-                        setcreatelist(createlist);
-                      }}
-                    />
-                    <TextButton
-                      label="Create"
-                      buttonContainerStyle={{
-                        height: 45,
-                        borderRadius: SIZES.radius,
-                        marginTop: SIZES.padding,
-                      }}
-                      onPress={() => {
-                        createList();
-                      }}
-                    />
-                  </Card.Content>
-                </Card>
+                {/* <Card style={styles.card}>
+                  <Card.Content> */}
+                <Dropdown
+                  style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={data}
+                  search
+                  maxHeight={300}
+                  labelField="user_role"
+                  valueField="_id"
+                  placeholder={!isFocus ? 'Select name' : '...'}
+                  searchPlaceholder="Search..."
+                  value={value}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={item => {
+                    // console.log(item.unit_id);
+                    setValue(item._id);
+                    setIsFocus(false);
+                  }}
+                  // renderLeftIcon={() => (
+                  //   <AntDesign
+                  //     style={styles.icon}
+                  //     color={isFocus ? 'blue' : 'black'}
+                  //     name="Safety"
+                  //     size={20}
+                  //   />
+                  // )}
+                />
+                <View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginTop: 10,
+                    }}>
+                    <Text>Name</Text>
+                    <TouchableOpacity onPress={addHandler}>
+                      <Text
+                        style={{
+                          ...FONTS.body3,
+                          borderWidth: 1,
+                          paddingLeft: 10,
+                          paddingRight: 10,
+                          fontWeight: 'bold',
+                          borderRadius: 5,
+                        }}>
+                        Add More
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {/* <TextInput
+                    style={styles.input}
+                    onChangeText={setcreatelist}
+                    value={createlist}
+                  /> */}
+                </View>
+                <View style={styles.container}>
+                  <ScrollView style={styles.inputsContainer}>
+                    {inputs.map((input, key) => (
+                      <View style={{flexDirection:"row",justifyContent:"space-between",}}>
+                        <TextInput
+                          style={styles.inputcheck}
+                          // placeholder={'Enter Name'}
+                          value={input.value}
+                          onChangeText={text => inputHandler(text, key)}
+                        />
+                          <TouchableOpacity onPress={() => deleteHandler(key)}>
+                            <AntDesign style={{marginTop:15,color:"red"}} name={'delete'} size={30}/>
+                            {/* <Text
+                              style={{
+                                ...FONTS.body3,
+                                borderWidth: 1,
+                                paddingLeft: 10,
+                                paddingRight: 10,
+                                fontWeight: 'bold',
+                                borderRadius: 5,
+                                padding:11,
+                               marginTop:10
+                              }}>
+                              Delete
+                            </Text> */}
+                          </TouchableOpacity>
+                       
+                      </View>
+                    ))}
+                  </ScrollView>
+
+                  {/* <Button title="add" onPress={addHandler} /> */}
+                </View>
+                <TextButton
+                  label="Create"
+                  buttonContainerStyle={{
+                    height: 45,
+                    borderRadius: SIZES.radius,
+                    marginTop: SIZES.padding,
+                  }}
+                  onPress={() => {
+                    createList();
+                  }}
+                />
+                {/* </Card.Content>
+                </Card> */}
               </View>
             </View>
           </View>
@@ -177,7 +255,7 @@ const CheckList = () => {
             />
           </View>
           <FlatList
-            maxHeight={400}
+            maxHeight={10}
             contentContainerStyle={{marginTop: SIZES.radius}}
             scrollEnabled={true}
             data={data}
@@ -197,6 +275,20 @@ const CheckList = () => {
             }}
           />
         </View>
+        {/* <ScrollView  horizontal={true}> */}
+        <View style={{justifyContent:"space-around",flexDirection:"row"}}> 
+          <View>
+            <TouchableOpacity style={styles.button}>
+              <Title>Manager</Title>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity style={styles.button}>
+              <Title>Teamleader</Title>
+            </TouchableOpacity>
+          </View>
+        </View>
+      {/* </ScrollView> */}
       </View>
     </View>
   );
@@ -204,12 +296,12 @@ const CheckList = () => {
 export default CheckList;
 
 const styles = StyleSheet.create({
-  card: {
-    borderWidth: 2,
-    elevation: 20,
-    borderRadius: 5,
-    marginTop: 30,
-  },
+  // card: {
+  //   borderWidth: 2,
+  //   elevation: 20,
+  //   borderRadius: 5,
+  //   marginTop: 10,
+  // },
   dropdown: {
     height: 50,
     borderWidth: 1,
@@ -252,4 +344,39 @@ const styles = StyleSheet.create({
     fontSize: 18,
     // fontWeight:"bold",
   },
+  input: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    fontSize: 15,
+    backgroundColor: COLORS.gray2,
+    color: 'black',
+    marginTop: 10,
+  },
+  inputcheck:{
+    backgroundColor: 'white',
+    borderRadius: 10,
+    fontSize: 15,
+    backgroundColor: COLORS.gray2,
+    color: 'black',
+    marginTop: 10,
+    width:"90%",
+    justifyContent:"space-between"
+  }
+  // container: {
+  //   flex: 1,
+  //   padding: 20,
+  //   backgroundColor: 'gray'
+  // },
+  // inputsContainer: {
+  //   marginBottom: 20,
+  //   width:"80%"
+  // },
+  // inputContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  //   borderBottomWidth: 1,
+  //   borderBottomColor: "black",
+
+  // }
 });

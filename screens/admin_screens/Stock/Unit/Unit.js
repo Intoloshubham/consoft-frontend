@@ -27,33 +27,42 @@ const Unit = () => {
   const [modal, setModal] = useState(false);
   const [showBox, setShowBox] = useState(false);
 
-  // const [unitid, setunitid] = useState('');
+  const [unitid, setunitid] = useState('');
   // console.log(unitid);
-  const [editunit, seteditunit] = useState({unit_name: ''});
-  const [edit, setedit] = useState([]);
-  const idref = React.useRef();
+  // const [edit, setedit] = useState([]);
+  // const idref = React.useRef();
 
-  const updateunit = (id) => {
-    idref.current = id;
+  const updateunit = (id,name) => {
     setShowBox(true);
-    const fil = 
-    seteditunit({editunit: currenteditunit.editunit});
-    //   setunitid(id);
-    //  console.log(unitid);
-    console.log(idref.current);
-    //  seteditunit(item)
-    // editdata();
+      setunitid(id);
+    //  console.log(id);
+     setUintname(name)
+     console.log(name);
+    
   };
 
-  // const editdata = async (id) => {
-  //   const resp = await fetch(`http://192.168.1.99:8000/api/unit/${id}`);
-  //   const resdata = await resp.json();
-  //      console.log(resdata);
-  //     //  setedit(data);
-  // };
-  // useEffect(() => {
-  //   editdata();
-  // }, []);
+  const  Update =(id)=> {
+    const data = {
+      unit_name: unitname,
+    };
+      fetch(`http://192.168.1.99:8000/api/unit/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        setUintname('');
+        fetchData();
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
 
   const fetchData = async () => {
     const resp = await fetch('http://192.168.1.99:8000/api/unit/');
@@ -107,21 +116,7 @@ const Unit = () => {
     fetchData();
   };
 
-  //  function Update(id) {
-  // 		fetch(`http://192.168.1.99:8000/api/unit/${id}`, {
-  // 			method: 'PUT',
-  // 			body: JSON.stringify({
-  // 				unit_name:unitname
-  // 			}),
-  // 			headers: {
-  // 			  "Content-type": "application/json;"
-  // 			}
-  // 		}).then(response => {
-  // 						return response.json()
-  // 		}).then(json => {
-  // 			console.log(json,alert("update"))
-  // 		})
-  // 	}
+  
 
   const renderItem = ({item}) => {
     return (
@@ -134,7 +129,7 @@ const Unit = () => {
               <View style={{marginRight: 5}}>
                 <Button
                   title="edit"
-                  onPress={() => updateunit(item._id, item.unit_name)}
+                  onPress={() => updateunit(item._id,item.unit_name,)}
                 />
                 <Modal
                   animationType="fade"
@@ -170,24 +165,11 @@ const Unit = () => {
                         <Card style={{backgroundColor: ''}}>
                           <Card.Content>
                             <Title>Edit unit</Title>
-                            {/* <TextInput
-                              style={styles.input}
-                              onChangeText={(text)=>seteditunit(item.unit_name)}
-                              value={editunit.toString()}
-                            /> */}
-                            {/* <TextInput
-                              style={styles.input}
-                              onChange={value => {
-                                setUintname(value);
-                              }}
-                              value={item.unit_name}
-                              // editable={true}
-                            /> */}
                             <FormInput
-                              value={item.unit_name}
+                              value={unitname}
                               label="unit name"
                               onChange={value => {
-                                seteditunit(value);
+                                setUintname(value);
                               }}
                             />
 

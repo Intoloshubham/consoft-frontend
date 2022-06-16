@@ -12,8 +12,6 @@ import {
   UserReports
 } from '../screens/user_screens';
 
-
-
 const Tab = createBottomTabNavigator();
 
 const TabBarCustomButton = ({ children, onPress }) => {
@@ -56,7 +54,7 @@ const UserTabs = () => {
           height: 100,
         },
         headerStyle: {
-          height: 60,
+          // height: 78,
         },
         headerTitleAlign: 'left',
         headerRight: () => (
@@ -67,9 +65,9 @@ const UserTabs = () => {
               marginHorizontal: SIZES.radius,
             }}>
             <Image
-              source={images.cons_logo}
+              source={images.consoft_PNG}
               resizeMode="contain"
-              style={{ height: 80, width: 100 }}
+              style={{height: '100%', width: 100}}
             />
           </View>
         ),

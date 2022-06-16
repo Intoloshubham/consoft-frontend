@@ -50,6 +50,8 @@ const plus = require('../assets/icons/plus.png');
 const unit = require('../assets/icons/unit.png');
 const items = require('../assets/icons/items.png');
 const stock_manage = require('../assets/icons/stock_manage.png');
+const delete_icon = require('../assets/icons/delete.png');
+const upload_files = require('../assets/icons/upload_files.png');
 
 //pd
 const stock = require('../assets/icons/pd/stock.png');
@@ -66,6 +68,7 @@ const garage = require('../assets/icons/PPR/garage.png');
 const duplex = require('../assets/icons/PPR/duplex.png');
 const date = require('../assets/icons/date.png');
 const time = require('../assets/icons/time.png');
+const edit = require('../assets/icons/edit.png');
 
 export default {
   account,
@@ -133,4 +136,7 @@ export default {
   items,
   date,
   time,
+  edit,
+  delete_icon,
+  upload_files,
 };

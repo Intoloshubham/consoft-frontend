@@ -37,9 +37,8 @@ const UserDashboard = ({navigation}) => {
 
   return (
     <>
-      <LinearGradient colors={[COLORS.lightGray2, COLORS.lightGray2, COLORS.lightGray2]} style={styles.container}>
-        <View style={styles.header}>
-        </View>
+      {/* <LinearGradient colors={[COLORS.lightGray2, COLORS.lightGray2, COLORS.lightGray2]} style={styles.container}> */}
+
         <View style={styles.tasks}>
           <TouchableOpacity style={styles.Intask} onPress={() => handleTask()}>
             <View>
@@ -99,10 +98,10 @@ const UserDashboard = ({navigation}) => {
               navigation.navigate('Reports');
             }}
           >
-            <Text style={{ color: COLORS.black, ...FONTS.body4 }}>Create New Report</Text>
+            <Text style={{ color: COLORS.white, ...FONTS.body3 }}>Create New Report</Text>
           </TouchableOpacity>
         </View>
-      </LinearGradient>
+      {/* </LinearGradient> */}
 
     </>
   )

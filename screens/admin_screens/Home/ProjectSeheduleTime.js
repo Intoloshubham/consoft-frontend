@@ -145,7 +145,7 @@ const ProjectSeheduleTime = () => {
             ...FONTS.h2,
             color: COLORS.white,
           }}>
-          Expected Complete Date
+          Expected Completion Date
         </Text>
         <View
           style={{
