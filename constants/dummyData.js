@@ -125,7 +125,7 @@ const comp_tasks_var = [
 const Reports_part = [
     {
         id: 1,
-        name: "Company Team",
+        name: "Contractor Team",
         // icon: require("../assets/icons/completed.png")
     },
     {
@@ -134,8 +134,8 @@ const Reports_part = [
         // icon: require("../assets/icons/completed.png")
     },
     {
-        id: 3,
-        name: "Contractor Team",
+        id: 3, 
+        name: "Company Team",
         // icon: require("../assets/icons/completed.png")
     },
     {

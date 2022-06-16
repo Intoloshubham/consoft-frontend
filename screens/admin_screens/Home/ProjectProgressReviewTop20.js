@@ -29,7 +29,9 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
         paddingVertical: SIZES.base,
       }}
       onPress={() => {
-        navigation.navigate('ProjectsDetails');
+        navigation.navigate('ProjectsDetails', {
+          name: item.project_name,
+        });
       }}>
       {/* n.no  */}
       <View
@@ -101,8 +103,8 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
           alignItems: 'center',
           marginBottom: SIZES.base,
         }}>
-        <Text style={{...FONTS.h3, color: COLORS.darkGray, flex: 1}}>
-          Top 3 Projects
+        <Text style={{...FONTS.h2, color: COLORS.darkGray, flex: 1}}>
+          Top 3 Importants
         </Text>
       </View>
       <FlatList
@@ -121,7 +123,7 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
             <Text
               style={{
                 flex: 1,
-                color: COLORS.black,
+                color: COLORS.gray,
                 ...FONTS.body4,
               }}>
               S.N
@@ -129,8 +131,8 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
             <Text
               style={{
                 flex: 1,
-                marginLeft: -35,
-                color: COLORS.black,
+                marginLeft: -30,
+                color: COLORS.gray,
                 ...FONTS.body4,
               }}>
               Name
@@ -148,8 +150,8 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
             <Text
               style={{
                 flex: 1,
-                marginLeft: 40,
-                color: COLORS.black,
+                marginLeft: 35,
+                color: COLORS.gray,
                 ...FONTS.body4,
               }}>
               Progress
@@ -157,7 +159,7 @@ const ProjectProgressReviewTop20 = ({customContainerStyle, history}) => {
             <Text
               style={{
                 flex: 1,
-                color: COLORS.black,
+                color: COLORS.gray,
                 ...FONTS.body4,
               }}>
               Notification

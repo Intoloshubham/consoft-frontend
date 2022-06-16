@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
-import {View, ActivityIndicator} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import * as eva from '@eva-design/eva';
 
-import {ApplicationProvider, Layout, Text} from '@ui-kitten/components';
+import {ApplicationProvider} from '@ui-kitten/components';
 import {
   OnBoarding,
   SignUp,
@@ -31,14 +30,12 @@ import {
   CompanyTeam,
   ManageStock,
   CompanyTeamShow,
-  ProjectsOperationModal,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
-import Toast from 'react-native-toast-message';
-import user_tabs from './navigation/user_tabs'
+import user_tabs from './navigation/user_tabs';
 
 global.apiurl = 'http://192.168.1.99:8000/api';
 
@@ -54,17 +51,12 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            headerShown: false, 
+            headerShown: false,
           }}
-<<<<<<< HEAD
+
           initialRouteName={'Home'}>
           <Stack.Screen name="OnBoarding" component={OnBoarding} />
-=======
 
-          initialRouteName={'user_tabs'}> 
-          <Stack.Screen name="user_tabs" component={user_tabs} />
-
->>>>>>> b5e5273639bced25101e14af2c1202e6e6407511
           <Stack.Screen name="CreateCompany" component={CreateCompany} />
           <Stack.Screen name="CompanyPayment" component={CompanyPayment} />
           <Stack.Screen name="VerifyProductKey" component={VerifyProductKey} />
@@ -96,16 +88,14 @@ const App = () => {
           <Stack.Screen name="Unit" component={Unit} />
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />
-          <Stack.Screen
-            name="ProjectsOperationModal"
-            component={ProjectsOperationModal}
-          />
+
           {/* User  */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="Demo" component={Demo} />
           <Stack.Screen name="Demo1" component={Demo1} />
           <Stack.Screen name="Demo2" component={Demo2} />
+          <Stack.Screen name="user_tabs" component={user_tabs} />
         </Stack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>

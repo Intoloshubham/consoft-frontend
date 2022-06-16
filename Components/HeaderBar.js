@@ -16,13 +16,18 @@ const HeaderBar = ({right, title}) => {
         <TouchableOpacity
           style={{alignItems: 'center', alignItems: 'flex-start'}}
           onPress={() => navigation.goBack()}>
-          <Image source={icons.back} style={{width: 20, height: 20}} />
+          <Image
+            source={icons.back}
+            style={{width: 20, height: 20, tintColor: COLORS.black}}
+          />
         </TouchableOpacity>
         <Text
           style={{
             marginLeft: SIZES.radius,
             ...FONTS.h2,
+
             color: COLORS.lightblue_900,
+            textTransform: 'capitalize',
           }}>
           {title}
         </Text>
