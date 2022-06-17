@@ -91,13 +91,13 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
     }
 
 
+
   // console.log(itemname,qty,place,vehicle);
 
   const itemData = async () => {
     try {
       const resp = await fetch('http://192.168.1.99:8000/api/item');
       const data = await resp.json();
-
       //  console.log(data);
       setdata(data);
     } catch (error) {
@@ -154,10 +154,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
           location === '' ||
           vehicle === ''
             ? alert('all field required')
-
             : alert('Created Succcessfully');
-            : alert(' stock item Created Succcessfully');
-
         }
       })
       .catch(error => {
@@ -182,6 +179,8 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
           voucherItem();
         }, [])
         
+
+
   const addstockitem = e => {
     //  alert("add item")
     const data = {
@@ -249,32 +248,14 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
     return null;
   };
 
-  //  fetch api calls vaocher list
-  // const stokItem = async () => {
-  //   const resp = await fetch('http://192.168.1.99:8000/api/stock-entry');
-  //   const datastock = await resp.json();
-  //   // console.log(dataunit);
-  //   setstocklist(datastock);
-  // };
-
-  // useEffect(() => {
-  //   stokItem();
-  // }, [])
-
   const renderItem = ({item}) => {
     return (
       <ScrollView>
         <View>
           <View style={styles.item}>
-
             {/* <Text style={styles.title}>{item.item_id}</Text> */}
             <Text style={styles.title}>{item.location}</Text> 
              <View style={{justifyContent:"space-between", flexDirection: 'row',}}>
-               
-            <Text style={styles.title}>{item.item_name}</Text>
-            <Text style={styles.title}>{item.location}</Text>
-            {/* <View style={{justifyContent:"space-between", flexDirection: 'row',}}>
-
                 <View style={{marginRight:5}}>
                 {/* <Button title="edit" onPress={()=>voucherItemupdate(item._id,item.item_id,item.qty,item.location,item.vehicle_no)
                     }/> */}
@@ -296,11 +277,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                         </TouchableOpacity>
                      {/* <Button title="X" onPress={()=>voucherDelete(item._id)}/> */}
                 </View>
-
             </View>
-
-            </View> */}
-
           </View>
         </View>
       </ScrollView>
@@ -313,13 +290,8 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
        <View style={{marginHorizontal:SIZES.padding}}> 
          <Card style={styles.card}>
           <Card.Content>
-
               <View
                  style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-
-            <Modal>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Title>Stock entry</Title>
                 <Button title="voucher" onPress={() => setmodalstock(true)} />
                 <Modal
@@ -450,11 +422,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                                                   setIsFocusunit(false)
                                                 }
                                                 onChange={item => {
-
                                                   // console.log(item);
-
-                                                  console.log(item);
-
                                                   setValueunit(item._id);
 
                                                   setIsFocusunit(false);
@@ -556,10 +524,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                               }}
                               onPress={() => saveStock()}
                             />
-
                             
-
-
                           </Card.Content>
                         </Card>
                       </ScrollView>
@@ -567,15 +532,9 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                   </View>
                 </Modal>
               </View>
-
             
           </Card.Content>
         </Card> 
-
-            </Modal>
-          </Card.Content>
-        </Card>
-
         <View
           style={{
             marginBottom: SIZES.padding,
@@ -585,7 +544,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
             backgroundColor: COLORS.white,
             ...styles.shadow,
           }}>
-
           <Title style={{...FONTS.h2, color: COLORS.darkGray,borderBottomWidth:1}}>
             Voucher list
           </Title>
@@ -594,15 +552,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
             contentContainerStyle={{marginTop: SIZES.radius}}
             scrollEnabled={true}
             data={stocklist}
-
-          <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
-            voucher list
-          </Text>
-          <FlatList
-            maxHeight={410}
-            contentContainerStyle={{marginTop: SIZES.radius}}
-            scrollEnabled={true}
-            data={data}
             keyExtractor={item => `${item._id}`}
             renderItem={renderItem}
             showsVerticalScrollIndicator={true}
@@ -738,12 +687,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
       </View>
   )
 }
-
-        </View>
-      </View>
-    </View>
-  );
-};
 
 export default ManageStock;
 
