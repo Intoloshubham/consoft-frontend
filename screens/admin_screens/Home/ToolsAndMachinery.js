@@ -1,26 +1,41 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
-import {HeaderBar} from '../../../Components';
-import {COLORS, FONTS} from '../../../constants';
-import {TextButton} from '../../../Components';
-import {SIZES} from '../../../constants';
-import ToolsAndMachineryModal from '../Modals/ToolsAndMachineryModal';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Modal,
+  ScrollView,
+  Image,
+} from 'react-native';
+import {
+  HeaderBar,
+  FormInput,
+  IconButton,
+  TextButton,
+} from '../../../Components';
+import {COLORS, FONTS, SIZES, icons} from '../../../constants';
+
+const ToolsAndMachine = [
+  {id: 1, name: 'Mixer', qty: 25},
+  {id: 2, name: 'Roller', qty: 55},
+  {id: 3, name: 'Water tank', qty: 41},
+  {id: 4, name: 'Pipe', qty: 10},
+];
 
 const ToolsAndMachinery = () => {
-  const ToolsAndMachinery = [
-    {id: 1, name: 'Mixer', qty: 25},
-    {id: 2, name: 'Roller', qty: 55},
-    {id: 3, name: 'Water tank', qty: 41},
-    {id: 4, name: 'Pipe', qty: 10},
-  ];
-  const [tools, setTools] = React.useState(ToolsAndMachinery);
-  const [showModal, setShowModal] = React.useState(false);
+  const [tools, setTools] = React.useState(ToolsAndMachine);
+  const [showTAndMModal, setShowTAndMModal] = React.useState(false);
+  //Form data
+  const [toolsName, setToolsName] = React.useState('');
+  const [toolsQty, setToolsQty] = React.useState('');
 
   function renderToolsAndMachinery() {
     const renderItem = ({item, index}) => (
       <View
         style={{
-          // marginHorizontal: SIZES.base,
           marginVertical: SIZES.radius - 4,
           flexDirection: 'row',
           alignItems: 'center',
@@ -48,9 +63,39 @@ const ToolsAndMachinery = () => {
               ...FONTS.body3,
               color: COLORS.darkGray,
               fontWeight: 'bold',
+              right: 40,
             }}>
             {item.qty}
           </Text>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => {
+              alert('edit name');
+            }}>
+            <Image
+              source={icons.edit}
+              style={{
+                width: 18,
+                height: 18,
+                right: 15,
+                tintColor: COLORS.lightblue_900,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              alert('delete name');
+            }}>
+            <Image
+              source={icons.delete_icon}
+              style={{
+                width: 18,
+                height: 18,
+                tintColor: COLORS.red,
+              }}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -73,6 +118,7 @@ const ToolsAndMachinery = () => {
                 style={{
                   height: 1,
                   backgroundColor: COLORS.gray3,
+                  marginVertical: 5,
                 }}></View>
             );
           }}
@@ -80,6 +126,124 @@ const ToolsAndMachinery = () => {
       </View>
     );
   }
+
+  function renderAddToolsAndMachineModal() {
+    return (
+      <Modal animationType="slide" transparent={true} visible={showTAndMModal}>
+        <TouchableWithoutFeedback onPress={() => setShowTAndMModal(false)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                left: SIZES.padding,
+                width: '90%',
+                padding: SIZES.padding,
+                borderRadius: SIZES.radius,
+                backgroundColor: COLORS.white,
+              }}>
+              <View style={{}}>
+                {/* header */}
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                    Tools & Machine
+                  </Text>
+                  <IconButton
+                    containerStyle={{
+                      boborderWidth: 2,
+                      borderRadius: 10,
+                      borderColor: COLORS.gray2,
+                    }}
+                    icon={icons.cross}
+                    iconStyle={{
+                      tintColor: COLORS.gray,
+                    }}
+                    onPress={() => setShowTAndMModal(false)}
+                  />
+                </View>
+                <ScrollView>
+                  <FormInput
+                    label="Item name"
+                    keyboardType="default"
+                    autoCompleteType="username"
+                    onChange={value => {
+                      setToolsName(value);
+                    }}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            toolsName == '' || toolsName != ''
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              toolsName == ''
+                                ? COLORS.gray
+                                : toolsName != ''
+                                ? COLORS.green
+                                : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+                  <FormInput
+                    label="Quantity"
+                    keyboardType="numeric"
+                    onChange={value => {
+                      setToolsQty(value);
+                    }}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            toolsQty == '' || toolsQty != ''
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              toolsQty == ''
+                                ? COLORS.gray
+                                : toolsQty != ''
+                                ? COLORS.green
+                                : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+                  <TextButton
+                    label="Submit"
+                    buttonContainerStyle={{
+                      height: 45,
+                      marginTop: SIZES.padding * 1.5,
+                      alignItems: 'center',
+                      borderRadius: SIZES.radius,
+                      backgroundColor: COLORS.lightblue_700,
+                    }}
+                    onPress={() => alert('Okay...')}
+                  />
+                </ScrollView>
+              </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
   return (
     <View
       style={{
@@ -98,15 +262,10 @@ const ToolsAndMachinery = () => {
           backgroundColor: COLORS.lightblue_700,
           ...styles.shadow,
         }}
-        onPress={() => setShowModal(true)}
+        onPress={() => setShowTAndMModal(true)}
       />
-      {showModal && (
-        <ToolsAndMachineryModal
-          isVisible={showModal}
-          onClose={() => setShowModal(false)}
-        />
-      )}
       {renderToolsAndMachinery()}
+      {renderAddToolsAndMachineModal()}
     </View>
   );
 };
