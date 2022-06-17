@@ -274,7 +274,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
             <Text style={styles.title}>{item.item_name}</Text>
             <Text style={styles.title}>{item.location}</Text>
             {/* <View style={{justifyContent:"space-between", flexDirection: 'row',}}>
-
                 <View style={{marginRight:5}}>
                 {/* <Button title="edit" onPress={()=>voucherItemupdate(item._id,item.item_id,item.qty,item.location,item.vehicle_no)
                     }/> */}
@@ -589,15 +588,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
           <Title style={{...FONTS.h2, color: COLORS.darkGray,borderBottomWidth:1}}>
             Voucher list
           </Title>
-          <FlatList
-            maxHeight={500}
-            contentContainerStyle={{marginTop: SIZES.radius}}
-            scrollEnabled={true}
-            data={stocklist}
-
-          <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
-            voucher list
-          </Text>
+          
           <FlatList
             maxHeight={410}
             contentContainerStyle={{marginTop: SIZES.radius}}
