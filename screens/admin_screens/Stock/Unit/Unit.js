@@ -10,6 +10,7 @@ import {
   Modal,
   Pressable,
   Alert,
+  TouchableOpacity
 } from 'react-native';
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
@@ -21,46 +22,49 @@ const Unit = () => {
   const [unitname, setUintname] = useState('');
   const [data, setdata] = useState([]);
 
-  const [loading, setLoading] = React.useState(true);
+ 
+  
 
   // modal create unit
   const [modal, setModal] = useState(false);
   const [showBox, setShowBox] = useState(false);
 
   const [unitid, setunitid] = useState('');
-  // console.log(unitid);
-  // const [edit, setedit] = useState([]);
-  // const idref = React.useRef();
-
+  
   const updateunit = (id,name) => {
     setShowBox(true);
       setunitid(id);
-    //  console.log(id);
      setUintname(name)
-     console.log(name);
-    
+     console.log(name)
   };
 
-  const  Update =(id)=> {
-    const data = {
+  const  Update =()=> {
+    const data1 = {
       unit_name: unitname,
     };
-      fetch(`http://192.168.1.99:8000/api/unit/${id}`, {
+      fetch('http://192.168.1.99:8000/api/unit/' +`${unitid}`, {
+
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data1),
     })
       .then(response => response.json())
       .then(data => {
-        setUintname('');
-        fetchData();
-        console.log('Success:', data);
+       
+       fetchData();
+        console.log('Success:', data,alert("unit update"));
+        //  unitname == ''
+        //     // ? alert('plz fill unitname')
+        //     // : data.message == 'This unit is already exist'
+        //     // ? alert('This unit is already exist')
+        //     : alert('unit successfull update ');
       })
       .catch(error => {
         console.error('Error:', error);
       });
+     
   }
 
 
@@ -97,7 +101,7 @@ const Unit = () => {
             ? alert('plz fill unitname')
             : data.message == 'This unit is already exist'
             ? alert('This unit is already exist')
-            : alert('unit successfull create ');
+            : alert(' create ');
         }
       })
       .catch(error => {
@@ -131,63 +135,6 @@ const Unit = () => {
                   title="edit"
                   onPress={() => updateunit(item._id,item.unit_name,)}
                 />
-                <Modal
-                  animationType="fade"
-                  transparent={false}
-                  visible={showBox}>
-                  <View
-                    style={{
-                      backgroundColor: '#000000aa',
-                      flex: 1,
-                    }}>
-                    <View
-                      style={{
-                        marginTop: 100,
-                        padding: 20,
-                        backgroundColor: '#fff',
-                        borderWidth: 1,
-                        borderRadius: 20,
-                        margin: 10,
-                      }}>
-                      <View>
-                        <Pressable onPress={setShowBox}>
-                          <Text
-                            style={{
-                              alignSelf: 'flex-end',
-                              fontSize: 20,
-                              fontWeight: 'bold',
-                            }}>
-                            X
-                          </Text>
-                        </Pressable>
-                      </View>
-                      <View style={{marginTop: 10}}>
-                        <Card style={{backgroundColor: ''}}>
-                          <Card.Content>
-                            <Title>Edit unit</Title>
-                            <FormInput
-                              value={unitname}
-                              label="unit name"
-                              onChange={value => {
-                                setUintname(value);
-                              }}
-                            />
-
-                            <TextButton
-                              label="Update"
-                              buttonContainerStyle={{
-                                height: 45,
-                                borderRadius: SIZES.radius,
-                                marginTop: SIZES.padding,
-                              }}
-                              onPress={() => Update(item._id)}
-                            />
-                          </Card.Content>
-                        </Card>
-                      </View>
-                    </View>
-                  </View>
-                </Modal>
               </View>
               <View style={{marginLeft: 10}}>
                 <Button title="X" onPress={() => DeleteUnit(item._id)} />
@@ -200,13 +147,22 @@ const Unit = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <HeaderBar right={true} />
+    <View>
+      <HeaderBar right={true} title="Units" />
 
       <View
         style={{
           marginHorizontal: SIZES.padding,
         }}>
+          <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setModal(true);
+            }}>
+            <Title style={{color: 'white'}}>Add unit</Title>
+          </TouchableOpacity>
+          
         <Modal animationType="fade" transparent={false} visible={modal}>
           <View
             style={{
@@ -269,7 +225,7 @@ const Unit = () => {
           }}>
           <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
             <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Units</Text>
-            <Button title="add unit" onPress={() => setModal(true)} />
+           
           </View>
           <FlatList
             maxHeight={410}
@@ -287,12 +243,73 @@ const Unit = () => {
                     height: 1,
                     backgroundColor: COLORS.lightGray1,
                     marginVertical: 5,
+
                   }}></View>
               );
             }}
           />
         </View>
+        <View> 
+          <Modal
+                  animationType="fade"
+                  transparent={false}
+                  visible={showBox}>
+                  <View
+                    style={{
+                      backgroundColor: '#000000aa',
+                      flex: 1,
+                    }}>
+                    <View
+                      style={{
+                        marginTop: 100,
+                        padding: 20,
+                        backgroundColor: '#fff',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                        margin: 10,
+                      }}>
+                      <View>
+                        <Pressable onPress={setShowBox}>
+                          <Text
+                            style={{
+                              alignSelf: 'flex-end',
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                            }}>
+                            X
+                          </Text>
+                        </Pressable>
+                      </View>
+                      <View style={{marginTop: 10}}>
+                        <Card style={{backgroundColor: ''}}>
+                          <Card.Content>
+                            <Title>Edit unit</Title>
+                            <FormInput
+                              value={unitname}
+                              label="unit name"
+                              onChange={value => {
+                                setUintname(value);
+                              }}
+                            />
+
+                            <TextButton
+                              label="Update"
+                              buttonContainerStyle={{
+                                height: 45,
+                                borderRadius: SIZES.radius,
+                                marginTop: SIZES.padding,
+                              }}
+                              onPress={() => Update()}
+                            />
+                          </Card.Content>
+                        </Card>
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
+                </View>
       </View>
+    </View>
     </View>
   );
 };
@@ -336,5 +353,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: COLORS.lightblue_700,
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 10,
   },
 });
