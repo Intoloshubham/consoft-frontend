@@ -7,15 +7,7 @@ import {COLORS, images, icons, SIZES, Apis} from '../../constants';
 import {FormInput, TextButton} from '../../Components';
 import Toast from 'react-native-toast-message';
 
-<<<<<<< HEAD:screens/OnBoarding/CompanyRegistration.js
 const CompanyRegistration = ({navigation}) => {
-=======
-
-
-const url = 'http://192.168.1.99:8000/api/company';
-
-const CreateCompany = ({navigation}) => {
->>>>>>> 94543fa2e1910b67598eb44acdc9059cf899c1b1:screens/OnBoarding/CreateCompany.js
   const [cName, setCName] = React.useState('');
   const [cPanNo, setCPanNo] = React.useState('');
   const [cMobileNo, setCMobileNo] = React.useState('');
