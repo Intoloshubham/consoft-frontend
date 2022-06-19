@@ -7,6 +7,8 @@ import {COLORS, images, icons, SIZES} from '../../constants';
 import {FormInput, TextButton} from '../../Components';
 import Toast from 'react-native-toast-message';
 
+
+
 const url = 'http://192.168.1.99:8000/api/company';
 
 const CreateCompany = ({navigation}) => {
