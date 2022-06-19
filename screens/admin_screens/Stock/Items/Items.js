@@ -378,16 +378,7 @@ const Items = () => {
                       onChange={item => {
                         setValue(item._id);
                         setIsFocus(false);
-                      }}
-                      // renderLeftIcon={() => (
-                      //   <AntDesign
-                      //     style={styles.icon}
-                      //     color={isFocus ? 'blue' : 'black'}
-                      //     name="Safety"
-                      //     size={20}
-                      //   />
-                      // )}
-                    />
+                      }}/>
 
                     <TextButton
                       label="Save"

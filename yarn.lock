@@ -5278,15 +5278,7 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-<<<<<<< HEAD
 "prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
-=======
-<<<<<<< HEAD
-"prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
-=======
-"prop-types@*", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
->>>>>>> 19ef66ba1d0aedf5a3540bd02e4a0e4f5cf25e76
->>>>>>> 9b2289178a36656459a8768e0841590c7486e2f4
   "version" "15.8.1"
   dependencies:
     "loose-envify" "^1.4.0"
@@ -5509,11 +5501,7 @@
     "prop-types" "^15.7.2"
     "yargs" "^16.1.1"
 
-<<<<<<< HEAD
-"react-native@*", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
-=======
-"react-native@*", "react-native@>= 0.60.2", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
->>>>>>> IntoloIndia-master
+"react-native@*", "react-native@>= 0.60.2", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
   "version" "0.68.1"
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
