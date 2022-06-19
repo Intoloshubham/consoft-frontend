@@ -1,34 +1,129 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
-import {COLORS, FONTS, SIZES} from '../../../constants';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  LayoutAnimation,
+  Platform,
+  ScrollView,
+  UIManager,
+  Image,
+} from 'react-native';
+import {COLORS, FONTS, SIZES, Apis, icons} from '../../../constants';
 
-const AssignedWorks = ({customContainerStyle, history}) => {
-  const renderItem = ({item, index}) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: SIZES.base,
-      }}>
-      <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
-      <Text
-        style={{
-          ...FONTS.h3,
-          flex: 1,
-          marginLeft: SIZES.base,
-          color: COLORS.darkGray,
-        }}>
-        {item.work_name}
-      </Text>
-      <Text
-        style={{
-          ...FONTS.h4,
-          color: COLORS.darkGray,
-        }}>
-        {item.date}
-      </Text>
-    </View>
-  );
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
+
+const AssignedWorks = () => {
+  const [active, setActive] = React.useState(null);
+  const [innerActive, setInnerActive] = React.useState(null);
+
+  const dummtdata = [1, 2, 3, 4, 5];
+  const dummtdata1 = [1, 2, 3, 4];
+  const dummtdata2 = [1, 2, 3, 4, 5];
+
+  const RenderData = ({
+    index,
+    active,
+    setActive,
+    i,
+    innerActive,
+    setInnerActive,
+  }) => {
+    const onPress = () => {
+      LayoutAnimation.easeInEaseOut();
+      setActive(index === active ? null : index);
+    };
+    const onPress1 = () => {
+      LayoutAnimation.easeInEaseOut();
+      setInnerActive(i === innerActive ? null : i);
+    };
+    return (
+      <TouchableOpacity onPress={onPress} activeOpacity={1}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text
+            style={{
+              ...FONTS.h3,
+              color: COLORS.black,
+            }}>
+            {index + 1} - Header
+          </Text>
+          <Image
+            source={active === index ? icons.up_arrow : icons.down1}
+            style={{
+              height: 15,
+              width: 15,
+              tintColor: COLORS.black,
+            }}
+          />
+        </View>
+        <View
+          style={{
+            marginVertical: 5,
+          }}>
+          {active == index &&
+            dummtdata.map(x => {
+              return (
+                <View
+                  style={{
+                    marginLeft: SIZES.padding,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <TouchableOpacity onPress={onPress1} activeOpacity={1}>
+                    {/* <Text style={{...FONTS.h3}} key={x}>
+                      -Data
+                    </Text> */}
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text
+                        style={{
+                          ...FONTS.h3,
+                          color: COLORS.black,
+                        }}>
+                        {i + 1} - Data
+                      </Text>
+                      <Image
+                        source={active === index ? icons.up_arrow : icons.down1}
+                        style={{
+                          height: 15,
+                          width: 15,
+                          tintColor: COLORS.black,
+                        }}
+                      />
+                    </View>
+                    {innerActive == i &&
+                      dummtdata2.map(x => {
+                        return (
+                          <View>
+                            <Text></Text>
+                          </View>
+                        );
+                      })}
+                  </TouchableOpacity>
+                  <Image
+                    source={icons.up_arrow}
+                    style={{
+                      height: 15,
+                      width: 15,
+                      tintColor: COLORS.red,
+                    }}
+                  />
+                </View>
+              );
+            })}
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View
       style={{
@@ -39,50 +134,68 @@ const AssignedWorks = ({customContainerStyle, history}) => {
         backgroundColor: COLORS.lightblue_50,
         ...styles.shadow,
       }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
-          Assigned Works
-        </Text>
-        <Text
-          style={{
-            ...FONTS.h3,
-            color: COLORS.black,
-            backgroundColor: COLORS.yellow_400,
-            padding: 5,
-            // paddingHorizontal: SIZES.base,
-            // paddingVertical: SIZES.base - 5,
-            borderRadius: SIZES.base,
-          }}>
-          25
-        </Text>
-      </View>
-      <FlatList
-        contentContainerStyle={{marginTop: SIZES.radius}}
-        scrollEnabled={false}
-        data={history}
-        keyExtractor={item => `${item.id}`}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => {
+      <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Assign Works</Text>
+      <ScrollView style={{marginTop: SIZES.radius}}>
+        {dummtdata1.map((x, i) => {
           return (
-            <View
-              style={{
-                width: '100%',
-                height: 1,
-                backgroundColor: COLORS.gray2,
-                marginVertical: 5,
-              }}></View>
+            <View>
+              <RenderData
+                key={x}
+                index={i}
+                active={active}
+                setActive={setActive}
+              />
+            </View>
           );
-        }}
-      />
+        })}
+      </ScrollView>
     </View>
   );
 };
+
+// const AssignedWorks = () => {
+//   const [active, setActive] = React.useState(null);
+
+//   const Xxample = ({i, active, setActive}) => {
+//     const onPress = () => {
+//       LayoutAnimation.easeInEaseOut();
+//       setActive(i === active ? null : i);
+//     };
+//     const open = (active = i);
+
+//     return (
+//       <TouchableOpacity onPress={onPress} activeOpacity={1}>
+//         <View>
+//           <Text>Header -{i + 1}</Text>
+//           <Text>{open ? 'close' : 'open'}</Text>
+//           {open &&
+//             [1, 2, 3, 4].map(x => {
+//               return <Text key={x}> - data</Text>;
+//             })}
+//         </View>
+//       </TouchableOpacity>
+//     );
+//   };
+
+//   return (
+//     <View
+//       style={{
+//         marginTop: SIZES.padding,
+//         marginHorizontal: SIZES.padding,
+//         padding: 20,
+//         borderRadius: SIZES.radius,
+//         backgroundColor: COLORS.lightblue_50,
+//         ...styles.shadow,
+//       }}>
+//       <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Assign Works</Text>
+//       <ScrollView>
+//         {[1, 2, 3, 4, 5].map((x, i) => {
+//           <Xxample key={x} />;
+//         })}
+//       </ScrollView>
+//     </View>
+//   );
+// };
 
 const styles = StyleSheet.create({
   shadow: {

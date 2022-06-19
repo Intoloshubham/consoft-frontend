@@ -2,33 +2,21 @@ import React from 'react';
 import {
   View,
   Text,
-  Animated,
   StyleSheet,
   TouchableOpacity,
   Image,
   FlatList,
   ScrollView,
-  ImageBackground,
-  SafeAreaView,
   Modal,
   TouchableWithoutFeedback,
-  ToastAndroid,
 } from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import {
-  FormInput,
-  Drop,
-  CustomDropdown,
-  IconButton,
-  TextButton,
-} from '../../../Components';
+import {FormInput, Drop, IconButton, TextButton} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
-import {COLORS, SIZES, FONTS, icons, images} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons, Apis} from '../../../constants';
 import Toast from 'react-native-toast-message';
-import axios from 'axios';
-const url = 'http://192.168.1.99:8000/api/projects';
 
 const ProjectsBanner = () => {
   const navigation = useNavigation();
@@ -42,7 +30,7 @@ const ProjectsBanner = () => {
   };
   // get projects
   React.useEffect(() => {
-    fetch('http://192.168.1.99:8000/api/projects', {
+    fetch(`${Apis.API_URL.BASE_URL}/projects`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +45,7 @@ const ProjectsBanner = () => {
 
   // // project categories
   React.useEffect(() => {
-    fetch('http://192.168.1.99:8000/api/project-category', {
+    fetch(`${Apis.API_URL.BASE_URL}/project-category`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -65,53 +53,63 @@ const ProjectsBanner = () => {
     })
       .then(response => response.json())
       .then(data => {
+        let proCatFromApi = data.map(item => {
+          return {label: item.category_name, value: item._id};
+        });
         console.log(data);
-        setProjectCategory(data);
+        setProjectCategory(proCatFromApi);
       })
       .catch(error => console.log(error.message));
   }, []);
 
-  const [projectCategory, setProjectCategory] = React.useState([]);
+  // project types
+  React.useEffect(() => {
+    fetch(`${Apis.API_URL.BASE_URL}/project-type`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        let proTypeFromApi = data.map(item => {
+          return {label: item.project_type, value: item._id};
+        });
+        console.log(data);
+        setProjectType(proTypeFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
 
   // create projects
   const [projectname, setProjectName] = React.useState('');
   const [projectError, setProjectError] = React.useState('');
+
   const [projectlocation, setProjectLocation] = React.useState('');
   const [projectLocationError, setProjectLocationError] = React.useState('');
+
   const [projectplotarea, setProjectPlotArea] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
 
   // fetch project category
-
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState([]);
-  const [items, setItems] = React.useState([
-    {label: 'Residential', value: '1'},
-    {label: 'Mid-rise apertment', value: '7', parent: '1'},
-    {label: 'Hi-rise apertment', value: '6', parent: '1'},
-    {label: 'Township', value: '5', parent: '1'},
-    {label: 'House', value: '4', parent: '1'},
-    {label: 'Apartment', value: '3', parent: '1'},
-    {label: 'Bungalow', value: '2', parent: '1'},
-    {label: 'Commercial', value: '8'},
-    {label: 'Showroom / Office', value: '9', parent: '8'},
-    {label: 'Mall/Multiplxer', value: '10', parent: '8'},
-    {label: 'Health Care', value: '11'},
-    {label: 'Hospitals', value: '12', parent: '11'},
-    {label: 'Hospitality', value: '13'},
-    {label: 'Hotels', value: '14', parent: '13'},
-    {label: 'Resorts', value: '15', parent: '13'},
-    {label: 'Mixed Used', value: '16', parent: '13'},
-  ]);
+  const [projectCategory, setProjectCategory] = React.useState([]);
 
-  const unitData = [
+  // project types
+  const [open1, setOpen1] = React.useState(false);
+  const [value1, setValue1] = React.useState([]);
+  const [projectType, setProjectType] = React.useState([]);
+
+  //units
+  const [open2, setOpen2] = React.useState(false);
+  const [value2, setValue2] = React.useState([]);
+  const [projectUnit, setProjectUnit] = React.useState([
     {label: 'Hectare', value: '1'},
     {label: 'Acre', value: '2'},
     {label: 'Sqm', value: '3'},
     {label: 'Sqf', value: '4'},
-  ];
-
-  const [unitDropdown, setUnitDropdown] = React.useState('');
+  ]);
 
   function isEnableSubmit() {
     return (
@@ -137,8 +135,10 @@ const ProjectsBanner = () => {
     const data = {
       project_name: projectname,
       project_location: projectlocation,
-      plot_area: projectplotarea,
-      project_type: value,
+      project_area: projectplotarea,
+      project_category: value,
+      project_type: value1,
+      project_measurement: value2,
     };
 
     fetch(url, {
@@ -188,8 +188,10 @@ const ProjectsBanner = () => {
     const updateData = {
       project_name: projectname,
       project_location: projectlocation,
-      plot_area: projectplotarea,
-      project_type: value,
+      project_area: projectplotarea,
+      project_category: value,
+      project_type: value1,
+      project_measurement: value2,
     };
 
     fetch('http://192.168.1.99:8000/api/projects' + `/${data}`, {
@@ -203,15 +205,13 @@ const ProjectsBanner = () => {
   };
 
   //edit projects
-  const editpro = (name, location, type, area) => {
+  const editpro = (name, location, category, type, area, unit) => {
     setProjectName(name);
     setProjectLocation(location);
-    setValue(type);
+    setValue(category);
+    setValue1(type);
     setProjectPlotArea(area);
-    console.log(name);
-    console.log(location);
-    console.log(area);
-    console.log(type);
+    setValue2(unit);
   };
 
   //render projects
@@ -258,24 +258,6 @@ const ProjectsBanner = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              {/* <ImageBackground
-                    style={{
-                      width: 18,
-                      height: 18,
-                      backgroundColor: COLORS.success_300,
-                      borderRadius: SIZES.padding,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      right: 12,
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 10,
-                        color: COLORS.black,
-                      }}>
-                      {index + 1}
-                    </Text>
-                  </ImageBackground> */}
               <TouchableOpacity
                 onPress={() => {
                   alert('All Notification Message Show in here...');
@@ -296,8 +278,10 @@ const ProjectsBanner = () => {
                   editpro(
                     item.project_name,
                     item.project_location,
+                    item.project_category,
                     item.project_type,
-                    item.plot_area,
+                    item.project_area,
+                    item.project_measurement,
                   );
                 }}>
                 <Image
@@ -476,19 +460,23 @@ const ProjectsBanner = () => {
                     />
 
                     <Drop
-                      placeholder="Select project types"
+                      placeholder="Select category"
                       open={open}
                       value={value}
-                      items={items}
+                      items={projectCategory}
                       setOpen={setOpen}
                       setValue={setValue}
-                      setItems={setItems}
-                      categorySelectable={false}
-                      listParentLabelStyle={{
-                        fontWeight: 'bold',
-                        color: COLORS.white,
-                        fontSize: 18,
-                      }}
+                      setItems={setProjectCategory}
+                    />
+
+                    <Drop
+                      placeholder="Select types"
+                      open={open1}
+                      value={value1}
+                      items={projectType}
+                      setOpen={setOpen1}
+                      setValue={setValue1}
+                      setItems={setProjectType}
                     />
                     <View
                       style={{
@@ -500,7 +488,7 @@ const ProjectsBanner = () => {
                         keyboardType="numeric"
                         autoCompleteType="cc-number"
                         containerStyle={{width: 215}}
-                        value={projectplotarea.toString()}
+                        value={projectplotarea}
                         onChange={value => {
                           utils.validateNumber(value, setProjectPlotAreaError);
                           setProjectPlotArea(value);
@@ -513,15 +501,14 @@ const ProjectsBanner = () => {
                           width: 100,
                           marginTop: 5,
                         }}>
-                        <CustomDropdown
-                          data={unitData}
-                          placeholder="Units"
-                          label="Dropdown"
-                          value={unitDropdown}
-                          onChange={item => {
-                            setUnitDropdown(item.value);
-                            console.log('selected', item);
-                          }}
+                        <Drop
+                          placeholder="Unit"
+                          open={open2}
+                          value={value2}
+                          items={projectUnit}
+                          setOpen={setOpen2}
+                          setValue={setValue2}
+                          setItems={setProjectUnit}
                         />
                       </View>
                     </View>
@@ -559,8 +546,7 @@ const ProjectsBanner = () => {
           <View
             style={{
               flex: 1,
-              // alignItems: 'center',
-              // justifyContent: 'center',
+
               backgroundColor: COLORS.transparentBlack7,
             }}>
             <View
@@ -592,21 +578,7 @@ const ProjectsBanner = () => {
                       OnUpdateSubmit();
                     }}
                   />
-                  {/* <TextButton
-                    label="Remove"
-                    disabled={false}
-                    buttonContainerStyle={{
-                      marginTop: SIZES.radius,
-                      backgroundColor: COLORS.yellow_400,
-                      borderRadius: SIZES.base,
-                      padding: 5,
-                    }}
-                    labelStyle={{
-                      color: COLORS.black,
-                      ...FONTS.h3,
-                    }}
-                    onPress={() => alert('Remove from  list add to database')}
-                  /> */}
+
                   <TextButton
                     label="Delete"
                     disabled={false}

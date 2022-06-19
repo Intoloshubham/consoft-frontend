@@ -49,7 +49,7 @@ const Drop = ({
         }}
         dropDownContainerStyle={{
           marginTop: SIZES.padding,
-          backgroundColor: COLORS.lightblue_800,
+          backgroundColor: COLORS.lightblue_400,
           borderWidth: null,
         }}
         textStyle={{

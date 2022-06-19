@@ -50,30 +50,6 @@ const contractorsDetails = [
     email: 'demo2@gmail.com',
     mobile: 9988776655,
   },
-  {
-    id: 6,
-    name: 'Demo 3',
-    email: 'demo3@gmail.com',
-    mobile: 9988776655,
-  },
-  {
-    id: 7,
-    name: 'Demo 1',
-    email: 'demo1@gmail.com',
-    mobile: 9988776655,
-  },
-  {
-    id: 8,
-    name: 'Demo 2',
-    email: 'demo2@gmail.com',
-    mobile: 9988776655,
-  },
-  {
-    id: 9,
-    name: 'Demo 3',
-    email: 'demo3@gmail.com',
-    mobile: 9988776655,
-  },
 ];
 
 const Contractors = () => {
@@ -331,7 +307,7 @@ const Contractors = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

@@ -25,21 +25,6 @@ const stockdetails = [
   {id: 3, name: 'Iron', quantity: 57},
   {id: 4, name: 'Cement', quantity: 55},
   {id: 5, name: 'Oil', quantity: 95},
-  {id: 6, name: 'Bricks', quantity: 45},
-  {id: 7, name: 'Sand', quantity: 88},
-  {id: 8, name: 'Iron', quantity: 57},
-  {id: 9, name: 'Cement', quantity: 55},
-  {id: 10, name: 'Oil', quantity: 95},
-  {id: 11, name: 'Bricks', quantity: 45},
-  {id: 12, name: 'Sand', quantity: 88},
-  {id: 13, name: 'Iron', quantity: 57},
-  {id: 14, name: 'Cement', quantity: 55},
-  {id: 15, name: 'Oil', quantity: 95},
-  {id: 16, name: 'Bricks', quantity: 45},
-  {id: 17, name: 'Sand', quantity: 88},
-  {id: 18, name: 'Iron', quantity: 57},
-  {id: 19, name: 'Cement', quantity: 55},
-  {id: 20, name: 'Oil', quantity: 95},
 ];
 
 const StocksAndInventry = () => {
@@ -321,7 +306,7 @@ const StocksAndInventry = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

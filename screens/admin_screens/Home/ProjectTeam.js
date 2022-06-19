@@ -57,34 +57,6 @@ const teamdetail = [
     mobile: 9988776655,
     designation: 'Architect',
   },
-  {
-    id: 6,
-    name: 'Chotu Patel',
-    email: 'chotu@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
-  {
-    id: 7,
-    name: 'Shivam Verma',
-    email: 'shivam@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
-  {
-    id: 8,
-    name: 'Rahul Shrivastav',
-    email: 'rahul@gmail.com',
-    mobile: 9988776655,
-    designation: 'Architect',
-  },
-  {
-    id: 9,
-    name: 'Chotu Patel',
-    email: 'chotu@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
 ];
 const ProjectTeam = () => {
   const navigation = useNavigation();
@@ -391,7 +363,7 @@ const ProjectTeam = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

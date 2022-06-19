@@ -22,19 +22,7 @@ const ToolsAndMachine = [
   {id: 1, name: 'Mixer', qty: 25},
   {id: 2, name: 'Roller', qty: 55},
   {id: 3, name: 'Water tank', qty: 41},
-  {id: 5, name: 'Pipe', qty: 10},
-  {id: 6, name: 'Mixer', qty: 25},
-  {id: 7, name: 'Roller', qty: 55},
-  {id: 8, name: 'Water tank', qty: 41},
-  {id: 9, name: 'Pipe', qty: 10},
-  {id: 10, name: 'Mixer', qty: 25},
-  {id: 12, name: 'Roller', qty: 55},
-  {id: 13, name: 'Water tank', qty: 41},
-  {id: 14, name: 'Pipe', qty: 10},
-  {id: 15, name: 'Mixer', qty: 25},
-  {id: 16, name: 'Roller', qty: 55},
-  {id: 17, name: 'Water tank', qty: 41},
-  {id: 18, name: 'Pipe', qty: 10},
+  {id: 4, name: 'Pipe', qty: 10},
 ];
 
 const ToolsAndMachinery = () => {
@@ -269,7 +257,7 @@ const ToolsAndMachinery = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

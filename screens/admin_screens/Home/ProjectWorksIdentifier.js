@@ -2,7 +2,17 @@ import React from 'react';
 import {View, Text, Image, FlatList, StyleSheet} from 'react-native';
 import {COLORS, FONTS, SIZES, icons, images} from '../../../constants';
 
-const ProjectWorksIdentifier = ({history}) => {
+const ProjectWorksIdentifier = () => {
+  const projectTasksIdentifier = [
+    {id: 1, name: 'Important', img: images.red},
+    {id: 2, name: 'Moderate', img: images.green},
+    {id: 3, name: 'Informational', img: images.yellow},
+  ];
+
+  const [indentifierColor, setIdentifierColor] = React.useState(
+    projectTasksIdentifier,
+  );
+
   const renderItem = ({item}) => (
     <View
       style={{
@@ -21,8 +31,8 @@ const ProjectWorksIdentifier = ({history}) => {
       <Image
         source={item.img}
         style={{
-          height: 20,
-          width: 60,
+          height: 12,
+          width: 30,
         }}
       />
     </View>
@@ -41,7 +51,7 @@ const ProjectWorksIdentifier = ({history}) => {
       <FlatList
         contentContainerStyle={{marginTop: SIZES.radius}}
         scrollEnabled={false}
-        data={history}
+        data={indentifierColor}
         keyExtractor={item => `${item.id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
