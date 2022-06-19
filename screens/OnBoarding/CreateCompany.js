@@ -36,19 +36,20 @@ const CreateCompany = ({navigation}) => {
   const showToast = () =>
     Toast.show({
       position: 'top',
+      topOffset: 10,
       type: 'success',
       text1: 'Successfully Created Company',
       text2: 'Success',
-      visibilityTime: 400,
+      visibilityTime: 700,
     });
 
   const showToastError = () =>
     Toast.show({
       position: 'top',
-      topOffset: 50,
+      topOffset: 10,
       type: 'error',
-      text1: 'Please Enter all details',
-      text2: 'Error',
+      text1: 'Email & Mobile No. is Already Exist',
+      text2: 'If you want to continue with us, click on CONTINUE & PAYMENT',
       visibilityTime: 4000,
     });
 
@@ -72,16 +73,15 @@ const CreateCompany = ({navigation}) => {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-
-        // if (data.response == 200) {
-        showToast();
-        setTimeout(() => {
-          navigation.navigate('CompanyPayment');
-        }, 200);
-        // }
-        // if (data.response != 200) {
-        //   showToastError();
-        // }
+        if (data.status == 200) {
+          showToast();
+          setTimeout(() => {
+            navigation.navigate('CompanyPayment');
+          }, 350);
+        }
+        if (data.status != 200) {
+          showToastError();
+        }
       })
       .catch(error => {
         console.error('Error:', error);

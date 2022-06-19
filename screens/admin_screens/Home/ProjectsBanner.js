@@ -56,60 +56,22 @@ const ProjectsBanner = () => {
   const [projects, setProjects] = React.useState([]);
 
   // // project categories
-  // React.useEffect(() => {
-  //   fetch('http://192.168.1.99:8000/project-category')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log(data);
-  //       // const catData = data.map((item, index) => {
-  //       //   return {
-  //       //     label: item.category_name,
-  //       //     value: index,
-  //       //   };
-  //       // });
-  //       setProjectCategory(data);
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }, []);
+  React.useEffect(() => {
+    fetch('http://192.168.1.99:8000/api/project-category', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setProjectCategory(data);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
 
-  // fetch('http://192.168.1.99:8000/project-category', {
-  //   method: 'GET',
-  //   //Request Type
-  // })
-  //   .then(response => response.json())
-  //   .then(responseJson => {
-  //     console.log(responseJson);
-  //   })
-  //   .catch(error => {
-  //     console.error(error);
-  //   });
-
-  // fetch multiple api
-  // const fetchReq1 = fetch(`http://192.168.1.99:8000/project-category`).then(
-  //   res => res.json(),
-  // );
-  // const fetchReq2 = fetch(`http://192.168.1.99:8000/project-types`).then(res =>
-  //   res.json(),
-  // );
-  // fetchReq1.then(res => console.log(res));
-  // const allData = Promise.all([fetchReq1, fetchReq2]);
-  // allData.then(res => console.log(res));
-  //
-
-  // React.useEffect(() => {
-  //   fetch('http://192.168.1.99:8000/api/project-category', {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log(data);
-  //       setProjectCategory(data);
-  //     });
-  // }, []);
-  // const [projectCategory, setProjectCategory] = React.useState([]);
+  const [projectCategory, setProjectCategory] = React.useState([]);
 
   // create projects
   const [projectname, setProjectName] = React.useState('');
@@ -255,50 +217,48 @@ const ProjectsBanner = () => {
   //render projects
   function renderProjects() {
     const renderItem = ({item, index}) => (
-      <SafeAreaView>
-        <ScrollView nestedScrollEnabled={true} scrollEnabled={true}>
-          <TouchableOpacity
-            style={{marginVertical: SIZES.base}}
-            onPress={() => {
-              navigation.navigate('ProjectsDetails', {
-                name: item.project_name,
-              });
+      <TouchableOpacity
+        style={{marginVertical: SIZES.base}}
+        onPress={() => {
+          navigation.navigate('ProjectsDetails', {
+            name: item.project_name,
+          });
+        }}>
+        <View
+          style={{
+            borderRadius: SIZES.radius,
+            backgroundColor: COLORS.white2,
+            paddingHorizontal: SIZES.radius,
+            paddingVertical: SIZES.radius,
+            ...styles.shadow,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{...FONTS.h3, color: COLORS.black}}>
+                {index + 1}.
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 4,
+                  fontSize: 18,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                }}>
+                {item.project_name}
+              </Text>
+            </View>
             <View
               style={{
-                borderRadius: SIZES.radius,
-                backgroundColor: COLORS.white2,
-                paddingHorizontal: SIZES.radius,
-                paddingVertical: SIZES.radius,
-                ...styles.shadow,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{...FONTS.h3, color: COLORS.black}}>
-                    {index + 1}.
-                  </Text>
-                  <Text
-                    style={{
-                      marginLeft: 4,
-                      fontSize: 18,
-                      color: COLORS.darkGray,
-                      textTransform: 'capitalize',
-                    }}>
-                    {item.project_name}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  {/* <ImageBackground
+              {/* <ImageBackground
                     style={{
                       width: 18,
                       height: 18,
@@ -316,60 +276,59 @@ const ProjectsBanner = () => {
                       {index + 1}
                     </Text>
                   </ImageBackground> */}
-                  <TouchableOpacity
-                    onPress={() => {
-                      alert('All Notification Message Show in here...');
-                    }}>
-                    <Image
-                      source={icons.notification}
-                      style={{
-                        width: 15,
-                        height: 15,
-                        tintColor: COLORS.darkGray,
-                        right: 3,
-                      }}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      modalHandler(item._id);
-                      editpro(
-                        item.project_name,
-                        item.project_location,
-                        item.project_type,
-                        item.plot_area,
-                      );
-                    }}>
-                    <Image
-                      source={icons.menu}
-                      style={{
-                        width: 18,
-                        height: 18,
-                        tintColor: COLORS.darkGray,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <Text
-                style={{
-                  ...FONTS.body4,
-                  color: COLORS.gray,
+              <TouchableOpacity
+                onPress={() => {
+                  alert('All Notification Message Show in here...');
                 }}>
-                Project code - {index + 1}
-              </Text>
-              <Text
-                style={{
-                  ...FONTS.body4,
-                  color: COLORS.gray,
+                <Image
+                  source={icons.notification}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    tintColor: COLORS.darkGray,
+                    right: 3,
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  modalHandler(item._id);
+                  editpro(
+                    item.project_name,
+                    item.project_location,
+                    item.project_type,
+                    item.plot_area,
+                  );
                 }}>
-                Progress - 89%
-              </Text>
+                <Image
+                  source={icons.menu}
+                  style={{
+                    width: 18,
+                    height: 18,
+                    tintColor: COLORS.darkGray,
+                  }}
+                />
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </ScrollView>
-      </SafeAreaView>
+          </View>
+          <Text
+            style={{
+              ...FONTS.body4,
+              color: COLORS.gray,
+            }}>
+            Project code - {index + 1}
+          </Text>
+          <Text
+            style={{
+              ...FONTS.body4,
+              color: COLORS.gray,
+            }}>
+            Progress - 89%
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
+
     return (
       <FlatList
         contentContainerStyle={{
@@ -378,6 +337,9 @@ const ProjectsBanner = () => {
         data={projects}
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
+        scrollEnabled={true}
+        maxHeight={510}
+        showsVerticalScrollIndicator={false}
       />
     );
   }
@@ -716,70 +678,11 @@ const ProjectsBanner = () => {
           }}
         />
       </View>
-      <Collapsible collapsed={collapsed}>
-        <View>{renderProjects()}</View>
-      </Collapsible>
+      <Collapsible collapsed={collapsed}>{renderProjects()}</Collapsible>
       {/* create project modal  */}
       {renderCreateProjectModal()}
       {renderProjectCrudModal()}
     </TouchableOpacity>
-
-    // <TouchableOpacity
-    //   style={{
-    //     marginTop: SIZES.padding,
-    //     marginHorizontal: SIZES.padding,
-    //     paddingVertical: SIZES.radius,
-    //     paddingHorizontal: SIZES.padding,
-    //     backgroundColor: COLORS.lightblue_600,
-    //     borderRadius: SIZES.base,
-    //     ...styles.shadow,
-    //   }}
-    //   onPress={toggleExpanded}>
-    //   <View
-    //     style={{
-    //       flex: 1,
-    //       flexDirection: 'row',
-    //       alignItems: 'center',
-    //     }}>
-    //     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-    //       <Text style={{...FONTS.body2, color: COLORS.white}}>Projects</Text>
-    //       <TextButton
-    //         label="Create New"
-    //         disabled={false}
-    //         buttonContainerStyle={{
-    //           marginLeft: SIZES.padding * 3.7,
-    //           alignItems: 'center',
-    //           paddingHorizontal: SIZES.base,
-    //           paddingVertical: 3,
-    //           // padding: 5,
-    //           borderRadius: 8,
-    //           backgroundColor: COLORS.yellow_400,
-    //         }}
-    //         labelStyle={{
-    //           color: COLORS.black,
-    //           ...FONTS.body4,
-    //         }}
-    //         onPress={() => setCreateProjectModal(true)}
-    //       />
-    //     </View>
-    //     <Image
-    //       source={icons.down_arrow}
-    //       style={{
-    //         height: 18,
-    //         width: 18,
-    //         tintColor: COLORS.white,
-    //         marginLeft: SIZES.padding,
-    //       }}
-    //     />
-    //   </View>
-    //   <Collapsible collapsed={collapsed}>
-    //     <View>{renderProjects()}</View>
-    //   </Collapsible>
-
-    //   {/* create project modal  */}
-    //   {renderCreateProjectModal()}
-    //   {renderProjectCrudModal()}
-    // </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({

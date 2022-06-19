@@ -21,8 +21,8 @@ import ProjectWorksIdentifier from './Home/ProjectWorksIdentifier';
 import CheckList from './CheckList/CheckList';
 import Items from './Stock/Items/Items';
 import Unit from './Stock/Unit/Unit';
-import ProjectCategory from './Project/ProjectCategory';
-import ProjectTypes from './Project/ProjectTypes';
+import ProjectCategoriesAndTypes from './Project/ProjectCategoriesAndTypes';
+
 import CompanyTeam from './CompanyTeam/CompanyTeam';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import CompanyTeamShow from './Home/CompanyTeamShow';
@@ -50,8 +50,7 @@ export {
   CheckList,
   Items,
   Unit,
-  ProjectCategory,
-  ProjectTypes,
+  ProjectCategoriesAndTypes,
   CompanyTeam,
   ManageStock,
   CompanyTeamShow,

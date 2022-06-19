@@ -8,11 +8,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import {COLORS, FONTS, SIZES, icons, images} from '../../../constants';
-// import FilterModal from '../FilterModal/FilterModal';
 
 const ProjectProgressReview = ({customContainerStyle, history}) => {
-  //   const [showProgressFilterModal, setProgressFilterModal] = React.useState(false);
-
   const renderItem = ({item}) => (
     <TouchableOpacity
       style={{
@@ -52,6 +49,7 @@ const ProjectProgressReview = ({customContainerStyle, history}) => {
   return (
     <View
       style={{
+        flex: 1,
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
         padding: 20,
@@ -69,9 +67,7 @@ const ProjectProgressReview = ({customContainerStyle, history}) => {
         <Text style={{...FONTS.h2, color: COLORS.darkGray, flex: 1}}>
           Progress Review
         </Text>
-        <TouchableOpacity
-        // onPress={() => setProgressFilterModal(true)}
-        >
+        <TouchableOpacity>
           <Image
             source={icons.filter}
             style={{height: 20, width: 20, tintColor: COLORS.darkGray}}
@@ -80,10 +76,11 @@ const ProjectProgressReview = ({customContainerStyle, history}) => {
       </View>
       <FlatList
         contentContainerStyle={{marginTop: SIZES.radius}}
-        scrollEnabled={false}
         data={history}
         keyExtractor={item => `${item.id}`}
         renderItem={renderItem}
+        scrollEnabled={true}
+        maxHeight={100}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => {
           return (
@@ -97,12 +94,6 @@ const ProjectProgressReview = ({customContainerStyle, history}) => {
           );
         }}
       />
-      {/* {showProgressFilterModal && (
-        <FilterModal
-          isVisible={showProgressFilterModal}
-          onClose={() => setProgressFilterModal(false)}
-        />
-      )} */}
     </View>
   );
 };

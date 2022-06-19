@@ -53,8 +53,9 @@ const AssignedWorks = ({customContainerStyle, history}) => {
             ...FONTS.h3,
             color: COLORS.black,
             backgroundColor: COLORS.yellow_400,
-            paddingHorizontal: SIZES.radius,
-            paddingVertical: SIZES.base - 5,
+            padding: 5,
+            // paddingHorizontal: SIZES.base,
+            // paddingVertical: SIZES.base - 5,
             borderRadius: SIZES.base,
           }}>
           25

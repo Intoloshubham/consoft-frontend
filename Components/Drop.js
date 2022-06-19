@@ -42,7 +42,7 @@ const Drop = ({
           //   marginBottom: SIZES.base,
           borderWidth: null,
           width: '100%',
-          //   height: 45,
+          height: 45,
           paddingHorizontal: SIZES.padding,
           backgroundColor: COLORS.gray3,
           borderRadius: SIZES.base,

@@ -4,11 +4,10 @@ import AuthLayout from '../../Authentication/AuthLayout';
 import {FONTS, SIZES, COLORS, icons} from '../../../constants';
 import {FormInput, TextButton, CustomDropdown} from '../../../Components';
 import utils from '../../../utils';
-// import {add_users} from '../../../ApiStore/ApiStore';
 const url = 'http://192.168.1.99:8000/api/';
 import {HeaderBar} from '../../../Components';
 
-const SignUp = ({navigation}) => {
+const CompanyTeam = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
@@ -223,4 +222,4 @@ const SignUp = ({navigation}) => {
   );
 };
 
-export default SignUp;
+export default CompanyTeam;

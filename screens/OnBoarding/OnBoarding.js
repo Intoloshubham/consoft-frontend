@@ -77,7 +77,45 @@ const OnBoarding = ({navigation}) => {
         if (data.access_token) {
           showToast();
           setTimeout(() => {
-            navigation.navigate('UserDashboard');
+            if (data.role == 'Editor') {
+              navigation.navigate('Home');
+            } else {
+              navigation.navigate('UserDashboard');
+            }
+          }, 200);
+        }
+        if (!data.access_token) {
+          showToastError();
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  const companyOnSubmit = () => {
+    const data = {
+      mobile: companyMobileNo,
+      password: companyPassword,
+    };
+    console.log(data);
+    fetch('http://192.168.1.99:8000/api/company-login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // navigation.navigate('Home');
+        if (data.access_token) {
+          showToast();
+          setTimeout(() => {
+            if (data.role == 'Editor' || data.role == 'Administrator') {
+              navigation.navigate('Home');
+            }
           }, 200);
         }
         if (!data.access_token) {
@@ -288,6 +326,7 @@ const OnBoarding = ({navigation}) => {
               marginTop: SIZES.padding,
               borderRadius: SIZES.base,
             }}
+            onPress={companyOnSubmit}
           />
         </View>
         <View
