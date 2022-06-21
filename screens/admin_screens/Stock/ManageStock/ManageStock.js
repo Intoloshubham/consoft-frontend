@@ -290,48 +290,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
        <View style={{marginHorizontal:SIZES.padding}}> 
          <Card style={styles.card}>
           <Card.Content>
-<<<<<<< HEAD
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Title>Stock entry</Title>
-              <Button title="voucher" onPress={() => setmodalstock(true)} />
-              <Modal
-                animationType="slide"
-                transparent={false}
-                visible={modalstock}>
-                <View style={{backgroundColor: '#000000aa', flex: 1}}>
-                  <View
-                    style={{
-                      flex: 1,
-                      backgroundColor: '#fff',
-                      marginTop: 50,
-                      padding: 30,
-                      borderTopRightRadius: 30,
-                      borderTopLeftRadius: 30,
-                    }}>
-                    <View>
-                      <Pressable onPress={setmodalstock}>
-                        <Text
-                          style={{
-                            alignSelf: 'flex-end',
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                          }}>
-                          X
-                        </Text>
-                      </Pressable>
-                    </View>
-                    <ScrollView>
-                      <Card style={styles.card2}>
-                        <Card.Content>
-                          <TouchableOpacity onPress={() => setunitmodal(true)}>
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                justifyContent: 'flex-end',
-                              }}>
-                              <Text
-=======
               <View
                  style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Title>Stock entry</Title>
@@ -368,7 +326,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                             <TouchableOpacity
                               onPress={() => setunitmodal(true)}>
                               <View
->>>>>>> 94543fa2e1910b67598eb44acdc9059cf899c1b1
                                 style={{
                                   ...FONTS.body3,
                                   borderWidth: 1,
@@ -483,8 +440,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                                             />
                                           </Card.Content>
                                         </Card>
-<<<<<<< HEAD
-=======
                                         <View>
                                           <Card style={{borderWidth: 1}}>
                                             <Card.Content>
@@ -557,7 +512,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                                             </Card.Content>
                                           </Card>
                                         </View>
->>>>>>> 94543fa2e1910b67598eb44acdc9059cf899c1b1
                                       </View>
                                     </View>
                                   </View>
@@ -626,24 +580,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                             }}
                           />
 
-<<<<<<< HEAD
-                          <TextButton
-                            label="save"
-                            buttonContainerStyle={{
-                              height: 45,
-                              borderRadius: SIZES.radius,
-                              marginTop: SIZES.padding,
-                            }}
-                            onPress={() => saveStock()}
-                          />
-                        </Card.Content>
-                      </Card>
-                    </ScrollView>
-                  </View>
-                </View>
-              </Modal>
-            </View>
-=======
                             <TextButton
                               label="save"
                               buttonContainerStyle={{
@@ -662,7 +598,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                 </Modal>
               </View>
             
->>>>>>> 94543fa2e1910b67598eb44acdc9059cf899c1b1
           </Card.Content>
         </Card> 
         <View
