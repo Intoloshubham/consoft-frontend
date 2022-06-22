@@ -38,6 +38,18 @@ const contractorsDetails = [
     email: 'demo3@gmail.com',
     mobile: 9988776655,
   },
+  {
+    id: 4,
+    name: 'Demo 1',
+    email: 'demo1@gmail.com',
+    mobile: 9988776655,
+  },
+  {
+    id: 5,
+    name: 'Demo 2',
+    email: 'demo2@gmail.com',
+    mobile: 9988776655,
+  },
 ];
 
 const Contractors = () => {
@@ -295,7 +307,7 @@ const Contractors = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,
@@ -314,10 +326,11 @@ const Contractors = () => {
           ...styles.shadow,
         }}>
         <FlatList
-          scrollEnabled={false}
           data={contractorsDetails}
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
+          scrollEnabled={true}
+          maxHeight={510}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
