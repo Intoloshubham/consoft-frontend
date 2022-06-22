@@ -37,7 +37,9 @@ import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
 import user_tabs from './navigation/user_tabs';
 
-global.apiurl = 'http://192.168.1.99:8000/api';
+//setup redux
+import { store } from './app/store';
+import { Provider } from 'react-redux';
 
 const Stack = createStackNavigator();
 
@@ -102,4 +104,13 @@ const App = () => {
   );
 };
 
-export default App;
+// export default App;
+
+//for redux
+export default () => {
+  return(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+}
