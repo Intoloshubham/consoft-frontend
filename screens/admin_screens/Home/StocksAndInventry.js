@@ -114,10 +114,11 @@ const StocksAndInventry = () => {
           ...styles.shadow,
         }}>
         <FlatList
-          scrollEnabled={false}
           data={stockdetails}
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
+          scrollEnabled={true}
+          maxHeight={510}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
@@ -305,7 +306,7 @@ const StocksAndInventry = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

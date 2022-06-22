@@ -111,7 +111,10 @@ const ToolsAndMachinery = () => {
         <FlatList
           data={tools}
           keyExtractor={item => `${item.id}`}
+          scrollEnabled={true}
+          maxHeight={510}
           renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
               <View
@@ -254,7 +257,7 @@ const ToolsAndMachinery = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

@@ -43,6 +43,20 @@ const teamdetail = [
     mobile: 9988776655,
     designation: 'Engineer',
   },
+  {
+    id: 4,
+    name: 'Shivam Verma',
+    email: 'shivam@gmail.com',
+    mobile: 9988776655,
+    designation: 'Engineer',
+  },
+  {
+    id: 5,
+    name: 'Rahul Shrivastav',
+    email: 'rahul@gmail.com',
+    mobile: 9988776655,
+    designation: 'Architect',
+  },
 ];
 const ProjectTeam = () => {
   const navigation = useNavigation();
@@ -154,10 +168,11 @@ const ProjectTeam = () => {
         {/* <Text style={{...FONTS.h2, color: COLORS.darkGray}}>List</Text> */}
         <FlatList
           contentContainerStyle={{marginTop: SIZES.radius}}
-          scrollEnabled={false}
           data={teamdetails}
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
+          scrollEnabled={true}
+          maxHeight={510}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
@@ -348,7 +363,7 @@ const ProjectTeam = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,
