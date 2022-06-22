@@ -4,7 +4,7 @@ import AuthLayout from '../../Authentication/AuthLayout';
 import {FONTS, SIZES, COLORS, icons} from '../../../constants';
 import {FormInput, TextButton, CustomDropdown} from '../../../Components';
 import utils from '../../../utils';
-const url = 'http://192.168.1.99:8000/api/';
+import Config from '../../../config';
 import {HeaderBar} from '../../../Components';
 
 const CompanyTeam = ({navigation}) => {
@@ -36,7 +36,7 @@ const CompanyTeam = ({navigation}) => {
       password: password,
     };
 
-    fetch(url, {
+    fetch(`${Config.API_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -327,117 +327,53 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                               onPress={() => setunitmodal(true)}>
                               <View
                                 style={{
-                                  ...FONTS.body3,
-                                  borderWidth: 1,
-                                  paddingLeft: 10,
-                                  paddingRight: 10,
-                                  fontWeight: 'bold',
-                                  borderRadius: 5,
+                                  flexDirection: 'row',
+                                  justifyContent: 'flex-end',
                                 }}>
-                                add item
-                              </Text>
-                              <Modal
-                                animationType="slide"
-                                transparent={false}
-                                visible={unitmodal}>
-                                <View
+                                <Text
                                   style={{
-                                    backgroundColor: '#000000aa',
-                                    flex: 1,
+                                    ...FONTS.body3,
+                                    borderWidth: 1,
+                                    paddingLeft: 10,
+                                    paddingRight: 10,
+                                    fontWeight: 'bold',
+                                    borderRadius: 5,
                                   }}>
+                                  add item
+                                </Text>
+                                <Modal
+                                  animationType="slide"
+                                  transparent={false}
+                                  visible={unitmodal}>
                                   <View
                                     style={{
-                                      backgroundColor: '#fff',
+                                      backgroundColor: '#000000aa',
                                       flex: 1,
-                                      marginTop: 40,
-                                      padding: 20,
-                                      borderRadius: 20,
                                     }}>
-                                    <View>
-                                      <Pressable onPress={setunitmodal}>
-                                        <Text
-                                          style={{
-                                            alignSelf: 'flex-end',
-                                            fontSize: 20,
-                                            fontWeight: 'bold',
-                                          }}>
-                                          X
-                                        </Text>
-                                      </Pressable>
-                                    </View>
-                                    <View>
-                                      <Card>
-                                        <Card.Content>
-                                          <Title>Item</Title>
-                                        </Card.Content>
-                                      </Card>
+                                    <View
+                                      style={{
+                                        backgroundColor: '#fff',
+                                        flex: 1,
+                                        marginTop: 40,
+                                        padding: 20,
+                                        borderRadius: 20,
+                                      }}>
                                       <View>
-                                        <Card style={{borderWidth: 1}}>
+                                        <Pressable onPress={setunitmodal}>
+                                          <Text
+                                            style={{
+                                              alignSelf: 'flex-end',
+                                              fontSize: 20,
+                                              fontWeight: 'bold',
+                                            }}>
+                                            X
+                                          </Text>
+                                        </Pressable>
+                                      </View>
+                                      <View>
+                                        <Card>
                                           <Card.Content>
-                                            <FormInput
-                                              label="Item name"
-                                              onChange={itemname => {
-                                                setItemname(itemname);
-                                              }}
-                                            />
-
-                                            <Dropdown
-                                              style={[
-                                                styles.dropdowns,
-                                                isFocusunit && {
-                                                  borderColor: 'blue',
-                                                },
-                                              ]}
-                                              placeholderStyle={
-                                                styles.placeholderStyle
-                                              }
-                                              selectedTextStyle={
-                                                styles.selectedTextStyle
-                                              }
-                                              inputSearchStyle={
-                                                styles.inputSearchStyle
-                                              }
-                                              iconStyle={styles.iconStyle}
-                                              data={dataunit}
-                                              search
-                                              maxHeight={300}
-                                              labelField="unit_name"
-                                              valueField="_id"
-                                              placeholder={
-                                                !isFocus ? 'Select unit' : '...'
-                                              }
-                                              searchPlaceholder="Search..."
-                                              value={valueunit}
-                                              onFocus={() =>
-                                                setIsFocusunit(true)
-                                              }
-                                              onBlur={() =>
-                                                setIsFocusunit(false)
-                                              }
-                                              onChange={item => {
-                                                console.log(item);
-                                                setValueunit(item._id);
-
-                                                setIsFocusunit(false);
-                                              }}
-                                              // renderLeftIcon={() => (
-                                              //   <AntDesign
-                                              //     style={styles.icon}
-                                              //     color={isFocus ? 'blue' : 'black'}
-                                              //     name="Safety"
-                                              //     size={20}
-                                              //   />
-                                              // )}
-                                            />
-                                            <TextButton
-                                              label="Add item"
-                                              buttonContainerStyle={{
-                                                height: 45,
-                                                borderRadius: SIZES.radius,
-                                                marginTop: SIZES.padding,
-                                              }}
-                                              onPress={() => addstockitem()}
-                                            />
+                                            <Title>Item</Title>
                                           </Card.Content>
                                         </Card>
                                         <View>
@@ -515,70 +451,69 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                                       </View>
                                     </View>
                                   </View>
-                                </View>
-                              </Modal>
-                            </View>
-                          </TouchableOpacity>
-                          <Dropdown
-                            style={[
-                              styles.dropdown,
-                              isFocus && {borderColor: 'blue'},
-                            ]}
-                            placeholderStyle={styles.placeholderStyle}
-                            selectedTextStyle={styles.selectedTextStyle}
-                            inputSearchStyle={styles.inputSearchStyle}
-                            iconStyle={styles.iconStyle}
-                            data={data}
-                            search
-                            maxHeight={300}
-                            labelField="item_name"
-                            valueField="_id"
-                            placeholder={!isFocus ? 'Select item' : '...'}
-                            searchPlaceholder="Search..."
-                            value={value}
-                            onFocus={() => setIsFocus(true)}
-                            onBlur={() => setIsFocus(false)}
-                            onChange={item => {
-                              // console.log(item.unit_id);
-                              setValue(item._id);
-                              setunitname(item.unit_id);
-                              setIsFocus(false);
-                            }}
-                            // renderLeftIcon={() => (
-                            //   <AntDesign
-                            //     style={styles.icon}
-                            //     color={isFocus ? 'blue' : 'black'}
-                            //     name="Safety"
-                            //     size={20}
-                            //   />
-                            // )}
-                          />
-                          <View style={{justifyContent: 'space-between'}}>
-                            <TextInput
-                              style={styles.input}
-                              editable={false}
-                              selectTextOnFocus={false}
-                              placeholder={unitname}
+                                </Modal>
+                              </View>
+                            </TouchableOpacity>
+                            <Dropdown
+                              style={[
+                                styles.dropdown,
+                                isFocus && {borderColor: 'blue'},
+                              ]}
+                              placeholderStyle={styles.placeholderStyle}
+                              selectedTextStyle={styles.selectedTextStyle}
+                              inputSearchStyle={styles.inputSearchStyle}
+                              iconStyle={styles.iconStyle}
+                              data={data}
+                              search
+                              maxHeight={300}
+                              labelField="item_name"
+                              valueField="_id"
+                              placeholder={!isFocus ? 'Select item' : '...'}
+                              searchPlaceholder="Search..."
+                              value={value}
+                              onFocus={() => setIsFocus(true)}
+                              onBlur={() => setIsFocus(false)}
+                              onChange={item => {
+                                // console.log(item.unit_id);
+                                setValue(item._id);
+                                setunitname(item.unit_id);
+                                setIsFocus(false);
+                              }}
+                              // renderLeftIcon={() => (
+                              //   <AntDesign
+                              //     style={styles.icon}
+                              //     color={isFocus ? 'blue' : 'black'}
+                              //     name="Safety"
+                              //     size={20}
+                              //   />
+                              // )}
                             />
+                            <View style={{justifyContent: 'space-between'}}>
+                              <TextInput
+                                style={styles.input}
+                                editable={false}
+                                selectTextOnFocus={false}
+                                placeholder={unitname}
+                              />
+                              <FormInput
+                                label="Quantity"
+                                onChange={qty => {
+                                  setqty(qty);
+                                }}
+                              />
+                            </View>
                             <FormInput
-                              label="Quantity"
-                              onChange={qty => {
-                                setqty(qty);
+                              label="Supplier/Vendor"
+                              onChange={location => {
+                                setlocation(location);
                               }}
                             />
-                          </View>
-                          <FormInput
-                            label="Supplier/Vendor"
-                            onChange={location => {
-                              setlocation(location);
-                            }}
-                          />
-                          <FormInput
-                            label="Vehicle no"
-                            onChange={vehicle => {
-                              setvehicle(vehicle);
-                            }}
-                          />
+                            <FormInput
+                              label="Vehicle no"
+                              onChange={vehicle => {
+                                setvehicle(vehicle);
+                              }}
+                            />
 
                             <TextButton
                               label="save"

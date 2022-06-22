@@ -16,6 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {FormInput, TextButton} from '../../Components';
 import utils from '../../utils';
 import Toast from 'react-native-toast-message';
+import Config from '../../config';
 
 const Login = ({navigation}) => {
   const makeCall = () => {
@@ -74,7 +75,7 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     console.log(data);
-    fetch(`${Apis.API_URL.BASE_URL}/login`, {
+    fetch(`${Config.API_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -105,7 +106,7 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
     console.log(Companydata);
-    fetch(`${Apis.API_URL.BASE_URL}/company-login`, {
+    fetch(`${Config.API_URL}/company-login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

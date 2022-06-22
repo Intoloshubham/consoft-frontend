@@ -12,6 +12,7 @@ import {
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons, Apis} from '../../../constants';
 import {IconButton, FormInput, Drop, TextButton} from '../../../Components';
+import Config from '../../../config';
 
 const WorkAssignModal = ({isVisible, onClose}) => {
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
@@ -41,7 +42,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
 
   // api call for getting roles
   React.useEffect(() => {
-    fetch(`${Apis.API_URL.BASE_URL}/role`, {
+    fetch(`${Config.API_URL}/role`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +60,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
 
   // get assign works
   React.useEffect(() => {
-    fetch(`${Apis.API_URL.BASE_URL}/assign-works`, {
+    fetch(`${Config.API_URL}/assign-works`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +84,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
       work: assignWork,
     };
 
-    fetch(`${Apis.API_URL.BASE_URL}/assign-works`, {
+    fetch(`${Config.API_URL}/assign-works`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -201,6 +202,8 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
+              zIndex={5000}
+              zIndexInverse={1000}
             />
             <Drop
               placeholder="Select"
@@ -210,11 +213,13 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               setOpen={setOpenUser}
               setValue={setUserValue}
               setItems={setUserItems}
-              multiple={true}
+              // multiple={true}
               categorySelectable={true}
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
+              zIndex={3000}
+              zIndexInverse={1000}
             />
             <FormInput
               inputStyle={{width: 200}}

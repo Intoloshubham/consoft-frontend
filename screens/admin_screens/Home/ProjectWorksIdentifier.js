@@ -17,8 +17,8 @@ const ProjectWorksIdentifier = () => {
     <View
       style={{
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: SIZES.base,
       }}>
       <Text
         style={{
@@ -32,7 +32,8 @@ const ProjectWorksIdentifier = () => {
         source={item.img}
         style={{
           height: 12,
-          width: 30,
+          width: 25,
+          borderRadius: SIZES.base,
         }}
       />
     </View>
@@ -47,7 +48,7 @@ const ProjectWorksIdentifier = () => {
         backgroundColor: COLORS.lightblue_50,
         ...styles.shadow,
       }}>
-      <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Work Tasks</Text>
+      <Text style={{...FONTS.h3, color: COLORS.black}}>Work Tasks</Text>
       <FlatList
         contentContainerStyle={{marginTop: SIZES.radius}}
         scrollEnabled={false}
@@ -61,7 +62,7 @@ const ProjectWorksIdentifier = () => {
               style={{
                 width: '100%',
                 height: 1,
-                backgroundColor: COLORS.gray2,
+                backgroundColor: COLORS.lightGray1,
                 marginVertical: 5,
               }}></View>
           );

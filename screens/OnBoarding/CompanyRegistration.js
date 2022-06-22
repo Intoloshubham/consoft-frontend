@@ -6,6 +6,7 @@ import utils from '../../utils';
 import {COLORS, images, icons, SIZES, Apis} from '../../constants';
 import {FormInput, TextButton} from '../../Components';
 import Toast from 'react-native-toast-message';
+import Config from '../../config';
 
 const CompanyRegistration = ({navigation}) => {
   const [cName, setCName] = React.useState('');
@@ -61,7 +62,7 @@ const CompanyRegistration = ({navigation}) => {
 
     console.log(data);
 
-    fetch(`${Apis.API_URL.BASE_URL}/company`, {
+    fetch(`${Config.API_URL}/company`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

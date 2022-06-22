@@ -14,6 +14,8 @@ const Drop = ({
   categorySelectable,
   listParentLabelStyle,
   multiple,
+  zIndex,
+  zIndexInverse,
 }) => {
   //   const [open, setOpen] = React.useState(false);
   //   const [value, setValue] = React.useState([]);
@@ -49,7 +51,7 @@ const Drop = ({
         }}
         dropDownContainerStyle={{
           marginTop: SIZES.padding,
-          backgroundColor: COLORS.lightblue_400,
+          backgroundColor: COLORS.lightblue_800,
           borderWidth: null,
         }}
         textStyle={{
@@ -90,6 +92,8 @@ const Drop = ({
           height: 15,
           backgroundColor: COLORS.white,
         }}
+        zIndex={zIndex}
+        zIndexInverse={zIndexInverse}
       />
     </View>
   );

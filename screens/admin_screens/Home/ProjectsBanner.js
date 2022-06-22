@@ -17,6 +17,7 @@ import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
 import {COLORS, SIZES, FONTS, icons, Apis} from '../../../constants';
 import Toast from 'react-native-toast-message';
+import Config from '../../../config';
 
 const ProjectsBanner = () => {
   const navigation = useNavigation();
@@ -30,7 +31,7 @@ const ProjectsBanner = () => {
   };
   // get projects
   React.useEffect(() => {
-    fetch(`${Apis.API_URL.BASE_URL}/projects`, {
+    fetch(`${Config.API_URL}/projects`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ const ProjectsBanner = () => {
 
   // // project categories
   React.useEffect(() => {
-    fetch(`${Apis.API_URL.BASE_URL}/project-category`, {
+    fetch(`${Config.API_URL}/project-category`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ const ProjectsBanner = () => {
 
   // project types
   React.useEffect(() => {
-    fetch(`${Apis.API_URL.BASE_URL}/project-type`, {
+    fetch(`${Config.API_URL}/project-type`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -141,7 +142,7 @@ const ProjectsBanner = () => {
       project_measurement: value2,
     };
 
-    fetch(url, {
+    fetch(`${Config.API_URL}/projects`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -173,7 +174,7 @@ const ProjectsBanner = () => {
   // delete projects
   const OnDeleteSubmit = () => {
     alert(data);
-    fetch('http://192.168.1.99:8000/api/projects/' + `${data}`, {
+    fetch(`${Config.API_URL}/projects` + `${data}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -194,7 +195,7 @@ const ProjectsBanner = () => {
       project_measurement: value2,
     };
 
-    fetch('http://192.168.1.99:8000/api/projects' + `/${data}`, {
+    fetch(`${Config.API_URL}/projects` + `/${data}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -467,6 +468,8 @@ const ProjectsBanner = () => {
                       setOpen={setOpen}
                       setValue={setValue}
                       setItems={setProjectCategory}
+                      zIndex={7000}
+                      zIndexInverse={1000}
                     />
 
                     <Drop
@@ -477,6 +480,8 @@ const ProjectsBanner = () => {
                       setOpen={setOpen1}
                       setValue={setValue1}
                       setItems={setProjectType}
+                      zIndex={7000}
+                      zIndexInverse={1000}
                     />
                     <View
                       style={{
@@ -621,7 +626,7 @@ const ProjectsBanner = () => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <Text style={{...FONTS.body2, color: COLORS.white}}>Projects</Text>
+        <Text style={{fontSize: 20, color: COLORS.white}}>Projects</Text>
         <TextButton
           label="Create New"
           disabled={false}

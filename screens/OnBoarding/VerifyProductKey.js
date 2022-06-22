@@ -5,6 +5,7 @@ import {COLORS, images, SIZES, icons, Apis} from '../../constants';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
 import {FormInput, TextButton} from '../../Components';
+import Config from '../../config';
 
 const VerifyProductKey = ({navigation}) => {
   const [productKey, setProductKey] = React.useState('');
@@ -15,7 +16,7 @@ const VerifyProductKey = ({navigation}) => {
       product_key: productKey,
       company_id: '62af20782d72412828766b66',
     };
-    fetch(`${Apis.API_URL.BASE_URL}/verify-product-key`, {
+    fetch(`${Config.API_URL}/verify-product-key`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
