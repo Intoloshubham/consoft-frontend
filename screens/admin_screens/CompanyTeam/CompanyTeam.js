@@ -4,11 +4,10 @@ import AuthLayout from '../../Authentication/AuthLayout';
 import {FONTS, SIZES, COLORS, icons} from '../../../constants';
 import {FormInput, TextButton, CustomDropdown} from '../../../Components';
 import utils from '../../../utils';
-// import {add_users} from '../../../ApiStore/ApiStore';
-const url = 'http://192.168.1.99:8000/api/';
+import Config from '../../../config';
 import {HeaderBar} from '../../../Components';
 
-const SignUp = ({navigation}) => {
+const CompanyTeam = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
@@ -19,6 +18,9 @@ const SignUp = ({navigation}) => {
   const [usernameError, setUsernameError] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
+
+  //redux
+  const [registerCompany] = useRegisterCompanyMutation();
 
   // dropdown
   const data = [
@@ -37,20 +39,25 @@ const SignUp = ({navigation}) => {
       password: password,
     };
 
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.error(error.message);
-      });
+    const res = registerCompany(data);
+    console.log(res);
+
+    // fetch(url, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //   })
+    //   .catch(error => {
+    //     console.error(error.message);
+    //   });
+
+
   };
 
   return (
@@ -223,4 +230,4 @@ const SignUp = ({navigation}) => {
   );
 };
 
-export default SignUp;
+export default CompanyTeam;

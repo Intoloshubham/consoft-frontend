@@ -43,6 +43,13 @@ const CompanyTeam = [
     mobile: 9988776655,
     designation: 'Engineer',
   },
+  {
+    id: 4,
+    name: 'Shivam Verma',
+    email: 'shivam@gmail.com',
+    mobile: 9988776655,
+    designation: 'Engineer',
+  },
 ];
 const ProjectCompanyShow = () => {
   React.useEffect(() => {
@@ -146,10 +153,11 @@ const ProjectCompanyShow = () => {
         </Text> */}
         <FlatList
           contentContainerStyle={{marginTop: SIZES.radius}}
-          scrollEnabled={false}
           data={comTeamDetails}
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
+          scrollEnabled={true}
+          maxHeight={510}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
@@ -339,7 +347,7 @@ const ProjectCompanyShow = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

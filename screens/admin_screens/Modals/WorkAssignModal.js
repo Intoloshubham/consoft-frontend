@@ -10,16 +10,17 @@ import {
   Image,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons, Apis} from '../../../constants';
 import {IconButton, FormInput, Drop, TextButton} from '../../../Components';
+import Config from '../../../config';
 
 const WorkAssignModal = ({isVisible, onClose}) => {
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const [showCreateProjectModal, setCreateProjectModal] =
+  const [showAssignWorkModal, setShowAssignWorkModal] =
     React.useState(isVisible);
 
   React.useEffect(() => {
-    if (showCreateProjectModal) {
+    if (showAssignWorkModal) {
       Animated.timing(modalAnimatedValue, {
         toValue: 1,
         duration: 500,
@@ -32,29 +33,99 @@ const WorkAssignModal = ({isVisible, onClose}) => {
         useNativeDriver: false,
       }).start(() => onClose());
     }
-  }, [showCreateProjectModal]);
+  }, [showAssignWorkModal]);
 
   const modalY = modalAnimatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [SIZES.height, SIZES.height - 650],
   });
 
+  // api call for getting roles
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}/role`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        let rolesFromApi = data.map(team => {
+          return {label: team.user_role, value: team._id};
+        });
+        setRoleItems(rolesFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+
+  // get assign works
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}/assign-works`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // let rolesFromApi = data.map(team => {
+        //   return {label: team.user_role, value: team._id};
+        // });
+        // setRoleItems(rolesFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+  // post data from api
+  const OnSubmit = () => {
+    const data = {
+      role_id: roleValue,
+      list: userValue,
+      work: assignWork,
+    };
+
+    fetch(`${Config.API_URL}/assign-works`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        if (data.status == 200) {
+          setTimeout(() => {
+            setShowAssignWorkModal(false);
+          }, 1000);
+        }
+        // showToast();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
   //form data
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
-  const [items, setItems] = React.useState([
-    {label: 'Engineer', value: '1'},
-    {label: 'Maneger', value: '2'},
-    {label: 'Supervisor', value: '3'},
-    {label: 'Asst. Supervisor', value: '4'},
-    {label: 'Site Engineer', value: '5'},
-    {label: 'Other staff', value: '6'},
+  const [openRole, setOpenRole] = React.useState(false);
+  const [roleValue, setRoleValue] = React.useState([]);
+  const [roleItems, setRoleItems] = React.useState([]);
+
+  // second from users
+  const [openUser, setOpenUser] = React.useState(false);
+  const [userValue, setUserValue] = React.useState([]);
+  const [userItems, setUserItems] = React.useState([
+    {label: 'User 1', value: 'User1'},
+    {label: 'User 2', value: 'User2'},
+    {label: 'User 3', value: 'User3'},
+    {label: 'User 4', value: 'User4'},
+    {label: 'User 5', value: 'User5'},
   ]);
-  const [projectTeamname, setProjectTeamName] = React.useState('');
-  const [projectTeamNameError, setProjectTeamNameError] = React.useState('');
+  const [assignWork, setAssignWork] = React.useState('');
+  const [assignWorkError, setAssignWorkError] = React.useState('');
 
   function isEnableSubmit() {
-    return projectTeamname != '' && projectTeamNameError == '';
+    return assignWork != '' && assignWorkError == '';
   }
 
   // document picker
@@ -78,7 +149,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
         {/* transparent background */}
-        <TouchableWithoutFeedback onPress={() => setCreateProjectModal(false)}>
+        <TouchableWithoutFeedback onPress={() => setShowAssignWorkModal(false)}>
           <View
             style={{
               position: 'absolute',
@@ -114,23 +185,41 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               iconStyle={{
                 tintColor: COLORS.gray,
               }}
-              onPress={() => setCreateProjectModal(false)}
+              onPress={() => setShowAssignWorkModal(false)}
             />
           </View>
           {/* <WorkAssign /> */}
           <ScrollView>
             <Drop
               placeholder="Select"
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
+              open={openRole}
+              value={roleValue}
+              items={roleItems}
+              setOpen={setOpenRole}
+              setValue={setRoleValue}
+              setItems={setRoleItems}
               categorySelectable={true}
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
+              zIndex={5000}
+              zIndexInverse={1000}
+            />
+            <Drop
+              placeholder="Select"
+              open={openUser}
+              value={userValue}
+              items={userItems}
+              setOpen={setOpenUser}
+              setValue={setUserValue}
+              setItems={setUserItems}
+              // multiple={true}
+              categorySelectable={true}
+              listParentLabelStyle={{
+                color: COLORS.white,
+              }}
+              zIndex={3000}
+              zIndexInverse={1000}
             />
             <FormInput
               inputStyle={{width: 200}}
@@ -140,7 +229,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               keyboardType="default"
               autoCompleteType="username"
               onChange={value => {
-                setProjectTeamName(value);
+                setAssignWork(value);
               }}
             />
 
@@ -200,7 +289,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                 marginTop: SIZES.padding * 1.5,
                 borderRadius: SIZES.radius,
               }}
-              onPress={() => alert('Okay...')}
+              onPress={() => OnSubmit()}
             />
           </ScrollView>
         </Animated.View>

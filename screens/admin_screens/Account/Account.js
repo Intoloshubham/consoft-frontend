@@ -233,6 +233,12 @@ const Account = () => {
           value="Project Team"
           image={icons.right_arr}
         />
+        <ProfileValue
+          icon={icons.p_team}
+          value="Categories & Types"
+          image={icons.right_arr}
+          onPress={() => navigation.navigate('CategoryandType')}
+        />
       </View>
     );
   }
