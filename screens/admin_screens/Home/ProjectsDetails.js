@@ -4,75 +4,32 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  Button,
   Image,
   StyleSheet,
 } from 'react-native';
 import {COLORS, SIZES, FONTS, images, icons} from '../../../constants';
-import {TextButton, HeaderBar, FloatingButton} from '../../../Components';
+import {TextButton, HeaderBar} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
 
 const ProjectsDetails = ({route}) => {
   const navigation = useNavigation();
-  const proDetails = [
+  const ProjectList = [
     {id: 1, img: icons.p_team, name: 'Company Team'},
     {id: 2, img: icons.p_team, name: 'Project Team'},
     {id: 3, img: icons.contr, name: 'Contractors'},
     {id: 4, img: icons.stock, name: 'Stock / Inventry'},
     {id: 5, img: icons.machine, name: 'Tools & Machinery'},
-    {id: 6, img: icons.report1, name: 'Reports'},
-    {id: 7, img: icons.time_seh, name: 'Project Sehedule & Timeline'},
-  ];
-  const ProjectData = [
-    {
-      id: 1,
-      img: images.profile,
-      name: 'Demo Project 1',
-      start_date: '10/05/2022',
-      total_contractor: 5,
-      total_staf: 20,
-      work_progress: '40%',
-    },
-    {
-      id: 2,
-      img: images.profile,
-      name: 'Demo  Project 2',
-      start_date: '10/05/2022',
-      total_contractor: 1,
-      total_staf: 25,
-      work_progress: '90%',
-    },
-    {
-      id: 3,
-      img: images.profile,
-      name: 'Demo  Project 3',
-      start_date: '10/05/2022',
-      total_contractor: 6,
-      total_staf: 65,
-      work_progress: '99%',
-    },
-    {
-      id: 4,
-      img: images.profile,
-      name: 'Demo  Project 4',
-      start_date: '10/05/2022',
-      total_contractor: 9,
-      total_staf: 71,
-      work_progress: '65%',
-    },
+    {id: 6, img: icons.time_seh, name: 'Sehedule & Timeline'},
   ];
 
   //get name of project from project banner screen using params
   const {name} = route.params; //
-
   const [showWorkModal, setWorkModal] = React.useState(false);
-
-  const [dummydetails, setDummyDetails] = React.useState(proDetails);
-  const [projectdetails, setProjectDetails] = React.useState(ProjectData);
+  const [projects, setProjects] = React.useState(ProjectList);
 
   function renderProjectDetails() {
-    const renderItem = ({item, index}) => (
+    const renderItem = ({item}) => (
       <TouchableOpacity
         style={{
           flexDirection: 'row',
@@ -91,8 +48,6 @@ const ProjectsDetails = ({route}) => {
             : item.id == 5
             ? navigation.navigate('ToolsAndMachinery')
             : item.id == 6
-            ? navigation.navigate('ProjectReports')
-            : item.id == 7
             ? navigation.navigate('ProjectSeheduleTime')
             : null;
         }}>
@@ -114,6 +69,7 @@ const ProjectsDetails = ({route}) => {
             style={{
               ...FONTS.h3,
               color: COLORS.darkGray,
+              textTransform: 'capitalize',
             }}>
             {item.name}
           </Text>
@@ -139,16 +95,12 @@ const ProjectsDetails = ({route}) => {
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
-        {/* <View style={{alignItems: 'center', marginBottom: SIZES.radius * 3}}>
-          <Text style={{...FONTS.h2, color: COLORS.in_orange}}>
-            Progress Review
-          </Text>
-        </View> */}
         <FlatList
-          scrollEnabled={false}
-          data={dummydetails}
+          data={projects}
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
+          maxHeight={510}
+          scrollEnabled={true}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
@@ -171,7 +123,7 @@ const ProjectsDetails = ({route}) => {
       <TextButton
         label="Assign Work"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

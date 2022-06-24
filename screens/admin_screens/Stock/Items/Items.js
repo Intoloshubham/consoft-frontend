@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
 import {COLORS, FONTS, SIZES} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+
 
 const url = 'http://192.168.1.99:8000/api/item';
 
@@ -27,15 +27,19 @@ const Items = () => {
   // modal
   const [itemmodal, setItemmodal] = React.useState(false);
   const [unitmodal, setunitmodal] = React.useState(false);
+  const [updateitemmodal, setupdateitemmodal] = useState(false);
 
   const [unitname, setUnitname] = React.useState('');
- 
+
   const [data, setdata] = React.useState([]);
 
   const [datalist, setdatalist] = React.useState([]);
 
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState('');
+  
   const [isFocus, setIsFocus] = React.useState(false);
+
+  const [itemid, setitemid] = React.useState('');
 
   const fetchData = async () => {
     const resp = await fetch('http://192.168.1.99:8000/api/unit');
@@ -47,7 +51,7 @@ const Items = () => {
   const listData = async () => {
     const resp = await fetch('http://192.168.1.99:8000/api/item');
     const data = await resp.json();
-    //  console.log(data);
+    //console.log(data);
     setdatalist(data);
   };
 
@@ -120,19 +124,69 @@ const Items = () => {
       });
   }
 
-        const DeleteItem = async item_id => {
-            var id = item_id;
-            let result = await fetch('http://192.168.1.99:8000/api/item/' + id,{
-              method: 'DELETE',
-            });
-            result = await result.json();
-            listData();
-            console.log(result, alert('this item  deleted '));
-          };
+  const DeleteItem = async item_id => {
+    var id = item_id;
+    let result = await fetch('http://192.168.1.99:8000/api/item/' + id, {
+      method: 'DELETE',
+    });
+    result = await result.json();
+    listData();
+    console.log(result, alert('this item  deleted '));
+  };
 
-          // edit modal api 
+  // edit modal api
+    const edititem = (id, name,unit_id)=>{
+      setupdateitemmodal(true);
+      setitemid(id);
+      // console.log(id);
+      setItemname(name);
+      // console.log(name);
+       setValue(unit_id);
+      //  console.log(unit_id);
+    }
 
-
+    const updateItem = (e) => {
+      const updateItemdata = {
+        item_name: itemname,
+        unit_id:value
+      }
+      // 
+        fetch('http://192.168.1.99:8000/api/item/'+itemid,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateItemdata),
+      })
+        .then(response =>{ response.json()})
+        .then(data => {
+          listData();
+          setItemname('');
+          setValue('');
+          console.log('Success:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+        ///
+        // fetch('http://192.168.1.99:8000/api/item/'+itemid, {
+        //   method: 'PUT',
+        //   headers: {
+        //     Accept: 'application/json',
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify(
+        //     // item_name: itemname,
+        //     // unit_id: value 
+        //     updateItemdata
+        //   )
+        // }).then(data=>console.log(data))
+        ////
+        
+    
+    
 
 
   const renderItem = ({item}) => {
@@ -144,7 +198,12 @@ const Items = () => {
             <View
               style={{justifyContent: 'space-between', flexDirection: 'row'}}>
               <View style={{marginRight: 5}}>
-                <Button title="edit" onPress={()=>{setItemmodal(true)}}/>
+                <Button
+                  title="edit"
+                  onPress={() => {
+                   edititem(item._id,item.item_name,item.unit_id)
+                  }}
+                />
               </View>
               <View style={{marginLeft: 10}}>
                 <Button title="X" onPress={() => DeleteItem(item._id)} />
@@ -168,185 +227,185 @@ const Items = () => {
   };
   return (
     <View>
-      <HeaderBar right={true} />
+      <HeaderBar right={true} title="Items"/>
       <View style={{marginHorizontal: SIZES.padding}}>
-        
-              {/* modal start  */}
-              <Modal
-                animationType="slide"
-                transparent={false}
-                visible={itemmodal}>
-                <View style={{backgroundColor: '#000000aa', flex: 1,justifyContent:"center"}}>
-                  <View
-                    style={{
-                      backgroundColor: '#fff',
-                      padding: 20,
-                      borderRadius: 20,
-                      margin:10
-                    }}>
-                    <ScrollView>
+        {/* modal start  */}
+        <Modal animationType="slide" transparent={false} visible={itemmodal}>
+          <View
+            style={{
+              backgroundColor: '#000000aa',
+              flex: 1,
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                padding: 20,
+                borderRadius: 20,
+                margin: 10,
+              }}>
+              <ScrollView>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={{fontSize: 20, fontWeight: 'bold'}}>Item</Text>
+                  <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={unitmodal}>
+                    <View
+                      style={{
+                        backgroundColor: '#000000aa',
+                        flex: 1,
+                        justifyContent: 'center',
+                      }}>
                       <View
                         style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
+                          backgroundColor: '#fff',
+
+                          padding: 20,
+                          borderRadius: 20,
+                          margin: 10,
                         }}>
-                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-                          Item
-                        </Text>
-
-                        <Modal
-                          animationType="slide"
-                          transparent={false}
-                          visible={unitmodal}>
-                          <View style={{backgroundColor: '#000000aa', flex: 1,justifyContent:"center"}}>
-                            <View
+                        <View>
+                          <Pressable onPress={setunitmodal}>
+                            <Text
                               style={{
-                                backgroundColor: '#fff',
-                              
-                                padding: 20,
-                                borderRadius: 20,
-                                margin:10
+                                alignSelf: 'flex-end',
+                                fontSize: 20,
+                                fontWeight: 'bold',
                               }}>
-                              <View>
-                                <Pressable onPress={setunitmodal}>
-                                  <Text
-                                    style={{
-                                      alignSelf: 'flex-end',
-                                      fontSize: 20,
-                                      fontWeight: 'bold',
-                                    }}>
-                                    X
-                                  </Text>
-                                </Pressable>
-                              </View>
-                              <View>
-                                <Card>
-                                  <Card.Content>
-                                    <Title>Unit</Title>
-                                  </Card.Content>
-                                </Card>
-                                <View>
-                                  <Card style={{borderWidth: 1}}>
-                                    <Card.Content>
-                                        <FormInput
-                                              label="unit name"
-                                              onChange={unitname => {
-                                                setUnitname(unitname);
-                                              }}
-                                            />
-
-                                      <TextButton
-                                        label="Save"
-                                        buttonContainerStyle={{
-                                          height: 45,
-                                          borderRadius: SIZES.radius,
-                                          marginTop: SIZES.padding,
-                                        }}
-                                        onPress={() => saveUnit()}
-                                      />
-                                    </Card.Content>
-                                  </Card>
-                                </View>
-                              </View>
-                            </View>
-                          </View>
-                        </Modal>
-                        <Pressable onPress={setItemmodal}>
-                          <Text
-                            style={{
-                              alignSelf: 'flex-end',
-                              fontSize: 20,
-                              fontWeight: 'bold',
-                            }}>
-                            X
-                          </Text>
-                        </Pressable>
-                      </View>
-
-                      <Card style={styles.Itemmodal}>
-                        <Card.Content>
-                       
-
-                          <FormInput
-                            label="item name"
-                            onChange={itemname=>{
-                            setItemname(itemname);
-                          }}
-                          />
-                          <View
-                            style={{
-                              justifyContent: 'space-between',
-                              flexDirection: 'row',
-                            }}>
-                            <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
-                              Units
+                              X
                             </Text>
-                            <TouchableOpacity
-                              onPress={() => setunitmodal(true)}>
-                              <Text
-                                style={{
-                                  ...FONTS.body3,
-                                  borderWidth: 1,
-                                  paddingLeft: 10,
-                                  paddingRight: 10,
-                                  fontWeight: 'bold',
-                                  borderRadius: 10,
-                                  marginTop:10
-                                }}>
-                                Add unit
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                          <Dropdown
-                            style={[
-                              styles.dropdown,
-                              isFocus && {borderColor: 'blue'},
-                            ]}
-                            placeholderStyle={styles.placeholderStyle}
-                            selectedTextStyle={styles.selectedTextStyle}
-                            inputSearchStyle={styles.inputSearchStyle}
-                            iconStyle={styles.iconStyle}
-                            data={data}
-                            search
-                            maxHeight={300}
-                            labelField="unit_name"
-                            valueField="_id"
-                            placeholder={!isFocus ? 'Select unit' : '...'}
-                            searchPlaceholder="Search..."
-                            value={value}
-                            onFocus={() => setIsFocus(true)}
-                            onBlur={() => setIsFocus(false)}
-                            onChange={item => {
-                              setValue(item._id);
-                              setIsFocus(false);
-                            }}
-                            // renderLeftIcon={() => (
-                            //   <AntDesign
-                            //     style={styles.icon}
-                            //     color={isFocus ? 'blue' : 'black'}
-                            //     name="Safety"
-                            //     size={20}
-                            //   />
-                            // )}
-                          />
+                          </Pressable>
+                        </View>
+                        <View>
+                          <Card>
+                            <Card.Content>
+                              <Title>Unit</Title>
+                            </Card.Content>
+                          </Card>
+                          <View>
+                            <Card style={{borderWidth: 1}}>
+                              <Card.Content>
+                                <FormInput
+                                  label="unit name"
+                                  onChange={unitname => {
+                                    setUnitname(unitname);
+                                  }}
+                                />
 
-                          <TextButton
-                            label="Save"
-                            buttonContainerStyle={{
-                              height: 45,
-                              borderRadius: SIZES.radius,
-                              marginTop: SIZES.padding,
-                            }}
-                            onPress={() => submit()}
-                          />
-                        </Card.Content>
-                      </Card>
-                    </ScrollView>
-                  </View>
+                                <TextButton
+                                  label="Save"
+                                  buttonContainerStyle={{
+                                    height: 45,
+                                    borderRadius: SIZES.radius,
+                                    marginTop: SIZES.padding,
+                                  }}
+                                  onPress={() => saveUnit()}
+                                />
+                              </Card.Content>
+                            </Card>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </Modal>
+                  <Pressable onPress={setItemmodal}>
+                    <Text
+                      style={{
+                        alignSelf: 'flex-end',
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                      }}>
+                      X
+                    </Text>
+                  </Pressable>
                 </View>
-              </Modal>
-              {/* modal end  */}
-           
+
+                <Card style={styles.Itemmodal}>
+                  <Card.Content>
+                    <FormInput
+                      label="item name"
+                      onChange={itemname => {
+                        setItemname(itemname);
+                      }}
+                    />
+                    <View
+                      style={{
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
+                      }}>
+                      <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                        Units
+                      </Text>
+                      <TouchableOpacity onPress={() => setunitmodal(true)}>
+                        <Text
+                          style={{
+                            ...FONTS.body3,
+                            borderWidth: 1,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                            fontWeight: 'bold',
+                            borderRadius: 10,
+                            marginTop: 10,
+                          }}>
+                          Add unit
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Dropdown
+                      style={[
+                        styles.dropdown,
+                        isFocus && {borderColor: 'blue'},
+                      ]}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      iconStyle={styles.iconStyle}
+                      data={data}
+                      search
+                      maxHeight={300}
+                      labelField="unit_name"
+                      valueField="_id"
+                      placeholder={!isFocus ? 'Select unit' : '...'}
+                      searchPlaceholder="Search..."
+                      value={value}
+                      onFocus={() => setIsFocus(true)}
+                      onBlur={() => setIsFocus(false)}
+                      onChange={item => {
+                        setValue(item._id);
+                        setIsFocus(false);
+                      }}
+                      // renderLeftIcon={() => (
+                      //   <AntDesign
+                      //     style={styles.icon}
+                      //     color={isFocus ? 'blue' : 'black'}
+                      //     name="Safety"
+                      //     size={20}
+                      //   />
+                      // )}
+                    />
+
+                    <TextButton
+                      label="Save"
+                      buttonContainerStyle={{
+                        height: 45,
+                        borderRadius: SIZES.radius,
+                        marginTop: SIZES.padding,
+                      }}
+                      onPress={() => submit()}
+                    />
+                  </Card.Content>
+                </Card>
+              </ScrollView>
+            </View>
+          </View>
+        </Modal>
+        {/* modal end  */}
+
         <View
           style={{
             marginBottom: SIZES.padding,
@@ -356,9 +415,9 @@ const Items = () => {
             backgroundColor: COLORS.white,
             ...styles.shadow,
           }}>
-            <View style={{justifyContent:"space-between",flexDirection:"row"}}>
-          <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Items</Text>
-          <Button title="Add new" onPress={() => setItemmodal(true)} />
+          <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+            <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Items</Text>
+            <Button title="Add new" onPress={() => setItemmodal(true)} />
           </View>
           <FlatList
             maxHeight={410}
@@ -382,7 +441,93 @@ const Items = () => {
           />
         </View>
         <View>
-          <Text></Text>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={updateitemmodal}>
+            <View
+              style={{
+                backgroundColor: '#000000aa',
+                flex: 1,
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                  padding: 20,
+                  borderRadius: 20,
+                  margin: 10,
+                }}>
+                <ScrollView>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                      Edit item
+                    </Text>
+                    <Pressable onPress={setupdateitemmodal}>
+                      <Text
+                        style={{
+                          alignSelf: 'flex-end',
+                          fontSize: 20,
+                          fontWeight: 'bold',
+                        }}>
+                        X
+                      </Text>
+                    </Pressable>
+                  </View>
+
+                  <Card style={styles.Itemmodal}>
+                    <Card.Content>
+                      <FormInput
+                        label="item name"
+                        value={itemname}
+                        onChange={value => {
+                          setItemname(value);
+                        }}
+                      />
+                      <Dropdown
+                        style={[
+                          styles.dropdown,
+                          isFocus && {borderColor: 'blue'},
+                        ]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data}
+                        search
+                        maxHeight={300}
+                        labelField="unit_name"
+                        valueField="_id"
+                        placeholder={!isFocus ? 'Select unit' : '...'}
+                        searchPlaceholder="Search..."
+                        value={value}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={item => {
+                          setValue(item._id);
+                          setIsFocus(false);
+                        }}
+                      />
+
+                      <TextButton
+                        label="Update"
+                        buttonContainerStyle={{
+                          height: 45,
+                          borderRadius: SIZES.radius,
+                          marginTop: SIZES.padding,
+                        }}
+                        onPress={() => updateItem()}
+                      />
+                    </Card.Content>
+                  </Card>
+                </ScrollView>
+              </View>
+            </View>
+          </Modal>
         </View>
       </View>
     </View>
@@ -412,16 +557,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 10,
   },
-  title:{
+  title: {
     fontSize: 18,
-   
   },
   dropdown: {
     height: 50,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 8,
-    margin: 10,
+    marginTop: 15,
   },
   icon: {
     marginRight: 5,
