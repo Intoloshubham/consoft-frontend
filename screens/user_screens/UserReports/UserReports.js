@@ -223,7 +223,7 @@ const UserReports = () => {
   }
   const toggleExpanded = (item) => {
     setcon_item_id(item.id)
-    setCollapsed(true);
+    setCollapsed(!collapsed);
   };
 
   const onValueChange = (item, index) => {

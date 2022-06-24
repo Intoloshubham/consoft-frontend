@@ -53,8 +53,8 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'Home'}>
-          <Stack.Screen name="CreateCompany" component={CreateCompany} />
+          initialRouteName={'user_tabs'}>
+          <Stack.Screen name="user_tabs" component={user_tabs} />
           <Stack.Screen name="CompanyPayment" component={CompanyPayment} />
           <Stack.Screen name="VerifyProductKey" component={VerifyProductKey} />
           <Stack.Screen name="SignIn" component={SignIn} />
@@ -92,7 +92,7 @@ const App = () => {
           <Stack.Screen name="Demo" component={Demo} />
           <Stack.Screen name="Demo1" component={Demo1} />
           <Stack.Screen name="Demo2" component={Demo2} />
-          <Stack.Screen name="user_tabs" component={user_tabs} />
+          {/* <Stack.Screen name="user_tabs" component={user_tabs} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>
