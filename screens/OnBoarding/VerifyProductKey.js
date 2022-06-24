@@ -1,14 +1,39 @@
 import React from 'react';
-import {View, Image, TouchableOpacity, Text, Button} from 'react-native';
+import {View, Image} from 'react-native';
 import {HeaderBar} from '../../Components';
-import {COLORS, images, SIZES, icons} from '../../constants';
+import {COLORS, images, SIZES, icons, Apis} from '../../constants';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import {FormInput, TextButton, Toast} from '../../Components';
+import {FormInput, TextButton} from '../../Components';
+import Config from '../../config';
 
 const VerifyProductKey = ({navigation}) => {
   const [productKey, setProductKey] = React.useState('');
   const [productKeyError, setProductKeyError] = React.useState('');
+
+  const OnSubmit = () => {
+    const productdata = {
+      product_key: productKey,
+      company_id: '62af20782d72412828766b66',
+    };
+    fetch(`${Config.API_URL}/verify-product-key`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(productdata),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.status);
+        if (data.status == 200) {
+          navigation.navigate('Home');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
   return (
     <View
@@ -67,7 +92,7 @@ const VerifyProductKey = ({navigation}) => {
               marginTop: SIZES.padding,
               borderRadius: SIZES.base,
             }}
-            onPress={() => navigation.navigate('Home')}
+            onPress={OnSubmit}
           />
         </View>
       </AuthLayout>

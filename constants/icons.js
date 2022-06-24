@@ -69,6 +69,12 @@ const duplex = require('../assets/icons/PPR/duplex.png');
 const date = require('../assets/icons/date.png');
 const time = require('../assets/icons/time.png');
 const edit = require('../assets/icons/edit.png');
+const call = require('../assets/icons/call.png');
+const whatsapp = require('../assets/icons/whatsapp.png');
+const mail = require('../assets/icons/mail.png');
+const website = require('../assets/icons/website.png');
+const up_arrow = require('../assets/icons/up_arrow.png');
+const down1 = require('../assets/icons/down1.png');
 
 export default {
   account,
@@ -127,10 +133,8 @@ export default {
   camera,
   checklist,
   stock_manage,
-
   submit1,
   forward_arrow,
-
   plus,
   unit,
   items,
@@ -139,4 +143,10 @@ export default {
   edit,
   delete_icon,
   upload_files,
+  call,
+  whatsapp,
+  mail,
+  website,
+  up_arrow,
+  down1,
 };
