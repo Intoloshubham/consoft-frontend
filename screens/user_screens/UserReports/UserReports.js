@@ -5,28 +5,18 @@ import {
   Text, FlatList,
   StyleSheet, Image,
   ScrollView, Modal,
-  Pressable, TouchableHighlight,
-  TouchableOpacity, LogBox
+  Pressable,
+  TouchableOpacity, LogBox, LayoutAnimation
 } from 'react-native'
-import { COLORS, FONTS, SIZES, dummyData } from '../../../constants'
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import { Layout, Card } from '@ui-kitten/components';
+import { COLORS, FONTS, SIZES, dummyData, icons } from '../../../constants'
 import { Divider } from '@ui-kitten/components';
 import Foundation from 'react-native-vector-icons/Foundation'
-import {
-  Svg,
-  LinearGradient,
-  Mask,
-  Rect,
-  ForeignObject,
-} from 'react-native-svg';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+
 import CheckBox from '@react-native-community/checkbox';
 
-import DropDownPicker from 'react-native-dropdown-picker';
 import { AccordionList } from 'accordion-collapse-react-native';
 import DatePicker from 'react-native-neat-date-picker'
-import Collapsible from 'react-native-collapsible';
-// MaterialCommunityIcons.loadFont()
 
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
@@ -37,12 +27,36 @@ const UserReports = () => {
   const [selectedDel, setSelectedDel] = React.useState(null)
   const [Report_list, setReport_list] = React.useState(dummyData.Reports_part)
   const [selectheaderid, setselectheaderid] = React.useState(Report_list)
-  const [collapsed, setCollapsed] = React.useState(false);
+  // const [collapsed, setCollapsed] = React.useState(false);
   const [Tech_collapse, setTech_collapse] = React.useState(false)
   const [Masonry_collapse, setMasonry_collapse] = React.useState(false)
   const [Steel_collapse, setSteel_collapse] = React.useState(false)
   const [Shelter_collapse, setShelter_collapse] = React.useState(false)
+  const [active, setactive] = React.useState(null)
 
+  const [date, setDate] = React.useState(new Date(1598051730000));
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setDate(currentDate);
+  };
+
+  const showMode = currentMode => {
+    DateTimePickerAndroid.open({
+      value: date,
+      onChange,
+      mode: currentMode,
+      is24Hour: true,
+    });
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
 
 
 
@@ -144,53 +158,70 @@ const UserReports = () => {
     },
   ])
 
-  const [ExpCalendar, setExpCalendar] = React.useState(false)
-  const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
+  // const [ExpCalendar, setExpCalendar] = React.useState(false)
+  const [pressed, setpressed] = React.useState(false)
+  // const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
 
 
-  const { header, header_elements, con_body, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
+  const { header, con_body, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
 
   const _head = (item) => {
+    LayoutAnimation.easeInEaseOut();
     return (
       <View style={header} key={item.key}>
-        <View style={header_elements} >
-          <TouchableOpacity >
-            <Text style={[FONTS.h3, { color: COLORS.black, textAlign: "left" }]}>
+          <View        
+            >
+            <Text style={[FONTS.body3, { color: COLORS.black,letterSpacing:1, textAlign: "left" }]}>
               {item.name}
             </Text>
-          </TouchableOpacity>
-
-        </View>
+          </View>
       </View>
     );
   }
 
 
-  const onConfirmexp = (output) => {
-    setExp_date(output.dateString)
-    setExpCalendar(false)
-  }
+  // const onConfirmexp = (output) => {
+  //   setExp_date(output.dateString)
+  //   setExpCalendar(false)
+  // }
 
 
   const schedular_section = (item) => {
     return (
       <View>
         <View style={{ flexDirection: "row", justifyContent: "space-between", width: 115, alignSelf: "flex-start", marginLeft: -65 }}>
-          <View style={{ backgroundColor: COLORS.gray3, borderRadius: 5, alignSelf: "center", paddingHorizontal: 5 }}>
-            <Text style={{ color: "#000" }} >{Exp_date}</Text>
+          <View style={{ marginTop: SIZES.radius, justifyContent: 'center', backgroundColor: COLORS.lightblue_100, borderRadius: SIZES.base, borderWidth: 2, borderColor: COLORS.lightGray1, alignSelf: "center", paddingHorizontal: 5 }}>
+            <Text style={{
+              ...FONTS.h4,
+              color: COLORS.black,
+            }} >
+              Date: {date.toLocaleDateString()}
+            </Text>
           </View>
-          <View style={{ width: 30, borderRadius: 5, backgroundColor: COLORS.gray3, alignSelf: "center", paddingHorizontal: 2 }}>
-            <Pressable onPress={() => { setExpCalendar(true) }}>
-              <EvilIcons name="calendar" color={"#106853"} size={28} />
-            </Pressable>
+          <View
+            style={{
+              top: SIZES.radius,
+              paddingVertical: SIZES.radius,
+              width: "31%",
+              height: 30,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.lightblue_100,
+              justifyContent: 'center',
+              paddingLeft: SIZES.font * 0.5,
+              alignContent: "center"
+            }}>
+            <TouchableOpacity onPress={showDatepicker}>
+              <Image
+                source={icons.date}
+                style={{
+                  width: 22,
+                  height: 22,
+                  tintColor: COLORS.green,
+                }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
-        <DatePicker
-          isVisible={ExpCalendar}
-          mode={'single'}
-          onCancel={() => { setExpCalendar(false) }}
-          onConfirm={onConfirmexp}
-        />
       </View>
     )
   }
@@ -221,9 +252,11 @@ const UserReports = () => {
       </View>
     )
   }
-  const toggleExpanded = (item) => {
+  const toggleExpanded = (item, index) => {
+    LayoutAnimation.easeInEaseOut();
+    setactive(index == active ? null : index)
     setcon_item_id(item.id)
-    setCollapsed(!collapsed);
+    // setCollapsed(!collapsed);
   };
 
   const onValueChange = (item, index) => {
@@ -231,7 +264,7 @@ const UserReports = () => {
     newData[index].isCheck = !item.isCheck;
     setTech_staff(newData);
   }
- 
+
 
   const onMasonryChange = (item, index) => {
     const newData = [...Masonry];
@@ -263,7 +296,8 @@ const UserReports = () => {
     }
   }
 
-  const render_con_list = (item) => {
+  const render_con_list = (item, index) => {
+    const open = active == index
     return (
       <>
         <TouchableOpacity style={{
@@ -271,27 +305,31 @@ const UserReports = () => {
           flexDirection: "row",
           margin: 2,
           borderWidth: 1,
+          borderRadius:5,
+          borderColor:COLORS.lightblue_400,
           width: SIZES.width * 0.9,
           padding: 3,
           paddingRight: 52,
           justifyContent: "space-between"
         }}
-          onPress={()=>{ toggleExpanded(item)}
+          onPress={() => { toggleExpanded(item, index) }
           }
+          activeOpacity={1}
         >
           <View>
-            <Text>{item.name}</Text>
+            <Text style={[FONTS.body4, { color: COLORS.black,letterSpacing:1, textAlign: "left",fontSize:16 }]}>{item.name}</Text>
           </View>
           <View>
             {edit_delet_section(item)}
           </View>
         </TouchableOpacity>
-        {collapsed && con_item_id == item.id ?
+        {open && con_item_id == item.id ?
           <View
             style={{
               flex: 1,
               flexDirection: "column",
               borderWidth: 1,
+              borderColor:COLORS.lightblue_400,
               alignItems: "flex-start",
               width: SIZES.width * 0.9,
               height: SIZES.width,
@@ -303,7 +341,7 @@ const UserReports = () => {
             <View style={{ marginLeft: 24 * 3 }}>
               {schedular_section(item)}
             </View>
-            <Divider style={{ backgroundColor: "gray", width: SIZES.width * 0.85, marginHorizontal: 2, top: 5 }} />
+            <Divider style={{ backgroundColor:COLORS.lightGray1, width: SIZES.width * 0.85, marginHorizontal: 2, top: 5 }} />
             <View style={{
               flex: 1,
               flexDirection: "column",
@@ -317,7 +355,7 @@ const UserReports = () => {
                 <TouchableOpacity
                   onPress={() => setTech_collapse(!Tech_collapse)}
                 >
-                  <Text>Technical Staff</Text>
+                  <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>Technical Staff</Text>
                 </TouchableOpacity>
               </View>
               {Tech_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 90 }}>
@@ -333,7 +371,7 @@ const UserReports = () => {
                           onValueChange={(newValue) => onValueChange(item, index)}
                           key={item.name}
                         />
-                        <Text>{item.name}</Text>
+                        <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:13}]}>{item.name}</Text>
                       </TouchableOpacity>
                       {/* <TouchableOpacity onPress={()=>getSelectedValue(item)}><Text>getdata</Text></TouchableOpacity> */}
                     </View>
@@ -344,7 +382,7 @@ const UserReports = () => {
                 <TouchableOpacity
                   onPress={() => setMasonry_collapse(!Masonry_collapse)}
                 >
-                  <Text>Masonry</Text>
+                  <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>Masonry</Text>
                 </TouchableOpacity>
               </View>
               {Masonry_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 55 }}>
@@ -357,14 +395,14 @@ const UserReports = () => {
                         <TouchableOpacity
                           key={index}
                           onPress={() => onMasonryChange(item, index)}
-                          style={{ flexDirection: "row",alignItems:"center" }}
+                          style={{ flexDirection: "row", alignItems: "center" }}
                         >
                           <CheckBox
                             value={item.isCheck}
                             onValueChange={(newValue) => onMasonryChange(item, index)}
                             key={item.id}
                           />
-                          <Text>{item.name}</Text>
+                          <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:13}]}>{item.name}</Text>
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -375,17 +413,17 @@ const UserReports = () => {
                 <TouchableOpacity
                   onPress={() => setSteel_collapse(!Steel_collapse)}
                 >
-                  <Text>Steel Binder</Text>
+                  <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>Steel Binder</Text>
                 </TouchableOpacity>
               </View>
               {Steel_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 60 }}>
                 {steel_bind.map((item, index) => {
                   return (
-                    <View key={index} style={{  }}>
+                    <View key={index} style={{}}>
                       <TouchableOpacity
                         key={index}
                         onPress={() => onSteelChange(item, index)}
-                        style={{ flexDirection: "row",alignItems:"center" }}
+                        style={{ flexDirection: "row", alignItems: "center" }}
                       >
                         <CheckBox
                           value={item.isCheck}
@@ -393,7 +431,7 @@ const UserReports = () => {
                           key={item.id}
                         />
                         <View>
-                          <Text>{item.name}</Text>
+                          <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:13}]}>{item.name}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -402,9 +440,9 @@ const UserReports = () => {
               </ScrollView> : null}
               <View>
                 <TouchableOpacity
-                  onPress={() => setShelter_collapse(!Shelter_collapse)}                
+                  onPress={() => setShelter_collapse(!Shelter_collapse)}
                 >
-                  <Text>Sheltering</Text>
+                  <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>Sheltering</Text>
                 </TouchableOpacity>
               </View>
               {Shelter_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 90 }}>
@@ -416,14 +454,14 @@ const UserReports = () => {
                       <TouchableOpacity
                         key={index}
                         onPress={() => onShelterChange(item, index)}
-                        style={{ flexDirection: "row",alignItems:"center" }}
+                        style={{ flexDirection: "row", alignItems: "center" }}
                       >
                         <CheckBox
                           value={item.isCheck}
                           onValueChange={(newValue) => onShelterChange(item, index)}
                           key={item.id}
                         />
-                        <Text>{item.name}</Text>
+                        <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>{item.name}</Text>
                       </TouchableOpacity>
                     </View>
                   )
@@ -437,14 +475,14 @@ const UserReports = () => {
   }
 
 
-  const list_of_all_contractors = (item) => {
+  const list_of_all_contractors = (item, index) => {
     return (
       <View style={{}}>
         <FlatList
           data={list_Contractor}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            render_con_list(item)
+          renderItem={({ item, index }) => (
+            render_con_list(item, index)
           )}
           extraData={selectheaderid}
           keyExtractor={(item, index) => `${item.id}`}
@@ -454,10 +492,10 @@ const UserReports = () => {
   }
 
 
-  const _body = (item) => {
+  const _body = (item, index) => {
     return (
       <View style={con_body}>
-        {list_of_all_contractors(item)}
+        {list_of_all_contractors(item, index)}
       </View>
     )
   }
@@ -466,7 +504,7 @@ const UserReports = () => {
     <View
       style={{
         flex: 2,
-        backgroundColor: "#ffff",
+        backgroundColor: COLORS.lightblue_100
       }}>
       <AccordionList
         list={Report_list}
@@ -485,19 +523,21 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     borderWidth: 1,
-    margin: 5,
-    padding: 5,
-    borderRadius: 5,
+    backgroundColor: COLORS.lightblue_200,
+    borderColor: COLORS.lightblue_200,
+    margin: SIZES.base * 0.5,
+    padding: SIZES.base,
+    alignItems: "center",
+    borderRadius: 2,
     top: 1,
+    elevation: 5
   },
-  header_elements: {
-    alignItems: "center"
-  },
+
   con_body: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: COLORS.gray3,
+    backgroundColor: COLORS.lightblue_100,
     marginHorizontal: 5
   },
   body_del_btn: {
