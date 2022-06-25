@@ -5,16 +5,14 @@ import {
   Text, FlatList,
   StyleSheet, Image,
   ScrollView, Modal,
-  Pressable,
+  Pressable, TextInput,
   TouchableOpacity, LogBox, LayoutAnimation
 } from 'react-native'
 import { COLORS, FONTS, SIZES, dummyData, icons } from '../../../constants'
 import { Divider } from '@ui-kitten/components';
 import Foundation from 'react-native-vector-icons/Foundation'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-
 import CheckBox from '@react-native-community/checkbox';
-
 import { AccordionList } from 'accordion-collapse-react-native';
 import DatePicker from 'react-native-neat-date-picker'
 
@@ -33,6 +31,7 @@ const UserReports = () => {
   const [Steel_collapse, setSteel_collapse] = React.useState(false)
   const [Shelter_collapse, setShelter_collapse] = React.useState(false)
   const [active, setactive] = React.useState(null)
+  const [number, onChangeNumber] = React.useState(null);
 
   const [date, setDate] = React.useState(new Date(1598051730000));
 
@@ -63,20 +62,20 @@ const UserReports = () => {
   const [list_Contractor, setlist_Contractor] = React.useState([
     {
       id: "0",
-      name: "Contractor 1"
+      name: "Lobours"
     },
-    {
-      id: "1",
-      name: "Contractor 2"
-    },
-    {
-      id: "2",
-      name: "Contractor 3"
-    },
-    {
-      id: "3",
-      name: "Contractor 4"
-    },
+    // {
+    //   id: "1",
+    //   name: "Contractor 2"
+    // },
+    // {
+    //   id: "2",
+    //   name: "Contractor 3"
+    // },
+    // {
+    //   id: "3",
+    //   name: "Contractor 4"
+    // },
   ])
   const [Tech_staff, setTech_staff] = React.useState([
     {
@@ -159,22 +158,21 @@ const UserReports = () => {
   ])
 
   // const [ExpCalendar, setExpCalendar] = React.useState(false)
-  const [pressed, setpressed] = React.useState(false)
   // const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
 
 
-  const { header, con_body, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
+  const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
 
   const _head = (item) => {
     LayoutAnimation.easeInEaseOut();
     return (
       <View style={header} key={item.key}>
-          <View        
-            >
-            <Text style={[FONTS.body3, { color: COLORS.black,letterSpacing:1, textAlign: "left" }]}>
-              {item.name}
-            </Text>
-          </View>
+        <View
+        >
+          <Text style={[FONTS.body3, { color: COLORS.black, letterSpacing: 1, textAlign: "left" }]}>
+            {item.name}
+          </Text>
+        </View>
       </View>
     );
   }
@@ -214,9 +212,9 @@ const UserReports = () => {
               <Image
                 source={icons.date}
                 style={{
-                  width: 22,
-                  height: 22,
-                  tintColor: COLORS.green,
+                  width: 21,
+                  height: 21,
+                  tintColor: COLORS.black,
                 }}
               />
             </TouchableOpacity>
@@ -305,8 +303,8 @@ const UserReports = () => {
           flexDirection: "row",
           margin: 2,
           borderWidth: 1,
-          borderRadius:5,
-          borderColor:COLORS.lightblue_400,
+          borderRadius: 5,
+          borderColor: COLORS.lightblue_400,
           width: SIZES.width * 0.9,
           padding: 3,
           paddingRight: 52,
@@ -317,7 +315,7 @@ const UserReports = () => {
           activeOpacity={1}
         >
           <View>
-            <Text style={[FONTS.body4, { color: COLORS.black,letterSpacing:1, textAlign: "left",fontSize:16 }]}>{item.name}</Text>
+            <Text style={[FONTS.body4, { color: COLORS.black, letterSpacing: 1, textAlign: "left", fontSize: 16 }]}>{item.name}</Text>
           </View>
           <View>
             {edit_delet_section(item)}
@@ -329,7 +327,7 @@ const UserReports = () => {
               flex: 1,
               flexDirection: "column",
               borderWidth: 1,
-              borderColor:COLORS.lightblue_400,
+              borderColor: COLORS.lightblue_400,
               alignItems: "flex-start",
               width: SIZES.width * 0.9,
               height: SIZES.width,
@@ -341,7 +339,7 @@ const UserReports = () => {
             <View style={{ marginLeft: 24 * 3 }}>
               {schedular_section(item)}
             </View>
-            <Divider style={{ backgroundColor:COLORS.lightGray1, width: SIZES.width * 0.85, marginHorizontal: 2, top: 5 }} />
+            <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.85, marginHorizontal: 2, top: 5 }} />
             <View style={{
               flex: 1,
               flexDirection: "column",
@@ -355,23 +353,47 @@ const UserReports = () => {
                 <TouchableOpacity
                   onPress={() => setTech_collapse(!Tech_collapse)}
                 >
-                  <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>Technical Staff</Text>
+                  <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, fontSize: 14 }]}>Technical Staff</Text>
                 </TouchableOpacity>
               </View>
               {Tech_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 90 }}>
                 {Tech_staff.map((item, index) => {
                   return (
                     <View style={{ flex: 1 }} key={index}>
+                      <View>
+
+                      </View>
                       <TouchableOpacity
                         key={index}
                         onPress={() => onValueChange(item, index)}
                         style={{ flexDirection: "row", alignContent: "center", alignItems: "center" }}>
-                        <CheckBox
-                          value={item.isCheck}
-                          onValueChange={(newValue) => onValueChange(item, index)}
-                          key={item.name}
-                        />
-                        <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:13}]}>{item.name}</Text>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                          <View style={{ alignSelf: "center" }}>
+                            <CheckBox
+                              value={item.isCheck}
+                              onValueChange={(newValue) => onValueChange(item, index)}
+                              key={item.name}
+                            />
+                          </View>
+                          <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, fontSize: 13 }]}>{item.name}</Text>
+                          <View
+                            style={{
+                              position: "absolute",
+                              left: 100,
+                              right: -100,
+                              top:-4,
+                              bottom:0,
+                              alignSelf: "center"
+                            }}>
+                            <TextInput
+                              style={input}
+                              onChangeText={onChangeNumber}
+                              value={number}
+                              placeholder=""
+                              keyboardType="numeric"
+                            />
+                          </View>
+                        </View>
                       </TouchableOpacity>
                       {/* <TouchableOpacity onPress={()=>getSelectedValue(item)}><Text>getdata</Text></TouchableOpacity> */}
                     </View>
@@ -382,7 +404,7 @@ const UserReports = () => {
                 <TouchableOpacity
                   onPress={() => setMasonry_collapse(!Masonry_collapse)}
                 >
-                  <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>Masonry</Text>
+                  <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, fontSize: 14 }]}>Masonry</Text>
                 </TouchableOpacity>
               </View>
               {Masonry_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 55 }}>
@@ -402,7 +424,24 @@ const UserReports = () => {
                             onValueChange={(newValue) => onMasonryChange(item, index)}
                             key={item.id}
                           />
-                          <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:13}]}>{item.name}</Text>
+                            <View
+                            style={{
+                              position: "absolute",
+                              left: 100,
+                              right: -100,
+                              top:-4,
+                              bottom:0,
+                              alignSelf: "center"
+                            }}>
+                            <TextInput
+                              style={input}
+                              onChangeText={onChangeNumber}
+                              value={number}
+                              placeholder=""
+                              keyboardType="numeric"
+                            />
+                          </View>
+                          <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, fontSize: 13 }]}>{item.name}</Text>
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -413,7 +452,7 @@ const UserReports = () => {
                 <TouchableOpacity
                   onPress={() => setSteel_collapse(!Steel_collapse)}
                 >
-                  <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>Steel Binder</Text>
+                  <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, fontSize: 14 }]}>Steel Binder</Text>
                 </TouchableOpacity>
               </View>
               {Steel_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 60 }}>
@@ -430,8 +469,25 @@ const UserReports = () => {
                           onValueChange={(newValue) => onSteelChange(item, index)}
                           key={item.id}
                         />
+                          <View
+                            style={{
+                              position: "absolute",
+                              left: 100,
+                              right: -100,
+                              top:-4,
+                              bottom:0,
+                              alignSelf: "center"
+                            }}>
+                            <TextInput
+                              style={input}
+                              onChangeText={onChangeNumber}
+                              value={number}
+                              placeholder=""
+                              keyboardType="numeric"
+                            />
+                          </View>
                         <View>
-                          <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:13}]}>{item.name}</Text>
+                          <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, fontSize: 13 }]}>{item.name}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -442,7 +498,7 @@ const UserReports = () => {
                 <TouchableOpacity
                   onPress={() => setShelter_collapse(!Shelter_collapse)}
                 >
-                  <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>Sheltering</Text>
+                  <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, fontSize: 14 }]}>Shuttering</Text>
                 </TouchableOpacity>
               </View>
               {Shelter_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 90 }}>
@@ -461,7 +517,24 @@ const UserReports = () => {
                           onValueChange={(newValue) => onShelterChange(item, index)}
                           key={item.id}
                         />
-                        <Text style={[FONTS.body5, { color: COLORS.black,letterSpacing:1,fontSize:14}]}>{item.name}</Text>
+                          <View
+                            style={{
+                              position: "absolute",
+                              left: 100,
+                              right: -100,
+                              top:-4,
+                              bottom:0,
+                              alignSelf: "center"
+                            }}>
+                            <TextInput
+                              style={input}
+                              onChangeText={onChangeNumber}
+                              value={number}
+                              placeholder=""
+                              keyboardType="numeric"
+                            />
+                          </View>
+                        <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, fontSize: 14 }]}>{item.name}</Text>
                       </TouchableOpacity>
                     </View>
                   )
@@ -560,6 +633,13 @@ const styles = StyleSheet.create({
   option: {
     marginVertical: 4,
     marginHorizontal: 12,
+  },
+  input: {
+    height: 20,
+    margin: 12,
+    borderWidth: 1,
+    padding: 2,
+    width: 38
   },
 
 })
