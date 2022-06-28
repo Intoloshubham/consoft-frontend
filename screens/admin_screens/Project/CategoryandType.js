@@ -50,13 +50,13 @@ const CategoryandType = ({navigation}) => {
   // get cat id
   const [id, setId] = React.useState('');
   const getId = id => {
-    console.log('onedit', id);
+    // console.log('onedit', id);
     setId(id);
   };
 
   // get cat data
   const getData = name => {
-    console.log(name);
+    // console.log(name);
     setCatName(name);
   };
 
@@ -71,7 +71,7 @@ const CategoryandType = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         setCategories(data);
       })
       .catch(error => console.log(error.message));
@@ -92,7 +92,7 @@ const CategoryandType = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
+        // console.log('Success:', data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -121,20 +121,20 @@ const CategoryandType = ({navigation}) => {
         'Content-Type': 'application/json',
       },
     });
-    console.log('cat delete');
+    // console.log('cat delete');
   };
 
   // All api of types
   // get id
   const [typeid, setTypeId] = React.useState('');
   const gettypeId = id => {
-    console.log('type', id);
+    // console.log('type', id);
     setTypeId(id);
   };
 
   // get type data
   const getTypeData = (cat_id, name) => {
-    console.log(name);
+    // console.log(name);
     setValue(cat_id);
     setTypeName(name);
   };
@@ -149,7 +149,7 @@ const CategoryandType = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         setTypes(data);
       })
       .catch(error => console.log(error.message));
@@ -171,7 +171,7 @@ const CategoryandType = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
+        // console.log('Success:', data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -195,14 +195,14 @@ const CategoryandType = ({navigation}) => {
 
   // Delete types
   const OnDeleteTypes = id => {
-    console.log('delete', id);
+    // console.log('delete', id);
     fetch('http://192.168.1.99:8000/api/project-type/' + `${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    console.log('type delete');
+    // console.log('type delete');
   };
   React.useEffect(() => {
     OnDeleteTypes;

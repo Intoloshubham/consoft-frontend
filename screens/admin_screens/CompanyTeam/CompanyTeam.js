@@ -7,6 +7,8 @@ import utils from '../../../utils';
 import Config from '../../../config';
 import {HeaderBar} from '../../../Components';
 
+
+
 const CompanyTeam = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
@@ -19,8 +21,7 @@ const CompanyTeam = ({navigation}) => {
   const [mobileNoError, setMobileNoError] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
 
-  //redux
-  const [registerCompany] = useRegisterCompanyMutation();
+  
 
   // dropdown
   const data = [
@@ -39,23 +40,23 @@ const CompanyTeam = ({navigation}) => {
       password: password,
     };
 
-    const res = registerCompany(data);
-    console.log(res);
+    // const res = registerCompany(data);
+    // console.log(res);
 
-    // fetch(url, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //   })
-    //   .catch(error => {
-    //     console.error(error.message);
-    //   });
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error(error.message);
+      });
 
 
   };

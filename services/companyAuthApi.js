@@ -16,24 +16,54 @@ export const companyAuthApi = createApi({
                     'Content-type': 'application/json',
                   }
             }
+            
         }
-    })
+        
+    }),
+
+    verifyProductKey:builder.mutation({
+      query:(user) => {
+          return {
+              url:'verify-product-key',
+              method:'POST',
+              body:user,
+              headers:{
+                  'Content-type':'application/json',
+              }
+            }
+        } 
+    }),
+
+    loginCompany:builder.mutation({
+      query:(user) => {
+          return {
+              url:'company-login',
+              method:'POST',
+              body:user,
+              headers:{
+                  'Content-type':'application/json',
+              }
+            }
+        } 
+    }),
+
+    getLoggedCompany:builder.query({
+      query:(token) => ({
+        url:'company',
+        method:'GET',
+        headers:{
+          'authorization':`Bearer ${token}`,
+        }
+      }) 
+    }),
+
+    
   }),
 
-//   loginUser: builder.mutation({
-//     query: (user) => {
-//       return {
-//         url: 'login',
-//         method: 'POST',
-//         body: user,
-//         headers: {
-//           'Content-type': 'application/json',
-//         }
-//       }
-//     }
-//   }),
+
 
 })
 
 
-export const { useRegisterCompanyMutation} = companyAuthApi
+// export const { useRegisterUserMutation } = companyAuthApi
+export const { useRegisterCompanyMutation, useVerifyProductKeyMutation, useGetLoggedCompanyQuery, useLoginCompanyMutation } = companyAuthApi

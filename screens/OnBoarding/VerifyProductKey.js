@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Image} from 'react-native';
 import {HeaderBar} from '../../Components';
 import {COLORS, images, SIZES, icons, Apis} from '../../constants';
@@ -7,32 +7,76 @@ import utils from '../../utils';
 import {FormInput, TextButton} from '../../Components';
 import Config from '../../config';
 
+//redux
+import { getCompanyId, storeToken } from '../../services/asyncStorageService';
+import { useVerifyProductKeyMutation } from '../../services/companyAuthApi';
+
 const VerifyProductKey = ({navigation}) => {
   const [productKey, setProductKey] = React.useState('');
   const [productKeyError, setProductKeyError] = React.useState('');
 
-  const OnSubmit = () => {
+  //redux
+  const [companyIdAsync, setCompanyIdAsync ] = React.useState();
+  const [ verifyProductKey ] = useVerifyProductKeyMutation();
+
+  useEffect(() => {
+    (async () => {
+      const company_id = await getCompanyId() 
+      setCompanyIdAsync(company_id)          
+      
+    })();
+  })
+
+
+  const OnSubmit = async () => {
     const productdata = {
       product_key: productKey,
-      company_id: '62af20782d72412828766b66',
+      company_id: companyIdAsync,
     };
-    fetch(`${Config.API_URL}/verify-product-key`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(productdata),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data.status);
-        if (data.status == 200) {
-          navigation.navigate('Home');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    const res = await verifyProductKey(productdata);
+
+    // console.log(res);
+    // console.log(result.error);
+    // console.log(result);
+    let result;
+    if (res.data) {
+      result = res.data;
+    }
+    if (res.error) {
+      result = res.error;
+    }
+
+    if (result.status === 200) {
+      await storeToken(result.access_token);   
+      navigation.navigate('Home');
+    }
+
+    if(result.status === 406){
+      alert(result.data.message);
+    }
+
+
+
+    // {result.data.status === 200 ? navigation.navigate('Home') : result.error.data.message }
+
+
+    // fetch(`${Config.API_URL}/verify-product-key`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(productdata),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data.status);
+    //     if (data.status == 200) {
+    //       navigation.navigate('Home');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
   };
 
   return (

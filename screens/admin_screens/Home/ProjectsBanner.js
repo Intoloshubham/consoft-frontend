@@ -57,7 +57,7 @@ const ProjectsBanner = () => {
         let proCatFromApi = data.map(item => {
           return {label: item.category_name, value: item._id};
         });
-        console.log(data);
+        // console.log(data);
         setProjectCategory(proCatFromApi);
       })
       .catch(error => console.log(error.message));
@@ -76,7 +76,7 @@ const ProjectsBanner = () => {
         let proTypeFromApi = data.map(item => {
           return {label: item.project_type, value: item._id};
         });
-        console.log(data);
+        // console.log(data);
         setProjectType(proTypeFromApi);
       })
       .catch(error => console.log(error.message));
@@ -151,7 +151,7 @@ const ProjectsBanner = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
+        // console.log('Success:', data);
         showToast();
       })
       .catch(error => {
@@ -167,7 +167,7 @@ const ProjectsBanner = () => {
   const [data, setData] = React.useState('');
   const modalHandler = id => {
     setData(id);
-    console.log(id);
+    // console.log(id);
     setProjectCrud(true);
   };
 
@@ -180,7 +180,7 @@ const ProjectsBanner = () => {
         'Content-Type': 'application/json',
       },
     });
-    console.log('delete');
+    // console.log('delete');
     showToast();
   };
 

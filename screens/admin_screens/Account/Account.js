@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -20,9 +20,21 @@ import {
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
+import { removeToken } from '../../../services/asyncStorageService';
+import { useSelector } from 'react-redux';
+import { unSetCompanyInfo } from '../../../features/CompanySlice';
+import { unsetCompanyToken } from '../../../features/CompanyAuthSlice';
 
 const Account = () => {
   const navigation = useNavigation();
+
+  const logout = async () => {
+    unSetCompanyInfo({ _id: "", company_name: "", email: "", mobile: "" })
+    unsetCompanyToken({ token: null})
+    await removeToken('token')
+    navigation.navigate('Dahsboard');
+  }
+
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
@@ -32,6 +44,16 @@ const Account = () => {
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
+
+
+  //getting company data from redux store    company -> name is reducer
+  const companyData = useSelector(state => state.company)
+  // console.log(companyData);
+  
+  // const companyToken = useSelector(state => state.companyAuth)
+  // console.log(companyToken);
+
+  
 
   function renderHeader() {
     return (
@@ -126,10 +148,10 @@ const Account = () => {
               color: COLORS.white,
               ...FONTS.h2,
             }}>
-            Admin Demo
+            {companyData.company_name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
-            Administrator
+            {companyData.email}
           </Text>
           {/* progress  */}
           {/* <ProgressBar
@@ -249,7 +271,7 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" onPress={() => {}} />
+        <ProfileValue icon={icons.logout} value="LogOut" onPress={logout} />
       </View>
     );
   }
