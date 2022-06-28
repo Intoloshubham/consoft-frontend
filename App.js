@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
@@ -26,14 +26,14 @@ import {
   ManageStock,
   CompanyTeamShow,
   CategoryandType,
+  ProjectReports,
+  Suppliers,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
 import user_tabs from './navigation/user_tabs';
-
-global.apiurl = 'http://192.168.1.99:8000/api';
 
 const Stack = createStackNavigator();
 
@@ -65,6 +65,7 @@ const App = () => {
           <Stack.Screen name="CompanyTeamShow" component={CompanyTeamShow} />
           <Stack.Screen name="ProjectTeam" component={ProjectTeam} />
           <Stack.Screen name="Contractors" component={Contractors} />
+          <Stack.Screen name="ProjectReports" component={ProjectReports} />
           <Stack.Screen
             name="StocksAndInventry"
             component={StocksAndInventry}
@@ -80,6 +81,7 @@ const App = () => {
 
           {/* Tab screens */}
           <Stack.Screen name="Account" component={Account} />
+          <Stack.Screen name="Suppliers" component={Suppliers} />
 
           {/* Account Screens */}
           <Stack.Screen name="CategoryandType" component={CategoryandType} />

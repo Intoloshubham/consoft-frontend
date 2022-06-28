@@ -1,21 +1,20 @@
 import React from 'react';
 import {View, Image} from 'react-native';
-import {HeaderBar} from '../../Components';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import {COLORS, images, icons, SIZES, Apis} from '../../constants';
-import {FormInput, TextButton} from '../../Components';
 import Toast from 'react-native-toast-message';
 import Config from '../../config';
+import {FormInput, TextButton, HeaderBar} from '../../Components';
+import {COLORS, images, icons, SIZES} from '../../constants';
 
 const CompanyRegistration = ({navigation}) => {
   const [cName, setCName] = React.useState('');
-  const [cPanNo, setCPanNo] = React.useState('');
+  // const [cPanNo, setCPanNo] = React.useState('');
   const [cMobileNo, setCMobileNo] = React.useState('');
   const [cEmail, setCEmail] = React.useState('');
 
   const [cNameError, setCNameError] = React.useState('');
-  const [cPanNoError, setCPanNoError] = React.useState('');
+  // const [cPanNoError, setCPanNoError] = React.useState('');
   const [cMobileNoError, setCMobileNoError] = React.useState('');
   const [cEmailError, setCEmailError] = React.useState('');
 
@@ -23,8 +22,8 @@ const CompanyRegistration = ({navigation}) => {
     return (
       cName != '' &&
       cNameError == '' &&
-      cPanNo != '' &&
-      cPanNoError == '' &&
+      // cPanNo != '' &&
+      // cPanNoError == '' &&
       cMobileNo != '' &&
       cMobileNoError == '' &&
       cEmail != '' &&
@@ -55,14 +54,14 @@ const CompanyRegistration = ({navigation}) => {
   const onSubmit = () => {
     const data = {
       company_name: cName,
-      pan: cPanNo,
+      // pan: cPanNo,
       mobile: cMobileNo,
       email: cEmail,
     };
 
     console.log(data);
 
-    fetch(`${Config.API_URL}/company`, {
+    fetch(`${Config.API_URL}company`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -71,11 +70,13 @@ const CompanyRegistration = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        console.log(data.company_id);
         if (data.status == 200) {
           showToast();
           setTimeout(() => {
-            navigation.navigate('VerifyProductKey');
+            navigation.navigate('VerifyProductKey', {
+              company_id: data.company_id,
+            });
           }, 350);
         }
         if (data.status != 200) {
@@ -134,7 +135,7 @@ const CompanyRegistration = ({navigation}) => {
               </View>
             }
           />
-          <FormInput
+          {/* <FormInput
             label="Pan No."
             keyboardType="default"
             onChange={value => {
@@ -163,7 +164,7 @@ const CompanyRegistration = ({navigation}) => {
                 />
               </View>
             }
-          />
+          /> */}
           <FormInput
             label="Mobile No."
             keyboardType="phone-pad"

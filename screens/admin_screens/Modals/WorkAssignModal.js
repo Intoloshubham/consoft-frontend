@@ -8,13 +8,127 @@ import {
   Modal,
   ScrollView,
   Image,
+  TextInput,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
-import {COLORS, SIZES, FONTS, icons, Apis} from '../../../constants';
-import {IconButton, FormInput, Drop, TextButton} from '../../../Components';
+import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {IconButton, CustomDropdown, TextButton} from '../../../Components';
 import Config from '../../../config';
 
 const WorkAssignModal = ({isVisible, onClose}) => {
+  //assign work input
+  const [work, setWork] = React.useState([{key: '', value: ''}]);
+  const [newWork, setNewWork] = React.useState([]);
+
+  const addHandler = () => {
+    const inputs = [...work];
+    inputs.push({key: '', value: ''});
+    setWork(inputs);
+  };
+
+  const removeHandler = key => {
+    const inputs = work.filter((input, index) => index != key);
+    setWork(inputs);
+  };
+
+  const inputHandler = (text, key) => {
+    const inputs = [...work];
+    inputs[key].value = text;
+    inputs[key].key = key;
+    setWork(inputs);
+  };
+
+  const assignWorkArr = [];
+  React.useEffect(() => {
+    work.map((item, i) => {
+      assignWorkArr.push(item.value);
+      setNewWork(assignWorkArr);
+    });
+  }, [work]);
+
+  //user roles from api
+  const [openUserRole, setOpenUserRole] = React.useState(false);
+  const [userRoleValue, setUserRoleValue] = React.useState([]);
+  const [userRoles, setUserRoles] = React.useState([]);
+
+  //users inside user roles
+  const [openUsers, setOpenUsers] = React.useState(false);
+  const [usersValue, setUsersValue] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
+
+  // button enable function
+  function isEnableSubmit() {
+    return work != '' && workError == '';
+  }
+
+  // call apis
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}role`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data);
+        let roleDataFromApi = data.map(one => {
+          return {label: one.user_role, value: one._id};
+        });
+        setUserRoles(roleDataFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+
+  const OnChangeHandler = id => {
+    fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data);
+        let userRolesFromApi = data.map(one => {
+          return {label: one.name, value: one._id};
+        });
+        setUsers(userRolesFromApi);
+      })
+      .catch(error => console.log(error.message));
+  };
+
+  // Post assign work data from api
+  const OnSubmit = () => {
+    const FormData = {
+      role_id: userRoleValue,
+      user_id: usersValue,
+      work: newWork,
+    };
+    console.log(FormData);
+    fetch(`${Config.API_URL}assign-works`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(FormData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log('Success:', data);
+        if (data.status == 200) {
+          setTimeout(() => {
+            setShowAssignWorkModal(false);
+          }, 1000);
+        }
+        // showToast();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  //Modal
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
   const [showAssignWorkModal, setShowAssignWorkModal] =
     React.useState(isVisible);
@@ -40,95 +154,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     outputRange: [SIZES.height, SIZES.height - 650],
   });
 
-  // api call for getting roles
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}/role`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let rolesFromApi = data.map(team => {
-          return {label: team.user_role, value: team._id};
-        });
-        setRoleItems(rolesFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
-
-  // get assign works
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}/assign-works`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        // let rolesFromApi = data.map(team => {
-        //   return {label: team.user_role, value: team._id};
-        // });
-        // setRoleItems(rolesFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
-  // post data from api
-  const OnSubmit = () => {
-    const data = {
-      role_id: roleValue,
-      list: userValue,
-      work: assignWork,
-    };
-
-    fetch(`${Config.API_URL}/assign-works`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        if (data.status == 200) {
-          setTimeout(() => {
-            setShowAssignWorkModal(false);
-          }, 1000);
-        }
-        // showToast();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  };
-
-  //form data
-  const [openRole, setOpenRole] = React.useState(false);
-  const [roleValue, setRoleValue] = React.useState([]);
-  const [roleItems, setRoleItems] = React.useState([]);
-
-  // second from users
-  const [openUser, setOpenUser] = React.useState(false);
-  const [userValue, setUserValue] = React.useState([]);
-  const [userItems, setUserItems] = React.useState([
-    {label: 'User 1', value: 'User1'},
-    {label: 'User 2', value: 'User2'},
-    {label: 'User 3', value: 'User3'},
-    {label: 'User 4', value: 'User4'},
-    {label: 'User 5', value: 'User5'},
-  ]);
-  const [assignWork, setAssignWork] = React.useState('');
-  const [assignWorkError, setAssignWorkError] = React.useState('');
-
-  function isEnableSubmit() {
-    return assignWork != '' && assignWorkError == '';
-  }
-
-  // document picker
+  // Document picker
   const [fileData, setFileData] = React.useState([]);
 
   const handleFilePicker = async () => {
@@ -165,7 +191,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
             left: SIZES.padding,
             top: modalY,
             width: '90%',
-            // height: '50%',
+            height: '65%',
             padding: SIZES.padding,
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
@@ -189,31 +215,31 @@ const WorkAssignModal = ({isVisible, onClose}) => {
             />
           </View>
           {/* <WorkAssign /> */}
-          <ScrollView>
-            <Drop
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <CustomDropdown
               placeholder="Select"
-              open={openRole}
-              value={roleValue}
-              items={roleItems}
-              setOpen={setOpenRole}
-              setValue={setRoleValue}
-              setItems={setRoleItems}
-              categorySelectable={true}
+              open={openUserRole}
+              value={userRoleValue}
+              items={userRoles}
+              setOpen={setOpenUserRole}
+              setValue={setUserRoleValue}
+              setItems={setUserRoles}
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
-              zIndex={5000}
-              zIndexInverse={1000}
+              onChangeValue={value => {
+                OnChangeHandler(value);
+                console.log(value);
+              }}
             />
-            <Drop
+            <CustomDropdown
               placeholder="Select"
-              open={openUser}
-              value={userValue}
-              items={userItems}
-              setOpen={setOpenUser}
-              setValue={setUserValue}
-              setItems={setUserItems}
-              // multiple={true}
+              open={openUsers}
+              value={usersValue}
+              items={users}
+              setOpen={setOpenUsers}
+              setValue={setUsersValue}
+              setItems={setUsers}
               categorySelectable={true}
               listParentLabelStyle={{
                 color: COLORS.white,
@@ -221,17 +247,76 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               zIndex={3000}
               zIndexInverse={1000}
             />
-            <FormInput
-              inputStyle={{width: 200}}
-              multiline={true}
-              numberOfLines={8}
-              label="Work details"
-              keyboardType="default"
-              autoCompleteType="username"
-              onChange={value => {
-                setAssignWork(value);
-              }}
-            />
+
+            <View
+              style={{
+                // flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              {/* <ScrollView> */}
+              {work.map((input, key) => (
+                <View style={{}} key={key}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        color: COLORS.darkGray,
+                        ...FONTS.body4,
+                        marginTop: SIZES.radius,
+                      }}>
+                      Work {key + 1}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    <View
+                      style={{
+                        width: key == 0 ? '88%' : '80%',
+                        paddingHorizontal: SIZES.padding,
+                        borderRadius: SIZES.base,
+                        backgroundColor: COLORS.gray3,
+                      }}>
+                      <TextInput
+                        placeholder="Write here..."
+                        placeholderTextColor={COLORS.darkGray}
+                        value={input.value}
+                        onChangeText={text => inputHandler(text, key)}
+                      />
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                      <TouchableOpacity
+                        style={{}}
+                        onPress={() => removeHandler(key)}>
+                        {key != 0 && (
+                          <Image
+                            source={icons.minus1}
+                            style={{
+                              height: 25,
+                              width: 25,
+                              right: 5,
+                            }}
+                          />
+                        )}
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={addHandler}>
+                        <Image
+                          source={icons.plus1}
+                          style={{
+                            height: key == 0 ? 30 : 25,
+                            width: key == 0 ? 30 : 25,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              ))}
+              {/* </ScrollView> */}
+            </View>
 
             <Text
               style={{

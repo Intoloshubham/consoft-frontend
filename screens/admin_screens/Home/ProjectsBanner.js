@@ -11,7 +11,12 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import {FormInput, Drop, IconButton, TextButton} from '../../../Components';
+import {
+  FormInput,
+  CustomDropdown,
+  IconButton,
+  TextButton,
+} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
@@ -41,12 +46,12 @@ const ProjectsBanner = () => {
       .then(data => {
         setProjects(data);
       });
-  });
+  }, []);
   const [projects, setProjects] = React.useState([]);
 
   // // project categories
   React.useEffect(() => {
-    fetch(`${Config.API_URL}/project-category`, {
+    fetch(`${Config.API_URL}project-category`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +62,7 @@ const ProjectsBanner = () => {
         let proCatFromApi = data.map(item => {
           return {label: item.category_name, value: item._id};
         });
-        console.log(data);
+        // console.log(data);
         setProjectCategory(proCatFromApi);
       })
       .catch(error => console.log(error.message));
@@ -65,7 +70,7 @@ const ProjectsBanner = () => {
 
   // project types
   React.useEffect(() => {
-    fetch(`${Config.API_URL}/project-type`, {
+    fetch(`${Config.API_URL}project-type`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -76,7 +81,7 @@ const ProjectsBanner = () => {
         let proTypeFromApi = data.map(item => {
           return {label: item.project_type, value: item._id};
         });
-        console.log(data);
+        // console.log(data);
         setProjectType(proTypeFromApi);
       })
       .catch(error => console.log(error.message));
@@ -152,35 +157,36 @@ const ProjectsBanner = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
+        if (data.status == 200) {
+          setTimeout(() => {
+            setCreateProjectModal(false);
+          }, 1000);
+        }
         showToast();
       })
       .catch(error => {
         console.error('Error:', error);
       });
-
-    setTimeout(() => {
-      setCreateProjectModal(false);
-    }, 1000);
   };
 
   // project id
   const [data, setData] = React.useState('');
   const modalHandler = id => {
     setData(id);
-    console.log(id);
+    // console.log(id);
     setProjectCrud(true);
   };
 
   // delete projects
   const OnDeleteSubmit = () => {
     alert(data);
-    fetch(`${Config.API_URL}/projects` + `${data}`, {
+    fetch(`${Config.API_URL}projects/` + `${data}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    console.log('delete');
+    // console.log('delete');
     showToast();
   };
 
@@ -195,14 +201,24 @@ const ProjectsBanner = () => {
       project_measurement: value2,
     };
 
-    fetch(`${Config.API_URL}/projects` + `/${data}`, {
+    fetch(`${Config.API_URL}projects/` + `${data}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(updateData),
-    });
-    showToast();
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+    // setTimeout(() => {
+    //   setCreateProjectModal(false);
+    // }, 1000);
   };
 
   //edit projects
@@ -318,12 +334,14 @@ const ProjectsBanner = () => {
       <FlatList
         contentContainerStyle={{
           marginTop: SIZES.padding,
+          paddingBottom: SIZES.padding,
         }}
         data={projects}
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         scrollEnabled={true}
-        maxHeight={510}
+        nestedScrollEnabled={true}
+        maxHeight={300}
         showsVerticalScrollIndicator={false}
       />
     );
@@ -460,7 +478,7 @@ const ProjectsBanner = () => {
                       }
                     />
 
-                    <Drop
+                    <CustomDropdown
                       placeholder="Select category"
                       open={open}
                       value={value}
@@ -468,11 +486,15 @@ const ProjectsBanner = () => {
                       setOpen={setOpen}
                       setValue={setValue}
                       setItems={setProjectCategory}
-                      zIndex={7000}
+                      zIndex={9000}
                       zIndexInverse={1000}
+                      multiple={false}
+                      listParentLabelStyle={{
+                        color: COLORS.white,
+                      }}
                     />
 
-                    <Drop
+                    <CustomDropdown
                       placeholder="Select types"
                       open={open1}
                       value={value1}
@@ -482,6 +504,9 @@ const ProjectsBanner = () => {
                       setItems={setProjectType}
                       zIndex={7000}
                       zIndexInverse={1000}
+                      listParentLabelStyle={{
+                        color: COLORS.white,
+                      }}
                     />
                     <View
                       style={{
@@ -493,7 +518,7 @@ const ProjectsBanner = () => {
                         keyboardType="numeric"
                         autoCompleteType="cc-number"
                         containerStyle={{width: 215}}
-                        value={projectplotarea}
+                        value={projectplotarea.toString()}
                         onChange={value => {
                           utils.validateNumber(value, setProjectPlotAreaError);
                           setProjectPlotArea(value);
@@ -503,10 +528,10 @@ const ProjectsBanner = () => {
                       <View
                         style={{
                           marginLeft: SIZES.radius,
-                          width: 100,
-                          marginTop: 5,
+                          width: '36%',
+                          // marginTop: 5,
                         }}>
-                        <Drop
+                        <CustomDropdown
                           placeholder="Unit"
                           open={open2}
                           value={value2}
@@ -514,6 +539,9 @@ const ProjectsBanner = () => {
                           setOpen={setOpen2}
                           setValue={setValue2}
                           setItems={setProjectUnit}
+                          listParentLabelStyle={{
+                            color: COLORS.white,
+                          }}
                         />
                       </View>
                     </View>

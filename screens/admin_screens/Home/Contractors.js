@@ -15,7 +15,7 @@ import {
   TextButton,
   FormInput,
   IconButton,
-  Drop,
+  CustomDropdown
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 
@@ -177,7 +177,7 @@ const Contractors = () => {
                   />
                 </View>
                 <ScrollView>
-                  <Drop
+                  <CustomDropdown
                     placeholder="Select Role"
                     open={open}
                     value={value}

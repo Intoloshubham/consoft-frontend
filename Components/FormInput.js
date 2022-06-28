@@ -26,7 +26,7 @@ const FormInput = ({
           style={{
             color: COLORS.darkGray,
             ...FONTS.body4,
-            marginTop: SIZES.base,
+            marginTop: SIZES.base * 1.5,
           }}>
           {label}
         </Text>
@@ -35,7 +35,7 @@ const FormInput = ({
       <View
         style={{
           flexDirection: 'row',
-          height: 45,
+          height: 40,
           paddingHorizontal: SIZES.padding,
           // marginTop: SIZES.base,
           borderRadius: SIZES.base,

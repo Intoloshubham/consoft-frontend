@@ -1,22 +1,22 @@
 import React from 'react';
 import {View, Image} from 'react-native';
-import {HeaderBar} from '../../Components';
-import {COLORS, images, SIZES, icons, Apis} from '../../constants';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import {FormInput, TextButton} from '../../Components';
 import Config from '../../config';
+import {FormInput, TextButton, HeaderBar} from '../../Components';
+import {COLORS, images, SIZES, icons} from '../../constants';
 
-const VerifyProductKey = ({navigation}) => {
+const VerifyProductKey = ({navigation, route}) => {
+  const {company_id} = route.params;
   const [productKey, setProductKey] = React.useState('');
   const [productKeyError, setProductKeyError] = React.useState('');
 
   const OnSubmit = () => {
     const productdata = {
       product_key: productKey,
-      company_id: '62af20782d72412828766b66',
+      company_id: company_id,
     };
-    fetch(`${Config.API_URL}/verify-product-key`, {
+    fetch(`${Config.API_URL}verify-product-key`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,6 +25,7 @@ const VerifyProductKey = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         console.log(data.status);
         if (data.status == 200) {
           navigation.navigate('Home');

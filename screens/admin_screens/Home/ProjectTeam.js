@@ -16,7 +16,7 @@ import {
   HeaderBar,
   TextButton,
   FormInput,
-  Drop,
+  CustomDropdown,
   IconButton,
 } from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
@@ -234,7 +234,7 @@ const ProjectTeam = () => {
                   />
                 </View>
                 <ScrollView>
-                  <Drop
+                  <CustomDropdown
                     placeholder="Select Role"
                     open={open}
                     value={value}

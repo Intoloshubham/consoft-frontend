@@ -2,12 +2,13 @@ import React from 'react';
 import {View, LogBox, ScrollView, SafeAreaView} from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
+import ProjectReports from './ProjectReports';
 import ProjectWorksIdentifier from './ProjectWorksIdentifier';
 
 const Home = () => {
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
+  }, []);
 
   return (
     <SafeAreaView>
@@ -19,7 +20,8 @@ const Home = () => {
           }}>
           <ProjectsBanner />
           <AssignedWorks />
-          <ProjectWorksIdentifier />
+          {/* <ProjectReports /> */}
+          {/* <ProjectWorksIdentifier /> */}
         </View>
       </ScrollView>
     </SafeAreaView>

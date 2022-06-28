@@ -7,53 +7,23 @@ import {
   ScrollView,
   StyleSheet,
   LogBox,
-  FlatList,
 } from 'react-native';
-import {
-  IconButton,
-  TextButton,
-  LineDivider,
-  ProgressBar,
-  ProfileValue,
-  UploadImage,
-} from '../../../Components';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
+import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {LineDivider, ProfileValue} from '../../../Components';
 
 const Account = () => {
   const navigation = useNavigation();
+  const [collapsed, setCollapsed] = React.useState(true);
+
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  const [collapsed, setCollapsed] = React.useState(true);
-
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
-
-  function renderHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          // marginTop: 30,
-          paddingHorizontal: SIZES.padding,
-          justifyContent: 'space-between',
-        }}>
-        <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
-          Profile
-        </Text>
-        {/* <IconButton
-          icon={icons.sun}
-          iconStyle={{
-            tintColor: COLORS.black,
-          }}
-        /> */}
-      </View>
-    );
-  }
 
   function renderProfileCard() {
     return (
@@ -69,18 +39,16 @@ const Account = () => {
         {/* profile image  */}
         <TouchableOpacity
           style={{
-            width: 80,
-            height: 80,
+            width: 60,
+            height: 60,
           }}
-          onPress={() => {
-            return <UploadImage />;
-          }}>
+          onPress={() => alert('Upload Image')}>
           <Image
             source={images.Profile7}
             style={{
               width: '100%',
               height: '100%',
-              borderRadius: 40,
+              borderRadius: 30,
               borderWidth: 2,
               borderColor: COLORS.white,
             }}
@@ -131,33 +99,6 @@ const Account = () => {
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             Administrator
           </Text>
-          {/* progress  */}
-          {/* <ProgressBar
-            progress="40%"
-            containerStyle={{
-              marginTop: SIZES.radius,
-            }}
-          /> */}
-          {/* <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            <Text
-              style={{
-                flex: 1,
-                color: COLORS.white,
-                ...FONTS.body4,
-              }}>
-              Overall Progress
-            </Text>
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.body4,
-              }}>
-              40%
-            </Text>
-          </View> */}
         </View>
       </View>
     );
@@ -170,31 +111,27 @@ const Account = () => {
           ...styles.profileSectionContainer,
         }}>
         <ProfileValue
-          icon={icons.profile}
-          value="Create New Project"
+          icon={icons.p_team}
+          value="Project Categories & Types"
           image={icons.right_arr}
+          onPress={() => navigation.navigate('CategoryandType')}
+        />
+        <LineDivider />
+        <ProfileValue
+          icon={icons.p_team}
+          value="Add Company Team"
+          image={icons.right_arr}
+          onPress={() => navigation.navigate('CompanyTeam')}
         />
         <LineDivider />
         <ProfileValue
           icon={icons.stock_manage}
-          value="Stock Mangement"
+          value="Stock Management"
           image={icons.down_arrow}
           onPress={toggleExpanded}
         />
         <Collapsible collapsed={collapsed} duration={300}>
           <View style={{marginLeft: SIZES.padding * 1.8}}>
-            {/* <Text
-              style={{
-                ...FONTS.h3,
-                fontSize: 18,
-                color: COLORS.darkGray,
-                marginVertical: SIZES.base,
-              }}>
-              Items
-            </Text> */}
-            {/* <Text style={{...FONTS.h3, fontSize: 18, color: COLORS.darkGray}}>
-              Unit
-            </Text> */}
             <ProfileValue
               icon={icons.items}
               value="Items"
@@ -217,28 +154,14 @@ const Account = () => {
             />
           </View>
         </Collapsible>
+        <LineDivider />
         <ProfileValue
-          icon={icons.p_team}
-          value="Create Company Team"
+          icon={icons.Suppliers}
+          value="Suppliers"
           image={icons.right_arr}
-          onPress={() => navigation.navigate('CompanyTeam')}
+          onPress={() => navigation.navigate('Suppliers')}
         />
-        <ProfileValue
-          icon={icons.contr}
-          value="Contractors"
-          image={icons.right_arr}
-        />
-        <ProfileValue
-          icon={icons.camera}
-          value="Project Team"
-          image={icons.right_arr}
-        />
-        <ProfileValue
-          icon={icons.p_team}
-          value="Categories & Types"
-          image={icons.right_arr}
-          onPress={() => navigation.navigate('CategoryandType')}
-        />
+        <LineDivider />
       </View>
     );
   }
@@ -249,7 +172,11 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" onPress={() => {}} />
+        <ProfileValue
+          icon={icons.logout}
+          value="LogOut"
+          onPress={() => navigation.navigate('Dahsboard')}
+        />
       </View>
     );
   }
@@ -260,20 +187,13 @@ const Account = () => {
         flex: 1,
         backgroundColor: COLORS.white,
       }}>
-      {/* Header  */}
-      {/* {renderHeader()} */}
-
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: SIZES.padding,
           paddingBottom: 150,
         }}>
-        {/* profile card  */}
         {renderProfileCard()}
-
-        {/* profile section 1  */}
         {renderProfileSection1()}
-        {/* section 2  */}
         {renderProfileSection2()}
       </ScrollView>
     </View>

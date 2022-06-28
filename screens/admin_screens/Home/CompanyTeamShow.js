@@ -17,46 +17,33 @@ import {
   TextButton,
   IconButton,
   FormInput,
-  Drop,
+  CustomDropdown,
 } from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
+import Config from '../../../config';
 
-const CompanyTeam = [
-  {
-    id: 1,
-    name: 'Shivam Verma',
-    email: 'shivam@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
-  {
-    id: 2,
-    name: 'Rahul Shrivastav',
-    email: 'rahul@gmail.com',
-    mobile: 9988776655,
-    designation: 'Architect',
-  },
-  {
-    id: 3,
-    name: 'Chotu Patel',
-    email: 'chotu@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
-  {
-    id: 4,
-    name: 'Shivam Verma',
-    email: 'shivam@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
-];
 const ProjectCompanyShow = () => {
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
+  }, []);
 
-  const [comTeamDetails, setComTeamDetails] = React.useState(CompanyTeam);
+  const [comTeamDetails, setComTeamDetails] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}users`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setComTeamDetails(data);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+
   const [showCompanyAddTeamModal, setShowCompanyAddTeamModal] =
     React.useState(false);
   const [name, setName] = React.useState('');
@@ -85,7 +72,7 @@ const ProjectCompanyShow = () => {
           flexDirection: 'row',
           paddingVertical: SIZES.base,
         }}>
-        <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
+        <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}.</Text>
         <View style={{flex: 1, marginLeft: SIZES.radius}}>
           <View
             style={{
@@ -95,12 +82,13 @@ const ProjectCompanyShow = () => {
             }}>
             <Text
               style={{
-                ...FONTS.h3,
+                ...FONTS.h4,
                 color: COLORS.darkGray,
+                textTransform: 'capitalize',
               }}>
-              Mr.{item.name}
+              Mr. {item.name}
             </Text>
-            <View style={{flexDirection: 'row'}}>
+            {/* <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
                 onPress={() => {
                   alert('edit name');
@@ -128,9 +116,15 @@ const ProjectCompanyShow = () => {
                   }}
                 />
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
-          <Text style={{...FONTS.body4}}>Designation - {item.designation}</Text>
+          <Text style={{...FONTS.body5, textTransform: 'capitalize'}}>
+            Designation - {item.user_role}
+          </Text>
+          <Text style={{...FONTS.body5, textTransform: 'capitalize'}}>
+            Mobile No. - {item.mobile}
+          </Text>
+          <Text style={{...FONTS.body5}}>Email - {item.email}</Text>
         </View>
       </View>
     );
@@ -152,12 +146,11 @@ const ProjectCompanyShow = () => {
           List
         </Text> */}
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius}}
           data={comTeamDetails}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
-          maxHeight={510}
+          maxHeight={600}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
@@ -219,7 +212,7 @@ const ProjectCompanyShow = () => {
                   />
                 </View>
                 <ScrollView>
-                  <Drop
+                  <CustomDropdown
                     placeholder="Select Role"
                     open={open}
                     value={value}
@@ -344,7 +337,7 @@ const ProjectCompanyShow = () => {
         flex: 1,
       }}>
       <HeaderBar right={true} title="Company Team" />
-      <TextButton
+      {/* <TextButton
         label="Add New"
         buttonContainerStyle={{
           height: 45,
@@ -355,7 +348,7 @@ const ProjectCompanyShow = () => {
           backgroundColor: COLORS.lightblue_700,
         }}
         onPress={() => setShowCompanyAddTeamModal(true)}
-      />
+      /> */}
       {renderAddCompanyTeamModal()}
       {renderTeamList()}
     </View>
