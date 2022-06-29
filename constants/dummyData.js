@@ -123,26 +123,22 @@ const comp_tasks_var = [
 
 ]
 const Reports_part = [
-    // {
-    //     id: 1,
-    //     name: "Contractor Team",
-    //     // icon: require("../assets/icons/completed.png")
-    // },
-    // {
-    //     id: 2,
-    //     name: "Project Team",
-    //     // icon: require("../assets/icons/completed.png")
-    // },
-    // {
-    //     id: 3, 
-    //     name: "Company Team",
-    //     // icon: require("../assets/icons/completed.png")
-    // },
     {
-        id: 4,
-        name: "Contractor's Labour",
+        id: 0,
+        name: "Contractor 1",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 1,
+        name: "Contractor 2",
+        // icon: require("../assets/icons/completed.png")
+    },
+    {
+        id: 2, 
+        name: "Contractor 3",
         // icon: require("../assets/icons/completed.png")
     }
+
 
 ]
 
