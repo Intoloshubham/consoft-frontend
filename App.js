@@ -35,6 +35,10 @@ import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
 import user_tabs from './navigation/user_tabs';
 
+//setup redux
+import { store } from './app/store';
+import { Provider } from 'react-redux';
+
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -49,7 +53,7 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'Home'}>
+          initialRouteName={'VerifyProductKey'}>
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
@@ -104,4 +108,13 @@ const App = () => {
   );
 };
 
-export default App;
+// export default App;
+
+//for redux
+export default () => {
+  return(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+}

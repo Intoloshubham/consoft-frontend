@@ -18,6 +18,8 @@ import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
+import { useLoginCompanyMutation } from '../../services/companyAuthApi';
+
 const Login = ({navigation}) => {
   const makeCall = () => {
     let phoneNumber = '';
@@ -53,6 +55,9 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
 
   const [showPass, setShowPass] = React.useState(false);
+
+  //rtk
+  const [ loginCompany ] = useLoginCompanyMutation();
 
   function isEnableLogin() {
     return (
@@ -110,38 +115,49 @@ const Login = ({navigation}) => {
       });
   };
 
-  const companyOnSubmit = () => {
-    const Companydata = {
+
+
+  const companyOnSubmit = async () => {
+    const company_data = {
       mobile: companyMobileNo,
       password: companyPassword,
     };
-    console.log(Companydata);
-    fetch(`${Config.API_URL}company-login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(Companydata),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.access_token) {
-          showToast();
-          setTimeout(() => {
-            if (data.role == 'Editor' || data.role == 'Administrator') {
-              navigation.navigate('Home');
-            }
-          }, 200);
-        }
-        if (!data.access_token) {
-          showToastError();
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    const res = await loginCompany(company_data)
+    // console.log(res.data.company_id);
+    //store token in storage
+
+
+
+
+    // fetch(`${Config.API_URL}/company-login`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(company_data),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     if (data.access_token) {
+    //       showToast();
+    //       setTimeout(() => {
+    //         if (data.role == 'Editor' || data.role == 'Administrator') {
+    //           navigation.navigate('Home');
+    //         }
+    //       }, 200);
+    //     }
+    //     if (!data.access_token) {
+    //       showToastError();
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
+
+
   };
+
 
   function renderHeaderLogo() {
     return (

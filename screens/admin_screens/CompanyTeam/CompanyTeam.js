@@ -41,6 +41,14 @@ const CompanyTeam = ({navigation}) => {
     );
   }
 
+  // dropdown
+  const data = [
+    {label: 'Engineer', value: '1'},
+    {label: 'Supervisor', value: '2'},
+    {label: 'Asst. Superviosr', value: '3'},
+  ];
+  const [dropdown, setDropdown] = React.useState(null);
+
   // show toast on successfullt created
   const showToast = () =>
     Toast.show({
@@ -87,29 +95,28 @@ const CompanyTeam = ({navigation}) => {
       .catch(error => console.log(error.message));
   }, []);
 
-  const UserRegister = () => {
-    const userData = {
-      role_id: roleValue,
-      name: name,
+  const OnSubmit = () => {
+    const data = {
+      role: dropdown,
+      name: username,
       email: email,
-      mobile: mobile,
+      mobile: mobileNo,
       password: password,
     };
 
-    fetch(`${Config.API_URL}register`, {
+    // const res = registerCompany(data);
+    // console.log(res);
+
+    fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(data),
     })
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        if (data.access_token != null) {
-          showToast();
-          console.log(data.access_token);
-        }
       })
       .catch(error => {
         console.error(error.message);
@@ -294,7 +301,7 @@ const CompanyTeam = ({navigation}) => {
                 ? COLORS.lightblue_700
                 : COLORS.transparentPrimary,
             }}
-            onPress={UserRegister}
+            onPress={OnSubmit}
           />
         </View>
       </AuthLayout>

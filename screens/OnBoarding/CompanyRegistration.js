@@ -7,23 +7,30 @@ import Config from '../../config';
 import {FormInput, TextButton, HeaderBar} from '../../Components';
 import {COLORS, images, icons, SIZES} from '../../constants';
 
+//redux
+import {useRegisterCompanyMutation} from '../../services/companyAuthApi';
+import {setCompanyId} from '../../services/asyncStorageService';
+
 const CompanyRegistration = ({navigation}) => {
   const [cName, setCName] = React.useState('');
-  // const [cPanNo, setCPanNo] = React.useState('');
+  //const [cPanNo, setCPanNo] = React.useState('');
   const [cMobileNo, setCMobileNo] = React.useState('');
   const [cEmail, setCEmail] = React.useState('');
 
   const [cNameError, setCNameError] = React.useState('');
-  // const [cPanNoError, setCPanNoError] = React.useState('');
+  //const [cPanNoError, setCPanNoError] = React.useState('');
   const [cMobileNoError, setCMobileNoError] = React.useState('');
   const [cEmailError, setCEmailError] = React.useState('');
+
+  //redux
+  const [registerCompany] = useRegisterCompanyMutation();
 
   function isEnableCreateCompany() {
     return (
       cName != '' &&
       cNameError == '' &&
-      // cPanNo != '' &&
-      // cPanNoError == '' &&
+      //cPanNo != '' &&
+      //cPanNoError == '' &&
       cMobileNo != '' &&
       cMobileNoError == '' &&
       cEmail != '' &&
@@ -51,41 +58,52 @@ const CompanyRegistration = ({navigation}) => {
       visibilityTime: 4000,
     });
 
-  const onSubmit = () => {
-    const data = {
+  const onSubmit = async () => {
+    const company_data = {
       company_name: cName,
-      // pan: cPanNo,
+      //pan: cPanNo,
       mobile: cMobileNo,
       email: cEmail,
     };
 
-    console.log(data);
+    const result = await registerCompany(company_data);
+    // console.log(result.error.data.message);
+    // console.log(result.data.status);
+    // console.log(result)
+    if (result.data.status == 200) {
+      await setCompanyId(result.data.company_id);
+      showToast();
+      setTimeout(() => {
+        navigation.navigate('VerifyProductKey');
+      }, 350);
+    }
+    if (result.data.status != 200) {
+      showToastError();
+    }
 
-    fetch(`${Config.API_URL}company`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data.company_id);
-        if (data.status == 200) {
-          showToast();
-          setTimeout(() => {
-            navigation.navigate('VerifyProductKey', {
-              company_id: data.company_id,
-            });
-          }, 350);
-        }
-        if (data.status != 200) {
-          showToastError();
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    // fetch(`${Config.API_URL}/company`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     if (data.status == 200) {
+    //       showToast();
+    //       setTimeout(() => {
+    //         navigation.navigate('VerifyProductKey');
+    //       }, 350);
+    //     }
+    //     if (data.status != 200) {
+    //       showToastError();
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
   };
 
   return (

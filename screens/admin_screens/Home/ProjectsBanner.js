@@ -20,7 +20,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
-import {COLORS, SIZES, FONTS, icons, Apis} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import Toast from 'react-native-toast-message';
 import Config from '../../../config';
 
@@ -156,12 +156,7 @@ const ProjectsBanner = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
-        if (data.status == 200) {
-          setTimeout(() => {
-            setCreateProjectModal(false);
-          }, 1000);
-        }
+        // console.log('Success:', data);
         showToast();
       })
       .catch(error => {
