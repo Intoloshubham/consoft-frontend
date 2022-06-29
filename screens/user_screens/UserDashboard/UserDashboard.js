@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, ScrollView, Modal, Pressable, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FONTS, icons, SIZES, COLORS } from '../../../constants'
 import LinearGradient from 'react-native-linear-gradient'
@@ -9,10 +9,39 @@ import { Todo, InProgressModal, DoneModal } from '../TaskModal'
 import styles from './css/UserDashboardStyle'
 import Reports from '../UserReports/UserReports'
 
+//redux
+import { getToken } from '../../../services/asyncStorageService';
+import { useGetLoggedUserQuery } from '../../../services/userAuthApi';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '../../../features/UserSlice';
+import { setUserToken } from '../../../features/UserAuthSlice';
+import { useSelector } from 'react-redux';
 
 // Icons.loadFont();
 
 const UserDashboard = ({navigation}) => {
+
+  const [accessToken, setAccessToken] = useState('');
+
+  useEffect( () => {
+    (async() => {
+        const token = await getToken();
+        setAccessToken(token)
+        dispatch(setUserToken({ token:token }))
+      })();
+  })
+
+  const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role_id: data.role_id  }))
+    }
+  })
+
+  const userData = useSelector(state => state.user);
+  // console.log(userData);
 
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
@@ -40,6 +69,7 @@ const UserDashboard = ({navigation}) => {
       {/* <LinearGradient colors={[COLORS.lightGray2, COLORS.lightGray2, COLORS.lightGray2]} style={styles.container}> */}
 
         <View style={styles.tasks}>
+          {/* <Text>{accessToken}</Text> */}
           <TouchableOpacity style={styles.Intask} onPress={() => handleTask()}>
             <View>
               <Image

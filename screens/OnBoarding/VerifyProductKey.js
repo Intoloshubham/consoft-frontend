@@ -1,14 +1,59 @@
-import React from 'react';
-import {View, Image, TouchableOpacity, Text, Button} from 'react-native';
-import {HeaderBar} from '../../Components';
-import {COLORS, images, SIZES, icons} from '../../constants';
+import React, {useEffect, useState} from 'react';
+import {View, Image} from 'react-native';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import {FormInput, TextButton, Toast} from '../../Components';
+import Config from '../../config';
+import {FormInput, TextButton, HeaderBar} from '../../Components';
+import {COLORS, images, SIZES, icons} from '../../constants';
+
+//redux
+import { getCompanyId, storeToken } from '../../services/asyncStorageService';
+import { useVerifyProductKeyMutation } from '../../services/companyAuthApi';
 
 const VerifyProductKey = ({navigation}) => {
   const [productKey, setProductKey] = React.useState('');
   const [productKeyError, setProductKeyError] = React.useState('');
+
+  //redux
+  const [companyIdAsync, setCompanyIdAsync ] = React.useState();
+  const [ verifyProductKey ] = useVerifyProductKeyMutation();
+
+  useEffect(() => {
+    (async () => {
+      const company_id = await getCompanyId() 
+      setCompanyIdAsync(company_id)          
+    })();
+  })
+
+
+  const OnSubmit = async () => {
+    const productdata = {
+      product_key: productKey,
+      company_id: companyIdAsync,
+    };
+    const res = await verifyProductKey(productdata);
+
+    // console.log(res);
+    // console.log(result.error);
+    // console.log(result);
+    let result;
+    if (res.data) {
+      result = res.data;
+    }
+    if (res.error) {
+      result = res.error;
+    }
+
+    if (result.status === 200) {
+      await storeToken(result.access_token);   
+      navigation.navigate('Home');
+    }
+
+    if(result.status === 406){
+      alert(result.data.message);
+    }
+
+  };
 
   return (
     <View
@@ -67,7 +112,7 @@ const VerifyProductKey = ({navigation}) => {
               marginTop: SIZES.padding,
               borderRadius: SIZES.base,
             }}
-            onPress={() => navigation.navigate('Home')}
+            onPress={OnSubmit}
           />
         </View>
       </AuthLayout>

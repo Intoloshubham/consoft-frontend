@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
@@ -6,12 +6,8 @@ import * as eva from '@eva-design/eva';
 
 import {ApplicationProvider} from '@ui-kitten/components';
 import {
-  OnBoarding,
-  SignUp,
-  SignIn,
-  Otp,
-  ForgotPassword,
-  CreateCompany,
+  Login,
+  CompanyRegistration,
   CompanyPayment,
   VerifyProductKey,
 } from './screens';
@@ -21,7 +17,6 @@ import {
   ProjectTeam,
   Contractors,
   StocksAndInventry,
-  ProjectReports,
   ToolsAndMachinery,
   ProjectSeheduleTime,
   CheckList,
@@ -30,6 +25,9 @@ import {
   CompanyTeam,
   ManageStock,
   CompanyTeamShow,
+  CategoryandType,
+  ProjectReports,
+  Suppliers,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -37,7 +35,9 @@ import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
 import user_tabs from './navigation/user_tabs';
 
-global.apiurl = 'http://192.168.1.99:8000/api';
+//setup redux
+import {store} from './app/store';
+import {Provider} from 'react-redux';
 
 const Stack = createStackNavigator();
 
@@ -53,24 +53,27 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'Home'}>
-          <Stack.Screen name="CreateCompany" component={CreateCompany} />
+          initialRouteName={'Login'}>
+          {/* Company Resgistration & User */}
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="CompanyRegistration"
+            component={CompanyRegistration}
+          />
           <Stack.Screen name="CompanyPayment" component={CompanyPayment} />
           <Stack.Screen name="VerifyProductKey" component={VerifyProductKey} />
-          <Stack.Screen name="SignIn" component={SignIn} />
+
+          {/* Home screens */}
           <Stack.Screen name="Home" component={Tabs} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-          <Stack.Screen name="Otp" component={Otp} />
-          <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="ProjectsDetails" component={ProjectsDetails} />
+          <Stack.Screen name="CompanyTeamShow" component={CompanyTeamShow} />
           <Stack.Screen name="ProjectTeam" component={ProjectTeam} />
           <Stack.Screen name="Contractors" component={Contractors} />
+          <Stack.Screen name="ProjectReports" component={ProjectReports} />
           <Stack.Screen
             name="StocksAndInventry"
             component={StocksAndInventry}
           />
-          <Stack.Screen name="ProjectReports" component={ProjectReports} />
           <Stack.Screen
             name="ToolsAndMachinery"
             component={ToolsAndMachinery}
@@ -79,14 +82,20 @@ const App = () => {
             name="ProjectSeheduleTime"
             component={ProjectSeheduleTime}
           />
-          <Stack.Screen name="CompanyTeamShow" component={CompanyTeamShow} />
-          <Stack.Screen name="CheckList" component={CheckList} />
+
+          {/* Tab screens */}
+          <Stack.Screen name="Account" component={Account} />
+          <Stack.Screen name="Suppliers" component={Suppliers} />
+
+          {/* Account Screens */}
+          <Stack.Screen name="CategoryandType" component={CategoryandType} />
           <Stack.Screen name="Items" component={Items} />
           <Stack.Screen name="Unit" component={Unit} />
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />
+          <Stack.Screen name="CheckList" component={CheckList} />
 
-          {/* User  */}
+          {/* User Screens */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="Demo" component={Demo} />
@@ -99,4 +108,13 @@ const App = () => {
   );
 };
 
-export default App;
+// export default App;
+
+//for redux
+export default () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};

@@ -8,18 +8,133 @@ import {
   Modal,
   ScrollView,
   Image,
+  TextInput,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import {IconButton, FormInput, Drop, TextButton} from '../../../Components';
+import {IconButton, CustomDropdown, TextButton} from '../../../Components';
+import Config from '../../../config';
 
 const WorkAssignModal = ({isVisible, onClose}) => {
+  //assign work input
+  const [work, setWork] = React.useState([{key: '', value: ''}]);
+  const [newWork, setNewWork] = React.useState([]);
+
+  const addHandler = () => {
+    const inputs = [...work];
+    inputs.push({key: '', value: ''});
+    setWork(inputs);
+  };
+
+  const removeHandler = key => {
+    const inputs = work.filter((input, index) => index != key);
+    setWork(inputs);
+  };
+
+  const inputHandler = (text, key) => {
+    const inputs = [...work];
+    inputs[key].value = text;
+    inputs[key].key = key;
+    setWork(inputs);
+  };
+
+  const assignWorkArr = [];
+  React.useEffect(() => {
+    work.map((item, i) => {
+      assignWorkArr.push(item.value);
+      setNewWork(assignWorkArr);
+    });
+  }, [work]);
+
+  //user roles from api
+  const [openUserRole, setOpenUserRole] = React.useState(false);
+  const [userRoleValue, setUserRoleValue] = React.useState([]);
+  const [userRoles, setUserRoles] = React.useState([]);
+
+  //users inside user roles
+  const [openUsers, setOpenUsers] = React.useState(false);
+  const [usersValue, setUsersValue] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
+
+  // button enable function
+  function isEnableSubmit() {
+    return work != '' && workError == '';
+  }
+
+  // call apis
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}role`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data);
+        let roleDataFromApi = data.map(one => {
+          return {label: one.user_role, value: one._id};
+        });
+        setUserRoles(roleDataFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+
+  const OnChangeHandler = id => {
+    fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data);
+        let userRolesFromApi = data.map(one => {
+          return {label: one.name, value: one._id};
+        });
+        setUsers(userRolesFromApi);
+      })
+      .catch(error => console.log(error.message));
+  };
+
+  // Post assign work data from api
+  const OnSubmit = () => {
+    const FormData = {
+      role_id: userRoleValue,
+      user_id: usersValue,
+      work: newWork,
+    };
+    console.log(FormData);
+    fetch(`${Config.API_URL}assign-works`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(FormData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log('Success:', data);
+        if (data.status == 200) {
+          setTimeout(() => {
+            setShowAssignWorkModal(false);
+          }, 1000);
+        }
+        // showToast();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  //Modal
   const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const [showCreateProjectModal, setCreateProjectModal] =
+  const [showAssignWorkModal, setShowAssignWorkModal] =
     React.useState(isVisible);
 
   React.useEffect(() => {
-    if (showCreateProjectModal) {
+    if (showAssignWorkModal) {
       Animated.timing(modalAnimatedValue, {
         toValue: 1,
         duration: 500,
@@ -32,32 +147,14 @@ const WorkAssignModal = ({isVisible, onClose}) => {
         useNativeDriver: false,
       }).start(() => onClose());
     }
-  }, [showCreateProjectModal]);
+  }, [showAssignWorkModal]);
 
   const modalY = modalAnimatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [SIZES.height, SIZES.height - 650],
   });
 
-  //form data
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
-  const [items, setItems] = React.useState([
-    {label: 'Engineer', value: '1'},
-    {label: 'Maneger', value: '2'},
-    {label: 'Supervisor', value: '3'},
-    {label: 'Asst. Supervisor', value: '4'},
-    {label: 'Site Engineer', value: '5'},
-    {label: 'Other staff', value: '6'},
-  ]);
-  const [projectTeamname, setProjectTeamName] = React.useState('');
-  const [projectTeamNameError, setProjectTeamNameError] = React.useState('');
-
-  function isEnableSubmit() {
-    return projectTeamname != '' && projectTeamNameError == '';
-  }
-
-  // document picker
+  // Document picker
   const [fileData, setFileData] = React.useState([]);
 
   const handleFilePicker = async () => {
@@ -78,7 +175,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
         {/* transparent background */}
-        <TouchableWithoutFeedback onPress={() => setCreateProjectModal(false)}>
+        <TouchableWithoutFeedback onPress={() => setShowAssignWorkModal(false)}>
           <View
             style={{
               position: 'absolute',
@@ -94,7 +191,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
             left: SIZES.padding,
             top: modalY,
             width: '90%',
-            // height: '50%',
+            height: '65%',
             padding: SIZES.padding,
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
@@ -114,35 +211,112 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               iconStyle={{
                 tintColor: COLORS.gray,
               }}
-              onPress={() => setCreateProjectModal(false)}
+              onPress={() => setShowAssignWorkModal(false)}
             />
           </View>
           {/* <WorkAssign /> */}
-          <ScrollView>
-            <Drop
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <CustomDropdown
               placeholder="Select"
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
+              open={openUserRole}
+              value={userRoleValue}
+              items={userRoles}
+              setOpen={setOpenUserRole}
+              setValue={setUserRoleValue}
+              setItems={setUserRoles}
+              listParentLabelStyle={{
+                color: COLORS.white,
+              }}
+              onChangeValue={value => {
+                OnChangeHandler(value);
+                console.log(value);
+              }}
+            />
+            <CustomDropdown
+              placeholder="Select"
+              open={openUsers}
+              value={usersValue}
+              items={users}
+              setOpen={setOpenUsers}
+              setValue={setUsersValue}
+              setItems={setUsers}
               categorySelectable={true}
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
+              zIndex={3000}
+              zIndexInverse={1000}
             />
-            <FormInput
-              inputStyle={{width: 200}}
-              multiline={true}
-              numberOfLines={8}
-              label="Work details"
-              keyboardType="default"
-              autoCompleteType="username"
-              onChange={value => {
-                setProjectTeamName(value);
-              }}
-            />
+
+            <View
+              style={{
+                // flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              {/* <ScrollView> */}
+              {work.map((input, key) => (
+                <View style={{}} key={key}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        color: COLORS.darkGray,
+                        ...FONTS.body4,
+                        marginTop: SIZES.radius,
+                      }}>
+                      Work {key + 1}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    <View
+                      style={{
+                        width: key == 0 ? '88%' : '80%',
+                        paddingHorizontal: SIZES.padding,
+                        borderRadius: SIZES.base,
+                        backgroundColor: COLORS.gray3,
+                      }}>
+                      <TextInput
+                        placeholder="Write here..."
+                        placeholderTextColor={COLORS.darkGray}
+                        value={input.value}
+                        onChangeText={text => inputHandler(text, key)}
+                      />
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                      <TouchableOpacity
+                        style={{}}
+                        onPress={() => removeHandler(key)}>
+                        {key != 0 && (
+                          <Image
+                            source={icons.minus1}
+                            style={{
+                              height: 25,
+                              width: 25,
+                              right: 5,
+                            }}
+                          />
+                        )}
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={addHandler}>
+                        <Image
+                          source={icons.plus1}
+                          style={{
+                            height: key == 0 ? 30 : 25,
+                            width: key == 0 ? 30 : 25,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              ))}
+              {/* </ScrollView> */}
+            </View>
 
             <Text
               style={{
@@ -200,7 +374,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                 marginTop: SIZES.padding * 1.5,
                 borderRadius: SIZES.radius,
               }}
-              onPress={() => alert('Okay...')}
+              onPress={() => OnSubmit()}
             />
           </ScrollView>
         </Animated.View>

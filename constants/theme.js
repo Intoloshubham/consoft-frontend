@@ -23,10 +23,12 @@ export const COLORS = {
   yellow_800: '#92400e',
   yellow_900: '#78350f',
 
+  success_100: '#dcfce7',
   success_300: '#86efac',
   success_400: '#4ade80',
   rose_600: '#e11d48',
 
+  warning_100: '#ffedd5',
   primary: '#FF6C44', //orange
   // transparentPrimary: 'rgba(227, 120, 75, 0.4)',
   transparentPrimary: '#bae6fd',
@@ -48,9 +50,11 @@ export const COLORS = {
   white2: '#FBFBFB',
   white: '#FFFFFF',
   black: '#000000',
-
+  tertiary50: '#ecfdf5',
+  
   transparent: 'transparent',
   transparentBlack1: 'rgba(0, 0, 0, 0.3)',
+  transparentBlack2: 'rgba(0, 0, 0, 0.4)',
   transparentBlack7: 'rgba(0, 0, 0, 0.7)',
 };
 export const SIZES = {

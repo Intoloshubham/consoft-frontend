@@ -40,6 +40,7 @@ const tasks = require('../assets/icons/tasks.png');
 const dashboard = require('../assets/icons/dashboard.png');
 const tracker = require('../assets/icons/tracker.png');
 const right_arr = require('../assets/icons/right_arr.png');
+const right1_arr = require('../assets/icons/right1_arr.png');
 const back = require('../assets/icons/back.png');
 const completed = require('../assets/icons/completed.png');
 const sun = require('../assets/icons/sun.png');
@@ -47,6 +48,9 @@ const camera = require('../assets/icons/camera.png');
 const checklist = require('../assets/icons/clipboard.png');
 // const stock_manage = require('../assets/icons/inventory.png');
 const plus = require('../assets/icons/plus.png');
+const plus1 = require('../assets/icons/plus1.png');
+const minus = require('../assets/icons/minus.png');
+const minus1 = require('../assets/icons/minus1.png');
 const unit = require('../assets/icons/unit.png');
 const items = require('../assets/icons/items.png');
 const stock_manage = require('../assets/icons/stock_manage.png');
@@ -69,6 +73,15 @@ const duplex = require('../assets/icons/PPR/duplex.png');
 const date = require('../assets/icons/date.png');
 const time = require('../assets/icons/time.png');
 const edit = require('../assets/icons/edit.png');
+const call = require('../assets/icons/call.png');
+const whatsapp = require('../assets/icons/whatsapp.png');
+const mail = require('../assets/icons/mail.png');
+const website = require('../assets/icons/website.png');
+const up_arrow = require('../assets/icons/up_arrow.png');
+const down1 = require('../assets/icons/down1.png');
+const Suppliers = require('../assets/icons/Suppliers.png');
+const suppliers1 = require('../assets/icons/suppliers1.png');
+const staff = require('../assets/icons/staff.png');
 
 export default {
   account,
@@ -127,10 +140,8 @@ export default {
   camera,
   checklist,
   stock_manage,
-
   submit1,
   forward_arrow,
-
   plus,
   unit,
   items,
@@ -139,4 +150,17 @@ export default {
   edit,
   delete_icon,
   upload_files,
+  call,
+  whatsapp,
+  mail,
+  website,
+  up_arrow,
+  down1,
+  right1_arr,
+  minus,
+  minus1,
+  plus1,
+  Suppliers,
+  suppliers1,
+  staff,
 };
