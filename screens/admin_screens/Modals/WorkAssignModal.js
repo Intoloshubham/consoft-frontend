@@ -9,11 +9,13 @@ import {
   ScrollView,
   Image,
   TextInput,
+  StyleSheet,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {IconButton, CustomDropdown, TextButton} from '../../../Components';
 import Config from '../../../config';
+import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 
 const WorkAssignModal = ({isVisible, onClose}) => {
   //assign work input
@@ -171,6 +173,78 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     }
   };
 
+  //date
+  const [date, setDate] = React.useState(new Date(1598051730000));
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setDate(currentDate);
+  };
+
+  const showMode = currentMode => {
+    DateTimePickerAndroid.open({
+      value: date,
+      onChange,
+      mode: currentMode,
+      is24Hour: true,
+    });
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
+  function renderStartDate() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          borderRadius: SIZES.base,
+          backgroundColor: COLORS.lightblue_700,
+          paddingHorizontal: SIZES.radius,
+          paddingVertical: SIZES.base,
+          ...styles.shadow,
+        }}>
+        <Text
+          style={{
+            ...FONTS.h4,
+            color: COLORS.white,
+          }}>
+          Wind-up Date :
+        </Text>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginLeft: SIZES.radius,
+          }}>
+          <Text
+            style={{
+              ...FONTS.body4,
+              color: COLORS.white,
+            }}>
+            {date.toLocaleDateString()}
+          </Text>
+          <TouchableOpacity onPress={showDatepicker}>
+            <Image
+              source={icons.date}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: COLORS.white,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
@@ -275,7 +349,8 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                     }}>
                     <View
                       style={{
-                        width: key == 0 ? '88%' : '80%',
+                        width: key == 0 ? '90%' : '82%',
+                        height: 40,
                         paddingHorizontal: SIZES.padding,
                         borderRadius: SIZES.base,
                         backgroundColor: COLORS.gray3,
@@ -297,7 +372,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                             style={{
                               height: 25,
                               width: 25,
-                              right: 5,
+                              right: 2,
                             }}
                           />
                         )}
@@ -306,8 +381,8 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                         <Image
                           source={icons.plus1}
                           style={{
-                            height: key == 0 ? 30 : 25,
-                            width: key == 0 ? 30 : 25,
+                            height: key == 0 ? 25 : 25,
+                            width: key == 0 ? 25 : 25,
                           }}
                         />
                       </TouchableOpacity>
@@ -317,25 +392,28 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               ))}
               {/* </ScrollView> */}
             </View>
-
+            <View style={{marginTop: SIZES.radius}}>{renderStartDate()}</View>
             <Text
               style={{
                 marginTop: SIZES.radius,
                 ...FONTS.body4,
                 color: COLORS.darkGray,
+                // marginLeft: SIZES.base,
               }}>
               Upload files
             </Text>
             <View
               style={{
                 // marginTop: SIZES.padding,
-                borderRadius: SIZES.radius,
+                height: 40,
+                borderRadius: SIZES.base,
                 backgroundColor: COLORS.gray3,
                 paddingHorizontal: SIZES.padding,
                 paddingVertical: SIZES.base,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                // marginLeft: SIZES.base,
               }}>
               <View>
                 {fileData.length > 0
@@ -358,8 +436,8 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                 <Image
                   source={icons.upload_files}
                   style={{
-                    height: 30,
-                    width: 30,
+                    height: 25,
+                    width: 25,
                     tintColor: COLORS.black,
                   }}
                 />
@@ -382,5 +460,21 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     </Modal>
   );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+});
 export default WorkAssignModal;

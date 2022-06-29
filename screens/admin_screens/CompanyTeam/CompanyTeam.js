@@ -7,6 +7,7 @@ import {HeaderBar} from '../../../Components';
 import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
 import Toast from 'react-native-toast-message';
+import {useSelector} from 'react-redux';
 
 const CompanyTeam = ({navigation}) => {
   // form states & dropdown role data fetch from api
@@ -21,14 +22,18 @@ const CompanyTeam = ({navigation}) => {
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [mobile, setMobile] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [showPass, setShowPass] = React.useState(false);
+  // const [password, setPassword] = React.useState('');
+  // const [showPass, setShowPass] = React.useState(false);
 
   //erroe states
   const [nameError, setNameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
   const [mobileError, setMobileError] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState('');
+  // const [passwordError, setPasswordError] = React.useState('');
+
+  // get company data
+  const company_data = useSelector(state => state.company);
+  console.log(company_data);
 
   function isEnableSubmit() {
     return (
@@ -40,14 +45,6 @@ const CompanyTeam = ({navigation}) => {
       emailError == ''
     );
   }
-
-  // dropdown
-  const data = [
-    {label: 'Engineer', value: '1'},
-    {label: 'Supervisor', value: '2'},
-    {label: 'Asst. Superviosr', value: '3'},
-  ];
-  const [dropdown, setDropdown] = React.useState(null);
 
   // show toast on successfullt created
   const showToast = () =>
@@ -95,17 +92,14 @@ const CompanyTeam = ({navigation}) => {
       .catch(error => console.log(error.message));
   }, []);
 
-  const OnSubmit = () => {
+  const OnCreateCompanyTeam = () => {
     const data = {
-      role: dropdown,
-      name: username,
+      role: roleValue,
+      name: name,
       email: email,
-      mobile: mobileNo,
-      password: password,
+      mobile: mobile,
+      company_id: company_data._id,
     };
-
-    // const res = registerCompany(data);
-    // console.log(res);
 
     fetch(url, {
       method: 'POST',
@@ -116,7 +110,10 @@ const CompanyTeam = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        if (data.status === 200) {
+          console.log(data);
+          showToast();
+        }
       })
       .catch(error => {
         console.error(error.message);
@@ -143,7 +140,7 @@ const CompanyTeam = ({navigation}) => {
             marginHorizontal: SIZES.radius,
           }}>
           <CustomDropdown
-            placeholder="Select"
+            placeholder="Select role"
             open={openRole}
             value={roleValue}
             items={role}
@@ -154,19 +151,6 @@ const CompanyTeam = ({navigation}) => {
               color: COLORS.white,
             }}
             zIndex={4000}
-          />
-          <CustomDropdown
-            placeholder="Select"
-            open={openProject}
-            value={projectValue}
-            items={project}
-            setOpen={setOpenProject}
-            setValue={setProjectValue}
-            setItems={setProject}
-            listParentLabelStyle={{
-              color: COLORS.white,
-            }}
-            zIndex={3000}
           />
 
           <FormInput
@@ -261,7 +245,7 @@ const CompanyTeam = ({navigation}) => {
               </View>
             }
           />
-          <FormInput
+          {/* <FormInput
             label="Password"
             secureTextEntry={!showPass}
             autoCompleteType="password"
@@ -288,6 +272,19 @@ const CompanyTeam = ({navigation}) => {
                 />
               </TouchableOpacity>
             }
+          /> */}
+          <CustomDropdown
+            placeholder="Assign to projects"
+            open={openProject}
+            value={projectValue}
+            items={project}
+            setOpen={setOpenProject}
+            setValue={setProjectValue}
+            setItems={setProject}
+            listParentLabelStyle={{
+              color: COLORS.white,
+            }}
+            zIndex={3000}
           />
           <TextButton
             label="Save"
@@ -301,7 +298,7 @@ const CompanyTeam = ({navigation}) => {
                 ? COLORS.lightblue_700
                 : COLORS.transparentPrimary,
             }}
-            onPress={OnSubmit}
+            onPress={OnCreateCompanyTeam}
           />
         </View>
       </AuthLayout>

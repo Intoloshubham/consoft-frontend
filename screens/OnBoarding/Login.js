@@ -18,7 +18,7 @@ import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
-import { useLoginCompanyMutation } from '../../services/companyAuthApi';
+import {useLoginCompanyMutation} from '../../services/companyAuthApi';
 
 const Login = ({navigation}) => {
   const makeCall = () => {
@@ -57,7 +57,7 @@ const Login = ({navigation}) => {
   const [showPass, setShowPass] = React.useState(false);
 
   //rtk
-  const [ loginCompany ] = useLoginCompanyMutation();
+  const [loginCompany] = useLoginCompanyMutation();
 
   function isEnableLogin() {
     return (
@@ -115,19 +115,14 @@ const Login = ({navigation}) => {
       });
   };
 
-
-
   const companyOnSubmit = async () => {
     const company_data = {
       mobile: companyMobileNo,
       password: companyPassword,
     };
-    const res = await loginCompany(company_data)
+    const res = await loginCompany(company_data);
     // console.log(res.data.company_id);
     //store token in storage
-
-
-
 
     // fetch(`${Config.API_URL}/company-login`, {
     //   method: 'POST',
@@ -154,10 +149,7 @@ const Login = ({navigation}) => {
     //   .catch(error => {
     //     console.error('Error:', error);
     //   });
-
-
   };
-
 
   function renderHeaderLogo() {
     return (

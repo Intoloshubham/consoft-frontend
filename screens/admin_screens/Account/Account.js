@@ -15,9 +15,11 @@ import {useSelector} from 'react-redux';
 import {unSetCompanyInfo} from '../../../features/CompanySlice';
 import {unsetCompanyToken} from '../../../features/CompanyAuthSlice';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {ProfileValue, LineDivider} from '../../../Components';
 
 const Account = () => {
   const navigation = useNavigation();
+  const [collapsed, setCollapsed] = React.useState(false);
 
   const logout = async () => {
     unSetCompanyInfo({_id: '', company_name: '', email: '', mobile: ''});
