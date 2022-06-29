@@ -19,6 +19,7 @@ import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
 import { useLoginCompanyMutation } from '../../services/companyAuthApi';
+import { setCompanyId, storeToken } from '../../services/asyncStorageService';
 
 const Login = ({navigation}) => {
   const makeCall = () => {
@@ -115,18 +116,33 @@ const Login = ({navigation}) => {
       });
   };
 
-
-
   const companyOnSubmit = async () => {
     const company_data = {
       mobile: companyMobileNo,
       password: companyPassword,
     };
+
     const res = await loginCompany(company_data)
-    // console.log(res.data.company_id);
+    console.log(res);
     //store token in storage
 
+    let result;
+    if (res.data) {
+      result = res.data;
+    }
+    if (res.error) {
+      result = res.error;
+    }
 
+    if (result.status === 200) {
+      await setCompanyId(result.company_id);
+      await storeToken(result.access_token);   
+      navigation.navigate('Home');
+    }
+
+    if(result.status === 401){
+      alert(result.data.message);
+    }
 
 
     // fetch(`${Config.API_URL}/company-login`, {

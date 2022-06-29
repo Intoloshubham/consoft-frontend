@@ -20,6 +20,14 @@ const getCompanyId = async () => {
     }
 }
 
+const removeCompanyId = async (id) => {
+  try {
+    await AsyncStorage.removeItem(id)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 //token
 const storeToken = async (token) => {
@@ -40,12 +48,12 @@ const getToken = async () => {
       console.log(error)
     }
 }
-  const removeToken = async (value) => {
-    try {
-      await AsyncStorage.removeItem(value)
-    } catch (error) {
-      console.log(error)
-    }
+const removeToken = async (value) => {
+  try {
+    await AsyncStorage.removeItem(value)
+  } catch (error) {
+    console.log(error)
   }
+}
   
-  export { setCompanyId, getCompanyId, storeToken, getToken, removeToken }
+  export { setCompanyId, getCompanyId, removeCompanyId, storeToken, getToken, removeToken }

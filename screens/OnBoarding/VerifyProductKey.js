@@ -22,7 +22,6 @@ const VerifyProductKey = ({navigation}) => {
     (async () => {
       const company_id = await getCompanyId() 
       setCompanyIdAsync(company_id)          
-      
     })();
   })
 
@@ -54,28 +53,6 @@ const VerifyProductKey = ({navigation}) => {
       alert(result.data.message);
     }
 
-
-
-    // {result.data.status === 200 ? navigation.navigate('Home') : result.error.data.message }
-
-
-    // fetch(`${Config.API_URL}/verify-product-key`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(productdata),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data.status);
-    //     if (data.status == 200) {
-    //       navigation.navigate('Home');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
   };
 
   return (

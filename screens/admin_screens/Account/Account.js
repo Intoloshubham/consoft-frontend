@@ -10,19 +10,22 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-import {removeToken} from '../../../services/asyncStorageService';
+import {removeCompanyId, removeToken} from '../../../services/asyncStorageService';
 import {useSelector} from 'react-redux';
 import {unSetCompanyInfo} from '../../../features/CompanySlice';
 import {unsetCompanyToken} from '../../../features/CompanyAuthSlice';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import { ProfileValue, LineDivider } from '../../../Components';
 
 const Account = () => {
   const navigation = useNavigation();
+  const [collapsed, setCollapsed] = useState(false);
 
   const logout = async () => {
     unSetCompanyInfo({_id: '', company_name: '', email: '', mobile: ''});
     unsetCompanyToken({token: null});
     await removeToken('token');
+    await removeCompanyId('company_id');
     navigation.navigate('Dahsboard');
   };
 
