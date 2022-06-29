@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {View, Image} from 'react-native';
-import {HeaderBar} from '../../Components';
-import {COLORS, images, SIZES, icons, Apis} from '../../constants';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import {FormInput, TextButton} from '../../Components';
 import Config from '../../config';
+import {FormInput, TextButton, HeaderBar} from '../../Components';
+import {COLORS, images, SIZES, icons} from '../../constants';
 
 //redux
 import { getCompanyId, storeToken } from '../../services/asyncStorageService';

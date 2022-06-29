@@ -1,19 +1,17 @@
 import React from 'react';
 import {View, Image} from 'react-native';
-import {HeaderBar} from '../../Components';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import {COLORS, images, icons, SIZES, Apis} from '../../constants';
-import {FormInput, TextButton} from '../../Components';
 import Toast from 'react-native-toast-message';
 import Config from '../../config';
+import {FormInput, TextButton, HeaderBar} from '../../Components';
+import {COLORS, images, icons, SIZES} from '../../constants';
 
 //redux
-import { useRegisterCompanyMutation } from '../../services/companyAuthApi';
-import { setCompanyId } from '../../services/asyncStorageService';
+import {useRegisterCompanyMutation} from '../../services/companyAuthApi';
+import {setCompanyId} from '../../services/asyncStorageService';
 
 const CompanyRegistration = ({navigation}) => {
-  
   const [cName, setCName] = React.useState('');
   //const [cPanNo, setCPanNo] = React.useState('');
   const [cMobileNo, setCMobileNo] = React.useState('');
@@ -25,8 +23,7 @@ const CompanyRegistration = ({navigation}) => {
   const [cEmailError, setCEmailError] = React.useState('');
 
   //redux
-  const [ registerCompany ] = useRegisterCompanyMutation();
-  
+  const [registerCompany] = useRegisterCompanyMutation();
 
   function isEnableCreateCompany() {
     return (
@@ -74,14 +71,14 @@ const CompanyRegistration = ({navigation}) => {
     // console.log(result.data.status);
     // console.log(result)
     if (result.data.status == 200) {
-        await setCompanyId(result.data.company_id);
-        showToast();
-        setTimeout(() => {
-          navigation.navigate('VerifyProductKey');
-        }, 350);
+      await setCompanyId(result.data.company_id);
+      showToast();
+      setTimeout(() => {
+        navigation.navigate('VerifyProductKey');
+      }, 350);
     }
     if (result.data.status != 200) {
-        showToastError();
+      showToastError();
     }
 
     // fetch(`${Config.API_URL}/company`, {
@@ -107,8 +104,6 @@ const CompanyRegistration = ({navigation}) => {
     //   .catch(error => {
     //     console.error('Error:', error);
     //   });
-
-
   };
 
   return (

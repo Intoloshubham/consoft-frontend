@@ -11,12 +11,12 @@ import {
   Switch,
   Linking,
 } from 'react-native';
-import {FONTS, COLORS, SIZES, icons, images, Apis} from '../../constants';
 import LinearGradient from 'react-native-linear-gradient';
-import {FormInput, TextButton} from '../../Components';
 import utils from '../../utils';
 import Toast from 'react-native-toast-message';
 import Config from '../../config';
+import {FormInput, TextButton} from '../../Components';
+import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
 import { useLoginCompanyMutation } from '../../services/companyAuthApi';
 
@@ -24,11 +24,21 @@ const Login = ({navigation}) => {
   const makeCall = () => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${+91-988774455}';
+      phoneNumber = 'tel:${+91-8109093551}';
     } else {
       phoneNumber = 'telprompt:${+919988774455}';
     }
     Linking.openURL(phoneNumber);
+  };
+  const message = 'Hello';
+  const number = +918109093551;
+  const openURL = async url => {
+    const isSupported = await Linking.canOpenURL(url);
+    if (isSupported) {
+      await Linking.openURL(url);
+    } else {
+      alert(`url is not correct: ${url}`);
+    }
   };
 
   const [switchValue, setSwitchValue] = React.useState(false);
@@ -80,7 +90,7 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     console.log(data);
-    fetch(`${Config.API_URL}/login`, {
+    fetch(`${Config.API_URL}login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -364,9 +374,17 @@ const Login = ({navigation}) => {
                 ...FONTS.body3,
                 fontWeight: 'bold',
               }}>
-              Demo &{' '}
+              Demo{' '}
             </Text>
           </TouchableOpacity>
+          <Text
+            style={{
+              color: COLORS.black,
+              ...FONTS.body3,
+              fontWeight: 'bold',
+            }}>
+            &
+          </Text>
           <TextButton
             label="Free 7-days trial"
             buttonContainerStyle={{
@@ -411,24 +429,29 @@ const Login = ({navigation}) => {
           }}>
           <TouchableOpacity
             style={{
-              backgroundColor: COLORS.lightblue_900,
+              backgroundColor: COLORS.white,
               padding: 5,
               borderRadius: SIZES.base,
             }}
-            onPress={() => console.log('Send Email')}>
+            onPress={() => {
+              Linking.openURL(
+                'mailto:support@example.com?subject=SendMail&body=Description',
+              );
+              // Linking.openURL(`sms:number=${number}?body=${message}`);
+            }}>
             <Image
               source={icons.mail}
               resizeMode="contain"
               style={{
                 height: 12,
                 width: 12,
-                tintColor: COLORS.white,
+                tintColor: COLORS.black,
               }}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              backgroundColor: COLORS.lightblue_600,
+              backgroundColor: COLORS.white,
               padding: 5,
               borderRadius: SIZES.base,
             }}
@@ -439,7 +462,7 @@ const Login = ({navigation}) => {
               style={{
                 height: 12,
                 width: 12,
-                tintColor: COLORS.white,
+                tintColor: COLORS.black,
               }}
             />
           </TouchableOpacity>
@@ -449,7 +472,9 @@ const Login = ({navigation}) => {
               padding: 5,
               borderRadius: SIZES.base,
             }}
-            onPress={() => console.log('Send Whatsappp Message')}>
+            onPress={() => {
+              Linking.openURL('https://wa.me/8109093551');
+            }}>
             <Image
               source={icons.whatsapp}
               resizeMode="contain"
@@ -461,18 +486,18 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              backgroundColor: COLORS.black,
+              backgroundColor: COLORS.white,
               padding: 5,
               borderRadius: SIZES.base,
             }}
-            onPress={() => console.log('Website')}>
+            onPress={() => Linking.openURL('http://www.intoloindia.com/')}>
             <Image
               source={icons.website}
               resizeMode="contain"
               style={{
                 height: 12,
                 width: 12,
-                tintColor: COLORS.white,
+                tintColor: COLORS.black,
               }}
             />
           </TouchableOpacity>

@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import AuthLayout from './AuthLayout';
 import {TextButton} from '../../Components';
-import {FONTS, SIZES, COLORS, icons, images} from '../../constants';
+import {FONTS, SIZES, COLORS} from '../../constants';
 
 const Otp = ({navigation}) => {
   const [timer, setTimer] = React.useState(60);

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
@@ -26,6 +26,8 @@ import {
   ManageStock,
   CompanyTeamShow,
   CategoryandType,
+  ProjectReports,
+  Suppliers,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -34,8 +36,8 @@ import Account from './screens/admin_screens/Account/Account';
 import user_tabs from './navigation/user_tabs';
 
 //setup redux
-import { store } from './app/store';
-import { Provider } from 'react-redux';
+import {store} from './app/store';
+import {Provider} from 'react-redux';
 
 const Stack = createStackNavigator();
 
@@ -51,7 +53,7 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'VerifyProductKey'}>
+          initialRouteName={'Login'}>
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
@@ -67,6 +69,7 @@ const App = () => {
           <Stack.Screen name="CompanyTeamShow" component={CompanyTeamShow} />
           <Stack.Screen name="ProjectTeam" component={ProjectTeam} />
           <Stack.Screen name="Contractors" component={Contractors} />
+          <Stack.Screen name="ProjectReports" component={ProjectReports} />
           <Stack.Screen
             name="StocksAndInventry"
             component={StocksAndInventry}
@@ -82,6 +85,7 @@ const App = () => {
 
           {/* Tab screens */}
           <Stack.Screen name="Account" component={Account} />
+          <Stack.Screen name="Suppliers" component={Suppliers} />
 
           {/* Account Screens */}
           <Stack.Screen name="CategoryandType" component={CategoryandType} />
@@ -108,9 +112,9 @@ const App = () => {
 
 //for redux
 export default () => {
-  return(
+  return (
     <Provider store={store}>
       <App />
     </Provider>
-  )
-}
+  );
+};

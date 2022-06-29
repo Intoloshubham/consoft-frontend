@@ -1,14 +1,9 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, TouchableOpacity, Image} from 'react-native';
 import AuthLayout from './AuthLayout';
-import {
-  FormInput,
-  CustomSwitch,
-  TextButton,
-  TextIconButton,
-} from '../../Components';
 import utils from '../../utils';
-import {icons, SIZES, COLORS, FONTS, images} from '../../constants';
+import {icons, SIZES, COLORS, images} from '../../constants';
+import {FormInput, TextButton} from '../../Components';
 const url = 'http://192.168.1.99:8000/api/login';
 
 const SignIn = ({navigation}) => {
@@ -28,14 +23,6 @@ const SignIn = ({navigation}) => {
       password: password,
     };
     console.log(data);
-    // axios
-    //   .post(url, data)
-    //   .then(res => {
-    //     console.log(res.data);
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
     fetch(url, {
       method: 'POST',
       headers: {

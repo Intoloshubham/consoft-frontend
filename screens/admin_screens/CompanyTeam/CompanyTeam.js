@@ -1,27 +1,45 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
-import AuthLayout from '../../Authentication/AuthLayout';
-import {FONTS, SIZES, COLORS, icons} from '../../../constants';
+import {View, Image, TouchableOpacity, ScrollView} from 'react-native';
+import {SIZES, COLORS, icons} from '../../../constants';
 import {FormInput, TextButton, CustomDropdown} from '../../../Components';
-import utils from '../../../utils';
 import Config from '../../../config';
 import {HeaderBar} from '../../../Components';
-
-
+import AuthLayout from '../../Authentication/AuthLayout';
+import utils from '../../../utils';
+import Toast from 'react-native-toast-message';
 
 const CompanyTeam = ({navigation}) => {
+  // form states & dropdown role data fetch from api
+  const [openRole, setOpenRole] = React.useState(false);
+  const [roleValue, setRoleValue] = React.useState([]);
+  const [role, setRole] = React.useState([]);
+  //projects
+  const [openProject, setOpenProject] = React.useState(false);
+  const [projectValue, setProjectValue] = React.useState([]);
+  const [project, setProject] = React.useState([]);
+  //
+  const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [mobileNo, setMobileNo] = React.useState('');
+  const [mobile, setMobile] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [showPass, setShowPass] = React.useState(false);
 
+  //erroe states
+  const [nameError, setNameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
-  const [usernameError, setUsernameError] = React.useState('');
-  const [mobileNoError, setMobileNoError] = React.useState('');
+  const [mobileError, setMobileError] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
 
-  
+  function isEnableSubmit() {
+    return (
+      name != '' &&
+      nameError == '' &&
+      mobile != '' &&
+      mobileError == '' &&
+      email != '' &&
+      emailError == ''
+    );
+  }
 
   // dropdown
   const data = [
@@ -30,6 +48,52 @@ const CompanyTeam = ({navigation}) => {
     {label: 'Asst. Superviosr', value: '3'},
   ];
   const [dropdown, setDropdown] = React.useState(null);
+
+  // show toast on successfullt created
+  const showToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'User Created Successfully',
+      text2: 'Success',
+      visibilityTime: 2000,
+    });
+
+  // get roles from api
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}role`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        let roleDataFromApi = data.map(one => {
+          return {label: one.user_role, value: one._id};
+        });
+        setRole(roleDataFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+
+  // get roles from api
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}projects`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        let roleDataFromApi = data.map(ele => {
+          return {label: ele.project_name, value: ele._id};
+        });
+        setProject(roleDataFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
 
   const OnSubmit = () => {
     const data = {
@@ -57,176 +121,190 @@ const CompanyTeam = ({navigation}) => {
       .catch(error => {
         console.error(error.message);
       });
-
-
   };
 
   return (
     <View
       style={{
         flex: 1,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Company Team" />
+      <AuthLayout
+        image={icons.staff}
+        title="Create a new team"
+        subtitle="Success is best when it's shared.">
+        <Toast config={showToast} />
+        <View
+          style={{
+            flex: 1,
+            marginTop: SIZES.radius,
+            paddingBottom: SIZES.padding * 2,
+            marginHorizontal: SIZES.radius,
+          }}>
+          <CustomDropdown
+            placeholder="Select"
+            open={openRole}
+            value={roleValue}
+            items={role}
+            setOpen={setOpenRole}
+            setValue={setRoleValue}
+            setItems={setRole}
+            listParentLabelStyle={{
+              color: COLORS.white,
+            }}
+            zIndex={4000}
+          />
+          <CustomDropdown
+            placeholder="Select"
+            open={openProject}
+            value={projectValue}
+            items={project}
+            setOpen={setOpenProject}
+            setValue={setProjectValue}
+            setItems={setProject}
+            listParentLabelStyle={{
+              color: COLORS.white,
+            }}
+            zIndex={3000}
+          />
 
-      <View
-        style={{
-          flex: 1,
-          marginTop: SIZES.padding * 2,
-          marginHorizontal: SIZES.padding,
-        }}>
-        <CustomDropdown
-          data={data}
-          label="Dropdown"
-          value={dropdown}
-          onChange={item => {
-            setDropdown(item.value);
-            console.log('selected', item);
-          }}
-        />
-        <FormInput
-          label="Name"
-          // placeholder="Username"
-          // containerStyle={{marginTop: SIZES.base}}
-          //   keyboardType="email-address"
-          //   autoCompleteType="email"
-          onChange={value => {
-            //validate email
-            // utils.validateEmail(value, setUsernameError);
-            setUsername(value);
-          }}
-          errorMsg={usernameError}
-          appendComponent={
-            <View style={{justifyContent: 'center'}}>
-              <Image
-                source={
-                  username == '' || (username != '' && usernameError == '')
-                    ? icons.correct
-                    : icons.cancel
-                }
+          <FormInput
+            label="Name"
+            keyboardType="default"
+            autoCompleteType="username"
+            onChange={value => {
+              utils.validateText(value, setNameError);
+              setName(value);
+            }}
+            errorMsg={nameError}
+            appendComponent={
+              <View style={{justifyContent: 'center'}}>
+                <Image
+                  source={
+                    name == '' || (name != '' && nameError == '')
+                      ? icons.correct
+                      : icons.cancel
+                  }
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor:
+                      name == ''
+                        ? COLORS.gray
+                        : name != '' && nameError == ''
+                        ? COLORS.green
+                        : COLORS.red,
+                  }}
+                />
+              </View>
+            }
+          />
+          <FormInput
+            label="Email"
+            keyboardType="email-address"
+            autoCompleteType="email"
+            onChange={value => {
+              utils.validateEmail(value, setEmailError);
+              setEmail(value);
+            }}
+            errorMsg={emailError}
+            appendComponent={
+              <View style={{justifyContent: 'center'}}>
+                <Image
+                  source={
+                    email == '' || (email != '' && emailError == '')
+                      ? icons.correct
+                      : icons.cancel
+                  }
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor:
+                      email == ''
+                        ? COLORS.gray
+                        : email != '' && emailError == ''
+                        ? COLORS.green
+                        : COLORS.red,
+                  }}
+                />
+              </View>
+            }
+          />
+          <FormInput
+            label="Mobile No."
+            keyboardType="numeric"
+            onChange={value => {
+              utils.validateNumber(value, setMobileError);
+              setMobile(value);
+            }}
+            errorMsg={mobileError}
+            appendComponent={
+              <View style={{justifyContent: 'center'}}>
+                <Image
+                  source={
+                    mobile == '' || (mobile != '' && mobileError == '')
+                      ? icons.correct
+                      : icons.cancel
+                  }
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor:
+                      mobile == ''
+                        ? COLORS.gray
+                        : mobile != '' && mobileError == ''
+                        ? COLORS.green
+                        : COLORS.red,
+                  }}
+                />
+              </View>
+            }
+          />
+          <FormInput
+            label="Password"
+            secureTextEntry={!showPass}
+            autoCompleteType="password"
+            onChange={value => {
+              utils.validatePassword(value, setPasswordError);
+              setPassword(value);
+            }}
+            errorMsg={passwordError}
+            appendComponent={
+              <TouchableOpacity
                 style={{
-                  height: 20,
-                  width: 20,
-                  tintColor:
-                    username == ''
-                      ? COLORS.gray
-                      : username != '' && usernameError == ''
-                      ? COLORS.green
-                      : COLORS.red,
+                  width: 40,
+                  alignItems: 'flex-end',
+                  justifyContent: 'center',
                 }}
-              />
-            </View>
-          }
-        />
-        <FormInput
-          label="Email"
-          // placeholder="Email"
-          keyboardType="email-address"
-          autoCompleteType="email"
-          onChange={value => {
-            //validate email
-
-            // utils.validateEmail(value, setEmailError);
-            setEmail(value);
-          }}
-          // errorMsg={emailError}
-          appendComponent={
-            <View style={{justifyContent: 'center'}}>
-              <Image
-                source={
-                  email == '' || (email != '' && emailError == '')
-                    ? icons.correct
-                    : icons.cancel
-                }
-                style={{
-                  height: 20,
-                  width: 20,
-                  tintColor:
-                    email == ''
-                      ? COLORS.gray
-                      : email != '' && emailError == ''
-                      ? COLORS.green
-                      : COLORS.red,
-                }}
-              />
-            </View>
-          }
-        />
-
-        <FormInput
-          label="Mobile No."
-          // placeholder="Mobile No."
-          // keyboardType="email-address"
-          // autoCompleteType="email"
-          onChange={value => {
-            //validate number
-            // utils.validateNumber(value, setMobileNoError);
-            setMobileNo(value);
-          }}
-          // errorMsg={mobileNoError}
-          appendComponent={
-            <View style={{justifyContent: 'center'}}>
-              <Image
-                source={
-                  mobileNo == '' || (mobileNo != '' && mobileNoError == '')
-                    ? icons.correct
-                    : icons.cancel
-                }
-                style={{
-                  height: 20,
-                  width: 20,
-                  tintColor:
-                    mobileNo == ''
-                      ? COLORS.gray
-                      : mobileNo != '' && mobileNoError == ''
-                      ? COLORS.green
-                      : COLORS.red,
-                }}
-              />
-            </View>
-          }
-        />
-
-        <FormInput
-          label="Password"
-          // placeholder="Password"
-          secureTextEntry={!showPass}
-          autoCompleteType="password"
-          onChange={value => {
-            // utils.validatePassword(value, setPasswordError);
-            setPassword(value);
-          }}
-          // errorMsg={passwordError}
-          appendComponent={
-            <TouchableOpacity
-              style={{
-                width: 40,
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-              }}
-              onPress={() => setShowPass(!showPass)}>
-              <Image
-                source={showPass ? icons.eye_close : icons.eye}
-                style={{
-                  height: 20,
-                  width: 20,
-                  tintColor: COLORS.gray,
-                }}
-              />
-            </TouchableOpacity>
-          }
-        />
-        {/* SignIn & SignUp section  */}
-        <TextButton
-          label="Submit"
-          buttonContainerStyle={{
-            height: 55,
-            alignItems: 'center',
-            marginTop: SIZES.padding,
-            borderRadius: SIZES.radius,
-          }}
-          onPress={OnSubmit}
-        />
-      </View>
+                onPress={() => setShowPass(!showPass)}>
+                <Image
+                  source={showPass ? icons.eye_close : icons.eye}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor: COLORS.gray,
+                  }}
+                />
+              </TouchableOpacity>
+            }
+          />
+          <TextButton
+            label="Save"
+            disabled={isEnableSubmit() ? false : true}
+            buttonContainerStyle={{
+              height: 45,
+              alignItems: 'center',
+              marginTop: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: isEnableSubmit()
+                ? COLORS.lightblue_700
+                : COLORS.transparentPrimary,
+            }}
+            onPress={OnSubmit}
+          />
+        </View>
+      </AuthLayout>
     </View>
   );
 };

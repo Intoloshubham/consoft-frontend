@@ -16,12 +16,13 @@ import {
   TextButton,
   IconButton,
   FormInput,
-  Drop,
+  CustomDropdown,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import Toast from 'react-native-toast-message';
+import Config from '../../../config';
 
 const CategoryandType = ({navigation}) => {
-  //LogBox
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
@@ -29,23 +30,44 @@ const CategoryandType = ({navigation}) => {
   // Store categories & types data from api
   const [categories, setCategories] = React.useState([]);
   const [types, setTypes] = React.useState([]);
-
   //Modal
   const [showCategoryModal, setShowCategoryModal] = React.useState(false);
   const [showTypesModal, setShowTypesModal] = React.useState(false);
-
   // Form Data
   const [catName, setCatName] = React.useState('');
   const [typeName, setTypeName] = React.useState('');
-
   //Dropdown
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState([]);
-  const [items, setItems] = React.useState([
-    {label: 'Residential', value: '1'},
-    {label: 'Hotels', value: '2'},
-    {label: 'Hospitals', value: '3'},
-  ]);
+  const [items, setItems] = React.useState([]);
+
+  // show toast on successfullt created
+  const catshowToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'Created Successfully',
+      text2: 'Success',
+      visibilityTime: 2000,
+    });
+
+  const updateShowToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'Updated Successfully',
+      text2: 'Success',
+      visibilityTime: 2000,
+    });
+
+  const typeDeleteToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'info',
+      text1: 'Deleted Successfully',
+      text2: 'Delete',
+      visibilityTime: 2000,
+    });
 
   // get cat id
   const [id, setId] = React.useState('');
@@ -60,10 +82,9 @@ const CategoryandType = ({navigation}) => {
     setCatName(name);
   };
 
-  // All Api calls of categories
-  // Get categories
+  // all apis & Get categories
   React.useEffect(() => {
-    fetch('http://192.168.1.99:8000/api/project-category', {
+    fetch(`${Config.API_URL}project-category`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -73,9 +94,10 @@ const CategoryandType = ({navigation}) => {
       .then(data => {
         // console.log(data);
         setCategories(data);
+        setItems(catFromApi);
       })
       .catch(error => console.log(error.message));
-  }, []);
+  }, [categories]);
 
   // post categories
   const OnSubmit = () => {
@@ -83,7 +105,7 @@ const CategoryandType = ({navigation}) => {
       category_name: catName,
     };
 
-    fetch('http://192.168.1.99:8000/api/project-category', {
+    fetch(`${Config.API_URL}project-category`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -104,18 +126,24 @@ const CategoryandType = ({navigation}) => {
     const editData = {
       category_name: catName,
     };
-    fetch('http://192.168.1.99:8000/api/project-category/' + `${id}`, {
+    fetch(`${Config.API_URL}project-category` + `/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(editData),
-    });
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 200) {
+          updateShowToast();
+        }
+      });
   };
 
   // Delete categories
   const OnDelete = id => {
-    fetch('http://192.168.1.99:8000/api/project-category' + `/${id}`, {
+    fetch(`${Config.API_URL}project-category` + `/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -141,7 +169,7 @@ const CategoryandType = ({navigation}) => {
 
   // Api call for types
   React.useEffect(() => {
-    fetch('http://192.168.1.99:8000/api/project-type', {
+    fetch(`${Config.API_URL}project-type`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -162,7 +190,7 @@ const CategoryandType = ({navigation}) => {
       project_type: typeName,
     };
 
-    fetch('http://192.168.1.99:8000/api/project-type', {
+    fetch(`${Config.API_URL}project-type`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -184,13 +212,19 @@ const CategoryandType = ({navigation}) => {
       category_id: value,
       project_type: typeName,
     };
-    fetch('http://192.168.1.99:8000/api/project-type/' + `${typeid}`, {
+    fetch(`${Config.API_URL}project-type` + `/${typeid}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(editData),
-    });
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 200) {
+          updateShowToast();
+        }
+      });
   };
 
   // Delete types
@@ -204,10 +238,10 @@ const CategoryandType = ({navigation}) => {
     });
     // console.log('type delete');
   };
+
   React.useEffect(() => {
     OnDeleteTypes;
     OnEditTypes;
-    OnDelete;
     OnEdit;
   }, []);
 
@@ -549,7 +583,7 @@ const CategoryandType = ({navigation}) => {
                   style={{
                     marginTop: SIZES.base,
                   }}>
-                  <Drop
+                  <CustomDropdown
                     placeholder="Select Categories"
                     open={open}
                     value={value}
@@ -599,6 +633,9 @@ const CategoryandType = ({navigation}) => {
         flex: 1,
       }}>
       <HeaderBar right={true} title="Categories & Types" />
+      <Toast config={catshowToast} />
+      <Toast config={updateShowToast} />
+      <Toast config={typeDeleteToast} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderCategories()}
         {renderTypes()}
