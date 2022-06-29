@@ -19,7 +19,9 @@ import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
 import { useLoginCompanyMutation } from '../../services/companyAuthApi';
-import { setCompanyId, storeToken } from '../../services/asyncStorageService';
+import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
+
+import { useLoginUserMutation } from '../../services/userAuthApi';//
 
 const Login = ({navigation}) => {
   const makeCall = () => {
@@ -60,6 +62,8 @@ const Login = ({navigation}) => {
   //rtk
   const [ loginCompany ] = useLoginCompanyMutation();
 
+  const [ loginUser ] = useLoginUserMutation();
+
   function isEnableLogin() {
     return (
       userMobileNo != '' &&
@@ -85,35 +89,58 @@ const Login = ({navigation}) => {
       text2: 'Error',
       visibilityTime: 4000,
     });
-  const userOnSubmit = () => {
+  const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
-    console.log(data);
-    fetch(`${Config.API_URL}login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(UserData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.access_token) {
-          showToast();
-          setTimeout(() => {
-            navigation.navigate('UserDashboard');
-          }, 200);
-        }
-        if (!data.access_token) {
-          showToastError();
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+
+    // console.log(UserData)
+    const res = await loginUser(UserData);
+    console.log(res)
+
+    let result;
+    if (res.data) {
+      result = res.data;
+    }
+    if (res.error) {
+      result = res.error;
+    }
+
+    if (result.status === 200) {
+      // await setUserId(result._id);
+      await storeToken(result.access_token);   
+      navigation.navigate('UserDashboard');
+    }
+
+    if(result.status === 401){
+      alert(result.data.message);
+    }
+
+    // fetch(`${Config.API_URL}login`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(UserData),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     if (data.access_token) {
+    //       showToast();
+    //       setTimeout(() => {
+    //         navigation.navigate('UserDashboard');
+    //       }, 200);
+    //     }
+    //     if (!data.access_token) {
+    //       showToastError();
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
+
   };
 
   const companyOnSubmit = async () => {
@@ -123,7 +150,7 @@ const Login = ({navigation}) => {
     };
 
     const res = await loginCompany(company_data)
-    console.log(res);
+    // console.log(res);
     //store token in storage
 
     let result;

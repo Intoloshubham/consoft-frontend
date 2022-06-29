@@ -15,9 +15,7 @@ import { useSelector } from 'react-redux';
 const Home = () => {
 
   const [accessToken, setAccessToken] = useState('');
-  console.log('ok');
-  console.log(accessToken);
-
+  
   useEffect( () => {
     (async() => {
         const token = await getToken();

@@ -28,6 +28,33 @@ const removeCompanyId = async (id) => {
   }
 }
 
+//user
+const setUserId = async (id) => {
+  try {
+      await AsyncStorage.setItem('user_id', id)
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+const getUserId = async () => {
+  try {
+    const user_id = await AsyncStorage.getItem('user_id')
+    if (user_id !== null) {
+      return user_id
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const removeUserId = async (id) => {
+  try {
+    await AsyncStorage.removeItem(id)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 //token
 const storeToken = async (token) => {
@@ -56,4 +83,4 @@ const removeToken = async (value) => {
   }
 }
   
-  export { setCompanyId, getCompanyId, removeCompanyId, storeToken, getToken, removeToken }
+  export { setCompanyId, getCompanyId, removeCompanyId, setUserId, getUserId, removeUserId, storeToken, getToken, removeToken }
