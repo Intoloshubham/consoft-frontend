@@ -37,7 +37,8 @@ const TabBarCustomButton = ({ children, onPress }) => {
     </TouchableOpacity>
   );
 };
-const UserTabs = () => {
+const UserTabs = ({navigation,route}) => {
+  const name_login_params = route.params.name_login;
   return (
     <Tab.Navigator
       screenOptions={{
@@ -56,6 +57,8 @@ const UserTabs = () => {
         headerStyle: {
           // height: 78,
         },
+        navigation:{navigation},
+        route:{route},
         headerTitleAlign: 'left',
         headerRight: () => (
           <View
@@ -73,11 +76,12 @@ const UserTabs = () => {
         ),
       }}>
       <Tab.Screen
-        name="Tasks"
+        name="User Dashboard"
         screenOptions={{
           tabBarShowLabel: false
         }}  
-        component={UserDashboard}
+        component={UserDashboard}  
+        initialParams={{name_login_params: name_login_params}}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
