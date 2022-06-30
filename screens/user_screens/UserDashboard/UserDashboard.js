@@ -26,8 +26,8 @@ const UserDashboard = ({ navigation, route }) => {
   //for getting new task data
   const [NewTaskRes, setNewTaskRes] = useState(null)
 
-  const dispatch = useDispatch()
 
+ 
 
   async function Get_token_Data() {
     const tokens = await getToken();
@@ -65,8 +65,10 @@ const UserDashboard = ({ navigation, route }) => {
   //   }
   // })
 
-  const userData = useSelector(state => state.user);
-  console.log(userData);
+
+
+ 
+
 
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
@@ -91,6 +93,20 @@ const UserDashboard = ({ navigation, route }) => {
     setdoneModal(true);
   }
 
+  const dispatch = useDispatch()
+
+
+  const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role: data.role, role_id: data.role_id  }))
+    }
+  },[])
+
+  const userData = useSelector(state => state.user);
+  const userToken = useSelector(state => state.userAuth);
+  // console.log(userToken);
 
   return (
     <>
