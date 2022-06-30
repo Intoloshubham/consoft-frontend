@@ -58,6 +58,7 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
 
   const [showPass, setShowPass] = React.useState(false);
+  const [login, setlogin] = React.useState(false)
 
   //rtk
   const [ loginCompany ] = useLoginCompanyMutation();
@@ -91,6 +92,7 @@ const Login = ({navigation}) => {
     });
     
   const userOnSubmit = async () => {
+    setlogin(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
@@ -111,7 +113,8 @@ const Login = ({navigation}) => {
     if (result.status === 200) {
       // await setUserId(result._id);
       await storeToken(result.access_token);   
-      navigation.navigate('UserDashboard');
+      navigation.navigate('UserDashboard',{name_login:login});
+
     }
 
     if(result.status === 401){
