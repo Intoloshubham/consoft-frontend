@@ -10,11 +10,12 @@ import {
     Animated,
     TextInput
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { icons, COLORS, SIZES, FONTS, dummyData, images } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 import styles from './css/InProgressModalStyle'
-import { log } from 'react-native-reanimated';
+
+
 
 
 
@@ -31,16 +32,17 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
     const [Num, setNum] = React.useState(0)
     const [dumybardata, setdumybardata] = React.useState(dummyData.barData)
     const [ShowCounterid, setShowCounterid] = useState(null)
-    const ShowCounteridRef=React.useRef()
+    const ShowCounteridRef = React.useRef()
     const [Data, setData] = useState(null)
     const GetPercentIdRef = React.useRef()
 
 
 
+
     const __handle_increase_counter = (item, id) => {
         // setShowCounterid(id)
-        ShowCounteridRef.current=id
-        console.log('showcounterref='+ShowCounteridRef.current+''+'id='+id);
+        ShowCounteridRef.current = id
+        console.log('showcounterref=' + ShowCounteridRef.current + '' + 'id=' + id);
         if (id == ShowCounteridRef.current) {
             if (count < 100) {
                 setCount(count => count + 5);
@@ -54,7 +56,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
 
     const __handle_decrease_counter = (item, id) => {
         // setShowCounterid(id)
-        ShowCounteridRef.current=id
+        ShowCounteridRef.current = id
         if (id == ShowCounteridRef.current) {
             if (count > 0) {
                 setCount(count => count - 5);
@@ -95,8 +97,8 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
 
 
     const __getPercent = (item, id) => {
-        const new_data=dumybardata.findIndex((i)=>i.label===item.label)
-        GetPercentIdRef.current=new_data
+        const new_data = dumybardata.findIndex((i) => i.label === item.label)
+        GetPercentIdRef.current = new_data
         // GetPercentIdRef
         // console.log(new_data);
         // console.log(GetPercentIdRef.current);
@@ -110,7 +112,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
 
     const CountingComponent = ({ item, id }) => {
 
-    
+
         // console.log(item);
         // console.log(id);
         return (
@@ -169,7 +171,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                             <Text style={{ color: COLORS.black, fontSize: 35, marginTop: -16, textAlign: "right" }}>-</Text>
                         </TouchableOpacity>
                         <View style={{ flexDirection: "column", alignSelf: "center", marginLeft: -5 }}>
-                            {(ShowCounteridRef.current== id ? Text_Counter(item, id) : Text_Counter2(item, id))}
+                            {(ShowCounteridRef.current == id ? Text_Counter(item, id) : Text_Counter2(item, id))}
                         </View>
                         <TouchableOpacity style={styles.plus_btn}
                             onPress={() => {
