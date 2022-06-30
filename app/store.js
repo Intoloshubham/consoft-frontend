@@ -10,11 +10,12 @@ import userReducer from '../features/UserSlice'
 import UserAuthReducer from '../features/UserAuthSlice'
 
 export const store = configureStore({
-  reducer: {
-    [companyAuthApi.reducerPath]: companyAuthApi.reducer,
-    company:companyReducer,
-    companyAuth:companyAuthReducer
-  },
+
+  // reducer: {
+  //   [companyAuthApi.reducerPath]: companyAuthApi.reducer,
+  //   company:companyReducer,
+  //   companyAuth:companyAuthReducer
+  // },
   
   reducer: {
     [userAuthApi.reducerPath]: userAuthApi.reducer,
@@ -22,8 +23,8 @@ export const store = configureStore({
     userAuth:UserAuthReducer
   },
 
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(companyAuthApi.middleware),
+  // middleware: (getDefaultMiddleware) =>
+  //   getDefaultMiddleware().concat(companyAuthApi.middleware),
     
 
   middleware: (getDefaultMiddleware) =>
