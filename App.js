@@ -19,7 +19,7 @@ import {
   StocksAndInventry,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  CheckList,
+  CheckList, 
   Items,
   Unit,
   CompanyTeam,
@@ -33,7 +33,6 @@ import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
-import user_tabs from './navigation/user_tabs';
 
 //setup redux
 import {store} from './app/store';
