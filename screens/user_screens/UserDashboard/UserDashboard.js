@@ -19,35 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const UserDashboard = ({navigation}) => {
 
-  const [accessToken, setAccessToken] = useState(false);
-  const dispatch = useDispatch()
-
-  useEffect( () => {
-    (async() => {
-        const token = await getToken();
-        setAccessToken(token)
-        dispatch(setUserToken({ token:token }))
-      })();
-  })
-
-  console.log(accessToken);
-
-    
-    // console.log("Token " + accessToken)
-    
-
-  // const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
-  // console.log("data "+ data);
-
-  
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role_id: data.role_id  }))
-  //   }
-  // })
-
-  // const userData = useSelector(state => state.user);
-  // console.log("User Data " + userData);
+  const [accessToken, setAccessToken] = useState('');
 
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
@@ -69,6 +41,26 @@ const UserDashboard = ({navigation}) => {
     setdoneModal(true);
   }
 
+  const dispatch = useDispatch()
+  useEffect( () => {
+    (async() => {
+        const token = await getToken();
+        setAccessToken(token)
+        dispatch(setUserToken({ token:token }))
+      })();
+    },[accessToken])
+
+  const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role: data.role, role_id: data.role_id  }))
+    }
+  },[])
+
+  const userData = useSelector(state => state.user);
+  const userToken = useSelector(state => state.userAuth);
+  // console.log(userToken);
 
   return (
     <>
