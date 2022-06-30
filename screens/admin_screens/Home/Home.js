@@ -40,6 +40,7 @@ const Home = () => {
   }, []);
 
   const companyData = useSelector(state => state.company);
+  console.log(companyData)
   
   return (
     <SafeAreaView>

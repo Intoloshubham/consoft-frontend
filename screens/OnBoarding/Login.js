@@ -89,6 +89,7 @@ const Login = ({navigation}) => {
       text2: 'Error',
       visibilityTime: 4000,
     });
+    
   const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
@@ -97,7 +98,7 @@ const Login = ({navigation}) => {
 
     // console.log(UserData)
     const res = await loginUser(UserData);
-    console.log(res)
+    // console.log(res)
 
     let result;
     if (res.data) {
