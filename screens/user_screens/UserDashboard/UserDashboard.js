@@ -56,11 +56,11 @@ const UserDashboard = ({navigation}) => {
     if (isSuccess) {
       dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role: data.role, role_id: data.role_id  }))
     }
-  },[])
+  },[isSuccess])
 
   const userData = useSelector(state => state.user);
   const userToken = useSelector(state => state.userAuth);
-  // console.log(userToken);
+  console.log(userData);
 
   return (
     <>
