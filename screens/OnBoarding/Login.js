@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState} from 'react';
 import {
   View,
   Text,
@@ -43,22 +43,23 @@ const Login = ({navigation}) => {
       alert(`url is not correct: ${url}`);
     }
   };
-
+  
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
     setSwitchValue(value);
   };
-
+  
   const [userMobileNo, setUserMobileNo] = React.useState('');
   const [userPassword, setUserPassword] = React.useState('');
   const [userMobileNoError, setUserMobileNoError] = React.useState('');
-
+  
   const [companyMobileNo, setCompanyMobileNo] = React.useState('');
   const [companyPassword, setCompanyPassword] = React.useState('');
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
-
+  
   const [showPass, setShowPass] = React.useState(false);
-
+  const [accessToken, setAccessToken] = useState(false);
+  
   //rtk
   const [ loginCompany ] = useLoginCompanyMutation();
 
@@ -89,7 +90,9 @@ const Login = ({navigation}) => {
       text2: 'Error',
       visibilityTime: 4000,
     });
+    
   const userOnSubmit = async () => {
+    setAccessToken(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
@@ -97,7 +100,7 @@ const Login = ({navigation}) => {
 
     // console.log(UserData)
     const res = await loginUser(UserData);
-    console.log(res)
+    // console.log(res)
 
     let result;
     if (res.data) {
