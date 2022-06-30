@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, ScrollView, Modal, Pressable, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FONTS, icons, SIZES, COLORS } from '../../../constants'
 import LinearGradient from 'react-native-linear-gradient'
@@ -12,16 +12,15 @@ import Reports from '../UserReports/UserReports'
 //redux
 import { getToken } from '../../../services/asyncStorageService';
 import { useGetLoggedUserQuery } from '../../../services/userAuthApi';
-import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../../../features/UserSlice';
 import { setUserToken } from '../../../features/UserAuthSlice';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-// Icons.loadFont();
 
 const UserDashboard = ({navigation}) => {
 
-  const [accessToken, setAccessToken] = useState('');
+  const [accessToken, setAccessToken] = useState(false);
+  const dispatch = useDispatch()
 
   useEffect( () => {
     (async() => {
@@ -31,17 +30,24 @@ const UserDashboard = ({navigation}) => {
       })();
   })
 
-  const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+  console.log(accessToken);
 
-  const dispatch = useDispatch()
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role_id: data.role_id  }))
-    }
-  })
+    
+    // console.log("Token " + accessToken)
+    
 
-  const userData = useSelector(state => state.user);
-  // console.log(userData);
+  // const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+  // console.log("data "+ data);
+
+  
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role_id: data.role_id  }))
+  //   }
+  // })
+
+  // const userData = useSelector(state => state.user);
+  // console.log("User Data " + userData);
 
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
