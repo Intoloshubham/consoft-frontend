@@ -10,6 +10,7 @@ import {
   ScrollView,
   LogBox,
   Image,
+  ImageBackground,
 } from 'react-native';
 import {
   HeaderBar,
@@ -21,11 +22,13 @@ import {
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import Toast from 'react-native-toast-message';
 import Config from '../../../config';
+import {useSelector} from 'react-redux';
 
 const CategoryandType = ({navigation}) => {
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
+  const companyData = useSelector(state => state.company);
 
   // Store categories & types data from api
   const [categories, setCategories] = React.useState([]);
@@ -87,12 +90,16 @@ const CategoryandType = ({navigation}) => {
     fetch(`${Config.API_URL}project-category`, {
       method: 'GET',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
       .then(response => response.json())
       .then(data => {
         // console.log(data);
+        let catFromApi = data.map(item => {
+          return {label: item.category_name, value: item._id};
+        });
         setCategories(data);
         setItems(catFromApi);
       })
@@ -103,18 +110,20 @@ const CategoryandType = ({navigation}) => {
   const OnSubmit = () => {
     const data = {
       category_name: catName,
+      company_id: companyData._id,
     };
 
     fetch(`${Config.API_URL}project-category`, {
       method: 'POST',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
       .then(response => response.json())
       .then(data => {
-        // console.log('Success:', data);
+        console.log(data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -125,10 +134,12 @@ const CategoryandType = ({navigation}) => {
   const OnEdit = () => {
     const editData = {
       category_name: catName,
+      company_id: companyData._id,
     };
     fetch(`${Config.API_URL}project-category` + `/${id}`, {
       method: 'PUT',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(editData),
@@ -146,6 +157,7 @@ const CategoryandType = ({navigation}) => {
     fetch(`${Config.API_URL}project-category` + `/${id}`, {
       method: 'DELETE',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     });
@@ -172,6 +184,7 @@ const CategoryandType = ({navigation}) => {
     fetch(`${Config.API_URL}project-type`, {
       method: 'GET',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
@@ -188,11 +201,13 @@ const CategoryandType = ({navigation}) => {
     const data = {
       category_id: value,
       project_type: typeName,
+      company_id: companyData._id,
     };
 
     fetch(`${Config.API_URL}project-type`, {
       method: 'POST',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
@@ -211,10 +226,12 @@ const CategoryandType = ({navigation}) => {
     const editData = {
       category_id: value,
       project_type: typeName,
+      company_id: companyData._id,
     };
     fetch(`${Config.API_URL}project-type` + `/${typeid}`, {
       method: 'PUT',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(editData),
@@ -233,17 +250,12 @@ const CategoryandType = ({navigation}) => {
     fetch('http://192.168.1.99:8000/api/project-type/' + `${id}`, {
       method: 'DELETE',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     });
     // console.log('type delete');
   };
-
-  React.useEffect(() => {
-    OnDeleteTypes;
-    OnEditTypes;
-    OnEdit;
-  }, []);
 
   function renderCategories() {
     const renderItem = ({item, index}) => {
@@ -284,21 +296,35 @@ const CategoryandType = ({navigation}) => {
                 setShowCategoryModal(true);
                 OnEdit();
               }}>
-              <Image
-                source={icons.edit}
+              <ImageBackground
                 style={{
-                  height: 15,
-                  width: 15,
-                  tintColor: COLORS.lightblue_800,
+                  backgroundColor: COLORS.green,
+                  padding: 5,
+                  borderRadius: SIZES.base,
                   right: 10,
-                }}
-              />
+                }}>
+                <Image
+                  source={icons.edit}
+                  style={{
+                    height: 15,
+                    width: 15,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => OnDelete(item._id)}>
-              <Image
-                source={icons.delete_icon}
-                style={{height: 15, width: 15, tintColor: COLORS.red}}
-              />
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.rose_600,
+                  padding: 5,
+                  borderRadius: SIZES.base,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{height: 15, width: 15, tintColor: COLORS.white}}
+                />
+              </ImageBackground>
             </TouchableOpacity>
           </View>
         </View>
@@ -393,21 +419,35 @@ const CategoryandType = ({navigation}) => {
                 setShowTypesModal(true);
                 OnEditTypes();
               }}>
-              <Image
-                source={icons.edit}
+              <ImageBackground
                 style={{
-                  height: 15,
-                  width: 15,
-                  tintColor: COLORS.lightblue_800,
+                  backgroundColor: COLORS.green,
+                  padding: 5,
+                  borderRadius: SIZES.base,
                   right: 10,
-                }}
-              />
+                }}>
+                <Image
+                  source={icons.edit}
+                  style={{
+                    height: 15,
+                    width: 15,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => OnDeleteTypes(item._id)}>
-              <Image
-                source={icons.delete_icon}
-                style={{height: 15, width: 15, tintColor: COLORS.red}}
-              />
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.rose_600,
+                  padding: 5,
+                  borderRadius: SIZES.base,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{height: 15, width: 15, tintColor: COLORS.white}}
+                />
+              </ImageBackground>
             </TouchableOpacity>
           </View>
         </View>
@@ -468,7 +508,7 @@ const CategoryandType = ({navigation}) => {
         animationType="slide"
         transparent={true}
         visible={showCategoryModal}>
-        <TouchableWithoutFeedback onPress={() => setShowCategoryModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
@@ -543,7 +583,7 @@ const CategoryandType = ({navigation}) => {
   function renderAddTypesModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={showTypesModal}>
-        <TouchableWithoutFeedback onPress={() => setShowTypesModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,

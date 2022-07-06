@@ -17,6 +17,9 @@ const Drop = ({
   zIndex,
   zIndexInverse,
   onChangeValue,
+  maxHeight,
+  onOpen,
+  closeAfterSelecting,
 }) => {
   return (
     <View>
@@ -27,8 +30,9 @@ const Drop = ({
           borderWidth: null,
           backgroundColor: COLORS.gray3,
           minHeight: 40,
+          paddingHorizontal: SIZES.padding,
         }}
-        maxHeight={200}
+        maxHeight={maxHeight}
         dropDownContainerStyle={{
           marginTop: SIZES.radius * 1.4,
           backgroundColor: COLORS.lightblue_800,
@@ -55,27 +59,27 @@ const Drop = ({
         setOpen={setOpen}
         setValue={setValue}
         setItems={setItems}
+        onOpen={onOpen}
         // multiple
         theme="LIGHT"
         multiple={multiple}
         mode="BADGE"
         badgeDotColors={[
-          '#e76f51',
-          '#00b4d8',
-          '#e9c46a',
-          '#e76f51',
-          '#8ac926',
-          '#00b4d8',
-          '#e9c46a',
+          COLORS.rose_600,
+          COLORS.green,
+          COLORS.yellow_600,
+          COLORS.blue,
         ]}
         tickIconStyle={{
           width: 15,
           height: 15,
           backgroundColor: COLORS.white,
+          borderRadius: SIZES.base,
         }}
         zIndex={zIndex}
         zIndexInverse={zIndexInverse}
         onChangeValue={onChangeValue}
+        closeAfterSelecting={closeAfterSelecting}
       />
     </View>
   );

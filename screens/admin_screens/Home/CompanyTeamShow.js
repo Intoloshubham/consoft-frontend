@@ -83,7 +83,7 @@ const ProjectCompanyShow = () => {
             <Text
               style={{
                 ...FONTS.h4,
-                color: COLORS.darkGray,
+                color: COLORS.lightblue_900,
                 textTransform: 'capitalize',
               }}>
               Mr. {item.name}
@@ -118,13 +118,25 @@ const ProjectCompanyShow = () => {
               </TouchableOpacity>
             </View> */}
           </View>
-          <Text style={{...FONTS.body5, textTransform: 'capitalize'}}>
+          <Text
+            style={{
+              ...FONTS.body5,
+              textTransform: 'capitalize',
+              color: COLORS.darkGray,
+            }}>
             Designation - {item.user_role}
           </Text>
-          <Text style={{...FONTS.body5, textTransform: 'capitalize'}}>
-            Mobile No. - {item.mobile}
+          <Text
+            style={{
+              ...FONTS.body5,
+              textTransform: 'capitalize',
+              color: COLORS.darkGray,
+            }}>
+            Mobile No - +91-{item.mobile}
           </Text>
-          <Text style={{...FONTS.body5}}>Email - {item.email}</Text>
+          <Text style={{...FONTS.body5, color: COLORS.darkGray}}>
+            Email - {item.email}
+          </Text>
         </View>
       </View>
     );
@@ -150,7 +162,7 @@ const ProjectCompanyShow = () => {
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
-          maxHeight={600}
+          maxHeight={550}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (

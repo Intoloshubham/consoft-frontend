@@ -16,6 +16,7 @@ import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {IconButton, CustomDropdown, TextButton} from '../../../Components';
 import Config from '../../../config';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import Toast from 'react-native-toast-message';
 
 const WorkAssignModal = ({isVisible, onClose}) => {
   //assign work input
@@ -57,6 +58,14 @@ const WorkAssignModal = ({isVisible, onClose}) => {
   const [openUsers, setOpenUsers] = React.useState(false);
   const [usersValue, setUsersValue] = React.useState([]);
   const [users, setUsers] = React.useState([]);
+
+  const onRoleOpen = React.useCallback(() => {
+    setOpenUsers(false);
+  }, []);
+
+  const onUserOpen = React.useCallback(() => {
+    setOpenUserRole(false);
+  }, []);
 
   // button enable function
   function isEnableSubmit() {
@@ -100,14 +109,24 @@ const WorkAssignModal = ({isVisible, onClose}) => {
       .catch(error => console.log(error.message));
   };
 
+  const showToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'Assign Work Successfully',
+      text2: 'Success',
+      visibilityTime: 1800,
+    });
+
   // Post assign work data from api
   const OnSubmit = () => {
     const FormData = {
       role_id: userRoleValue,
       user_id: usersValue,
       work: newWork,
+      exp_completion_time: date,
     };
-    console.log(FormData);
+
     fetch(`${Config.API_URL}assign-works`, {
       method: 'POST',
       headers: {
@@ -117,8 +136,9 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log('Success:', data);
+        // console.log(data);
         if (data.status == 200) {
+          showToast();
           setTimeout(() => {
             setShowAssignWorkModal(false);
           }, 1000);
@@ -174,8 +194,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
   };
 
   //date
-  const [date, setDate] = React.useState(new Date(1598051730000));
-
+  const [date, setDate] = React.useState(new Date());
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
@@ -186,7 +205,8 @@ const WorkAssignModal = ({isVisible, onClose}) => {
       value: date,
       onChange,
       mode: currentMode,
-      is24Hour: true,
+      locale: 'en-IN',
+      display: 'spinner',
     });
   };
 
@@ -204,42 +224,58 @@ const WorkAssignModal = ({isVisible, onClose}) => {
         style={{
           flexDirection: 'row',
           borderRadius: SIZES.base,
-          backgroundColor: COLORS.lightblue_700,
+          backgroundColor: COLORS.gray3,
           paddingHorizontal: SIZES.radius,
           paddingVertical: SIZES.base,
-          ...styles.shadow,
+          // ...styles.shadow,
         }}>
-        <Text
-          style={{
-            ...FONTS.h4,
-            color: COLORS.white,
-          }}>
-          Wind-up Date :
-        </Text>
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginLeft: SIZES.radius,
+            // marginLeft: SIZES.radius,
           }}>
-          <Text
-            style={{
-              ...FONTS.body4,
-              color: COLORS.white,
-            }}>
-            {date.toLocaleDateString()}
-          </Text>
-          <TouchableOpacity onPress={showDatepicker}>
-            <Image
-              source={icons.date}
+          <View style={{flexDirection: 'row'}}>
+            <Text
               style={{
-                width: 20,
-                height: 20,
-                tintColor: COLORS.white,
-              }}
-            />
-          </TouchableOpacity>
+                ...FONTS.body4,
+                color: COLORS.darkGray,
+              }}>
+              Date - {date.toLocaleDateString()}
+            </Text>
+            <Text
+              style={{
+                ...FONTS.body4,
+                color: COLORS.darkGray,
+                left: 10,
+              }}>
+              Time - {date.toLocaleTimeString()}
+            </Text>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={showDatepicker}>
+              <Image
+                source={icons.date}
+                style={{
+                  width: 20,
+                  height: 20,
+                  tintColor: COLORS.lightblue_900,
+                  right: 8,
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={showTimepicker}>
+              <Image
+                source={icons.time}
+                style={{
+                  width: 20,
+                  height: 20,
+                  tintColor: COLORS.lightblue_900,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -248,8 +284,9 @@ const WorkAssignModal = ({isVisible, onClose}) => {
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
+        <Toast config={showToast} />
         {/* transparent background */}
-        <TouchableWithoutFeedback onPress={() => setShowAssignWorkModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               position: 'absolute',
@@ -289,6 +326,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
             />
           </View>
           {/* <WorkAssign /> */}
+
           <ScrollView showsVerticalScrollIndicator={false}>
             <CustomDropdown
               placeholder="Select"
@@ -305,6 +343,9 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                 OnChangeHandler(value);
                 console.log(value);
               }}
+              onOpen={onRoleOpen}
+              zIndex={2000}
+              zIndexInverse={1000}
             />
             <CustomDropdown
               placeholder="Select"
@@ -318,8 +359,9 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
-              zIndex={3000}
-              zIndexInverse={1000}
+              zIndex={1000}
+              zIndexInverse={2000}
+              onOpen={onUserOpen}
             />
 
             <View
@@ -354,8 +396,10 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                         paddingHorizontal: SIZES.padding,
                         borderRadius: SIZES.base,
                         backgroundColor: COLORS.gray3,
+                        right: 3,
                       }}>
                       <TextInput
+                        style={{color: COLORS.black}}
                         placeholder="Write here..."
                         placeholderTextColor={COLORS.darkGray}
                         value={input.value}
@@ -404,18 +448,12 @@ const WorkAssignModal = ({isVisible, onClose}) => {
             </Text>
             <View
               style={{
-                // marginTop: SIZES.padding,
-                height: 40,
                 borderRadius: SIZES.base,
                 backgroundColor: COLORS.gray3,
                 paddingHorizontal: SIZES.padding,
                 paddingVertical: SIZES.base,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                // marginLeft: SIZES.base,
               }}>
-              <View>
+              <View style={{}}>
                 {fileData.length > 0
                   ? fileData.map((list, index) => {
                       return (
@@ -425,14 +463,16 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                               ...FONTS.body4,
                               color: COLORS.lightblue_900,
                             }}>
-                            {list.name},
+                            {index + 1}.{''} {list.name}
                           </Text>
                         </View>
                       );
                     })
                   : null}
               </View>
-              <TouchableOpacity onPress={handleFilePicker}>
+              <TouchableOpacity
+                onPress={handleFilePicker}
+                style={{alignItems: 'flex-end'}}>
                 <Image
                   source={icons.upload_files}
                   style={{

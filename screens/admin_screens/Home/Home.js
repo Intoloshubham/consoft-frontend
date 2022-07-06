@@ -4,15 +4,23 @@ import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
 import ProjectWorksIdentifier from './ProjectWorksIdentifier';
+import SubmittedWorks from './SubmittedWorks';
 
 import {getToken} from '../../../services/asyncStorageService';
 import {useGetLoggedCompanyQuery} from '../../../services/companyAuthApi';
 import {useDispatch} from 'react-redux';
 import {setCompanyInfo} from '../../../features/CompanySlice';
 import {setCompanyToken} from '../../../features/CompanyAuthSlice';
+import {useSelector} from 'react-redux';
 
 const Home = () => {
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
+
   const [accessToken, setAccessToken] = useState('');
+  const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
+  const companyData = useSelector(state => state.company);
 
   useEffect(() => {
     (async () => {
@@ -21,8 +29,6 @@ const Home = () => {
       dispatch(setCompanyToken({token: token}));
     })();
   });
-
-  const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
 
   //store data in redux store
   const dispatch = useDispatch();
@@ -39,10 +45,6 @@ const Home = () => {
     }
   });
 
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-
   return (
     <SafeAreaView>
       <ScrollView>
@@ -52,8 +54,9 @@ const Home = () => {
             marginBottom: 130,
           }}>
           <ProjectsBanner />
+          <SubmittedWorks />
+          <ProjectReports />
           <AssignedWorks />
-          {/* <ProjectReports /> */}
           {/* <ProjectWorksIdentifier /> */}
         </View>
       </ScrollView>

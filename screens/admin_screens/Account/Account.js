@@ -10,7 +10,10 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-import {removeToken} from '../../../services/asyncStorageService';
+import {
+  removeCompanyId,
+  removeToken,
+} from '../../../services/asyncStorageService';
 import {useSelector} from 'react-redux';
 import {unSetCompanyInfo} from '../../../features/CompanySlice';
 import {unsetCompanyToken} from '../../../features/CompanyAuthSlice';
@@ -19,12 +22,13 @@ import {ProfileValue, LineDivider} from '../../../Components';
 
 const Account = () => {
   const navigation = useNavigation();
-  const [collapsed, setCollapsed] = React.useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   const logout = async () => {
     unSetCompanyInfo({_id: '', company_name: '', email: '', mobile: ''});
     unsetCompanyToken({token: null});
     await removeToken('token');
+    await removeCompanyId('company_id');
     navigation.navigate('Dahsboard');
   };
 
@@ -71,16 +75,17 @@ const Account = () => {
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.radius,
+          paddingHorizontal: SIZES.padding,
           paddingVertical: 20,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_800,
+          alignItems: 'center',
         }}>
         {/* profile image  */}
         <TouchableOpacity
           style={{
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
           }}
           onPress={() => alert('Upload Image')}>
           <Image
@@ -88,7 +93,7 @@ const Account = () => {
             style={{
               width: '100%',
               height: '100%',
-              borderRadius: 30,
+              borderRadius: 40,
               borderWidth: 2,
               borderColor: COLORS.white,
             }}
@@ -133,11 +138,15 @@ const Account = () => {
             style={{
               color: COLORS.white,
               ...FONTS.h2,
+              textTransform: 'capitalize',
             }}>
             {companyData.company_name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             {companyData.email}
+          </Text>
+          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+            +91{companyData.mobile}
           </Text>
         </View>
       </View>
@@ -151,43 +160,43 @@ const Account = () => {
           ...styles.profileSectionContainer,
         }}>
         <ProfileValue
-          icon={icons.p_team}
+          icon={icons.project_type}
           value="Project Categories & Types"
           image={icons.right_arr}
           onPress={() => navigation.navigate('CategoryandType')}
         />
         <LineDivider />
         <ProfileValue
-          icon={icons.p_team}
+          icon={icons.company_team}
           value="Add Company Team"
           image={icons.right_arr}
           onPress={() => navigation.navigate('CompanyTeam')}
         />
         <LineDivider />
         <ProfileValue
-          icon={icons.stock_manage}
+          icon={icons.stock_management}
           value="Stock Management"
-          image={icons.down_arrow}
+          image={icons.down_arro}
           onPress={toggleExpanded}
         />
         <Collapsible collapsed={collapsed} duration={300}>
           <View style={{marginLeft: SIZES.padding * 1.8}}>
             <ProfileValue
-              icon={icons.items}
+              icon={icons.itemss}
               value="Items"
               image={icons.right_arr}
               onPress={() => navigation.navigate('Items')}
             />
             <LineDivider />
             <ProfileValue
-              icon={icons.unit}
+              icon={icons.units}
               value="Unit"
               image={icons.right_arr}
               onPress={() => navigation.navigate('Unit')}
             />
             <LineDivider />
             <ProfileValue
-              icon={icons.stock_manage}
+              icon={icons.manage_stock}
               value="Manage Stock"
               image={icons.right_arr}
               onPress={() => navigation.navigate('ManageStock')}
@@ -196,7 +205,7 @@ const Account = () => {
         </Collapsible>
         <LineDivider />
         <ProfileValue
-          icon={icons.Suppliers}
+          icon={icons.supplier}
           value="Suppliers"
           image={icons.right_arr}
           onPress={() => navigation.navigate('Suppliers')}

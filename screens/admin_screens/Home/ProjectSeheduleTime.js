@@ -15,7 +15,7 @@ import {HeaderBar} from '../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../constants';
 
 const ProjectSeheduleTime = () => {
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date());
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;

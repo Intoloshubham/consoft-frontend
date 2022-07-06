@@ -23,9 +23,13 @@ import utils from '../../../utils';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import Toast from 'react-native-toast-message';
 import Config from '../../../config';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSelector} from 'react-redux';
 
 const ProjectsBanner = () => {
   const navigation = useNavigation();
+  const companyData = useSelector(state => state.company);
+
   //collapse
   const [collapsed, setCollapsed] = React.useState(true);
   const [showCreateProjectModal, setCreateProjectModal] = React.useState(false);
@@ -33,20 +37,32 @@ const ProjectsBanner = () => {
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
+    // setTimeout(() => {
+    //   setCollapsed(collapsed);
+    // }, 5000);
   };
+
   // get projects
+  // React.useEffect(() => {
+  //   fetch(`${Config.API_URL}projects`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setProjects(data);
+  //     });
+  // }, []);
+  async function fetchData() {
+    fetch(`${Config.API_URL}projects`)
+      .then(res => res.json())
+      .then(data => setProjects(data));
+  }
   React.useEffect(() => {
-    fetch(`${Config.API_URL}/projects`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setProjects(data);
-      });
-  }, []);
+    fetchData();
+  }, [projects]);
   const [projects, setProjects] = React.useState([]);
 
   // // project categories
@@ -111,10 +127,10 @@ const ProjectsBanner = () => {
   const [open2, setOpen2] = React.useState(false);
   const [value2, setValue2] = React.useState([]);
   const [projectUnit, setProjectUnit] = React.useState([
-    {label: 'Hectare', value: '1'},
+    {label: 'HA', value: '1'},
     {label: 'Acre', value: '2'},
-    {label: 'Sqm', value: '3'},
-    {label: 'Sqf', value: '4'},
+    {label: 'SQm', value: '3'},
+    {label: 'SQF', value: '4'},
   ]);
 
   function isEnableSubmit() {
@@ -132,9 +148,17 @@ const ProjectsBanner = () => {
     Toast.show({
       position: 'top',
       type: 'success',
-      text1: 'Update Successfully',
+      text1: 'Created Successfully',
       text2: 'Success',
-      visibilityTime: 400,
+      visibilityTime: 1800,
+    });
+  const showUpdateToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'Updated Successfully',
+      text2: 'Success',
+      visibilityTime: 1800,
     });
 
   const OnSubmit = () => {
@@ -145,9 +169,10 @@ const ProjectsBanner = () => {
       project_category: value,
       project_type: value1,
       project_measurement: value2,
+      company_id: companyData._id,
     };
-
-    fetch(`${Config.API_URL}/projects`, {
+    console.log(data);
+    fetch(`${Config.API_URL}projects`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -156,13 +181,40 @@ const ProjectsBanner = () => {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log('Success:', data);
-        showToast();
+        if (data.status === 200) {
+          showToast();
+          setTimeout(() => {
+            setCreateProjectModal(false);
+            setProjectName('');
+            setProjectLocation('');
+            setProjectPlotArea('');
+            setValue('');
+            setValue1('');
+            setValue2('');
+          }, 2000);
+        }
       })
       .catch(error => {
         console.error('Error:', error);
       });
+    // setTimeout(() => {
+    //   setProjectName('');
+    //   setProjectLocation('');
+    //   setProjectPlotArea('');
+    //   setValue('');
+    //   setValue1('');
+    //   setValue2('');
+    // }, 2500);
   };
+
+  function empltModalForm() {
+    setProjectName('');
+    setProjectLocation('');
+    setProjectPlotArea('');
+    setValue('');
+    setValue1('');
+    setValue2('');
+  }
 
   // project id
   const [data, setData] = React.useState('');
@@ -194,6 +246,7 @@ const ProjectsBanner = () => {
       project_category: value,
       project_type: value1,
       project_measurement: value2,
+      company_id: companyData._id,
     };
 
     fetch(`${Config.API_URL}projects/` + `${data}`, {
@@ -205,15 +258,18 @@ const ProjectsBanner = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
+        // console.log(data);
+        if (data.status === 200) {
+          showUpdateToast();
+          setTimeout(() => {
+            setCreateProjectModal(false);
+            setProjectCrud(false);
+          }, 2000);
+        }
       })
       .catch(error => {
         console.error('Error:', error);
       });
-
-    // setTimeout(() => {
-    //   setCreateProjectModal(false);
-    // }, 1000);
   };
 
   //edit projects
@@ -234,6 +290,7 @@ const ProjectsBanner = () => {
         onPress={() => {
           navigation.navigate('ProjectsDetails', {
             name: item.project_name,
+            project_id: item._id,
           });
         }}>
         <View
@@ -277,10 +334,10 @@ const ProjectsBanner = () => {
                 <Image
                   source={icons.notification}
                   style={{
-                    width: 15,
-                    height: 15,
+                    width: 18,
+                    height: 18,
                     tintColor: COLORS.darkGray,
-                    right: 3,
+                    right: 5,
                   }}
                 />
               </TouchableOpacity>
@@ -299,8 +356,8 @@ const ProjectsBanner = () => {
                 <Image
                   source={icons.menu}
                   style={{
-                    width: 18,
-                    height: 18,
+                    width: 20,
+                    height: 20,
                     tintColor: COLORS.darkGray,
                   }}
                 />
@@ -346,219 +403,208 @@ const ProjectsBanner = () => {
   function renderCreateProjectModal() {
     return (
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={showCreateProjectModal}>
-        <TouchableWithoutFeedback onPress={() => setCreateProjectModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              justifyContent: 'flex-end',
+              backgroundColor: COLORS.transparentBlack2,
             }}>
+            <Toast config={showToast} />
+            <Toast config={showUpdateToast} />
             <View
               style={{
-                borderRadius: SIZES.base,
-                backgroundColor: COLORS.white,
+                backgroundColor: COLORS.white2,
                 position: 'absolute',
-                left: 0,
-                top: 100,
                 width: '100%',
-                height: '100%',
-                padding: SIZES.padding,
-                borderTopRightRadius: SIZES.radius,
-                borderTopLeftRadius: SIZES.radius,
+                height: '60%',
+                // padding: SIZES.radius,
+                paddingHorizontal: SIZES.padding,
+                paddingTop: SIZES.radius,
+                paddingBottom: SIZES.padding,
+                borderTopRightRadius: SIZES.base,
+                borderTopLeftRadius: SIZES.base,
                 backgroundColor: COLORS.white,
               }}>
-              <View style={{}}>
-                {/* header */}
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
-                    Create New Project
-                  </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setCreateProjectModal(false)}
-                  />
-                </View>
-                <ScrollView
-                  showsHorizontalScrollIndicator={false}
+              <View style={{alignItems: 'flex-end'}}>
+                <IconButton
+                  containerStyle={{
+                    boborderWidth: 2,
+                    borderRadius: 10,
+                    borderColor: COLORS.gray2,
+                  }}
+                  icon={icons.cross}
+                  iconStyle={{
+                    tintColor: COLORS.gray,
+                  }}
+                  onPress={() => setCreateProjectModal(false)}
+                />
+              </View>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <KeyboardAwareScrollView
+                  keyboardDismissMode="on-drag"
                   contentContainerStyle={{
-                    paddingBottom: 250,
+                    flex: 1,
                   }}>
-                  {/* <CreateProjects /> */}
-
-                  {/* <AuthLayout> */}
-                  <View
-                    style={{
-                      flex: 1,
-                      marginTop: SIZES.padding,
-                      marginHorizontal: SIZES.base,
-                    }}>
-                    <FormInput
-                      label="Name"
-                      keyboardType="default"
-                      autoCompleteType="username"
-                      value={projectname}
-                      onChange={value => {
-                        utils.validateText(value, setProjectError);
-                        setProjectName(value);
-                      }}
-                      errorMsg={projectError}
-                      appendComponent={
-                        <View style={{justifyContent: 'center'}}>
-                          <Image
-                            source={
-                              projectname == '' ||
-                              (projectname != '' && projectError == '')
-                                ? icons.correct
-                                : icons.cancel
-                            }
-                            style={{
-                              height: 20,
-                              width: 20,
-                              tintColor:
-                                projectname == ''
-                                  ? COLORS.gray
-                                  : projectname != '' && projectError == ''
-                                  ? COLORS.green
-                                  : COLORS.red,
-                            }}
-                          />
-                        </View>
-                      }
-                    />
-                    <FormInput
-                      label="Location"
-                      keyboardType="default"
-                      autoCompleteType="username"
-                      value={projectlocation}
-                      onChange={value => {
-                        utils.validateText(value, setProjectLocationError);
-                        setProjectLocation(value);
-                      }}
-                      errorMsg={projectLocationError}
-                      appendComponent={
-                        <View style={{justifyContent: 'center'}}>
-                          <Image
-                            source={
-                              projectlocation == '' ||
-                              (projectlocation != '' &&
-                                projectLocationError == '')
-                                ? icons.correct
-                                : icons.cancel
-                            }
-                            style={{
-                              height: 20,
-                              width: 20,
-                              tintColor:
-                                projectlocation == ''
-                                  ? COLORS.gray
-                                  : projectlocation != '' &&
-                                    projectLocationError == ''
-                                  ? COLORS.green
-                                  : COLORS.red,
-                            }}
-                          />
-                        </View>
-                      }
-                    />
-
-                    <CustomDropdown
-                      placeholder="Select category"
-                      open={open}
-                      value={value}
-                      items={projectCategory}
-                      setOpen={setOpen}
-                      setValue={setValue}
-                      setItems={setProjectCategory}
-                      zIndex={9000}
-                      zIndexInverse={1000}
-                      multiple={false}
-                      listParentLabelStyle={{
-                        color: COLORS.white,
-                      }}
-                    />
-
-                    <CustomDropdown
-                      placeholder="Select types"
-                      open={open1}
-                      value={value1}
-                      items={projectType}
-                      setOpen={setOpen1}
-                      setValue={setValue1}
-                      setItems={setProjectType}
-                      zIndex={7000}
-                      zIndexInverse={1000}
-                      listParentLabelStyle={{
-                        color: COLORS.white,
-                      }}
-                    />
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                      }}>
-                      <FormInput
-                        label="Plot area"
-                        keyboardType="numeric"
-                        autoCompleteType="cc-number"
-                        containerStyle={{width: 215}}
-                        value={projectplotarea.toString()}
-                        onChange={value => {
-                          utils.validateNumber(value, setProjectPlotAreaError);
-                          setProjectPlotArea(value);
-                        }}
-                        errorMsg={projectPlotAreaError}
-                      />
-                      <View
-                        style={{
-                          marginLeft: SIZES.radius,
-                          width: '36%',
-                          // marginTop: 5,
-                        }}>
-                        <CustomDropdown
-                          placeholder="Unit"
-                          open={open2}
-                          value={value2}
-                          items={projectUnit}
-                          setOpen={setOpen2}
-                          setValue={setValue2}
-                          setItems={setProjectUnit}
-                          listParentLabelStyle={{
-                            color: COLORS.white,
+                  <FormInput
+                    label="Name"
+                    keyboardType="default"
+                    autoCompleteType="username"
+                    value={projectname}
+                    onChange={value => {
+                      utils.validateText(value, setProjectError);
+                      setProjectName(value);
+                    }}
+                    errorMsg={projectError}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            projectname == '' ||
+                            (projectname != '' && projectError == '')
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              projectname == ''
+                                ? COLORS.gray
+                                : projectname != '' && projectError == ''
+                                ? COLORS.green
+                                : COLORS.red,
                           }}
                         />
                       </View>
-                    </View>
-                    <TextButton
-                      label="Submit"
-                      disabled={isEnableSubmit() ? false : true}
-                      buttonContainerStyle={{
-                        height: 55,
-                        alignItems: 'center',
-                        marginTop: SIZES.padding,
-                        borderRadius: SIZES.radius,
-                        backgroundColor: isEnableSubmit()
-                          ? COLORS.lightblue_700
-                          : COLORS.lightblue_100,
+                    }
+                  />
+                  <FormInput
+                    label="Location"
+                    keyboardType="default"
+                    autoCompleteType="username"
+                    value={projectlocation}
+                    onChange={value => {
+                      utils.validateText(value, setProjectLocationError);
+                      setProjectLocation(value);
+                    }}
+                    errorMsg={projectLocationError}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            projectlocation == '' ||
+                            (projectlocation != '' &&
+                              projectLocationError == '')
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              projectlocation == ''
+                                ? COLORS.gray
+                                : projectlocation != '' &&
+                                  projectLocationError == ''
+                                ? COLORS.green
+                                : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+
+                  <CustomDropdown
+                    placeholder="Select category"
+                    open={open}
+                    value={value}
+                    items={projectCategory}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setProjectCategory}
+                    zIndex={11000}
+                    multiple={false}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                  />
+
+                  <CustomDropdown
+                    placeholder="Select types"
+                    open={open1}
+                    value={value1}
+                    items={projectType}
+                    setOpen={setOpen1}
+                    setValue={setValue1}
+                    setItems={setProjectType}
+                    zIndex={10000}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    maxHeight={100}
+                  />
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <FormInput
+                      label="Plot area"
+                      keyboardType="numeric"
+                      autoCompleteType="cc-number"
+                      containerStyle={{width: '60%'}}
+                      value={projectplotarea.toString()}
+                      onChange={value => {
+                        utils.validateNumber(value, setProjectPlotAreaError);
+                        setProjectPlotArea(value);
                       }}
-                      onPress={() =>
-                        data == '' ? OnSubmit() : OnUpdateSubmit()
-                      }
+                      errorMsg={projectPlotAreaError}
                     />
+                    <View
+                      style={{
+                        marginTop: 13,
+                        marginLeft: SIZES.radius,
+                        width: '35%',
+                      }}>
+                      <CustomDropdown
+                        placeholder="Unit"
+                        open={open2}
+                        value={value2}
+                        items={projectUnit}
+                        setOpen={setOpen2}
+                        setValue={setValue2}
+                        setItems={setProjectUnit}
+                        listParentLabelStyle={{
+                          color: COLORS.white,
+                        }}
+                        maxHeight={70}
+                        zIndex={8000}
+                        zIndexInverse={8000}
+                      />
+                    </View>
                   </View>
-                </ScrollView>
-              </View>
+                  <TextButton
+                    label="Submit"
+                    disabled={isEnableSubmit() ? false : true}
+                    buttonContainerStyle={{
+                      height: 45,
+                      alignItems: 'center',
+                      marginTop: SIZES.padding,
+                      marginBottom: SIZES.padding,
+                      borderRadius: SIZES.base,
+                      backgroundColor: isEnableSubmit()
+                        ? COLORS.lightblue_700
+                        : COLORS.transparentPrimary,
+                    }}
+                    onPress={() => (data == '' ? OnSubmit() : OnUpdateSubmit())}
+                  />
+                </KeyboardAwareScrollView>
+              </ScrollView>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -569,61 +615,59 @@ const ProjectsBanner = () => {
   // crud modal
   function renderProjectCrudModal() {
     return (
-      <Modal animationType="slide" transparent={true} visible={projectCrud}>
+      <Modal animationType="fade" transparent={true} visible={projectCrud}>
         <TouchableWithoutFeedback onPress={() => setProjectCrud(false)}>
           <View
             style={{
               flex: 1,
-
-              backgroundColor: COLORS.transparentBlack7,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack2,
             }}>
             <View
               style={{
-                top: 200,
-                borderRadius: SIZES.base,
+                position: 'absolute',
+                width: '40%',
                 backgroundColor: COLORS.white,
-                marginHorizontal: SIZES.padding * 4,
-                paddingHorizontal: SIZES.padding,
+                paddingHorizontal: SIZES.radius,
+                paddingVertical: SIZES.radius,
+                borderRadius: SIZES.base,
               }}>
-              <View style={{marginVertical: SIZES.padding}}>
-                {/*  render here... */}
-                <View>
-                  <TextButton
-                    label="Update"
-                    disabled={false}
-                    buttonContainerStyle={{
-                      marginTop: SIZES.radius,
-                      backgroundColor: COLORS.success_300,
-                      borderRadius: SIZES.base,
-                      padding: 5,
-                    }}
-                    labelStyle={{
-                      color: COLORS.black,
-                      ...FONTS.h3,
-                    }}
-                    onPress={() => {
-                      setCreateProjectModal(true);
-                      OnUpdateSubmit();
-                    }}
-                  />
-
-                  <TextButton
-                    label="Delete"
-                    disabled={false}
-                    buttonContainerStyle={{
-                      marginTop: SIZES.radius,
-                      backgroundColor: COLORS.rose_600,
-                      borderRadius: SIZES.base,
-                      padding: 5,
-                    }}
-                    labelStyle={{
-                      color: COLORS.white,
-                      ...FONTS.h3,
-                    }}
-                    onPress={() => OnDeleteSubmit()}
-                  />
-                </View>
-              </View>
+              <ScrollView>
+                <TextButton
+                  label="Update"
+                  disabled={false}
+                  buttonContainerStyle={{
+                    backgroundColor: null,
+                  }}
+                  labelStyle={{
+                    color: COLORS.black,
+                    ...FONTS.h3,
+                  }}
+                  onPress={() => {
+                    setCreateProjectModal(true);
+                  }}
+                />
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: COLORS.gray,
+                    marginVertical: SIZES.base,
+                    marginHorizontal: SIZES.padding,
+                  }}></View>
+                <TextButton
+                  label="Delete"
+                  disabled={false}
+                  buttonContainerStyle={{
+                    backgroundColor: null,
+                  }}
+                  labelStyle={{
+                    color: COLORS.black,
+                    ...FONTS.h3,
+                  }}
+                  onPress={() => OnDeleteSubmit()}
+                />
+              </ScrollView>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -666,10 +710,13 @@ const ProjectsBanner = () => {
             color: COLORS.black,
             ...FONTS.body5,
           }}
-          onPress={() => setCreateProjectModal(true)}
+          onPress={() => {
+            setCreateProjectModal(true);
+            empltModalForm();
+          }}
         />
         <Image
-          source={icons.down_arrow}
+          source={collapsed ? icons.down_arrow : icons.up_arrow}
           style={{
             height: 18,
             width: 18,

@@ -33,7 +33,7 @@ const CompanyTeam = ({navigation}) => {
 
   // get company data
   const company_data = useSelector(state => state.company);
-  console.log(company_data);
+  // console.log(company_data);
 
   function isEnableSubmit() {
     return (
@@ -94,14 +94,16 @@ const CompanyTeam = ({navigation}) => {
 
   const OnCreateCompanyTeam = () => {
     const data = {
-      role: roleValue,
+      role_id: roleValue,
       name: name,
       email: email,
       mobile: mobile,
       company_id: company_data._id,
+      project_id: projectValue,
     };
 
-    fetch(url, {
+    // console.log(data);
+    fetch(`${Config.API_URL}register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -110,10 +112,12 @@ const CompanyTeam = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        if (data.status === 200) {
-          console.log(data);
+        console.log(data);
+        if (data.status == 200) {
+      
           showToast();
         }
+        // console.log(data);
       })
       .catch(error => {
         console.error(error.message);

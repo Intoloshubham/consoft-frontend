@@ -15,13 +15,14 @@ import StocksAndInventry from './Home/StocksAndInventry';
 import ToolsAndMachinery from './Home/ToolsAndMachinery';
 import WorkAssignModal from './Modals/WorkAssignModal';
 import CategoryandType from './Project/CategoryandType';
-import Reports from './Reports/Reports';
+import ReportsDisplay from './Reports/ReportDisplay';
 import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
 import Tasks from './Tasks/Tasks';
 import Tracker from './Tracker/Tracker';
 import Suppliers from './Suppliers/Suppliers';
+import SubmittedWorks from './Home/SubmittedWorks';
 
 export {
   Account,
@@ -41,11 +42,12 @@ export {
   ToolsAndMachinery,
   WorkAssignModal,
   CategoryandType,
-  Reports,
+  ReportsDisplay,
   Items,
   ManageStock,
   Unit,
   Tasks,
   Tracker,
   Suppliers,
+  SubmittedWorks,
 };

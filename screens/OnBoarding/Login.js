@@ -19,19 +19,20 @@ import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
 import {useLoginCompanyMutation} from '../../services/companyAuthApi';
+import {setCompanyId, storeToken} from '../../services/asyncStorageService';
 
 const Login = ({navigation}) => {
   const makeCall = () => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${+91-8109093551}';
+      phoneNumber = 'tel:+91-8109093551';
     } else {
       phoneNumber = 'telprompt:${+919988774455}';
     }
     Linking.openURL(phoneNumber);
   };
   const message = 'Hello';
-  const number = +918109093551;
+  const number = +919479505099;
   const openURL = async url => {
     const isSupported = await Linking.canOpenURL(url);
     if (isSupported) {
@@ -89,7 +90,7 @@ const Login = ({navigation}) => {
       mobile: userMobileNo,
       password: userPassword,
     };
-    console.log(data);
+    console.log(UserData);
     fetch(`${Config.API_URL}login`, {
       method: 'POST',
       headers: {
@@ -99,7 +100,7 @@ const Login = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        console.log(data.access_token);
         if (data.access_token) {
           showToast();
           setTimeout(() => {
@@ -120,9 +121,28 @@ const Login = ({navigation}) => {
       mobile: companyMobileNo,
       password: companyPassword,
     };
+
     const res = await loginCompany(company_data);
-    // console.log(res.data.company_id);
+    console.log(res);
     //store token in storage
+
+    let result;
+    if (res.data) {
+      result = res.data;
+    }
+    if (res.error) {
+      result = res.error;
+    }
+
+    if (result.status === 200) {
+      await setCompanyId(result.company_id);
+      await storeToken(result.access_token);
+      navigation.navigate('Home');
+    }
+
+    if (result.status === 401) {
+      alert(result.data.message);
+    }
 
     // fetch(`${Config.API_URL}/company-login`, {
     //   method: 'POST',
@@ -427,9 +447,8 @@ const Login = ({navigation}) => {
             }}
             onPress={() => {
               Linking.openURL(
-                'mailto:support@example.com?subject=SendMail&body=Description',
+                'mailto:ssdoffice44@gmail.com?subject=SendMail&body=Description',
               );
-              // Linking.openURL(`sms:number=${number}?body=${message}`);
             }}>
             <Image
               source={icons.mail}
@@ -465,7 +484,7 @@ const Login = ({navigation}) => {
               borderRadius: SIZES.base,
             }}
             onPress={() => {
-              Linking.openURL('https://wa.me/8109093551');
+              Linking.openURL('https://wa.me/9479505099');
             }}>
             <Image
               source={icons.whatsapp}
