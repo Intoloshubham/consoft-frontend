@@ -44,13 +44,13 @@ const UserReports = ({ route }) => {
   //getting user id state
   const [userId, setUserId] = useState(null)
 
-//getting userid
+  //getting userid
   const Get_userId = async () => {
     const userId = await getUserId();
     // console.log(userId)
     setUserId(userId);
   }
-  console.log("userid")
+  console.log("userid///////////")
   console.log(userId)
   //calling userid
   React.useEffect(() => {
@@ -58,27 +58,30 @@ const UserReports = ({ route }) => {
   }, [])
 
   //getting 
-//   useMemo(() => {
-//     const sendUserId = () => { 
-//       fetch(`${Config.API_URL}user-by-projects/${userId}`)
-//         .then((response) => response.json())
-//         .then(data => {
-//           // console.log(data)
-//           setSelectedIdProjects(data);
-//         })
-//     }
-//     // (async () => await sendUserId())();
-//     sendUserId();
-//   }, [userId])
-//   console.log("selected userid projects")
-// console.log(selectedIdProjects)
+  useMemo(() => {
+    const sendUserId = () => {
+      fetch(`${Config.API_URL}user-by-projects/${userId}`)
+        .then((response) => response.json())
+        .then(data => {
+          // console.log(data)
+          setSelectedIdProjects(data);
+        })
+    }
+    // (async () => await sendUserId())();
+    sendUserId();
+  }, [userId])
+  console.log("selected userid projects")
+  console.log(selectedIdProjects)
+  console.log("Repeated........................")
   //getting and setting data in label value pair
-  // useMemo(() => {
-  //   let ProData = selectedIdProjects.map(ele => {
-  //     return { label: ele.project_name, value: ele.project_id };
-  //   })
-  //   setProList(ProData)
-  // }, [selectedIdProjects])
+  useMemo(() => {
+    if (!selectedIdProjects==[]) {
+      let ProData = selectedIdProjects.map(ele => {
+        return { label: ele.project_name, value: ele.project_id };
+      })
+      setProList(ProData)
+    }
+  }, [selectedIdProjects])
   // console.log("dropdown items data")
   // console.log(ProList)
 
@@ -152,7 +155,7 @@ const UserReports = ({ route }) => {
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           <View>
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList}/>
+              <Manpower projectTeamList={projectTeamList} />
             </View>
             <View style={{ marginVertical: 5, top: 4 }}>
               {/* Stock component */}
