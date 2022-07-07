@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const UserDashboard = ({ navigation, route }) => {
-  const { name_login_params } = route.params;
+  // const { name_login_params } = route.params;
   //for saving token
   const [accessToken, setAccessToken] = useState('');
   const accessref = useRef('')
