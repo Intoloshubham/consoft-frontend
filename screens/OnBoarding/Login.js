@@ -26,7 +26,7 @@ import { useLoginUserMutation } from '../../services/userAuthApi';//
 
 const Login = ({navigation}) => {
   const makeCall = () => {
-    let phoneNumber = '';
+    let phoneNumber = ''; 
     if (Platform.OS === 'android') {
       phoneNumber = 'tel:+91-8109093551';
     } else {
