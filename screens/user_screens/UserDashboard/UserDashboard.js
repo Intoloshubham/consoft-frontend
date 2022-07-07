@@ -8,9 +8,9 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Todo, InProgressModal, DoneModal } from '../TaskModal'
 import styles from './css/UserDashboardStyle'
 import Reports from '../UserReports/UserReports'
-
+import Config from '../../../config'
 //redux
-import { getToken } from '../../../services/asyncStorageService';
+import { getToken,getUserId } from '../../../services/asyncStorageService';
 import { useGetLoggedUserQuery } from '../../../services/userAuthApi';
 import { setUserInfo } from '../../../features/UserSlice';
 import { setUserToken } from '../../../features/UserAuthSlice';
@@ -18,15 +18,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const UserDashboard = ({ navigation, route }) => {
-  const { name_login_params } = route.params;
+  // const { name_login_params } = route.params;
   //for saving token
   const [accessToken, setAccessToken] = useState('');
   const accessref = useRef('')
 
   //for getting new task data
-  const [NewTaskRes, setNewTaskRes] = useState(null)
+  const [NewTaskRes, setNewTaskRes] = useState([])
 
-
+  const [userId, setUserId] = useState('')
 
 
   const dispatch = useDispatch()
@@ -39,6 +39,7 @@ const UserDashboard = ({ navigation, route }) => {
 
   // }
 
+  
   // React.useEffect(() => {
   //   Get_token_Data()
   // }, [])
@@ -55,7 +56,6 @@ const UserDashboard = ({ navigation, route }) => {
   //setting token
   React.useEffect(() => {
     (async () => await Get_token_Data())();
-
   }, [])
 
 
@@ -77,7 +77,7 @@ const UserDashboard = ({ navigation, route }) => {
   // })
 
 
-
+// console.log(userId)
 
 
 
@@ -88,10 +88,11 @@ const UserDashboard = ({ navigation, route }) => {
   const [inProgressModalnum, setinProgressModalNum] = useState(false)
   const [doneModalnum, setdoneModalNum] = useState(false)
 
-  const handleTask = () => {
-    // const new_task=await fetch('http://10.0.2.2:7000/api/user-assign-works/')
-    // const res=await new_task.json(new_task)
-    // setNewTaskRes(res)
+  const handleTask = async () => {
+    const new_task=await fetch(`${Config.API_URL}user-assign-works/${userId}`)
+    const res=await new_task.json(new_task)
+    // console.log(res)
+    setNewTaskRes(res)
     settaskModalNum(true);
     settaskModal(true);
   }
@@ -103,6 +104,8 @@ const UserDashboard = ({ navigation, route }) => {
     setdoneModalNum(true);
     setdoneModal(true);
   }
+// console.log(NewTaskRes)
+
 
   const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
 
@@ -110,14 +113,11 @@ const UserDashboard = ({ navigation, route }) => {
     if (isSuccess) {
       dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role: data.role, role_id: data.role_id  }))
     }
-  },[isSuccess])
-
-  // console.log(data);
+  },[])
 
   const userData = useSelector(state => state.user);
   const userToken = useSelector(state => state.userAuth);
-
-  // console.log(userData);
+  // console.log(userToken);
 
   return (
     <>
@@ -140,7 +140,7 @@ const UserDashboard = ({ navigation, route }) => {
             <Text style={[styles.tag, { color: "red" }]} >5</Text>
           </View>
         </TouchableOpacity>
-        {taskModalnum ? (<Todo taskModal={taskModal} settaskModal={settaskModal} />) : null}
+        {taskModalnum ? (<Todo taskModal={taskModal} settaskModal={settaskModal} NewTaskRes={NewTaskRes} />) : null}
 
         <TouchableOpacity style={styles.Intask} onPress={() => handleInProgressTask()}>
           <View>
@@ -180,7 +180,7 @@ const UserDashboard = ({ navigation, route }) => {
         <TouchableOpacity
           style={styles.create_new_report_btn}
           onPress={() => {
-            navigation.navigate('Reports');
+            navigation.navigate('Report');
           }}
         >
           <Text style={{ color: COLORS.white, ...FONTS.body3 }}>Create New Report</Text>

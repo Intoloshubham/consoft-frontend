@@ -143,7 +143,7 @@ const ProjectReports = () => {
   const [nullIndex, setNullIndex] = React.useState('');
   const [heading1, setHeading1] = React.useState([]);
   const [heading2, setHeading2] = React.useState([]);
-  const [newData, setNewData] = React.useState(repData);
+  const [newData, setNewData] = React.useState('');
 
   function renderReportData() {
     const renderItem = ({item}) => {
