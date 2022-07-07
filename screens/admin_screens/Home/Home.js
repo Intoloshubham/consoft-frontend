@@ -40,7 +40,7 @@ const Home = () => {
   }, []);
 
   const companyData = useSelector(state => state.company);
-  console.log(companyData)
+  // console.log(companyData)
   
   return (
     <SafeAreaView>
@@ -50,7 +50,7 @@ const Home = () => {
             flex: 1,
             marginBottom: 130,
           }}>
-          <Text>{accessToken}</Text>
+          {/* <Text>{accessToken}</Text> */}
           <ProjectsBanner />
           <AssignedWorks />
           {/* <ProjectReports /> */}
