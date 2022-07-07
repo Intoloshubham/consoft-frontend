@@ -152,6 +152,7 @@ const Login = ({navigation}) => {
     //   });
 
 
+
   };
 
   const companyOnSubmit = async () => {
