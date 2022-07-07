@@ -9,6 +9,7 @@ import {
   ScrollView,
   Modal,
   TouchableWithoutFeedback,
+  ImageBackground,
 } from 'react-native';
 import {
   HeaderBar,
@@ -137,28 +138,42 @@ const StocksAndInventry = () => {
             onPress={() => {
               alert('edit name');
             }}>
-            <Image
-              source={icons.edit}
+            <ImageBackground
               style={{
-                width: 18,
-                height: 18,
-                right: 15,
-                tintColor: COLORS.lightblue_900,
-              }}
-            />
+                backgroundColor: COLORS.green,
+                padding: 5,
+                borderRadius: SIZES.base,
+                right: 10,
+              }}>
+              <Image
+                source={icons.edit}
+                style={{
+                  width: 15,
+                  height: 15,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </ImageBackground>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               alert('delete name');
             }}>
-            <Image
-              source={icons.delete_icon}
+            <ImageBackground
               style={{
-                width: 18,
-                height: 18,
-                tintColor: COLORS.red,
-              }}
-            />
+                backgroundColor: COLORS.rose_600,
+                padding: 5,
+                borderRadius: SIZES.base,
+              }}>
+              <Image
+                source={icons.delete_icon}
+                style={{
+                  width: 15,
+                  height: 15,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </ImageBackground>
           </TouchableOpacity>
         </View>
       </View>

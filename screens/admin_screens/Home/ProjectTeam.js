@@ -10,149 +10,229 @@ import {
   Image,
   TouchableWithoutFeedback,
   Modal,
+  ImageBackground,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {
   HeaderBar,
   TextButton,
-  FormInput,
   CustomDropdown,
   IconButton,
 } from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
+import Config from '../../../config';
+import Toast from 'react-native-toast-message';
 
-const teamdetail = [
-  {
-    id: 1,
-    name: 'Shivam Verma',
-    email: 'shivam@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
-  {
-    id: 2,
-    name: 'Rahul Shrivastav',
-    email: 'rahul@gmail.com',
-    mobile: 9988776655,
-    designation: 'Architect',
-  },
-  {
-    id: 3,
-    name: 'Chotu Patel',
-    email: 'chotu@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
-  {
-    id: 4,
-    name: 'Shivam Verma',
-    email: 'shivam@gmail.com',
-    mobile: 9988776655,
-    designation: 'Engineer',
-  },
-  {
-    id: 5,
-    name: 'Rahul Shrivastav',
-    email: 'rahul@gmail.com',
-    mobile: 9988776655,
-    designation: 'Architect',
-  },
-];
-const ProjectTeam = () => {
-  const navigation = useNavigation();
+const ProjectTeam = ({route}) => {
+  const {project_id} = route.params; //
+
+  const showToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'Added Successfully',
+      text2: 'Success',
+      visibilityTime: 1800,
+    });
+
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  const [teamdetails, setTeamDetails] = React.useState(teamdetail);
+  const [teamdetails, setTeamDetails] = React.useState([]);
   const [showAddProjectTeamModal, setShowAddProjectTeamModal] =
     React.useState(false);
-  const [collapsed, setCollapsed] = React.useState(true);
-  const toggleExpanded = () => {
-    if (collapsed) {
-      setCollapsed(false);
-    } else {
-      setCollapsed(true);
-    }
-  };
-  // project team states
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [mobileNo, setMobileNo] = React.useState('');
-  const [emailError, setEmailError] = React.useState('');
-  const [nameError, setNameError] = React.useState('');
-  const [mobileNoError, setMobileNoError] = React.useState('');
 
-  //drop
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
-  const [items, setItems] = React.useState([
-    {label: 'Engineer', value: '1'},
-    {label: 'Maneger', value: '2'},
-    {label: 'Supervisor', value: '3'},
-    {label: 'Asst. Supervisor', value: '4'},
-    {label: 'Site Engineer', value: '5'},
-    {label: 'Other staff', value: '6'},
-  ]);
+  // call apis
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}role`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        let roleFromApi = data.map(one => {
+          return {label: one.user_role, value: one._id};
+        });
+        setRoleItems(roleFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+
+  const OnChangeHandler = id => {
+    fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        let usersFromApi = data.map(ele => {
+          return {label: ele.name, value: ele._id};
+        });
+        setUserItems(usersFromApi);
+      })
+      .catch(error => console.log(error.message));
+  };
+  React.useEffect(() => {
+    OnChangeHandler;
+  }, []);
+
+  //roloe dropdown
+  const [openRole, setOpenRole] = React.useState(false);
+  const [roleValue, setRoleValue] = React.useState('');
+  const [roleItems, setRoleItems] = React.useState([]);
+
+  // users dropdown
+  const [openUser, setOpenUser] = React.useState(false);
+  const [userValue, setUserValue] = React.useState([]);
+  const [userItems, setUserItems] = React.useState([]);
+
+  const onRoleOpen = React.useCallback(() => {
+    setOpenUser(false);
+  }, []);
+
+  const onUserOpen = React.useCallback(() => {
+    setOpenRole(false);
+  }, []);
+
+  // post data
+  const OnSubmit = () => {
+    const FormData = {
+      project_id: project_id,
+      user_id: userValue,
+    };
+    fetch(`${Config.API_URL}project-team`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(FormData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 200) {
+          setTimeout(() => {
+            showToast();
+            setShowAddProjectTeamModal(false);
+          }, 3000);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  const deleteHandler = id => {
+    console.log(id);
+    fetch(`${Config.API_URL}project-team/` + `${project_id}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => console.log(error.message));
+  };
+
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}project-team/` + `${project_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setTeamDetails(data);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
 
   function renderTeamList() {
     const renderItem = ({item, index}) => (
       <View>
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            paddingVertical: SIZES.base,
-          }}>
-          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
-          <View style={{flex: 1, marginLeft: SIZES.radius}}>
-            <View
+        {item.project_team.map((ele, i) => {
+          return (
+            <TouchableOpacity
+              key={i}
               style={{
-                flex: 1,
                 flexDirection: 'row',
-                justifyContent: 'space-between',
+                paddingVertical: SIZES.base,
               }}>
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  color: COLORS.darkGray,
-                }}>
-                Mr.{item.name}
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                {i + 1}.
               </Text>
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    alert('edit name');
+              <View style={{flex: 1, marginLeft: SIZES.radius}}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}>
-                  <Image
-                    source={icons.edit}
+                  <Text
                     style={{
-                      width: 18,
-                      height: 18,
-                      right: 15,
-                      tintColor: COLORS.lightblue_900,
-                    }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    alert('delete name');
-                  }}>
-                  <Image
-                    source={icons.delete_icon}
-                    style={{
-                      width: 18,
-                      height: 18,
-                      tintColor: COLORS.red,
-                    }}
-                  />
-                </TouchableOpacity>
+                      ...FONTS.h3,
+                      color: COLORS.lightblue_900,
+                      textTransform: 'capitalize',
+                    }}>
+                    Mr.{ele.user_name}
+                  </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    {/* <TouchableOpacity
+                      onPress={() => {
+                        alert('edit name');
+                      }}>
+                      <ImageBackground
+                        style={{
+                          backgroundColor: COLORS.green,
+                          padding: 5,
+                          borderRadius: SIZES.base,
+                          right: 10,
+                        }}>
+                        <Image
+                          source={icons.edit}
+                          style={{
+                            width: 15,
+                            height: 15,
+                            // right: 15,
+                            tintColor: COLORS.white,
+                          }}
+                        />
+                      </ImageBackground>
+                    </TouchableOpacity> */}
+                    <TouchableOpacity
+                      onPress={() => deleteHandler(ele.user_id)}>
+                      <ImageBackground
+                        style={{
+                          backgroundColor: COLORS.rose_600,
+                          padding: 5,
+                          borderRadius: SIZES.base,
+                        }}>
+                        <Image
+                          source={icons.delete_icon}
+                          style={{
+                            width: 15,
+                            height: 15,
+                            tintColor: COLORS.white,
+                          }}
+                        />
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
+                  Designation - {item.designation}
+                </Text>
               </View>
-            </View>
-            <Text style={{...FONTS.body4}}>
-              Designation - {item.designation}
-            </Text>
-          </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     );
     return (
@@ -196,8 +276,7 @@ const ProjectTeam = () => {
         animationType="slide"
         transparent={true}
         visible={showAddProjectTeamModal}>
-        <TouchableWithoutFeedback
-          onPress={() => setShowAddProjectTeamModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
@@ -235,115 +314,55 @@ const ProjectTeam = () => {
                 </View>
                 <ScrollView>
                   <CustomDropdown
-                    placeholder="Select Role"
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
+                    placeholder="Select role"
+                    open={openRole}
+                    value={roleValue}
+                    items={roleItems}
+                    setOpen={setOpenRole}
+                    setValue={setRoleValue}
+                    setItems={setRoleItems}
+                    onOpen={onRoleOpen}
                     categorySelectable={true}
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
-                  />
-                  <FormInput
-                    label="Name"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    onChange={value => {
-                      setName(value);
+                    maxHeight={150}
+                    zIndex={2000}
+                    zIndexInverse={2000}
+                    onChangeValue={value => {
+                      OnChangeHandler(value);
                     }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            name == '' || (name != '' && nameError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              name == ''
-                                ? COLORS.gray
-                                : name != '' && nameError == ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
                   />
-                  <FormInput
-                    label="Email"
-                    keyboardType="email-address"
-                    autoCompleteType="email"
-                    onChange={value => {
-                      setEmail(value);
+                  <CustomDropdown
+                    placeholder="Select users"
+                    open={openUser}
+                    value={userValue}
+                    items={userItems}
+                    setOpen={setOpenUser}
+                    setValue={setUserValue}
+                    setItems={setUserItems}
+                    // categorySelectable={true}
+
+                    onOpen={onUserOpen}
+                    multiple={true}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
                     }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            email == '' || (email != '' && emailError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              email == ''
-                                ? COLORS.gray
-                                : email != '' && emailError == ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
+                    maxHeight={100}
+                    zIndex={1000}
+                    zIndexInverse={3000}
+                    closeAfterSelecting={true}
                   />
-                  <FormInput
-                    label="Mobile No."
-                    keyboardType="numeric"
-                    onChange={value => {
-                      setMobileNo(value);
-                    }}
-                    errorMsg={mobileNoError}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            mobileNo == '' ||
-                            (mobileNo != '' && mobileNoError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              mobileNo == ''
-                                ? COLORS.gray
-                                : mobileNo != '' && mobileNoError == ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
+
                   <TextButton
                     label="Submit"
                     buttonContainerStyle={{
-                      height: 55,
+                      height: 50,
                       alignItems: 'center',
-                      marginTop: SIZES.padding,
+                      marginTop: SIZES.padding * 2,
                       borderRadius: SIZES.radius,
                     }}
-                    // onPress={OnSubmit}
+                    onPress={OnSubmit}
                   />
                 </ScrollView>
               </View>
@@ -372,6 +391,7 @@ const ProjectTeam = () => {
         }}
         onPress={() => setShowAddProjectTeamModal(true)}
       />
+      <Toast config={showToast} />
 
       {renderTeamList()}
       {renderAddProjectTeamModal()}
