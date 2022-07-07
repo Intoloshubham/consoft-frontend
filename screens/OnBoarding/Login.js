@@ -17,17 +17,16 @@ import Toast from 'react-native-toast-message';
 import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
-
-
 import { useLoginCompanyMutation } from '../../services/companyAuthApi';
 import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
 
 import { useLoginUserMutation } from '../../services/userAuthApi';//
 
 
+
 const Login = ({navigation}) => {
   const makeCall = () => {
-    let phoneNumber = '';
+    let phoneNumber = ''; 
     if (Platform.OS === 'android') {
       phoneNumber = 'tel:+91-8109093551';
     } else {
@@ -97,12 +96,11 @@ const Login = ({navigation}) => {
     
   const userOnSubmit = async () => {
     setAccessToken(true)
-    setlogin(true)
+    // setlogin(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
-
 
     // console.log(UserData)
     const res = await loginUser(UserData);
@@ -150,10 +148,7 @@ const Login = ({navigation}) => {
     //   .catch(error => {
     //     console.error('Error:', error);
     //   });
-
-
-
-  };
+  }
 
   const companyOnSubmit = async () => {
     const company_data = {
