@@ -29,7 +29,7 @@ const Account = () => {
     unsetCompanyToken({token: null});
     await removeToken('token');
     await removeCompanyId('company_id');
-    navigation.navigate('Dahsboard');
+    navigation.navigate('Login');
   };
 
   React.useEffect(() => {

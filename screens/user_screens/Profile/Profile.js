@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-import {removeCompanyId, removeToken} from '../../../services/asyncStorageService';
+import {removeUserId, removeToken} from '../../../services/asyncStorageService';
 import {useSelector} from 'react-redux';
 import {unSetUserInfo} from '../../../features/UserSlice';
 import {unsetUserToken} from '../../../features/UserAuthSlice';
@@ -22,11 +22,11 @@ const Profile = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const logout = async () => {
-    unSetUserInfo({_id: '', company_name: '', email: '', mobile: ''});
+    unSetUserInfo({_id:'', name:'', email: '', mobile: '', role: '', role_id: '' });
     unsetUserToken({token: null});
     await removeToken('token');
-    await removeCompanyId('company_id');
-    navigation.navigate('Dahsboard');
+    await removeUserId('user_id');
+    navigation.navigate('Login');
   };
 
   React.useEffect(() => {
@@ -154,7 +154,7 @@ const Profile = () => {
           ...styles.profileSectionContainer1,
         }}>
         <ProfileValue icon={icons.logout} value="LogOut" 
-        // onPress={logout} 
+        onPress={logout} 
 
         />
       </View>

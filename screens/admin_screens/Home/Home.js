@@ -19,11 +19,6 @@ const Home = () => {
   }, []);
 
   const [accessToken, setAccessToken] = useState('');
-
-  const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
-  const companyData = useSelector(state => state.company);
-
-
   useEffect(() => {
     (async () => {
       const token = await getToken();
@@ -32,6 +27,7 @@ const Home = () => {
     })();
   });
 
+  const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
   //store data in redux store
   const dispatch = useDispatch();
   useEffect(() => {
@@ -47,13 +43,12 @@ const Home = () => {
     }
   });
 
-
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
   const companyData = useSelector(state => state.company);
-  console.log(companyData)
+  // console.log(companyData)
   
 
   return (

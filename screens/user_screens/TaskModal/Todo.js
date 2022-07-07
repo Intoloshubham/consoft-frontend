@@ -7,7 +7,7 @@ import {
     Pressable,
     StyleSheet,
     Button,
-    Image
+    Image,LayoutAnimation
 } from 'react-native';
 import React from 'react'
 import { AccordionList } from 'accordion-collapse-react-native';
@@ -40,26 +40,54 @@ const data =
     ]
 }
 
-function Todo({ taskModal, settaskModal }) {
+function Todo({ taskModal, settaskModal, newTaskRes }) {
 
 
     const [ExpCalendar, setExpCalendar] = React.useState(false)
     const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
     const [list, setlist] = React.useState(data.list)
+    const [assign_works, setAssign_works] = React.useState([])
 
 
-    const _head = (item) => {
+
+
+
+
+    function Test({ item }) {
+        // console.log(item2)
         return (
-            <View style={styles.header} key={item.key}>
-                <View >
-                    <Text style={[FONTS.h3, { color: COLORS.black, textAlign: "left" }]}>{item.title} :       Particular</Text>
+            <View style={styles.header}>
+                <View style={{flexDirection:"row"}}>
+                    <View >
+                    <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "left" }]}>{item.work_code}: </Text>
+                    </View>
+                    <View>
+                        <Text style={[FONTS.h3, { color: COLORS.black, textAlign: "left" }]}>{item.work}</Text>
+                    </View>
                 </View>
             </View>
-        );
+        )
     }
 
+    const _head = (item) => {
+        // console.log(item.user_name)
+        LayoutAnimation.easeInEaseOut();
+        return (
+            <View>
+                <Test item={item} />
+            </View>
+        )
+    }
 
+    React.useEffect(() => {
+        newTaskRes.map(ele => {
+            let data_assign = ele.assign_works
+            setAssign_works(data_assign)
+            console.log(data_assign)
+        })
+    }, [])
 
+    // console.log(assign_works)
 
 
 
@@ -73,12 +101,13 @@ function Todo({ taskModal, settaskModal }) {
 
     // }
 
-    const onConfirmexp = (output) => {
-        setExp_date(output.dateString)
-        setExpCalendar(false)
-    }
+    // const onConfirmexp = (output) => {
+    //     setExp_date(output.dateString)
+    //     setExpCalendar(false)
+    // }
 
     const _body = (item) => {
+        LayoutAnimation.easeInEaseOut();
         return (
             <View style={styles.body_container} key={item.key}>
                 <View style={[styles.form_container, { borderRadius: 10, shadowOffset: { width: 0, height: 1 }, shadowColor: "#99CCC0", shadowOpacity: 1.5 }]}>
@@ -86,11 +115,11 @@ function Todo({ taskModal, settaskModal }) {
                         <Text style={{ color: COLORS.black, fontSize: SIZES.h4 }} >Date: </Text>
                         <Text style={{ color: COLORS.black }}  >Time: </Text>
                     </View>
-                    <Divider style={{ backgroundColor: COLORS.gray2,marginTop:5}} />
-                    <View>
+                    <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} />
+                    {/* <View>
                         <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3 }} >Particular</Text>
-                    </View>
-                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+                    </View> */}
+                    {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
                         <View>
                             <Text style={{ height: 40, top: 15, ...FONTS.h4, color: COLORS.black, backgroundColor: COLORS.gray3, width: 150 }} >Expected Comp. time</Text>
                         </View>
@@ -110,25 +139,25 @@ function Todo({ taskModal, settaskModal }) {
                             onCancel={() => { setExpCalendar(false) }}
                             onConfirm={onConfirmexp}   
                         />
-                    </View>
-                    <View style={{flexdirection:"row",justifyContent:"space-around"}}>
+                    </View> */}
+                    <View style={{ flexdirection: "row", justifyContent: "space-around" }}>
                         <View style={{ backgroundColor: COLORS.gray3, top: 10 }}>
-                            <TextInput placeholder='Comment section' placeholderTextColor={COLORS.gray} style={{ height: 35, top: 5, backgroundColor: COLORS.gray3, letterSpacing: 1, ...FONTS.body4}}></TextInput>
+                            <TextInput placeholder='Comment section' placeholderTextColor={COLORS.gray} style={{ height: 35, top: 5, backgroundColor: COLORS.gray3, letterSpacing: 1, ...FONTS.body4 }}></TextInput>
                         </View>
-                        <View style={{ backgroundColor: COLORS.Gray3, marginVertical: 10,marginTop:20, alignSelf:"center"}}>
+                        <View style={{ backgroundColor: COLORS.Gray3, marginVertical: 10, marginTop: 20, alignSelf: "center" }}>
                             <TouchableOpacity style={styles.sub_btn} >
                                 <Text style={{ fontWeight: "bold", color: COLORS.white, letterSpacing: 1, fontFamily: 'Poppins-SemiBold', fontSize: 11, lineHeight: 20 }}>Submit</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <Divider style={{ backgroundColor: COLORS.gray2,marginTop:5}} />
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginHorizontal:5 }}>
+                    <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} />
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 5 }}>
                         <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3 }} >Admin Revert</Text>
                         <TouchableOpacity style={{ backgroundColor: COLORS.blue, padding: 2, borderRadius: 4, width: 30, height: 20 }} >
                             <Text style={{ textAlign: 'center', color: COLORS.white, ...FONTS.h5, bottom: 4, letterSpacing: 1 }}>OK</Text>
                         </TouchableOpacity>
                     </View>
-                    <Divider style={{ backgroundColor: COLORS.gray2,marginTop:5}} />
+                    <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} />
                 </View>
             </View>
         );
@@ -136,6 +165,7 @@ function Todo({ taskModal, settaskModal }) {
 
     return (
         <>
+        
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -148,14 +178,18 @@ function Todo({ taskModal, settaskModal }) {
 
                 </Pressable>
                 <View style={styles.modal_container}>
+                {LayoutAnimation.easeInEaseOut()}
                     <Pressable style={{ alignSelf: "flex-end", marginLeft: 320, marginTop: 10, left: -8, top: -12 }} onPress={() => settaskModal(!taskModal)}><Entypo name="cross" color={"#106853"} size={25} /></Pressable>
+
                     <AccordionList
-                        list={list}
+                        list={assign_works}
                         header={_head}
                         isExpanded={false}
                         body={_body}
-                        keyExtractor={item => `${item.id}`}
+                        keyExtractor={item => `${item._id}`}
                     />
+
+
                 </View>
             </Modal>
 
@@ -168,7 +202,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.white2,
         padding: 8,
-        borderRadius: 25,
+        borderRadius: 5,
         margin: 2,
         shadowOpacity: 0.9,
         shadowOffset: { width: 0, height: 3 },
@@ -183,7 +217,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#eee",
         marginTop: 2,
         marginBottom: 2,
-        borderRadius: 77,
+        borderRadius: 10,
         elevation: 2,
     },
     modal_container: {
@@ -200,8 +234,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderLeftWidth: 1,
         borderRightWidth: 1,
-        borderTopRightRadius: 77,
-        borderTopLeftRadius: 77,
+        borderTopRightRadius: 40,
+        borderTopLeftRadius: 40,
         shadowColor: "#470000",
         shadowOffset: {
             width: 0,
@@ -240,7 +274,7 @@ const styles = StyleSheet.create({
         borderColor: "#99CCC0",
         padding: 10,
         justifyContent: "center",
-        borderRadius: 12,
+        borderRadius: 5,
         backgroundColor: COLORS.gray3,
         flexDirection: "column",
         // height:160,
