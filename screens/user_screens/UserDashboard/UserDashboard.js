@@ -32,23 +32,30 @@ const UserDashboard = ({ navigation, route }) => {
   const dispatch = useDispatch()
 
 
-  async function Get_token_Data() {
-    const tokens = await getToken();
-    setAccessToken(tokens)
-    dispatch(setUserToken({ token: tokens }))
+  // async function Get_token_Data() {
+  //   const tokens = await getToken();
+  //   setAccessToken(tokens)
+  //   dispatch(setUserToken({ token: tokens }))
 
-  }
+  // }
 
   // React.useEffect(() => {
-  //     Get_token_Data()
-  //   }, [name_login_params])
+  //   Get_token_Data()
+  // }, [])
 
 
-
-
-  
+  const Get_token_Data =async () => {
+    const tokens = await getToken();
+    const userId = await getUserId();
+    // console.log(userId)
+    setUserId(userId);
+    setAccessToken(tokens)
+    dispatch(setUserToken({ token: tokens }))
+  }
+  //setting token
   React.useEffect(() => {
-    Get_token_Data()
+    (async () => await Get_token_Data())();
+
   }, [])
 
 

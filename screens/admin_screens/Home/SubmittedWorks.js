@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {COLORS, SIZES, FONTS, icons, images} from '../../../constants';
 import {VictoryPie} from 'victory-native';
-import CircularProgress from 'react-native-circular-progress-indicator';
 
 const SubmittedWorks = () => {
   // dummy data
@@ -384,14 +383,7 @@ const SubmittedWorks = () => {
               Work<Text style={{color: COLORS.darkGray}}> - {item.work}</Text>
             </Text>
             <View style={{flex: 0.6}}>
-              {/* <CircularProgress
-                value={pValue}
-                radius={30}
-                duration={1000}
-                progressValueColor={COLORS.rose_600}
-                maxValue={100}
-                titleStyle={{fontWeight: 'bold'}}
-              /> */}
+             
             </View>
             <TouchableOpacity
               onPress={() => console.log('Verification Successfully...')}
