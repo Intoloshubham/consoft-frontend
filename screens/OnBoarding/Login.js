@@ -12,7 +12,7 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import utils from '../../utils';
+import utils from '../../utils'; 
 import Toast from 'react-native-toast-message';
 import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
@@ -62,7 +62,7 @@ const Login = ({navigation}) => {
   const [showPass, setShowPass] = React.useState(false);
   const [accessToken, setAccessToken] = useState(false);
   
-  const [login, setlogin] = React.useState(false)
+  // const [login, setlogin] = React.useState(false)
 
   //rtk
   const [loginCompany] = useLoginCompanyMutation();
@@ -119,7 +119,7 @@ const Login = ({navigation}) => {
     if (result.status === 200) {
       // await setUserId(result._id);
       await storeToken(result.access_token);   
-      navigation.navigate('UserDashboard',{name_login:login});
+      navigation.navigate('UserDashboard');
 
     }
 
@@ -150,6 +150,7 @@ const Login = ({navigation}) => {
     //   .catch(error => {
     //     console.error('Error:', error);
     //   });
+
 
 
   };
