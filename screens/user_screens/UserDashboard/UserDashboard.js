@@ -57,7 +57,6 @@ const UserDashboard =({ navigation }) => {
 
   }, [])
   
-  const { data, isSuccess } = useGetLoggedUserQuery(accessToken);
 
   // console.log(data); 
 
@@ -117,13 +116,7 @@ const UserDashboard =({ navigation }) => {
   // const userData = useSelector(state => state.user);
   // const userToken = useSelector(state => state.userAuth);
 
-  const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
 
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role: data.role, role_id: data.role_id  }))
-    }
-  },[isSuccess])
 
   // console.log(data);
 

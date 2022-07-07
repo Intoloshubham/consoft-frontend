@@ -12,7 +12,7 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import utils from '../../utils';
+import utils from '../../utils'; 
 import Toast from 'react-native-toast-message';
 import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
