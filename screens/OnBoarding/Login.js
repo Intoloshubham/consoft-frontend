@@ -148,7 +148,7 @@ const Login = ({navigation}) => {
     //   .catch(error => {
     //     console.error('Error:', error);
     //   });
-
+  }
 
   const companyOnSubmit = async () => {
     const company_data = {
