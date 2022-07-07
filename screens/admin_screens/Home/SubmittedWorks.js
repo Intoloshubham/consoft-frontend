@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {COLORS, SIZES, FONTS, icons, images} from '../../../constants';
 import {VictoryPie} from 'victory-native';
-import CircularProgress from 'react-native-circular-progress-indicator';
 
 const SubmittedWorks = () => {
   // dummy data
