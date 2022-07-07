@@ -57,6 +57,7 @@ export const companyAuthApi = createApi({
       }) 
     }),
 
+
     
   }),
 
@@ -65,5 +66,4 @@ export const companyAuthApi = createApi({
 })
 
 
-// export const { useRegisterUserMutation } = companyAuthApi
 export const { useRegisterCompanyMutation, useVerifyProductKeyMutation, useGetLoggedCompanyQuery, useLoginCompanyMutation } = companyAuthApi

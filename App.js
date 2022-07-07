@@ -19,7 +19,7 @@ import {
   StocksAndInventry,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  CheckList,
+  CheckList, 
   Items,
   Unit,
   CompanyTeam,
@@ -33,7 +33,6 @@ import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
-import user_tabs from './navigation/user_tabs';
 
 //setup redux
 import {store} from './app/store';
@@ -101,7 +100,7 @@ const App = () => {
           <Stack.Screen name="Demo" component={Demo} />
           <Stack.Screen name="Demo1" component={Demo1} />
           <Stack.Screen name="Demo2" component={Demo2} />
-          <Stack.Screen name="user_tabs" component={user_tabs} />
+          {/* <Stack.Screen name="user_tabs" component={user_tabs} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>

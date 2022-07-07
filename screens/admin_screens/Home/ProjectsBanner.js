@@ -148,6 +148,7 @@ const ProjectsBanner = () => {
     Toast.show({
       position: 'top',
       type: 'success',
+
       text1: 'Created Successfully',
       text2: 'Success',
       visibilityTime: 1800,
@@ -157,6 +158,8 @@ const ProjectsBanner = () => {
       position: 'top',
       type: 'success',
       text1: 'Updated Successfully',
+      activeOpacity:10,
+      text1: 'Update Successfully',
       text2: 'Success',
       visibilityTime: 1800,
     });

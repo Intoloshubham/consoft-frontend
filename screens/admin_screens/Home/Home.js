@@ -19,8 +19,10 @@ const Home = () => {
   }, []);
 
   const [accessToken, setAccessToken] = useState('');
+
   const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
   const companyData = useSelector(state => state.company);
+
 
   useEffect(() => {
     (async () => {
@@ -44,6 +46,15 @@ const Home = () => {
       );
     }
   });
+
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
+
+  const companyData = useSelector(state => state.company);
+  console.log(companyData)
+  
 
   return (
     <SafeAreaView>
