@@ -3,6 +3,7 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
+
 import {
   Home,
   Account,
@@ -10,6 +11,7 @@ import {
   ReportsDisplay,
   Tasks,
 } from '../screens/admin_screens';
+
 
 const Tab = createBottomTabNavigator();
 

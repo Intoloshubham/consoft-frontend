@@ -15,7 +15,9 @@ import StocksAndInventry from './Home/StocksAndInventry';
 import ToolsAndMachinery from './Home/ToolsAndMachinery';
 import WorkAssignModal from './Modals/WorkAssignModal';
 import CategoryandType from './Project/CategoryandType';
+
 import ReportsDisplay from './Reports/ReportDisplay';
+
 import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
@@ -42,7 +44,9 @@ export {
   ToolsAndMachinery,
   WorkAssignModal,
   CategoryandType,
+
   ReportsDisplay,
+
   Items,
   ManageStock,
   Unit,

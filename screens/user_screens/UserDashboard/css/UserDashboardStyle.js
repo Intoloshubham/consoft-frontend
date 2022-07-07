@@ -80,7 +80,7 @@ export default StyleSheet.create({
       margin: SIZES.h5,
       padding: 5,
       width: 350,
-      marginTop: SIZES.body3,
+      marginTop: SIZES.body1*3,
       marginBottom: -SIZES.h5,
       marginLeft: SIZES.h2,
     },

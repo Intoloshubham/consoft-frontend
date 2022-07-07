@@ -12,16 +12,17 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import utils from '../../utils';
+import utils from '../../utils'; 
 import Toast from 'react-native-toast-message';
 import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
-
 import { useLoginCompanyMutation } from '../../services/companyAuthApi';
 import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
 
 import { useLoginUserMutation } from '../../services/userAuthApi';//
+
+
 
 const Login = ({navigation}) => {
   const makeCall = () => {
@@ -60,7 +61,7 @@ const Login = ({navigation}) => {
   const [showPass, setShowPass] = React.useState(false);
   const [accessToken, setAccessToken] = useState(false);
   
-  const [login, setlogin] = React.useState(false)
+  // const [login, setlogin] = React.useState(false)
 
   //rtk
   const [loginCompany] = useLoginCompanyMutation();
@@ -95,7 +96,7 @@ const Login = ({navigation}) => {
     
   const userOnSubmit = async () => {
     setAccessToken(true)
-    setlogin(true)
+    // setlogin(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
@@ -116,7 +117,7 @@ const Login = ({navigation}) => {
     if (result.status === 200) {
       // await setUserId(result._id);
       await storeToken(result.access_token);   
-      navigation.navigate('UserDashboard',{name_login:login});
+      navigation.navigate('UserDashboard');
 
     }
 
@@ -147,8 +148,7 @@ const Login = ({navigation}) => {
     //   .catch(error => {
     //     console.error('Error:', error);
     //   });
-
-  };
+  }
 
   const companyOnSubmit = async () => {
     const company_data = {
@@ -156,8 +156,10 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
 
+
     const res = await loginCompany(company_data)
     // console.log(res);
+
     //store token in storage
 
     let result;

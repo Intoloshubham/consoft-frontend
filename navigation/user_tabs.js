@@ -38,7 +38,7 @@ const TabBarCustomButton = ({ children, onPress }) => {
   );
 };
 const UserTabs = ({navigation,route}) => {
-  const name_login_params = route.params.name_login;
+  // const selectedIdProjects = route.params.selectedIdProjects;
   return (
     <Tab.Navigator
       screenOptions={{
@@ -81,7 +81,7 @@ const UserTabs = ({navigation,route}) => {
           tabBarShowLabel: false
         }}  
         component={UserDashboard}  
-        initialParams={{name_login_params: name_login_params}}
+        
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -132,12 +132,13 @@ const UserTabs = ({navigation,route}) => {
         }}
       />
       <Tab.Screen
-        name="Reports"
+        name="Report"
         component={UserReports}
+        // initialParams={{selectedIdProjects: selectedIdProjects}}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
-              source={icons.report}
+              source={icons.report}  
               resizeMode="contain"
               style={{
                 height: 25,
