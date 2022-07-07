@@ -79,13 +79,14 @@ function Todo({ taskModal, settaskModal, newTaskRes }) {
         )
     }
 
-    React.useEffect(() => {
-        newTaskRes.map(ele => {
-            let data_assign = ele.assign_works
-            setAssign_works(data_assign)
-            console.log(data_assign)
-        })
-    }, [])
+    console.log(newTaskRes)
+    // React.useEffect(() => {
+    //     newTaskRes.map(ele => {
+    //         let data_assign = ele.assign_works
+    //         setAssign_works(data_assign)
+    //         console.log(data_assign)
+    //     })
+    // }, [])
 
     // console.log(assign_works)
 

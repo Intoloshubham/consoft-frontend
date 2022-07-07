@@ -115,7 +115,7 @@ const Login = ({navigation}) => {
     }
 
     if (result.status === 200) {
-      // await setUserId(result._id);
+      await setUserId(result._id);
       await storeToken(result.access_token);   
       navigation.navigate('UserDashboard');
 
