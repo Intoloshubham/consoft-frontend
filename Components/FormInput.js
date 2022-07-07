@@ -26,7 +26,7 @@ const FormInput = ({
           style={{
             color: COLORS.darkGray,
             ...FONTS.body4,
-            marginTop: SIZES.base * 1.5,
+            marginTop: SIZES.base,
           }}>
           {label}
         </Text>
@@ -43,7 +43,7 @@ const FormInput = ({
         }}>
         {prependComponent}
         <TextInput
-          style={{flex: 1, ...inputStyle}}
+          style={{flex: 1, ...inputStyle, color: COLORS.black}}
           placeholder={placeholder}
           placeholderTextColor={COLORS.darkGray}
           secureTextEntry={secureTextEntry}

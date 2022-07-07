@@ -18,24 +18,26 @@ import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
+
 import { useLoginCompanyMutation } from '../../services/companyAuthApi';
 import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
 
 import { useLoginUserMutation } from '../../services/userAuthApi';//
+
 
 const Login = ({navigation}) => {
 
   const makeCall = () => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${+91-8109093551}';
+      phoneNumber = 'tel:+91-8109093551';
     } else {
       phoneNumber = 'telprompt:${+919988774455}';
     }
     Linking.openURL(phoneNumber);
   };
   const message = 'Hello';
-  const number = +918109093551;
+  const number = +919479505099;
   const openURL = async url => {
     const isSupported = await Linking.canOpenURL(url);
     if (isSupported) {
@@ -60,12 +62,12 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   
   const [showPass, setShowPass] = React.useState(false);
-  // const [login, setlogin] = React.useState(false)
+
 
   const [accessToken, setAccessToken] = useState(false);
   
   //rtk
-  const [ loginCompany ] = useLoginCompanyMutation();
+  const [loginCompany] = useLoginCompanyMutation();
 
   const [ loginUser ] = useLoginUserMutation();
 
@@ -96,12 +98,15 @@ const Login = ({navigation}) => {
     });
 
   const userOnSubmit = async () => {
-    // setlogin(true)
+
     setAccessToken(true)
+    setlogin(true)
+
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
+
 
     // console.log(UserData)
     const res = await loginUser(UserData);
@@ -128,6 +133,7 @@ const Login = ({navigation}) => {
     }
 
 
+
   };
 
   const companyOnSubmit = async () => {
@@ -136,8 +142,10 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
 
+
     const res = await loginCompany(company_data)
     // console.log(res);
+
     //store token in storage
 
     let result;
@@ -150,14 +158,13 @@ const Login = ({navigation}) => {
 
     if (result.status === 200) {
       await setCompanyId(result.company_id);
-      await storeToken(result.access_token);   
+      await storeToken(result.access_token);
       navigation.navigate('Home');
     }
 
-    if(result.status === 401){
+    if (result.status === 401) {
       alert(result.data.message);
     }
-
 
     // fetch(`${Config.API_URL}/company-login`, {
     //   method: 'POST',
@@ -184,10 +191,7 @@ const Login = ({navigation}) => {
     //   .catch(error => {
     //     console.error('Error:', error);
     //   });
-
-
   };
-
 
   function renderHeaderLogo() {
     return (
@@ -465,9 +469,8 @@ const Login = ({navigation}) => {
             }}
             onPress={() => {
               Linking.openURL(
-                'mailto:support@example.com?subject=SendMail&body=Description',
+                'mailto:ssdoffice44@gmail.com?subject=SendMail&body=Description',
               );
-              // Linking.openURL(`sms:number=${number}?body=${message}`);
             }}>
             <Image
               source={icons.mail}
@@ -503,7 +506,7 @@ const Login = ({navigation}) => {
               borderRadius: SIZES.base,
             }}
             onPress={() => {
-              Linking.openURL('https://wa.me/8109093551');
+              Linking.openURL('https://wa.me/9479505099');
             }}>
             <Image
               source={icons.whatsapp}

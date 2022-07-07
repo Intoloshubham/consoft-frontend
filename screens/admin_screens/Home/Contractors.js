@@ -9,13 +9,14 @@ import {
   Modal,
   TouchableWithoutFeedback,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import {
   HeaderBar,
   TextButton,
   FormInput,
   IconButton,
-  CustomDropdown
+  CustomDropdown,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 
@@ -25,30 +26,35 @@ const contractorsDetails = [
     name: 'Demo 1',
     email: 'demo1@gmail.com',
     mobile: 9988776655,
+    designation: 'editor',
   },
   {
     id: 2,
     name: 'Demo 2',
     email: 'demo2@gmail.com',
     mobile: 9988776655,
+    designation: 'editor',
   },
   {
     id: 3,
     name: 'Demo 3',
     email: 'demo3@gmail.com',
     mobile: 9988776655,
+    designation: 'editor',
   },
   {
     id: 4,
     name: 'Demo 1',
     email: 'demo1@gmail.com',
     mobile: 9988776655,
+    designation: 'editor',
   },
   {
     id: 5,
     name: 'Demo 2',
     email: 'demo2@gmail.com',
     mobile: 9988776655,
+    designation: 'editor',
   },
 ];
 
@@ -83,7 +89,7 @@ const Contractors = () => {
         flexDirection: 'row',
         paddingVertical: SIZES.base,
       }}>
-      <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
+      <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}.</Text>
       <View style={{flex: 1, marginLeft: SIZES.radius}}>
         <View
           style={{
@@ -94,7 +100,7 @@ const Contractors = () => {
           <Text
             style={{
               ...FONTS.h3,
-              color: COLORS.darkGray,
+              color: COLORS.lightblue_900,
             }}>
             Mr.{item.name}
           </Text>
@@ -103,32 +109,53 @@ const Contractors = () => {
               onPress={() => {
                 alert('edit name');
               }}>
-              <Image
-                source={icons.edit}
+              <ImageBackground
                 style={{
-                  width: 18,
-                  height: 18,
-                  right: 15,
-                  tintColor: COLORS.lightblue_900,
-                }}
-              />
+                  backgroundColor: COLORS.green,
+                  padding: 5,
+                  borderRadius: SIZES.base,
+                  right: 10,
+                }}>
+                <Image
+                  source={icons.edit}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 alert('delete name');
               }}>
-              <Image
-                source={icons.delete_icon}
+              <ImageBackground
                 style={{
-                  width: 18,
-                  height: 18,
-                  tintColor: COLORS.red,
-                }}
-              />
+                  backgroundColor: COLORS.rose_600,
+                  padding: 5,
+                  borderRadius: SIZES.base,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
             </TouchableOpacity>
           </View>
         </View>
-        <Text style={{...FONTS.body4}}>Designation - {item.designation}</Text>
+        <Text
+          style={{
+            ...FONTS.body4,
+            color: COLORS.darkGray,
+            textTransform: 'capitalize',
+          }}>
+          Designation - {item.designation}
+        </Text>
       </View>
     </View>
   );

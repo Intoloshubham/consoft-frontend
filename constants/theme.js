@@ -29,6 +29,7 @@ export const COLORS = {
   rose_600: '#e11d48',
 
   warning_100: '#ffedd5',
+  warning_200: '#fecaca',
   primary: '#FF6C44', //orange
   // transparentPrimary: 'rgba(227, 120, 75, 0.4)',
   transparentPrimary: '#bae6fd',
@@ -51,11 +52,18 @@ export const COLORS = {
   white: '#FFFFFF',
   black: '#000000',
   tertiary50: '#ecfdf5',
-  
+
+  teal_400: '#2dd4bf',
+
   transparent: 'transparent',
-  transparentBlack1: 'rgba(0, 0, 0, 0.3)',
-  transparentBlack2: 'rgba(0, 0, 0, 0.4)',
+  transparentBlack1: 'rgba(0, 0, 0, 0.1)',
+  transparentBlack2: 'rgba(0, 0, 0, 0.2)',
+  transparentBlack3: 'rgba(0, 0, 0, 0.3)',
+  transparentBlack4: 'rgba(0, 0, 0, 0.4)',
+  transparentBlack5: 'rgba(0, 0, 0, 0.5)',
+  transparentBlack6: 'rgba(0, 0, 0, 0.6)',
   transparentBlack7: 'rgba(0, 0, 0, 0.7)',
+  transparentBlack8: 'rgba(0, 0, 0, 0.8)',
 };
 export const SIZES = {
   // global sizes

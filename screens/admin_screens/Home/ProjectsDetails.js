@@ -24,7 +24,7 @@ const ProjectsDetails = ({route}) => {
   ];
 
   //get name of project from project banner screen using params
-  const {name} = route.params; //
+  const {name, project_id} = route.params; //
   const [showWorkModal, setWorkModal] = React.useState(false);
   const [projects, setProjects] = React.useState(ProjectList);
 
@@ -40,7 +40,7 @@ const ProjectsDetails = ({route}) => {
           item.id == 1
             ? navigation.navigate('CompanyTeamShow')
             : item.id == 2
-            ? navigation.navigate('ProjectTeam')
+            ? navigation.navigate('ProjectTeam', {project_id})
             : item.id == 3
             ? navigation.navigate('Contractors')
             : item.id == 4

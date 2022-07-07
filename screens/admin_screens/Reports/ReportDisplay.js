@@ -1,5 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
+import {SIZES} from '../../../constants';
+
 
 const ReportDisplay = () => {
   return (
@@ -12,4 +14,6 @@ const ReportDisplay = () => {
   );
 };
 
+
 export default ReportDisplay;
+
