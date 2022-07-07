@@ -13,6 +13,7 @@ import { color } from 'react-native-reanimated';
 
 function DoneModal({ doneModal, setdoneModal }) {
 
+
     const renderItem = ({ item }) => (
         <View style={{ backgroundColor: COLORS.gray3, padding: SIZES.base, borderRadius: 10, margin: 5 }}>
             <View

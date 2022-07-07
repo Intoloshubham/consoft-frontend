@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState} from 'react';
 import {
   View,
   Text,
@@ -18,8 +18,10 @@ import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
-import {useLoginCompanyMutation} from '../../services/companyAuthApi';
-import {setCompanyId, storeToken} from '../../services/asyncStorageService';
+import { useLoginCompanyMutation } from '../../services/companyAuthApi';
+import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
+
+import { useLoginUserMutation } from '../../services/userAuthApi';//
 
 const Login = ({navigation}) => {
   const makeCall = () => {
@@ -41,24 +43,29 @@ const Login = ({navigation}) => {
       alert(`url is not correct: ${url}`);
     }
   };
-
+  
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
     setSwitchValue(value);
   };
-
+  
   const [userMobileNo, setUserMobileNo] = React.useState('');
   const [userPassword, setUserPassword] = React.useState('');
   const [userMobileNoError, setUserMobileNoError] = React.useState('');
-
+  
   const [companyMobileNo, setCompanyMobileNo] = React.useState('');
   const [companyPassword, setCompanyPassword] = React.useState('');
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
-
+  
   const [showPass, setShowPass] = React.useState(false);
+  const [accessToken, setAccessToken] = useState(false);
+  
+  const [login, setlogin] = React.useState(false)
 
   //rtk
   const [loginCompany] = useLoginCompanyMutation();
+
+  const [ loginUser ] = useLoginUserMutation();
 
   function isEnableLogin() {
     return (
@@ -85,35 +92,62 @@ const Login = ({navigation}) => {
       text2: 'Error',
       visibilityTime: 4000,
     });
-  const userOnSubmit = () => {
+    
+  const userOnSubmit = async () => {
+    setAccessToken(true)
+    setlogin(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
-    console.log(UserData);
-    fetch(`${Config.API_URL}login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(UserData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data.access_token);
-        if (data.access_token) {
-          showToast();
-          setTimeout(() => {
-            navigation.navigate('UserDashboard');
-          }, 200);
-        }
-        if (!data.access_token) {
-          showToastError();
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+
+    // console.log(UserData)
+    const res = await loginUser(UserData);
+    // console.log(res)
+
+    let result;
+    if (res.data) {
+      result = res.data;
+    }
+    if (res.error) {
+      result = res.error;
+    }
+
+    if (result.status === 200) {
+      // await setUserId(result._id);
+      await storeToken(result.access_token);   
+      navigation.navigate('UserDashboard',{name_login:login});
+
+    }
+
+    if(result.status === 401){
+      alert(result.data.message);
+    }
+
+    // fetch(`${Config.API_URL}login`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(UserData),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     if (data.access_token) {
+    //       showToast();
+    //       setTimeout(() => {
+    //         navigation.navigate('UserDashboard');
+    //       }, 200);
+    //     }
+    //     if (!data.access_token) {
+    //       showToastError();
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
+
   };
 
   const companyOnSubmit = async () => {
@@ -122,8 +156,8 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
 
-    const res = await loginCompany(company_data);
-    console.log(res);
+    const res = await loginCompany(company_data)
+    // console.log(res);
     //store token in storage
 
     let result;
