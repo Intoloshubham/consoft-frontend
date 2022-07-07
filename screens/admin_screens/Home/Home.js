@@ -4,36 +4,49 @@ import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
 import ProjectWorksIdentifier from './ProjectWorksIdentifier';
+import SubmittedWorks from './SubmittedWorks';
 
-import { getToken } from '../../../services/asyncStorageService';
-import { useGetLoggedCompanyQuery } from '../../../services/companyAuthApi';
-import { useDispatch } from 'react-redux';
-import { setCompanyInfo } from '../../../features/CompanySlice';
-import { setCompanyToken } from '../../../features/CompanyAuthSlice';
-import { useSelector } from 'react-redux';
+import {getToken} from '../../../services/asyncStorageService';
+import {useGetLoggedCompanyQuery} from '../../../services/companyAuthApi';
+import {useDispatch} from 'react-redux';
+import {setCompanyInfo} from '../../../features/CompanySlice';
+import {setCompanyToken} from '../../../features/CompanyAuthSlice';
+import {useSelector} from 'react-redux';
 
 const Home = () => {
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   const [accessToken, setAccessToken] = useState('');
-  
-  useEffect( () => {
-    (async() => {
-        const token = await getToken();
-        setAccessToken(token)
-        dispatch(setCompanyToken({ token:token }))
-      })();
-  })
 
-  const { data, isSuccess } = useGetLoggedCompanyQuery(accessToken)
-  // console.log(data)
+  const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
+  const companyData = useSelector(state => state.company);
+
+
+  useEffect(() => {
+    (async () => {
+      const token = await getToken();
+      setAccessToken(token);
+      dispatch(setCompanyToken({token: token}));
+    })();
+  });
 
   //store data in redux store
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     if (isSuccess) {
-      dispatch(setCompanyInfo({ _id:data._id, company_name:data.company_name, email: data.email, mobile: data.mobile  }))
+      dispatch(
+        setCompanyInfo({
+          _id: data._id,
+          company_name: data.company_name,
+          email: data.email,
+          mobile: data.mobile,
+        }),
+      );
     }
-  })
+  });
+
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -42,6 +55,7 @@ const Home = () => {
   const companyData = useSelector(state => state.company);
   console.log(companyData)
   
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -50,10 +64,10 @@ const Home = () => {
             flex: 1,
             marginBottom: 130,
           }}>
-          <Text>{accessToken}</Text>
           <ProjectsBanner />
+          <SubmittedWorks />
+          <ProjectReports />
           <AssignedWorks />
-          {/* <ProjectReports /> */}
           {/* <ProjectWorksIdentifier /> */}
         </View>
       </ScrollView>

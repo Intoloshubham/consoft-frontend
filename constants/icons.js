@@ -82,8 +82,32 @@ const down1 = require('../assets/icons/down1.png');
 const Suppliers = require('../assets/icons/Suppliers.png');
 const suppliers1 = require('../assets/icons/suppliers1.png');
 const staff = require('../assets/icons/staff.png');
+const verify = require('../assets/icons/verify.png');
+const revert = require('../assets/icons/revert.png');
+
+//final selected
+const company_team = require('../assets/icons/final/company_team.png');
+const down_arro = require('../assets/icons/final/down_arrow.png');
+const itemss = require('../assets/icons/final/items.png');
+const manage_stock = require('../assets/icons/final/manage_stock.png');
+const project_type = require('../assets/icons/final/project_type.png');
+const stock_management = require('../assets/icons/final/stock_management.png');
+const supplier = require('../assets/icons/final/supplier.png');
+const units = require('../assets/icons/final/units.png');
 
 export default {
+  // final
+  company_team,
+  down_arro,
+  itemss,
+  manage_stock,
+  project_type,
+  stock_management,
+  supplier,
+  units,
+  //
+  revert,
+  verify,
   account,
   report,
   tasks,

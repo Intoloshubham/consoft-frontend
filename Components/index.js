@@ -10,6 +10,7 @@ import UploadImage from './UplaodImage';
 import FloatingButton from './FloatingButton';
 import CustomDropdown from './CustomDropdown';
 import ShowToast from './ShowToast';
+import ItemBox from './ItemBox';
 
 export {
   TextButton,
@@ -24,4 +25,5 @@ export {
   FloatingButton,
   CustomDropdown,
   ShowToast,
+  ItemBox,
 };

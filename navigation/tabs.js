@@ -3,7 +3,13 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
-import {Home, Account, Tracker, Reports, Tasks} from '../screens/admin_screens';
+import {
+  Home,
+  Account,
+  Tracker,
+  ReportsDisplay,
+  Tasks,
+} from '../screens/admin_screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -117,7 +123,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Reports"
-        component={Reports}
+        component={ReportsDisplay}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
