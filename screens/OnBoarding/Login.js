@@ -24,6 +24,7 @@ import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorage
 import { useLoginUserMutation } from '../../services/userAuthApi';//
 
 const Login = ({navigation}) => {
+
   const makeCall = () => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
@@ -45,6 +46,7 @@ const Login = ({navigation}) => {
   };
   
   const [switchValue, setSwitchValue] = React.useState(false);
+
   const toggleSwitch = value => {
     setSwitchValue(value);
   };
@@ -58,7 +60,7 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   
   const [showPass, setShowPass] = React.useState(false);
-  const [login, setlogin] = React.useState(false)
+  // const [login, setlogin] = React.useState(false)
 
   const [accessToken, setAccessToken] = useState(false);
   
@@ -92,9 +94,9 @@ const Login = ({navigation}) => {
       text2: 'Error',
       visibilityTime: 4000,
     });
-    
+
   const userOnSubmit = async () => {
-    setlogin(true)
+    // setlogin(true)
     setAccessToken(true)
     const UserData = {
       mobile: userMobileNo,
@@ -103,20 +105,21 @@ const Login = ({navigation}) => {
 
     // console.log(UserData)
     const res = await loginUser(UserData);
-    // console.log(res)
+    console.log("first")
+    console.log(res)
 
-    let result;
+    let result;  
     if (res.data) {
       result = res.data;
     }
     if (res.error) {
       result = res.error;
     }
-
+// console.log(result);
     if (result.status === 200) {
-      // await setUserId(result._id);
+      await setUserId(result._id);
       await storeToken(result.access_token);   
-      navigation.navigate('UserDashboard',{name_login:login});
+      navigation.navigate('UserDashboard');
 
     }
 
@@ -124,29 +127,6 @@ const Login = ({navigation}) => {
       alert(result.data.message);
     }
 
-    // fetch(`${Config.API_URL}login`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(UserData),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     if (data.access_token) {
-    //       showToast();
-    //       setTimeout(() => {
-    //         navigation.navigate('UserDashboard');
-    //       }, 200);
-    //     }
-    //     if (!data.access_token) {
-    //       showToastError();
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
 
   };
 

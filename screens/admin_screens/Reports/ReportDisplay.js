@@ -1,15 +1,15 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const Reports = () => {
+const ReportDisplay = () => {
   return (
     <View
       style={{
         paddingHorizontal: SIZES.padding,
       }}>
-      <Text>Reports</Text>
+      <Text>ReportDisplay</Text>
     </View>
   );
 };
 
-export default Reports;
+export default ReportDisplay;
