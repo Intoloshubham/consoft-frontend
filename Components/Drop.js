@@ -14,6 +14,7 @@ const Drop = ({
   categorySelectable,
   listParentLabelStyle,
   multiple,
+... containerStyle
 }) => {
   //   const [open, setOpen] = React.useState(false);
   //   const [value, setValue] = React.useState([]);
@@ -46,6 +47,7 @@ const Drop = ({
           paddingHorizontal: SIZES.padding,
           backgroundColor: COLORS.gray3,
           borderRadius: SIZES.base,
+          ... containerStyle
         }}
         dropDownContainerStyle={{
           marginTop: SIZES.padding,

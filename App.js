@@ -30,6 +30,9 @@ import {
   CompanyTeam,
   ManageStock,
   CompanyTeamShow,
+  ToolAndMachinery1,
+  Quantitywork,
+  Optiontype
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -53,7 +56,9 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'Home'}>
+
+          initialRouteName={'Optiontype'}>
+
           <Stack.Screen name="OnBoarding" component={OnBoarding} />
 
           <Stack.Screen name="CreateCompany" component={CreateCompany} />
@@ -73,9 +78,7 @@ const App = () => {
             component={StocksAndInventry}
           />
           <Stack.Screen name="ProjectReports" component={ProjectReports} />
-          <Stack.Screen
-            name="ToolsAndMachinery"
-            component={ToolsAndMachinery}
+          <Stack.Screen name="ToolsAndMachinery" component={ToolsAndMachinery}
           />
           <Stack.Screen
             name="ProjectSeheduleTime"
@@ -83,10 +86,15 @@ const App = () => {
           />
           <Stack.Screen name="CompanyTeamShow" component={CompanyTeamShow} />
           <Stack.Screen name="CheckList" component={CheckList} />
+          <Stack.Screen name="Optiontype" component={Optiontype} />
           <Stack.Screen name="Items" component={Items} />
           <Stack.Screen name="Unit" component={Unit} />
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />
+          <Stack.Screen name="ToolAndMachinery1" component={ToolAndMachinery1} />
+          <Stack.Screen name="Quantitywork" component={Quantitywork} />
+
+
 
           {/* User  */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />

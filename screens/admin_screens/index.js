@@ -25,6 +25,9 @@ import ProjectCategory from './Project/ProjectCategory';
 import ProjectTypes from './Project/ProjectTypes';
 import CompanyTeam from './CompanyTeam/CompanyTeam';
 import ManageStock from './Stock/ManageStock/ManageStock';
+import ToolAndMachinery1 from './Stock/Tools/ToolAndMachinery1';
+import Quantitywork from './Stock/Tools/Quantitywork';
+import Optiontype from './CheckList/Optiontype';
 import CompanyTeamShow from './Home/CompanyTeamShow';
 
 export {
@@ -55,4 +58,7 @@ export {
   CompanyTeam,
   ManageStock,
   CompanyTeamShow,
+  ToolAndMachinery1,
+  Quantitywork,
+  Optiontype
 };

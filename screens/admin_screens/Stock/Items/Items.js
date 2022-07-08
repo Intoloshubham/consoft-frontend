@@ -11,10 +11,11 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
-import {COLORS, FONTS, SIZES} from '../../../../constants';
+import {COLORS, FONTS, SIZES,icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
 
 
@@ -197,16 +198,31 @@ const Items = () => {
             <Text style={styles.title}>{item.item_name}</Text>
             <View
               style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-              <View style={{marginRight: 5}}>
-                <Button
-                  title="edit"
-                  onPress={() => {
+              <View style={{flexDirection:"row"}}>
+               <TouchableOpacity onPress={() => {
                    edititem(item._id,item.item_name,item.unit_id)
-                  }}
-                />
-              </View>
-              <View style={{marginLeft: 10}}>
-                <Button title="X" onPress={() => DeleteItem(item._id)} />
+                  }}>
+                    <Image
+                    source={icons.edit}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      right: 15,
+                      tintColor: COLORS.lightblue_900,
+                    }}
+                  />
+               </TouchableOpacity>
+               <TouchableOpacity onPress={() => DeleteItem(item._id)}>
+                    <Image
+                    source={icons.delete_icon}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      right: 5,
+                      tintColor: COLORS.red,
+                    }}
+                  />
+               </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -228,8 +244,19 @@ const Items = () => {
   return (
     <View>
       <HeaderBar right={true} title="Items"/>
-      <View style={{marginHorizontal: SIZES.padding}}>
-        {/* modal start  */}
+      <View>
+      <TextButton
+        label="Add New"
+        buttonContainerStyle={{
+          height: 50,
+          alignItems: 'center',
+          marginHorizontal: SIZES.padding,
+          marginBottom: SIZES.padding,
+          borderRadius: SIZES.radius,
+          backgroundColor: COLORS.lightblue_700,
+        }}
+        onPress={() => setItemmodal(true)}
+      />
         <Modal animationType="slide" transparent={false} visible={itemmodal}>
           <View
             style={{
@@ -405,10 +432,13 @@ const Items = () => {
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
             ...styles.shadow,
+            marginHorizontal: SIZES.padding,
+            marginBottom: SIZES.padding,
+            borderRadius: SIZES.radius,
+            // backgroundColor: COLORS.lightblue_700,
           }}>
           <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
             <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Items</Text>
-            <Button title="Add new" onPress={() => setItemmodal(true)} />
           </View>
           <FlatList
             maxHeight={410}

@@ -17,7 +17,7 @@ const FormInput = ({
   errorMsg = '',
   value,
   multiline,
-  numberOfLines,
+  numberOfLines,editable
 }) => {
   return (
     <View style={{...containerStyle}}>
@@ -54,6 +54,7 @@ const FormInput = ({
           value={value}
           multiline={multiline}
           numberOfLines={numberOfLines}
+          editable={editable}
         />
         {appendComponent}
       </View>

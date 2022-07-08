@@ -105,6 +105,7 @@ const ProjectsBanner = () => {
   //   })
   //     .then(response => response.json())
   //     .then(data => {
+
   //       console.log(data);
   //       setProjectCategory(data);
   //     });

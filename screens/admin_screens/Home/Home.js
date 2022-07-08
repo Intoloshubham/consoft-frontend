@@ -6,7 +6,6 @@ import ProjectProgressReview from './ProjectProgressReview';
 import ProjectProgressReviewTop20 from './ProjectProgressReviewTop20';
 import ProjectWorksIdentifier from './ProjectWorksIdentifier';
 import AssignedWorks from './AssignedWorks';
-
 const Home = () => {
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);

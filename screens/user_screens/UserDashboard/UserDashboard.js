@@ -34,7 +34,7 @@ const UserDashboard = ({navigation}) => {
     setdoneModal(true);
   }
 
-
+console.log("hello");
   return (
     <>
       {/* <LinearGradient colors={[COLORS.lightGray2, COLORS.lightGray2, COLORS.lightGray2]} style={styles.container}> */}
