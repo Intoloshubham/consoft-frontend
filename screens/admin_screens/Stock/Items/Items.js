@@ -3,7 +3,7 @@ import {
   View,
   Text,
   Button,
-  StyleSheet,
+  StyleSheet, 
   Modal,
   TextInput,
   Alert,
@@ -16,7 +16,6 @@ import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
 import {COLORS, FONTS, SIZES} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
-
 
 const url = 'http://192.168.1.99:8000/api/item';
 
@@ -36,7 +35,7 @@ const Items = () => {
   const [datalist, setdatalist] = React.useState([]);
 
   const [value, setValue] = React.useState('');
-  
+
   const [isFocus, setIsFocus] = React.useState(false);
 
   const [itemid, setitemid] = React.useState('');
@@ -88,9 +87,6 @@ const Items = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  useEffect(() => {
     listData();
   }, []);
 
@@ -135,59 +131,57 @@ const Items = () => {
   };
 
   // edit modal api
-    const edititem = (id, name,unit_id)=>{
-      setupdateitemmodal(true);
-      setitemid(id);
-      // console.log(id);
-      setItemname(name);
-      // console.log(name);
-       setValue(unit_id);
-      //  console.log(unit_id);
-    }
+  const edititem = (id, name, unit_id) => {
+    setupdateitemmodal(true);
+    setitemid(id);
+    // console.log(id);
+    setItemname(name);
+    // console.log(name);
+    setValue(unit_id);
+    //  console.log(unit_id);
+  };
 
-    const updateItem = (e) => {
-      const updateItemdata = {
-        item_name: itemname,
-        unit_id:value
-      }
-      // 
-        fetch('http://192.168.1.99:8000/api/item/'+itemid,{
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateItemdata),
+  const updateItem = e => {
+    const updateItemdata = {
+      item_name: itemname,
+      unit_id: value,
+    };
+    //
+    fetch('http://192.168.1.99:8000/api/item/' + itemid, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateItemdata),
+    })
+      .then(response => {
+        response.json();
       })
-        .then(response =>{ response.json()})
-        .then(data => {
-          listData();
-          setItemname('');
-          setValue('');
-          console.log('Success:', data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
-        ///
-        // fetch('http://192.168.1.99:8000/api/item/'+itemid, {
-        //   method: 'PUT',
-        //   headers: {
-        //     Accept: 'application/json',
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify(
-        //     // item_name: itemname,
-        //     // unit_id: value 
-        //     updateItemdata
-        //   )
-        // }).then(data=>console.log(data))
-        ////
-        
-    
-    
-
+      .then(data => {
+        listData();
+        setItemname('');
+        setValue('');
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+  ///
+  // fetch('http://192.168.1.99:8000/api/item/'+itemid, {
+  //   method: 'PUT',
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(
+  //     // item_name: itemname,
+  //     // unit_id: value
+  //     updateItemdata
+  //   )
+  // }).then(data=>console.log(data))
+  ////
 
   const renderItem = ({item}) => {
     return (
@@ -201,7 +195,7 @@ const Items = () => {
                 <Button
                   title="edit"
                   onPress={() => {
-                   edititem(item._id,item.item_name,item.unit_id)
+                    edititem(item._id, item.item_name, item.unit_id);
                   }}
                 />
               </View>
@@ -227,7 +221,7 @@ const Items = () => {
   };
   return (
     <View>
-      <HeaderBar right={true} title="Items"/>
+      <HeaderBar right={true} title="Items" />
       <View style={{marginHorizontal: SIZES.padding}}>
         {/* modal start  */}
         <Modal animationType="slide" transparent={false} visible={itemmodal}>

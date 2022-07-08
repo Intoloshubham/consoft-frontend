@@ -1,14 +1,9 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import AuthLayout from '../Authentication/AuthLayout';
-import {FONTS, SIZES, COLORS, icons, images} from '../../constants';
-import {
-  FormInput,
-  TextButton,
-  TextIconButton,
-  Dropdown,
-} from '../../Components';
 import utils from '../../utils';
+import {FormInput, TextButton, Dropdown} from '../../Components';
+import {FONTS, SIZES, COLORS, icons} from '../../constants';
 const url = 'http://192.168.1.99:8000/api/register';
 
 const SignUp = ({navigation}) => {

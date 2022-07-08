@@ -27,6 +27,7 @@ const build_f = require('../assets/images/build_f.png');
 const build_f1 = require('../assets/images/build_f1.jpg');
 const create_company = require('../assets/images/create_company.png');
 const product_key = require('../assets/images/product_key.png');
+const Graph_paper = require('../assets/images/projects/Graph_paper.png');
 
 export default {
   background_01,
@@ -57,4 +58,5 @@ export default {
   build_f1,
   create_company,
   product_key,
+  Graph_paper
 };

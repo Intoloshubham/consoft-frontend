@@ -35,7 +35,7 @@ const FormInput = ({
       <View
         style={{
           flexDirection: 'row',
-          height: 45,
+          height: 40,
           paddingHorizontal: SIZES.padding,
           // marginTop: SIZES.base,
           borderRadius: SIZES.base,
@@ -43,7 +43,7 @@ const FormInput = ({
         }}>
         {prependComponent}
         <TextInput
-          style={{flex: 1, ...inputStyle}}
+          style={{flex: 1, ...inputStyle, color: COLORS.black}}
           placeholder={placeholder}
           placeholderTextColor={COLORS.darkGray}
           secureTextEntry={secureTextEntry}

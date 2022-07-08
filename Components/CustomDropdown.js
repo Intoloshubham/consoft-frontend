@@ -1,53 +1,94 @@
 import React from 'react';
-import {View, Text, Image} from 'react-native';
-import {Dropdown} from 'react-native-element-dropdown';
-import {icons, COLORS, SIZES, FONTS} from '../constants';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import {View} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {COLORS, SIZES} from '../constants';
 
-const CustomDropdown = ({data, value, onChange, renderItem, placeholder}) => {
-  const _renderItem = item => {
-    return (
-      <View style={{marginHorizontal: SIZES.radius, marginTop: SIZES.base}}>
-        <Text style={{...FONTS.body4}}>{item.label}</Text>
-        {item.value === value && (
-          <AntDesign color={COLORS.blue} name="check" size={20} />
-        )}
-      </View>
-    );
-  };
+const Drop = ({
+  open,
+  setOpen,
+  setValue,
+  value,
+  items,
+  setItems,
+  placeholder,
+  categorySelectable,
+  listParentLabelStyle,
+  multiple,
+  zIndex,
+  zIndexInverse,
+  onChangeValue,
 
+  maxHeight,
+  onOpen,
+  closeAfterSelecting,
+
+}) => {
   return (
     <View>
-      {/* <Text
+      <DropDownPicker
         style={{
-          color: COLORS.darkGray,
-          ...FONTS.body4,
-
-        }}>
-        {label}
-      </Text> */}
-      <Dropdown
-        style={{
-          marginTop: SIZES.radius + 8,
-          width: '100%',
-          height: 45,
+          flex: 1,
+          marginTop: SIZES.radius * 1.4,
+          borderWidth: null,
           backgroundColor: COLORS.gray3,
-          paddingHorizontal: SIZES.radius,
+          minHeight: 40,
+          paddingHorizontal: SIZES.padding,
+
+        }}
+        maxHeight={maxHeight}
+        dropDownContainerStyle={{
+          marginTop: SIZES.radius * 1.4,
+          backgroundColor: COLORS.lightblue_800,
+          borderWidth: null,
+        }}
+        textStyle={{
+          fontSize: 15,
+          color: COLORS.black,
+          textTransform: 'capitalize'
+
+        }}
+        categorySelectable={categorySelectable}
+        listParentLabelStyle={listParentLabelStyle}
+        listChildContainerStyle={{
+          paddingLeft: 30
+
+        }}
+        listChildLabelStyle={{
+          color: COLORS.white,
+          fontSize: 15
+
+        }}
+        placeholder={placeholder}
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        onOpen={onOpen}
+        // multiple
+        theme="LIGHT"
+        multiple={multiple}
+        mode="BADGE"
+        badgeDotColors={[
+          COLORS.rose_600,
+          COLORS.green,
+          COLORS.yellow_600,
+          COLORS.blue,
+        ]}
+        tickIconStyle={{
+          width: 15,
+          height: 15,
+          backgroundColor: COLORS.white,
           borderRadius: SIZES.base,
         }}
-        containerStyle={{}}
-        data={data}
-        placeholder={placeholder}
-        searchPlaceholder="Search"
-        labelField="label"
-        valueField="value"
-        value={value}
-        onChange={onChange}
-        renderItem={renderItem}
-        textError="Error"
+        zIndex={zIndex}
+        zIndexInverse={zIndexInverse}
+        onChangeValue={onChangeValue}
+        closeAfterSelecting={closeAfterSelecting}
       />
     </View>
   );
 };
 
-export default CustomDropdown;
+export default Drop;
