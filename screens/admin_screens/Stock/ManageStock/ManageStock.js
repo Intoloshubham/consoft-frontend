@@ -10,6 +10,7 @@ import {
   Alert,
   TouchableOpacity,
   FlatList,
+  Image
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Card, Title} from 'react-native-paper';
@@ -19,7 +20,7 @@ import {
   TextButton,
   HeaderBar,
 } from '../../../../Components';
-import {FONTS, SIZES, COLORS, Image, icons} from '../../../../constants';
+import {FONTS, SIZES, COLORS, icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign  from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome  from 'react-native-vector-icons/FontAwesome';
@@ -41,6 +42,7 @@ const ManageStock = () => {
 
   const [data, setdata] = useState([]);
   const [dataunit, setdataunit] = useState([]);
+  const [stocklist, setstocklist] = React.useState([]);
 
   const [qty, setqty] = useState('');
   const [location, setlocation] = useState('');
@@ -51,7 +53,7 @@ const ManageStock = () => {
 
   // const [datalist, setdatalist] = React.useState([]);
 
-  const [stocklist, setstocklist] = React.useState([]);
+
   const [voucherId, setvoucherId] = React.useState('');
   const [test, settest] = React.useState(false)
 
@@ -63,7 +65,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
         setqty(qty);
         setlocation(location);
         setvehicle(vehicle);
-        console.log(item_id,qty,location,vehicle);
+        // console.log(item_id,qty,location,vehicle);
         // setunitname(unitname);
   }
       // update api voucher 
@@ -256,26 +258,29 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
             {/* <Text style={styles.title}>{item.item_id}</Text> */}
             <Text style={styles.title}>{item.location}</Text> 
              <View style={{justifyContent:"space-between", flexDirection: 'row',}}>
-                <View style={{marginRight:5}}>
-                {/* <Button title="edit" onPress={()=>voucherItemupdate(item._id,item.item_id,item.qty,item.location,item.vehicle_no)
-                    }/> */}
+                <View style={{flexDirection:"row"}}>
                      <TouchableOpacity onPress={()=>voucherItemupdate(item._id,item.item_id,item.qty,item.location,item.vehicle_no)}>
-                          <FontAwesome
-                            style={{ marginTop:5,color: 'blue'}}
-                            name={'edit'}
-                            size={25}
-                          />
-                        </TouchableOpacity>
-                </View>
-                <View style={{marginLeft:10}}>
+                     <Image
+                    source={icons.edit}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      right: 15,
+                      tintColor: COLORS.lightblue_900,
+                    }}
+                  />
+                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>voucherDelete(item._id)}>
-                          <AntDesign
-                            style={{ marginTop:5,color: 'red'}}
-                            name={'delete'}
-                            size={25}
-                          />
-                        </TouchableOpacity>
-                     {/* <Button title="X" onPress={()=>voucherDelete(item._id)}/> */}
+                <Image
+                    source={icons.delete_icon}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      right: 5,
+                      tintColor: COLORS.red,
+                    }}
+                  />
+                 </TouchableOpacity>
                 </View>
             </View>
           </View>
@@ -287,13 +292,20 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
   return (
     <View>
       <HeaderBar right={true} title="Manage Stock" />
-       <View style={{marginHorizontal:SIZES.padding}}> 
-         <Card style={styles.card}>
-          <Card.Content>
-              <View
-                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Title>Stock entry</Title>
-                <Button title="voucher" onPress={() => setmodalstock(true)} />
+       <View> 
+       <TextButton
+        label="Voucher"
+        buttonContainerStyle={{
+          height: 50,
+          alignItems: 'center',
+          marginHorizontal: SIZES.padding,
+          marginBottom: SIZES.padding,
+          borderRadius: SIZES.radius,
+          backgroundColor: COLORS.lightblue_700,
+        }}
+        onPress={() => setmodalstock(true)}
+      />
+        
                 <Modal
                   animationType="slide"
                   transparent={false}
@@ -427,14 +439,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
 
                                                   setIsFocusunit(false);
                                                 }}
-                                                // renderLeftIcon={() => (
-                                                //   <AntDesign
-                                                //     style={styles.icon}
-                                                //     color={isFocus ? 'blue' : 'black'}
-                                                //     name="Safety"
-                                                //     size={20}
-                                                //   />
-                                                // )}
+                                              
                                               />
                                               <TextButton
                                                 label="Add item"
@@ -476,17 +481,10 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                               onChange={item => {
                                 // console.log(item.unit_id);
                                 setValue(item._id);
-                                setunitname(item.unit_id);
+                                setunitname(item.unit_name);
                                 setIsFocus(false);
                               }}
-                              // renderLeftIcon={() => (
-                              //   <AntDesign
-                              //     style={styles.icon}
-                              //     color={isFocus ? 'blue' : 'black'}
-                              //     name="Safety"
-                              //     size={20}
-                              //   />
-                              // )}
+                              
                             />
                             <View style={{justifyContent: 'space-between'}}>
                               <TextInput
@@ -531,10 +529,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                     </View>
                   </View>
                 </Modal>
-              </View>
-            
-          </Card.Content>
-        </Card> 
         <View
           style={{
             marginBottom: SIZES.padding,
@@ -543,6 +537,10 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
             ...styles.shadow,
+            marginHorizontal: SIZES.padding,
+          marginBottom: SIZES.padding,
+          borderRadius: SIZES.radius,
+          // backgroundColor: COLORS.lightblue_700,
           }}>
           <Title style={{...FONTS.h2, color: COLORS.darkGray,borderBottomWidth:1}}>
             Voucher list
@@ -757,6 +755,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    // fontWeight:"bold",
+    textTransform:"capitalize",
   },
 });

@@ -11,10 +11,11 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
-import {COLORS, FONTS, SIZES} from '../../../../constants';
+import {COLORS, FONTS, SIZES,icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
 
 const url = 'http://192.168.1.99:8000/api/item';
@@ -372,16 +373,7 @@ const Items = () => {
                       onChange={item => {
                         setValue(item._id);
                         setIsFocus(false);
-                      }}
-                      // renderLeftIcon={() => (
-                      //   <AntDesign
-                      //     style={styles.icon}
-                      //     color={isFocus ? 'blue' : 'black'}
-                      //     name="Safety"
-                      //     size={20}
-                      //   />
-                      // )}
-                    />
+                      }}/>
 
                     <TextButton
                       label="Save"
@@ -408,10 +400,13 @@ const Items = () => {
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
             ...styles.shadow,
+            marginHorizontal: SIZES.padding,
+            marginBottom: SIZES.padding,
+            borderRadius: SIZES.radius,
+            // backgroundColor: COLORS.lightblue_700,
           }}>
           <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
             <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Items</Text>
-            <Button title="Add new" onPress={() => setItemmodal(true)} />
           </View>
           <FlatList
             maxHeight={410}
