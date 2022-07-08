@@ -7,7 +7,7 @@ const ProfileValue = ({icon, value, onPress, image}) => {
     <TouchableOpacity
       style={{
         flexDirection: 'row',
-        height: 60,
+        height: 55,
         alignItems: 'center',
       }}
       onPress={onPress}>
@@ -38,18 +38,7 @@ const ProfileValue = ({icon, value, onPress, image}) => {
           flex: 1,
           marginLeft: SIZES.radius,
         }}>
-        {/* {label && (
-          <Text
-            style={{
-              color: COLORS.gray,
-              ...FONTS.body4,
-            }}>
-            {label}
-          </Text>
-        )} */}
-        <Text style={{...FONTS.h3, fontSize: 18, color: COLORS.darkGray}}>
-          {value}
-        </Text>
+        <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{value}</Text>
       </View>
       {/* icon  */}
       <Image

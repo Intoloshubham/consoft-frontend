@@ -9,15 +9,17 @@ import {
   ScrollView,
   Modal,
   TouchableWithoutFeedback,
+  ImageBackground,
 } from 'react-native';
 import {
   HeaderBar,
   TextButton,
   FormInput,
   IconButton,
-  Drop,
+  CustomDropdown,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import Config from '../../../config';
 
 const stockdetails = [
   {id: 1, name: 'Bricks', quantity: 45},
@@ -39,13 +41,72 @@ const StocksAndInventry = () => {
   //drop
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState([]);
-  const [items, setItems] = React.useState([
-    {label: 'Sand', value: '1'},
-    {label: 'iron', value: '2'},
-    {label: 'Oil', value: '3'},
-    {label: 'Cement', value: '4'},
-    {label: 'Bricks', value: '5'},
-  ]);
+  const [items, setItems] = React.useState([]);
+
+  //Gey data of stock-entry
+  const [stocks, setStocks] = React.useState([]);
+  //api
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}item`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data);
+        let itemFromApi = data.map(one => {
+          return {label: one.item_name, value: one._id};
+        });
+        setItems(itemFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}stock-entry`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setStocks(data);
+      })
+      .catch(error => console.log(error.message));
+  }, []);
+
+  const OnSubmit = () => {
+    const FormData = {
+      item_id: value,
+      qty: quantity,
+      location: location,
+      vehicle_no: vehicleNo,
+    };
+    console.log(FormData);
+    fetch(`${Config.API_URL}stock-entry`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(FormData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        if (data.status == 200) {
+          setTimeout(() => {
+            setShowAddMaterialsModal(false);
+          }, 1000);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
   function renderTeamList() {
     const renderItem = ({item}) => (
@@ -62,14 +123,14 @@ const StocksAndInventry = () => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{item.name}</Text>
+          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{}</Text>
           <Text
             style={{
               ...FONTS.h3,
               color: COLORS.darkGray,
               fontWeight: 'bold',
             }}>
-            {item.quantity}
+            {item.qty}
           </Text>
         </View>
         <View style={{marginLeft: 40, flexDirection: 'row'}}>
@@ -77,28 +138,42 @@ const StocksAndInventry = () => {
             onPress={() => {
               alert('edit name');
             }}>
-            <Image
-              source={icons.edit}
+            <ImageBackground
               style={{
-                width: 18,
-                height: 18,
-                right: 15,
-                tintColor: COLORS.lightblue_900,
-              }}
-            />
+                backgroundColor: COLORS.green,
+                padding: 5,
+                borderRadius: SIZES.base,
+                right: 10,
+              }}>
+              <Image
+                source={icons.edit}
+                style={{
+                  width: 15,
+                  height: 15,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </ImageBackground>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               alert('delete name');
             }}>
-            <Image
-              source={icons.delete_icon}
+            <ImageBackground
               style={{
-                width: 18,
-                height: 18,
-                tintColor: COLORS.red,
-              }}
-            />
+                backgroundColor: COLORS.rose_600,
+                padding: 5,
+                borderRadius: SIZES.base,
+              }}>
+              <Image
+                source={icons.delete_icon}
+                style={{
+                  width: 15,
+                  height: 15,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </ImageBackground>
           </TouchableOpacity>
         </View>
       </View>
@@ -114,10 +189,11 @@ const StocksAndInventry = () => {
           ...styles.shadow,
         }}>
         <FlatList
-          scrollEnabled={false}
-          data={stockdetails}
-          keyExtractor={item => `${item.id}`}
+          data={stocks}
+          keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
+          scrollEnabled={true}
+          maxHeight={510}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
@@ -179,7 +255,7 @@ const StocksAndInventry = () => {
                   />
                 </View>
                 <ScrollView>
-                  <Drop
+                  <CustomDropdown
                     placeholder="Select Item"
                     open={open}
                     value={value}
@@ -285,7 +361,7 @@ const StocksAndInventry = () => {
                       marginTop: SIZES.padding,
                       borderRadius: SIZES.radius,
                     }}
-                    // onPress={OnSubmit}
+                    onPress={OnSubmit}
                   />
                 </ScrollView>
               </View>
@@ -305,7 +381,7 @@ const StocksAndInventry = () => {
       <TextButton
         label="Add New"
         buttonContainerStyle={{
-          height: 50,
+          height: 45,
           alignItems: 'center',
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,

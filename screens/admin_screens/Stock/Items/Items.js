@@ -3,7 +3,7 @@ import {
   View,
   Text,
   Button,
-  StyleSheet,
+  StyleSheet, 
   Modal,
   TextInput,
   Alert,
@@ -17,7 +17,6 @@ import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
 import {COLORS, FONTS, SIZES,icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
-
 
 const url = 'http://192.168.1.99:8000/api/item';
 
@@ -37,7 +36,7 @@ const Items = () => {
   const [datalist, setdatalist] = React.useState([]);
 
   const [value, setValue] = React.useState('');
-  
+
   const [isFocus, setIsFocus] = React.useState(false);
 
   const [itemid, setitemid] = React.useState('');
@@ -89,9 +88,6 @@ const Items = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  useEffect(() => {
     listData();
   }, []);
 
@@ -136,59 +132,57 @@ const Items = () => {
   };
 
   // edit modal api
-    const edititem = (id, name,unit_id)=>{
-      setupdateitemmodal(true);
-      setitemid(id);
-      // console.log(id);
-      setItemname(name);
-      // console.log(name);
-       setValue(unit_id);
-      //  console.log(unit_id);
-    }
+  const edititem = (id, name, unit_id) => {
+    setupdateitemmodal(true);
+    setitemid(id);
+    // console.log(id);
+    setItemname(name);
+    // console.log(name);
+    setValue(unit_id);
+    //  console.log(unit_id);
+  };
 
-    const updateItem = (e) => {
-      const updateItemdata = {
-        item_name: itemname,
-        unit_id:value
-      }
-      // 
-        fetch('http://192.168.1.99:8000/api/item/'+itemid,{
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateItemdata),
+  const updateItem = e => {
+    const updateItemdata = {
+      item_name: itemname,
+      unit_id: value,
+    };
+    //
+    fetch('http://192.168.1.99:8000/api/item/' + itemid, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateItemdata),
+    })
+      .then(response => {
+        response.json();
       })
-        .then(response =>{ response.json()})
-        .then(data => {
-          listData();
-          setItemname('');
-          setValue('');
-          console.log('Success:', data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
-        ///
-        // fetch('http://192.168.1.99:8000/api/item/'+itemid, {
-        //   method: 'PUT',
-        //   headers: {
-        //     Accept: 'application/json',
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify(
-        //     // item_name: itemname,
-        //     // unit_id: value 
-        //     updateItemdata
-        //   )
-        // }).then(data=>console.log(data))
-        ////
-        
-    
-    
-
+      .then(data => {
+        listData();
+        setItemname('');
+        setValue('');
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+  ///
+  // fetch('http://192.168.1.99:8000/api/item/'+itemid, {
+  //   method: 'PUT',
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(
+  //     // item_name: itemname,
+  //     // unit_id: value
+  //     updateItemdata
+  //   )
+  // }).then(data=>console.log(data))
+  ////
 
   const renderItem = ({item}) => {
     return (
@@ -198,31 +192,16 @@ const Items = () => {
             <Text style={styles.title}>{item.item_name}</Text>
             <View
               style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-              <View style={{flexDirection:"row"}}>
-               <TouchableOpacity onPress={() => {
-                   edititem(item._id,item.item_name,item.unit_id)
-                  }}>
-                    <Image
-                    source={icons.edit}
-                    style={{
-                      width: 18,
-                      height: 18,
-                      right: 15,
-                      tintColor: COLORS.lightblue_900,
-                    }}
-                  />
-               </TouchableOpacity>
-               <TouchableOpacity onPress={() => DeleteItem(item._id)}>
-                    <Image
-                    source={icons.delete_icon}
-                    style={{
-                      width: 18,
-                      height: 18,
-                      right: 5,
-                      tintColor: COLORS.red,
-                    }}
-                  />
-               </TouchableOpacity>
+              <View style={{marginRight: 5}}>
+                <Button
+                  title="edit"
+                  onPress={() => {
+                    edititem(item._id, item.item_name, item.unit_id);
+                  }}
+                />
+              </View>
+              <View style={{marginLeft: 10}}>
+                <Button title="X" onPress={() => DeleteItem(item._id)} />
               </View>
             </View>
           </View>
@@ -243,20 +222,9 @@ const Items = () => {
   };
   return (
     <View>
-      <HeaderBar right={true} title="Items"/>
-      <View>
-      <TextButton
-        label="Add New"
-        buttonContainerStyle={{
-          height: 50,
-          alignItems: 'center',
-          marginHorizontal: SIZES.padding,
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.lightblue_700,
-        }}
-        onPress={() => setItemmodal(true)}
-      />
+      <HeaderBar right={true} title="Items" />
+      <View style={{marginHorizontal: SIZES.padding}}>
+        {/* modal start  */}
         <Modal animationType="slide" transparent={false} visible={itemmodal}>
           <View
             style={{

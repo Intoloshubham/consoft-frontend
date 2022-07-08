@@ -1,525 +1,184 @@
-import React from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
-  View, Animated,
-  Easing, Switch,
+  View,
   Text, FlatList,
   StyleSheet, Image,
   ScrollView, Modal,
-  Pressable, TouchableHighlight,
+  Pressable, TextInput,
   TouchableOpacity, LogBox
 } from 'react-native'
-import { COLORS, FONTS, SIZES, dummyData } from '../../../constants'
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import { Layout, Card } from '@ui-kitten/components';
+import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../constants'
+import { FormInput, Drop, IconButton, CustomDropdown, TextButton } from '../../../Components';
 import { Divider } from '@ui-kitten/components';
-import Foundation from 'react-native-vector-icons/Foundation'
-import {
-  Svg,
-  LinearGradient,
-  Mask,
-  Rect,
-  ForeignObject,
-} from 'react-native-svg';
 import CheckBox from '@react-native-community/checkbox';
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import { AccordionList } from 'accordion-collapse-react-native';
-import DatePicker from 'react-native-neat-date-picker'
-import Collapsible from 'react-native-collapsible';
-// MaterialCommunityIcons.loadFont()
+import styles from './ReportStyle.js'
+import { EditDeletebuttons, ReportDateTimeHeader, Manpower, Stock, Quantity, Quality, TAndP } from '../index.js'
+import { Dropdown } from 'react-native-element-dropdown';
+import { Get_Project_Team_Data } from '../UserReports/ReportApi.js'
+import { getToken, getUserId } from '../../../services/asyncStorageService';
+import Config from '../../../config'
+const UserReports = ({ route }) => {
 
-LogBox.ignoreLogs(["EventEmitter.removeListener"]);
+  // const { selectedIdProjects } = route.params; 
 
-const UserReports = () => {
-
-  const [selectedEditId, setSelectedEditId] = React.useState(null)
-  const [con_item_id, setcon_item_id] = React.useState('')
-  const [selectedDel, setSelectedDel] = React.useState(null)
-  const [Report_list, setReport_list] = React.useState(dummyData.Reports_part)
-  const [selectheaderid, setselectheaderid] = React.useState(Report_list)
-  const [collapsed, setCollapsed] = React.useState(false);
-  const [Tech_collapse, setTech_collapse] = React.useState(false)
-  const [Masonry_collapse, setMasonry_collapse] = React.useState(false)
-  const [Steel_collapse, setSteel_collapse] = React.useState(false)
-  const [Shelter_collapse, setShelter_collapse] = React.useState(false)
+  LogBox.ignoreLogs(["EventEmitter.removeListener"]);
+  LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
 
 
+  const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, Project_list_drop } = styles
 
+  //project list setting 
+  const [ProList, setProList] = useState([])
+  const [proListIsFocus, setProListIsFocus] = useState(false)
+  const [projectTeamList, setProjectTeamList] = useState([])
 
-  const [list_Contractor, setlist_Contractor] = React.useState([
-    {
-      id: "0",
-      name: "Contractor 1"
-    },
-    {
-      id: "1",
-      name: "Contractor 2"
-    },
-    {
-      id: "2",
-      name: "Contractor 3"
-    },
-    {
-      id: "3",
-      name: "Contractor 4"
-    },
-  ])
-  const [Tech_staff, setTech_staff] = React.useState([
-    {
-      id: "0",
-      name: 'first',
-      ischeck: false
-    },
-    {
-      id: "1",
-      name: 'second',
-      ischeck: false
-    },
-    {
-      id: "2",
-      name: 'third',
-      ischeck: false
-    },
-    {
-      id: "3",
-      name: 'fourth',
-      ischeck: false
-    },
-    {
-      id: "4",
-      name: 'fifth',
-      ischeck: false
-    },
-    {
-      id: "5",
-      name: 'sixth',
-      ischeck: false
-    },
-    {
-      id: "6",
-      name: 'seventh',
-      ischeck: false
-    },
-    {
-      id: "7",
-      name: 'eighth',
-      ischeck: false
-    },
+  //Projects in dropdown
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
 
-  ])
+  //for saving projects
+  const [selectedIdProjects, setSelectedIdProjects] = useState([])
 
-  const [steel_bind, setsteel_bind] = React.useState([
-    {
-      id: "0",
-      name: "M"
-    },
-    {
-      id: "1",
-      name: "M/c"
+  //getting user id state
+  const [userId, setUserId] = useState(null)
+
+  //getting userid
+  const Get_userId = async () => {
+    const userId = await getUserId();
+    // console.log(userId)
+    setUserId(userId);
+  }
+  console.log("userid///////////")
+  console.log(userId)
+  //calling userid
+  React.useEffect(() => {
+    (async () => await Get_userId())();
+  }, [])
+
+  //getting 
+  useMemo(() => {
+    const sendUserId = () => {
+      fetch(`${Config.API_URL}user-by-projects/${userId}`)
+        .then((response) => response.json())
+        .then(data => {
+          // console.log(data)
+          setSelectedIdProjects(data);
+        })
     }
-  ])
-
-  const [shelter, setshelter] = React.useState([
-    {
-      id: "0",
-      name: "M"
-    },
-    {
-      id: "1",
-      name: "M/c"
+    // (async () => await sendUserId())();
+    sendUserId();
+  }, [userId])
+  console.log("selected userid projects")
+  console.log(selectedIdProjects)
+  console.log("Repeated........................")
+  //getting and setting data in label value pair
+  useMemo(() => {
+    if (!selectedIdProjects==[]) {
+      let ProData = selectedIdProjects.map(ele => {
+        return { label: ele.project_name, value: ele.project_id };
+      })
+      setProList(ProData)
     }
-  ])
-  const [Masonry, setMasonry] = React.useState([
-    {
-      id: "0",
-      name: "M"
-    },
-    {
-      id: "1",
-      name: "M/c"
-    },
-    {
-      id: "2",
-      name: "F/c"
-    },
-  ])
-
-  const [ExpCalendar, setExpCalendar] = React.useState(false)
-  const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
+  }, [selectedIdProjects])
+  // console.log("dropdown items data")
+  // console.log(ProList)
 
 
-  const { header, header_elements, con_body, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
+  // useMemo(() => {
+  //   // console.log(value)
+  //   const data = Get_Project_Team_Data(value)
+  //   data.then(res => res.json())
+  //     .then(result => {
+  //       setProjectTeamList(result)
+  //       // console.log("project team data")
+  //       console.log(result)
+  //     })
+  // }, [value])
+  // console.log("selected projects data of team")
+  // console.log(projectTeamList)
 
-  const _head = (item) => {
-    return (
-      <View style={header} key={item.key}>
-        <View style={header_elements} >
-          <TouchableOpacity >
-            <Text style={[FONTS.h3, { color: COLORS.black, textAlign: "left" }]}>
-              {item.name}
-            </Text>
-          </TouchableOpacity>
-
-        </View>
-      </View>
-    );
-  }
-
-
-  const onConfirmexp = (output) => {
-    setExp_date(output.dateString)
-    setExpCalendar(false)
-  }
-
-
-  const schedular_section = (item) => {
-    return (
-      <View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", width: 115, alignSelf: "flex-start", marginLeft: -65 }}>
-          <View style={{ backgroundColor: COLORS.gray3, borderRadius: 5, alignSelf: "center", paddingHorizontal: 5 }}>
-            <Text style={{ color: "#000" }} >{Exp_date}</Text>
-          </View>
-          <View style={{ width: 30, borderRadius: 5, backgroundColor: COLORS.gray3, alignSelf: "center", paddingHorizontal: 2 }}>
-            <Pressable onPress={() => { setExpCalendar(true) }}>
-              <EvilIcons name="calendar" color={"#106853"} size={28} />
-            </Pressable>
-          </View>
-        </View>
-        <DatePicker
-          isVisible={ExpCalendar}
-          mode={'single'}
-          onCancel={() => { setExpCalendar(false) }}
-          onConfirm={onConfirmexp}
-        />
-      </View>
-    )
-  }
-
-  const edit_delet_section = (item) => {
-    return (
-      <View style={body_ed_de_view}>
-        <View style={body_del_btn}>
-          <Pressable
-            style={{}}
-            onPress={() => {
-              setSelectedEditId(item.id)
-            }}
-          >
-            <Foundation name='page-edit' color={item.id == selectedEditId ? "#2aaeff" : null} size={24} />
-          </Pressable>
-        </View>
-        <View style={body_edit_btn}>
-          <Pressable
-            onPress={() => {
-              setSelectedDel(item.id)
-
-            }}
-          >
-            <Foundation name='page-delete' color={item.id == selectedDel ? "#d45" : null} size={24} />
-          </Pressable>
-        </View>
-      </View>
-    )
-  }
-  const toggleExpanded = (item) => {
-    setcon_item_id(item.id)
-    setCollapsed(true);
-  };
-
-  const onValueChange = (item, index) => {
-    const newData = [...Tech_staff];
-    newData[index].isCheck = !item.isCheck;
-    setTech_staff(newData);
-  }
- 
-
-  const onMasonryChange = (item, index) => {
-    const newData = [...Masonry];
-    newData[index].isCheck = !item.isCheck;
-    setMasonry(newData);
-  }
-  const onSteelChange = (item, index) => {
-    const newData = [...steel_bind];
-    newData[index].isCheck = !item.isCheck;
-    setsteel_bind(newData);
-  }
-
-  const onShelterChange = (item, index) => {
-    const newData = [...shelter];
-    newData[index].isCheck = !item.isCheck;
-    setshelter(newData);
-  }
-
-
-
-
-  const getSelectedValue = (item) => {
-    var name = Tech_staff.map((t) => t.name)
-    var isChecked = Tech_staff.map((t) => t.isCheck)
-    let selected = []
-    for (let i = 0; i < isChecked.length; i++) {
-      if (isChecked[i] == true)
-        selected.push(name[i])
-    }
-  }
-
-  const render_con_list = (item) => {
-    return (
-      <>
-        <TouchableOpacity style={{
-          flex: 1,
-          flexDirection: "row",
-          margin: 2,
-          borderWidth: 1,
-          width: SIZES.width * 0.9,
-          padding: 3,
-          paddingRight: 52,
-          justifyContent: "space-between"
-        }}
-          onPress={()=>{ toggleExpanded(item)}
-          }
-        >
-          <View>
-            <Text>{item.name}</Text>
-          </View>
-          <View>
-            {edit_delet_section(item)}
-          </View>
-        </TouchableOpacity>
-        {collapsed && con_item_id == item.id ?
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "column",
-              borderWidth: 1,
-              alignItems: "flex-start",
-              width: SIZES.width * 0.9,
-              height: SIZES.width,
-              paddingLeft: SIZES.base,
-              marginHorizontal: 2,
-              position: "relative",
-            }}
-          >
-            <View style={{ marginLeft: 24 * 3 }}>
-              {schedular_section(item)}
-            </View>
-            <Divider style={{ backgroundColor: "gray", width: SIZES.width * 0.85, marginHorizontal: 2, top: 5 }} />
-            <View style={{
-              flex: 1,
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              marginTop: 15,
-              marginLeft: 2,
-              height: SIZES.width * 0.9,
-              width: SIZES.width * 0.85,
-            }}>
-              <View>
-                <TouchableOpacity
-                  onPress={() => setTech_collapse(!Tech_collapse)}
-                >
-                  <Text>Technical Staff</Text>
-                </TouchableOpacity>
-              </View>
-              {Tech_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 90 }}>
-                {Tech_staff.map((item, index) => {
-                  return (
-                    <View style={{ flex: 1 }} key={index}>
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => onValueChange(item, index)}
-                        style={{ flexDirection: "row", alignContent: "center", alignItems: "center" }}>
-                        <CheckBox
-                          value={item.isCheck}
-                          onValueChange={(newValue) => onValueChange(item, index)}
-                          key={item.name}
-                        />
-                        <Text>{item.name}</Text>
-                      </TouchableOpacity>
-                      {/* <TouchableOpacity onPress={()=>getSelectedValue(item)}><Text>getdata</Text></TouchableOpacity> */}
-                    </View>
-                  )
-                })}
-              </ScrollView> : null}
-              <View>
-                <TouchableOpacity
-                  onPress={() => setMasonry_collapse(!Masonry_collapse)}
-                >
-                  <Text>Masonry</Text>
-                </TouchableOpacity>
-              </View>
-              {Masonry_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 55 }}>
-                {Masonry.map((item, index) => {
-                  return (
-                    <View key={index}>
-                      <View
-                        key={index}
-                        style={{ maxHeight: 25 }}>
-                        <TouchableOpacity
-                          key={index}
-                          onPress={() => onMasonryChange(item, index)}
-                          style={{ flexDirection: "row",alignItems:"center" }}
-                        >
-                          <CheckBox
-                            value={item.isCheck}
-                            onValueChange={(newValue) => onMasonryChange(item, index)}
-                            key={item.id}
-                          />
-                          <Text>{item.name}</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  )
-                })}
-              </ScrollView> : null}
-              <View>
-                <TouchableOpacity
-                  onPress={() => setSteel_collapse(!Steel_collapse)}
-                >
-                  <Text>Steel Binder</Text>
-                </TouchableOpacity>
-              </View>
-              {Steel_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 60 }}>
-                {steel_bind.map((item, index) => {
-                  return (
-                    <View key={index} style={{  }}>
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => onSteelChange(item, index)}
-                        style={{ flexDirection: "row",alignItems:"center" }}
-                      >
-                        <CheckBox
-                          value={item.isCheck}
-                          onValueChange={(newValue) => onSteelChange(item, index)}
-                          key={item.id}
-                        />
-                        <View>
-                          <Text>{item.name}</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  )
-                })}
-              </ScrollView> : null}
-              <View>
-                <TouchableOpacity
-                  onPress={() => setShelter_collapse(!Shelter_collapse)}                
-                >
-                  <Text>Sheltering</Text>
-                </TouchableOpacity>
-              </View>
-              {Shelter_collapse ? <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 90 }}>
-                {shelter.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                    >
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => onShelterChange(item, index)}
-                        style={{ flexDirection: "row",alignItems:"center" }}
-                      >
-                        <CheckBox
-                          value={item.isCheck}
-                          onValueChange={(newValue) => onShelterChange(item, index)}
-                          key={item.id}
-                        />
-                        <Text>{item.name}</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )
-                })}
-              </ScrollView> : null}
-            </View>
-          </View> : null
-        }
-      </>
-    )
-  }
-
-
-  const list_of_all_contractors = (item) => {
-    return (
-      <View style={{}}>
-        <FlatList
-          data={list_Contractor}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            render_con_list(item)
-          )}
-          extraData={selectheaderid}
-          keyExtractor={(item, index) => `${item.id}`}
-        />
-      </View>
-    )
-  }
-
-
-  const _body = (item) => {
-    return (
-      <View style={con_body}>
-        {list_of_all_contractors(item)}
-      </View>
-    )
-  }
 
   return (
     <View
-      style={{
-        flex: 2,
-        backgroundColor: "#ffff",
-      }}>
-      <AccordionList
-        list={Report_list}
-        header={_head}
-        isExpanded={false}
-        body={_body}
-        keyExtractor={item => item.id}
+      source={images.Graph_paper}
+      style={{ flex: 1, margin: SIZES.base, position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}
+    >
+      <Dropdown
+        style={[
+          Project_list_drop,
+          proListIsFocus && {
+            borderColor: COLORS.lightblue_600,
+          },
+        ]}
+        placeholderStyle={{ fontSize: 16, color: COLORS.gray }
+        }
+        selectedTextStyle={{ color: COLORS.gray, }
+        }
+        inputSearchStyle={{ color: COLORS.gray, height: 40 }}
+        iconStyle={{
+          height: 28
+          // fontSize: 16, 
+        }}
+        data={ProList}
+        search
+        maxHeight={100}
+        labelField="label"
+        valueField="value"
+        placeholder={'Select Project'}
+        searchPlaceholder="Search..."
+        value={value}
+        onFocus={() =>
+          setProListIsFocus(true)
+        }
+        onBlur={() =>
+          setProListIsFocus(false)
+        }
+        onChange={item => {
+          // console.log(item)
+          setValue(item.value);
+          setProListIsFocus(false);
+        }}
+
       />
+      <ScrollView contentContainerStyle={{ height: SIZES.height }} horizontal={false}>
+        <View
+          style={{
+            flex: 1,
+            borderColor: COLORS.lightblue_400,
+            borderWidth: 1,
+            padding: SIZES.base,
+            // top: 10
+          }}>
+          <ReportDateTimeHeader />
+          <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
+          <View>
+            <View style={{ marginVertical: 5 }}>
+              <Manpower projectTeamList={projectTeamList} />
+            </View>
+            <View style={{ marginVertical: 5, top: 4 }}>
+              {/* Stock component */}
+              <Stock />
+            </View>
+            <View style={{ marginVertical: 5 }}>
+              {/* Quantity */}
+              <Quantity />
+            </View>
+            <View style={{ marginVertical: 2 }}>
+              {/* Quality */}
+              <Quality />
+            </View>
+            <View style={{ marginVertical: 4 }}>
+              {/* Quality */}
+              <TAndP />
+            </View>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   )
 }
 
 export default UserReports
 
-const styles = StyleSheet.create({
-  header: {
-    flex: 1,
-    borderWidth: 1,
-    margin: 5,
-    padding: 5,
-    borderRadius: 5,
-    top: 1,
-  },
-  header_elements: {
-    alignItems: "center"
-  },
-  con_body: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: COLORS.gray3,
-    marginHorizontal: 5
-  },
-  body_del_btn: {
-    // backgroundColor: "green",
-    paddingHorizontal: 8
-  },
-  body_edit_btn: {
-    // backgroundColor: "gray",
-    paddingHorizontal: 8
-  },
-  body_ed_de_view: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    right: -52,
-    // backgroundColor: "red",
-  },
-  group: {
-    marginVertical: 4,
-  },
-  option: {
-    marginVertical: 4,
-    marginHorizontal: 12,
-  },
-
-})

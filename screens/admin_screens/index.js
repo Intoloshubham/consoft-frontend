@@ -1,64 +1,57 @@
-//screens
-import Home from './Home/Home';
 import Account from './Account/Account';
-import Reports from './Reports/Reports';
-import Tasks from './Tasks/Tasks';
-import Tracker from './Tracker/Tracker';
-import ProjectsBanner from './Home/ProjectsBanner';
-import ProjectsCreateModal from './Modals/ProjectsCreateModal';
-import ProjectsDetails from './Home/ProjectsDetails';
-import WorkAssignModal from './Modals/WorkAssignModal';
+import CheckList from './CheckList/CheckList';
+import CompanyTeam from './CompanyTeam/CompanyTeam';
+import AssignedWorks from './Home/AssignedWorks';
+import CompanyTeamShow from './Home/CompanyTeamShow';
 import Contractors from './Home/Contractors';
+import Home from './Home/Home';
+import ProjectReports from './Home/ProjectReports';
+import ProjectsBanner from './Home/ProjectsBanner';
+import ProjectsDetails from './Home/ProjectsDetails';
 import ProjectSeheduleTime from './Home/ProjectSeheduleTime';
 import ProjectTeam from './Home/ProjectTeam';
-import ProjectReports from './Home/ProjectReports';
+import ProjectWorksIdentifier from './Home/ProjectWorksIdentifier';
 import StocksAndInventry from './Home/StocksAndInventry';
 import ToolsAndMachinery from './Home/ToolsAndMachinery';
-import ProjectProgressReview from './Home/ProjectProgressReview';
-import ProjectProgressReviewTop20 from './Home/ProjectProgressReviewTop20';
-import AssignedWorks from './Home/AssignedWorks';
-import ProjectWorksIdentifier from './Home/ProjectWorksIdentifier';
-import CheckList from './CheckList/CheckList';
+import WorkAssignModal from './Modals/WorkAssignModal';
+import CategoryandType from './Project/CategoryandType';
+
+import ReportsDisplay from './Reports/ReportDisplay';
+
 import Items from './Stock/Items/Items';
-import Unit from './Stock/Unit/Unit';
-import ProjectCategory from './Project/ProjectCategory';
-import ProjectTypes from './Project/ProjectTypes';
-import CompanyTeam from './CompanyTeam/CompanyTeam';
 import ManageStock from './Stock/ManageStock/ManageStock';
-import ToolAndMachinery1 from './Stock/Tools/ToolAndMachinery1';
-import Quantitywork from './Stock/Tools/Quantitywork';
-import Optiontype from './CheckList/Optiontype';
-import CompanyTeamShow from './Home/CompanyTeamShow';
+import Unit from './Stock/Unit/Unit';
+import Tasks from './Tasks/Tasks';
+import Tracker from './Tracker/Tracker';
+import Suppliers from './Suppliers/Suppliers';
+import SubmittedWorks from './Home/SubmittedWorks';
 
 export {
-  Home,
   Account,
-  Reports,
-  Tasks,
-  Tracker,
-  ProjectsBanner,
-  ProjectsCreateModal,
-  ProjectsDetails,
-  WorkAssignModal,
+  CheckList,
+  CompanyTeam,
+  AssignedWorks,
+  CompanyTeamShow,
   Contractors,
+  Home,
+  ProjectReports,
+  ProjectsBanner,
+  ProjectsDetails,
   ProjectSeheduleTime,
   ProjectTeam,
-  ProjectReports,
+  ProjectWorksIdentifier,
   StocksAndInventry,
   ToolsAndMachinery,
-  ProjectProgressReview,
-  ProjectProgressReviewTop20,
-  AssignedWorks,
-  ProjectWorksIdentifier,
-  CheckList,
+  WorkAssignModal,
+  CategoryandType,
+
+  ReportsDisplay,
+
   Items,
-  Unit,
-  ProjectCategory,
-  ProjectTypes,
-  CompanyTeam,
   ManageStock,
-  CompanyTeamShow,
-  ToolAndMachinery1,
-  Quantitywork,
-  Optiontype
+  Unit,
+  Tasks,
+  Tracker,
+  Suppliers,
+  SubmittedWorks,
 };

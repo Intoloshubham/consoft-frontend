@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,31 +7,45 @@ import {
   ScrollView,
   StyleSheet,
   LogBox,
-  FlatList,
 } from 'react-native';
-import {
-  IconButton,
-  TextButton,
-  LineDivider,
-  ProgressBar,
-  ProfileValue,
-  UploadImage,
-} from '../../../Components';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
+import {
+  removeCompanyId,
+  removeToken,
+} from '../../../services/asyncStorageService';
+import {useSelector} from 'react-redux';
+import {unSetCompanyInfo} from '../../../features/CompanySlice';
+import {unsetCompanyToken} from '../../../features/CompanyAuthSlice';
+import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {ProfileValue, LineDivider} from '../../../Components';
 
 const Account = () => {
   const navigation = useNavigation();
+  const [collapsed, setCollapsed] = useState(true);
+
+  const logout = async () => {
+    unSetCompanyInfo({_id: '', company_name: '', email: '', mobile: ''});
+    unsetCompanyToken({token: null});
+    await removeToken('token');
+    await removeCompanyId('company_id');
+    navigation.navigate('Dashboard');
+  };
+
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  const [collapsed, setCollapsed] = React.useState(true);
-
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
+
+  //getting company data from redux store    company -> name is reducer
+  const companyData = useSelector(state => state.company);
+  // console.log(companyData);
+
+  // const companyToken = useSelector(state => state.companyAuth)
+  // console.log(companyToken);
 
   function renderHeader() {
     return (
@@ -61,10 +75,11 @@ const Account = () => {
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.radius,
+          paddingHorizontal: SIZES.padding,
           paddingVertical: 20,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_800,
+          alignItems: 'center',
         }}>
         {/* profile image  */}
         <TouchableOpacity
@@ -72,9 +87,7 @@ const Account = () => {
             width: 80,
             height: 80,
           }}
-          onPress={() => {
-            return <UploadImage />;
-          }}>
+          onPress={() => alert('Upload Image')}>
           <Image
             source={images.Profile7}
             style={{
@@ -125,39 +138,16 @@ const Account = () => {
             style={{
               color: COLORS.white,
               ...FONTS.h2,
+              textTransform: 'capitalize',
             }}>
-            Admin Demo
+            {companyData.company_name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
-            Administrator
+            {companyData.email}
           </Text>
-          {/* progress  */}
-          {/* <ProgressBar
-            progress="40%"
-            containerStyle={{
-              marginTop: SIZES.radius,
-            }}
-          /> */}
-          {/* <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            <Text
-              style={{
-                flex: 1,
-                color: COLORS.white,
-                ...FONTS.body4,
-              }}>
-              Overall Progress
-            </Text>
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.body4,
-              }}>
-              40%
-            </Text>
-          </View> */}
+          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+            +91{companyData.mobile}
+          </Text>
         </View>
       </View>
     );
@@ -170,69 +160,57 @@ const Account = () => {
           ...styles.profileSectionContainer,
         }}>
         <ProfileValue
-          icon={icons.profile}
-          value="Create New Project"
+          icon={icons.project_type}
+          value="Project Categories & Types"
           image={icons.right_arr}
+          onPress={() => navigation.navigate('CategoryandType')}
         />
         <LineDivider />
         <ProfileValue
-          icon={icons.stock_manage}
-          value="Stock Mangement"
-          image={icons.down_arrow}
+          icon={icons.company_team}
+          value="Add Company Team"
+          image={icons.right_arr}
+          onPress={() => navigation.navigate('CompanyTeam')}
+        />
+        <LineDivider />
+        <ProfileValue
+          icon={icons.stock_management}
+          value="Stock Management"
+          image={icons.down_arro}
           onPress={toggleExpanded}
         />
         <Collapsible collapsed={collapsed} duration={300}>
           <View style={{marginLeft: SIZES.padding * 1.8}}>
-            {/* <Text
-              style={{
-                ...FONTS.h3,
-                fontSize: 18,
-                color: COLORS.darkGray,
-                marginVertical: SIZES.base,
-              }}>
-              Items
-            </Text> */}
-            {/* <Text style={{...FONTS.h3, fontSize: 18, color: COLORS.darkGray}}>
-              Unit
-            </Text> */}
             <ProfileValue
-              icon={icons.items}
+              icon={icons.itemss}
               value="Items"
               image={icons.right_arr}
               onPress={() => navigation.navigate('Items')}
             />
             <LineDivider />
             <ProfileValue
-              icon={icons.unit}
+              icon={icons.units}
               value="Unit"
               image={icons.right_arr}
               onPress={() => navigation.navigate('Unit')}
             />
             <LineDivider />
             <ProfileValue
-              icon={icons.stock_manage}
+              icon={icons.manage_stock}
               value="Manage Stock"
               image={icons.right_arr}
               onPress={() => navigation.navigate('ManageStock')}
             />
           </View>
         </Collapsible>
+        <LineDivider />
         <ProfileValue
-          icon={icons.p_team}
-          value="Create Company Team"
+          icon={icons.supplier}
+          value="Suppliers"
           image={icons.right_arr}
-          onPress={() => navigation.navigate('CompanyTeam')}
+          onPress={() => navigation.navigate('Suppliers')}
         />
-        <ProfileValue
-          icon={icons.contr}
-          value="Contractors"
-          image={icons.right_arr}
-        />
-        <ProfileValue
-          icon={icons.camera}
-          value="Project Team"
-          image={icons.right_arr}
-        />
+        <LineDivider />
       </View>
     );
   }
@@ -243,7 +221,7 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" onPress={() => {}} />
+        <ProfileValue icon={icons.logout} value="LogOut" onPress={logout} />
       </View>
     );
   }
@@ -254,20 +232,13 @@ const Account = () => {
         flex: 1,
         backgroundColor: COLORS.white,
       }}>
-      {/* Header  */}
-      {/* {renderHeader()} */}
-
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: SIZES.padding,
           paddingBottom: 150,
         }}>
-        {/* profile card  */}
         {renderProfileCard()}
-
-        {/* profile section 1  */}
         {renderProfileSection1()}
-        {/* section 2  */}
         {renderProfileSection2()}
       </ScrollView>
     </View>
