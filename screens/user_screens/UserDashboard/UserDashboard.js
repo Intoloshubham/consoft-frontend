@@ -48,37 +48,16 @@ const UserDashboard = ({ navigation, route }) => {
   const Get_token_Data =async () => {
     const tokens = await getToken();
     const userId = await getUserId();
-    // console.log(userId)
-    setUserId(userId);
+    setUserId(userId);   
     setAccessToken(tokens)
-    dispatch(setUserToken({ token: tokens }))
+    dispatch(setUserToken({ token: tokens })) 
   }
+
+
   //setting token
-  React.useEffect(() => {
+  React.useMemo(() => {
     (async () => await Get_token_Data())();
   }, [])
-
-
-  // console.log(accessToken)
-
-
-  // console.log("Token " + accessToken)
-
-
-
-  // const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
-  // console.log("data "+ data);
-
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role_id: data.role_id  }))
-  //   }
-  // })
-
-
-// console.log(userId)
-
 
 
   const [taskModal, settaskModal] = useState(false)
@@ -91,7 +70,7 @@ const UserDashboard = ({ navigation, route }) => {
   const handleTask = async () => {
     const new_task=await fetch(`${Config.API_URL}user-assign-works/${userId}`)
     const res=await new_task.json(new_task)
-    // console.log(res)
+    console.log(res)
     setNewTaskRes(res)
     settaskModalNum(true);
     settaskModal(true);
@@ -176,16 +155,17 @@ const UserDashboard = ({ navigation, route }) => {
       <View style={styles.report_section_title}>
         <Text style={styles.avai_text}>Reports</Text>
       </View>
-      <View>
+      {/* <View>
         <TouchableOpacity
           style={styles.create_new_report_btn}
           onPress={() => {
+          //  get_UserId() 
             navigation.navigate('Report');
           }}
         >
           <Text style={{ color: COLORS.white, ...FONTS.body3 }}>Create New Report</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       {/* </LinearGradient> */}
 
     </>

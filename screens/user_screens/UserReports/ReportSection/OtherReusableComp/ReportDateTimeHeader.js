@@ -8,10 +8,10 @@ import {
     Pressable, TextInput, TouchableWithoutFeedback,
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
-import styles from '../ReportStyle.js'
-import EditDeletebuttons from './EditDeletebuttons.js'
+import styles from '../../ReportStyle.js'
+import {EditDeletebuttons} from '../../../index.js'
 import moment from 'moment';
-import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../constants'
+import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 
 
 const ReportDateTimeHeader = () => {

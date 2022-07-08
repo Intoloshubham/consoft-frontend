@@ -8,19 +8,19 @@ import {
     Pressable, TextInput, TouchableWithoutFeedback,
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
-import styles from '../ReportStyle.js'
+import styles from '../../ReportStyle.js'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../constants'
+import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 
-const Stock = () => {
+const TAndP = () => {
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
-      //Stock collapse
-  const [stockCollapse, setStockCollapse] = useState(false)
+    //T & P collapse
+    const [tAndP, setTAndP] = useState(false)
     return (
         <>
-            {/* Stock */}
+            {/* T & P */}
             <Pressable
-                onPress={() => setStockCollapse(!stockCollapse)}
+                onPress={() => setTAndP(!tAndP)}
                 style={{
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
@@ -30,13 +30,14 @@ const Stock = () => {
                     top: SIZES.base * 2,
                     borderColor: COLORS.lightblue_200,
                     borderWidth: 1,
-                    borderRadius: 2
+                    borderRadius: 1,
+                    elevation: 1
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => setStockCollapse(!stockCollapse)} style={[FONTS.h3, { color: COLORS.darkGray }]}>Stock</Text>
+                    <Text onPress={() => setTAndP(!tAndP)} style={[FONTS.h3, { color: COLORS.darkGray }]}>T & P</Text>
                 </View>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <TouchableOpacity onPress={() => setStockCollapse(!stockCollapse)}>
+                    <TouchableOpacity onPress={() => setTAndP(!tAndP)}>
                         <AntDesign name='caretdown' size={12} color={COLORS.gray} />
                     </TouchableOpacity>
                 </View>
@@ -45,4 +46,4 @@ const Stock = () => {
     )
 }
 
-export default Stock
+export default TAndP

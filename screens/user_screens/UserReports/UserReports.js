@@ -11,7 +11,7 @@ import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../constan
 import { FormInput, Drop, IconButton, CustomDropdown, TextButton } from '../../../Components';
 import { Divider } from '@ui-kitten/components';
 import CheckBox from '@react-native-community/checkbox';
-
+ 
 import DropDownPicker from 'react-native-dropdown-picker';
 import styles from './ReportStyle.js'
 import { EditDeletebuttons, ReportDateTimeHeader, Manpower, Stock, Quantity, Quality, TAndP } from '../index.js'
@@ -19,14 +19,12 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Get_Project_Team_Data } from '../UserReports/ReportApi.js'
 import { getToken, getUserId } from '../../../services/asyncStorageService';
 import Config from '../../../config'
-const UserReports = ({ route }) => {
-
-  // const { selectedIdProjects } = route.params; 
+const UserReports = ({ route }) => { 
 
   LogBox.ignoreLogs(["EventEmitter.removeListener"]);
   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
 
-
+ 
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, Project_list_drop } = styles
 
   //project list setting 
@@ -41,63 +39,85 @@ const UserReports = ({ route }) => {
   //for saving projects
   const [selectedIdProjects, setSelectedIdProjects] = useState([])
 
+  
+const [userid, setUserid] = useState(null)
+
+  const Get_UserId_Data = async () => {
+    const userid = await getUserId();
+    const new_userid=userid;
+    setUserid(new_userid);        
+  } 
   //getting user id state
-  const [userId, setUserId] = useState(null)
+  useMemo(()=>{
+    Get_UserId_Data();
 
-  //getting userid
-  const Get_userId = async () => {
-    const userId = await getUserId();
-    // console.log(userId)
-    setUserId(userId);
-  }
-  console.log("userid///////////")
-  console.log(userId)
-  //calling userid
-  React.useEffect(() => {
-    (async () => await Get_userId())();
-  }, [])
+    // console.log("seconde.....................")
 
-  //getting 
-  useMemo(() => {
-    const sendUserId = () => {
-      fetch(`${Config.API_URL}user-by-projects/${userId}`)
-        .then((response) => response.json())
-        .then(data => {
-          // console.log(data)
-          setSelectedIdProjects(data);
-        })
+
+  },[getUserId])
+
+  useEffect(()=>{
+    // console.log("first...........")
+    // console.log(userid) 
+    if (userid) {
+      const sendUserId = () => {
+        fetch(`${Config.API_URL}user-by-projects/${userid}`)
+          .then((response) => response.json())
+          .then(data => {
+            console.log("data........")
+            // console.log(data)
+            setSelectedIdProjects(data);
+          })
+      }
+       sendUserId();
     }
-    // (async () => await sendUserId())();
-    sendUserId();
-  }, [userId])
-  console.log("selected userid projects")
-  console.log(selectedIdProjects)
-  console.log("Repeated........................")
+  },[userid])
+  // console.log("selectedIdProjects..........584")
+  // console.log(selectedIdProjects)
+
+// const prevValue = useridRef.current; 
+//  console.log(prevValue)
+  // const Get_userId = () => {
+  //   getUserId().then((res) => setUserId(res));
+  //   // console.log(userId)
+  // }
+  // useEffect(() => { 
+  //   (async () => {
+  //     const userid = await ge tUserId();
+  //     setUserId(userid);
+  //     console.log(userId)
+  //   })();
+  // }, []);
+  // console.log(userId)
+
+
+
   //getting and setting data in label value pair
   useMemo(() => {
-    if (!selectedIdProjects==[]) {
+    if (selectedIdProjects) {
       let ProData = selectedIdProjects.map(ele => {
         return { label: ele.project_name, value: ele.project_id };
       })
       setProList(ProData)
+      
     }
   }, [selectedIdProjects])
-  // console.log("dropdown items data")
-  // console.log(ProList)
+
+// console.log("ProList..........121")
+// console.log(ProList) 
+
+  useMemo(() => {
+    if (value) {
+      const data = Get_Project_Team_Data(value)
+      data.then(res => res.json())
+        .then(result => {
+          setProjectTeamList(result)               
+        })      
+    }
+  }, [value])
 
 
-  // useMemo(() => {
-  //   // console.log(value)
-  //   const data = Get_Project_Team_Data(value)
-  //   data.then(res => res.json())
-  //     .then(result => {
-  //       setProjectTeamList(result)
-  //       // console.log("project team data")
-  //       console.log(result)
-  //     })
-  // }, [value])
-  // console.log("selected projects data of team")
-  // console.log(projectTeamList)
+
 
 
   return (
@@ -114,9 +134,10 @@ const UserReports = ({ route }) => {
         ]}
         placeholderStyle={{ fontSize: 16, color: COLORS.gray }
         }
-        selectedTextStyle={{ color: COLORS.gray, }
+        selectedTextStyle={{ color: COLORS.darkGray }
         }
-        inputSearchStyle={{ color: COLORS.gray, height: 40 }}
+        containerStyle={{borderRadius:5}}
+        inputSearchStyle={{ color: COLORS.gray, height: 40,borderRadius:5,padding:-5 }}
         iconStyle={{
           height: 28
           // fontSize: 16, 
@@ -145,19 +166,19 @@ const UserReports = ({ route }) => {
       <ScrollView contentContainerStyle={{ height: SIZES.height }} horizontal={false}>
         <View
           style={{
-            flex: 1,
+            flex: 1, 
             borderColor: COLORS.lightblue_400,
             borderWidth: 1,
             padding: SIZES.base,
-            // top: 10
+            // top: 10  
           }}>
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
-          <View>
+          <View >
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList} />
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} />
             </View>
-            <View style={{ marginVertical: 5, top: 4 }}>
+            <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
               <Stock />
             </View>
@@ -165,11 +186,11 @@ const UserReports = ({ route }) => {
               {/* Quantity */}
               <Quantity />
             </View>
-            <View style={{ marginVertical: 2 }}>
+            <View style={{ marginVertical: 5 }}>
               {/* Quality */}
               <Quality />
             </View>
-            <View style={{ marginVertical: 4 }}>
+            <View style={{ marginVertical: 5 }}>
               {/* Quality */}
               <TAndP />
             </View>
