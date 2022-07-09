@@ -204,6 +204,24 @@ const Account = () => {
           </View>
         </Collapsible>
         <LineDivider />
+        <Collapsible collapsed={collapsed} duration={300}>
+          <View style={{marginLeft: SIZES.padding * 1.8}}>
+            <ProfileValue
+              icon={icons.itemss}
+              value="Checklist"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('CheckList')}
+            />
+            <LineDivider />
+            <ProfileValue
+              icon={icons.units}
+              value="Optiontype"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('Optiontype')}
+            />
+          </View>
+        </Collapsible>
+        <LineDivider />
         <ProfileValue
           icon={icons.supplier}
           value="Suppliers"
