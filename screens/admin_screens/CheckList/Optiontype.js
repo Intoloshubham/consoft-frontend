@@ -14,8 +14,11 @@ import {FormInput, TextButton, HeaderBar} from '../../../Components';
 import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import config from '../../../config';
+import { getCompanyId,getToken } from '../../../services/asyncStorageService';
+
 
 const Optiontype = () => {
+    
   const [optiontypemodal, setoptiontypemodal] = useState(false);
   const [optiontypemodalupdate, setoptiontypemodalupdate] = useState(false);
 
@@ -23,12 +26,38 @@ const Optiontype = () => {
   const [Optiondata, setOptiondata] = useState([]);
   const [Optionid, setOptionid] = useState('');
 
+  //get company id 
+  const [company_id, setCompany_id] = useState('')
+  const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
+
   const optionid = (id, name) => {
     setoptiontypemodalupdate(true);
     setOptionid(id);
     setoptionTypename(name);
     console.log(id, name);
   };
+
+  const _companyId =async () => {
+   
+    const _id = await getCompanyId();
+    setCompany_id(_id);
+  }
+  // console.log(company_id);
+  //setting token
+  React.useEffect(() => {
+    (async () => await _companyId())();
+  }, [])
+
+
+  
+  useEffect(() => {
+    (async () => {
+      const token = await getToken();
+      setAccessTokenoptiontype(token);
+    })();
+  });
+  //  console.log(accessTokenoptiontype);
+
   const updateOption = () => {
     const optiondataupdate = {
       option_type: optionTypename,
@@ -45,6 +74,7 @@ const Optiontype = () => {
       .then(response => response.json())
       .then(data => {
         check();
+        setoptionTypename('');
         console.log('Success:', data);
       })
       .catch(error => {
@@ -55,11 +85,17 @@ const Optiontype = () => {
   const check = async () => {
     try {
       const resp = await fetch(
-        'http://192.168.1.99:8000/api/checklist-option-type',
-      );
+        'http://192.168.1.99:8000/api/checklist-option-type',{
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer '+accessTokenoptiontype ,
+        },
+    });
       let dataitem = await resp.json();
-      //   console.log(dataitem);
-      setOptiondata(dataitem);
+       //console.log(dataitem);
+       setOptiondata(dataitem);
     } catch (error) {
       console.log('error', error);
     }
@@ -72,6 +108,7 @@ const Optiontype = () => {
   const submit = () => {
     const optiondata = {
       option_type: optionTypename,
+      company_id:company_id
     };
     try {
       fetch(`${config.API_URL}checklist-option-type`, {

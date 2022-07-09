@@ -19,8 +19,6 @@ import {
   FormInput,
   HeaderBar,
   TextButton,
-  Drop,
-  FloatingButton,
 } from '../../../Components';
 import {SIZES, COLORS, icons, images, FONTS} from '../../../constants';
 import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -31,9 +29,9 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {loadOptions} from '@babel/core';
 
 const CheckList = () => {
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
+  // React.useEffect(() => {
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // });
 
   const [addmodal, setaddmodal] = React.useState(false);
 
@@ -48,7 +46,7 @@ const CheckList = () => {
   const [showdata, setshowdata] = useState([]);
 
   const [inputs, setInputs] = useState([{key: '', value: ''}]);
-  const [inputs1, setInputs1] = useState([{key: '', value: ''}]);
+  // const [inputs1, setInputs1] = useState([{key: '', value: ''}]);
 
   const [inputslist, setInputslist] = useState([]);
 
@@ -65,7 +63,7 @@ const CheckList = () => {
   const [isFocus, setIsFocus] = React.useState(false);
 
   const addHandler = () => {
-    const _inputs = [...inputs];
+     const _inputs = [...inputs];
     _inputs.push({key: '', value: ''});
     setInputs(_inputs);
   };
@@ -76,7 +74,7 @@ const CheckList = () => {
   };
 
   const inputHandler = (text, key) => {
-    const _inputs = [...inputs];
+     const _inputs = [...inputs];
     _inputs[key].value = text;
     _inputs[key].key = key;
     setInputs(_inputs);
@@ -109,7 +107,7 @@ const CheckList = () => {
       .then(response => response.json())
       .then(data => {
         setcreatelist('');
-        setInputslist('');
+        // setInputslist('');
         setvalue('');
         checklistItem();
         console.log('Success:', data, alert('createlist'));
@@ -386,7 +384,7 @@ const CheckList = () => {
   };
 
   function edit(e, input) {
-    input.value;
+    // input.value;
     // console.log(input.value);
   }
 
@@ -399,11 +397,12 @@ const CheckList = () => {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              setlist(true);
+             setlist(true);
+            //  alert('')
             }}>
             <Title style={{color: 'white'}}>Create list</Title>
           </TouchableOpacity>
-          <Modal visible={list} animationType="slide" transparent={false}>
+          <Modal visible={list} animationType="slide" transparent={true}>
             <View style={{flex: 1, backgroundColor: '#000000aa'}}>
               <View
                 style={{
@@ -442,7 +441,7 @@ const CheckList = () => {
                   <TouchableOpacity onPress={addHandler}>
                     <Text
                       style={{
-                        ...FONTS.body3,
+                        // ...FONTS.body3,
                         borderWidth: 1,
                         paddingLeft: 10,
                         paddingRight: 10,
@@ -490,7 +489,7 @@ const CheckList = () => {
                       </View>
                     ))}
 
-                    <View>
+                    {/* <View>
                       <Dropdown
                         style={[
                           styles.dropdown,
@@ -512,7 +511,7 @@ const CheckList = () => {
                           setIsFocus(false);
                         }}
                       />
-                    </View>
+                    </View> */}
                   </ScrollView>
                 </View>
 
@@ -919,7 +918,7 @@ const CheckList = () => {
                     data={data} 
                     labelField="option_type"
                     valueField="_id"
-                    placeholder={!isFocus ? 'Select' : '...'}
+                    // placeholder={!isFocus ? 'Select' : '...'}
                     value={value}
                     onFocus={() => setIsFocus(true)}
                     onBlur={() => setIsFocus(false)}
