@@ -9,9 +9,9 @@ const Get_Project_Team_Data = async (project_id) => {
 }
 
  
-const Get_Contractor_Data = async () => {
+const Get_Contractor_Data = async (project_id) => {
 
-    const getData = await fetch(`${Config.API_URL}contractor`)
+    const getData = await fetch(`${Config.API_URL}project-by-contractor/${project_id}`)
     return getData 
 
 }

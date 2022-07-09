@@ -15,10 +15,12 @@ import styles from '../../ReportStyle.js'
 import { EditDeletebuttons, ManPowerProjectTeam, ManpowerUserContractors } from '../../../index.js'
 import { Get_Contractor_Data } from '../../ReportApi.js'
 
-const Manpower = ({ projectTeamList, ProList }) => {
+const Manpower = ({ projectTeamList, ProList,Main_drp_pro_value }) => {
 
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
 
+    // console.log("Manpower")
+    // console.log(Main_drp_pro_value)
     //Manpower collapse
     const [TabCollapse, setTabCollapse] = useState(false)
 
@@ -57,7 +59,7 @@ const Manpower = ({ projectTeamList, ProList }) => {
                 </View>
                 <View>
                     {/* Contractors start */}
-                    <ManpowerUserContractors ProList={ProList} />
+                    <ManpowerUserContractors ProList={ProList} Main_drp_pro_value={Main_drp_pro_value} />
                     {/* Contractors close */}
                 </View>
 

@@ -4,7 +4,7 @@ import {
     Easing, Switch,
     Text, FlatList,
     StyleSheet, Image,
-    ScrollView, Modal,
+    ScrollView, Modal, SectionList,
     Pressable, TextInput, TouchableWithoutFeedback,
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
@@ -23,7 +23,8 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
     //getting userrole name
     const [UserRole, setUserRole] = useState('')
 
-
+    // setting setMergeRolePro
+    const [mergeRolePro, setMergeRolePro] = useState('')
     //getting project team names with designation
     useMemo(() => {
         if (projectTeamList) {
@@ -44,10 +45,21 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                 setUserRole(result)
             })
     }, [])
-
-
-    //project team list collapse
+    
+    useMemo(() => {
+        if (UserRole && ProjectTeamName) {
+            const MerUseRoleProjeArray = [
+                UserRole,
+                ...ProjectTeamName
+            ]
+            setMergeRolePro()
+        }
+    }, [UserRole, ProjectTeamName])
+    // console.log(MerUseRoleProjeArray)
+    //   console.log("array..................")
+    //project team list collapse 
     const _project_team = (item, index) => {
+        // console.log(item);
         LayoutAnimation.easeInEaseOut();
         return (
             <>
@@ -101,6 +113,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                     <View
                         style={{}}
                     >
+                                            
                         <FlatList
                             data={ProjectTeamName}
                             horizontal={false}
@@ -110,14 +123,14 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                             renderItem={({ item, index }) => _project_team(item, index)}
                             keyExtractor={(item, index) => index.toString()}
                         />
-                        <SectionList
-                            sections={ProjectTeamName}
+                        {/* <SectionList
+                            sections={MerUseRoleProjeArray}
                             keyExtractor={(item, index) => item._id}
-                            renderItem={({ item }) => <Item title={item} />}
-                            renderSectionHeader={({ section: { title } }) => (
-                                <Text style={styles.header}>{title}</Text>
+                            renderItem={({ item, index }) => _project_team(item, index)}
+                            renderSectionHeader={({ section: { item } }) => (
+                                <Text style={styles.header}>{item.user_role}</Text>
                             )}
-                        />
+                        /> */}
                     </View>
                 )
             }

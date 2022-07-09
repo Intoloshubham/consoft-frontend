@@ -56,15 +56,15 @@ const [userid, setUserid] = useState(null)
 
   },[getUserId])
 
-  useEffect(()=>{
-    // console.log("first...........")
-    // console.log(userid) 
+  useEffect(()=>{ 
+    console.log("first...........")
+    console.log(userid) 
     if (userid) {
       const sendUserId = () => {
         fetch(`${Config.API_URL}user-by-projects/${userid}`)
           .then((response) => response.json())
           .then(data => {
-            console.log("data........")
+            // console.log("data........")
             // console.log(data)
             setSelectedIdProjects(data);
           })
@@ -111,6 +111,8 @@ const [userid, setUserid] = useState(null)
       const data = Get_Project_Team_Data(value)
       data.then(res => res.json())
         .then(result => {
+          // console.log("result")
+          // console.log(result)
           setProjectTeamList(result)               
         })      
     }
@@ -144,7 +146,7 @@ const [userid, setUserid] = useState(null)
         }}
         data={ProList}
         search
-        maxHeight={100}
+        maxHeight={200}
         labelField="label"
         valueField="value"
         placeholder={'Select Project'}
@@ -176,7 +178,7 @@ const [userid, setUserid] = useState(null)
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           <View >
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList} ProList={ProList} />
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value}/>
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}

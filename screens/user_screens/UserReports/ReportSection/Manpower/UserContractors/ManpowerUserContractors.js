@@ -22,7 +22,7 @@ import utils from '../../../../../../utils';
 import styles from '../../../ReportStyle.js'
 
 
-const ManpowerUserContractors = ({ProList}) => {
+const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, cont_Project_list_drop } = styles
   //getting post data into state
   const [postContData, setPostContData] = useState('')
@@ -140,9 +140,10 @@ const ManpowerUserContractors = ({ProList}) => {
   function Insert_Contractor_data() {
     const data = {
       contractor_name: ContractorName,
-      phone_no: ContractorPhone
+      phone_no: ContractorPhone,
+      project_id:value
     }
-
+// console.log(data)
 
     fetch(`${Config.API_URL}contractor`, {
       method: 'POST',
@@ -151,7 +152,8 @@ const ManpowerUserContractors = ({ProList}) => {
     })
       .then((response) => response.json())
       .then(data => {
-        console.log(data.status)
+        // console.log("post data..")
+        // console.log(data) 
         setPostContData(data)
         if (data.status == '200') {
           setContractorName('')
@@ -162,17 +164,21 @@ const ManpowerUserContractors = ({ProList}) => {
       })
 
   }
-
-
+// console.log("first...................")
+// console.log(Main_drp_pro_value)
 
   //getting contractor data functions
-  useEffect(() => {
-    const data = Get_Contractor_Data()
-    data.then(res => res.json())
-      .then(result => {
-        setReport_list(result)
-      })
-  }, [postContData])
+  useMemo(() => { 
+    if (Main_drp_pro_value) {
+      const data = Get_Contractor_Data(Main_drp_pro_value)
+      data.then(res => res.json())
+        .then(result => { 
+          console.log("report list")
+          console.log(Report_list)
+          setReport_list(result)
+        })      
+    }
+  }, [postContData || Main_drp_pro_value])
 
 
 
@@ -327,7 +333,7 @@ const ManpowerUserContractors = ({ProList}) => {
                       }}
                       data={ProList}
                       search
-                      maxHeight={100}
+                      maxHeight={200}
                       labelField="label"
                       valueField="value"
                       placeholder={'Select Project'}
@@ -752,6 +758,10 @@ const ManpowerUserContractors = ({ProList}) => {
   //flatlist head render funciton
   //collapse contractor 
   const _head = (item, index) => {
+    // console.log("Maiin.......")
+    // console.log(Main_drp_pro_value)
+    // console.log("Project......")
+    // console.log(item.project_id)
     LayoutAnimation.easeInEaseOut();
     const open = active == index
     return (
@@ -773,6 +783,7 @@ const ManpowerUserContractors = ({ProList}) => {
             }}
             activeOpacity={1}>
             <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, textAlign: "left" }]}>
+              {/* {Main_drp_pro_value==item.project_id?  item.contractor_name:<Text>Nothing to Show!</Text>} */}
               {item.contractor_name}
             </Text>
           </View>
