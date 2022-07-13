@@ -11,7 +11,7 @@ import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../constan
 import { FormInput, Drop, IconButton, CustomDropdown, TextButton } from '../../../Components';
 import { Divider } from '@ui-kitten/components';
 import CheckBox from '@react-native-community/checkbox';
- 
+
 import DropDownPicker from 'react-native-dropdown-picker';
 import styles from './ReportStyle.js'
 import { EditDeletebuttons, ReportDateTimeHeader, Manpower, Stock, Quantity, Quality, TAndP } from '../index.js'
@@ -19,12 +19,12 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Get_Project_Team_Data } from '../UserReports/ReportApi.js'
 import { getToken, getUserId } from '../../../services/asyncStorageService';
 import Config from '../../../config'
-const UserReports = ({ route }) => { 
+const UserReports = ({ route }) => {
 
   LogBox.ignoreLogs(["EventEmitter.removeListener"]);
   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
 
- 
+
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, Project_list_drop } = styles
 
   //project list setting 
@@ -39,26 +39,26 @@ const UserReports = ({ route }) => {
   //for saving projects
   const [selectedIdProjects, setSelectedIdProjects] = useState([])
 
-  
-const [userid, setUserid] = useState(null)
+
+  const [userid, setUserid] = useState(null)
 
   const Get_UserId_Data = async () => {
     const userid = await getUserId();
-    const new_userid=userid;
-    setUserid(new_userid);        
-  } 
+    const new_userid = userid;
+    setUserid(new_userid);
+  }
   //getting user id state
-  useMemo(()=>{
+  useMemo(() => {
     Get_UserId_Data();
 
     // console.log("seconde.....................")
 
 
-  },[getUserId])
+  }, [getUserId])
 
-  useEffect(()=>{ 
+  useMemo(() => {
     console.log("first...........")
-    console.log(userid) 
+    console.log(userid)
     if (userid) {
       const sendUserId = () => {
         fetch(`${Config.API_URL}user-by-projects/${userid}`)
@@ -69,14 +69,14 @@ const [userid, setUserid] = useState(null)
             setSelectedIdProjects(data);
           })
       }
-       sendUserId();
+      sendUserId();
     }
-  },[userid])
+  }, [userid])
   // console.log("selectedIdProjects..........584")
   // console.log(selectedIdProjects)
 
-// const prevValue = useridRef.current; 
-//  console.log(prevValue)
+  // const prevValue = useridRef.current; 
+  //  console.log(prevValue)
   // const Get_userId = () => {
   //   getUserId().then((res) => setUserId(res));
   //   // console.log(userId)
@@ -99,12 +99,12 @@ const [userid, setUserid] = useState(null)
         return { label: ele.project_name, value: ele.project_id };
       })
       setProList(ProData)
-      
+
     }
   }, [selectedIdProjects])
 
-// console.log("ProList..........121")
-// console.log(ProList) 
+  // console.log("ProList..........121")
+  // console.log(ProList) 
 
   useMemo(() => {
     if (value) {
@@ -113,8 +113,10 @@ const [userid, setUserid] = useState(null)
         .then(result => {
           // console.log("result")
           // console.log(result)
-          setProjectTeamList(result)               
-        })      
+          setProjectTeamList(result)
+        })
+    } else {
+      return
     }
   }, [value])
 
@@ -134,16 +136,17 @@ const [userid, setUserid] = useState(null)
             borderColor: COLORS.lightblue_600,
           },
         ]}
-        placeholderStyle={{ fontSize: 16, color: COLORS.gray }
+        placeholderStyle={{ ...FONTS.h3, color: COLORS.black, textTransform: 'capitalize' }
         }
-        selectedTextStyle={{ color: COLORS.darkGray }
+        selectedTextStyle={{ color: COLORS.black, ...FONTS.h4, textTransform: "capitalize", }
         }
-        containerStyle={{borderRadius:5}}
-        inputSearchStyle={{ color: COLORS.gray, height: 40,borderRadius:5,padding:-5 }}
+        containerStyle={{}}
+        inputSearchStyle={{ color: COLORS.darkGray, height: 30, borderRadius: 5, padding: 5, ...FONTS.h4 }}
         iconStyle={{
           height: 28
           // fontSize: 16, 
         }}
+
         data={ProList}
         search
         maxHeight={200}
@@ -151,6 +154,7 @@ const [userid, setUserid] = useState(null)
         valueField="value"
         placeholder={'Select Project'}
         searchPlaceholder="Search..."
+
         value={value}
         onFocus={() =>
           setProListIsFocus(true)
@@ -168,7 +172,7 @@ const [userid, setUserid] = useState(null)
       <ScrollView contentContainerStyle={{ height: SIZES.height }} horizontal={false}>
         <View
           style={{
-            flex: 1, 
+            flex: 1,
             borderColor: COLORS.lightblue_400,
             borderWidth: 1,
             padding: SIZES.base,
@@ -178,7 +182,7 @@ const [userid, setUserid] = useState(null)
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           <View >
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value}/>
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}

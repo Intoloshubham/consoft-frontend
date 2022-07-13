@@ -24,6 +24,7 @@ const Stock = () => {
                 style={{
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
+                    paddingVertical: 3,
                     width: SIZES.width * 0.35,
                     alignItems: "center",
                     justifyContent: "space-between",

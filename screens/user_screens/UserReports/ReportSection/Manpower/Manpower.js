@@ -31,7 +31,7 @@ const Manpower = ({ projectTeamList, ProList,Main_drp_pro_value }) => {
                 style={{
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
-                    // paddingVertical: 3,
+                    paddingVertical: 3,
                     // marginBottom: -SIZES.base,
                     width: SIZES.width * 0.35,
                     alignItems: "center",
@@ -43,7 +43,7 @@ const Manpower = ({ projectTeamList, ProList,Main_drp_pro_value }) => {
                     elevation: 1
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.body3, { color: COLORS.darkGray }]}>Manpower</Text>
+                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.darkGray}]}>Manpower</Text>
                 </View>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <TouchableOpacity onPress={() => setTabCollapse(!TabCollapse)}>

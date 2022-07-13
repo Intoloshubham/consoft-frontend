@@ -9,7 +9,7 @@ import {
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
 import styles from '../../ReportStyle.js'
-import {EditDeletebuttons} from '../../../index.js'
+import { EditDeletebuttons } from '../../../index.js'
 import moment from 'moment';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 
@@ -57,8 +57,8 @@ const ReportDateTimeHeader = () => {
                 <View style={{ flexDirection: "row", justifyContent: "space-between", width: 115, alignSelf: "flex-start", marginLeft: -65 }}>
                     <View style={{ marginTop: SIZES.radius, justifyContent: 'center', backgroundColor: COLORS.lightblue_200, borderRadius: SIZES.base, borderWidth: 2, borderColor: COLORS.lightGray1, alignSelf: "center", paddingHorizontal: 5 }}>
                         <Text style={{
-                            ...FONTS.h4,
-                            color: COLORS.black,
+                            ...FONTS.h5,
+                            color: COLORS.red,
                         }}
                         >
                             Date: {date.toLocaleDateString()}
@@ -96,10 +96,10 @@ const ReportDateTimeHeader = () => {
         <>
             <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: SIZES.base * 3 }}>
                 <View >
-                    <Text style={[FONTS.body4, { color: COLORS.black, fontWeight: "500" }]}>Date:{' ' + current_dat}</Text>
+                    <Text style={{ ...FONTS.h5, color: COLORS.black }}>Date:{' ' + current_dat}</Text>
                 </View>
                 <View>
-                    <Text style={[FONTS.body4, { color: COLORS.black, fontWeight: "500" }]}>Time:{' ' + current_Time}</Text>
+                    <Text style={{ ...FONTS.h5, color: COLORS.black }}>Time:{' ' + current_Time}</Text>
                 </View>
                 <View style={{ left: SIZES.base * 3, top: -SIZES.base * 0.1 }}>
                     {<EditDeletebuttons edit_size={18} del_size={20} />}

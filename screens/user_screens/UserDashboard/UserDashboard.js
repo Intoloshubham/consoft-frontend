@@ -152,9 +152,9 @@ const UserDashboard = ({ navigation, route }) => {
         </TouchableOpacity>
         {doneModalnum ? (<DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />) : null}
       </View>
-      <View style={styles.report_section_title}>
+      {/* <View style={styles.report_section_title}>
         <Text style={styles.avai_text}>Reports</Text>
-      </View>
+      </View> */}
       {/* <View>
         <TouchableOpacity
           style={styles.create_new_report_btn}

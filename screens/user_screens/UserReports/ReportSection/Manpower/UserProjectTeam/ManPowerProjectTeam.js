@@ -45,26 +45,27 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                 setUserRole(result)
             })
     }, [])
-    
-    useMemo(() => {
-        if (UserRole && ProjectTeamName) {
-            const MerUseRoleProjeArray = [
-                UserRole,
-                ...ProjectTeamName
-            ]
-            setMergeRolePro()
-        }
-    }, [UserRole, ProjectTeamName])
-    // console.log(MerUseRoleProjeArray)
+
+    // useMemo(() => {
+    //     if (UserRole && ProjectTeamName) {
+    //         const MerUseRoleProjeArray = [
+    //             UserRole,
+    //             ...ProjectTeamName
+    //         ]
+    //         setMergeRolePro(MerUseRoleProjeArray)
+    //     }
+    // }, [UserRole, ProjectTeamName])
+    // console.log(mergeRolePro)
     //   console.log("array..................")
     //project team list collapse 
     const _project_team = (item, index) => {
+        // console.log("item..4.............")
         // console.log(item);
         LayoutAnimation.easeInEaseOut();
         return (
             <>
                 <TouchableOpacity
-                    style={[header,
+                    style={[header, 
                         {
                             width: SIZES.width * 0.7,
                             justifyContent: "center",
@@ -113,7 +114,6 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                     <View
                         style={{}}
                     >
-                                            
                         <FlatList
                             data={ProjectTeamName}
                             horizontal={false}
@@ -121,16 +121,12 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                             nestedScrollEnabled={true}
                             maxHeight={100}
                             renderItem={({ item, index }) => _project_team(item, index)}
-                            keyExtractor={(item, index) => index.toString()}
+                            keyExtractor={(item, index) => index.toString()}                
                         />
-                        {/* <SectionList
-                            sections={MerUseRoleProjeArray}
-                            keyExtractor={(item, index) => item._id}
-                            renderItem={({ item, index }) => _project_team(item, index)}
-                            renderSectionHeader={({ section: { item } }) => (
-                                <Text style={styles.header}>{item.user_role}</Text>
-                            )}
-                        /> */}
+                        {
+
+                        }
+            
                     </View>
                 )
             }

@@ -158,7 +158,7 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
         if (data.status == '200') {
           setContractorName('')
           setContractorPhone('')
-          Get_Contractor_Data()
+          // Get_Contractor_Data()
         }
         showToast();
       })
@@ -169,16 +169,19 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
 
   //getting contractor data functions
   useMemo(() => { 
-    if (Main_drp_pro_value) {
+    if (Main_drp_pro_value || postContData) {
       const data = Get_Contractor_Data(Main_drp_pro_value)
       data.then(res => res.json())
         .then(result => { 
-          console.log("report list")
+          // console.log("report list")
           console.log(Report_list)
-          setReport_list(result)
+          
+          setReport_list(result)            
         })      
+    }else{
+      alert("Select Project first!")
     }
-  }, [postContData || Main_drp_pro_value])
+  }, [postContData,Main_drp_pro_value])
 
 
 
@@ -758,10 +761,7 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
   //flatlist head render funciton
   //collapse contractor 
   const _head = (item, index) => {
-    // console.log("Maiin.......")
-    // console.log(Main_drp_pro_value)
-    // console.log("Project......")
-    // console.log(item.project_id)
+
     LayoutAnimation.easeInEaseOut();
     const open = active == index
     return (
@@ -783,7 +783,6 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
             }}
             activeOpacity={1}>
             <Text style={[FONTS.body5, { color: COLORS.black, letterSpacing: 1, textAlign: "left" }]}>
-              {/* {Main_drp_pro_value==item.project_id?  item.contractor_name:<Text>Nothing to Show!</Text>} */}
               {item.contractor_name}
             </Text>
           </View>
