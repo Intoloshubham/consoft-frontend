@@ -27,6 +27,7 @@ import Tracker from './Tracker/Tracker';
 import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
 import Quantitywork from './Stock/Tools/Quantitywork'
+import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1'
 
 export {
   Account,
@@ -57,5 +58,6 @@ export {
   Suppliers,
   SubmittedWorks,
   Optiontype,
-  Quantitywork
+  Quantitywork,
+  ToolsAndMachinery1,
 };

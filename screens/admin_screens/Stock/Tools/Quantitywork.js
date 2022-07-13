@@ -122,33 +122,41 @@ const Quantitywork = () => {
     try {
       const resp = await fetch(`${config.API_URL}quantity-report`);
       const tabledata = await resp.json();
-      // console.log(tabledata); 
-     const data= tabledata.map((data) => {
-        return data.quantity;
-        // data.quantity.map((ab)=>{
-        //   return(console.log(ab.particular))
-        // })
-      });
-      const obj={}
-const val=data[0].map((res)=>{
-  Object.assign(obj,res)
-})
-console.log(obj)
-data[1].map(res=>{ Object.assign(val,res)})
-    } catch (error) {
-      console.log('error', error);
+      console.log(tabledata);
+      // setquantityitemdata(quantitydata);
     }
-  };
-  // console.log(tabalshowdatamore)
-  // useMemo(() => {
-  //   if (tabalshowdatamore) {
-  //     tabalshowdatamore[1].map((data, key) => {
-  //       console.log(data); 
-  //     });      
-  //   }else{
-  //     console.log("no data found")
-  //   }
-  // },[tabalshowdatamore]);
+    catch (error) {
+    console.log('error', error);
+    }
+  }
+
+//       // console.log(tabledata); 
+//      const data= tabledata.map((data) => {
+//         return data.quantity;
+//         // data.quantity.map((ab)=>{
+//         //   return(console.log(ab.particular))
+//         // })
+//       });
+//       const obj={}
+// const val=data[0].map((res)=>{
+//   Object.assign(obj,res)
+// })
+// console.log(obj)
+// data[1].map(res=>{ Object.assign(val,res)})
+//     } catch (error) {
+//       console.log('error', error);
+//     }
+//   };
+//   // console.log(tabalshowdatamore)
+//   // useMemo(() => {
+//   //   if (tabalshowdatamore) {
+//   //     tabalshowdatamore[1].map((data, key) => {
+//   //       console.log(data); 
+//   //     });      
+//   //   }else{
+//   //     console.log("no data found")
+//   //   }
+//   // },[tabalshowdatamore]);
 
   useEffect(() => {
     quantitytable();
