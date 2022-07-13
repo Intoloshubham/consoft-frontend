@@ -3,7 +3,7 @@ import {
   View,
   Text,
   Button,
-  StyleSheet, 
+  StyleSheet,
   Modal,
   TextInput,
   Alert,
@@ -11,11 +11,11 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
-  Image
+  Image,
 } from 'react-native';
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
-import {COLORS, FONTS, SIZES,icons} from '../../../../constants';
+import {COLORS, FONTS, SIZES, icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
 
 const url = 'http://192.168.1.99:8000/api/item';
@@ -127,8 +127,8 @@ const Items = () => {
       method: 'DELETE',
     });
     result = await result.json();
-    listData();
     console.log(result, alert('this item  deleted '));
+    listData();
   };
 
   // edit modal api
@@ -192,16 +192,34 @@ const Items = () => {
             <Text style={styles.title}>{item.item_name}</Text>
             <View
               style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-              <View style={{marginRight: 5}}>
-                <Button
-                  title="edit"
-                  onPress={() => {
-                    edititem(item._id, item.item_name, item.unit_id);
-                  }}
-                />
+              <View>
+                 <TouchableOpacity
+            onPress={() => {
+              edititem(item._id, item.item_name, item.unit_id);
+            }}>
+            <Image
+              source={icons.edit}
+              style={{
+                width: 18,
+                height: 18,
+                right: 15,
+                tintColor: COLORS.lightblue_900,
+              }}
+            />
+          </TouchableOpacity>
               </View>
-              <View style={{marginLeft: 10}}>
-                <Button title="X" onPress={() => DeleteItem(item._id)} />
+              <View>
+                <TouchableOpacity
+                  onPress={() => DeleteItem(item._id)}>
+                  <Image
+                    source={icons.delete_icon}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      tintColor: COLORS.red,
+                    }}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -223,7 +241,19 @@ const Items = () => {
   return (
     <View>
       <HeaderBar right={true} title="Items" />
-      <View style={{marginHorizontal: SIZES.padding}}>
+      <View>
+        <TextButton
+          label="Create Item"
+          buttonContainerStyle={{
+            height: 50,
+            alignItems: 'center',
+            marginHorizontal: SIZES.padding,
+            marginBottom: SIZES.padding,
+            borderRadius: SIZES.radius,
+            backgroundColor: COLORS.lightblue_700,
+          }}
+          onPress={() => setItemmodal(true)}
+        />
         {/* modal start  */}
         <Modal animationType="slide" transparent={false} visible={itemmodal}>
           <View
@@ -373,7 +403,8 @@ const Items = () => {
                       onChange={item => {
                         setValue(item._id);
                         setIsFocus(false);
-                      }}/>
+                      }}
+                    />
 
                     <TextButton
                       label="Save"
@@ -403,10 +434,11 @@ const Items = () => {
             marginHorizontal: SIZES.padding,
             marginBottom: SIZES.padding,
             borderRadius: SIZES.radius,
+            borderWidth:1
             // backgroundColor: COLORS.lightblue_700,
           }}>
           <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-            <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Items</Text>
+            <Text style={{...FONTS.h2, color: COLORS.darkGray,}}>Items</Text>
           </View>
           <FlatList
             maxHeight={410}
@@ -545,9 +577,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: 10,
+    // borderBottomWidth:1
   },
   title: {
     fontSize: 18,
+   
   },
   dropdown: {
     height: 50,

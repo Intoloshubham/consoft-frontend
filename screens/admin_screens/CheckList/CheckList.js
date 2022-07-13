@@ -6,11 +6,8 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  Alert,
-  FlatList,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   Image,
   LogBox,
 } from 'react-native';
@@ -19,16 +16,13 @@ import {
   FormInput,
   HeaderBar,
   TextButton,
-  Drop,
-  FloatingButton,
+  CustomDropdown,
 } from '../../../Components';
-import {SIZES, COLORS, icons, images, FONTS} from '../../../constants';
-import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
+import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import {Checkbox} from 'react-native-paper';
+import {getCompanyId, getToken} from '../../../services/asyncStorageService';
 import {Dropdown} from 'react-native-element-dropdown';
-import {loadOptions} from '@babel/core';
 
 const CheckList = () => {
   React.useEffect(() => {
@@ -48,9 +42,8 @@ const CheckList = () => {
   const [showdata, setshowdata] = useState([]);
 
   const [inputs, setInputs] = useState([{key: '', value: ''}]);
-  const [inputs1, setInputs1] = useState([{key: '', value: ''}]);
-
   const [inputslist, setInputslist] = useState([]);
+  // console.log(typ(inputslist))
 
   const [checklistId, setchecklistId] = useState('');
   const [checked, setChecked] = React.useState(false);
@@ -60,9 +53,38 @@ const CheckList = () => {
   const [work, setwork] = React.useState(false);
 
   //drop
-  const [data, setdata] = useState([]);
-  const [value, setvalue] = useState(null);
-  const [isFocus, setIsFocus] = React.useState(false);
+  // const [data, setdata] = useState([]);
+  // const [value, setvalue] = useState('');
+  // const [isFocus, setIsFocus] = React.useState(false);
+
+  const [openRole, setOpenRole] = React.useState(false);
+  const [roleValue, setRoleValue] = React.useState([]);
+  const [roleItems, setRoleItems] = React.useState([]);
+
+  // get company id
+  const [company_id_option_type, setCompany_id_option_type] = useState('');
+  const [accessTokenoptiontype_list, setAccessTokenoptiontype_list] =
+    useState('');
+
+  const _companyId = async () => {
+    const com_id = await getCompanyId();
+    setCompany_id_option_type(com_id);
+  };
+  // console.log(company_id_option_type);
+  //setting token
+  React.useEffect(() => {
+    (async () => await _companyId())();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const token = await getToken();
+      setAccessTokenoptiontype_list(token);
+    })();
+  });
+  //  console.log(accessTokenoptiontype_list);
+
+  //
 
   const addHandler = () => {
     const _inputs = [...inputs];
@@ -81,22 +103,13 @@ const CheckList = () => {
     _inputs[key].key = key;
     setInputs(_inputs);
   };
-  // const _selectdropdownhandler = (txt, index) => {
-  //   // console.log(txt);
-  //   const _select = [...drop];
-  //   // console.log("inti _select "+_select);
-  //   _select[index].value = txt.option_type;
-  //   _select[index].key = index;
-  //   setdrop(_select);
-  //   // console.log(value);
-  // };
 
   // create list funcation api save
   const createSave = () => {
     const data = {
       checklist_name: createlist,
       checklist_item: inputslist,
-      checklist_option_type_id: value,
+      checklist_option_type_id: roleValue,
     };
     // console.log(data);
     fetch('http://192.168.1.99:8000/api/checklists', {
@@ -110,7 +123,6 @@ const CheckList = () => {
       .then(data => {
         setcreatelist('');
         setInputslist('');
-        setvalue('');
         checklistItem();
         console.log('Success:', data, alert('createlist'));
         // {
@@ -122,13 +134,12 @@ const CheckList = () => {
         // }
         setlist(false);
       })
-
       .catch(error => {
         console.error('Error:', error);
       });
   };
 
-  // fatch  checklist data unig fatch api
+  // // fatch  checklist data unig fatch api
 
   const checklistItem = async () => {
     try {
@@ -146,69 +157,50 @@ const CheckList = () => {
     checklistItem();
   }, []);
 
-  const deleteChecklist = async id => {
-    try {
-      let result = await fetch(
-        'http://192.168.1.99:8000/api/checklists/' + id,
-        {
-          method: 'DELETE',
-        },
-      );
-      result = await result.json();
-      checklistItem();
-      console.log(result, alert('deleted'));
-    } catch (error) {
-      console.log('error', error.message);
-    }
-  };
-
-  // useEffect(() => {
-  //   deleteChecklist();
-  // },[])
   // update createlist
-  const update = (id, name, item,option_id) => {
+  const update = (id, name, type, items) => {
+    console.log(id, name, items, type);
     setupdatelist(true);
     setchecklistId(id);
-    // console.log(id);
     setcreatelist(name);
-    setvalue(option_id.map((option)=>{
-      return (
-        (option.option_type)
-      )}))
-     setInputs(item.map(ele => {
-      return(ele.checklist_item)}));
-     };
-    // console.log(value);
-    // let obj_data = {...inputs};
-    // setInputs1(obj_data);
+    setInputs(
+      items.map(ele => {
+        return {
+          key: ele.checklist_item,
+          value: ele.checklist_item,
+        };
+      }),
+    );
+    // console.log(inputs);
 
-    // const list_text_array1 = [{...inputs}];
-    // useEffect(() => {
-    //   inputs.map(ele => {
-    //     list_text_array.push(ele.value);
-    //     // console.log("inner  "+list_text_array);
-    //     setInputs1(list_text_array1);
-    //   });
-    // }, [inputs]);
+    //  setRoleValue(type);
 
-    // console.log(inputs1);
+    // item.map(ele => {
+    //   return {
+    //     label: ele.option_type,
+    //     value: ele.checklist_option_type_id,
+    //   };
+    // }),
+    // console.log(roleValue);
+    //
+    // console.log(id);
 
-    // console.log(inputslist);
-      
-      // //  console.log(inputs); 
-      //  const inparr=inputs.map((ele)=>{
-      //   console.log(ele)
-      //   })
-        
-      // console.log(inparr)
+    // setRoleValue(
+    //   type.map(ele => {
+    //     console.log(ele);
+    //     return {label: ele.option_type, value: ele._id};
+    //   }),
+    // );
+    //
+  };
 
   const updatechecklistdata = () => {
     const objdata = {
       checklist_name: createlist,
       checklist_item: inputslist,
-      checklist_option_type_id: value
+      checklist_option_type_id: roleValue,
     };
-    // console.log(objdata);
+    //  console.log(objdata);
     fetch('http://192.168.1.99:8000/api/checklists/' + checklistId, {
       method: 'PUT',
       headers: {
@@ -224,7 +216,7 @@ const CheckList = () => {
         console.log('Success:', data, alert(' update'));
         createlist === ' ';
       });
-    setupdatelist(false);
+    // setupdatelist(false);
   };
 
   const createlistshowdata = (element, index) => {
@@ -278,7 +270,12 @@ const CheckList = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() =>
-                    update(element._id, element.checklist_name, element.list,element.list)
+                    update(
+                      element._id,
+                      element.checklist_name,
+                      element.list,
+                      element.list,
+                    )
                   }>
                   <Image
                     source={icons.edit}
@@ -315,7 +312,7 @@ const CheckList = () => {
                           textTransform: 'capitalize',
                           marginTop: SIZES.base,
                           flexDirection: 'row',
-                           justifyContent: 'space-between',
+                          justifyContent: 'space-between',
                           //  alignItems: 'center',
                         }}>
                         <Text
@@ -326,7 +323,6 @@ const CheckList = () => {
                             // marginTop: SIZES.base,
                           }}>
                           {ele.checklist_item}
-                          
                         </Text>
                         <Text>{ele.option_type}</Text>
                       </View>
@@ -341,56 +337,69 @@ const CheckList = () => {
     );
   };
 
-  const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && {color: 'blue'}]}>
-          Dropdown label
-        </Text>
-      );
-    }
-    return null;
-  };
+  const option_type_data = async () => {
+    const resp = await fetch(
+      'http://192.168.1.99:8000/api/checklist-option-type',
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authorization: 'Bearer ' + accessTokenoptiontype_list,
+        },
+      },
+    );
+    let dataitem = await resp.json();
+    // console.log(dataitem)
+    const datafromapi = dataitem.map((ele, key) => {
+      return {
+        label: ele.option_type,
+        value: ele._id,
+      };
+    });
+    setRoleItems(datafromapi);
 
-  const check = async () => {
-    try {
-      const resp = await fetch(
-        'http://192.168.1.99:8000/api/checklist-option-type',
-      );
-      let dataitem = await resp.json();
-      setdata(dataitem);
-    } catch (error) {
-      console.log('error', error);
-    }
+    // console.log(datafromapi)
   };
-
   useEffect(() => {
-    check();
-  }, []);
+    option_type_data();
+  }, [roleItems]);
 
   const list_text_array = [];
   useEffect(() => {
     inputs.map(ele => {
       list_text_array.push(ele.value);
-      // console.log("inner  "+list_text_array);
+      //  console.log("inner  "+list_text_array);
       setInputslist(list_text_array);
     });
   }, [inputs]);
-  // console.log("outer loop "+inputslist);
-  // console.log(typeof(inputslist));
+  //  console.log("outer loop "+inputslist);
+  //  console.log(typeof(inputslist));
 
-  const addmodalsave = name => {
-    setaddmodal(true);
-    setcreatelist(name);
-    // console.log(name);
-  };
-
-  function edit(e, input) {
-    input.value;
-    // console.log(input.value);
-  }
+  // const addmodalsave = name => {
+  //   setaddmodal(true);
+  //   setcreatelist(name);
+  //   // console.log(name);
+  // };
 
   // console.log(data)
+
+  const deleteChecklist = async checklistId => {
+    let result = await fetch(
+      'http://192.168.1.99:8000/api/checklists/' + checklistId,
+      {
+        method: 'DELETE',
+      },
+    );
+    result = await result.json();
+    console.log(result, alert(' deleted '));
+    checklistItem();
+  };
+
+  // useEffect(()=>{
+  //   deleteChecklist();
+  // })
+
   return (
     <View>
       <HeaderBar right={true} title="Project Checklist" />
@@ -400,10 +409,11 @@ const CheckList = () => {
             style={styles.button}
             onPress={() => {
               setlist(true);
+              //  alert('')
             }}>
             <Title style={{color: 'white'}}>Create list</Title>
           </TouchableOpacity>
-          <Modal visible={list} animationType="slide" transparent={false}>
+          <Modal visible={list} animationType="slide" transparent={true}>
             <View style={{flex: 1, backgroundColor: '#000000aa'}}>
               <View
                 style={{
@@ -411,6 +421,7 @@ const CheckList = () => {
                   padding: 20,
                   borderRadius: 20,
                   margin: 10,
+                  flex: 1,
                 }}>
                 <View>
                   <Pressable onPress={setlist}>
@@ -433,16 +444,35 @@ const CheckList = () => {
                     }}
                   />
                 </View>
+                <View>
+                  <CustomDropdown
+                    placeholder="Select role"
+                    open={openRole}
+                    value={roleValue}
+                    items={roleItems}
+                    setOpen={setOpenRole}
+                    setValue={setRoleValue}
+                    setItems={setRoleItems}
+                    categorySelectable={true}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    // maxHeight={150}
+                    // zIndex={-2000}
+                    //  zIndexInverse={2000}
+                  />
+                </View>
+
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'flex-end',
-                    marginTop: 10,
+                    marginTop: 50,
                   }}>
                   <TouchableOpacity onPress={addHandler}>
                     <Text
                       style={{
-                        ...FONTS.body3,
+                        // ...FONTS.body3,
                         borderWidth: 1,
                         paddingLeft: 10,
                         paddingRight: 10,
@@ -453,6 +483,7 @@ const CheckList = () => {
                     </Text>
                   </TouchableOpacity>
                 </View>
+
                 <View>
                   <ScrollView style={styles.inputsContainer}>
                     {inputs.map((input, key) => (
@@ -469,6 +500,7 @@ const CheckList = () => {
                           label="List"
                           value={input.value}
                           onChange={inputs => {
+                            // console.log(inputs);
                             setInputs(inputs);
                             inputHandler(inputs, key);
                           }}
@@ -489,30 +521,6 @@ const CheckList = () => {
                         </View>
                       </View>
                     ))}
-
-                    <View>
-                      <Dropdown
-                        style={[
-                          styles.dropdown,
-                          isFocus && {borderColor: 'blue'},
-                        ]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={data}
-                        labelField="option_type"
-                        valueField="_id"
-                        placeholder={!isFocus ? 'Select' : '...'}
-                        value={value}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                          setvalue(item._id);
-                          setIsFocus(false);
-                        }}
-                      />
-                    </View>
                   </ScrollView>
                 </View>
 
@@ -575,7 +583,7 @@ const CheckList = () => {
                   </Pressable>
                   <Title>Username CheckList</Title>
                 </View>
-
+                <ScrollView style={{maxHeight:500}}>
                 {showdata !== undefined
                   ? showdata.map((element, index) => {
                       return (
@@ -608,6 +616,37 @@ const CheckList = () => {
                                   {element.checklist_name}
                                 </Text>
                               </View>
+                             
+                              {element.list !== undefined
+                                ? element.list.map((ele, index) => {
+                                    return (
+                                      <View
+                                        key={index}
+                                        style={{
+                                          // ...FONTS.body3,
+                                          // color: COLORS.darkGray,
+                                          // textTransform: 'capitalize',
+                                          // marginTop: SIZES.base,
+                                         flexDirection: 'row',
+                                          // // justifyContent: 'space-between',
+                                          // //  alignItems: 'center',
+                                          marginLeft:50
+                                        }}>
+                                        <Text
+                                          style={{
+                                            ...FONTS.body3,
+                                            color: COLORS.darkGray,
+                                            textTransform: 'capitalize',
+                                            // marginTop: SIZES.base,
+                                          }}>
+                                          {ele.checklist_item}
+                                        </Text>
+                                        <Text>{ele.option_type}</Text>
+                                      </View>
+                                    );
+                                  })
+                                : null}
+                               
                               <View
                                 style={{
                                   flexDirection: 'row',
@@ -642,6 +681,7 @@ const CheckList = () => {
                       );
                     })
                   : null}
+                   </ScrollView>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -672,7 +712,7 @@ const CheckList = () => {
                   padding: 30,
                   borderRadius: 20,
                   margin: 10,
-                  flex:1
+                  flex: 1,
                 }}>
                 <View
                   style={{
@@ -697,15 +737,32 @@ const CheckList = () => {
                       setcreatelist(createlist);
                     }}
                     value={createlist}
-                    />
-                    {/* {console.log(createlist)} */}
+                  />
+                  {/* {console.log(createlist)} */}
                 </View>
-
+                <View>
+                  <CustomDropdown
+                    placeholder="Select role"
+                    open={openRole}
+                    value={roleValue}
+                    items={roleItems}
+                    setOpen={setOpenRole}
+                    setValue={setRoleValue}
+                    setItems={setRoleItems}
+                    categorySelectable={true}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    // maxHeight={150}
+                    // zIndex={-2000}
+                    //  zIndexInverse={2000}
+                  />
+                </View>
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'flex-end',
-                    marginTop: 10,
+                    marginTop: 50,
                   }}>
                   <TouchableOpacity onPress={addHandler}>
                     <Text
@@ -743,12 +800,11 @@ const CheckList = () => {
 
                         <FormInput
                           label="name"
-                           value={input.value}
+                          value={input.value}
                           onChange={inputs => {
                             setInputs(inputs);
-                             inputHandler(inputs, key);
+                            inputHandler(inputs, key);
                           }}
-                         
                         />
                         <TouchableOpacity onPress={() => deleteHandler(key)}>
                           <Image
@@ -765,29 +821,6 @@ const CheckList = () => {
                         </TouchableOpacity>
                       </View>
                     ))}
-                    <View>
-                      <Dropdown
-                        style={[
-                          styles.dropdown,
-                          isFocus && {borderColor: 'blue'},
-                        ]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={data}
-                        labelField="option_type"
-                        valueField="_id"
-                        placeholder={!isFocus ? 'Select' : '...'}
-                        value={value}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                          setvalue(item._id);
-                          setIsFocus(false);
-                        }}
-                      />
-                    </View>
                   </ScrollView>
                 </View>
                 <TextButton
@@ -909,30 +942,7 @@ const CheckList = () => {
                     ))}
                   </ScrollView>
                 </View>
-                <View>
-                  <Dropdown
-                    style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={data} 
-                    labelField="option_type"
-                    valueField="_id"
-                    placeholder={!isFocus ? 'Select' : '...'}
-                    value={value}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                      setvalue(item._id);
-                      setIsFocus(false);
-                      // setValue([{_id:txt._id,option_type:txt.option_type}]);
-                      // _selectdropdownhandler(txt, index);
-                      // console.log("setvalue    "+value.option_type);
-                      // addbox(key,value);
-                    }}
-                  />
-                </View>
+
                 <View>
                   <TextButton
                     label="save"
@@ -964,7 +974,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   inputsContainer: {
-    maxHeight: 300,
+    maxHeight: 200,
   },
   sa: {
     maxHeight: 100,
