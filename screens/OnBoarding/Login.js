@@ -102,9 +102,9 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
 
-    // console.log(UserData)
+    console.log(UserData)
     const res = await loginUser(UserData);
-    // console.log(res)
+    console.log(res) 
 
     let result;
     if (res.data) {

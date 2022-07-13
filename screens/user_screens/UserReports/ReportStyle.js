@@ -11,7 +11,7 @@ export default styles = StyleSheet.create({
         margin: SIZES.base * 0.3,
         borderRadius: 2,
         width: SIZES.width * 0.7,
-        elevation: 5
+        elevation: 2
     },
 
     con_body: {
@@ -59,7 +59,20 @@ export default styles = StyleSheet.create({
         paddingHorizontal: 8,
         marginTop: 20,
         marginBottom:5,
-        width:377
+        width:SIZES.width*1*0.962,
+        borderRadius:2
+    },
+    cont_Project_list_drop: {
+        height: 38,
+        borderRadius:5,
+        borderWidth: 1,
+        borderColor:COLORS.transparentBlack1,
+        alignSelf:"center",
+        paddingHorizontal: 8,
+        marginTop: 20,
+        marginBottom:5,
+        width:347,
+        bottom:-15
     }
 
 })
