@@ -9,15 +9,12 @@ import {
   FlatList,
   ScrollView,
   Image,
-  Button,
 } from 'react-native';
-import {Card, Title, DataTable} from 'react-native-paper';
 import {FormInput, TextButton, HeaderBar} from '../../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../../constants';
-import {Dropdown} from 'react-native-element-dropdown';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import config from '../../../../config';
+import { getCompanyId,getToken } from '../../../../services/asyncStorageService';
+
 
 const ToolAndMachinery1 = () => {
   const [toolmodal, settoolmodal] = useState(false);
@@ -27,6 +24,31 @@ const ToolAndMachinery1 = () => {
 
   const [tooldata, settooldata] = useState([]);
   const [toolsId, settoolsId] = useState('');
+
+   //get company id 
+   const [company_id, setCompany_id] = useState('')
+   const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
+
+   const _companyId =async () => {
+   
+    const _id = await getCompanyId();
+    setCompany_id(_id);
+  }
+  //  console.log(company_id);
+  //setting token
+  React.useEffect(() => {
+    (async () => await _companyId())();
+  }, [])
+
+
+  useEffect(() => {
+    (async () => {
+      const token = await getToken();
+      setAccessTokenoptiontype(token);
+    })();
+  });
+  //  console.log(accessTokenoptiontype);
+
 
   const tools = (id, name, qty) => {
     setupdatemodal(true);
@@ -40,6 +62,7 @@ const ToolAndMachinery1 = () => {
     const toolsupdate = {
       tools_machinery_name: Toolsname,
       qty: Toolquantity,
+      company_id:company_id,
     };
     fetch('http://192.168.1.99:8000/api/tools-machinery/' + `${toolsId}`, {
       method: 'PUT',
@@ -54,6 +77,7 @@ const ToolAndMachinery1 = () => {
         fetchDatatools();
         setToolsname('');
         console.log('Success:', data);
+        
         {
           Toolsname == ''
             ? alert('plz fill Tools name')
@@ -68,7 +92,14 @@ const ToolAndMachinery1 = () => {
   };
 
   const fetchDatatools = async () => {
-    const resp = await fetch('http://192.168.1.99:8000/api/tools-machinery');
+    const resp = await fetch('http://192.168.1.99:8000/api/tools-machinery',{
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer '+accessTokenoptiontype ,
+      },
+    })
     const data = await resp.json();
     // console.log(data);
     settooldata(data);
@@ -104,6 +135,7 @@ const ToolAndMachinery1 = () => {
       body: JSON.stringify({
         tools_machinery_name: Toolsname,
         qty: Toolquantity,
+        company_id:company_id,
       }),
     })
       .then(response => response.json())
@@ -112,13 +144,14 @@ const ToolAndMachinery1 = () => {
         setToolquantity('');
         fetchDatatools();
         console.log('Success:', data);
-        {
-          Toolsname == ''
-            ? alert('plz fill Tools name')
-            : data.message == 'This Tools is already exist'
-            ? alert('This Tools is already exist')
-            : alert(' create ');
-        }
+        
+        // {
+        //   Toolsname == ''
+        //     ? alert('plz fill Tools name')
+        //     : data.message == 'This Tools is already exist'
+        //     ? alert('This Tools is already exist')
+        //     : alert(' create ');
+        // }
       })
       .catch(error => {
         console.error('Error:', error);

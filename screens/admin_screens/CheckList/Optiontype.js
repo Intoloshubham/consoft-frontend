@@ -61,6 +61,7 @@ const Optiontype = () => {
   const updateOption = () => {
     const optiondataupdate = {
       option_type: optionTypename,
+      company_id:company_id,
     };
     // console.log(optiondataupdate);
     fetch('http://192.168.1.99:8000/api/checklist-option-type/' + Optionid, {
@@ -76,6 +77,7 @@ const Optiontype = () => {
         check();
         setoptionTypename('');
         console.log('Success:', data);
+
       })
       .catch(error => {
         console.error('Error:', error);
@@ -83,27 +85,22 @@ const Optiontype = () => {
   };
 
   const check = async () => {
-    try {
       const resp = await fetch(
         'http://192.168.1.99:8000/api/checklist-option-type',{
         method: 'GET',
         headers: {
-          Accept: 'application/json',
           'Content-Type': 'application/json',
           'authorization': 'Bearer '+accessTokenoptiontype ,
         },
-    });
+      });
       let dataitem = await resp.json();
-       //console.log(dataitem);
+      //  console.log(dataitem);
        setOptiondata(dataitem);
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
+  }
 
   useEffect(() => {
     check();
-  }, []);
+  }, [Optiondata]);
 
   const submit = () => {
     const optiondata = {
@@ -121,6 +118,7 @@ const Optiontype = () => {
       })
         .then(response => response.json())
         .then(data => {
+          check();
           console.log('Success:', data);
         });
     } catch (error) {
@@ -282,13 +280,10 @@ const Optiontype = () => {
             <TextButton
               label="Option Type"
               buttonContainerStyle={{
-                height: 40,
-                // marginHorizontal: SIZES.padding,
-                // marginBottom: SIZES.padding,
-                borderRadius: SIZES.radius,
-                backgroundColor: COLORS.lightblue_700,
-                width:"50%"
+                paddingHorizontal: SIZES.base,
+                borderRadius: 5,
               }}
+              labelStyle={{...FONTS.h5}}
               onPress={() => setoptiontypemodal(true)}
             />
           </View>

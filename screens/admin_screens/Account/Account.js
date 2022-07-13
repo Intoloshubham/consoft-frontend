@@ -219,6 +219,13 @@ const Account = () => {
               image={icons.right_arr}
               onPress={() => navigation.navigate('Optiontype')}
             />
+             <LineDivider />
+            <ProfileValue
+              icon={icons.units}
+              value="ToolsAndMachinery1"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('ToolsAndMachinery1')}
+            />
           </View>
         </Collapsible>
         <LineDivider />

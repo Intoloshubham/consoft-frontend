@@ -1,7 +1,8 @@
-import React from 'react';
+import React,{useState,useRef} from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
+import { getUserId } from '../services/asyncStorageService.js';
 import { COLORS, FONTS, SIZES, icons, images } from '../constants';
 import {
   UserDashboard,
@@ -14,30 +15,43 @@ import {
 
 const Tab = createBottomTabNavigator();
 
-const TabBarCustomButton = ({ children, onPress }) => {
-  return (
-    <TouchableOpacity
-      style={{
-        top: -15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        ...styles.shadow,
-      }}
-      onPress={onPress}>
 
-      <LinearGradient
-        colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
-        style={{
-          width: 60,
-          height: 60,
-          borderRadius: 35,
-        }}>
-        {children}
-      </LinearGradient>
-    </TouchableOpacity>
-  );
-};
+
+
 const UserTabs = ({navigation,route}) => {
+  
+  
+  const TabBarCustomButton = ({ children, onPress }) => {
+    
+
+    
+    
+    return (
+      <TouchableOpacity
+          style={{
+            top: -15,
+            justifyContent: 'center',
+            alignItems: 'center',
+            ...styles.shadow,
+          }}
+          onPress={()=>{
+            // Get_UserId_Data()
+            onPress()
+            }}>
+    
+          <LinearGradient
+            colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 35,
+            }}>
+            {children}
+          </LinearGradient>
+        </TouchableOpacity>
+      );
+    };
+    
   // const selectedIdProjects = route.params.selectedIdProjects;
   return (
     <Tab.Navigator
@@ -134,7 +148,7 @@ const UserTabs = ({navigation,route}) => {
       <Tab.Screen
         name="Report"
         component={UserReports}
-        // initialParams={{selectedIdProjects: selectedIdProjects}}
+        // initialParams={{userId: useridRef}}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
