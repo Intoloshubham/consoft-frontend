@@ -19,7 +19,7 @@ import {
   StocksAndInventry,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  CheckList, 
+  CheckList,
   Items,
   Unit,
   CompanyTeam,
@@ -52,9 +52,7 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-
-          initialRouteName={'Home'}>
-
+          initialRouteName={'Login'}>
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen

@@ -32,6 +32,10 @@ export const COLORS = {
   warning_200: '#fecaca',
   primary: '#FF6C44', //orange
   // transparentPrimary: 'rgba(227, 120, 75, 0.4)',
+
+  //
+  red_300: '#fca5a5',
+  red_600: '#dc2626',
   transparentPrimary: '#bae6fd',
   orange: '#FFA133',
   lightOrange: '#FFA133',

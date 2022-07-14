@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import {COLORS} from '../constants';
 
 const ProgressBar = ({containerStyle, progress}) => {
@@ -7,9 +7,9 @@ const ProgressBar = ({containerStyle, progress}) => {
     <View
       style={{
         width: '100%',
-        height: 13,
+        height: 10,
         borderRadius: 10,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.lightGray1,
         ...containerStyle,
       }}>
       <View
@@ -19,8 +19,20 @@ const ProgressBar = ({containerStyle, progress}) => {
           height: '100%',
           width: progress,
           borderRadius: 10,
-          backgroundColor: COLORS.success_300,
-        }}></View>
+          backgroundColor: COLORS.rose_600,
+          justifyContent: 'center',
+        }}>
+        <Text
+          style={{
+            fontSize: 6,
+            textAlign: 'right',
+            color: COLORS.white,
+            right: 10,
+            fontWeight: 'bold',
+          }}>
+          {progress}%
+        </Text>
+      </View>
     </View>
   );
 };

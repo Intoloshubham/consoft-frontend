@@ -89,12 +89,12 @@ const Account = () => {
           }}
           onPress={() => alert('Upload Image')}>
           <Image
-            source={images.Profile7}
+            source={images.civil_eng}
             style={{
               width: '100%',
               height: '100%',
-              borderRadius: 40,
-              borderWidth: 2,
+              borderRadius: 15,
+              borderWidth: 3,
               borderColor: COLORS.white,
             }}
           />

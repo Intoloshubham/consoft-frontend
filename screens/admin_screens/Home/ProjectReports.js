@@ -23,89 +23,34 @@ const ProjectReports = () => {
   const repData = [
     {
       id: 1,
-      name: 'intolo india jabalpur',
-      cost: 12,
-      timeline: '22/05/22',
+      name: 'Dream Homes',
+      cost: '12/100',
+      startdate: '10/05/22',
       h_name: 'cost',
       category_id: 1,
     },
     {
       id: 2,
-      name: 'sdplweb',
-      cost: 11,
-      timeline: '20/05/22',
+      name: 'Shawn elizey',
+      cost: '40/100',
+      startdate: '3/01/22',
       h_name: 'timeline',
-      category_id: 1,
+      category_id: 2,
     },
     {
       id: 3,
-      name: 'SHrikhande deigns pvt ltd',
-      cost: 11,
-      timeline: '20/05/22',
+      name: 'JP contruction',
+      cost: '60/100',
+      startdate: '10/09/21',
       h_name: 'timeline',
-      category_id: 1,
+      category_id: 3,
     },
     {
       id: 4,
-      name: 'Untangle AI',
-      cost: 9,
-      timeline: '15/05/22',
+      name: 'CDS builders',
+      cost: '45/100',
+      // startdate: '15/05/22',
       h_name: 'stock',
-      category_id: 2,
-    },
-    {
-      id: 5,
-      name: 'Untangle AI',
-      cost: 9,
-      timeline: '15/05/22',
-      h_name: 'stock',
-      category_id: 2,
-    },
-    {
-      id: 6,
-      name: 'Paytm',
-      cost: 28,
-      timeline: '13/05/22',
-      h_name: 'manpower',
-      category_id: 2,
-    },
-    {
-      id: 7,
-      name: 'Paytm',
-      cost: 28,
-      timeline: '13/05/22',
-      h_name: 'manpower',
-      category_id: 2,
-    },
-    {
-      id: 8,
-      name: 'Microsoft',
-      cost: 15,
-      timeline: '19/05/22',
-      h_name: 'quality',
-      category_id: 3,
-    },
-    {
-      id: 9,
-      name: 'Microsoft',
-      cost: 15,
-      timeline: '19/05/22',
-      h_name: 'safety',
-      category_id: 3,
-    },
-    {
-      id: 10,
-      name: 'Microsoft',
-      cost: 15,
-      timeline: '19/05/22',
-      h_name: 'safety',
-      category_id: 3,
-    },
-    {
-      id: 11,
-      name: 'Microsoft',
-      cost: 15,
-      h_name: 'technical',
       category_id: 4,
     },
   ];
@@ -141,9 +86,9 @@ const ProjectReports = () => {
   };
 
   const [nullIndex, setNullIndex] = React.useState('');
-  const [heading1, setHeading1] = React.useState([]);
-  const [heading2, setHeading2] = React.useState([]);
-  const [newData, setNewData] = React.useState('');
+  const [heading1, setHeading1] = React.useState('');
+  const [heading2, setHeading2] = React.useState('');
+  const [newData, setNewData] = React.useState(repData);
 
   function renderReportData() {
     const renderItem = ({item}) => {
@@ -173,12 +118,12 @@ const ProjectReports = () => {
 
           <Text
             style={{
-              ...FONTS.h4,
+              ...FONTS.h5,
               color: COLORS.black,
               flex: 1,
               textAlign: 'right',
             }}>
-            {item.timeline}
+            {item.startdate}
           </Text>
         </View>
       );
