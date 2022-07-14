@@ -21,8 +21,6 @@ import { getToken, getUserId } from '../../../services/asyncStorageService';
 import Config from '../../../config'
 const UserReports = ({ route }) => {
 
-  // const { selectedIdProjects } = route.params; 
-
   LogBox.ignoreLogs(["EventEmitter.removeListener"]);
   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
 
@@ -41,60 +39,89 @@ const UserReports = ({ route }) => {
   //for saving projects
   const [selectedIdProjects, setSelectedIdProjects] = useState([])
 
-  //getting user id state
-  const [userId, setUserId] = useState(null)
 
-//getting userid
-  const Get_userId = async () => {
-    const userId = await getUserId();
-    // console.log(userId)
-    setUserId(userId);
+  const [userid, setUserid] = useState(null)
+
+  const Get_UserId_Data = async () => {
+    const userid = await getUserId();
+    const new_userid = userid;
+    setUserid(new_userid);
   }
-  console.log("userid")
-  console.log(userId)
-  //calling userid
-  React.useEffect(() => {
-    (async () => await Get_userId())();
-  }, [])
+  //getting user id state
+  useMemo(() => {
+    Get_UserId_Data();
 
-  //getting 
-//   useMemo(() => {
-//     const sendUserId = () => { 
-//       fetch(`${Config.API_URL}user-by-projects/${userId}`)
-//         .then((response) => response.json())
-//         .then(data => {
-//           // console.log(data)
-//           setSelectedIdProjects(data);
-//         })
-//     }
-//     // (async () => await sendUserId())();
-//     sendUserId();
-//   }, [userId])
-//   console.log("selected userid projects")
-// console.log(selectedIdProjects)
+    // console.log("seconde.....................")
+
+
+  }, [getUserId])
+
+  useMemo(() => {
+    console.log("first...........")
+    console.log(userid)
+    if (userid) {
+      const sendUserId = () => {
+        fetch(`${Config.API_URL}user-by-projects/${userid}`)
+          .then((response) => response.json())
+          .then(data => {
+            // console.log("data........")
+            // console.log(data)
+            setSelectedIdProjects(data);
+          })
+      }
+      sendUserId();
+    }
+  }, [userid])
+  // console.log("selectedIdProjects..........584")
+  // console.log(selectedIdProjects)
+
+  // const prevValue = useridRef.current; 
+  //  console.log(prevValue)
+  // const Get_userId = () => {
+  //   getUserId().then((res) => setUserId(res));
+  //   // console.log(userId)
+  // }
+  // useEffect(() => { 
+  //   (async () => {
+  //     const userid = await ge tUserId();
+  //     setUserId(userid);
+  //     console.log(userId)
+  //   })();
+  // }, []);
+  // console.log(userId)
+
+
+
   //getting and setting data in label value pair
-  // useMemo(() => {
-  //   let ProData = selectedIdProjects.map(ele => {
-  //     return { label: ele.project_name, value: ele.project_id };
-  //   })
-  //   setProList(ProData)
-  // }, [selectedIdProjects])
-  // console.log("dropdown items data")
-  // console.log(ProList)
+  useMemo(() => {
+    if (selectedIdProjects) {
+      let ProData = selectedIdProjects.map(ele => {
+        return { label: ele.project_name, value: ele.project_id };
+      })
+      setProList(ProData)
+
+    }
+  }, [selectedIdProjects])
+
+  // console.log("ProList..........121")
+  // console.log(ProList) 
+
+  useMemo(() => {
+    if (value) {
+      const data = Get_Project_Team_Data(value)
+      data.then(res => res.json())
+        .then(result => {
+          // console.log("result")
+          // console.log(result)
+          setProjectTeamList(result)
+        })
+    } else {
+      return
+    }
+  }, [value])
 
 
-  // useMemo(() => {
-  //   // console.log(value)
-  //   const data = Get_Project_Team_Data(value)
-  //   data.then(res => res.json())
-  //     .then(result => {
-  //       setProjectTeamList(result)
-  //       // console.log("project team data")
-  //       console.log(result)
-  //     })
-  // }, [value])
-  // console.log("selected projects data of team")
-  // console.log(projectTeamList)
+
 
 
   return (
@@ -109,22 +136,25 @@ const UserReports = ({ route }) => {
             borderColor: COLORS.lightblue_600,
           },
         ]}
-        placeholderStyle={{ fontSize: 16, color: COLORS.gray }
+        placeholderStyle={{ ...FONTS.h3, color: COLORS.black, textTransform: 'capitalize' }
         }
-        selectedTextStyle={{ color: COLORS.gray, }
+        selectedTextStyle={{ color: COLORS.black, ...FONTS.h4, textTransform: "capitalize", }
         }
-        inputSearchStyle={{ color: COLORS.gray, height: 40 }}
+        containerStyle={{}}
+        inputSearchStyle={{ color: COLORS.darkGray, height: 30, borderRadius: 5, padding: 5, ...FONTS.h4 }}
         iconStyle={{
           height: 28
           // fontSize: 16, 
         }}
+
         data={ProList}
         search
-        maxHeight={100}
+        maxHeight={200}
         labelField="label"
         valueField="value"
         placeholder={'Select Project'}
         searchPlaceholder="Search..."
+
         value={value}
         onFocus={() =>
           setProListIsFocus(true)
@@ -146,15 +176,15 @@ const UserReports = ({ route }) => {
             borderColor: COLORS.lightblue_400,
             borderWidth: 1,
             padding: SIZES.base,
-            // top: 10
+            // top: 10  
           }}>
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
-          <View>
+          <View >
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList}/>
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} />
             </View>
-            <View style={{ marginVertical: 5, top: 4 }}>
+            <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
               <Stock />
             </View>
@@ -162,11 +192,11 @@ const UserReports = ({ route }) => {
               {/* Quantity */}
               <Quantity />
             </View>
-            <View style={{ marginVertical: 2 }}>
+            <View style={{ marginVertical: 5 }}>
               {/* Quality */}
               <Quality />
             </View>
-            <View style={{ marginVertical: 4 }}>
+            <View style={{ marginVertical: 5 }}>
               {/* Quality */}
               <TAndP />
             </View>

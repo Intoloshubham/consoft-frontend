@@ -5512,10 +5512,12 @@
   "resolved" "https://registry.npmjs.org/react-native-animated-tree-view/-/react-native-animated-tree-view-0.1.4.tgz"
   "version" "0.1.4"
 
+
 "react-native-awesome-alerts@^2.0.0":
   "integrity" "sha512-ZRBNnDfpE+aQCtXXnQcfGLqwzZ53Q45CNkQI4hOiF8/9JPuCyMUQL2aqtiypnLpCIX+CB28Jcx1KVJ6/reaZsg=="
   "resolved" "https://registry.npmjs.org/react-native-awesome-alerts/-/react-native-awesome-alerts-2.0.0.tgz"
   "version" "2.0.0"
+
   dependencies:
     "prop-types" "^15.7.2"
 
