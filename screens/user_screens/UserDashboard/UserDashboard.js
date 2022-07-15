@@ -60,7 +60,6 @@ const UserDashboard = ({ navigation, route }) => {
   }, [])
 
 
-<<<<<<< HEAD
 
 
 
@@ -68,8 +67,6 @@ console.log(userId)
 
 
 
-=======
->>>>>>> f267fef8e0100a0edd6ea58ec9e51981beee1cc8
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
   const [doneModal, setdoneModal] = useState(false)
@@ -80,11 +77,7 @@ console.log(userId)
   const handleTask = async () => {
     const new_task=await fetch(`${Config.API_URL}user-assign-works/${userId}`)
     const res=await new_task.json(new_task)
-<<<<<<< HEAD
 
-=======
-    console.log(res)
->>>>>>> f267fef8e0100a0edd6ea58ec9e51981beee1cc8
     setNewTaskRes(res)
     settaskModalNum(true);
     settaskModal(true);
