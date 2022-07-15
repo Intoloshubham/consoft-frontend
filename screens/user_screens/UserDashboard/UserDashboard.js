@@ -46,6 +46,7 @@ const UserDashboard = () => {
       `${Config.API_URL}user-assign-works/` + `${userId}`,
     );
     const res = await new_task.json(new_task);
+
     setNewTaskRes(res);
     settaskModalNum(true);
     settaskModal(true);
@@ -81,7 +82,7 @@ const UserDashboard = () => {
 
   return (
     <View>
-      <Todo user_id={userId} />
+      {/* <Todo user_id={userId} /> */}
       <View style={styles.tasks}>
         <TouchableOpacity style={styles.Intask} onPress={() => handleTask()}>
           <View>

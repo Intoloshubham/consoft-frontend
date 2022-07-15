@@ -23,7 +23,6 @@ import {
   storeToken,
   setUserId,
 } from '../../services/asyncStorageService';
-
 import {useLoginUserMutation} from '../../services/userAuthApi'; //
 
 const Login = ({navigation}) => {
@@ -67,7 +66,6 @@ const Login = ({navigation}) => {
 
   //rtk
   const [loginCompany] = useLoginCompanyMutation();
-
   const [loginUser] = useLoginUserMutation();
 
   function isEnableLogin() {
@@ -119,8 +117,8 @@ const Login = ({navigation}) => {
     if (result.status === 200) {
       await setUserId(result._id);
       await storeToken(result.access_token);
-      console.log(result._id);
-      console.log(result.access_token);
+      // console.log(result._id);
+      // console.log(result.access_token);
       navigation.navigate('UserDashboard');
       setUserMobileNo('');
       setUserPassword('');

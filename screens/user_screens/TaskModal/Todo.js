@@ -17,24 +17,24 @@ const Todo = ({user_id}) => {
   const [assignWorks, setAssignWorks] = React.useState([]);
   const [textMsg, setTextMsg] = React.useState('');
 
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}user-assign-works/` + `${user_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setAssignWorksData(data);
-        data.map(ele => {
-          setAssignWorks(ele.assign_works);
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  });
+  // React.useEffect(() => {
+  //   fetch(`${Config.API_URL}user-assign-works/` + `${user_id}`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setAssignWorksData(data);
+  //       data.map(ele => {
+  //         setAssignWorks(ele.assign_works);
+  //       });
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // });
 
   const headerRender = (item, index) => {
     return (
