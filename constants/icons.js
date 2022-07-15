@@ -84,6 +84,7 @@ const suppliers1 = require('../assets/icons/suppliers1.png');
 const staff = require('../assets/icons/staff.png');
 const verify = require('../assets/icons/verify.png');
 const revert = require('../assets/icons/revert.png');
+// const location = require('../assets/icons/location.png');
 
 //final selected
 const company_team = require('../assets/icons/final/company_team.png');

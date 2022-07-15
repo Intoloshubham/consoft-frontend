@@ -1,41 +1,35 @@
 import React from 'react';
-import {View, FlatList, SafeAreaView} from 'react-native';
-import {ItemBox} from '../../../Components';
-import {COLORS, SIZES} from '../../../constants';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {CustomToast} from '../../../Components';
+import {COLORS} from '../../../constants';
 
-const data = [
-  {id: 1, name: 'A'},
-  {id: 2, name: 'B'},
-  {id: 3, name: 'C'},
-  {id: 4, name: 'D'},
-  {id: 5, name: 'E'},
-  {id: 6, name: 'F'},
-  {id: 7, name: 'G'},
-];
 const Tasks = () => {
-  const [lists, setList] = React.useState(data);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [modalVisible1, setModalVisible1] = React.useState(false);
+
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        marginHorizontal: SIZES.padding,
-      }}>
-      <FlatList
-        data={lists}
-        renderItem={({item}) => {
-          return <ItemBox data={item} />;
-        }}
-        ItemSeparatorComponent={() => {
-          return (
-            <View
-              style={{
-                height: 1,
-                backgroundColor: COLORS.black,
-              }}></View>
-          );
-        }}
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Text>Click</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => setModalVisible1(true)}>
+        <Text>Click</Text>
+      </TouchableOpacity>
+      <CustomToast
+        isVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        color={COLORS.green}
+        title="Work Update"
+        message="Updated Work Successfully..."
       />
-    </SafeAreaView>
+      <CustomToast
+        isVisible={modalVisible1}
+        onClose={() => setModalVisible1(false)}
+        color={COLORS.rose_600}
+        title="Work Update"
+        message="Updated Work Successfully..."
+      />
+    </View>
   );
 };
 

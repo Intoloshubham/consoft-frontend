@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import * as eva from '@eva-design/eva';
 
+
 import {ApplicationProvider} from '@ui-kitten/components';
 import {
   Login,
@@ -19,7 +20,7 @@ import {
   StocksAndInventry,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  CheckList, 
+  CheckList,
   Items,
   Unit,
   CompanyTeam,
@@ -28,6 +29,9 @@ import {
   CategoryandType,
   ProjectReports,
   Suppliers,
+  Optiontype,
+  Quantitywork,
+  ToolsAndMachinery1
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -95,6 +99,11 @@ const App = () => {
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />
           <Stack.Screen name="CheckList" component={CheckList} />
+          <Stack.Screen name="Optiontype" component={Optiontype} />
+          <Stack.Screen name="Quantitywork" component={Quantitywork} />
+          <Stack.Screen name="ToolsAndMachinery1" component={ToolsAndMachinery1} />
+
+
 
           {/* User Screens */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import {
   Button,
 } from 'react-native';
 import {Card, Title, DataTable} from 'react-native-paper';
-import {FormInput, TextButton} from '../../../../Components';
+import {FormInput, TextButton, HeaderBar} from '../../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -34,12 +34,12 @@ const Quantitywork = () => {
   const [datalist, setdatalist] = useState([]);
   const [quantityitemdata, setquantityitemdata] = useState([]);
   const [tabalshowdata, settabalshowdata] = useState([]);
-
+  const [tabalshowdatamore, settabalshowdatamore] = useState([]);
 
   const [table, settable] = useState(false);
   const [additem, setadditem] = useState(false);
   const [workmodal, setworkmodal] = useState(false);
-  const [addwork, setaddwork] = useState(false);
+  const [showcardlist, setshowcardlist] = useState(false);
 
   React.useMemo(() => {
     const quantitytotal = lenght * breadth * height;
@@ -117,12 +117,47 @@ const Quantitywork = () => {
     quantityworkdata();
   }, []);
 
+  // table data quantitytable api fetch api
   const quantitytable = async () => {
-    const resp = await fetch(`${config.API_URL}quantity-report`);
-    const tabledata = await resp.json();
-    console.log(tabledata);
-    // settabalshowdata(tabledata);
-  };
+    try {
+      const resp = await fetch(`${config.API_URL}quantity-report`);
+      const tabledata = await resp.json();
+      console.log(tabledata);
+      // setquantityitemdata(quantitydata);
+    }
+    catch (error) {
+    console.log('error', error);
+    }
+  }
+
+//       // console.log(tabledata); 
+//      const data= tabledata.map((data) => {
+//         return data.quantity;
+//         // data.quantity.map((ab)=>{
+//         //   return(console.log(ab.particular))
+//         // })
+//       });
+//       const obj={}
+// const val=data[0].map((res)=>{
+//   Object.assign(obj,res)
+// })
+// console.log(obj)
+// data[1].map(res=>{ Object.assign(val,res)})
+//     } catch (error) {
+//       console.log('error', error);
+//     }
+//   };
+//   // console.log(tabalshowdatamore)
+//   // useMemo(() => {
+//   //   if (tabalshowdatamore) {
+//   //     tabalshowdatamore[1].map((data, key) => {
+//   //       console.log(data); 
+//   //     });      
+//   //   }else{
+//   //     console.log("no data found")
+//   //   }
+//   // },[tabalshowdatamore]);
+
   useEffect(() => {
     quantitytable();
   }, []);
@@ -138,17 +173,17 @@ const Quantitywork = () => {
     listData();
   }, []);
 
-
-    // table show data api 
+  // table show data api
 
   return (
     <View>
+      <HeaderBar right={true} title="Quantity work" />
       <View>
         <Card style={{borderWidth: 3}}>
           <Card.Content>
             <TouchableOpacity
               onPress={() => {
-                setaddwork(!addwork);
+                setshowcardlist(!showcardlist);
               }}>
               <View
                 style={{
@@ -181,40 +216,35 @@ const Quantitywork = () => {
           </Card.Content>
         </Card>
       </View>
-      <Modal transparent={false} visible={additem} animationType="fade">
+      <Modal transparent={false} visible={additem} animationType="slide">
         <View
           style={{
             flex: 1,
             backgroundColor: '#000000aa',
-            justifyContent: 'center',
+            // justifyContent: 'center',
           }}>
           <View
             style={{
-              flex: 1,
+              // flex: 1,
               backgroundColor: '#fff',
               marginTop: 80,
-              padding: 10,
-              borderRadius: 10,
+              padding: 20,
+              borderRadius: 20,
+              margin: 10,
             }}>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                borderBottomWidth: 1,
+                // borderBottomWidth: 1,
               }}>
               <Text style={{...FONTS.body2}}>Quantity item</Text>
               <Pressable onPress={setadditem}>
-                <Text
-                  style={{
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                  }}>
-                  X
-                </Text>
+                <AntDesign name="close" size={30} />
               </Pressable>
             </View>
-            <View>
+            <View style={{marginTop: 20}}>
               <FormInput
                 label="Name"
                 onChange={quantityitem => {
@@ -263,14 +293,14 @@ const Quantitywork = () => {
       </Modal>
       <Card style={{borderWidth: 4, marginTop: 10}}>
         <Card.Content>
-          {addwork && (
+          {showcardlist && (
             <View>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   borderBottomWidth: 1,
-                  alignItems:"center"
+                  alignItems: 'center',
                 }}>
                 <Title>List works</Title>
 
@@ -280,12 +310,17 @@ const Quantitywork = () => {
                     width: 90,
                     alignItems: 'center',
                     borderRadius: 10,
-                    marginVertical:5
+                    marginVertical: 5,
                   }}
                   onPress={() => {
                     setworkmodal(true);
                   }}>
-                  <View style={{flexDirection: 'row', justifyContent:"space-between",alignItems: 'center',}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
                     <Title>Add</Title>
                     <Ionicons name="add-circle" size={28} color="black" />
                   </View>
@@ -316,7 +351,9 @@ const Quantitywork = () => {
                   flex: 1,
                   backgroundColor: '#fff',
                   marginTop: 80,
-                  padding: 10,
+                  padding: 20,
+                  borderRadius: 20,
+                  margin: 10,
                 }}>
                 <View
                   style={{
@@ -327,13 +364,7 @@ const Quantitywork = () => {
                   }}>
                   <Text style={{...FONTS.body2}}></Text>
                   <Pressable onPress={setworkmodal}>
-                    <Text
-                      style={{
-                        fontSize: 30,
-                        fontWeight: 'bold',
-                      }}>
-                      X
-                    </Text>
+                    <AntDesign name="close" size={30} color="black" />
                   </Pressable>
                 </View>
 
@@ -447,7 +478,6 @@ const Quantitywork = () => {
             <View style={styles.container}>
               <Card style={{borderWidth: 2, marginTop: 10}}>
                 <Card.Content>
-
                   <DataTable>
                     <DataTable.Header style={{borderBottomWidth: 1}}>
                       <DataTable.Cell>Sno</DataTable.Cell>
@@ -475,6 +505,21 @@ const Quantitywork = () => {
           )}
         </Card.Content>
       </Card>
+      <View>
+        {
+          // console.log("neeche ............") &&
+          //  console.log("data",tabalshowdatamore)
+          // console.log("first") &&
+          // console.log(tabalshowdatamore)
+          // tabalshowdatamore.map((data,key)=>{
+          //   return(
+          //     <View key={key}>
+          //     <Text>{console.log(data)}</Text>
+          //     </View>
+          //   )
+          // })
+        }
+      </View>
     </View>
   );
 };
@@ -498,6 +543,6 @@ const styles = StyleSheet.create({
     marginTop: 28,
   },
   scroll: {
-    maxHeight: 200,
+    maxHeight: 100,
   },
 });

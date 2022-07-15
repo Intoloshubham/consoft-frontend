@@ -18,20 +18,110 @@ import {
   TextButton,
 } from '../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../constants';
+import Config from '../../../config';
+import {useSelector} from 'react-redux';
 
-const ToolsAndMachine = [
-  {id: 1, name: 'Mixer', qty: 25},
-  {id: 2, name: 'Roller', qty: 55},
-  {id: 3, name: 'Water tank', qty: 41},
-  {id: 4, name: 'Pipe', qty: 10},
-];
-
-const ToolsAndMachinery = () => {
-  const [tools, setTools] = React.useState(ToolsAndMachine);
+const ToolsAndMachinery = ({route}) => {
+  const companyData = useSelector(state => state.company);
+  const {project_id} = route.params; //
   const [showTAndMModal, setShowTAndMModal] = React.useState(false);
+  const [showEditTAndMModal, setShowEditTAndMModal] = React.useState(false);
+  const [toolsAndMachinery, setToolsAndMachinery] = React.useState([]);
+
   //Form data
   const [toolsName, setToolsName] = React.useState('');
   const [toolsQty, setToolsQty] = React.useState('');
+
+  // api call
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}tools-machinery`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setToolsAndMachinery(data);
+      })
+      .catch(error => console.log(error.message));
+  }, [toolsAndMachinery]);
+
+  const OnSubmit = () => {
+    const FormData = {
+      // project_id: project_id,
+      tools_machinery_name: toolsName,
+      qty: toolsQty,
+      company_id: companyData._id,
+    };
+    fetch(`${Config.API_URL}tools-machinery`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(FormData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data);
+        if (data.status === 200) {
+          setShowTAndMModal(false);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  const OnDelete = id => {
+    fetch(`${Config.API_URL}tools-machinery/` + `${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const [storeid, setStoreId] = React.useState('');
+  const getEditData = (id, name, qty) => {
+    setToolsName(name);
+    setToolsQty(qty);
+    setStoreId(id);
+    setShowEditTAndMModal(true);
+  };
+
+  const OnEdit = () => {
+    const editData = {
+      tools_machinery_name: toolsName,
+      qty: toolsQty,
+      company_id: companyData._id,
+    };
+
+    fetch(`${Config.API_URL}tools-machinery/` + `${storeid}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(editData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.status === 200) {
+          setShowEditTAndMModal(false);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
   function renderToolsAndMachinery() {
     const renderItem = ({item, index}) => (
@@ -44,7 +134,7 @@ const ToolsAndMachinery = () => {
         <Text
           style={{
             ...FONTS.body4,
-            color: COLORS.gray,
+            color: COLORS.darkGray,
           }}>
           {index + 1}.
         </Text>
@@ -56,14 +146,19 @@ const ToolsAndMachinery = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Text style={{...FONTS.body3, color: COLORS.darkGray}}>
-            {item.name}
+          <Text
+            style={{
+              ...FONTS.body3,
+              color: COLORS.darkGray,
+              textTransform: 'capitalize',
+            }}>
+            {item.tools_machinery_name}
           </Text>
           <Text
             style={{
               ...FONTS.body3,
               color: COLORS.darkGray,
-              fontWeight: 'bold',
+              // fontWeight: 'bold',
               right: 40,
             }}>
             {item.qty}
@@ -71,9 +166,9 @@ const ToolsAndMachinery = () => {
         </View>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
-            onPress={() => {
-              alert('edit name');
-            }}>
+            onPress={() =>
+              getEditData(item._id, item.tools_machinery_name, item.qty)
+            }>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.green,
@@ -91,10 +186,7 @@ const ToolsAndMachinery = () => {
               />
             </ImageBackground>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              alert('delete name');
-            }}>
+          <TouchableOpacity onPress={() => OnDelete(item._id)}>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.rose_600,
@@ -124,8 +216,8 @@ const ToolsAndMachinery = () => {
           ...styles.shadow,
         }}>
         <FlatList
-          data={tools}
-          keyExtractor={item => `${item.id}`}
+          data={toolsAndMachinery}
+          keyExtractor={item => `${item._id}`}
           scrollEnabled={true}
           maxHeight={510}
           renderItem={renderItem}
@@ -189,6 +281,7 @@ const ToolsAndMachinery = () => {
                     label="Item name"
                     keyboardType="default"
                     autoCompleteType="username"
+                    // value={toolsName}
                     onChange={value => {
                       setToolsName(value);
                     }}
@@ -217,6 +310,7 @@ const ToolsAndMachinery = () => {
                   <FormInput
                     label="Quantity"
                     keyboardType="numeric"
+                    // value={toolsQty.toString()}
                     onChange={value => {
                       setToolsQty(value);
                     }}
@@ -251,7 +345,129 @@ const ToolsAndMachinery = () => {
                       borderRadius: SIZES.radius,
                       backgroundColor: COLORS.lightblue_700,
                     }}
-                    onPress={() => alert('Okay...')}
+                    onPress={() => OnSubmit()}
+                  />
+                </ScrollView>
+              </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
+  function renderEditToolsAndMachineModal() {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showEditTAndMModal}>
+        <TouchableWithoutFeedback onPress={() => setShowEditTAndMModal(false)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                left: SIZES.padding,
+                width: '90%',
+                padding: SIZES.padding,
+                borderRadius: SIZES.radius,
+                backgroundColor: COLORS.white,
+              }}>
+              <View style={{}}>
+                {/* header */}
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                    Tools & Machine
+                  </Text>
+                  <IconButton
+                    containerStyle={{
+                      boborderWidth: 2,
+                      borderRadius: 10,
+                      borderColor: COLORS.gray2,
+                    }}
+                    icon={icons.cross}
+                    iconStyle={{
+                      tintColor: COLORS.gray,
+                    }}
+                    onPress={() => setShowEditTAndMModal(false)}
+                  />
+                </View>
+                <ScrollView>
+                  <FormInput
+                    label="Item name"
+                    keyboardType="default"
+                    autoCompleteType="username"
+                    value={toolsName}
+                    onChange={value => {
+                      setToolsName(value);
+                    }}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            toolsName == '' || toolsName != ''
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              toolsName == ''
+                                ? COLORS.gray
+                                : toolsName != ''
+                                ? COLORS.green
+                                : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+                  <FormInput
+                    label="Quantity"
+                    keyboardType="numeric"
+                    value={toolsQty.toString()}
+                    onChange={value => {
+                      setToolsQty(value);
+                    }}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            toolsQty == '' || toolsQty != ''
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              toolsQty == ''
+                                ? COLORS.gray
+                                : toolsQty != ''
+                                ? COLORS.green
+                                : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+                  <TextButton
+                    label="Update"
+                    buttonContainerStyle={{
+                      height: 45,
+                      marginTop: SIZES.padding * 1.5,
+                      alignItems: 'center',
+                      borderRadius: SIZES.radius,
+                      backgroundColor: COLORS.lightblue_700,
+                    }}
+                    onPress={() => OnEdit()}
                   />
                 </ScrollView>
               </View>
@@ -280,10 +496,15 @@ const ToolsAndMachinery = () => {
           backgroundColor: COLORS.lightblue_700,
           ...styles.shadow,
         }}
-        onPress={() => setShowTAndMModal(true)}
+        onPress={() => {
+          setToolsName('');
+          setToolsQty('');
+          setShowTAndMModal(true);
+        }}
       />
       {renderToolsAndMachinery()}
       {renderAddToolsAndMachineModal()}
+      {renderEditToolsAndMachineModal()}
     </View>
   );
 };

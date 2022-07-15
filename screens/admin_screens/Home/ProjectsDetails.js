@@ -42,11 +42,11 @@ const ProjectsDetails = ({route}) => {
             : item.id == 2
             ? navigation.navigate('ProjectTeam', {project_id})
             : item.id == 3
-            ? navigation.navigate('Contractors')
+            ? navigation.navigate('Contractors', {project_id})
             : item.id == 4
             ? navigation.navigate('StocksAndInventry')
             : item.id == 5
-            ? navigation.navigate('ToolsAndMachinery')
+            ? navigation.navigate('ToolsAndMachinery', {project_id})
             : item.id == 6
             ? navigation.navigate('ProjectSeheduleTime')
             : null;
@@ -135,6 +135,7 @@ const ProjectsDetails = ({route}) => {
       />
       {showWorkModal && (
         <WorkAssignModal
+          projectId={project_id}
           isVisible={showWorkModal}
           onClose={() => setWorkModal(false)}
         />
