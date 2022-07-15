@@ -20,7 +20,7 @@ import {
   StocksAndInventry,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  CheckList, 
+  CheckList,
   Items,
   Unit,
   CompanyTeam,
@@ -56,7 +56,6 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-
 
           initialRouteName={'Login'}>
 

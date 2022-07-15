@@ -26,7 +26,7 @@ const Home = () => {
       dispatch(setCompanyToken({token: token}));
     })();
   });
-
+  // console.log(accessToken);
   const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
   //store data in redux store
   const dispatch = useDispatch();
@@ -49,7 +49,6 @@ const Home = () => {
 
   const companyData = useSelector(state => state.company);
   // console.log(companyData)
-  
 
   return (
     <SafeAreaView>

@@ -38,11 +38,11 @@ const ProjectCompanyShow = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         setComTeamDetails(data);
       })
       .catch(error => console.log(error.message));
-  }, []);
+  }, [comTeamDetails]);
 
   const [showCompanyAddTeamModal, setShowCompanyAddTeamModal] =
     React.useState(false);
