@@ -38,15 +38,14 @@ const SubmittedWorks = () => {
     })
       .then(response => response.json())
       .then(data => {
+        // console.log(data);
         setSubmitWork(data);
-      })
-      .catch(error => {
-        console.log(error);
       });
   }, [submitWork]);
 
   // verify works
   const verifyHandler = id => {
+    // console.log(id);
     fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
       method: 'GET',
       headers: {
@@ -55,6 +54,7 @@ const SubmittedWorks = () => {
     })
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         setVerifyResponse(data.status);
       })
       .catch(error => {
@@ -77,7 +77,12 @@ const SubmittedWorks = () => {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log(data);
+        if (data.status === 200) {
+          setTimeout(() => {
+            setRevertModal(false);
+          }, 1000);
+        }
+        console.log(data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -105,10 +110,15 @@ const SubmittedWorks = () => {
                 top: '30%',
                 borderRadius: SIZES.base,
               }}>
+              <View>
+                <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                  Comment
+                </Text>
+              </View>
               <FormInput
-                placeholder="Write here..."
+                placeholder=""
                 multiline={true}
-                numberOfLines={5}
+                numberOfLines={3}
                 onChange={value => {
                   setRevertMsg(value);
                 }}
@@ -181,15 +191,15 @@ const SubmittedWorks = () => {
                 <Image
                   source={icons.date}
                   style={{
-                    height: 10,
-                    width: 10,
+                    height: 12,
+                    width: 12,
                     tintColor: COLORS.darkGray,
                     right: 3,
                   }}
                 />
                 <Text
                   style={{
-                    fontSize: 8,
+                    fontSize: 10,
                     color: COLORS.darkGray,
                   }}>
                   {item.submit_work_date}
@@ -199,15 +209,15 @@ const SubmittedWorks = () => {
                 <Image
                   source={icons.time}
                   style={{
-                    height: 10,
-                    width: 10,
+                    height: 12,
+                    width: 12,
                     tintColor: COLORS.darkGray,
                     right: 3,
                   }}
                 />
                 <Text
                   style={{
-                    fontSize: 8,
+                    fontSize: 10,
                     color: COLORS.darkGray,
                   }}>
                   {item.submit_work_time}
@@ -231,16 +241,14 @@ const SubmittedWorks = () => {
               Work
               <Text style={{color: COLORS.darkGray}}> - {item.work}</Text>
             </Text>
-            <TouchableOpacity onPress={verifyHandler(item._id)}>
+            <TouchableOpacity onPress={() => verifyHandler(item._id)}>
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.green,
-                  paddingHorizontal: 3,
+                  paddingHorizontal: 5,
                   borderRadius: 2,
                 }}>
-                <Text style={{fontSize: 10, color: COLORS.white}}>
-                  {verifyResponse === 200 ? 'Verified' : 'Verify'}
-                </Text>
+                <Text style={{fontSize: 10, color: COLORS.white}}>Verify</Text>
                 {/* <Image
                   source={verifyResponse == 200 ? icons.verify : icons.cancel}
                   resizeMode="contain"
@@ -280,7 +288,7 @@ const SubmittedWorks = () => {
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.rose_600,
-                  paddingHorizontal: 3,
+                  paddingHorizontal: 5,
                   borderRadius: 2,
                 }}>
                 <Text

@@ -12,29 +12,52 @@ import {Divider} from '@ui-kitten/components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import Config from '../../../config';
 
-const Todo = ({user_id}) => {
+const UserAssignWorks = ({user_id}) => {
   const [assignWorksData, setAssignWorksData] = React.useState([]);
   const [assignWorks, setAssignWorks] = React.useState([]);
   const [textMsg, setTextMsg] = React.useState('');
+  // console.log(assignWorksData);
+  // console.log(assignWorks);
 
   // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}user-assign-works/` + `${user_id}`, {
-  //     method: 'GET',
+    fetch(`${Config.API_URL}user-assign-works/` + `${user_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setAssignWorksData(data);
+        data.map(ele => {
+          setAssignWorks(ele.assign_works);
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  // }, [assignWorksData,assignWorks]);
+
+  // const OnSubmit = work_id => {
+  //   const data = {
+  //     comment: textMsg,
+  //   };
+  //   fetch(`${Config.API_URL}user-work-comment/` + `${work_id}`, {
+  //     method: 'POST',
   //     headers: {
-  //       'Content-Type': 'application/json',
+  //       'Content-Type': 'application/json;charset=utf-8',
   //     },
+  //     body: JSON.stringify(data),
   //   })
   //     .then(response => response.json())
   //     .then(data => {
-  //       setAssignWorksData(data);
-  //       data.map(ele => {
-  //         setAssignWorks(ele.assign_works);
-  //       });
+  //       // console.log(data);
   //     })
   //     .catch(error => {
-  //       console.log(error);
+  //       console.error('Error:', error);
   //     });
-  // });
+  // };
 
   const headerRender = (item, index) => {
     return (
@@ -45,25 +68,25 @@ const Todo = ({user_id}) => {
           alignItems: 'center',
           marginTop: index == 0 ? null : SIZES.radius,
           paddingHorizontal: SIZES.base,
-          backgroundColor: COLORS.lightGray1,
+          backgroundColor: COLORS.darkGray,
           padding: 5,
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
         }}>
-        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+        <Text style={{...FONTS.h4, color: COLORS.white}}>
           {item.work_code}
           {' - '}
           <Text
             style={{
               ...FONTS.h4,
-              color: COLORS.darkGray,
+              color: COLORS.white,
             }}>
             {item.work}
           </Text>
         </Text>
         <Image
           source={icons.down_arrow}
-          style={{height: 15, width: 15, tintColor: COLORS.darkGray}}
+          style={{height: 15, width: 15, tintColor: COLORS.white}}
         />
       </View>
     );
@@ -73,10 +96,11 @@ const Todo = ({user_id}) => {
     return (
       <View
         style={{
-          backgroundColor: COLORS.darkGray,
+          backgroundColor: COLORS.darkGray2,
           padding: SIZES.radius,
           borderBottomLeftRadius: 5,
           borderBottomRightRadius: 5,
+          ...styles.shadow,
         }}
         key={item.key}>
         <View style={{}}>
@@ -99,7 +123,7 @@ const Todo = ({user_id}) => {
           />
           <View style={{flexdirection: 'row'}}>
             <View style={{backgroundColor: COLORS.white, borderRadius: 3}}>
-              <TextInput
+              {/* <TextInput
                 style={{paddingHorizontal: SIZES.radius}}
                 placeholder="Write message here.."
                 placeholderTextColor={COLORS.darkGray}
@@ -107,6 +131,16 @@ const Todo = ({user_id}) => {
                   console.log(value);
                   setTextMsg(value);
                 }}
+              /> */}
+              <TextInput
+                style={{flex: 1, color: COLORS.black}}
+                placeholder="write"
+                placeholderTextColor={COLORS.darkGray}
+                keyboardType="default"
+                onChangeText={value => setTextMsg(value)}
+                value={textMsg}
+                multiline={true}
+                numberOfLines={3}
               />
             </View>
             <TouchableOpacity
@@ -114,7 +148,7 @@ const Todo = ({user_id}) => {
                 alignItems: 'flex-end',
                 marginTop: SIZES.base,
               }}
-              onPress={() => alert('Send...')}>
+              onPress={() => OnSubmit(item._id)}>
               <Text
                 style={{
                   color: COLORS.white,
@@ -166,11 +200,20 @@ const Todo = ({user_id}) => {
         marginHorizontal: SIZES.padding,
         marginVertical: SIZES.padding,
         paddingHorizontal: SIZES.radius,
-        paddingVertical: SIZES.radius,
+        // paddingVertical: SIZES.radius,
+        paddingBottom: SIZES.radius,
         backgroundColor: COLORS.white,
         borderRadius: SIZES.base,
         ...styles.shadow,
       }}>
+      <Text
+        style={{
+          ...FONTS.h2,
+          color: COLORS.black,
+          marginVertical: SIZES.radius,
+        }}>
+        Tasks
+      </Text>
       <AccordionList
         list={assignWorks}
         header={headerRender}
@@ -182,7 +225,7 @@ const Todo = ({user_id}) => {
   );
 };
 
-export default Todo;
+export default UserAssignWorks;
 const styles = StyleSheet.create({
   shadow: {
     shadowColor: '#000',

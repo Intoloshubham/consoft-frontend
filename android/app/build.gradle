@@ -134,10 +134,6 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4974dfa5c0b8ee52e52de7cd787074723cb4d39d
     defaultConfig {        
         applicationId "com.consoftapp"
         minSdkVersion rootProject.ext.minSdkVersion

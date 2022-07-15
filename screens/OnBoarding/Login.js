@@ -17,13 +17,19 @@ import Toast from 'react-native-toast-message';
 import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
+
 import {useLoginCompanyMutation} from '../../services/companyAuthApi';
 import {
   setCompanyId,
   storeToken,
   setUserId,
 } from '../../services/asyncStorageService';
+
 import {useLoginUserMutation} from '../../services/userAuthApi'; //
+import {useDispatch} from 'react-redux';
+
+
+
 
 const Login = ({navigation}) => {
   const makeCall = () => {
@@ -60,7 +66,8 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
 
   const [showPass, setShowPass] = React.useState(false);
-  const [accessToken, setAccessToken] = useState(false);
+  // const [accessToken, setAccessToken] = useState(false);
+  const [accessToken, setAccessToken] = useState();
 
   // const [login, setlogin] = React.useState(false)
 
@@ -94,17 +101,18 @@ const Login = ({navigation}) => {
       visibilityTime: 4000,
     });
 
+    const dispatch = useDispatch();
   const userOnSubmit = async () => {
-    setAccessToken(true);
+    // setAccessToken(true);
     // setlogin(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
 
-    console.log(UserData);
+    // console.log(UserData);
     const res = await loginUser(UserData);
-    console.log(res);
+    // console.log(res);
 
     let result;
     if (res.data) {
@@ -117,8 +125,7 @@ const Login = ({navigation}) => {
     if (result.status === 200) {
       await setUserId(result._id);
       await storeToken(result.access_token);
-      // console.log(result._id);
-      // console.log(result.access_token);
+      
       navigation.navigate('UserDashboard');
       setUserMobileNo('');
       setUserPassword('');

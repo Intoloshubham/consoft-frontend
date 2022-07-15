@@ -20,6 +20,7 @@ import {ProfileValue, LineDivider} from '../../../Components';
 const Profile = () => {
   const navigation = useNavigation();
   const userData = useSelector(state => state.user);
+  console.log(userData);
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
@@ -59,7 +60,7 @@ const Profile = () => {
           }}
           onPress={() => alert('Upload Image')}>
           <Image
-            source={images.civil_eng}
+            source={images.Profile7}
             style={{
               width: '100%',
               height: '100%',
@@ -117,6 +118,10 @@ const Profile = () => {
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             +91{userData.mobile}
+          </Text>
+          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+            Role{' - '}
+            {userData.role}
           </Text>
         </View>
       </View>
