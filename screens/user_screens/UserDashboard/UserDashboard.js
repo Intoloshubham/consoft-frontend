@@ -90,9 +90,6 @@ console.log(userId)
     setdoneModalNum(true);
     setdoneModal(true);
   }
-// console.log(NewTaskRes)
-
-
   const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
 
   useEffect(() => {
