@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -12,21 +12,23 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import utils from '../../utils'; 
+import utils from '../../utils';
 import Toast from 'react-native-toast-message';
 import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
-import { useLoginCompanyMutation } from '../../services/companyAuthApi';
-import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
+import {useLoginCompanyMutation} from '../../services/companyAuthApi';
+import {
+  setCompanyId,
+  storeToken,
+  setUserId,
+} from '../../services/asyncStorageService';
 
-import { useLoginUserMutation } from '../../services/userAuthApi';//
-
-
+import {useLoginUserMutation} from '../../services/userAuthApi'; //
 
 const Login = ({navigation}) => {
   const makeCall = () => {
-    let phoneNumber = ''; 
+    let phoneNumber = '';
     if (Platform.OS === 'android') {
       phoneNumber = 'tel:+91-8109093551';
     } else {
@@ -44,29 +46,29 @@ const Login = ({navigation}) => {
       alert(`url is not correct: ${url}`);
     }
   };
-  
+
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
     setSwitchValue(value);
   };
-  
+
   const [userMobileNo, setUserMobileNo] = React.useState('');
   const [userPassword, setUserPassword] = React.useState('');
   const [userMobileNoError, setUserMobileNoError] = React.useState('');
-  
+
   const [companyMobileNo, setCompanyMobileNo] = React.useState('');
   const [companyPassword, setCompanyPassword] = React.useState('');
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
-  
+
   const [showPass, setShowPass] = React.useState(false);
   const [accessToken, setAccessToken] = useState(false);
-  
+
   // const [login, setlogin] = React.useState(false)
 
   //rtk
   const [loginCompany] = useLoginCompanyMutation();
 
-  const [ loginUser ] = useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation();
 
   function isEnableLogin() {
     return (
@@ -93,18 +95,18 @@ const Login = ({navigation}) => {
       text2: 'Error',
       visibilityTime: 4000,
     });
-    
+
   const userOnSubmit = async () => {
-    setAccessToken(true)
+    setAccessToken(true);
     // setlogin(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
 
-    // console.log(UserData)
+    console.log(UserData);
     const res = await loginUser(UserData);
-    // console.log(res)
+    console.log(res);
 
     let result;
     if (res.data) {
@@ -115,13 +117,16 @@ const Login = ({navigation}) => {
     }
 
     if (result.status === 200) {
-      // await setUserId(result._id);
-      await storeToken(result.access_token);   
+      await setUserId(result._id);
+      await storeToken(result.access_token);
+      console.log(result._id);
+      console.log(result.access_token);
       navigation.navigate('UserDashboard');
-
+      setUserMobileNo('');
+      setUserPassword('');
     }
 
-    if(result.status === 401){
+    if (result.status === 401) {
       alert(result.data.message);
     }
 
@@ -148,7 +153,7 @@ const Login = ({navigation}) => {
     //   .catch(error => {
     //     console.error('Error:', error);
     //   });
-  }
+  };
 
   const companyOnSubmit = async () => {
     const company_data = {
@@ -156,8 +161,7 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
 
-
-    const res = await loginCompany(company_data)
+    const res = await loginCompany(company_data);
     // console.log(res);
 
     //store token in storage
@@ -174,6 +178,8 @@ const Login = ({navigation}) => {
       await setCompanyId(result.company_id);
       await storeToken(result.access_token);
       navigation.navigate('Home');
+      setCompanyMobileNo('');
+      setCompanyPassword('');
     }
 
     if (result.status === 401) {

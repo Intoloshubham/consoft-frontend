@@ -1,5 +1,6 @@
 import Account from './Account/Account';
 import CheckList from './CheckList/CheckList';
+import Optiontype from './CheckList/Optiontype'
 import CompanyTeam from './CompanyTeam/CompanyTeam';
 import AssignedWorks from './Home/AssignedWorks';
 import CompanyTeamShow from './Home/CompanyTeamShow';
@@ -25,6 +26,8 @@ import Tasks from './Tasks/Tasks';
 import Tracker from './Tracker/Tracker';
 import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
+import Quantitywork from './Stock/Tools/Quantitywork'
+import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1'
 
 export {
   Account,
@@ -54,4 +57,7 @@ export {
   Tracker,
   Suppliers,
   SubmittedWorks,
+  Optiontype,
+  Quantitywork,
+  ToolsAndMachinery1,
 };

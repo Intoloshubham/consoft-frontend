@@ -403,7 +403,7 @@ const CategoryandType = () => {
                   width: '100%',
                   height: 1,
                   backgroundColor: COLORS.gray2,
-                  marginVertical: 5,
+                  // marginVertical: 5,
                 }}></View>
             );
           }}

@@ -29,7 +29,7 @@ const Account = () => {
     unsetCompanyToken({token: null});
     await removeToken('token');
     await removeCompanyId('company_id');
-    navigation.navigate('Dashboard');
+    navigation.navigate('Login');
   };
 
   React.useEffect(() => {
@@ -204,6 +204,31 @@ const Account = () => {
           </View>
         </Collapsible>
         <LineDivider />
+        <Collapsible collapsed={collapsed} duration={300}>
+          <View style={{marginLeft: SIZES.padding * 1.8}}>
+            <ProfileValue
+              icon={icons.itemss}
+              value="Checklist"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('CheckList')}
+            />
+            <LineDivider />
+            <ProfileValue
+              icon={icons.units}
+              value="Optiontype"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('Optiontype')}
+            />
+            <LineDivider />
+            <ProfileValue
+              icon={icons.units}
+              value="ToolsAndMachinery1"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('ToolsAndMachinery1')}
+            />
+          </View>
+        </Collapsible>
+        <LineDivider />
         <ProfileValue
           icon={icons.supplier}
           value="Suppliers"
@@ -221,7 +246,11 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" onPress={logout} />
+        <ProfileValue
+          icon={icons.logout}
+          value="LogOut"
+          onPress={() => logout()}
+        />
       </View>
     );
   }

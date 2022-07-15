@@ -15,56 +15,29 @@ import {useSelector} from 'react-redux';
 import {unSetUserInfo} from '../../../features/UserSlice';
 import {unsetUserToken} from '../../../features/UserAuthSlice';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
-import { ProfileValue, LineDivider } from '../../../Components';
+import {ProfileValue, LineDivider} from '../../../Components';
 
 const Profile = () => {
   const navigation = useNavigation();
-  const [collapsed, setCollapsed] = useState(false);
+  const userData = useSelector(state => state.user);
+  React.useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  });
 
   const logout = async () => {
-    unSetUserInfo({_id:'', name:'', email: '', mobile: '', role: '', role_id: '' });
+    unSetUserInfo({
+      _id: '',
+      name: '',
+      email: '',
+      mobile: '',
+      role: '',
+      role_id: '',
+    });
     unsetUserToken({token: null});
     await removeToken('token');
     await removeUserId('user_id');
     navigation.navigate('Login');
   };
-
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
-
-  const toggleExpanded = () => {
-    setCollapsed(!collapsed);
-  };
-
-  //getting company data from redux store    company -> name is reducer
-  const companyData = useSelector(state => state.company);
-  // console.log(companyData);
-
-  // const companyToken = useSelector(state => state.companyAuth)
-  // console.log(companyToken);
-
-  function renderHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          // marginTop: 30,
-          paddingHorizontal: SIZES.padding,
-          justifyContent: 'space-between',
-        }}>
-        <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
-          Profile
-        </Text>
-        {/* <IconButton
-          icon={icons.sun}
-          iconStyle={{
-            tintColor: COLORS.black,
-          }}
-        /> */}
-      </View>
-    );
-  }
 
   function renderProfileCard() {
     return (
@@ -72,25 +45,26 @@ const Profile = () => {
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.radius,
+          paddingHorizontal: SIZES.padding,
           paddingVertical: 20,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_800,
+          alignItems: 'center',
         }}>
         {/* profile image  */}
         <TouchableOpacity
           style={{
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
           }}
           onPress={() => alert('Upload Image')}>
           <Image
-            source={images.Profile7}
+            source={images.civil_eng}
             style={{
               width: '100%',
               height: '100%',
-              borderRadius: 30,
-              borderWidth: 2,
+              borderRadius: 15,
+              borderWidth: 3,
               borderColor: COLORS.white,
             }}
           />
@@ -134,18 +108,20 @@ const Profile = () => {
             style={{
               color: COLORS.white,
               ...FONTS.h2,
+              textTransform: 'capitalize',
             }}>
-            {/* {companyData.company_name} */}
+            {userData.name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
-            {/* {companyData.email} */}
+            {userData.email}
+          </Text>
+          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+            +91{userData.mobile}
           </Text>
         </View>
       </View>
     );
   }
-
-
 
   function renderProfileSection2() {
     return (
@@ -153,10 +129,7 @@ const Profile = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" 
-        onPress={logout} 
-
-        />
+        <ProfileValue icon={icons.logout} value="LogOut" onPress={logout} />
       </View>
     );
   }
