@@ -59,14 +59,6 @@ const UserDashboard = ({ navigation, route }) => {
     (async () => await Get_token_Data())();
   }, [])
 
-
-
-
-
-console.log(userId)
-
-
-
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
   const [doneModal, setdoneModal] = useState(false)
@@ -91,6 +83,7 @@ console.log(userId)
     setdoneModal(true);
   }
   const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+  
 
   useEffect(() => {
     if (isSuccess) {
@@ -98,8 +91,9 @@ console.log(userId)
     }
   },[])
 
-  const userData = useSelector(state => state.user);
-  const userToken = useSelector(state => state.userAuth);
+  // const userData = useSelector(state => state.user);
+  // const userToken = useSelector(state => state.userAuth);
+  // console.log(userData);
   // console.log(userToken);
 
   return (

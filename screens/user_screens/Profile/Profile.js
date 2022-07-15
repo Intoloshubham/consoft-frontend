@@ -21,6 +21,9 @@ const Profile = () => {
   const navigation = useNavigation();
   const [collapsed, setCollapsed] = useState(false);
 
+  const userData = useSelector(state => state.user);
+  console.log(userData)
+
   const logout = async () => {
     unSetUserInfo({_id:'', name:'', email: '', mobile: '', role: '', role_id: '' });
     unsetUserToken({token: null});
@@ -38,9 +41,7 @@ const Profile = () => {
   };
 
   //getting company data from redux store    company -> name is reducer
-  const companyData = useSelector(state => state.company);
-  // console.log(companyData);
-
+  
   // const companyToken = useSelector(state => state.companyAuth)
   // console.log(companyToken);
 
