@@ -13,6 +13,7 @@ import UserAssignWorks from './UserAssignWorks';
 const UserDashboard = () => {
   const [userId, setUserId] = useState('');
   
+<<<<<<< HEAD
   const [accessToken, setAccessToken] = useState('');
   useEffect(() => {
     (async () => {
@@ -29,6 +30,53 @@ const UserDashboard = () => {
   const dispatch = useDispatch();
 console.log(data)
   //store data in redux store
+=======
+  // React.useEffect(() => {
+  //   Get_token_Data()
+  // }, [])
+
+
+  const Get_token_Data =async () => {
+    const tokens = await getToken();
+    const userId = await getUserId();
+    setUserId(userId);   
+    setAccessToken(tokens)
+    dispatch(setUserToken({ token: tokens })) 
+  }
+
+
+  //setting token
+  React.useMemo(() => {
+    (async () => await Get_token_Data())();
+  }, [])
+
+  const [taskModal, settaskModal] = useState(false)
+  const [inProgressModal, setinProgressModal] = useState(false)
+  const [doneModal, setdoneModal] = useState(false)
+  const [taskModalnum, settaskModalNum] = useState(false)
+  const [inProgressModalnum, setinProgressModalNum] = useState(false)
+  const [doneModalnum, setdoneModalNum] = useState(false)
+
+  const handleTask = async () => {
+    const new_task=await fetch(`${Config.API_URL}user-assign-works/${userId}`)
+    const res=await new_task.json(new_task)
+
+    setNewTaskRes(res)
+    settaskModalNum(true);
+    settaskModal(true);
+  }
+  const handleInProgressTask = () => {
+    setinProgressModalNum(true)
+    setinProgressModal(true);
+  }
+  const handleDoneTask = () => {
+    setdoneModalNum(true);
+    setdoneModal(true);
+  }
+  const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+  
+
+>>>>>>> f73e7b96e24bfcbc22b30c6e4b706ac876ceec64
   useEffect(() => {
     if (isSuccess) {
       dispatch(
@@ -44,6 +92,7 @@ console.log(data)
     }
   });
 
+<<<<<<< HEAD
   const userData = useSelector(state => state.user);
   console.log(userData)
 
@@ -73,6 +122,12 @@ console.log(data)
   //     );
   //   }
   // }, []);
+=======
+  // const userData = useSelector(state => state.user);
+  // const userToken = useSelector(state => state.userAuth);
+  // console.log(userData);
+  // console.log(userToken);
+>>>>>>> f73e7b96e24bfcbc22b30c6e4b706ac876ceec64
 
   return (
     <View>

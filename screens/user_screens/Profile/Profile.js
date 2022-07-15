@@ -25,6 +25,9 @@ const Profile = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
+  const userData = useSelector(state => state.user);
+  console.log(userData)
+
   const logout = async () => {
     unSetUserInfo({
       _id: '',
@@ -40,6 +43,44 @@ const Profile = () => {
     navigation.navigate('Login');
   };
 
+<<<<<<< HEAD
+=======
+  React.useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  });
+
+  const toggleExpanded = () => {
+    setCollapsed(!collapsed);
+  };
+
+  //getting company data from redux store    company -> name is reducer
+  
+  // const companyToken = useSelector(state => state.companyAuth)
+  // console.log(companyToken);
+
+  function renderHeader() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          // marginTop: 30,
+          paddingHorizontal: SIZES.padding,
+          justifyContent: 'space-between',
+        }}>
+        <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
+          Profile
+        </Text>
+        {/* <IconButton
+          icon={icons.sun}
+          iconStyle={{
+            tintColor: COLORS.black,
+          }}
+        /> */}
+      </View>
+    );
+  }
+
+>>>>>>> f73e7b96e24bfcbc22b30c6e4b706ac876ceec64
   function renderProfileCard() {
     return (
       <View
