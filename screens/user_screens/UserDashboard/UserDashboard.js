@@ -59,25 +59,10 @@ const UserDashboard = ({ navigation, route }) => {
   }, [])
 
 
-  // console.log(accessToken)
-
-
-  // console.log("Token " + accessToken)
 
 
 
-  // const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
-  // console.log("data "+ data);
-
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role_id: data.role_id  }))
-  //   }
-  // })
-
-
-// console.log(userId)
+console.log(userId)
 
 
 
@@ -91,7 +76,7 @@ const UserDashboard = ({ navigation, route }) => {
   const handleTask = async () => {
     const new_task=await fetch(`${Config.API_URL}user-assign-works/${userId}`)
     const res=await new_task.json(new_task)
-    // console.log(res)
+
     setNewTaskRes(res)
     settaskModalNum(true);
     settaskModal(true);
