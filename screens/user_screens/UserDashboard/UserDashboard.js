@@ -70,7 +70,7 @@ const UserDashboard = ({ navigation, route }) => {
   const handleTask = async () => {
     const new_task=await fetch(`${Config.API_URL}user-assign-works/${userId}`)
     const res=await new_task.json(new_task)
-    console.log(res)
+    console.log(res)  
     setNewTaskRes(res)
     settaskModalNum(true);
     settaskModal(true);

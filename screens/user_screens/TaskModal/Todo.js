@@ -18,6 +18,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import DatePicker from 'react-native-neat-date-picker'
 import { Divider } from '@ui-kitten/components';
 import { LogBox } from "react-native";
+import Config from '../../../config';
 
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
@@ -47,7 +48,7 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
     const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
     const [list, setlist] = React.useState(data.list)
     const [assign_works, setAssign_works] = React.useState([])
-    const [work_id, setWorkId] = useState('')
+    const [work_id, setWorkId] = useState([])
     const [workData, setWorkData] = useState('')
     const [commentInput, setCommentInput] = useState('')
 
@@ -56,7 +57,7 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
 
 
 
-    function Test({ item }) {
+    function WorkParicular({ item }) {
         // console.log(item2)
         return (
             <View style={styles.header}>
@@ -77,12 +78,12 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
         LayoutAnimation.easeInEaseOut();
         return (
             <View>
-                <Test item={item} />
+                <WorkParicular item={item} />
             </View>
         )
     }
 
-    // console.log(newTaskRes)
+    // console.log(NewTaskRes)
     React.useMemo(() => {
         NewTaskRes.map(ele => {
             let data_assign = ele.assign_works
@@ -100,22 +101,24 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
             })
         }
     }, [assign_works])
-
-
+    
+    console.log(work_id); 
     const submit_comment = () => {
         const data = {
-            comment: commentInput,
+            submit_work_text: commentInput,
         }
 
         fetch(`${Config.API_URL}user-submit-work/${work_id}`, {
-            method: 'POST',
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
             .then((response) => response.json())
             .then(data => {
-                // console.log(data) 
-                setWorkData(data)
+                console.log(data.status) 
+                if (data.status == '200') {
+                    setCommentInput('PENDING FOR VERIFY!!')
+                  }
             })
     }
 
@@ -173,6 +176,7 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
                         <View style={{}}>
                             <TextInput textAlignVertical='top' multiline={true} placeholder='Comment section' placeholderTextColor={COLORS.gray}
                                 style={{
+                                    minHeight:15,
                                     backgroundColor: COLORS.gray3,
                                     ...FONTS.body4,
                                     width: 200,
@@ -180,6 +184,7 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
 
                                 }}
                                 onChangeText={(text) => setCommentInput(text)}
+                                value={commentInput}
                             ></TextInput>
                         </View>
                         <View style={{ marginTop: 40 }}>
