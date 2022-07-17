@@ -10,7 +10,8 @@ import {
   Modal,
   Pressable,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
@@ -22,28 +23,24 @@ const Unit = () => {
   const [unitname, setUintname] = useState('');
   const [data, setdata] = useState([]);
 
- 
-  
-
   // modal create unit
   const [modal, setModal] = useState(false);
   const [showBox, setShowBox] = useState(false);
 
   const [unitid, setunitid] = useState('');
-  
-  const updateunit = (id,name) => {
+
+  const updateunit = (id, name) => {
     setShowBox(true);
-      setunitid(id);
-     setUintname(name)
-     console.log(name)
+    setunitid(id);
+    setUintname(name);
+    //  console.log(name)
   };
 
-  const  Update =()=> {
+  const Update = () => {
     const data1 = {
       unit_name: unitname,
     };
-      fetch('http://192.168.1.99:8000/api/unit/' +`${unitid}`, {
-
+    fetch('http://192.168.1.99:8000/api/unit/' + `${unitid}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -52,9 +49,8 @@ const Unit = () => {
     })
       .then(response => response.json())
       .then(data => {
-       
-       fetchData();
-        console.log('Success:', data,alert("unit update"));
+        fetchData();
+        console.log('Success:', data, alert('unit update'));
         //  unitname == ''
         //     // ? alert('plz fill unitname')
         //     // : data.message == 'This unit is already exist'
@@ -64,9 +60,7 @@ const Unit = () => {
       .catch(error => {
         console.error('Error:', error);
       });
-     
-  }
-
+  };
 
   const fetchData = async () => {
     const resp = await fetch('http://192.168.1.99:8000/api/unit/');
@@ -79,6 +73,8 @@ const Unit = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // console.log(data);
 
   function submit(e) {
     const data = {
@@ -120,8 +116,6 @@ const Unit = () => {
     fetchData();
   };
 
-  
-
   const renderItem = ({item}) => {
     return (
       <ScrollView>
@@ -130,14 +124,33 @@ const Unit = () => {
             <Text style={styles.title}>{item.unit_name}</Text>
             <View
               style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-              <View style={{marginRight: 5}}>
-                <Button
-                  title="edit"
-                  onPress={() => updateunit(item._id,item.unit_name,)}
-                />
-              </View>
-              <View style={{marginLeft: 10}}>
-                <Button title="X" onPress={() => DeleteUnit(item._id)} />
+              <View style={{flexDirection:"row"}}>
+                <TouchableOpacity
+                  onPress={() =>
+                    updateunit(item._id, item.unit_name)
+                  }>
+                    <Image
+                    source={icons.edit}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      right: 15,
+                      tintColor: COLORS.lightblue_900,
+                    }}
+                  />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => DeleteUnit(item._id)}>
+                    <Image
+                    source={icons.delete_icon}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      right: 10,
+                      tintColor: COLORS.red,
+                    }}
+                  />
+                  </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -149,12 +162,11 @@ const Unit = () => {
   return (
     <View>
       <HeaderBar right={true} title="Units" />
-
       <View
         style={{
           marginHorizontal: SIZES.padding,
         }}>
-          <View>
+        <View>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -162,154 +174,150 @@ const Unit = () => {
             }}>
             <Title style={{color: 'white'}}>Add unit</Title>
           </TouchableOpacity>
-          
-        <Modal animationType="fade" transparent={false} visible={modal}>
-          <View
-            style={{
-              backgroundColor: '#000000aa',
-              flex: 1,
-            }}>
+
+          <Modal animationType="fade" transparent={false} visible={modal}>
             <View
               style={{
-                marginTop: 100,
-                padding: 20,
-                backgroundColor: '#fff',
-                borderWidth: 1,
-                borderRadius: 20,
-                margin: 10,
+                backgroundColor: '#000000aa',
+                flex: 1,
               }}>
-              <View>
-                <Pressable onPress={setModal}>
-                  <Text
-                    style={{
-                      alignSelf: 'flex-end',
-                      fontSize: 20,
-                      fontWeight: 'bold',
-                    }}>
-                    X
-                  </Text>
-                </Pressable>
-              </View>
-              <View style={{marginTop: 10}}>
-                <Card style={{backgroundColor: ''}}>
-                  <Card.Content>
-                    <Title>Unit name</Title>
-                    <FormInput
-                      onChange={unitname => {
-                        setUintname(unitname);
-                      }}
-                    />
-                    <TextButton
-                      label="Save"
-                      buttonContainerStyle={{
-                        height: 45,
-                        borderRadius: SIZES.radius,
-                        marginTop: SIZES.padding,
-                      }}
-                      onPress={() => submit()}
-                    />
-                  </Card.Content>
-                </Card>
+              <View
+                style={{
+                  marginTop: 100,
+                  padding: 20,
+                  backgroundColor: '#fff',
+                  borderWidth: 1,
+                  borderRadius: 20,
+                  margin: 10,
+                }}>
+                <View>
+                  <Pressable onPress={setModal}>
+                    <Text
+                      style={{
+                        alignSelf: 'flex-end',
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                      }}>
+                      X
+                    </Text>
+                  </Pressable>
+                </View>
+                <View style={{marginTop: 10}}>
+                  <Card style={{backgroundColor: ''}}>
+                    <Card.Content>
+                      <Title>Unit name</Title>
+                      <FormInput
+                        onChange={unitname => {
+                          setUintname(unitname);
+                        }}
+                      />
+                      <TextButton
+                        label="Save"
+                        buttonContainerStyle={{
+                          height: 45,
+                          borderRadius: SIZES.radius,
+                          marginTop: SIZES.padding,
+                        }}
+                        onPress={() => submit()}
+                      />
+                    </Card.Content>
+                  </Card>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
-        <View
-          style={{
-            marginBottom: SIZES.padding,
-            marginTop: 5,
-            padding: 20,
-            borderRadius: SIZES.radius,
-            backgroundColor: COLORS.white,
-            ...styles.shadow,
-          }}>
-          <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-            <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Units</Text>
-           
-          </View>
-          <FlatList
-            maxHeight={410}
-            contentContainerStyle={{marginTop: SIZES.radius}}
-            scrollEnabled={true}
-            data={data}
-            keyExtractor={item => `${item._id}`}
-            renderItem={renderItem}
-            showsVerticalScrollIndicator={true}
-            ItemSeparatorComponent={() => {
-              return (
-                <View
-                  style={{
-                    width: '100%',
-                    height: 1,
-                    backgroundColor: COLORS.lightGray1,
-                    marginVertical: 5,
-
-                  }}></View>
-              );
-            }}
-          />
-        </View>
-        <View> 
-          <Modal
-                  animationType="fade"
-                  transparent={false}
-                  visible={showBox}>
+          </Modal>
+          <View
+            style={{
+              marginBottom: SIZES.padding,
+              marginTop: 5,
+              padding: 20,
+              borderRadius: SIZES.radius,
+              backgroundColor: COLORS.white,
+              ...styles.shadow,
+            }}>
+            <View
+              style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+              <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Units</Text>
+            </View>
+            <FlatList
+              maxHeight={410}
+              contentContainerStyle={{marginTop: SIZES.radius}}
+              scrollEnabled={true}
+              data={data}
+              keyExtractor={item => `${item._id}`}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={true}
+              ItemSeparatorComponent={() => {
+                return (
                   <View
                     style={{
-                      backgroundColor: '#000000aa',
-                      flex: 1,
-                    }}>
-                    <View
-                      style={{
-                        marginTop: 100,
-                        padding: 20,
-                        backgroundColor: '#fff',
-                        borderWidth: 1,
-                        borderRadius: 20,
-                        margin: 10,
-                      }}>
-                      <View>
-                        <Pressable onPress={setShowBox}>
-                          <Text
-                            style={{
-                              alignSelf: 'flex-end',
-                              fontSize: 20,
-                              fontWeight: 'bold',
-                            }}>
-                            X
-                          </Text>
-                        </Pressable>
-                      </View>
-                      <View style={{marginTop: 10}}>
-                        <Card style={{backgroundColor: ''}}>
-                          <Card.Content>
-                            <Title>Edit unit</Title>
-                            <FormInput
-                              value={unitname}
-                              label="unit name"
-                              onChange={value => {
-                                setUintname(value);
-                              }}
-                            />
-
-                            <TextButton
-                              label="Update"
-                              buttonContainerStyle={{
-                                height: 45,
-                                borderRadius: SIZES.radius,
-                                marginTop: SIZES.padding,
-                              }}
-                              onPress={() => Update()}
-                            />
-                          </Card.Content>
-                        </Card>
-                      </View>
-                    </View>
+                      width: '100%',
+                      height: 1,
+                      backgroundColor: COLORS.lightGray1,
+                      marginVertical: 5,
+                    }}></View>
+                );
+              }}
+            />
+          </View>
+          <View>
+            <Modal animationType="fade" transparent={false} visible={showBox}>
+              <View
+                style={{
+                  backgroundColor: '#000000aa',
+                  flex: 1,
+                }}>
+                <View
+                  style={{
+                    marginTop: 100,
+                    padding: 20,
+                    backgroundColor: '#fff',
+                    borderWidth: 1,
+                    borderRadius: 20,
+                    margin: 10,
+                  }}>
+                  <View>
+                    <Pressable onPress={setShowBox}>
+                      <Text
+                        style={{
+                          alignSelf: 'flex-end',
+                          fontSize: 20,
+                          fontWeight: 'bold',
+                        }}>
+                        X
+                      </Text>
+                    </Pressable>
                   </View>
-                </Modal>
+                  <View style={{marginTop: 10}}>
+                    <Card style={{backgroundColor: ''}}>
+                      <Card.Content>
+                        <Title>Edit unit</Title>
+                        <FormInput
+                          value={unitname}
+                          label="unit name"
+                          onChange={value => {
+                            setUintname(value);
+                          }}
+                        />
+
+                        <TextButton
+                          label="Update"
+                          buttonContainerStyle={{
+                            height: 45,
+                            borderRadius: SIZES.radius,
+                            marginTop: SIZES.padding,
+                          }}
+                          onPress={() => Update()}
+                        />
+                      </Card.Content>
+                    </Card>
+                  </View>
                 </View>
+              </View>
+            </Modal>
+          </View>
+        </View>
       </View>
-    </View>
     </View>
   );
 };
@@ -328,7 +336,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    // fontWeight:"bold",
+    textTransform:"capitalize"
   },
   input: {
     backgroundColor: 'white',

@@ -17,6 +17,7 @@ import Toast from 'react-native-toast-message';
 import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
+
 import { useLoginCompanyMutation } from '../../services/companyAuthApi';
 import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
 
@@ -65,7 +66,6 @@ const Login = ({navigation}) => {
 
   //rtk
   const [loginCompany] = useLoginCompanyMutation();
-
   const [ loginUser ] = useLoginUserMutation();
 
   function isEnableLogin() {

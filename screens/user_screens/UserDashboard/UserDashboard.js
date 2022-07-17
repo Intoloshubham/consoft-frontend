@@ -59,7 +59,6 @@ const UserDashboard = ({ navigation, route }) => {
     (async () => await Get_token_Data())();
   }, [])
 
-
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
   const [doneModal, setdoneModal] = useState(false)
@@ -70,7 +69,7 @@ const UserDashboard = ({ navigation, route }) => {
   const handleTask = async () => {
     const new_task=await fetch(`${Config.API_URL}user-assign-works/${userId}`)
     const res=await new_task.json(new_task)
-    console.log(res)  
+
     setNewTaskRes(res)
     settaskModalNum(true);
     settaskModal(true);
@@ -83,10 +82,8 @@ const UserDashboard = ({ navigation, route }) => {
     setdoneModalNum(true);
     setdoneModal(true);
   }
-// console.log(NewTaskRes)
-
-
   const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+  
 
   useEffect(() => {
     if (isSuccess) {
@@ -94,8 +91,9 @@ const UserDashboard = ({ navigation, route }) => {
     }
   },[])
 
-  const userData = useSelector(state => state.user);
-  const userToken = useSelector(state => state.userAuth);
+  // const userData = useSelector(state => state.user);
+  // const userToken = useSelector(state => state.userAuth);
+  // console.log(userData);
   // console.log(userToken);
 
   return (

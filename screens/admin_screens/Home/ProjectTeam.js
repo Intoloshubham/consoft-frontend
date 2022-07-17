@@ -17,6 +17,7 @@ import {
   TextButton,
   CustomDropdown,
   IconButton,
+  ConformationAlert,
 } from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
 import Config from '../../../config';
@@ -24,6 +25,16 @@ import Toast from 'react-native-toast-message';
 
 const ProjectTeam = ({route}) => {
   const {project_id} = route.params; //
+  const [showAddProjectTeamModal, setShowAddProjectTeamModal] =
+    React.useState(false);
+  const [projectTeam, setProjectTeam] = React.useState([]);
+
+  const [teamDeleteConfirmation, setTeamDeleteConfirmation] =
+    React.useState(false);
+
+  React.useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  });
 
   const showToast = () =>
     Toast.show({
@@ -33,14 +44,6 @@ const ProjectTeam = ({route}) => {
       text2: 'Success',
       visibilityTime: 1800,
     });
-
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
-
-  const [teamdetails, setTeamDetails] = React.useState([]);
-  const [showAddProjectTeamModal, setShowAddProjectTeamModal] =
-    React.useState(false);
 
   // call apis
   React.useEffect(() => {
@@ -58,7 +61,7 @@ const ProjectTeam = ({route}) => {
         setRoleItems(roleFromApi);
       })
       .catch(error => console.log(error.message));
-  }, []);
+  }, [roleItems]);
 
   const OnChangeHandler = id => {
     fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
@@ -78,7 +81,7 @@ const ProjectTeam = ({route}) => {
   };
   React.useEffect(() => {
     OnChangeHandler;
-  }, []);
+  }, [userItems]);
 
   //roloe dropdown
   const [openRole, setOpenRole] = React.useState(false);
@@ -125,9 +128,15 @@ const ProjectTeam = ({route}) => {
       });
   };
 
-  const deleteHandler = id => {
-    console.log(id);
-    fetch(`${Config.API_URL}project-team/` + `${project_id}/${id}`, {
+  const [tid, setTId] = React.useState('');
+  const teamid = id => {
+    // console.log(id);
+    setTId(id);
+  };
+
+  const deleteHandler = () => {
+    // console.log(id);
+    fetch(`${Config.API_URL}project-team/` + `${project_id}/${tid}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -138,6 +147,7 @@ const ProjectTeam = ({route}) => {
         console.log(data);
       })
       .catch(error => console.log(error.message));
+    setTeamDeleteConfirmation(false);
   };
 
   React.useEffect(() => {
@@ -149,10 +159,10 @@ const ProjectTeam = ({route}) => {
     })
       .then(response => response.json())
       .then(data => {
-        setTeamDetails(data);
+        setProjectTeam(data);
       })
       .catch(error => console.log(error.message));
-  }, []);
+  }, [projectTeam]);
 
   function renderTeamList() {
     const renderItem = ({item, index}) => (
@@ -207,7 +217,10 @@ const ProjectTeam = ({route}) => {
                       </ImageBackground>
                     </TouchableOpacity> */}
                     <TouchableOpacity
-                      onPress={() => deleteHandler(ele.user_id)}>
+                      onPress={() => {
+                        teamid(ele.user_id);
+                        setTeamDeleteConfirmation(true);
+                      }}>
                       <ImageBackground
                         style={{
                           backgroundColor: COLORS.rose_600,
@@ -248,7 +261,7 @@ const ProjectTeam = ({route}) => {
         {/* <Text style={{...FONTS.h2, color: COLORS.darkGray}}>List</Text> */}
         <FlatList
           contentContainerStyle={{marginTop: SIZES.radius}}
-          data={teamdetails}
+          data={projectTeam}
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
           scrollEnabled={true}
@@ -392,9 +405,21 @@ const ProjectTeam = ({route}) => {
         onPress={() => setShowAddProjectTeamModal(true)}
       />
       <Toast config={showToast} />
-
       {renderTeamList()}
       {renderAddProjectTeamModal()}
+      <ConformationAlert
+        isVisible={teamDeleteConfirmation}
+        onCancel={() => {
+          setTeamDeleteConfirmation(false);
+        }}
+        title="Team Delete"
+        message="Are you sure want to delete this member ?"
+        cancelText="Cancel"
+        confirmText="Yes"
+        onConfirmPressed={() => {
+          deleteHandler();
+        }}
+      />
     </View>
   );
 };

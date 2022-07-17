@@ -103,6 +103,7 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
     }, [NewTaskRes])
 
     // console.log(assign_works)
+
     useMemo(() => {
         if (assign_works) {
             assign_works.map((ele) => {
@@ -131,6 +132,7 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
                 }
             })
     }
+
 
 
 
