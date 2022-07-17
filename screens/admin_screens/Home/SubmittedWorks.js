@@ -18,9 +18,13 @@ import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 
 const SubmittedWorks = () => {
   //COMPANY DATA
-  const companyData = useSelector(state => state.company);
-  const company_id = companyData._id;
-  // console.log(company_id);
+
+  
+    
+    const companyData = useSelector(state => state.company);
+    const company_id = companyData._id;
+    console.log(company_id);
+
 
   const [submitWork, setSubmitWork] = React.useState([]);
   const [verifyResponse, setVerifyResponse] = React.useState([]);
@@ -29,21 +33,21 @@ const SubmittedWorks = () => {
   const [revertId, setRevertId] = React.useState('');
 
   // GET SUBMITTED WORKS
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}submit-works/` + `${company_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setSubmitWork(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [submitWork]);
+  // React.useEffect(() => {
+  //   fetch(`${Config.API_URL}submit-works/` + `${company_id}`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setSubmitWork(data);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // }, [submitWork]);
 
   // verify works
   const verifyHandler = id => {
