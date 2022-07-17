@@ -57,18 +57,24 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
 
 
 
-    function WorkParicular({ item }) {
-        // console.log(item2)
+    function WorkParicular({ item ,message,COLOR}) {
+        console.log(item)
         return (
-            <View style={styles.header}>
-                <View style={{ flexDirection: "row" }}>
-                    <View >
-                        <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "left" }]}>{item.work_code}: </Text>
+
+            <View >
+                    <View style={styles.header}>
+                        <View style={[{flexDirection: "row"}]}>
+                            <View>
+                                <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "left" }]}>{item.work_code}: </Text>
+                            </View>
+                            <View>
+                                <Text style={[FONTS.h3, { color: COLORS.black, textAlign: "left" }]}>{item.work}</Text>
+                            </View>
+                        </View>
+                        <View style={{}}>
+                            <Text style={{color:COLOR}}>{message}</Text>
+                        </View>
                     </View>
-                    <View>
-                        <Text style={[FONTS.h3, { color: COLORS.black, textAlign: "left" }]}>{item.work}</Text>
-                    </View>
-                </View>
             </View>
         )
     }
@@ -78,7 +84,11 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
         LayoutAnimation.easeInEaseOut();
         return (
             <View>
-                <WorkParicular item={item} />
+              {item.work_status == true && item.verify == false && item.revert_status == false ?
+                <WorkParicular item={item} message={"Pending from admin side!!"} COLOR={COLORS.yellow_700}/>                
+                :item.work_status==false && item.verify==false && item.revert_status==true ?<WorkParicular item={item} message={"Revert"} COLOR={COLORS.red}/>
+                :item.work_status == false && item.verify == false && item.revert_status == false ?<WorkParicular item={item} message={""} COLOR={COLORS.black}/>
+                :null}
             </View>
         )
     }
@@ -97,12 +107,12 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
         if (assign_works) {
             assign_works.map((ele) => {
                 let work_id = ele._id
-                setWorkId(work_id)    
+                setWorkId(work_id)
             })
         }
     }, [assign_works])
-    
-    console.log(work_id); 
+
+    console.log(work_id);
     const submit_comment = () => {
         const data = {
             submit_work_text: commentInput,
@@ -115,10 +125,10 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
         })
             .then((response) => response.json())
             .then(data => {
-                console.log(data.status) 
+                console.log(data.status)
                 if (data.status == '200') {
-                    setCommentInput('PENDING FOR VERIFY!!')
-                  }
+                    setCommentInput(' ')
+                }
             })
     }
 
@@ -138,14 +148,16 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
     //     setExpCalendar(false)
     // }
 
+
+    
     const _body = (item) => {
         LayoutAnimation.easeInEaseOut();
         return (
             <View style={styles.body_container} key={item.key}>
                 <View style={[styles.form_container, { borderRadius: 10, shadowOffset: { width: 0, height: 1 }, shadowColor: "#99CCC0", shadowOpacity: 1.5 }]}>
                     <View style={{ backgroundColor: COLORS.gray3, flexDirection: "row", justifyContent: "space-between" }}>
-                        <Text style={{ color: COLORS.black, fontSize: SIZES.h4 }} >Date: </Text>
-                        <Text style={{ color: COLORS.black }}  >Time: </Text>
+                        <Text style={{ color: COLORS.black, fontSize: SIZES.h4 }} >{item.exp_completion_date} </Text>
+                        <Text style={{ color: COLORS.black }}  >{item.exp_completion_date} </Text>
                     </View>
                     <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} />
                     {/* <View>
@@ -176,7 +188,7 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
                         <View style={{}}>
                             <TextInput textAlignVertical='top' multiline={true} placeholder='Comment section' placeholderTextColor={COLORS.gray}
                                 style={{
-                                    minHeight:15,
+                                    minHeight: 15,
                                     backgroundColor: COLORS.gray3,
                                     ...FONTS.body4,
                                     width: 200,
