@@ -7,9 +7,9 @@ import {
     Pressable,
     StyleSheet,
     Button,
-    Image,LayoutAnimation
+    Image, LayoutAnimation
 } from 'react-native';
-import React from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
 import { icons, COLORS, SIZES, FONTS } from '../../../constants';
@@ -18,6 +18,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import DatePicker from 'react-native-neat-date-picker'
 import { Divider } from '@ui-kitten/components';
 import { LogBox } from "react-native";
+import Config from '../../../config';
 
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
@@ -40,31 +41,40 @@ const data =
     ]
 }
 
-function Todo({ taskModal, settaskModal, newTaskRes }) {
+function Todo({ taskModal, settaskModal, NewTaskRes }) {
 
 
     const [ExpCalendar, setExpCalendar] = React.useState(false)
     const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
     const [list, setlist] = React.useState(data.list)
     const [assign_works, setAssign_works] = React.useState([])
+    const [work_id, setWorkId] = useState([])
+    const [workData, setWorkData] = useState('')
+    const [commentInput, setCommentInput] = useState('')
 
 
 
 
 
 
-    function Test({ item }) {
-        // console.log(item2)
+    function WorkParicular({ item ,message,COLOR}) {
+        console.log(item)
         return (
-            <View style={styles.header}>
-                <View style={{flexDirection:"row"}}>
-                    <View >
-                    <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "left" }]}>{item.work_code}: </Text>
+
+            <View >
+                    <View style={styles.header}>
+                        <View style={[{flexDirection: "row"}]}>
+                            <View>
+                                <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "left" }]}>{item.work_code}: </Text>
+                            </View>
+                            <View>
+                                <Text style={[FONTS.h3, { color: COLORS.black, textAlign: "left" }]}>{item.work}</Text>
+                            </View>
+                        </View>
+                        <View style={{}}>
+                            <Text style={{color:COLOR}}>{message}</Text>
+                        </View>
                     </View>
-                    <View>
-                        <Text style={[FONTS.h3, { color: COLORS.black, textAlign: "left" }]}>{item.work}</Text>
-                    </View>
-                </View>
             </View>
         )
     }
@@ -74,21 +84,53 @@ function Todo({ taskModal, settaskModal, newTaskRes }) {
         LayoutAnimation.easeInEaseOut();
         return (
             <View>
-                <Test item={item} />
+              {item.work_status == true && item.verify == false && item.revert_status == false ?
+                <WorkParicular item={item} message={"Pending from admin side!!"} COLOR={COLORS.yellow_700}/>                
+                :item.work_status==false && item.verify==false && item.revert_status==true ?<WorkParicular item={item} message={"Revert"} COLOR={COLORS.red}/>
+                :item.work_status == false && item.verify == false && item.revert_status == false ?<WorkParicular item={item} message={""} COLOR={COLORS.black}/>
+                :null}
             </View>
         )
     }
 
-    React.useEffect(() => {
-        newTaskRes.map(ele => {
+    // console.log(NewTaskRes)
+    React.useMemo(() => {
+        NewTaskRes.map(ele => {
             let data_assign = ele.assign_works
             setAssign_works(data_assign)
-            console.log(data_assign)
+
         })
-    }, [])
+    }, [NewTaskRes])
 
     // console.log(assign_works)
+    useMemo(() => {
+        if (assign_works) {
+            assign_works.map((ele) => {
+                let work_id = ele._id
+                setWorkId(work_id)
+            })
+        }
+    }, [assign_works])
 
+    console.log(work_id);
+    const submit_comment = () => {
+        const data = {
+            submit_work_text: commentInput,
+        }
+
+        fetch(`${Config.API_URL}user-submit-work/${work_id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then(data => {
+                console.log(data.status)
+                if (data.status == '200') {
+                    setCommentInput(' ')
+                }
+            })
+    }
 
 
 
@@ -106,14 +148,16 @@ function Todo({ taskModal, settaskModal, newTaskRes }) {
     //     setExpCalendar(false)
     // }
 
+
+    
     const _body = (item) => {
         LayoutAnimation.easeInEaseOut();
         return (
             <View style={styles.body_container} key={item.key}>
                 <View style={[styles.form_container, { borderRadius: 10, shadowOffset: { width: 0, height: 1 }, shadowColor: "#99CCC0", shadowOpacity: 1.5 }]}>
                     <View style={{ backgroundColor: COLORS.gray3, flexDirection: "row", justifyContent: "space-between" }}>
-                        <Text style={{ color: COLORS.black, fontSize: SIZES.h4 }} >Date: </Text>
-                        <Text style={{ color: COLORS.black }}  >Time: </Text>
+                        <Text style={{ color: COLORS.black, fontSize: SIZES.h4 }} >{item.exp_completion_date} </Text>
+                        <Text style={{ color: COLORS.black }}  >{item.exp_completion_date} </Text>
                     </View>
                     <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} />
                     {/* <View>
@@ -140,24 +184,35 @@ function Todo({ taskModal, settaskModal, newTaskRes }) {
                             onConfirm={onConfirmexp}   
                         />
                     </View> */}
-                    <View style={{ flexdirection: "row", justifyContent: "space-around" }}>
-                        <View style={{ backgroundColor: COLORS.gray3, top: 10 }}>
-                            <TextInput placeholder='Comment section' placeholderTextColor={COLORS.gray} style={{ height: 35, top: 5, backgroundColor: COLORS.gray3, letterSpacing: 1, ...FONTS.body4 }}></TextInput>
+                    <View style={{ flexDirection: "row", flex: 1, justifyContent: "space-between" }}>
+                        <View style={{}}>
+                            <TextInput textAlignVertical='top' multiline={true} placeholder='Comment section' placeholderTextColor={COLORS.gray}
+                                style={{
+                                    minHeight: 15,
+                                    backgroundColor: COLORS.gray3,
+                                    ...FONTS.body4,
+                                    width: 200,
+                                    overflow: "scroll"
+
+                                }}
+                                onChangeText={(text) => setCommentInput(text)}
+                                value={commentInput}
+                            ></TextInput>
                         </View>
-                        <View style={{ backgroundColor: COLORS.Gray3, marginVertical: 10, marginTop: 20, alignSelf: "center" }}>
-                            <TouchableOpacity style={styles.sub_btn} >
-                                <Text style={{ fontWeight: "bold", color: COLORS.white, letterSpacing: 1, fontFamily: 'Poppins-SemiBold', fontSize: 11, lineHeight: 20 }}>Submit</Text>
+                        <View style={{ marginTop: 40 }}>
+                            <TouchableOpacity style={styles.sub_btn} onPress={() => submit_comment()} >
+                                <Text style={{ ...FONTS.body5, color: COLORS.white, lineHeight: 20 }}>Submit</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} />
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 5 }}>
+                    {/* <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} /> */}
+                    {/* <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 5 }}>
                         <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3 }} >Admin Revert</Text>
                         <TouchableOpacity style={{ backgroundColor: COLORS.blue, padding: 2, borderRadius: 4, width: 30, height: 20 }} >
                             <Text style={{ textAlign: 'center', color: COLORS.white, ...FONTS.h5, bottom: 4, letterSpacing: 1 }}>OK</Text>
                         </TouchableOpacity>
-                    </View>
-                    <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} />
+                    </View> */}
+                    <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 10, marginBottom: 10 }} />
                 </View>
             </View>
         );
@@ -165,7 +220,7 @@ function Todo({ taskModal, settaskModal, newTaskRes }) {
 
     return (
         <>
-        
+
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -178,7 +233,7 @@ function Todo({ taskModal, settaskModal, newTaskRes }) {
 
                 </Pressable>
                 <View style={styles.modal_container}>
-                {LayoutAnimation.easeInEaseOut()}
+                    {LayoutAnimation.easeInEaseOut()}
                     <Pressable style={{ alignSelf: "flex-end", marginLeft: 320, marginTop: 10, left: -8, top: -12 }} onPress={() => settaskModal(!taskModal)}><Entypo name="cross" color={"#106853"} size={25} /></Pressable>
 
                     <AccordionList
@@ -260,13 +315,12 @@ const styles = StyleSheet.create({
         borderColor: COLORS.gray2,
         backgroundColor: COLORS.blue,
         borderRadius: 5,
-        padding: 3,
+        // padding: 2,
+        // top: 18,
         elevation: 1,
         alignItems: "center",
         height: 25,
-        width: 50,
-        paddingBottom: -11,
-        paddingTop: 2
+        width: 50
     },
     form_container: {
         flex: 1,

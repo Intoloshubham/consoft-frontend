@@ -8,10 +8,10 @@ import {
     Pressable, TextInput, TouchableWithoutFeedback,
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
-import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../constants'
+import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import styles from '../ReportStyle.js'
+import styles from '../../ReportStyle.js'
 
 
 
