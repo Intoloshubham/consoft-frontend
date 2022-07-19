@@ -11,54 +11,34 @@ import Reports from '../UserReports/UserReports'
 import Config from '../../../config'
 //redux
 import { getToken,getUserId } from '../../../services/asyncStorageService';
-import { useGetLoggedUserQuery } from '../../../services/userAuthApi';
+import { getLoggedUser } from '../../../services/userAuthApi';
 import { setUserInfo } from '../../../features/UserSlice';
 import { setUserToken } from '../../../features/UserAuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 const UserDashboard = ({ navigation, route }) => {
-  // const { name_login_params } = route.params;
-  //for saving token
-  const [accessToken, setAccessToken] = useState('');
-  const accessref = useRef('')
-
-  //for getting new task data
-  const [NewTaskRes, setNewTaskRes] = useState([])
-
-  const [userId, setUserId] = useState('')
-
 
   const dispatch = useDispatch()
-
-
-  // async function Get_token_Data() {
-  //   const tokens = await getToken();
-  //   setAccessToken(tokens)
-  //   dispatch(setUserToken({ token: tokens }))
-
-  // }
+  const userData = useSelector(state => state.user);
+  // console.log(userData)
 
   
-  // React.useEffect(() => {
-  //   Get_token_Data()
-  // }, [])
 
+      
+      
+   
+ 
+  
+  // const res = new_task.json(new_task)
 
-  const Get_token_Data =async () => {
-    const tokens = await getToken();
-    const userId = await getUserId();
-    setUserId(userId);   
-    setAccessToken(tokens)
-    dispatch(setUserToken({ token: tokens })) 
-  }
-
-
-  //setting token
-  React.useMemo(() => {
-    (async () => await Get_token_Data())();
-  }, [])
-
+  // const result =  dispatch(getLoggedUser(userData.token));
+  // console.log(result)
+ 
+  const [accessToken, setAccessToken] = useState('');
+  const accessref = useRef('')
+  const [NewTaskRes, setNewTaskRes] = useState([])
+  const [userId, setUserId] = useState(userData.user_id)
   const [taskModal, settaskModal] = useState(false)
   const [inProgressModal, setinProgressModal] = useState(false)
   const [doneModal, setdoneModal] = useState(false)
@@ -66,8 +46,25 @@ const UserDashboard = ({ navigation, route }) => {
   const [inProgressModalnum, setinProgressModalNum] = useState(false)
   const [doneModalnum, setdoneModalNum] = useState(false)
 
+  // const Get_token_Data = async () => {
+  //   const tokens = await getToken();
+  //   const userId = await getUserId();
+  //   setUserId(userId);   
+  //   setAccessToken(tokens)
+  //   dispatch(setUserToken({ token: tokens })) 
+  //   console.log(tokens)
+  //   console.log(userData.user_id)
+  // }
+  
+  // //setting token
+  // React.useMemo(() => {
+  //   ( async () => await Get_token_Data())();
+  // }, [])
+
+
   const handleTask = async () => {
-    const new_task=await fetch(`${Config.API_URL}user-assign-works/${userId}`)
+
+    const new_task=await fetch(`${Config.API_URL}user-assign-works/${userData.user_id}`)
     const res=await new_task.json(new_task)
 
     setNewTaskRes(res)
@@ -82,26 +79,26 @@ const UserDashboard = ({ navigation, route }) => {
     setdoneModalNum(true);
     setdoneModal(true);
   }
-  const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
+
+  //----------------------
+//   const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
   
+// console.log(data)
+//   useEffect(() => {
+//     if (isSuccess) {
+//       dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role: data.role, role_id: data.role_id  }))
+//     }
+//   },[])
 
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role: data.role, role_id: data.role_id  }))
-    }
-  },[])
-
-  // const userData = useSelector(state => state.user);
+  //const userData = useSelector(state => state.user);
   // const userToken = useSelector(state => state.userAuth);
-  // console.log(userData);
+  //console.log(userData);
   // console.log(userToken);
 
   return (
     <>
-      {/* <LinearGradient colors={[COLORS.lightGray2, COLORS.lightGray2, COLORS.lightGray2]} style={styles.container}> */}
-
+      {/* <Text>TEsting</Text> */}
       <View style={styles.tasks}>
-        {/* <Text>{accessToken}</Text> */}
         <TouchableOpacity style={styles.Intask} onPress={() => handleTask()}>
           <View>
             <Image
@@ -150,22 +147,7 @@ const UserDashboard = ({ navigation, route }) => {
         </TouchableOpacity>
         {doneModalnum ? (<DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />) : null}
       </View>
-      {/* <View style={styles.report_section_title}>
-        <Text style={styles.avai_text}>Reports</Text>
-      </View> */}
-      {/* <View>
-        <TouchableOpacity
-          style={styles.create_new_report_btn}
-          onPress={() => {
-          //  get_UserId() 
-            navigation.navigate('Report');
-          }}
-        >
-          <Text style={{ color: COLORS.white, ...FONTS.body3 }}>Create New Report</Text>
-        </TouchableOpacity>
-      </View> */}
-      {/* </LinearGradient> */}
-
+      
     </>
   )
 }

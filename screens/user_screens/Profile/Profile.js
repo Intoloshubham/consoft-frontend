@@ -11,24 +11,45 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
 import {removeUserId, removeToken} from '../../../services/asyncStorageService';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {unSetUserInfo} from '../../../features/UserSlice';
 import {unsetUserToken} from '../../../features/UserAuthSlice';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import { ProfileValue, LineDivider } from '../../../Components';
+import Config from '../../../config'
+
+import {userLogout, STATUSES, getLoggedUser} from '../../../services/userAuthApi';
 
 const Profile = () => {
+
   const navigation = useNavigation();
-  const [collapsed, setCollapsed] = useState(false);
-
+  const dispatch = useDispatch()
   const userData = useSelector(state => state.user);
-  console.log(userData)
+  // console.log(userData.token);
+  const [userDetail, setUserDetail] = useState([]);
+  React.useEffect(() => {
+      fetch(`${Config.API_URL}user`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization':`Bearer ${userData.token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data)
+          setUserDetail(data)
+        })
+        .catch(error => {
+          console.log(error);
+        });
+  }, []);
 
-  const logout = async () => {
-    unSetUserInfo({_id:'', name:'', email: '', mobile: '', role: '', role_id: '' });
-    unsetUserToken({token: null});
-    await removeToken('token');
-    await removeUserId('user_id');
+
+  const logout = () =>{
+
+
+    dispatch(userLogout());
     navigation.navigate('Login');
   };
 
@@ -36,38 +57,8 @@ const Profile = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  const toggleExpanded = () => {
-    setCollapsed(!collapsed);
-  };
-
-  //getting company data from redux store    company -> name is reducer
-  
-  // const companyToken = useSelector(state => state.companyAuth)
-  // console.log(companyToken);
-
-  function renderHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          // marginTop: 30,
-          paddingHorizontal: SIZES.padding,
-          justifyContent: 'space-between',
-        }}>
-        <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
-          Profile
-        </Text>
-        {/* <IconButton
-          icon={icons.sun}
-          iconStyle={{
-            tintColor: COLORS.black,
-          }}
-        /> */}
-      </View>
-    );
-  }
-
   function renderProfileCard() {
+    
     return (
       <View
         style={{
@@ -136,10 +127,10 @@ const Profile = () => {
               color: COLORS.white,
               ...FONTS.h2,
             }}>
-            {/* {companyData.company_name} */}
+            {userDetail.name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
-            {/* {companyData.email} */}
+            {userDetail.email}
           </Text>
         </View>
       </View>

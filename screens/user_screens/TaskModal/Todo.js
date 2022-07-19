@@ -20,6 +20,8 @@ import { Divider } from '@ui-kitten/components';
 import { LogBox } from "react-native";
 import Config from '../../../config';
 
+import { useDispatch, useSelector } from 'react-redux';
+
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
 Entypo.loadFont()
@@ -42,7 +44,8 @@ const data =
 }
 
 function Todo({ taskModal, settaskModal, NewTaskRes }) {
-
+    
+    const userData = useSelector(state => state.user);
 
     const [ExpCalendar, setExpCalendar] = React.useState(false)
     const [Exp_date, setExp_date] = React.useState('YYYY-MM-DD')
@@ -53,12 +56,14 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
     const [commentInput, setCommentInput] = useState('')
 
 
-
+    // const userData = useSelector(state => state.user);
+    // const userToken = useSelector(state => state.userAuth);
+    // console.log(userData);
 
 
 
     function WorkParicular({ item ,message,COLOR}) {
-        console.log(item)
+        // console.log(item)
         return (
 
             <View >
@@ -80,15 +85,32 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
     }
 
     const _head = (item) => {
-        // console.log(item.user_name)
+        // console.log(item)
         LayoutAnimation.easeInEaseOut();
         return (
             <View>
-              {item.work_status == true && item.verify == false && item.revert_status == false ?
+              {/* {item.work_status == true && item.verify == false && item.revert_status == false ? 
                 <WorkParicular item={item} message={"Pending from admin side!!"} COLOR={COLORS.yellow_700}/>                
-                :item.work_status==false && item.verify==false && item.revert_status==true ?<WorkParicular item={item} message={"Revert"} COLOR={COLORS.red}/>
+                :item.work_status == false && item.verify == false && item.revert_status == true ?<WorkParicular item={item} message={"Revert"} COLOR={COLORS.red}/>
                 :item.work_status == false && item.verify == false && item.revert_status == false ?<WorkParicular item={item} message={""} COLOR={COLORS.black}/>
-                :null}
+                :null} */}
+                
+                {
+                    (item.work_status == true && item.verify == false && item.revert_status == false) 
+                    ?
+                    <WorkParicular item={item} message={"Pending from admin side!!"} COLOR={COLORS.yellow_700}/>
+                    :
+                    (item.work_status == false && item.verify == false && item.revert_status == true) 
+                    ?
+                    <WorkParicular item={item} message={"Revert"} COLOR={COLORS.red}/>
+                    :
+                    (item.work_status == false && item.verify == false && item.revert_status == false) 
+                    ?
+                    <WorkParicular item={item} message={""} COLOR={COLORS.black}/>
+                    :null
+                   
+                }
+                
             </View>
         )
     }
@@ -104,20 +126,26 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
 
     // console.log(assign_works)
 
-    useMemo(() => {
-        if (assign_works) {
-            assign_works.map((ele) => {
-                let work_id = ele._id
-                setWorkId(work_id)
-            })
-        }
-    }, [assign_works])
+    // useMemo(() => {
+    //     if (assign_works) {
+    //         assign_works.map((ele) => {
+    //             let work_id = ele._id
+    //             setWorkId(work_id)
+    //         })
+    //     }
+    // }, [assign_works])
 
-    console.log(work_id);
-    const submit_comment = () => {
+    // const getWorkId = (work_id) =>{
+
+    // }
+
+    // console.log(work_id);
+    const submit_comment = (work_id) => {
         const data = {
             submit_work_text: commentInput,
         }
+        console.log(data)
+        console.log(work_id)
 
         fetch(`${Config.API_URL}user-submit-work/${work_id}`, {
             method: 'PUT',
@@ -199,10 +227,11 @@ function Todo({ taskModal, settaskModal, NewTaskRes }) {
                                 }}
                                 onChangeText={(text) => setCommentInput(text)}
                                 value={commentInput}
-                            ></TextInput>
+                                // onChange={(value) => setCommentInput(value)}
+                            />
                         </View>
                         <View style={{ marginTop: 40 }}>
-                            <TouchableOpacity style={styles.sub_btn} onPress={() => submit_comment()} >
+                            <TouchableOpacity style={styles.sub_btn} onPress={() => submit_comment(item._id)} >
                                 <Text style={{ ...FONTS.body5, color: COLORS.white, lineHeight: 20 }}>Submit</Text>
                             </TouchableOpacity>
                         </View>
@@ -301,7 +330,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 1,
-        marginTop: 200
+        marginTop: 10
     },
     textinputs: {
         fontSize: 13,

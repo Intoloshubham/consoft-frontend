@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -21,11 +21,134 @@ import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 import { useLoginCompanyMutation } from '../../services/companyAuthApi';
 import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
 
-import { useLoginUserMutation } from '../../services/userAuthApi';//
+// import { useLoginUserMutation } from '../../services/userAuthApi';//
+import {userLogin} from '../../services/userAuthApi';
+import { useSelector, useDispatch } from 'react-redux';
+import { getToken, getUserId } from '../../services/asyncStorageService';
+import { setUserToken } from '../../services/userAuthApi';
 
 
 
 const Login = ({navigation}) => {
+
+  const dispatch = useDispatch()
+
+  const [switchValue, setSwitchValue] = React.useState(false);
+  const toggleSwitch = value => {
+    setSwitchValue(value);
+  };
+  
+  const [userMobileNo, setUserMobileNo] = React.useState('');
+  const [userPassword, setUserPassword] = React.useState('');
+  const [userMobileNoError, setUserMobileNoError] = React.useState('');
+  
+  const [companyMobileNo, setCompanyMobileNo] = React.useState('');
+  const [companyPassword, setCompanyPassword] = React.useState('');
+  const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
+  
+  const [showPass, setShowPass] = React.useState(false);
+  const [accessToken, setAccessToken] = useState();
+  
+  //rtk
+  // const [loginCompany] = useLoginCompanyMutation();
+  // const [ loginUser ] = useLoginUserMutation();//old rtk
+
+  function isEnableLogin() {
+    return (
+      userMobileNo != '' &&
+      userMobileNoError == '' &&
+      companyMobileNo != '' &&
+      companyMobileNoError == ''
+    );
+  }
+  // const {userData, isSuccess} = useSelector(state => state.user);
+  // console.log(userData)
+  
+  // useEffect(async () => {
+  //     const tokens = await getToken();
+  //     const userId = await getUserId();
+  //     console.log(tokens);
+  //     console.log(userId);
+  //     console.log("ok");
+  //   },[])
+
+  const userOnSubmit = async () => {
+    // setlogin(true)
+    const UserData = {
+      mobile: userMobileNo,
+      password: userPassword,
+    };
+
+    const res = await dispatch(userLogin(UserData));
+    // console.log(res)
+      if(res.payload.status === 200){
+        navigation.navigate('UserDashboard');
+      }
+
+    
+  
+
+    // setUserToken({ token:res.payload.access_token, user_id: res.payload._id  }));
+
+
+    // const tokens = getToken();
+    // const userId = getUserId();
+    // console.log(tokens)
+    // console.log(userId)
+
+    // const {userData} = useSelector(state => state.user);
+    // console.log(userData);
+
+    // const res = await loginUser(UserData);
+    // console.log(res) 
+
+    // let result;
+    // if (res.data) {
+    //   result = res.data;
+    // }
+    // if (res.error) {
+    //   result = res.error;
+    // }
+
+    // if (result.status === 200) {
+    //   await setUserId(result._id);
+    //   await storeToken(result.access_token);   
+    //   navigation.navigate('UserDashboard');
+    // }
+
+    // if(result.status === 401){
+    //   alert(result.data.message);
+    // }
+
+  }
+
+  // const companyOnSubmit = async () => {
+  //   const company_data = {
+  //     mobile: companyMobileNo,
+  //     password: companyPassword,
+  //   };
+
+  //   const res = await loginCompany(company_data)
+  //   let result;
+  //   if (res.data) {
+  //     result = res.data;
+  //   }
+  //   if (res.error) {
+  //     result = res.error;
+  //   }
+
+  //   if (result.status === 200) {
+  //     await setCompanyId(result.company_id);
+  //     await storeToken(result.access_token);
+  //     navigation.navigate('Home');
+  //   }
+
+  //   if (result.status === 401) {
+  //     alert(result.data.message);
+  //   }
+    
+  // };
+
   const makeCall = () => {
     let phoneNumber = ''; 
     if (Platform.OS === 'android') {
@@ -45,37 +168,7 @@ const Login = ({navigation}) => {
       alert(`url is not correct: ${url}`);
     }
   };
-  
-  const [switchValue, setSwitchValue] = React.useState(false);
-  const toggleSwitch = value => {
-    setSwitchValue(value);
-  };
-  
-  const [userMobileNo, setUserMobileNo] = React.useState('');
-  const [userPassword, setUserPassword] = React.useState('');
-  const [userMobileNoError, setUserMobileNoError] = React.useState('');
-  
-  const [companyMobileNo, setCompanyMobileNo] = React.useState('');
-  const [companyPassword, setCompanyPassword] = React.useState('');
-  const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
-  
-  const [showPass, setShowPass] = React.useState(false);
-  const [accessToken, setAccessToken] = useState(false);
-  
-  // const [login, setlogin] = React.useState(false)
 
-  //rtk
-  const [loginCompany] = useLoginCompanyMutation();
-  const [ loginUser ] = useLoginUserMutation();
-
-  function isEnableLogin() {
-    return (
-      userMobileNo != '' &&
-      userMobileNoError == '' &&
-      companyMobileNo != '' &&
-      companyMobileNoError == ''
-    );
-  }
   const showToast = () =>
     Toast.show({
       position: 'top',
@@ -93,119 +186,6 @@ const Login = ({navigation}) => {
       text2: 'Error',
       visibilityTime: 4000,
     });
-    
-  const userOnSubmit = async () => {
-    setAccessToken(true)
-    // setlogin(true)
-    const UserData = {
-      mobile: userMobileNo,
-      password: userPassword,
-    };
-
-    // console.log(UserData)
-    const res = await loginUser(UserData);
-    // console.log(res) 
-
-    let result;
-    if (res.data) {
-      result = res.data;
-    }
-    if (res.error) {
-      result = res.error;
-    }
-
-    if (result.status === 200) {
-      await setUserId(result._id);
-      await storeToken(result.access_token);   
-      navigation.navigate('UserDashboard');
-
-    }
-
-    if(result.status === 401){
-      alert(result.data.message);
-    }
-
-    // fetch(`${Config.API_URL}login`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(UserData),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     if (data.access_token) {
-    //       showToast();
-    //       setTimeout(() => {
-    //         navigation.navigate('UserDashboard');
-    //       }, 200);
-    //     }
-    //     if (!data.access_token) {
-    //       showToastError();
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
-  }
-
-  const companyOnSubmit = async () => {
-    const company_data = {
-      mobile: companyMobileNo,
-      password: companyPassword,
-    };
-
-
-    const res = await loginCompany(company_data)
-    // console.log(res);
-
-    //store token in storage
-
-    let result;
-    if (res.data) {
-      result = res.data;
-    }
-    if (res.error) {
-      result = res.error;
-    }
-
-    if (result.status === 200) {
-      await setCompanyId(result.company_id);
-      await storeToken(result.access_token);
-      navigation.navigate('Home');
-    }
-
-    if (result.status === 401) {
-      alert(result.data.message);
-    }
-
-    // fetch(`${Config.API_URL}/company-login`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(company_data),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     if (data.access_token) {
-    //       showToast();
-    //       setTimeout(() => {
-    //         if (data.role == 'Editor' || data.role == 'Administrator') {
-    //           navigation.navigate('Home');
-    //         }
-    //       }, 200);
-    //     }
-    //     if (!data.access_token) {
-    //       showToastError();
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
-  };
 
   function renderHeaderLogo() {
     return (
