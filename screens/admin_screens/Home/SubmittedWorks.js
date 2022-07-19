@@ -15,6 +15,7 @@ import {useSelector} from 'react-redux';
 import Config from '../../../config';
 import {FormInput, ProgressBar} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import axios from 'axios';
 
 const SubmittedWorks = () => {
   //COMPANY DATA
@@ -30,64 +31,95 @@ const SubmittedWorks = () => {
 
   // GET SUBMITTED WORKS
   React.useEffect(() => {
-    fetch(`${Config.API_URL}submit-works/` + `${company_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        setSubmitWork(data);
-      });
-  }, [submitWork]);
+    // axios
+    //   .get('http://192.168.1.99:8000/api/submit-works/62ba94b8ea988119bbf13687')
+    //   .then(function (response) {
+    //     console.log(response.data);
+    //     setSubmitWork(response.data);
+    //   });
 
-  // verify works
-  const verifyHandler = id => {
-    // console.log(id);
-    fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    // `http://myapi.com/users/${userId}/posts`
+    const abortConst = new AbortController();
+    fetch(
+      `${Config.API_URL}submit-works/` + `${company_id}`,
+      {signal: abortConst.signal},
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        setVerifyResponse(data.status);
+        setSubmitWork(data);
       })
       .catch(error => {
-        console.log(error);
+        if (error.name == 'AbortError') {
+          console.log('fetch aborted');
+        } else {
+          console.log(error);
+        }
       });
+
+    return () => abortConst.abort();
+  }, []);
+
+  // verify works
+  const verifyHandler = id => {
+    // axios
+    //   .get('http://192.168.1.99:8000/api/verify-submit-work' + '/' + id)
+    //   .then(function (response) {
+    //     console.log(response.data);
+    //   });
+    // // console.log(id);
+    // fetch(
+    //   Config.API_URL + 'verify-submit-work' + '/' + id,
+    //   // `${Config.API_URL}verify-submit-work` + `/${id}`
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //   },
+    // )
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //     setVerifyResponse(data.status);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
   };
 
   const getRevertWorkId = id => {
     setRevertId(id);
   };
 
-  const OnSubmit = () => {
-    const formData = {revert_msg: revertMsg};
-    fetch(`${Config.API_URL}revert-submit-work` + `/${revertId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 200) {
-          setTimeout(() => {
-            setRevertModal(false);
-          }, 1000);
-        }
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  };
+  // const OnSubmit = () => {
+  //   const formData = {revert_msg: revertMsg};
+  //   fetch(`${Config.API_URL}revert-submit-work` + `/${revertId}`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(formData),
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       if (data.status === 200) {
+  //         setTimeout(() => {
+  //           setRevertModal(false);
+  //         }, 1000);
+  //       }
+  //       console.log(data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error:', error);
+  //     });
+  // };
 
   function renderRevertModal() {
     return (
@@ -149,7 +181,10 @@ const SubmittedWorks = () => {
                 <Text
                   style={{
                     ...FONTS.h3,
-                    backgroundColor: COLORS.lightblue_600,
+                    backgroundColor:
+                      revertMsg != null
+                        ? COLORS.lightblue_600
+                        : COLORS.darkGray,
                     paddingHorizontal: SIZES.base,
                     paddingVertical: 3,
                     borderRadius: 2,
@@ -176,23 +211,35 @@ const SubmittedWorks = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text
-              style={{
-                ...FONTS.h4,
-                color: COLORS.darkGray,
-                textTransform: 'capitalize',
-                fontWeight: 'bold',
-              }}>
-              {item.user_name}
-            </Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                  fontWeight: 'bold',
+                }}>
+                {item.user_name}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 8,
+                  left: 3,
+                  paddingHorizontal: 3,
+                  backgroundColor: COLORS.yellow_400,
+                  color: COLORS.black,
+                }}>
+                {item.work_code}
+              </Text>
+            </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View
                 style={{flexDirection: 'row', alignItems: 'center', right: 10}}>
                 <Image
                   source={icons.date}
                   style={{
-                    height: 12,
-                    width: 12,
+                    height: 10,
+                    width: 10,
                     tintColor: COLORS.darkGray,
                     right: 3,
                   }}
@@ -209,8 +256,8 @@ const SubmittedWorks = () => {
                 <Image
                   source={icons.time}
                   style={{
-                    height: 12,
-                    width: 12,
+                    height: 10,
+                    width: 10,
                     tintColor: COLORS.darkGray,
                     right: 3,
                   }}
@@ -276,7 +323,6 @@ const SubmittedWorks = () => {
               }}>
               Msg
               <Text style={{color: COLORS.darkGray}}>
-                {' '}
                 - {item.submit_work_text}
               </Text>
             </Text>
@@ -330,6 +376,9 @@ const SubmittedWorks = () => {
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={true}
+        nestedScrollEnabled={true}
+        maxHeight={250}
         ItemSeparatorComponent={() => {
           return (
             <View
@@ -346,12 +395,12 @@ const SubmittedWorks = () => {
   return (
     <View
       style={{
-        ...styles.shadow,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
         marginHorizontal: SIZES.padding,
         marginTop: SIZES.padding,
         borderRadius: SIZES.radius,
         padding: 20,
+        ...styles.shadow,
       }}>
       <View
         style={{

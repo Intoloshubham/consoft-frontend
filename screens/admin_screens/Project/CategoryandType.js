@@ -61,13 +61,18 @@ const CategoryandType = () => {
 
   // all apis & Get categories
   React.useEffect(() => {
-    fetch(`${Config.API_URL}project-category`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    const abortConst = new AbortController();
+    fetch(
+      `${Config.API_URL}project-category`,
+      {signal: abortConst.signal},
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
       .then(response => response.json())
       .then(data => {
         let catFromApi = data.map(item => {
@@ -76,10 +81,14 @@ const CategoryandType = () => {
         setProjectCategories(data);
         setItems(catFromApi);
       })
-      .catch(error => console.log(error.message));
-    return () => {
-      unmounted.current = true;
-    };
+      .catch(error => {
+        if (error.name === 'AbortError') {
+          console.log('fetch aborted');
+        } else {
+          console.log(error);
+        }
+      });
+    return () => abortConst.abort();
   }, [projectCategories]);
 
   // post categories
@@ -182,22 +191,31 @@ const CategoryandType = () => {
 
   // Api call for types
   React.useEffect(() => {
-    fetch(`${Config.API_URL}project-type`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    const abortConst = new AbortController();
+    fetch(
+      `${Config.API_URL}project-type`,
+      {signal: abortConst.signal},
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
       .then(response => response.json())
       .then(data => {
         // console.log(data);
         setProjectTypes(data);
       })
-      .catch(error => console.log(error.message));
-    return () => {
-      unmounted.current = true;
-    };
+      .catch(error => {
+        if (error.name === 'AbortError') {
+          console.log('fetch aborted');
+        } else {
+          console.log(error);
+        }
+      });
+    return () => abortConst.abort();
   }, [projectTypes]);
 
   // post types
@@ -272,7 +290,7 @@ const CategoryandType = () => {
       .then(data => {
         if (data.status === 200) {
           setDeleteToast(true);
-          setTypeDelete(false);
+          // setTypeDelete(false);
         }
       })
       .catch(error => {

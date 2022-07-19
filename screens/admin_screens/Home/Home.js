@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {View, LogBox, ScrollView, SafeAreaView, Text} from 'react-native';
+import {View, LogBox, ScrollView, SafeAreaView} from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
-import ProjectWorksIdentifier from './ProjectWorksIdentifier';
 import SubmittedWorks from './SubmittedWorks';
-
+import VerifyAndRevertWork from './VerifyAndRevertWork';
 import {getToken} from '../../../services/asyncStorageService';
 import {useGetLoggedCompanyQuery} from '../../../services/companyAuthApi';
 import {useDispatch} from 'react-redux';
@@ -18,7 +17,14 @@ const Home = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
+  // get company data
+  const companyData = useSelector(state => state.company);
+  console.log(companyData);
+
+  // get token
+  const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
   const [accessToken, setAccessToken] = useState('');
+
   useEffect(() => {
     (async () => {
       const token = await getToken();
@@ -26,8 +32,7 @@ const Home = () => {
       dispatch(setCompanyToken({token: token}));
     })();
   });
-  // console.log(accessToken);
-  const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
+
   //store data in redux store
   const dispatch = useDispatch();
   useEffect(() => {
@@ -43,13 +48,6 @@ const Home = () => {
     }
   });
 
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-
-  const companyData = useSelector(state => state.company);
-  // console.log(companyData)
-
   return (
     <SafeAreaView>
       <ScrollView>
@@ -62,7 +60,7 @@ const Home = () => {
           <SubmittedWorks />
           <ProjectReports />
           <AssignedWorks />
-          {/* <ProjectWorksIdentifier /> */}
+          <VerifyAndRevertWork company_id={companyData._id} />
         </View>
       </ScrollView>
     </SafeAreaView>

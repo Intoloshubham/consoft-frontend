@@ -19,14 +19,10 @@ import {ProfileValue, LineDivider} from '../../../Components';
 
 const Profile = () => {
   const navigation = useNavigation();
-  const userData = useSelector(state => state.user);
-  console.log(userData);
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
+  const [collapsed, setCollapsed] = useState(false);
 
   const userData = useSelector(state => state.user);
-  console.log(userData)
+  console.log(userData);
 
   const logout = async () => {
     unSetUserInfo({
@@ -43,8 +39,6 @@ const Profile = () => {
     navigation.navigate('Login');
   };
 
-<<<<<<< HEAD
-=======
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
@@ -54,7 +48,7 @@ const Profile = () => {
   };
 
   //getting company data from redux store    company -> name is reducer
-  
+
   // const companyToken = useSelector(state => state.companyAuth)
   // console.log(companyToken);
 
@@ -80,24 +74,22 @@ const Profile = () => {
     );
   }
 
->>>>>>> f73e7b96e24bfcbc22b30c6e4b706ac876ceec64
   function renderProfileCard() {
     return (
       <View
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
+          paddingHorizontal: SIZES.radius,
           paddingVertical: 20,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_800,
-          alignItems: 'center',
         }}>
         {/* profile image  */}
         <TouchableOpacity
           style={{
-            width: 80,
-            height: 80,
+            width: 60,
+            height: 60,
           }}
           onPress={() => alert('Upload Image')}>
           <Image
@@ -105,8 +97,8 @@ const Profile = () => {
             style={{
               width: '100%',
               height: '100%',
-              borderRadius: 15,
-              borderWidth: 3,
+              borderRadius: 30,
+              borderWidth: 2,
               borderColor: COLORS.white,
             }}
           />
@@ -150,19 +142,11 @@ const Profile = () => {
             style={{
               color: COLORS.white,
               ...FONTS.h2,
-              textTransform: 'capitalize',
             }}>
-            {userData.name}
+            {/* {companyData.company_name} */}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
-            {userData.email}
-          </Text>
-          <Text style={{color: COLORS.white, ...FONTS.body4}}>
-            +91{userData.mobile}
-          </Text>
-          <Text style={{color: COLORS.white, ...FONTS.body4}}>
-            Role{' - '}
-            {userData.role}
+            {/* {companyData.email} */}
           </Text>
         </View>
       </View>

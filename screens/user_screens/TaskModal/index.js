@@ -1,4 +1,5 @@
-import DoneModal from './DoneModal';
-import InProgressModal from './InProgressModal';
+import DoneModal from './DoneModal'
+import InProgressModal from './InProgressModal'
+import Todo from './Todo.js'
 
-export {DoneModal, InProgressModal};
+export  {DoneModal,InProgressModal,Todo}

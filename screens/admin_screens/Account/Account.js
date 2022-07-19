@@ -42,7 +42,7 @@ const Account = () => {
 
   //getting company data from redux store    company -> name is reducer
   const companyData = useSelector(state => state.company);
-  // console.log(companyData);
+  console.log(companyData);
 
   // const companyToken = useSelector(state => state.companyAuth)
   // console.log(companyToken);
@@ -222,7 +222,7 @@ const Account = () => {
             <LineDivider />
             <ProfileValue
               icon={icons.units}
-              value="ToolsAndMachinery1"
+              value="Tools & Machinery1"
               image={icons.right_arr}
               onPress={() => navigation.navigate('ToolsAndMachinery1')}
             />
