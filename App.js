@@ -38,7 +38,8 @@ import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
 
 //setup redux
-import {store} from './app/store';
+// import {store} from './app/store';
+import store from './app/store';
 import {Provider} from 'react-redux';
 
 const Stack = createStackNavigator();
@@ -56,6 +57,8 @@ const App = () => {
             headerShown: false,
           }}
           initialRouteName={'Login'}>
+          
+
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen

@@ -19,9 +19,13 @@ import axios from 'axios';
 
 const SubmittedWorks = () => {
   //COMPANY DATA
-  const companyData = useSelector(state => state.company);
-  const company_id = companyData._id;
-  // console.log(company_id);
+
+  
+    
+    const companyData = useSelector(state => state.company);
+    const company_id = companyData._id;
+    console.log(company_id);
+
 
   const [submitWork, setSubmitWork] = React.useState([]);
   const [verifyResponse, setVerifyResponse] = React.useState([]);
