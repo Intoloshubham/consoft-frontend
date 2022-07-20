@@ -13,8 +13,9 @@ const UserAssignWorks = () => {
   const [textMsg, setTextMsg] = React.useState('');
   const userData = useSelector(state => state.user);
 
+  // get data of user assign work from api
   React.useEffect(() => {
-    fetch(`${Config.API_URL}user-assign-works/` + `${userData.user_id}`, {
+    fetch(`${Config.API_URL}user-assign-works/` + `${userData._id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -32,35 +33,92 @@ const UserAssignWorks = () => {
       });
   }, []);
 
-  const renderHeader = (item, index) => {
+  // submit comment
+  const submitComment = work_id => {
+    const data = {
+      submit_work_text: textMsg,
+    };
+
+    fetch(`${Config.API_URL}user-submit-work/${work_id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 200) {
+          setTextMsg('');
+        }
+      });
+  };
+
+  const WorkDetails = ({item, index, message, color}) => {
     return (
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          //   alignItems: 'center',
-          marginTop: index == 0 ? null : SIZES.radius,
+          marginTop: index == 0 ? null : SIZES.base,
           paddingHorizontal: SIZES.base,
-          backgroundColor: COLORS.lightGray1,
+          backgroundColor: COLORS.darkGray,
           padding: 5,
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
         }}>
-        <Text style={{...FONTS.h4, color: COLORS.darkGray, flex: 1}}>
-          {item.work_code}
-          {' - '}
-          <Text
-            style={{
-              ...FONTS.h4,
-              color: COLORS.darkGray,
-            }}>
-            {item.work}
-          </Text>
-        </Text>
-        <Image
-          source={icons.down_arrow}
-          style={{height: 15, width: 15, tintColor: COLORS.darkGray}}
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              style={{
+                fontSize: 12,
+                paddingHorizontal: 5,
+                backgroundColor: COLORS.success_100,
+                color: COLORS.black,
+                borderRadius: 2,
+              }}>
+              {item.work_code}
+            </Text>
+            <Text
+              style={{
+                ...FONTS.h4,
+                color: COLORS.white,
+                left: 10,
+              }}>
+              {item.work}
+            </Text>
+          </View>
+          <Image
+            source={icons.down_arrow}
+            style={{height: 15, width: 15, tintColor: COLORS.white}}
+          />
+        </View>
+        <Text style={{color: color, marginTop: 3}}>{message}</Text>
+      </View>
+    );
+  };
+
+  const renderHeader = item => {
+    return (
+      <View>
+        {item.work_status == true &&
+        item.verify == false &&
+        item.revert_status == false ? (
+          <WorkDetails
+            item={item}
+            message={'Pending from the admin side'}
+            color={COLORS.yellow_400}
+          />
+        ) : item.work_status == false &&
+          item.verify == false &&
+          item.revert_status == true ? (
+          <WorkDetails item={item} message={'Revert'} color={COLORS.rose_600} />
+        ) : item.work_status == false &&
+          item.verify == false &&
+          item.revert_status == false ? (
+          <WorkDetails item={item} message={''} color={COLORS.black} />
+        ) : null}
       </View>
     );
   };
@@ -94,23 +152,17 @@ const UserAssignWorks = () => {
             }}
           />
           <View style={{flexdirection: 'row'}}>
-            <View style={{backgroundColor: COLORS.white, borderRadius: 3}}>
-              {/* <TextInput
-                style={{paddingHorizontal: SIZES.radius}}
-                placeholder="Write message here.."
-                placeholderTextColor={COLORS.darkGray}
-                onChange={value => {
-                  console.log(value);
-                  setTextMsg(value);
-                }}
-              /> */}
+            <View style={{backgroundColor: COLORS.white, borderRadius: 5}}>
               <TextInput
-                style={{paddingHorizontal: SIZES.radius}}
+                style={{
+                  paddingHorizontal: SIZES.radius,
+                  backgroundColor: COLORS.white,
+                }}
                 multiline={true}
-                placeholder="Comment section"
-                placeholderTextColor={COLORS.darkGray}
-                onChangeText={text => setCommentInput(text)}
-                value={commentInput}
+                placeholder="Comment section..."
+                placeholderTextColor={COLORS.gray}
+                onChangeText={text => setTextMsg(text)}
+                value={textMsg}
               />
             </View>
             <TouchableOpacity
@@ -118,7 +170,7 @@ const UserAssignWorks = () => {
                 alignItems: 'flex-end',
                 marginTop: SIZES.base,
               }}
-              onPress={() => alert('Send...')}>
+              onPress={() => submitComment(item._id)}>
               <Text
                 style={{
                   color: COLORS.white,
@@ -128,34 +180,6 @@ const UserAssignWorks = () => {
                   borderRadius: 3,
                 }}>
                 Send
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Divider
-            style={{
-              backgroundColor: COLORS.lightGray1,
-              marginVertical: SIZES.base,
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <Text style={{...FONTS.h3, color: COLORS.white}}>
-              admin revert message
-            </Text>
-            <TouchableOpacity onPress={() => alert('ok..')}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  backgroundColor: COLORS.lightblue_500,
-                  paddingHorizontal: 10,
-                  paddingVertical: 1,
-                  borderRadius: 3,
-                }}>
-                ok
               </Text>
             </TouchableOpacity>
           </View>
@@ -174,14 +198,13 @@ const UserAssignWorks = () => {
         borderRadius: SIZES.base,
         ...styles.shadow,
       }}>
-      <Text
+      {/* <Text
         style={{
           ...FONTS.h3,
           color: COLORS.darkGray,
-          marginBottom: SIZES.radius,
         }}>
-        UserAssignWorks
-      </Text>
+        User Assign Works
+      </Text> */}
       <AccordionList
         list={assignWorks}
         header={renderHeader}
