@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,24 +11,43 @@ import {
   TouchableWithoutFeedback,
   TextInput,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Config from '../../../config';
 import {FormInput, ProgressBar} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 
+// import { getAssignWorks, verifyAssignWork } from '../../../features/AssignWorksSlice';
+// import { STATUSES } from '../../../features/AssignWorksSlice';
+
 const SubmittedWorks = () => {
+
+  const dispatch = useDispatch();
   //COMPANY DATA
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
+
+  //
+  // const { data: works, status } = useSelector((state) => state.assignworks);
+  // console.log(works)
 
   const [submitWork, setSubmitWork] = React.useState([]);
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
 
+  // by rohit
+
+  // useEffect(() => {
+  //   dispatch(getAssignWorks(company_id));
+  //   setSubmitWork(works);
+
+
+  // }, []);
+
+  
   // GET SUBMITTED WORKS
   React.useEffect(() => {
-    // `http://myapi.com/users/${userId}/posts`
+    
     const abortConst = new AbortController();
     fetch(
       `${Config.API_URL}submit-works/` + `${company_id}`,
@@ -53,10 +72,11 @@ const SubmittedWorks = () => {
       });
 
     return () => abortConst.abort();
-  }, []);
+  }, [submitWork]);
 
   // verify works
   const verifyHandler = id => {
+    // dispatch(verifyAssignWork(id));
     fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
       method: 'GET',
       headers: {

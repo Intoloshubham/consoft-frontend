@@ -21,6 +21,7 @@ import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
 import { useDispatch } from 'react-redux';
 
+// import { getCompanyId, getUserId, getToken } from '../../services/asyncStorageService';
 
 const Login = ({navigation}) => {
 
@@ -40,6 +41,20 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   
   const [showPass, setShowPass] = React.useState(false);
+
+  // useEffect( async () => {
+  //     const token = await getToken();
+  //     console.log(token)
+      
+  //     const company_id = await getCompanyId();
+  //     console.log(company_id)
+
+  //     const user_id = await getUserId();
+  //     console.log(user_id)
+    
+  // }, []);
+
+
   
   function isEnableLogin() {
     return (
@@ -57,43 +72,12 @@ const Login = ({navigation}) => {
     };
 
     const res = await dispatch(userLogin(UserData));
-    // console.log(res)
+    
       if(res.payload.status === 200){
         navigation.navigate('UserDashboard');
+      }else{
+        alert(res.payload.message)
       }
-
-    // setUserToken({ token:res.payload.access_token, user_id: res.payload._id  }));
-
-
-    // const tokens = getToken();
-    // const userId = getUserId();
-    // console.log(tokens)
-    // console.log(userId)
-
-    // const {userData} = useSelector(state => state.user);
-    // console.log(userData);
-
-    // const res = await loginUser(UserData);
-    // console.log(res) 
-
-    // let result;
-    // if (res.data) {
-    //   result = res.data;
-    // }
-    // if (res.error) {
-    //   result = res.error;
-    // }
-
-    // if (result.status === 200) {
-    //   await setUserId(result._id);
-    //   await storeToken(result.access_token);   
-    //   navigation.navigate('UserDashboard');
-    // }
-
-    // if(result.status === 401){
-    //   alert(result.data.message);
-    // }
-
   }
 
   const companyOnSubmit = async () => {
@@ -106,27 +90,9 @@ const Login = ({navigation}) => {
     // console.log(res.payload)
       if(res.payload.status === 200){
         navigation.navigate('Home');
+      }else{
+        alert(res.payload.message)
       }
-
-  //   const res = await loginCompany(company_data)
-  //   let result;
-  //   if (res.data) {
-  //     result = res.data;
-  //   }
-  //   if (res.error) {
-  //     result = res.error;
-  //   }
-
-  //   if (result.status === 200) {
-  //     await setCompanyId(result.company_id);
-  //     await storeToken(result.access_token);
-  //     navigation.navigate('Home');
-  //   }
-
-  //   if (result.status === 401) {
-  //     alert(result.data.message);
-  //   }
-    
   };
 
   const makeCall = () => {

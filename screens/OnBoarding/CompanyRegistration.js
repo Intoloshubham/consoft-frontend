@@ -41,7 +41,7 @@ const CompanyRegistration = ({navigation}) => {
         navigation.navigate('VerifyProductKey');
       }, 300);
     }else{
-      showToastError();
+      alert(res.payload.message)
     }
     // const company_id = await getCompanyId();
     

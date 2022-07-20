@@ -82,12 +82,13 @@ export const userSlice = createSlice({
             state.status = STATUSES.LOADING;
         })
         .addCase(userLogin.fulfilled,(state, action) => {
-            state.status = STATUSES.IDLE;
-            state.token = action.payload.access_token;
-            state._id = action.payload._id;
-
-            setUserId(action.payload._id);
-            storeToken(action.payload.access_token);
+            if (action.payload.status === 200) {
+              state.status = STATUSES.IDLE;
+              state.token = action.payload.access_token;
+              state._id = action.payload._id;
+              setUserId(action.payload._id);
+              storeToken(action.payload.access_token);
+            } 
         })
         .addCase(userLogin.rejected, (state, action) => {
             state.status = STATUSES.ERROR;

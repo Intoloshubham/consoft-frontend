@@ -4,11 +4,15 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 import companyAuthReducer from '../services/companyAuthApi'
 import userAuthReducer from '../services/userAuthApi'
 
+//admin
+// import assignWorksReducer from '../features/AssignWorksSlice'
+//user
+
 export const store = configureStore({
   reducer: {
     company:companyAuthReducer,
     user:userAuthReducer,
-    
+    // assignworks:assignWorksReducer,
   } 
 })
 

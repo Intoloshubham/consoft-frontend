@@ -122,11 +122,13 @@ export const companySlice = createSlice({
         })
 
         .addCase(registerCompany.fulfilled,(state, action) => {
+          if (action.payload.status === 200) {
             state.status = STATUSES.IDLE;
             state._id = action.payload._id;
             state.company_name = action.payload.company_name;
             state.mobile = action.payload.mobile;
             state.email = action.payload.email;
+          }
         })
 
         //verify product key
@@ -135,10 +137,12 @@ export const companySlice = createSlice({
         })
 
         .addCase(verifyProductKey.fulfilled,(state, action) => {
-          state.token = action.payload.access_token;
-          state.status = STATUSES.IDLE;
-          storeToken(action.payload.access_token);
-          setCompanyId(action.payload._id);
+          if (action.payload.status === 200) {
+            state.token = action.payload.access_token;
+            state.status = STATUSES.IDLE;
+            storeToken(action.payload.access_token);
+            setCompanyId(action.payload._id);
+          }
         })
 
         //login company
@@ -146,6 +150,7 @@ export const companySlice = createSlice({
             state.status = STATUSES.LOADING;
         })
         .addCase(companyLogin.fulfilled,(state, action) => {
+          if (action.payload.status === 200) {
             state.status = STATUSES.IDLE;
             state.token = action.payload.access_token;
             state._id = action.payload._id;
@@ -154,6 +159,7 @@ export const companySlice = createSlice({
             state.email = action.payload.email;
             setCompanyId(action.payload._id);
             storeToken(action.payload.access_token);
+          }
         })
         .addCase(companyLogin.rejected, (state, action) => {
             state.status = STATUSES.ERROR;
