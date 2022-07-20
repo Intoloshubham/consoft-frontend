@@ -14,19 +14,12 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import utils from '../../utils'; 
 import Toast from 'react-native-toast-message';
-import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
-import { useLoginCompanyMutation } from '../../services/companyAuthApi';
-import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
-
-// import { useLoginUserMutation } from '../../services/userAuthApi';//
 import {userLogin} from '../../services/userAuthApi';
-import { useSelector, useDispatch } from 'react-redux';
-import { getToken, getUserId } from '../../services/asyncStorageService';
-import { setUserToken } from '../../services/userAuthApi';
-
+import {companyLogin} from '../../services/companyAuthApi';
+import { useDispatch } from 'react-redux';
 
 
 const Login = ({navigation}) => {
@@ -47,12 +40,7 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   
   const [showPass, setShowPass] = React.useState(false);
-  const [accessToken, setAccessToken] = useState();
   
-  //rtk
-  // const [loginCompany] = useLoginCompanyMutation();
-  // const [ loginUser ] = useLoginUserMutation();//old rtk
-
   function isEnableLogin() {
     return (
       userMobileNo != '' &&
@@ -61,19 +49,8 @@ const Login = ({navigation}) => {
       companyMobileNoError == ''
     );
   }
-  // const {userData, isSuccess} = useSelector(state => state.user);
-  // console.log(userData)
   
-  // useEffect(async () => {
-  //     const tokens = await getToken();
-  //     const userId = await getUserId();
-  //     console.log(tokens);
-  //     console.log(userId);
-  //     console.log("ok");
-  //   },[])
-
   const userOnSubmit = async () => {
-    // setlogin(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
@@ -84,9 +61,6 @@ const Login = ({navigation}) => {
       if(res.payload.status === 200){
         navigation.navigate('UserDashboard');
       }
-
-    
-  
 
     // setUserToken({ token:res.payload.access_token, user_id: res.payload._id  }));
 
@@ -122,11 +96,17 @@ const Login = ({navigation}) => {
 
   }
 
-  // const companyOnSubmit = async () => {
-  //   const company_data = {
-  //     mobile: companyMobileNo,
-  //     password: companyPassword,
-  //   };
+  const companyOnSubmit = async () => {
+    const company_data = {
+      mobile: companyMobileNo,
+      password: companyPassword,
+    };
+
+    const res = await dispatch(companyLogin(company_data));
+    // console.log(res.payload)
+      if(res.payload.status === 200){
+        navigation.navigate('Home');
+      }
 
   //   const res = await loginCompany(company_data)
   //   let result;
@@ -147,7 +127,7 @@ const Login = ({navigation}) => {
   //     alert(result.data.message);
   //   }
     
-  // };
+  };
 
   const makeCall = () => {
     let phoneNumber = ''; 

@@ -4,49 +4,18 @@ import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
 import SubmittedWorks from './SubmittedWorks';
-import VerifyAndRevertWork from './VerifyAndRevertWork';
-import {getToken} from '../../../services/asyncStorageService';
-import {useGetLoggedCompanyQuery} from '../../../services/companyAuthApi';
-import {useDispatch} from 'react-redux';
-import {setCompanyInfo} from '../../../features/CompanySlice';
-import {setCompanyToken} from '../../../features/CompanyAuthSlice';
-import {useSelector} from 'react-redux';
+
+import {useSelector, useDispatch} from 'react-redux';
 
 const Home = () => {
+
+  const dispatch = useDispatch()
+  const companyData = useSelector(state => state.company);
+  // console.log(companyData)
+
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
-
-  // get company data
-  const companyData = useSelector(state => state.company);
-  // console.log(companyData);
-
-  // get token
-  const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
-  const [accessToken, setAccessToken] = useState('');
-
-  useEffect(() => {
-    (async () => {
-      const token = await getToken();
-      setAccessToken(token);
-      dispatch(setCompanyToken({token: token}));
-    })();
-  });
-
-  //store data in redux store
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(
-        setCompanyInfo({
-          _id: data._id,
-          company_name: data.company_name,
-          email: data.email,
-          mobile: data.mobile,
-        }),
-      );
-    }
-  });
 
   return (
     <SafeAreaView>

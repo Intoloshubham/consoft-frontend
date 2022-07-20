@@ -24,7 +24,7 @@ const SubmittedWorks = () => {
     
     const companyData = useSelector(state => state.company);
     const company_id = companyData._id;
-    console.log(company_id);
+    // console.log(companyData);
 
 
   const [submitWork, setSubmitWork] = React.useState([]);

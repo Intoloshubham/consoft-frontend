@@ -10,25 +10,20 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-import {
-  removeCompanyId,
-  removeToken,
-} from '../../../services/asyncStorageService';
-import {useSelector} from 'react-redux';
-import {unSetCompanyInfo} from '../../../features/CompanySlice';
-import {unsetCompanyToken} from '../../../features/CompanyAuthSlice';
+
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {ProfileValue, LineDivider} from '../../../Components';
+import {useSelector, useDispatch} from 'react-redux';
+import { companyLogout } from '../../../services/companyAuthApi';
 
 const Account = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const companyData = useSelector(state => state.company);
   const [collapsed, setCollapsed] = useState(true);
 
-  const logout = async () => {
-    unSetCompanyInfo({_id: '', company_name: '', email: '', mobile: ''});
-    unsetCompanyToken({token: null});
-    await removeToken('token');
-    await removeCompanyId('company_id');
+  const logout = () => {
+    dispatch(companyLogout());
     navigation.navigate('Login');
   };
 
@@ -40,12 +35,6 @@ const Account = () => {
     setCollapsed(!collapsed);
   };
 
-  //getting company data from redux store    company -> name is reducer
-  const companyData = useSelector(state => state.company);
-  console.log(companyData);
-
-  // const companyToken = useSelector(state => state.companyAuth)
-  // console.log(companyToken);
 
   function renderProfileCard() {
     return (
