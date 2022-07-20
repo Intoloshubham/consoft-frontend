@@ -6,50 +6,17 @@ import ProjectReports from './ProjectReports';
 import ProjectWorksIdentifier from './ProjectWorksIdentifier';
 import SubmittedWorks from './SubmittedWorks';
 
-// import {getToken} from '../../../services/asyncStorageService';
-// import {useGetLoggedCompanyQuery} from '../../../services/companyAuthApi';
-// import {setCompanyInfo} from '../../../features/CompanySlice';
-// import {setCompanyToken} from '../../../features/CompanyAuthSlice';
 import {useSelector, useDispatch} from 'react-redux';
 
 const Home = () => {
 
   const dispatch = useDispatch()
   const companyData = useSelector(state => state.company);
-  console.log(companyData)
+  // console.log(companyData)
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
-
-  // const [accessToken, setAccessToken] = useState('');
-  // useEffect(() => {
-  //   (async () => {
-  //     const token = await getToken();
-  //     setAccessToken(token);
-  //     dispatch(setCompanyToken({token: token}));
-  //   })();
-  // });
-  // console.log(accessToken);
-  // const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);
-  //store data in redux store
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     dispatch(
-  //       setCompanyInfo({
-  //         _id: data._id,
-  //         company_name: data.company_name,
-  //         email: data.email,
-  //         mobile: data.mobile,
-  //       }),
-  //     );
-  //   }
-  // });
-
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-
 
   return (
     <SafeAreaView>

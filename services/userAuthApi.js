@@ -52,7 +52,7 @@ export const STATUSES = Object.freeze({
 
 const initialState = {
   token: "",
-  user_id: "",
+  _id: "",
   status:STATUSES.IDLE,
 }
 
@@ -62,13 +62,13 @@ export const userSlice = createSlice({
   reducers: {
     setUserToken: (state, action) => {
       state.token = action.payload.access_token,
-      state.user_id = action.payload._id,
+      state._id = action.payload._id,
       state.status = STATUSES.IDLE
     },
     
     userLogout:(state, action)=>{
       state.token = null,
-      state.user_id = null,
+      state._id = null,
       state.status = STATUSES.LOGOUT
       removeToken('token')
       removeUserId('user_id')
@@ -84,7 +84,7 @@ export const userSlice = createSlice({
         .addCase(userLogin.fulfilled,(state, action) => {
             state.status = STATUSES.IDLE;
             state.token = action.payload.access_token;
-            state.user_id = action.payload._id;
+            state._id = action.payload._id;
 
             setUserId(action.payload._id);
             storeToken(action.payload.access_token);

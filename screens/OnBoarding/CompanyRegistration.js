@@ -11,9 +11,9 @@ import {COLORS, images, icons, SIZES} from '../../constants';
 import {useRegisterCompanyMutation} from '../../services/companyAuthApi';
 import {setCompanyId} from '../../services/asyncStorageService';
 
-
-
 const CompanyRegistration = ({navigation}) => {
+
+
   const [cName, setCName] = React.useState('');
   //const [cPanNo, setCPanNo] = React.useState('');
   const [cMobileNo, setCMobileNo] = React.useState('');
