@@ -8,29 +8,39 @@ import {useSelector} from 'react-redux';
 import Config from '../../../config';
 
 const UserAssignWorks = () => {
-  const [assignWorksData, setAssignWorksData] = React.useState([]);
   const [assignWorks, setAssignWorks] = React.useState([]);
+  // console.log('aw', assignWorks);
   const [textMsg, setTextMsg] = React.useState('');
   const userData = useSelector(state => state.user);
 
   // get data of user assign work from api
   React.useEffect(() => {
-    fetch(`${Config.API_URL}user-assign-works/` + `${userData._id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    const abortConst = new AbortController();
+    fetch(
+      `${Config.API_URL}user-assign-works/` + `${userData._id}`,
+      {signal: abortConst.signal},
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
       .then(response => response.json())
       .then(data => {
-        setAssignWorksData(data);
+        console.log(data);
         data.map(ele => {
           setAssignWorks(ele.assign_works);
         });
       })
       .catch(error => {
-        console.log(error);
+        if (error.name == 'AbortError') {
+          console.log('fetch aborted');
+        } else {
+          console.log(error);
+        }
       });
+    return () => abortConst.abort();
   }, []);
 
   // submit comment
@@ -47,19 +57,20 @@ const UserAssignWorks = () => {
       .then(response => response.json())
       .then(data => {
         if (data.status === 200) {
+          console.log(data.status);
           setTextMsg('');
         }
       });
   };
 
-  const WorkDetails = ({item, index, message, color}) => {
+  const WorkDetails = ({item, message, color, index}) => {
     return (
       <View
         style={{
           marginTop: index == 0 ? null : SIZES.base,
           paddingHorizontal: SIZES.base,
+          paddingVertical: 5,
           backgroundColor: COLORS.darkGray,
-          padding: 5,
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
         }}>
@@ -69,14 +80,14 @@ const UserAssignWorks = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
             <Text
               style={{
                 fontSize: 12,
                 paddingHorizontal: 5,
-                backgroundColor: COLORS.success_100,
+                backgroundColor: COLORS.white,
                 color: COLORS.black,
-                borderRadius: 2,
+                borderRadius: 1,
               }}>
               {item.work_code}
             </Text>
@@ -99,7 +110,7 @@ const UserAssignWorks = () => {
     );
   };
 
-  const renderHeader = item => {
+  const renderHeader = (item, index) => {
     return (
       <View>
         {item.work_status == true &&
@@ -138,10 +149,10 @@ const UserAssignWorks = () => {
             style={{
               flexDirection: 'row',
             }}>
-            <Text style={{color: COLORS.white, fontSize: SIZES.h4}}>
+            <Text style={{...FONTS.h5, color: COLORS.white}}>
               Date: {item.exp_completion_date}
             </Text>
-            <Text style={{color: COLORS.white, left: 10}}>
+            <Text style={{...FONTS.h5, color: COLORS.white, left: 10}}>
               Time: {item.exp_completion_time}
             </Text>
           </View>
@@ -193,18 +204,20 @@ const UserAssignWorks = () => {
         marginHorizontal: SIZES.padding,
         marginVertical: SIZES.padding,
         paddingHorizontal: SIZES.radius,
-        paddingVertical: SIZES.radius,
+        paddingTop: SIZES.base,
+        paddingBottom: SIZES.radius,
         backgroundColor: COLORS.white,
         borderRadius: SIZES.base,
         ...styles.shadow,
       }}>
-      {/* <Text
+      <Text
         style={{
-          ...FONTS.h3,
+          ...FONTS.h2,
           color: COLORS.darkGray,
+          marginBottom: SIZES.base,
         }}>
         User Assign Works
-      </Text> */}
+      </Text>
       <AccordionList
         list={assignWorks}
         header={renderHeader}

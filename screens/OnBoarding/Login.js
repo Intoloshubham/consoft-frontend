@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,125 +12,55 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import utils from '../../utils'; 
+import utils from '../../utils';
 import Toast from 'react-native-toast-message';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
-import { useDispatch } from 'react-redux';
-
+import {useDispatch} from 'react-redux';
 
 const Login = ({navigation}) => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
     setSwitchValue(value);
   };
-  
+
   const [userMobileNo, setUserMobileNo] = React.useState('');
   const [userPassword, setUserPassword] = React.useState('');
   const [userMobileNoError, setUserMobileNoError] = React.useState('');
-  
   const [companyMobileNo, setCompanyMobileNo] = React.useState('');
   const [companyPassword, setCompanyPassword] = React.useState('');
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
-  
   const [showPass, setShowPass] = React.useState(false);
-  
-  function isEnableLogin() {
-    return (
-      userMobileNo != '' &&
-      userMobileNoError == '' &&
-      companyMobileNo != '' &&
-      companyMobileNoError == ''
-    );
-  }
-  
+
   const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
-
     const res = await dispatch(userLogin(UserData));
-    // console.log(res)
-      if(res.payload.status === 200){
-        navigation.navigate('UserDashboard');
-      }
-
-    // setUserToken({ token:res.payload.access_token, user_id: res.payload._id  }));
-
-
-    // const tokens = getToken();
-    // const userId = getUserId();
-    // console.log(tokens)
-    // console.log(userId)
-
-    // const {userData} = useSelector(state => state.user);
-    // console.log(userData);
-
-    // const res = await loginUser(UserData);
-    // console.log(res) 
-
-    // let result;
-    // if (res.data) {
-    //   result = res.data;
-    // }
-    // if (res.error) {
-    //   result = res.error;
-    // }
-
-    // if (result.status === 200) {
-    //   await setUserId(result._id);
-    //   await storeToken(result.access_token);   
-    //   navigation.navigate('UserDashboard');
-    // }
-
-    // if(result.status === 401){
-    //   alert(result.data.message);
-    // }
-
-  }
+    if (res.payload.status === 200) {
+      navigation.navigate('UserDashboard');
+    }
+  };
 
   const companyOnSubmit = async () => {
     const company_data = {
       mobile: companyMobileNo,
       password: companyPassword,
     };
-
     const res = await dispatch(companyLogin(company_data));
-    // console.log(res.payload)
-      if(res.payload.status === 200){
-        navigation.navigate('Home');
-      }
-
-  //   const res = await loginCompany(company_data)
-  //   let result;
-  //   if (res.data) {
-  //     result = res.data;
-  //   }
-  //   if (res.error) {
-  //     result = res.error;
-  //   }
-
-  //   if (result.status === 200) {
-  //     await setCompanyId(result.company_id);
-  //     await storeToken(result.access_token);
-  //     navigation.navigate('Home');
-  //   }
-
-  //   if (result.status === 401) {
-  //     alert(result.data.message);
-  //   }
-    
+    if (res.payload.status === 200) {
+      navigation.navigate('Home');
+    }
   };
 
   const makeCall = () => {
-    let phoneNumber = ''; 
+    let phoneNumber = '';
     if (Platform.OS === 'android') {
       phoneNumber = 'tel:+91-8109093551';
     } else {
@@ -138,6 +68,7 @@ const Login = ({navigation}) => {
     }
     Linking.openURL(phoneNumber);
   };
+
   const message = 'Hello';
   const number = +919479505099;
   const openURL = async url => {
@@ -186,6 +117,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+  
   function renderHeaderImage() {
     return (
       <View
@@ -205,6 +137,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderUserForm() {
     return (
       <View
@@ -274,15 +207,11 @@ const Login = ({navigation}) => {
           />
           <TextButton
             label="Login"
-            // disabled={isEnableSignIn() ? false : true}
             buttonContainerStyle={{
               height: 45,
               alignItems: 'center',
               marginTop: SIZES.padding,
               borderRadius: SIZES.base,
-              // backgroundColor: isEnableSignIn()
-              //   ? COLORS.lightblue_900
-              //   : COLORS.transparentPrimary,
             }}
             onPress={userOnSubmit}
           />
@@ -290,6 +219,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderCompanyForm() {
     return (
       <View
@@ -512,6 +442,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderToggleButton() {
     return (
       <View
@@ -547,6 +478,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}

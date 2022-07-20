@@ -28,7 +28,6 @@ const SubmittedWorks = () => {
 
   // GET SUBMITTED WORKS
   React.useEffect(() => {
-    // `http://myapi.com/users/${userId}/posts`
     const abortConst = new AbortController();
     fetch(
       `${Config.API_URL}submit-works/` + `${company_id}`,
