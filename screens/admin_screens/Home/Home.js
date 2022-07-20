@@ -12,7 +12,7 @@ const Home = () => {
 
   const dispatch = useDispatch()
   const companyData = useSelector(state => state.company);
-  // console.log(companyData)
+  console.log(companyData)
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);

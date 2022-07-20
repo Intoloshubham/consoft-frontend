@@ -116,6 +116,32 @@ export const companySlice = createSlice({
 
   extraReducers: (builder) => {
     builder
+        //register company
+        .addCase(registerCompany.pending, (state, action) => {
+            state.status = STATUSES.LOADING;
+        })
+
+        .addCase(registerCompany.fulfilled,(state, action) => {
+            state.status = STATUSES.IDLE;
+            state._id = action.payload._id;
+            state.company_name = action.payload.company_name;
+            state.mobile = action.payload.mobile;
+            state.email = action.payload.email;
+        })
+
+        //verify product key
+        .addCase(verifyProductKey.pending, (state, action) => {
+          state.status = STATUSES.LOADING;
+        })
+
+        .addCase(verifyProductKey.fulfilled,(state, action) => {
+          state.token = action.payload.access_token;
+          state.status = STATUSES.IDLE;
+          storeToken(action.payload.access_token);
+          setCompanyId(action.payload._id);
+        })
+
+        //login company
         .addCase(companyLogin.pending, (state, action) => {
             state.status = STATUSES.LOADING;
         })
@@ -144,6 +170,19 @@ export const registerCompany = createAsyncThunk('company/register', async (compa
   const res = await fetch(Config.API_URL+'company',{
     method:"post",
     body:JSON.stringify(companyData),
+    headers:{
+      "Content-Type":"application/json",
+    },
+  });
+  const data = await res.json();
+  return data;
+});
+
+//verify product key
+export const verifyProductKey = createAsyncThunk('company/verify_product_key', async (productKey) => {
+  const res = await fetch(Config.API_URL+'verify-product-key',{
+    method:"post",
+    body:JSON.stringify(productKey),
     headers:{
       "Content-Type":"application/json",
     },
