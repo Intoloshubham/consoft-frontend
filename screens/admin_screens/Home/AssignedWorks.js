@@ -299,7 +299,7 @@ const AssignedWorks = () => {
                   <View
                     style={{
                       marginTop: SIZES.base,
-                      backgroundColor: COLORS.lightblue_50,
+                      backgroundColor: COLORS.white,
                       padding: SIZES.base,
                       borderRadius: SIZES.base,
                     }}>
@@ -441,8 +441,8 @@ const AssignedWorks = () => {
             <Image
               source={icons.filter}
               style={{
-                height: 18,
-                width: 18,
+                height: 15,
+                width: 15,
                 tintColor: COLORS.lightGray1,
               }}
             />

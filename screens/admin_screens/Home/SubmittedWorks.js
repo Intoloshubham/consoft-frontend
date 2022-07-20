@@ -18,36 +18,42 @@ import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 
 const SubmittedWorks = () => {
   //COMPANY DATA
-
-  
-    
-    const companyData = useSelector(state => state.company);
-    const company_id = companyData._id;
-    // console.log(companyData);
-
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
 
   const [submitWork, setSubmitWork] = React.useState([]);
-  const [verifyResponse, setVerifyResponse] = React.useState([]);
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
 
   // GET SUBMITTED WORKS
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}submit-works/` + `${company_id}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setSubmitWork(data);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // }, [submitWork]);
+  React.useEffect(() => {
+    // `http://myapi.com/users/${userId}/posts`
+    const abortConst = new AbortController();
+    fetch(
+      `${Config.API_URL}submit-works/` + `${company_id}`,
+      {signal: abortConst.signal},
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+      .then(response => response.json())
+      .then(data => {
+        setSubmitWork(data);
+      })
+      .catch(error => {
+        if (error.name == 'AbortError') {
+          console.log('fetch aborted');
+        } else {
+          console.log(error);
+        }
+      });
+
+    return () => abortConst.abort();
+  }, []);
 
   // verify works
   const verifyHandler = id => {
@@ -59,7 +65,7 @@ const SubmittedWorks = () => {
     })
       .then(response => response.json())
       .then(data => {
-        setVerifyResponse(data.status);
+        console.log(data);
       })
       .catch(error => {
         console.log(error);
@@ -81,7 +87,12 @@ const SubmittedWorks = () => {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log(data);
+        if (data.status === 200) {
+          setTimeout(() => {
+            setRevertModal(false);
+          }, 1000);
+        }
+        console.log(data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -109,10 +120,15 @@ const SubmittedWorks = () => {
                 top: '30%',
                 borderRadius: SIZES.base,
               }}>
+              <View>
+                <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                  Comment
+                </Text>
+              </View>
               <FormInput
-                placeholder="Write here..."
+                placeholder=""
                 multiline={true}
-                numberOfLines={5}
+                numberOfLines={3}
                 onChange={value => {
                   setRevertMsg(value);
                 }}
@@ -143,7 +159,10 @@ const SubmittedWorks = () => {
                 <Text
                   style={{
                     ...FONTS.h3,
-                    backgroundColor: COLORS.lightblue_600,
+                    backgroundColor:
+                      revertMsg != null
+                        ? COLORS.lightblue_600
+                        : COLORS.darkGray,
                     paddingHorizontal: SIZES.base,
                     paddingVertical: 3,
                     borderRadius: 2,
@@ -170,15 +189,27 @@ const SubmittedWorks = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text
-              style={{
-                ...FONTS.h4,
-                color: COLORS.darkGray,
-                textTransform: 'capitalize',
-                fontWeight: 'bold',
-              }}>
-              {item.user_name}
-            </Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                  fontWeight: 'bold',
+                }}>
+                {item.user_name}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 8,
+                  left: 3,
+                  paddingHorizontal: 3,
+                  backgroundColor: COLORS.yellow_400,
+                  color: COLORS.black,
+                }}>
+                {item.work_code}
+              </Text>
+            </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View
                 style={{flexDirection: 'row', alignItems: 'center', right: 10}}>
@@ -193,7 +224,7 @@ const SubmittedWorks = () => {
                 />
                 <Text
                   style={{
-                    fontSize: 8,
+                    fontSize: 10,
                     color: COLORS.darkGray,
                   }}>
                   {item.submit_work_date}
@@ -211,7 +242,7 @@ const SubmittedWorks = () => {
                 />
                 <Text
                   style={{
-                    fontSize: 8,
+                    fontSize: 10,
                     color: COLORS.darkGray,
                   }}>
                   {item.submit_work_time}
@@ -235,16 +266,14 @@ const SubmittedWorks = () => {
               Work
               <Text style={{color: COLORS.darkGray}}> - {item.work}</Text>
             </Text>
-            <TouchableOpacity onPress={verifyHandler(item._id)}>
+            <TouchableOpacity onPress={() => verifyHandler(item._id)}>
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.green,
-                  paddingHorizontal: 3,
+                  paddingHorizontal: 5,
                   borderRadius: 2,
                 }}>
-                <Text style={{fontSize: 10, color: COLORS.white}}>
-                  {verifyResponse === 200 ? 'Verified' : 'Verify'}
-                </Text>
+                <Text style={{fontSize: 10, color: COLORS.white}}>Verify</Text>
                 {/* <Image
                   source={verifyResponse == 200 ? icons.verify : icons.cancel}
                   resizeMode="contain"
@@ -272,7 +301,6 @@ const SubmittedWorks = () => {
               }}>
               Msg
               <Text style={{color: COLORS.darkGray}}>
-                {' '}
                 - {item.submit_work_text}
               </Text>
             </Text>
@@ -284,7 +312,7 @@ const SubmittedWorks = () => {
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.rose_600,
-                  paddingHorizontal: 3,
+                  paddingHorizontal: 5,
                   borderRadius: 2,
                 }}>
                 <Text
@@ -326,6 +354,9 @@ const SubmittedWorks = () => {
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={true}
+        nestedScrollEnabled={true}
+        maxHeight={250}
         ItemSeparatorComponent={() => {
           return (
             <View
@@ -342,12 +373,12 @@ const SubmittedWorks = () => {
   return (
     <View
       style={{
-        ...styles.shadow,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
         marginHorizontal: SIZES.padding,
         marginTop: SIZES.padding,
         borderRadius: SIZES.radius,
         padding: 20,
+        ...styles.shadow,
       }}>
       <View
         style={{
