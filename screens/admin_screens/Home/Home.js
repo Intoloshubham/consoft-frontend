@@ -1,18 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {View, LogBox, ScrollView, SafeAreaView, Text} from 'react-native';
+import {View, LogBox, ScrollView, SafeAreaView} from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
-import ProjectWorksIdentifier from './ProjectWorksIdentifier';
 import SubmittedWorks from './SubmittedWorks';
-
+import VerifyAndRevertWork from './VerifyAndRevertWork';
 import {useSelector, useDispatch} from 'react-redux';
 
 const Home = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
-  // console.log(companyData)
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -30,7 +27,7 @@ const Home = () => {
           <SubmittedWorks />
           <ProjectReports />
           <AssignedWorks />
-          {/* <ProjectWorksIdentifier /> */}
+          <VerifyAndRevertWork company_id={companyData._id} />
         </View>
       </ScrollView>
     </SafeAreaView>

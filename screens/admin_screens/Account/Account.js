@@ -36,28 +36,6 @@ const Account = () => {
   };
 
 
-  function renderHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          // marginTop: 30,
-          paddingHorizontal: SIZES.padding,
-          justifyContent: 'space-between',
-        }}>
-        <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
-          Profile
-        </Text>
-        {/* <IconButton
-          icon={icons.sun}
-          iconStyle={{
-            tintColor: COLORS.black,
-          }}
-        /> */}
-      </View>
-    );
-  }
-
   function renderProfileCard() {
     return (
       <View
@@ -208,10 +186,10 @@ const Account = () => {
               image={icons.right_arr}
               onPress={() => navigation.navigate('Optiontype')}
             />
-             <LineDivider />
+            <LineDivider />
             <ProfileValue
               icon={icons.units}
-              value="ToolsAndMachinery1"
+              value="Tools & Machinery1"
               image={icons.right_arr}
               onPress={() => navigation.navigate('ToolsAndMachinery1')}
             />
@@ -235,7 +213,11 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" onPress={logout} />
+        <ProfileValue
+          icon={icons.logout}
+          value="LogOut"
+          onPress={() => logout()}
+        />
       </View>
     );
   }

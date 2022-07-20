@@ -11,6 +11,7 @@ import {COLORS, SIZES, FONTS, images, icons} from '../../../constants';
 import {TextButton, HeaderBar} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
+import VerifyAndRevertWork from './VerifyAndRevertWork';
 
 const ProjectsDetails = ({route}) => {
   const navigation = useNavigation();
@@ -140,6 +141,7 @@ const ProjectsDetails = ({route}) => {
           onClose={() => setWorkModal(false)}
         />
       )}
+
       {renderProjectDetails()}
     </View>
   );

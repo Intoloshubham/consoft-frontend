@@ -5556,6 +5556,13 @@
   dependencies:
     "lodash" "*"
 
+"react-native-element-textinput@^2.0.0":
+  "integrity" "sha512-JYq8fEy0nTGgjshf0Gt+/t7C2zi5MwPyV5Y78AXcRgK5hsw8gz8o5hOfETNBAnEn5MsZnCfzdub5uOGgk7kYtQ=="
+  "resolved" "https://registry.npmjs.org/react-native-element-textinput/-/react-native-element-textinput-2.0.0.tgz"
+  "version" "2.0.0"
+  dependencies:
+    "react-native-virtualized-view" "*"
+
 "react-native-expandable-listview@^1.3.1":
   "integrity" "sha512-42v1TGZ39FzsTLAznk4s81/nZrP8pHMO2MY5YfEpXQ+cYt4He8bT9N24Ro53olC0rtzcpt5e3n5Va85zmFSKLw=="
   "resolved" "https://registry.npmjs.org/react-native-expandable-listview/-/react-native-expandable-listview-1.3.1.tgz"
@@ -5618,6 +5625,11 @@
     "react-native-modal" "^12.1.0"
     "react-native-vector-icons" "^8.1.0"
 
+"react-native-pager-view@*", "react-native-pager-view@^5.4.25":
+  "integrity" "sha512-3drrYwaLat2fYszymZe3nHMPASJ4aJMaxiejfA1V5SK3OygYmdtmV2u5prX7TnjueJzGSyyaCYEr2JlrRt4YPg=="
+  "resolved" "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-5.4.25.tgz"
+  "version" "5.4.25"
+
 "react-native-paper@^4.12.1":
   "version" "4.12.1"
   dependencies:
@@ -5659,6 +5671,11 @@
   "resolved" "https://registry.npmjs.org/react-native-swipe-list-view/-/react-native-swipe-list-view-3.2.9.tgz"
   "version" "3.2.9"
 
+"react-native-tab-view@^3.1.1":
+  "integrity" "sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw=="
+  "resolved" "https://registry.npmjs.org/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz"
+  "version" "3.1.1"
+
 "react-native-table-component@^1.2.2":
   "integrity" "sha512-7bbsi5431iWcjj3toASh8lFHGi6AG/+MTd4M7GuksXKxx/CFs/Qwv1Ys7D2wgyuYKe3hxWNfSVrteFj0tOYXYw=="
   "resolved" "https://registry.npmjs.org/react-native-table-component/-/react-native-table-component-1.2.2.tgz"
@@ -5686,6 +5703,11 @@
     "lodash.template" "^4.5.0"
     "prop-types" "^15.7.2"
     "yargs" "^16.1.1"
+
+"react-native-virtualized-view@*":
+  "integrity" "sha512-7YyFMMkNzJ787/giGkKcm0JEx0IcLEE/XHREGz2I4K1RISQGFjEDe6iWsapOnHSR/e1vhebZJ8VmqhSpg5YPzg=="
+  "resolved" "https://registry.npmjs.org/react-native-virtualized-view/-/react-native-virtualized-view-1.0.0.tgz"
+  "version" "1.0.0"
 
 "react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.69 || 1000.0.0", "react-native@>= 0.60.2", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.59", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
   "version" "0.68.1"

@@ -284,12 +284,12 @@ const ProjectReports = () => {
   return (
     <View
       style={{
-        ...styles.shadow,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
         marginHorizontal: SIZES.padding,
         marginTop: SIZES.padding,
         borderRadius: SIZES.radius,
         padding: 20,
+        ...styles.shadow,
       }}>
       <View
         style={{
@@ -308,7 +308,7 @@ const ProjectReports = () => {
           <Image
             source={icons.filter}
             resizeMode="contain"
-            style={{height: 18, width: 18, tintColor: COLORS.darkGray}}
+            style={{height: 15, width: 15, tintColor: COLORS.darkGray}}
           />
         </TouchableOpacity>
       </View>
