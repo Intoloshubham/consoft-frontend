@@ -8,28 +8,20 @@ import {
   StyleSheet,
   LogBox,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import Collapsible from 'react-native-collapsible';
-import {removeUserId, removeToken} from '../../../services/asyncStorageService';
 import {useSelector, useDispatch} from 'react-redux';
-import {unSetUserInfo} from '../../../features/UserSlice';
-import {unsetUserToken} from '../../../features/UserAuthSlice';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
-import {ProfileValue, LineDivider} from '../../../Components';
 import Config from '../../../config';
-
-import {
-  userLogout,
-  STATUSES,
-  getLoggedUser,
-} from '../../../services/userAuthApi';
+import {useNavigation} from '@react-navigation/native';
+import {ProfileValue} from '../../../Components';
+import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {userLogout} from '../../../services/userAuthApi';
 
 const Profile = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const userData = useSelector(state => state.user);
-  // console.log(userData.token);
   const [userDetail, setUserDetail] = useState([]);
+
+  // get user data
   React.useEffect(() => {
     fetch(`${Config.API_URL}user`, {
       method: 'GET',
@@ -40,7 +32,7 @@ const Profile = () => {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log(data)
+        console.log(data);
         setUserDetail(data);
       })
       .catch(error => {
@@ -63,25 +55,26 @@ const Profile = () => {
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.radius,
+          paddingHorizontal: SIZES.padding,
           paddingVertical: 20,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_800,
+          alignItems: 'center',
         }}>
         {/* profile image  */}
         <TouchableOpacity
           style={{
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
           }}
           onPress={() => alert('Upload Image')}>
           <Image
-            source={images.Profile7}
+            source={images.civil_eng}
             style={{
               width: '100%',
               height: '100%',
-              borderRadius: 30,
-              borderWidth: 2,
+              borderRadius: 15,
+              borderWidth: 3,
               borderColor: COLORS.white,
             }}
           />
@@ -125,11 +118,15 @@ const Profile = () => {
             style={{
               color: COLORS.white,
               ...FONTS.h2,
+              textTransform: 'capitalize',
             }}>
             {userDetail.name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             {userDetail.email}
+          </Text>
+          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+            +91{userDetail.mobile}
           </Text>
         </View>
       </View>

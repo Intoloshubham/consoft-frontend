@@ -91,10 +91,10 @@ function Todo({taskModal, settaskModal, NewTaskRes}) {
     return (
       <View>
         {/* {item.work_status == true && item.verify == false && item.revert_status == false ? 
-              <WorkParicular item={item} message={"Pending from admin side!!"} COLOR={COLORS.yellow_700}/>                
-              :item.work_status == false && item.verify == false && item.revert_status == true ?<WorkParicular item={item} message={"Revert"} COLOR={COLORS.red}/>
-              :item.work_status == false && item.verify == false && item.revert_status == false ?<WorkParicular item={item} message={""} COLOR={COLORS.black}/>
-              :null} */}
+                <WorkParicular item={item} message={"Pending from admin side!!"} COLOR={COLORS.yellow_700}/>                
+                :item.work_status == false && item.verify == false && item.revert_status == true ?<WorkParicular item={item} message={"Revert"} COLOR={COLORS.red}/>
+                :item.work_status == false && item.verify == false && item.revert_status == false ?<WorkParicular item={item} message={""} COLOR={COLORS.black}/>
+                :null} */}
 
         {item.work_status == true &&
         item.verify == false &&
@@ -205,29 +205,29 @@ function Todo({taskModal, settaskModal, NewTaskRes}) {
           </View>
           <Divider style={{backgroundColor: COLORS.gray2, marginTop: 5}} />
           {/* <View>
-                      <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3 }} >Particular</Text>
-                  </View> */}
+                        <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3 }} >Particular</Text>
+                    </View> */}
           {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-                      <View>
-                          <Text style={{ height: 40, top: 15, ...FONTS.h4, color: COLORS.black, backgroundColor: COLORS.gray3, width: 150 }} >Expected Comp. time</Text>
-                      </View>
-                      <View style={{ flexDirection: "row", alignItems: "baseline", borderTopLeftRadius: 8, borderTopRightRadius: 8, width: 115, justifyContent: "space-around", marginBottom: 5 }}>
-                          <View style={{ backgroundColor: COLORS.gray2, borderRadius: 5 }}>
-                              <Text style={{ color: "#000", padding: 4 }} >{Exp_date}</Text>
-                          </View>
-                          <View style={{ width: 30, borderRadius: 5, backgroundColor: COLORS.gray3, top: 12 }}>
-                              <Pressable onPress={() => { setExpCalendar(true) }}  >
-                                  <EvilIcons name="calendar" color={"#106853"} size={35} />
-                              </Pressable>
-                          </View>
-                      </View>
-                      <DatePicker
-                          isVisible={ExpCalendar}
-                          mode={'single'}
-                          onCancel={() => { setExpCalendar(false) }}
-                          onConfirm={onConfirmexp}   
-                      />
-                  </View> */}
+                        <View>
+                            <Text style={{ height: 40, top: 15, ...FONTS.h4, color: COLORS.black, backgroundColor: COLORS.gray3, width: 150 }} >Expected Comp. time</Text>
+                        </View>
+                        <View style={{ flexDirection: "row", alignItems: "baseline", borderTopLeftRadius: 8, borderTopRightRadius: 8, width: 115, justifyContent: "space-around", marginBottom: 5 }}>
+                            <View style={{ backgroundColor: COLORS.gray2, borderRadius: 5 }}>
+                                <Text style={{ color: "#000", padding: 4 }} >{Exp_date}</Text>
+                            </View>
+                            <View style={{ width: 30, borderRadius: 5, backgroundColor: COLORS.gray3, top: 12 }}>
+                                <Pressable onPress={() => { setExpCalendar(true) }}  >
+                                    <EvilIcons name="calendar" color={"#106853"} size={35} />
+                                </Pressable>
+                            </View>
+                        </View>
+                        <DatePicker
+                            isVisible={ExpCalendar}
+                            mode={'single'}
+                            onCancel={() => { setExpCalendar(false) }}
+                            onConfirm={onConfirmexp}   
+                        />
+                    </View> */}
           <View
             style={{
               flexDirection: 'row',
@@ -265,11 +265,11 @@ function Todo({taskModal, settaskModal, NewTaskRes}) {
           </View>
           {/* <Divider style={{ backgroundColor: COLORS.gray2, marginTop: 5 }} /> */}
           {/* <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 5 }}>
-                      <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3 }} >Admin Revert</Text>
-                      <TouchableOpacity style={{ backgroundColor: COLORS.blue, padding: 2, borderRadius: 4, width: 30, height: 20 }} >
-                          <Text style={{ textAlign: 'center', color: COLORS.white, ...FONTS.h5, bottom: 4, letterSpacing: 1 }}>OK</Text>
-                      </TouchableOpacity>
-                  </View> */}
+                        <Text style={{ height: 30, marginTop: 12, backgroundColor: COLORS.gray3 }} >Admin Revert</Text>
+                        <TouchableOpacity style={{ backgroundColor: COLORS.blue, padding: 2, borderRadius: 4, width: 30, height: 20 }} >
+                            <Text style={{ textAlign: 'center', color: COLORS.white, ...FONTS.h5, bottom: 4, letterSpacing: 1 }}>OK</Text>
+                        </TouchableOpacity>
+                    </View> */}
           <Divider
             style={{
               backgroundColor: COLORS.gray2,

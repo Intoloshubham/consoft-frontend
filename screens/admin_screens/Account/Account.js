@@ -47,28 +47,6 @@ const Account = () => {
   // const companyToken = useSelector(state => state.companyAuth)
   // console.log(companyToken);
 
-  function renderHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          // marginTop: 30,
-          paddingHorizontal: SIZES.padding,
-          justifyContent: 'space-between',
-        }}>
-        <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
-          Profile
-        </Text>
-        {/* <IconButton
-          icon={icons.sun}
-          iconStyle={{
-            tintColor: COLORS.black,
-          }}
-        /> */}
-      </View>
-    );
-  }
-
   function renderProfileCard() {
     return (
       <View

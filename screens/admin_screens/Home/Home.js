@@ -19,7 +19,7 @@ const Home = () => {
 
   // get company data
   const companyData = useSelector(state => state.company);
-  console.log(companyData);
+  // console.log(companyData);
 
   // get token
   const {data, isSuccess} = useGetLoggedCompanyQuery(accessToken);

@@ -26,6 +26,9 @@ import {setUserInfo} from '../../../features/UserSlice';
 import {setUserToken} from '../../../features/UserAuthSlice';
 import {useDispatch, useSelector} from 'react-redux';
 
+//saurabh
+import UserAssignWorks from './UserAssignWorks';
+
 const UserDashboard = ({navigation, route}) => {
   const dispatch = useDispatch();
   const userData = useSelector(state => state.user);
@@ -97,8 +100,8 @@ const UserDashboard = ({navigation, route}) => {
   // console.log(userToken);
 
   return (
-    <>
-      {/* <Text>TEsting</Text> */}
+    <View>
+      <UserAssignWorks />
       <View style={styles.tasks}>
         <TouchableOpacity style={styles.Intask} onPress={() => handleTask()}>
           <View>
@@ -155,7 +158,7 @@ const UserDashboard = ({navigation, route}) => {
           <DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />
         ) : null}
       </View>
-    </>
+    </View>
   );
 };
 
