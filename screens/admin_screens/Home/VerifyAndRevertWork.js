@@ -1,16 +1,8 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
 import Config from '../../../config';
-import {useSelector} from 'react-redux';
 
 const VerifyAndRevertWork = ({company_id}) => {
   const [verifyRevertWorks, setVerifyRevertWorks] = React.useState([]);
@@ -21,37 +13,41 @@ const VerifyAndRevertWork = ({company_id}) => {
   ]);
 
   // call api for getting verified and reveted works
-  // React.useEffect(() => {
-  //   const abortCont = new AbortController();
-  //   fetch(
-  //     `${Config.API_URL}verify-revert-works/` + `${company_id}`,
-  //     {signal: abortCont.signal},
-  //     {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     },
-  //   )
-  //     .then(response => {
-  //       return response.json();
-  //     })
-  //     .then(data => {
-  //       setVerifyRevertWorks(data);
-  //       // console.log(data);
-  //     })
-  //     .catch(err => {
-  //       if (err.name === 'AbortError') {
-  //         console.log('fetch aborted');
-  //       } else {
-  //         console.log(err);
-  //       }
-  //     });
-  //   return () => abortCont.abort();
-  // }, [verifyRevertWorks]);
+  React.useEffect(() => {
+    const abortCont = new AbortController();
+    fetch(
+      `${Config.API_URL}verify-revert-works/` + `${company_id}`,
+      {signal: abortCont.signal},
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        setVerifyRevertWorks(data);
+        // console.log(data);
+      })
+      .catch(err => {
+        if (err.name === 'AbortError') {
+          console.log('fetch aborted');
+        } else {
+          console.log(err);
+        }
+      });
+    return () => abortCont.abort();
+  }, [verifyRevertWorks]);
 
   const VerifyWorksRoute = () => (
-    <View style={{padding: 5, marginTop: SIZES.base}}>
+    <View
+      style={{
+        padding: 5,
+        marginTop: SIZES.base,
+      }}>
       {verifyRevertWorks.map((ele, i) => {
         if (ele.verify == true) {
           return (

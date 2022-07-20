@@ -4,14 +4,12 @@ import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
 import SubmittedWorks from './SubmittedWorks';
-
+import VerifyAndRevertWork from './VerifyAndRevertWork';
 import {useSelector, useDispatch} from 'react-redux';
 
 const Home = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
-  // console.log(companyData)
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);

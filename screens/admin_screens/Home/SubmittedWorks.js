@@ -15,33 +15,19 @@ import {useSelector} from 'react-redux';
 import Config from '../../../config';
 import {FormInput, ProgressBar} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import axios from 'axios';
 
 const SubmittedWorks = () => {
   //COMPANY DATA
-
-  
-    
-    const companyData = useSelector(state => state.company);
-    const company_id = companyData._id;
-    // console.log(companyData);
-
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
 
   const [submitWork, setSubmitWork] = React.useState([]);
-  const [verifyResponse, setVerifyResponse] = React.useState([]);
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
 
   // GET SUBMITTED WORKS
   React.useEffect(() => {
-    // axios
-    //   .get('http://192.168.1.99:8000/api/submit-works/62ba94b8ea988119bbf13687')
-    //   .then(function (response) {
-    //     console.log(response.data);
-    //     setSubmitWork(response.data);
-    //   });
-
     // `http://myapi.com/users/${userId}/posts`
     const abortConst = new AbortController();
     fetch(
@@ -56,7 +42,6 @@ const SubmittedWorks = () => {
     )
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         setSubmitWork(data);
       })
       .catch(error => {
@@ -72,58 +57,47 @@ const SubmittedWorks = () => {
 
   // verify works
   const verifyHandler = id => {
-    // axios
-    //   .get('http://192.168.1.99:8000/api/verify-submit-work' + '/' + id)
-    //   .then(function (response) {
-    //     console.log(response.data);
-    //   });
-    // // console.log(id);
-    // fetch(
-    //   Config.API_URL + 'verify-submit-work' + '/' + id,
-    //   // `${Config.API_URL}verify-submit-work` + `/${id}`
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //   },
-    // )
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     setVerifyResponse(data.status);
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
+    fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   const getRevertWorkId = id => {
     setRevertId(id);
   };
 
-  // const OnSubmit = () => {
-  //   const formData = {revert_msg: revertMsg};
-  //   fetch(`${Config.API_URL}revert-submit-work` + `/${revertId}`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(formData),
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       if (data.status === 200) {
-  //         setTimeout(() => {
-  //           setRevertModal(false);
-  //         }, 1000);
-  //       }
-  //       console.log(data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error:', error);
-  //     });
-  // };
+  const OnSubmit = () => {
+    const formData = {revert_msg: revertMsg};
+    fetch(`${Config.API_URL}revert-submit-work` + `/${revertId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 200) {
+          setTimeout(() => {
+            setRevertModal(false);
+          }, 1000);
+        }
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
   function renderRevertModal() {
     return (
