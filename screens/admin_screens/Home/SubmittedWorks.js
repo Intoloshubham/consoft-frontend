@@ -16,8 +16,8 @@ import Config from '../../../config';
 import {FormInput, ProgressBar} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 
-// import { getAssignWorks, verifyAssignWork } from '../../../features/AssignWorksSlice';
-// import { STATUSES } from '../../../features/AssignWorksSlice';
+import { getAssignWorks, verifyAssignWork } from '../../../features/AssignWorksSlice';
+import { STATUSES } from '../../../features/AssignWorksSlice';
 
 const SubmittedWorks = () => {
 
@@ -25,43 +25,36 @@ const SubmittedWorks = () => {
   //COMPANY DATA
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
-
+  // console.log(company_id)
   //
-  // const { data: works, status } = useSelector((state) => state.assignworks);
+  const { data: works, status } = useSelector((state) => state.assignworks);
   // console.log(works)
 
-  const [submitWork, setSubmitWork] = React.useState([]);
+  const [submitWork, setSubmitWork] = React.useState();
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
 
   // by rohit
 
-  // useEffect(() => {
-  //   dispatch(getAssignWorks(company_id));
-  //   setSubmitWork(works);
-
-
-  // }, []);
-
-  
-  // GET SUBMITTED WORKS
   React.useEffect(() => {
     
     const abortConst = new AbortController();
     fetch(
       `${Config.API_URL}submit-works/` + `${company_id}`,
-      {signal: abortConst.signal},
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+        {signal: abortConst.signal},
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    )
+      )
       .then(response => response.json())
       .then(data => {
+        // console.log(data)
         setSubmitWork(data);
+       
       })
       .catch(error => {
         if (error.name == 'AbortError') {
@@ -72,11 +65,10 @@ const SubmittedWorks = () => {
       });
 
     return () => abortConst.abort();
-  }, [submitWork]);
+  }, []);
 
   // verify works
   const verifyHandler = id => {
-    // dispatch(verifyAssignWork(id));
     fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
       method: 'GET',
       headers: {
@@ -97,6 +89,7 @@ const SubmittedWorks = () => {
   };
 
   const OnSubmit = () => {
+    
     const formData = {revert_msg: revertMsg};
     fetch(`${Config.API_URL}revert-submit-work` + `/${revertId}`, {
       method: 'POST',
@@ -108,6 +101,7 @@ const SubmittedWorks = () => {
       .then(response => response.json())
       .then(data => {
         if (data.status === 200) {
+          
           setTimeout(() => {
             setRevertModal(false);
           }, 1000);
