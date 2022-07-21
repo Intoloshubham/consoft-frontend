@@ -6,14 +6,21 @@ import ProjectReports from './ProjectReports';
 import SubmittedWorks from './SubmittedWorks';
 import VerifyAndRevertWork from './VerifyAndRevertWork';
 import {useSelector, useDispatch} from 'react-redux';
+import { getProjects } from '../../../features/ProjectsSlice';
+// import { getProjectCategory } from '../../../features/ProjectCategorySlice';
 
 const Home = () => {
   const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
 
   useEffect(() => {
+    // dispatch(getProjects())
+    // dispatch(getProjectCategory())
+    // console.log("object")
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
+  // useEffect(() => {
+  // }, []);
 
   return (
     <SafeAreaView>
@@ -23,11 +30,11 @@ const Home = () => {
             flex: 1,
             marginBottom: 130,
           }}>
-          <ProjectsBanner />
-          <SubmittedWorks />
+          <ProjectsBanner company_id={companyData._id} />
+          {/* <SubmittedWorks />
           <ProjectReports />
           <AssignedWorks />
-          <VerifyAndRevertWork company_id={companyData._id} />
+          <VerifyAndRevertWork company_id={companyData._id} /> */}
         </View>
       </ScrollView>
     </SafeAreaView>

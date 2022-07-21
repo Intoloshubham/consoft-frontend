@@ -22,7 +22,7 @@ const Profile = () => {
   const [userDetail, setUserDetail] = useState([]);
 
   // get user data
-  React.useEffect(() => {
+  useEffect(() => {
     fetch(`${Config.API_URL}user`, {
       method: 'GET',
       headers: {
@@ -32,7 +32,6 @@ const Profile = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         setUserDetail(data);
       })
       .catch(error => {

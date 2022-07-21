@@ -24,14 +24,22 @@ import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import Toast from 'react-native-toast-message';
 import Config from '../../../config';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {ConformationAlert} from '../../../Components';
+import { getProjectCategory, getProjects } from '../../../controller/ProjectController';
 
-const ProjectsBanner = () => {
+
+const ProjectsBanner = ({company_id}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  // const {data: projectList} = useSelector(state => state.projects);
+  
 
   //COMPANY DATA
-  const companyData = useSelector(state => state.company);
+
+  // const companyData = useSelector(state => state.company);
+  // const company_id = companyData._id;
 
   //CONFIRMATION MODAL ON DELETE
   const [projectDeleteConfirmation, setProjectDeleteConfirmation] =
@@ -39,9 +47,8 @@ const ProjectsBanner = () => {
 
   //PROJECT BANNER COLLAPSED
   const [collapsed, setCollapsed] = React.useState(true);
-  const toggleExpanded = () => {
-    setCollapsed(!collapsed);
-  };
+
+  
 
   //PROJECT CREATE & UPDATE MODAL
   const [showCreateProjectModal, setCreateProjectModal] = React.useState(false);
@@ -78,6 +85,14 @@ const ProjectsBanner = () => {
   const [projectLocationError, setProjectLocationError] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
 
+  const toggleExpanded = async () => {
+    setCollapsed(!collapsed);
+    if (collapsed) {
+      const projectList = await getProjects();
+      setProjects(projectList);
+    }
+  };
+
   // ON BUTTON SUBMISSON VALIDATION
   function isEnableSubmit() {
     return (
@@ -92,58 +107,78 @@ const ProjectsBanner = () => {
 
   // GETTING DATA ALL API'S
   // API FOR GETTING PROJECTS DATA
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}projects`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data)
-        setProjects(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [projects]);
+
+  // function getProjects(company_id) {
+  //   fetch(`${Config.API_URL}projects`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     console.log(data)
+  //     // console.log("object")
+  //     setProjects(data);
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
+  // }
+
+  // React.useEffect(() => {
+  //   fetch(`${Config.API_URL}projects`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // console.log(data)
+  //       // console.log("object")
+  //       setProjects(data);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // }, [projects]);
 
   // GETTING PROJECTS CATEGORIES
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}project-category`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let proCatFromApi = data.map(item => {
-          return {label: item.category_name, value: item._id};
-        });
-        setProjectCategory(proCatFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, [projectCategory]);
+  // React.useEffect(() => {
+  //   fetch(`${Config.API_URL}project-category`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       let proCatFromApi = data.map(item => {
+  //         return {label: item.category_name, value: item._id};
+  //       });
+  //       setProjectCategory(proCatFromApi);
+  //     })
+  //     .catch(error => console.log(error.message));
+  // }, [projectCategory]);
 
   // GETTING PROJECTS TYPES
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}project-type`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let proTypeFromApi = data.map(item => {
-          return {label: item.project_type, value: item._id};
-        });
-        setProjectType(proTypeFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, [projectType]);
+  // React.useEffect(() => {
+  //   fetch(`${Config.API_URL}project-type`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       let proTypeFromApi = data.map(item => {
+  //         return {label: item.project_type, value: item._id};
+  //       });
+  //       setProjectType(proTypeFromApi);
+  //     })
+  //     .catch(error => console.log(error.message));
+  // }, [projectType]);
 
   // POST PROJECTS FORM DATA
   const OnSubmit = () => {
@@ -154,9 +189,11 @@ const ProjectsBanner = () => {
       project_category: value,
       project_type: value1,
       project_measurement: value2,
-      company_id: companyData._id,
+      company_id: company_id,
     };
-    // console.log(data);
+    // setProjects(projectList);
+
+    // console.log(projectList);
     fetch(`${Config.API_URL}projects`, {
       method: 'POST',
       headers: {
@@ -167,6 +204,8 @@ const ProjectsBanner = () => {
       .then(response => response.json())
       .then(data => {
         if (data.status === 200) {
+
+          
           showToast();
           setTimeout(() => {
             setCreateProjectModal(false);
@@ -262,6 +301,8 @@ const ProjectsBanner = () => {
       });
   };
 
+  
+
   // EMPTY ALL FORM STATED
   function empltModalForm() {
     setProjectName('');
@@ -270,6 +311,19 @@ const ProjectsBanner = () => {
     setValue('');
     setValue1('');
     setValue2('');
+   
+  }
+
+  const createProject = async () =>{
+    empltModalForm();
+    setCreateProjectModal(true);
+
+    const data = await getProjectCategory();
+    let proCatFromApi = data.map(item => {
+      return {label: item.category_name, value: item._id};
+    });
+    setProjectCategory(proCatFromApi);
+
   }
 
   // TOAST
@@ -911,7 +965,7 @@ const ProjectsBanner = () => {
     );
   }
   return (
-    <TouchableOpacity
+    <View
       style={{
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
@@ -921,7 +975,8 @@ const ProjectsBanner = () => {
         borderRadius: SIZES.base,
         ...styles.shadow,
       }}
-      onPress={toggleExpanded}>
+      // onPress={toggleExpanded}
+      >
       <View
         style={{
           flex: 1,
@@ -946,20 +1001,23 @@ const ProjectsBanner = () => {
             color: COLORS.black,
             ...FONTS.body5,
           }}
-          onPress={() => {
-            setCreateProjectModal(true);
-            empltModalForm();
+          onPress={ () => {
+            createProject()
           }}
+          // onPress={ createProject()}
         />
-        <Image
-          source={collapsed ? icons.down_arrow : icons.up_arrow}
-          style={{
-            height: 18,
-            width: 18,
-            tintColor: COLORS.white,
-            justifyContent: 'flex-end',
-          }}
-        />
+        <TouchableOpacity onPress={toggleExpanded}>
+
+          <Image
+            source={collapsed ? icons.down_arrow : icons.up_arrow}
+            style={{
+              height: 18,
+              width: 18,
+              tintColor: COLORS.white,
+              justifyContent: 'flex-end',
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <Collapsible collapsed={collapsed}>{renderProjects()}</Collapsible>
 
@@ -986,7 +1044,7 @@ const ProjectsBanner = () => {
           OnDeleteSubmit();
         }}
       />
-    </TouchableOpacity>
+    </View>
   );
 };
 

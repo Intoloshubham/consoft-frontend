@@ -19,10 +19,18 @@ import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
-import {useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getCompanyId, getUserId, getToken } from '../../services/asyncStorageService';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
+
+  // const userData = useSelector(state => state.user);
+  // const companyData = useSelector(state => state.company);
+  // console.log(userData)
+  // console.log("userData")
+  // console.log(companyData)
 
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
@@ -37,16 +45,60 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   const [showPass, setShowPass] = React.useState(false);
 
+
+  const [userId, setUserId] = React.useState('');
+  const [companyId, setCompanyId] = React.useState('');
+  const [token, setToken] = React.useState('');
+
+
+  
+
+  // useEffect( async () => {
+  //     const token = await getToken();
+  //     console.log(token)
+  //     setToken(token)
+
+  //     const company_id = await getCompanyId();
+  //     console.log("company_id")
+  //     console.log(company_id)
+  //     setCompanyId(company_id)
+      
+  //     const user_id = await getUserId();
+  //     console.log("user_id")
+  //     console.log(user_id)
+  //     setUserId(user_id)
+     
+  // }, []);
+
+
+  // {companyData.token && companyData._id ? ( navigation.navigate('Home') ): null}
+
+  // {userData.token && userData._id ? ( navigation.navigate('UserDashboard') ) : null }
+
+
+  
+  function isEnableLogin() {
+    return (
+      userMobileNo != '' &&
+      userMobileNoError == '' &&
+      companyMobileNo != '' &&
+      companyMobileNoError == ''
+    );
+  }
+  
   const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
-    if (res.payload.status === 200) {
-      navigation.navigate('UserDashboard');
-    }
-  };
+    
+      if(res.payload.status === 200){
+        navigation.navigate('UserDashboard');
+      }else{
+        alert(res.payload.message)
+      }
+  }
 
   const companyOnSubmit = async () => {
     const company_data = {
@@ -54,9 +106,11 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
     const res = await dispatch(companyLogin(company_data));
-    if (res.payload.status === 200) {
-      navigation.navigate('Home');
-    }
+      if(res.payload.status === 200){
+        navigation.navigate('Home');
+      }else{
+        alert(res.payload.message)
+      }
   };
 
   const makeCall = () => {

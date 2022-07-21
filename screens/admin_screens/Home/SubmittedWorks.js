@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,37 +11,50 @@ import {
   TouchableWithoutFeedback,
   TextInput,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Config from '../../../config';
 import {FormInput, ProgressBar} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 
+import { getAssignWorks, verifyAssignWork } from '../../../features/AssignWorksSlice';
+import { STATUSES } from '../../../features/AssignWorksSlice';
+
 const SubmittedWorks = () => {
+
+  const dispatch = useDispatch();
   //COMPANY DATA
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
+  // console.log(company_id)
+  //
+  const { data: works, status } = useSelector((state) => state.assignworks);
+  // console.log(works)
 
-  const [submitWork, setSubmitWork] = React.useState([]);
+  const [submitWork, setSubmitWork] = React.useState();
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
 
-  // GET SUBMITTED WORKS
+  // by rohit
+
   React.useEffect(() => {
+    
     const abortConst = new AbortController();
     fetch(
       `${Config.API_URL}submit-works/` + `${company_id}`,
-      {signal: abortConst.signal},
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+        {signal: abortConst.signal},
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    )
+      )
       .then(response => response.json())
       .then(data => {
+        // console.log(data)
         setSubmitWork(data);
+       
       })
       .catch(error => {
         if (error.name == 'AbortError') {
@@ -76,6 +89,7 @@ const SubmittedWorks = () => {
   };
 
   const OnSubmit = () => {
+    
     const formData = {revert_msg: revertMsg};
     fetch(`${Config.API_URL}revert-submit-work` + `/${revertId}`, {
       method: 'POST',
@@ -87,6 +101,7 @@ const SubmittedWorks = () => {
       .then(response => response.json())
       .then(data => {
         if (data.status === 200) {
+          
           setTimeout(() => {
             setRevertModal(false);
           }, 1000);

@@ -37,10 +37,12 @@ import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
 
+
+
 //setup redux
 // import {store} from './app/store';
 import store from './app/store';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +51,7 @@ const App = () => {
     SplashScreen.hide();
   }, []);
 
+  
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
@@ -57,6 +60,7 @@ const App = () => {
             headerShown: false,
           }}
           initialRouteName={'Login'}>
+
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
@@ -99,10 +103,7 @@ const App = () => {
           <Stack.Screen name="CheckList" component={CheckList} />
           <Stack.Screen name="Optiontype" component={Optiontype} />
           <Stack.Screen name="Quantitywork" component={Quantitywork} />
-          <Stack.Screen
-            name="ToolsAndMachinery1"
-            component={ToolsAndMachinery1}
-          />
+          <Stack.Screen name="ToolsAndMachinery1" component={ToolsAndMachinery1} />
 
           {/* User Screens */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />
