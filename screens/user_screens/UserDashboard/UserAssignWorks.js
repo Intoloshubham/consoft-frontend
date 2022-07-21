@@ -28,7 +28,6 @@ const UserAssignWorks = () => {
     )
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         data.map(ele => {
           setAssignWorks(ele.assign_works);
         });
