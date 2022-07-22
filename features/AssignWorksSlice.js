@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setUserId, removeUserId, storeToken, removeToken } from './asyncStorageService';
 import Config from '../config'
 
 export const STATUSES = Object.freeze({
@@ -31,7 +30,7 @@ const assignWorkSlice = createSlice({
             })
             .addCase(getAssignWorks.fulfilled, (state, action) => {
                 state.data = action.payload;
-                // alert(JSON.stringify(action.payload));
+                alert(JSON.stringify(action.payload));
                 state.status = STATUSES.IDLE;
             })
             .addCase(getAssignWorks.rejected, (state, action) => {
@@ -39,21 +38,22 @@ const assignWorkSlice = createSlice({
             })
 
             // verify work
-            // .addCase(verifyAssignWork.pending, (state, action) => {
-            //     state.status = STATUSES.LOADING;
-            // })
+            .addCase(verifyAssignWork.pending, (state, action) => {
+                state.status = STATUSES.LOADING;
+            })
 
-            // .addCase(verifyAssignWork.fulfilled, (state, action) => {
-                //state.data = action.payload;
-                // alert(JSON.stringify(action.payload));
-                //state.status = STATUSES.IDLE;
+            .addCase(verifyAssignWork.fulfilled, (state, action) => {
+                state.data = action.payload;
+                alert(JSON.stringify(action.payload.status));
+                // getAssignWorks("62c827689c1d4cb814ead866");
+                state.status = STATUSES.IDLE;
                 // return state.filter((item, i) => i !== action.payload.index)
                 // return state.filter((item) => item._id !== action.payload);
-            // })
+            })
 
-            // .addCase(verifyAssignWork.rejected, (state, action) => {
-            //     state.status = STATUSES.ERROR;
-            // })
+            .addCase(verifyAssignWork.rejected, (state, action) => {
+                state.status = STATUSES.ERROR;
+            })
     },
 });
 
@@ -61,8 +61,8 @@ export const { setProducts, setStatus } = assignWorkSlice.actions;
 export default assignWorkSlice.reducer;
 
 // Thunks
-export const getAssignWorks = createAsyncThunk('assignWork/get', async (company_id) => {
-    const res = await fetch(Config.API_URL+'submit-works/'+company_id);
+export const getAssignWorks = createAsyncThunk('assignWork/get', async (user_id) => {
+    const res = await fetch(Config.API_URL+'user-assign-works/'+user_id);
     const data = await res.json();
     return data;
 });
@@ -73,19 +73,3 @@ export const verifyAssignWork = createAsyncThunk('assignWork/verify', async (wor
     return data;
 });
 
-
-
-// export function fetchProducts() {
-//     return async function fetchProductThunk(dispatch, getState) {
-//         dispatch(setStatus(STATUSES.LOADING));
-//         try {
-//             const res = await fetch('https://fakestoreapi.com/products');
-//             const data = await res.json();
-//             dispatch(setProducts(data));
-//             dispatch(setStatus(STATUSES.IDLE));
-//         } catch (err) {
-//             console.log(err);
-//             dispatch(setStatus(STATUSES.ERROR));
-//         }
-//     };
-// }

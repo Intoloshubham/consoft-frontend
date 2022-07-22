@@ -6,7 +6,7 @@ import ProjectReports from './ProjectReports';
 import SubmittedWorks from './SubmittedWorks';
 import VerifyAndRevertWork from './VerifyAndRevertWork';
 import {useSelector, useDispatch} from 'react-redux';
-import { getProjects } from '../../../features/ProjectsSlice';
+// import { getProjects } from '../../../features/ProjectsSlice';
 // import { getProjectCategory } from '../../../features/ProjectCategorySlice';
 
 const Home = () => {
@@ -31,10 +31,10 @@ const Home = () => {
             marginBottom: 130,
           }}>
           <ProjectsBanner company_id={companyData._id} />
-          {/* <SubmittedWorks />
+           <SubmittedWorks />
           <ProjectReports />
           <AssignedWorks />
-          <VerifyAndRevertWork company_id={companyData._id} /> */}
+          <VerifyAndRevertWork company_id={companyData._id} />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -25,11 +25,8 @@ const SubmittedWorks = () => {
   //COMPANY DATA
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
-  // console.log(company_id)
-  //
   const { data: works, status } = useSelector((state) => state.assignworks);
   // console.log(works)
-
   const [submitWork, setSubmitWork] = React.useState();
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
@@ -65,23 +62,24 @@ const SubmittedWorks = () => {
       });
 
     return () => abortConst.abort();
-  }, []);
+  }, [submitWork]);
 
   // verify works
   const verifyHandler = id => {
-    fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    dispatch(verifyAssignWork(id));
+    // fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
   };
 
   const getRevertWorkId = id => {

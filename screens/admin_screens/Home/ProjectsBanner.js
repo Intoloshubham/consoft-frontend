@@ -26,7 +26,7 @@ import Config from '../../../config';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useSelector, useDispatch} from 'react-redux';
 import {ConformationAlert} from '../../../Components';
-import { getProjectCategory, getProjects } from '../../../controller/ProjectController';
+import { getProjectCategory, getProjects, deleteProjects } from '../../../controller/ProjectController';
 
 
 const ProjectsBanner = ({company_id}) => {
@@ -163,22 +163,22 @@ const ProjectsBanner = ({company_id}) => {
   // }, [projectCategory]);
 
   // GETTING PROJECTS TYPES
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}project-type`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       let proTypeFromApi = data.map(item => {
-  //         return {label: item.project_type, value: item._id};
-  //       });
-  //       setProjectType(proTypeFromApi);
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }, [projectType]);
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}project-type`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        let proTypeFromApi = data.map(item => {
+          return {label: item.project_type, value: item._id};
+        });
+        setProjectType(proTypeFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, [projectType]);
 
   // POST PROJECTS FORM DATA
   const OnSubmit = () => {
@@ -231,7 +231,10 @@ const ProjectsBanner = ({company_id}) => {
   };
 
   // DELETE PROJECTS
-  const OnDeleteSubmit = () => {
+  const OnDeleteSubmit = (data) => {
+
+    // deleteProjects(data);
+
     fetch(`${Config.API_URL}projects/` + `${data}`, {
       method: 'DELETE',
       headers: {

@@ -6,8 +6,8 @@ import userAuthReducer from '../services/userAuthApi'
 
 //admin
 import assignWorksReducer from '../features/AssignWorksSlice'
-import projectReducer from '../features/ProjectsSlice'
-import projectCategoryReducer from '../features/ProjectCategorySlice'
+// import projectReducer from '../features/ProjectsSlice'
+// import projectCategoryReducer from '../features/ProjectCategorySlice'
 //user
 
 export const store = configureStore({
@@ -15,8 +15,8 @@ export const store = configureStore({
     company:companyAuthReducer,
     user:userAuthReducer,
     assignworks:assignWorksReducer,
-    projects:projectReducer,
-    projectcategory:projectCategoryReducer,
+    // projects:projectReducer,
+    // projectcategory:projectCategoryReducer,
   } 
 })
 

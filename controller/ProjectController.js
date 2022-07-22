@@ -33,5 +33,24 @@ const getProjects = async () => {
     }
 }
 
+const deleteProjects = async (project_id) => {
+    try {
+        const res = await fetch(Config.API_URL+'projects/'+project_id,{
+            method:"delete",
+            headers:{
+                "Content-Type":"application/json",
+            },
+        });
+        const data = await res.json();
+        
+        return data;
+
+    } catch (error) {
+      console.log(error)
+    }
+}
+
+
+
     
-export { getProjectCategory, getProjects }
+export { getProjectCategory, getProjects, deleteProjects }
