@@ -1,11 +1,6 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {
-  setUserId,
-  removeUserId,
-  storeToken,
-  removeToken,
-} from './asyncStorageService';
-import Config from '../config';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import Config from '../config'
+
 
 export const STATUSES = Object.freeze({
   IDLE: 'idle',
@@ -15,6 +10,7 @@ export const STATUSES = Object.freeze({
 });
 
 const assignWorkSlice = createSlice({
+
   name: 'assignWork',
   initialState: {
     data: [],
@@ -60,16 +56,19 @@ const assignWorkSlice = createSlice({
     //     state.status = STATUSES.ERROR;
     // })
   },
+
 });
 
 export const {setProducts, setStatus} = assignWorkSlice.actions;
 export default assignWorkSlice.reducer;
 
 // Thunks
+
 export const getAssignWorks = createAsyncThunk(
   'assignWork/get',
   async company_id => {
     const res = await fetch(Config.API_URL + 'submit-works/' + company_id);
+
     const data = await res.json();
     return data;
   },
@@ -81,6 +80,7 @@ export const verifyAssignWork = createAsyncThunk(
     const res = await fetch(Config.API_URL + 'verify-submit-work/' + work_id);
     const data = await res.json();
     return data;
+
   },
 );
 
@@ -98,3 +98,4 @@ export const verifyAssignWork = createAsyncThunk(
 //         }
 //     };
 // }
+

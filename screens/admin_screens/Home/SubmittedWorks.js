@@ -24,7 +24,9 @@ const SubmittedWorks = () => {
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
 
+
   const [submitWork, setSubmitWork] = React.useState([]);
+
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
@@ -38,6 +40,7 @@ const SubmittedWorks = () => {
   React.useEffect(() => {
     fetchSubmitWork();
   }, [company_id]);
+
 
   // refresh page
 
@@ -76,6 +79,7 @@ const SubmittedWorks = () => {
       fetchSubmitWork();
     }
     // await fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
+
     //   method: 'GET',
     //   headers: {
     //     'Content-Type': 'application/json',

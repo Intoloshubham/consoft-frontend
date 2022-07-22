@@ -26,10 +26,11 @@ import Config from '../../../config';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useSelector, useDispatch} from 'react-redux';
 import {ConformationAlert} from '../../../Components';
-import {
-  getProjectCategory,
-  getProjects,
-} from '../../../controller/ProjectController';
+
+
+import { getProjectCategory, getProjects, deleteProjects } from '../../../controller/ProjectController';
+
+
 
 const ProjectsBanner = ({company_id}) => {
   const navigation = useNavigation();
@@ -197,7 +198,10 @@ const ProjectsBanner = ({company_id}) => {
   };
 
   // DELETE PROJECTS
-  const OnDeleteSubmit = () => {
+  const OnDeleteSubmit = (data) => {
+
+    // deleteProjects(data);
+
     fetch(`${Config.API_URL}projects/` + `${data}`, {
       method: 'DELETE',
       headers: {

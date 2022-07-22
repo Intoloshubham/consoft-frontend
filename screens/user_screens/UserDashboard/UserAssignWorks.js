@@ -1,67 +1,50 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {AccordionList} from 'accordion-collapse-react-native';
 import {TextInput} from 'react-native-paper';
 import {Divider} from '@ui-kitten/components';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Config from '../../../config';
+import { getAssignWorks, submitWork } from '../../../controller/UserAssignWorkController';
 
 const UserAssignWorks = () => {
+  const dispatch = useDispatch();
   const [assignWorksData, setAssignWorksData] = React.useState([]);
   const [assignWorks, setAssignWorks] = React.useState([]);
   console.log('aw', assignWorks);
   const [textMsg, setTextMsg] = React.useState('');
   const userData = useSelector(state => state.user);
 
-  // get data of user assign work from api
-  React.useEffect(() => {
-    const abortConst = new AbortController();
-    fetch(
-      `${Config.API_URL}user-assign-works/` + `${userData._id}`,
-      {signal: abortConst.signal},
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        // setAssignWorksData(data);
-        data.map(ele => {
-          setAssignWorks(ele.assign_works);
-        });
-      })
-      .catch(error => {
-        if (error.name == 'AbortError') {
-          console.log('fetch aborted');
-        } else {
-          console.log(error);
-        }
-      });
-    return () => abortConst.abort();
-  }, [assignWorks]);
+
+  const fetchAssignWorks = useCallback(async () => {
+    const  data = await getAssignWorks(userData._id);
+    data.map(ele => {
+      setAssignWorks(ele.assign_works);
+    });
+    console.log("object")
+  }, [userData._id]) 
+    
+  useEffect(() => {
+    fetchAssignWorks()
+
+  }, [fetchAssignWorks]) 
+
 
   // submit comment
-  const submitComment = work_id => {
-    const data = {
+  const submitComment = async (work_id) => {
+
+    const submit_data = {
       submit_work_text: textMsg,
     };
 
-    fetch(`${Config.API_URL}user-submit-work/${work_id}`, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 200) {
-          console.log(data.status);
-          setTextMsg('');
-        }
-      });
+    
+    const data = await submitWork(submit_data, work_id)
+    if (data.status === 200) {
+      setTextMsg('');
+      fetchAssignWorks();
+    }
+
   };
 
   const WorkDetails = ({item, message, color, index}) => {
@@ -136,6 +119,7 @@ const UserAssignWorks = () => {
   };
 
   const renderBody = item => {
+    
     return (
       <View
         style={{
@@ -183,16 +167,21 @@ const UserAssignWorks = () => {
                 marginTop: SIZES.base,
               }}
               onPress={() => submitComment(item._id)}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  backgroundColor: COLORS.lightblue_500,
-                  paddingHorizontal: 10,
-                  paddingVertical: 3,
-                  borderRadius: 3,
-                }}>
-                Send
-              </Text>
+                {
+                  item.work_status == false || item.revert_status == true ? 
+                  (
+                    <Text
+                      style={{
+                        color: COLORS.white,
+                        backgroundColor: COLORS.lightblue_500,
+                        paddingHorizontal: 10,
+                        paddingVertical: 3,
+                        borderRadius: 3,
+                      }}>
+                      Send
+                    </Text>
+                  ) : null
+                }
             </TouchableOpacity>
           </View>
         </View>
@@ -217,8 +206,21 @@ const UserAssignWorks = () => {
           color: COLORS.darkGray,
           marginBottom: SIZES.base,
         }}>
-        User Assign Works
+
+        Assign Works
       </Text>
+
+     {/* {
+      assignWorks.map((ele)=>{
+        return(
+          <View key ={ele._id}>
+            <Text>{ele.assign_works}</Text>
+          </View>
+        )
+      })
+     } */}
+
+
       <AccordionList
         list={assignWorks}
         header={renderHeader}

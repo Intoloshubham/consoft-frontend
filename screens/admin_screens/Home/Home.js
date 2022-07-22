@@ -5,7 +5,9 @@ import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
 import SubmittedWorks from './SubmittedWorks';
 import VerifyAndRevertWork from './VerifyAndRevertWork';
+
 import {useSelector} from 'react-redux';
+
 
 const Home = () => {
   const companyData = useSelector(state => state.company);
@@ -22,7 +24,9 @@ const Home = () => {
             marginBottom: 130,
           }}>
           <ProjectsBanner company_id={companyData._id} />
+
           <SubmittedWorks />
+
           <ProjectReports />
           <AssignedWorks />
           <VerifyAndRevertWork company_id={companyData._id} />
