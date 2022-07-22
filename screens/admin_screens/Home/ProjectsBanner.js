@@ -26,20 +26,13 @@ import Config from '../../../config';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useSelector, useDispatch} from 'react-redux';
 import {ConformationAlert} from '../../../Components';
-import { getProjectCategory, getProjects } from '../../../controller/ProjectController';
-
+import {
+  getProjectCategory,
+  getProjects,
+} from '../../../controller/ProjectController';
 
 const ProjectsBanner = ({company_id}) => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-
-  // const {data: projectList} = useSelector(state => state.projects);
-  
-
-  //COMPANY DATA
-
-  // const companyData = useSelector(state => state.company);
-  // const company_id = companyData._id;
 
   //CONFIRMATION MODAL ON DELETE
   const [projectDeleteConfirmation, setProjectDeleteConfirmation] =
@@ -47,8 +40,6 @@ const ProjectsBanner = ({company_id}) => {
 
   //PROJECT BANNER COLLAPSED
   const [collapsed, setCollapsed] = React.useState(true);
-
-  
 
   //PROJECT CREATE & UPDATE MODAL
   const [showCreateProjectModal, setCreateProjectModal] = React.useState(false);
@@ -85,12 +76,28 @@ const ProjectsBanner = ({company_id}) => {
   const [projectLocationError, setProjectLocationError] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
 
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}projects`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setProjects(data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [projects]);
+
   const toggleExpanded = async () => {
     setCollapsed(!collapsed);
-    if (collapsed) {
-      const projectList = await getProjects();
-      setProjects(projectList);
-    }
+    // if (collapsed) {
+    //   const projectList = await getProjects();
+    //   setProjects(projectList);
+    // }
   };
 
   // ON BUTTON SUBMISSON VALIDATION
@@ -104,45 +111,6 @@ const ProjectsBanner = ({company_id}) => {
       projectPlotAreaError == ''
     );
   }
-
-  // GETTING DATA ALL API'S
-  // API FOR GETTING PROJECTS DATA
-
-  // function getProjects(company_id) {
-  //   fetch(`${Config.API_URL}projects`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     console.log(data)
-  //     // console.log("object")
-  //     setProjects(data);
-  //   })
-  //   .catch(error => {
-  //     console.log(error);
-  //   });
-  // }
-
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}projects`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // console.log(data)
-  //       // console.log("object")
-  //       setProjects(data);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // }, [projects]);
 
   // GETTING PROJECTS CATEGORIES
   // React.useEffect(() => {
@@ -163,22 +131,22 @@ const ProjectsBanner = ({company_id}) => {
   // }, [projectCategory]);
 
   // GETTING PROJECTS TYPES
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}project-type`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       let proTypeFromApi = data.map(item => {
-  //         return {label: item.project_type, value: item._id};
-  //       });
-  //       setProjectType(proTypeFromApi);
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }, [projectType]);
+  React.useEffect(() => {
+    fetch(`${Config.API_URL}project-type`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        let proTypeFromApi = data.map(item => {
+          return {label: item.project_type, value: item._id};
+        });
+        setProjectType(proTypeFromApi);
+      })
+      .catch(error => console.log(error.message));
+  }, [projectType]);
 
   // POST PROJECTS FORM DATA
   const OnSubmit = () => {
@@ -204,8 +172,6 @@ const ProjectsBanner = ({company_id}) => {
       .then(response => response.json())
       .then(data => {
         if (data.status === 200) {
-
-          
           showToast();
           setTimeout(() => {
             setCreateProjectModal(false);
@@ -272,7 +238,7 @@ const ProjectsBanner = ({company_id}) => {
       project_category: value,
       project_type: value1,
       project_measurement: value2,
-      company_id: companyData._id,
+      company_id: company_id,
     };
 
     fetch(`${Config.API_URL}projects/` + `${data}`, {
@@ -301,8 +267,6 @@ const ProjectsBanner = ({company_id}) => {
       });
   };
 
-  
-
   // EMPTY ALL FORM STATED
   function empltModalForm() {
     setProjectName('');
@@ -311,10 +275,9 @@ const ProjectsBanner = ({company_id}) => {
     setValue('');
     setValue1('');
     setValue2('');
-   
   }
 
-  const createProject = async () =>{
+  const createProject = async () => {
     empltModalForm();
     setCreateProjectModal(true);
 
@@ -323,8 +286,7 @@ const ProjectsBanner = ({company_id}) => {
       return {label: item.category_name, value: item._id};
     });
     setProjectCategory(proCatFromApi);
-
-  }
+  };
 
   // TOAST
   const showToast = () =>
@@ -976,7 +938,7 @@ const ProjectsBanner = ({company_id}) => {
         ...styles.shadow,
       }}
       // onPress={toggleExpanded}
-      >
+    >
       <View
         style={{
           flex: 1,
@@ -1001,13 +963,12 @@ const ProjectsBanner = ({company_id}) => {
             color: COLORS.black,
             ...FONTS.body5,
           }}
-          onPress={ () => {
-            createProject()
+          onPress={() => {
+            createProject();
           }}
           // onPress={ createProject()}
         />
         <TouchableOpacity onPress={toggleExpanded}>
-
           <Image
             source={collapsed ? icons.down_arrow : icons.up_arrow}
             style={{

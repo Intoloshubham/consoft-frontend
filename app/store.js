@@ -1,24 +1,24 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { setupListeners } from '@reduxjs/toolkit/query'
+import {configureStore} from '@reduxjs/toolkit';
+import {setupListeners} from '@reduxjs/toolkit/query';
 
-import companyAuthReducer from '../services/companyAuthApi'
-import userAuthReducer from '../services/userAuthApi'
+import companyAuthReducer from '../services/companyAuthApi';
+import userAuthReducer from '../services/userAuthApi';
 
 //admin
-import assignWorksReducer from '../features/AssignWorksSlice'
-import projectReducer from '../features/ProjectsSlice'
-import projectCategoryReducer from '../features/ProjectCategorySlice'
+import assignWorksReducer from '../features/AssignWorksSlice';
+import projectReducer from '../features/ProjectsSlice';
+// import projectCategoryReducer from '../features/ProjectCategorySlice';
 //user
 
 export const store = configureStore({
   reducer: {
-    company:companyAuthReducer,
-    user:userAuthReducer,
-    assignworks:assignWorksReducer,
-    projects:projectReducer,
-    projectcategory:projectCategoryReducer,
-  } 
-})
+    company: companyAuthReducer,
+    user: userAuthReducer,
+    assignworks: assignWorksReducer,
+    projects: projectReducer,
+    // projectcategory: projectCategoryReducer,
+  },
+});
 
 export default store;
 

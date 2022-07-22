@@ -8,8 +8,9 @@ import {useSelector} from 'react-redux';
 import Config from '../../../config';
 
 const UserAssignWorks = () => {
+  const [assignWorksData, setAssignWorksData] = React.useState([]);
   const [assignWorks, setAssignWorks] = React.useState([]);
-  // console.log('aw', assignWorks);
+  console.log('aw', assignWorks);
   const [textMsg, setTextMsg] = React.useState('');
   const userData = useSelector(state => state.user);
 
@@ -28,7 +29,6 @@ const UserAssignWorks = () => {
     )
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         // setAssignWorksData(data);
         data.map(ele => {
           setAssignWorks(ele.assign_works);
@@ -42,7 +42,7 @@ const UserAssignWorks = () => {
         }
       });
     return () => abortConst.abort();
-  }, []);
+  }, [assignWorks]);
 
   // submit comment
   const submitComment = work_id => {

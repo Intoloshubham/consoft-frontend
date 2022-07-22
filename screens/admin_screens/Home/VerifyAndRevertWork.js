@@ -40,7 +40,7 @@ const VerifyAndRevertWork = ({company_id}) => {
         }
       });
     return () => abortCont.abort();
-  }, [verifyRevertWorks]);
+  }, []);
 
   const VerifyWorksRoute = () => (
     <View
