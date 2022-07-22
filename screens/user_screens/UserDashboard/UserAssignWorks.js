@@ -38,7 +38,6 @@ const UserAssignWorks = () => {
       submit_work_text: textMsg,
     };
 
-    
     const data = await submitWork(submit_data, work_id)
     if (data.status === 200) {
       setTextMsg('');

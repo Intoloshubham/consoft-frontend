@@ -44,6 +44,7 @@ const Contractors = ({route}) => {
       .then(data => {
         // console.log(data);
         setContractors(data);
+        // console.log("object")
       })
       .catch(error => console.log(error.message));
   }, [contractors]);
