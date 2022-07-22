@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import utils from '../../utils'; 
+import utils from '../../utils';
 import Toast from 'react-native-toast-message';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
@@ -24,8 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCompanyId, getUserId, getToken } from '../../services/asyncStorageService';
 
 const Login = ({navigation}) => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // const userData = useSelector(state => state.user);
   // const companyData = useSelector(state => state.company);
@@ -37,15 +36,13 @@ const Login = ({navigation}) => {
   const toggleSwitch = value => {
     setSwitchValue(value);
   };
-  
+
   const [userMobileNo, setUserMobileNo] = React.useState('');
   const [userPassword, setUserPassword] = React.useState('');
   const [userMobileNoError, setUserMobileNoError] = React.useState('');
-  
   const [companyMobileNo, setCompanyMobileNo] = React.useState('');
   const [companyPassword, setCompanyPassword] = React.useState('');
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
-  
   const [showPass, setShowPass] = React.useState(false);
 
 
@@ -94,7 +91,6 @@ const Login = ({navigation}) => {
       mobile: userMobileNo,
       password: userPassword,
     };
-
     const res = await dispatch(userLogin(UserData));
     
       if(res.payload.status === 200){
@@ -109,7 +105,6 @@ const Login = ({navigation}) => {
       mobile: companyMobileNo,
       password: companyPassword,
     };
-
     const res = await dispatch(companyLogin(company_data));
       if(res.payload.status === 200){
         navigation.navigate('Home');
@@ -119,7 +114,7 @@ const Login = ({navigation}) => {
   };
 
   const makeCall = () => {
-    let phoneNumber = ''; 
+    let phoneNumber = '';
     if (Platform.OS === 'android') {
       phoneNumber = 'tel:+91-8109093551';
     } else {
@@ -127,6 +122,7 @@ const Login = ({navigation}) => {
     }
     Linking.openURL(phoneNumber);
   };
+
   const message = 'Hello';
   const number = +919479505099;
   const openURL = async url => {
@@ -175,6 +171,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+  
   function renderHeaderImage() {
     return (
       <View
@@ -194,6 +191,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderUserForm() {
     return (
       <View
@@ -263,15 +261,11 @@ const Login = ({navigation}) => {
           />
           <TextButton
             label="Login"
-            // disabled={isEnableSignIn() ? false : true}
             buttonContainerStyle={{
               height: 45,
               alignItems: 'center',
               marginTop: SIZES.padding,
               borderRadius: SIZES.base,
-              // backgroundColor: isEnableSignIn()
-              //   ? COLORS.lightblue_900
-              //   : COLORS.transparentPrimary,
             }}
             onPress={userOnSubmit}
           />
@@ -279,6 +273,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderCompanyForm() {
     return (
       <View
@@ -501,6 +496,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderToggleButton() {
     return (
       <View
@@ -536,6 +532,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}
