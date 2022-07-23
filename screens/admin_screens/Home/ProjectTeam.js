@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback} from 'react';
 import {
   View,
   Text,
@@ -19,22 +19,101 @@ import {
   IconButton,
   ConformationAlert,
 } from '../../../Components';
-import {COLORS, FONTS, icons, SIZES} from '../../../constants';
+import {COLORS, FONTS, icons, SIZES, STATUS} from '../../../constants';
 import Config from '../../../config';
 import Toast from 'react-native-toast-message';
+import { getProjectTeam, saveProjectTeam, deleteProjectTeam } from '../../../controller/ProjectTeamController';
+import { getUserRole, roleByUser } from '../../../controller/UserRoleController';
 
 const ProjectTeam = ({route}) => {
+
   const {project_id} = route.params; //
-  const [showAddProjectTeamModal, setShowAddProjectTeamModal] =
-    React.useState(false);
-  const [projectTeam, setProjectTeam] = React.useState([]);
+  const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
+  const [projectTeam, setProjectTeam] = useState([]);
+  const [teamDeleteConfirmation, setTeamDeleteConfirmation] = useState(false);
 
-  const [teamDeleteConfirmation, setTeamDeleteConfirmation] =
-    React.useState(false);
+  //roloe dropdown
+  const [openRole, setOpenRole] = useState(false);
+  const [roleValue, setRoleValue] = useState('');
+  const [roleItems, setRoleItems] = useState([]);
 
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
+  // users dropdown
+  const [openUser, setOpenUser] = useState(false);
+  const [userValue, setUserValue] = useState([]);
+  const [userItems, setUserItems] = useState([]);
+
+  const [userId, setUserId] = useState('');
+
+  const onRoleOpen = useCallback(() => {
+    setOpenUser(false);
+  }, []);
+
+  const onUserOpen = useCallback(() => {
+    setOpenRole(false);
+  }, []);
+
+//---------------------------------------
+// fetch project team
+const fetchProjectTeam = useCallback( async () => {
+  const team = await getProjectTeam(project_id);
+  setProjectTeam(team);
+}, [project_id]) 
+  
+useEffect(() => {
+  fetchProjectTeam();
+  LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+}, [fetchProjectTeam])
+
+const addProjectTeam = async () =>{
+
+  setAddProjectTeamModal(true)
+  const res = await getUserRole();
+  if (res.status === STATUS.RES_SUCCESS) {
+    let roleFromApi = res.data.map(list => {
+      return {label: list.user_role, value: list._id};
+    });
+    setRoleItems(roleFromApi);
+  }
+}
+
+const getRolebyUser = async (role_id) =>{
+  const res = await roleByUser( role_id )
+  if (res.status === STATUS.RES_SUCCESS) {
+    let usersFromApi = res.data.map(ele => {
+      return {label: ele.name, value: ele._id};
+    });
+    setUserItems(usersFromApi);
+  }
+}
+// console.log("object")
+//---------------------------------------
+  
+  // post data
+  const saveProjectTeamSubmit = async () => {
+    const teamData = {
+      project_id: project_id,
+      user_id: userValue,
+    };
+    const res = await saveProjectTeam(teamData);
+    if (res.status === STATUS.RES_SUCCESS) {
+      showToast();
+      setAddProjectTeamModal(false);
+      await fetchProjectTeam();
+    }else{
+      alert(res.message);
+    }
+  };
+  
+  const deleteTeamSubmit = async () => {
+    const res = await deleteProjectTeam(project_id, userId)
+    console.log(res)
+    if (res.status === STATUS.RES_SUCCESS) {
+      await fetchProjectTeam();
+      setTeamDeleteConfirmation(false);
+    }else{
+      alert(res.message);
+    }
+  };
 
   const showToast = () =>
     Toast.show({
@@ -42,127 +121,8 @@ const ProjectTeam = ({route}) => {
       type: 'success',
       text1: 'Added Successfully',
       text2: 'Success',
-      visibilityTime: 1800,
+      visibilityTime: 2000,
     });
-
-  // call apis
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}role`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let roleFromApi = data.map(one => {
-          return {label: one.user_role, value: one._id};
-        });
-        setRoleItems(roleFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, [roleItems]);
-
-  const OnChangeHandler = id => {
-    fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let usersFromApi = data.map(ele => {
-          return {label: ele.name, value: ele._id};
-        });
-        setUserItems(usersFromApi);
-      })
-      .catch(error => console.log(error.message));
-  };
-  React.useEffect(() => {
-    OnChangeHandler;
-  }, [userItems]);
-
-  //roloe dropdown
-  const [openRole, setOpenRole] = React.useState(false);
-  const [roleValue, setRoleValue] = React.useState('');
-  const [roleItems, setRoleItems] = React.useState([]);
-
-  // users dropdown
-  const [openUser, setOpenUser] = React.useState(false);
-  const [userValue, setUserValue] = React.useState([]);
-  const [userItems, setUserItems] = React.useState([]);
-
-  const onRoleOpen = React.useCallback(() => {
-    setOpenUser(false);
-  }, []);
-
-  const onUserOpen = React.useCallback(() => {
-    setOpenRole(false);
-  }, []);
-
-  // post data
-  const OnSubmit = () => {
-    const FormData = {
-      project_id: project_id,
-      user_id: userValue,
-    };
-    fetch(`${Config.API_URL}project-team`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(FormData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 200) {
-          setTimeout(() => {
-            showToast();
-            setShowAddProjectTeamModal(false);
-          }, 3000);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  };
-
-  const [tid, setTId] = React.useState('');
-  const teamid = id => {
-    // console.log(id);
-    setTId(id);
-  };
-
-  const deleteHandler = () => {
-    // console.log(id);
-    fetch(`${Config.API_URL}project-team/` + `${project_id}/${tid}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => console.log(error.message));
-    setTeamDeleteConfirmation(false);
-  };
-
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}project-team/` + `${project_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setProjectTeam(data);
-      })
-      .catch(error => console.log(error.message));
-  }, [projectTeam]);
 
   function renderTeamList() {
     const renderItem = ({item, index}) => (
@@ -218,7 +178,7 @@ const ProjectTeam = ({route}) => {
                     </TouchableOpacity> */}
                     <TouchableOpacity
                       onPress={() => {
-                        teamid(ele.user_id);
+                        setUserId(ele.user_id);
                         setTeamDeleteConfirmation(true);
                       }}>
                       <ImageBackground
@@ -288,7 +248,7 @@ const ProjectTeam = ({route}) => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={showAddProjectTeamModal}>
+        visible={addProjectTeamModal}>
         <TouchableWithoutFeedback>
           <View
             style={{
@@ -322,7 +282,7 @@ const ProjectTeam = ({route}) => {
                     iconStyle={{
                       tintColor: COLORS.gray,
                     }}
-                    onPress={() => setShowAddProjectTeamModal(false)}
+                    onPress={() => setAddProjectTeamModal(false)}
                   />
                 </View>
                 <ScrollView>
@@ -343,7 +303,7 @@ const ProjectTeam = ({route}) => {
                     zIndex={2000}
                     zIndexInverse={2000}
                     onChangeValue={value => {
-                      OnChangeHandler(value);
+                      getRolebyUser(value);
                     }}
                   />
                   <CustomDropdown
@@ -375,7 +335,7 @@ const ProjectTeam = ({route}) => {
                       marginTop: SIZES.padding * 2,
                       borderRadius: SIZES.radius,
                     }}
-                    onPress={OnSubmit}
+                    onPress={saveProjectTeamSubmit}
                   />
                 </ScrollView>
               </View>
@@ -402,7 +362,7 @@ const ProjectTeam = ({route}) => {
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
         }}
-        onPress={() => setShowAddProjectTeamModal(true)}
+        onPress={() => addProjectTeam()}
       />
       <Toast config={showToast} />
       {renderTeamList()}
@@ -417,7 +377,7 @@ const ProjectTeam = ({route}) => {
         cancelText="Cancel"
         confirmText="Yes"
         onConfirmPressed={() => {
-          deleteHandler();
+          deleteTeamSubmit();
         }}
       />
     </View>

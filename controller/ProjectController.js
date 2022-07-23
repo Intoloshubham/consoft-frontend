@@ -1,6 +1,6 @@
 import Config from '../config';
 
-const getProjects = async company_id => {
+const getProjects = async (company_id) => {
   try {
     const res = await fetch(Config.API_URL + 'projects/' + `${company_id}`, {
       method: 'get',
@@ -14,6 +14,53 @@ const getProjects = async company_id => {
     console.log(error);
   }
 };
+
+const saveProject = async ( projectData ) => {
+  try {
+    const res = await fetch(Config.API_URL + 'projects', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body:JSON.stringify(projectData)
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+const updateProject = async (project_id, projectData) => {
+  try {
+    const res = await fetch(Config.API_URL + 'projects/' + project_id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body:JSON.stringify(projectData)
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+const deleteProject = async (project_id) =>{
+  try {
+    const res = await fetch(Config.API_URL + 'projects/' + project_id, {
+      method:'DELETE',
+      headers:{
+        'Content-Type': 'application/json',
+      },
+    });
+    const result = await res.json();
+    return result; 
+  } catch (error) {
+    return error;
+  }
+}
 
 const getProjectType = async () => {
   try {
@@ -45,4 +92,4 @@ const getProjectCategory = async () => {
   }
 };
 
-export {getProjects, getProjectType, getProjectCategory};
+export {saveProject, getProjects, updateProject, deleteProject, getProjectType, getProjectCategory};

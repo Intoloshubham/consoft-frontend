@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -20,7 +20,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
 import Toast from 'react-native-toast-message';
 import Config from '../../../config';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -29,6 +29,9 @@ import {ConformationAlert} from '../../../Components';
 
 import {
   getProjects,
+  saveProject,
+  updateProject,
+  deleteProject,
   getProjectType,
   getProjectCategory,
 } from '../../../controller/ProjectController';
@@ -73,6 +76,8 @@ const ProjectsBanner = ({company_id}) => {
     {label: 'sqf', value: '4'},
   ]);
 
+  const [projectId, setProjectId] = React.useState('');
+
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onCategoryOpen = React.useCallback(() => {
     setOpenType(false);
@@ -94,48 +99,21 @@ const ProjectsBanner = ({company_id}) => {
   const [projectLocationError, setProjectLocationError] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
 
-  // // get projects
-  // const fetchProjects = async () => {
-  //   const response = await getProjects(company_id);
-  //   setProjects(response);
-  //   fetchProjects();
-  // };
-
-  // // get project types
-  // const fetchProjectsTypes = async () => {
-  //   const response = await getProjectType();
-  //   let proTypeFromApi = response.map(item => {
-  //     return {label: item.project_type, value: item._id};
-  //   });
-  //   setProjectType(proTypeFromApi);
-  //   fetchProjectsTypes();
-  // };
-
-  // React.useEffect(() => {
-  //   fetchProjects();
-  //   fetchProjectsTypes();
-  // }, [company_id]);
-
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}projects/` + `${company_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setProjects(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [projects]);
-
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
+  
+   // get projects
+  const fetchProjects = useCallback( async () => {
+    const  data = await getProjects(company_id);
+    setProjects(data);
+  }, [company_id]) 
+    
+  useEffect(() => {
+    fetchProjects()
+  }, [fetchProjects]) 
 
+  // console.log("objesdfsdct")
   // ON BUTTON SUBMISSON VALIDATION
   function isEnableSubmit() {
     return (
@@ -148,114 +126,55 @@ const ProjectsBanner = ({company_id}) => {
     );
   }
 
-  // GETTING PROJECTS CATEGORIES
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}project-category`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       let proCatFromApi = data.map(item => {
-  //         return {label: item.category_name, value: item._id};
-  //       });
-  //       setProjectCategory(proCatFromApi);
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }, [projectCategory]);
+  //crete new project
+  const createProject = async () => {
+    createProjectModalForm();
+    setCreateProjectModal(true);
+    fetchProjectCategory()
+    fetchProjectsTypes();  
+  };
 
-  // GETTING PROJECTS TYPES
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}project-type`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let proTypeFromApi = data.map(item => {
-          return {label: item.project_type, value: item._id};
-        });
-        setProjectType(proTypeFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, [projectType]);
+  const fetchProjectCategory = async () => {
+    const res = await getProjectCategory();
+    let proCatFromApi = res.map(item => {
+      return {label: item.category_name, value: item._id};
+    });
+    setProjectCategory(proCatFromApi);
+  };
+ 
+  // get project types
+  const fetchProjectsTypes = async () => {
+    const response = await getProjectType();
+    let proTypeFromApi = response.map(item => {
+      return {label: item.project_type, value: item._id};
+    });
+    setProjectType(proTypeFromApi);
+    // fetchProjectsTypes();
+  };
 
-  // POST PROJECTS FORM DATA
-  const OnSubmit = () => {
-    const data = {
-      project_name: projectname,
-      project_location: projectlocation,
-      project_area: projectplotarea,
-      project_category: categoryValue,
-      project_type: typeValue,
-      project_measurement: unitValue,
-      company_id: company_id,
-    };
-    // setProjects(projectList);
-
-    // console.log(projectList);
-    fetch(`${Config.API_URL}projects`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 200) {
-          showToast();
-          setTimeout(() => {
-            setCreateProjectModal(false);
-            setProjectName('');
-            setProjectLocation('');
-            setProjectPlotArea('');
-            setCategoryValue('');
-            setTypeValue('');
-            setUnitValue('');
-          }, 2000);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+  //save project
+  const saveProjectSubmit = async () => {
+    const projectData = getProjectData();
+    const  res = await saveProject(projectData);
+      if (res.status === STATUS.RES_SUCCESS ) {
+        showToast();
+        fetchProjects();
+        setTimeout(() => {
+          setCreateProjectModal(false);
+          createProjectModalForm()
+        }, 1000);
+      }else{
+        alert(res.message);
+      }
   };
 
   // GETTING PROJECTS ID
-  const [data, setData] = React.useState('');
-  const modalHandler = id => {
-    console.log(id);
-    setData(id);
+  const modalHandler = project_id => {
+    setProjectId(project_id);//project ID state
     setProjectCrud(true);
   };
 
-  // DELETE PROJECTS
-  const OnDeleteSubmit = () => {
-    fetch(
-      `${Config.API_URL}` + `projects/` + `${data}`,
-      // `${Config.API_URL}projects/` + `${data}`
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-
-    setTimeout(() => {
-      setProjectDeleteConfirmation(false);
-    }, 1500);
-    setTimeout(() => {
-      setProjectCrud(false);
-    }, 2000);
-  };
-
-  // PUTR DATA IN FORM FOR UPDATION
-  const getProjectDataForEdit = (
+  const editProject = (
     name,
     location,
     category,
@@ -270,9 +189,24 @@ const ProjectsBanner = ({company_id}) => {
     setProjectPlotArea(area);
     setUnitValue(unit);
   };
-  // UPDATE PROJECTS
-  const OnUpdateSubmit = () => {
-    const updateData = {
+
+  //update project
+  const updateProjectSubmit = async () => {
+    const projectData = getProjectData();
+    const  res = await updateProject(projectId, projectData);
+    if (res.status === STATUS.RES_SUCCESS) {
+      showUpdateToast();
+      fetchProjects();
+      setTimeout(() => {
+        setUpdateProjectModal(false);
+        setProjectCrud(false);
+      }, 300);
+    }
+  };
+
+  // project data
+  const getProjectData = () => {
+    const projectData = {
       project_name: projectname,
       project_location: projectlocation,
       project_area: projectplotarea,
@@ -281,35 +215,11 @@ const ProjectsBanner = ({company_id}) => {
       project_measurement: unitValue,
       company_id: company_id,
     };
-
-    fetch(`${Config.API_URL}projects/` + `${data}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updateData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        if (data.status === 200) {
-          showUpdateToast();
-          setTimeout(() => {
-            setUpdateProjectModal(false);
-          }, 1000);
-          setTimeout(() => {
-            setUpdateProjectModal(false);
-            setProjectCrud(false);
-          }, 1500);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  };
+    return projectData;
+  }
 
   // EMPTY ALL FORM STATED
-  function empltModalForm() {
+  function createProjectModalForm() {
     setProjectName('');
     setProjectLocation('');
     setProjectPlotArea('');
@@ -318,15 +228,16 @@ const ProjectsBanner = ({company_id}) => {
     setUnitValue('');
   }
 
-  const createProject = async () => {
-    empltModalForm();
-    setCreateProjectModal(true);
-
-    const data = await getProjectCategory();
-    let proCatFromApi = data.map(item => {
-      return {label: item.category_name, value: item._id};
-    });
-    setProjectCategory(proCatFromApi);
+  // DELETE PROJECTS
+  const projectDeleteSubmit = async () => {
+    const res = await deleteProject(projectId);
+    if (res.status === STATUS.RES_SUCCESS) {
+      setTimeout(() => {
+        setProjectDeleteConfirmation(false);
+        setProjectCrud(false);
+      }, 300);
+      fetchProjects();
+    } 
   };
 
   // TOAST
@@ -337,7 +248,7 @@ const ProjectsBanner = ({company_id}) => {
       activeOpacity: 10,
       text1: 'Submitted Successfully',
       text2: 'Success',
-      visibilityTime: 1800,
+      visibilityTime: 2000,
     });
 
   const showUpdateToast = () =>
@@ -348,7 +259,7 @@ const ProjectsBanner = ({company_id}) => {
       activeOpacity: 10,
       text1: 'Updated Successfully',
       text2: 'Success',
-      visibilityTime: 1800,
+      visibilityTime: 2000,
     });
 
   //RENDER PROJECTS
@@ -413,7 +324,7 @@ const ProjectsBanner = ({company_id}) => {
               <TouchableOpacity
                 onPress={() => {
                   modalHandler(item._id);
-                  getProjectDataForEdit(
+                  editProject(
                     item.project_name,
                     item.project_location,
                     item.project_category,
@@ -676,7 +587,7 @@ const ProjectsBanner = ({company_id}) => {
                         ? COLORS.lightblue_700
                         : COLORS.transparentPrimary,
                     }}
-                    onPress={() => OnSubmit()}
+                    onPress={() => saveProjectSubmit()}
                   />
                 </KeyboardAwareScrollView>
               </ScrollView>
@@ -895,7 +806,7 @@ const ProjectsBanner = ({company_id}) => {
                         ? COLORS.lightblue_700
                         : COLORS.transparentPrimary,
                     }}
-                    onPress={() => OnUpdateSubmit()}
+                    onPress={() => updateProjectSubmit()}
                   />
                 </KeyboardAwareScrollView>
               </ScrollView>
@@ -963,7 +874,6 @@ const ProjectsBanner = ({company_id}) => {
                     () => {
                       setProjectDeleteConfirmation(true);
                     }
-                    //  OnDeleteSubmit()
                   }
                 />
               </ScrollView>
@@ -1049,7 +959,7 @@ const ProjectsBanner = ({company_id}) => {
         cancelText="Cancel"
         confirmText="Yes"
         onConfirmPressed={() => {
-          OnDeleteSubmit();
+          projectDeleteSubmit();
         }}
       />
     </View>
