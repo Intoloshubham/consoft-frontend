@@ -106,7 +106,6 @@ const getRolebyUser = async (role_id) =>{
   
   const deleteTeamSubmit = async () => {
     const res = await deleteProjectTeam(project_id, userId)
-    console.log(res)
     if (res.status === STATUS.RES_SUCCESS) {
       await fetchProjectTeam();
       setTeamDeleteConfirmation(false);
