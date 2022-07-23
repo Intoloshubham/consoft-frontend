@@ -26,7 +26,6 @@ const Home = () => {
           <ProjectsBanner company_id={companyData._id} />
 
           <SubmittedWorks />
-
           <ProjectReports />
           <AssignedWorks />
           <VerifyAndRevertWork company_id={companyData._id} />

@@ -87,11 +87,14 @@ const ProjectsBanner = ({company_id}) => {
       .then(response => response.json())
       .then(data => {
         setProjects(data);
+
       })
       .catch(error => {
         console.log(error);
       });
-  }, [projects]);
+  }, []);
+
+  console.log("object")
 
   const toggleExpanded = async () => {
     setCollapsed(!collapsed);

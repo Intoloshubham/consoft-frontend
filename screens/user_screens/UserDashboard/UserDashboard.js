@@ -25,7 +25,7 @@ const UserDashboard = () => {
       <UserAssignWorks />
       <View
         style={{
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           paddingHorizontal: SIZES.radius,
           paddingVertical: SIZES.radius,
           borderRadius: SIZES.base,

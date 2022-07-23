@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -25,16 +25,15 @@ import Toast from 'react-native-toast-message';
 
 const ProjectTeam = ({route}) => {
   const {project_id} = route.params; //
-  const [showAddProjectTeamModal, setShowAddProjectTeamModal] =
-    React.useState(false);
-  const [projectTeam, setProjectTeam] = React.useState([]);
+  const [showAddProjectTeamModal, setShowAddProjectTeamModal] = useState(false);
+  const [projectTeam, setProjectTeam] = useState([]);
 
-  const [teamDeleteConfirmation, setTeamDeleteConfirmation] =
-    React.useState(false);
+  const [teamDeleteConfirmation, setTeamDeleteConfirmation] = useState(false);
 
   React.useEffect(() => {
+    console.log("1425")
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
+  },[]);
 
   const showToast = () =>
     Toast.show({
@@ -163,6 +162,9 @@ const ProjectTeam = ({route}) => {
       })
       .catch(error => console.log(error.message));
   }, [projectTeam]);
+
+
+  // console.log("last")
 
   function renderTeamList() {
     const renderItem = ({item, index}) => (

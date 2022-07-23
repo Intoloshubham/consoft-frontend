@@ -12,7 +12,6 @@ const UserAssignWorks = () => {
   const dispatch = useDispatch();
   const [assignWorksData, setAssignWorksData] = React.useState([]);
   const [assignWorks, setAssignWorks] = React.useState([]);
-  console.log('aw', assignWorks);
   const [textMsg, setTextMsg] = React.useState('');
   const userData = useSelector(state => state.user);
 
@@ -22,12 +21,11 @@ const UserAssignWorks = () => {
     data.map(ele => {
       setAssignWorks(ele.assign_works);
     });
-    console.log("object")
+   
   }, [userData._id]) 
     
   useEffect(() => {
     fetchAssignWorks()
-
   }, [fetchAssignWorks]) 
 
 
@@ -190,8 +188,8 @@ const UserAssignWorks = () => {
   return (
     <View
       style={{
-        marginHorizontal: SIZES.padding,
-        marginVertical: SIZES.padding,
+        marginHorizontal: SIZES.radius,
+        marginVertical: SIZES.radius,
         paddingHorizontal: SIZES.radius,
         paddingTop: SIZES.base,
         paddingBottom: SIZES.radius,
