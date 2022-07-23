@@ -4,6 +4,8 @@ import images from './images';
 import icons from './icons';
 import dummyData from './dummyData';
 import reportdata from './reportdata';
+import STATUS from './status';
+
 
 export {
   constants,
@@ -15,4 +17,5 @@ export {
   icons,
   dummyData,
   reportdata,
+  STATUS,
 };
