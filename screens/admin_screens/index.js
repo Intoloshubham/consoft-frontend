@@ -27,6 +27,7 @@ import SubmittedWorks from './Home/SubmittedWorks';
 import Quantitywork from './Stock/Tools/Quantitywork';
 import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1';
 import VerifyAndRevertWork from './Home/VerifyAndRevertWork';
+import Boq from './Home/Boq';
 
 export {
   Account,
@@ -58,4 +59,5 @@ export {
   Quantitywork,
   ToolsAndMachinery1,
   VerifyAndRevertWork,
+  Boq,
 };

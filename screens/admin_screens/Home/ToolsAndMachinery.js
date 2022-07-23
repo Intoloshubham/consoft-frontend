@@ -18,8 +18,13 @@ import {
   TextButton,
 } from '../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../constants';
-import Config from '../../../config';
 import {useSelector} from 'react-redux';
+import {
+  getToolsAndMachinery,
+  postToolsAndMachinery,
+  deleteToolsAndMachinery,
+  editToolsAndMachinery,
+} from '../../../controller/toolsAndMachineryController';
 
 const ToolsAndMachinery = ({route}) => {
   const companyData = useSelector(state => state.company);
@@ -32,95 +37,63 @@ const ToolsAndMachinery = ({route}) => {
   const [toolsName, setToolsName] = React.useState('');
   const [toolsQty, setToolsQty] = React.useState('');
 
-  // api call
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}tools-machinery`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setToolsAndMachinery(data);
-      })
-      .catch(error => console.log(error.message));
-  }, [toolsAndMachinery]);
+  // get tools & machinery
+  const fetchToolsAndMachinery = async () => {
+    let data = await getToolsAndMachinery();
+    setToolsAndMachinery(data);
+    console.log('object');
+  };
 
-  const OnSubmit = () => {
-    const FormData = {
-      // project_id: project_id,
+  // post tools & machinery
+  const SubmitToolsAndMachinery = async () => {
+    const formData = {
       tools_machinery_name: toolsName,
       qty: toolsQty,
       company_id: companyData._id,
     };
-    fetch(`${Config.API_URL}tools-machinery`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(FormData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        if (data.status === 200) {
-          setShowTAndMModal(false);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    let data = await postToolsAndMachinery(formData);
+    if (data.status === 200) {
+      setShowTAndMModal(false);
+      setToolsName('');
+      setToolsQty('');
+      fetchToolsAndMachinery();
+    }
   };
 
-  const OnDelete = id => {
-    fetch(`${Config.API_URL}tools-machinery/` + `${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  // delete tools & machinery
+  const DeleteToolsAndMachinery = async id => {
+    let data = await deleteToolsAndMachinery(id);
+    if (data.status === 200) {
+      fetchToolsAndMachinery();
+    }
   };
 
-  const [storeid, setStoreId] = React.useState('');
+  // edit tools & machinery
+  const EditToolsAndMachinery = async () => {
+    const formData = {
+      tools_machinery_name: toolsName,
+      qty: toolsQty,
+      company_id: companyData._id,
+    };
+    let data = await editToolsAndMachinery(formData, toolsId);
+    if (data.status === 200) {
+      setShowEditTAndMModal(false);
+      setToolsName('');
+      setToolsQty('');
+      fetchToolsAndMachinery();
+    }
+  };
+
+  React.useEffect(() => {
+    fetchToolsAndMachinery();
+  }, []);
+
+  const [toolsId, setToolsId] = React.useState('');
   const getEditData = (id, name, qty) => {
     setToolsName(name);
     setToolsQty(qty);
-    setStoreId(id);
+    setToolsId(id);
     setShowEditTAndMModal(true);
-  };
-
-  const OnEdit = () => {
-    const editData = {
-      tools_machinery_name: toolsName,
-      qty: toolsQty,
-      company_id: companyData._id,
-    };
-
-    fetch(`${Config.API_URL}tools-machinery/` + `${storeid}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(editData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.status === 200) {
-          setShowEditTAndMModal(false);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
   };
 
   function renderToolsAndMachinery() {
@@ -186,7 +159,7 @@ const ToolsAndMachinery = ({route}) => {
               />
             </ImageBackground>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => OnDelete(item._id)}>
+          <TouchableOpacity onPress={() => DeleteToolsAndMachinery(item._id)}>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.rose_600,
@@ -240,7 +213,7 @@ const ToolsAndMachinery = ({route}) => {
   function renderAddToolsAndMachineModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={showTAndMModal}>
-        <TouchableWithoutFeedback onPress={() => setShowTAndMModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
@@ -345,7 +318,7 @@ const ToolsAndMachinery = ({route}) => {
                       borderRadius: SIZES.radius,
                       backgroundColor: COLORS.lightblue_700,
                     }}
-                    onPress={() => OnSubmit()}
+                    onPress={() => SubmitToolsAndMachinery()}
                   />
                 </ScrollView>
               </View>
@@ -467,7 +440,7 @@ const ToolsAndMachinery = ({route}) => {
                       borderRadius: SIZES.radius,
                       backgroundColor: COLORS.lightblue_700,
                     }}
-                    onPress={() => OnEdit()}
+                    onPress={() => EditToolsAndMachinery()}
                   />
                 </ScrollView>
               </View>

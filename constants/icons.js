@@ -56,7 +56,7 @@ const items = require('../assets/icons/items.png');
 const stock_manage = require('../assets/icons/stock_manage.png');
 const delete_icon = require('../assets/icons/delete.png');
 const upload_files = require('../assets/icons/upload_files.png');
-
+const boq = require('../assets/icons/boq.png');
 //pd
 const stock = require('../assets/icons/pd/stock.png');
 const report1 = require('../assets/icons/pd/report.png');
@@ -188,4 +188,5 @@ export default {
   Suppliers,
   suppliers1,
   staff,
+  boq,
 };
