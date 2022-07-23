@@ -1,12 +1,22 @@
 import React, {useCallback, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {AccordionList} from 'accordion-collapse-react-native';
 import {TextInput} from 'react-native-paper';
 import {Divider} from '@ui-kitten/components';
 import {useSelector, useDispatch} from 'react-redux';
 import Config from '../../../config';
-import { getAssignWorks, submitWork } from '../../../controller/UserAssignWorkController';
+import {
+  getAssignWorks,
+  submitWork,
+} from '../../../controller/UserAssignWorkController';
 
 const UserAssignWorks = () => {
   const dispatch = useDispatch();
@@ -15,33 +25,28 @@ const UserAssignWorks = () => {
   const [textMsg, setTextMsg] = React.useState('');
   const userData = useSelector(state => state.user);
 
-
   const fetchAssignWorks = useCallback(async () => {
-    const  data = await getAssignWorks(userData._id);
+    const data = await getAssignWorks(userData._id);
     data.map(ele => {
       setAssignWorks(ele.assign_works);
     });
-   
-  }, [userData._id]) 
-    
-  useEffect(() => {
-    fetchAssignWorks()
-  }, [fetchAssignWorks]) 
+  }, [userData._id]);
 
+  useEffect(() => {
+    fetchAssignWorks();
+  }, [fetchAssignWorks]);
 
   // submit comment
-  const submitComment = async (work_id) => {
-
+  const submitComment = async work_id => {
     const submit_data = {
       submit_work_text: textMsg,
     };
 
-    const data = await submitWork(submit_data, work_id)
+    const data = await submitWork(submit_data, work_id);
     if (data.status === 200) {
       setTextMsg('');
       fetchAssignWorks();
     }
-
   };
 
   const WorkDetails = ({item, message, color, index}) => {
@@ -116,7 +121,6 @@ const UserAssignWorks = () => {
   };
 
   const renderBody = item => {
-    
     return (
       <View
         style={{
@@ -164,21 +168,18 @@ const UserAssignWorks = () => {
                 marginTop: SIZES.base,
               }}
               onPress={() => submitComment(item._id)}>
-                {
-                  item.work_status == false || item.revert_status == true ? 
-                  (
-                    <Text
-                      style={{
-                        color: COLORS.white,
-                        backgroundColor: COLORS.lightblue_500,
-                        paddingHorizontal: 10,
-                        paddingVertical: 3,
-                        borderRadius: 3,
-                      }}>
-                      Send
-                    </Text>
-                  ) : null
-                }
+              {item.work_status == false || item.revert_status == true ? (
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    backgroundColor: COLORS.lightblue_500,
+                    paddingHorizontal: 10,
+                    paddingVertical: 3,
+                    borderRadius: 3,
+                  }}>
+                  Send
+                </Text>
+              ) : null}
             </TouchableOpacity>
           </View>
         </View>
@@ -203,11 +204,10 @@ const UserAssignWorks = () => {
           color: COLORS.darkGray,
           marginBottom: SIZES.base,
         }}>
-
         Assign Works
       </Text>
 
-     {/* {
+      {/* {
       assignWorks.map((ele)=>{
         return(
           <View key ={ele._id}>
@@ -216,7 +216,6 @@ const UserAssignWorks = () => {
         )
       })
      } */}
-
 
       <AccordionList
         list={assignWorks}

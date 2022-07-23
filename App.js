@@ -31,23 +31,22 @@ import {
   Optiontype,
   Quantitywork,
   ToolsAndMachinery1,
+  Boq,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
-
 //setup redux
-// import {store} from './app/store';
 import store from './app/store';
 import {Provider, useSelector} from 'react-redux';
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  React.useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+  // React.useEffect(() => {
+  //   SplashScreen.hide();
+  // }, []);
 
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
@@ -89,6 +88,7 @@ const App = () => {
           {/* Tab screens */}
           <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="Suppliers" component={Suppliers} />
+          <Stack.Screen name="Boq" component={Boq} />
 
           {/* Account Screens */}
           <Stack.Screen name="CategoryandType" component={CategoryandType} />

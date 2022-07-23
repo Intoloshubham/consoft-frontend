@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   Text,
@@ -22,11 +22,14 @@ import {
 import {COLORS, FONTS, icons, SIZES, STATUS} from '../../../constants';
 import Config from '../../../config';
 import Toast from 'react-native-toast-message';
-import { getProjectTeam, saveProjectTeam, deleteProjectTeam } from '../../../controller/ProjectTeamController';
-import { getUserRole, roleByUser } from '../../../controller/UserRoleController';
+import {
+  getProjectTeam,
+  saveProjectTeam,
+  deleteProjectTeam,
+} from '../../../controller/ProjectTeamController';
+import {getUserRole, roleByUser} from '../../../controller/UserRoleController';
 
 const ProjectTeam = ({route}) => {
-
   const {project_id} = route.params; //
   const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
   const [projectTeam, setProjectTeam] = useState([]);
@@ -52,42 +55,41 @@ const ProjectTeam = ({route}) => {
     setOpenRole(false);
   }, []);
 
-//---------------------------------------
-// fetch project team
-const fetchProjectTeam = useCallback( async () => {
-  const team = await getProjectTeam(project_id);
-  setProjectTeam(team);
-}, [project_id]) 
-  
-useEffect(() => {
-  fetchProjectTeam();
-  LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-}, [fetchProjectTeam])
+  //---------------------------------------
+  // fetch project team
+  const fetchProjectTeam = useCallback(async () => {
+    const team = await getProjectTeam(project_id);
+    setProjectTeam(team);
+  }, [project_id]);
 
-const addProjectTeam = async () =>{
+  useEffect(() => {
+    fetchProjectTeam();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, [fetchProjectTeam]);
 
-  setAddProjectTeamModal(true)
-  const res = await getUserRole();
-  if (res.status === STATUS.RES_SUCCESS) {
-    let roleFromApi = res.data.map(list => {
-      return {label: list.user_role, value: list._id};
-    });
-    setRoleItems(roleFromApi);
-  }
-}
+  const addProjectTeam = async () => {
+    setAddProjectTeamModal(true);
+    const res = await getUserRole();
+    if (res.status === STATUS.RES_SUCCESS) {
+      let roleFromApi = res.data.map(list => {
+        return {label: list.user_role, value: list._id};
+      });
+      setRoleItems(roleFromApi);
+    }
+  };
 
-const getRolebyUser = async (role_id) =>{
-  const res = await roleByUser( role_id )
-  if (res.status === STATUS.RES_SUCCESS) {
-    let usersFromApi = res.data.map(ele => {
-      return {label: ele.name, value: ele._id};
-    });
-    setUserItems(usersFromApi);
-  }
-}
-// console.log("object")
-//---------------------------------------
-  
+  const getRolebyUser = async role_id => {
+    const res = await roleByUser(role_id);
+    if (res.status === STATUS.RES_SUCCESS) {
+      let usersFromApi = res.data.map(ele => {
+        return {label: ele.name, value: ele._id};
+      });
+      setUserItems(usersFromApi);
+    }
+  };
+  // console.log("object")
+  //---------------------------------------
+
   // post data
   const saveProjectTeamSubmit = async () => {
     const teamData = {
@@ -99,18 +101,17 @@ const getRolebyUser = async (role_id) =>{
       showToast();
       setAddProjectTeamModal(false);
       await fetchProjectTeam();
-    }else{
+    } else {
       alert(res.message);
     }
   };
-  
+
   const deleteTeamSubmit = async () => {
-    const res = await deleteProjectTeam(project_id, userId)
-    console.log(res)
+    const res = await deleteProjectTeam(project_id, userId);
     if (res.status === STATUS.RES_SUCCESS) {
       await fetchProjectTeam();
       setTeamDeleteConfirmation(false);
-    }else{
+    } else {
       alert(res.message);
     }
   };

@@ -9,7 +9,7 @@ import {
   ScrollView,
   Image,
   TextInput,
-  StyleSheet,
+  StyleSheet,RefreshControl
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
@@ -74,22 +74,22 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
 
   // ALL API'S
   // GETTING USER ROLES API
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}role`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  // React.useEffect(() => {
+  fetch(`${Config.API_URL}role`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+      let roleDataFromApi = data.map((one, i) => {
+        return {label: one.user_role, value: one._id};
+      });
+      setUserRoles(roleDataFromApi);
     })
-      .then(response => response.json())
-      .then(data => {
-        let roleDataFromApi = data.map((one, i) => {
-          return {label: one.user_role, value: one._id};
-        });
-        setUserRoles(roleDataFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
+    .catch(error => console.log(error.message));
+  // }, []);
 
   // GETTING USER FROM API ON CHANGE OF USER ROLES
   const OnChangeHandler = id => {
@@ -135,7 +135,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
         if (data.status == 200) {
           showToast();
           setTimeout(() => {
-            setShowAssignWorkModal(false);
+            onClose;
           }, 1000);
         }
       })
@@ -153,32 +153,6 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       text2: 'Success',
       visibilityTime: 1800,
     });
-
-  //MODAL CODE
-  const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const [showAssignWorkModal, setShowAssignWorkModal] =
-    React.useState(isVisible);
-
-  React.useEffect(() => {
-    if (showAssignWorkModal) {
-      Animated.timing(modalAnimatedValue, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
-    } else {
-      Animated.timing(modalAnimatedValue, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: false,
-      }).start(() => onClose());
-    }
-  }, [showAssignWorkModal]);
-
-  const modalY = modalAnimatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [SIZES.height, SIZES.height - 650],
-  });
 
   // DOCUMENT PICKER
   // const [fileData, setFileData] = React.useState([]);
@@ -316,10 +290,11 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
           style={{
             position: 'absolute',
             left: SIZES.padding,
-            top: modalY,
+            top: 100,
+            // top: modalY,
             width: '90%',
             // height: '65%',
-            maxHeight: 500,
+            maxHeight: 400,
             padding: SIZES.padding,
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
@@ -339,7 +314,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
               iconStyle={{
                 tintColor: COLORS.gray,
               }}
-              onPress={() => setShowAssignWorkModal(false)}
+              onPress={onClose}
             />
           </View>
           {/* <WorkAssign /> */}

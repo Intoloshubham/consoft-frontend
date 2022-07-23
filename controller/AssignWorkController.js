@@ -38,7 +38,7 @@ const getVerifyAndRevertWorks = async company_id => {
 
 const getAssignWorks = async () => {
   try {
-    const res = await fetch(`${Config.API_URL}assign-works/`, {
+    const res = await fetch(`${Config.API_URL}assign-works`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
