@@ -19,9 +19,13 @@ import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
-import { getCompanyId, getUserId, getToken } from '../../services/asyncStorageService';
+import {
+  getCompanyId,
+  getUserId,
+  getToken,
+} from '../../services/asyncStorageService';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
@@ -45,13 +49,9 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   const [showPass, setShowPass] = React.useState(false);
 
-
   const [userId, setUserId] = React.useState('');
   const [companyId, setCompanyId] = React.useState('');
   const [token, setToken] = React.useState('');
-
-
-  
 
   // useEffect( async () => {
   //     const token = await getToken();
@@ -62,21 +62,18 @@ const Login = ({navigation}) => {
   //     console.log("company_id")
   //     console.log(company_id)
   //     setCompanyId(company_id)
-      
+
   //     const user_id = await getUserId();
   //     console.log("user_id")
   //     console.log(user_id)
   //     setUserId(user_id)
-     
-  // }, []);
 
+  // }, []);
 
   // {companyData.token && companyData._id ? ( navigation.navigate('Home') ): null}
 
   // {userData.token && userData._id ? ( navigation.navigate('UserDashboard') ) : null }
 
-
-  
   function isEnableLogin() {
     return (
       userMobileNo != '' &&
@@ -85,20 +82,19 @@ const Login = ({navigation}) => {
       companyMobileNoError == ''
     );
   }
-  
+
   const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
-    
-      if(res.payload.status === 200){
-        navigation.navigate('UserDashboard');
-      }else{
-        alert(res.payload.message)
-      }
-  }
+    if (res.payload.status === 200) {
+      navigation.navigate('UserDashboard');
+    } else {
+      alert(res.payload.message);
+    }
+  };
 
   const companyOnSubmit = async () => {
     const company_data = {
@@ -106,11 +102,11 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
     const res = await dispatch(companyLogin(company_data));
-      if(res.payload.status === 200){
-        navigation.navigate('Home');
-      }else{
-        alert(res.payload.message)
-      }
+    if (res.payload.status === 200) {
+      navigation.navigate('Home');
+    } else {
+      alert(res.payload.message);
+    }
   };
 
   const makeCall = () => {
@@ -171,7 +167,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
-  
+
   function renderHeaderImage() {
     return (
       <View
@@ -532,7 +528,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
-  
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}

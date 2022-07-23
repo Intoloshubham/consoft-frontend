@@ -1,56 +1,48 @@
-import Config from "../config";
+import Config from '../config';
 
+const getProjects = async company_id => {
+  try {
+    const res = await fetch(Config.API_URL + 'projects/' + `${company_id}`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getProjectType = async () => {
+  try {
+    const res = await fetch(Config.API_URL + 'project-type', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const getProjectCategory = async () => {
-    try {
-        const res = await fetch(Config.API_URL+'project-category',{
-            method:"get",
-            headers:{
-                "Content-Type":"application/json",
-            },
-        });
-        const data = await res.json();
-        return data;
+  try {
+    const res = await fetch(Config.API_URL + 'project-category', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    } catch (error) {
-      console.log(error)
-    }
-}
-
-const getProjects = async () => {
-    try {
-        const res = await fetch(Config.API_URL+'projects',{
-            method:"get",
-            headers:{
-                "Content-Type":"application/json",
-            },
-        });
-        const data = await res.json();
-        return data;
-
-    } catch (error) {
-      console.log(error)
-    }
-}
-
-const deleteProjects = async (project_id) => {
-    try {
-        const res = await fetch(Config.API_URL+'projects/'+project_id,{
-            method:"delete",
-            headers:{
-                "Content-Type":"application/json",
-            },
-        });
-        const data = await res.json();
-        
-        return data;
-
-    } catch (error) {
-      console.log(error)
-    }
-}
-
-
-
-    
-export { getProjectCategory, getProjects, deleteProjects }
+export {getProjects, getProjectType, getProjectCategory};
