@@ -1,8 +1,16 @@
 import * as React from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
 import Config from '../../../config';
+import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
 
 const VerifyAndRevertWork = ({company_id}) => {
   const [verifyRevertWorks, setVerifyRevertWorks] = React.useState([]);
@@ -13,246 +21,264 @@ const VerifyAndRevertWork = ({company_id}) => {
   ]);
 
   // call api for getting verified and reveted works
+  const fetchVerifyAndRevertWork = async () => {
+    const response = await getVerifyAndRevertWorks(company_id);
+    setVerifyRevertWorks(response);
+    fetchVerifyAndRevertWork();
+  };
+
   React.useEffect(() => {
-    const abortCont = new AbortController();
-    fetch(
-      `${Config.API_URL}verify-revert-works/` + `${company_id}`,
-      {signal: abortCont.signal},
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        setVerifyRevertWorks(data);
-        // console.log(data);
-      })
-      .catch(err => {
-        if (err.name === 'AbortError') {
-          console.log('fetch aborted');
-        } else {
-          console.log(err);
-        }
-      });
-    return () => abortCont.abort();
-  }, []);
+    fetchVerifyAndRevertWork();
+    // const abortCont = new AbortController();
+    // fetch(
+    //   `${Config.API_URL}verify-revert-works/` + `${company_id}`,
+    //   {signal: abortCont.signal},
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //   },
+    // )
+    //   .then(response => {
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     setVerifyRevertWorks(data);
+    //     // console.log(data);
+    //   })
+    //   .catch(err => {
+    //     if (err.name === 'AbortError') {
+    //       console.log('fetch aborted');
+    //     } else {
+    //       console.log(err);
+    //     }
+    //   });
+    // return () => abortCont.abort();
+  }, [company_id]);
 
   const VerifyWorksRoute = () => (
-    <View
+    <ScrollView
       style={{
         padding: 5,
         marginTop: SIZES.base,
-      }}>
-      {verifyRevertWorks.map((ele, i) => {
-        if (ele.verify == true) {
-          return (
-            <View key={ele._id}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      color: COLORS.darkGray,
-                      textTransform: 'capitalize',
-                      fontWeight: 'bold',
-                    }}>
-                    {ele.user_name}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 9,
-                      left: 3,
-                      paddingHorizontal: 3,
-                      backgroundColor: COLORS.green,
-                      color: COLORS.white,
-                      borderRadius: 2,
-                    }}>
-                    {ele.work_code}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      right: 10,
-                    }}>
-                    <Image
-                      source={icons.date}
-                      style={{
-                        height: 10,
-                        width: 10,
-                        tintColor: COLORS.darkGray,
-                        right: 3,
-                      }}
-                    />
+      }}
+      showsVerticalScrollIndicator={false}
+      scrollEnabled={true}
+      nestedScrollEnabled={true}>
+      <View>
+        {verifyRevertWorks.map(ele => {
+          if (ele.verify == true) {
+            return (
+              <View key={ele._id}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text
                       style={{
-                        fontSize: 10,
+                        ...FONTS.h4,
                         color: COLORS.darkGray,
+                        textTransform: 'capitalize',
+                        fontWeight: 'bold',
                       }}>
-                      {ele.verify_date}
+                      {ele.user_name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 9,
+                        left: 3,
+                        paddingHorizontal: 3,
+                        backgroundColor: COLORS.green,
+                        color: COLORS.white,
+                        borderRadius: 2,
+                      }}>
+                      {ele.work_code}
                     </Text>
                   </View>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image
-                      source={icons.time}
+                    <View
                       style={{
-                        height: 10,
-                        width: 10,
-                        tintColor: COLORS.darkGray,
-                        right: 3,
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontSize: 10,
-                        color: COLORS.darkGray,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        right: 10,
                       }}>
-                      {ele.verify_time}
-                    </Text>
+                      <Image
+                        source={icons.date}
+                        style={{
+                          height: 10,
+                          width: 10,
+                          tintColor: COLORS.darkGray,
+                          right: 3,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: COLORS.darkGray,
+                        }}>
+                        {ele.verify_date}
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Image
+                        source={icons.time}
+                        style={{
+                          height: 10,
+                          width: 10,
+                          tintColor: COLORS.darkGray,
+                          right: 3,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: COLORS.darkGray,
+                        }}>
+                        {ele.verify_time}
+                      </Text>
+                    </View>
                   </View>
                 </View>
+                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                  <Text style={{...FONTS.h4, color: COLORS.black}}>
+                    Work{' - '}
+                  </Text>
+                  {ele.work}
+                </Text>
+                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                  <Text style={{...FONTS.h4, color: COLORS.black}}>
+                    Msg{' - '}
+                  </Text>
+                  {ele.submit_work_text}
+                </Text>
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: COLORS.gray,
+                    marginVertical: SIZES.base,
+                  }}
+                />
               </View>
-              <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                <Text style={{...FONTS.h4, color: COLORS.black}}>
-                  Work{' - '}
-                </Text>
-                {ele.work}
-              </Text>
-              <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                <Text style={{...FONTS.h4, color: COLORS.black}}>
-                  Msg{' - '}
-                </Text>
-                {ele.submit_work_text}
-              </Text>
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: COLORS.gray,
-                  marginVertical: SIZES.base,
-                }}
-              />
-            </View>
-          );
-        }
-      })}
-    </View>
+            );
+          }
+        })}
+      </View>
+    </ScrollView>
   );
 
   const RevertWorksRoute = () => (
-    <View style={{padding: 10}}>
-      {verifyRevertWorks.map((ele, i) => {
-        if (ele.revert_status == true) {
-          return (
-            <View key={ele._id}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      color: COLORS.darkGray,
-                      textTransform: 'capitalize',
-                      fontWeight: 'bold',
-                    }}>
-                    {ele.user_name}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 9,
-                      left: 3,
-                      paddingHorizontal: 3,
-                      backgroundColor: COLORS.rose_600,
-                      color: COLORS.white,
-                      borderRadius: 2,
-                    }}>
-                    {ele.work_code}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      right: 10,
-                    }}>
-                    <Image
-                      source={icons.date}
-                      style={{
-                        height: 10,
-                        width: 10,
-                        tintColor: COLORS.darkGray,
-                        right: 3,
-                      }}
-                    />
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      scrollEnabled={true}
+      nestedScrollEnabled={true}
+      style={{padding: 10}}>
+      <View>
+        {verifyRevertWorks.map((ele, i) => {
+          if (ele.revert_status == true) {
+            return (
+              <View key={ele._id}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text
                       style={{
-                        fontSize: 10,
+                        ...FONTS.h4,
                         color: COLORS.darkGray,
+                        textTransform: 'capitalize',
+                        fontWeight: 'bold',
                       }}>
-                      {ele.verify_date}
+                      {ele.user_name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 9,
+                        left: 3,
+                        paddingHorizontal: 3,
+                        backgroundColor: COLORS.rose_600,
+                        color: COLORS.white,
+                        borderRadius: 2,
+                      }}>
+                      {ele.work_code}
                     </Text>
                   </View>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image
-                      source={icons.time}
+                    <View
                       style={{
-                        height: 10,
-                        width: 10,
-                        tintColor: COLORS.darkGray,
-                        right: 3,
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontSize: 10,
-                        color: COLORS.darkGray,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        right: 10,
                       }}>
-                      {ele.verify_time}
-                    </Text>
+                      <Image
+                        source={icons.date}
+                        style={{
+                          height: 10,
+                          width: 10,
+                          tintColor: COLORS.darkGray,
+                          right: 3,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: COLORS.darkGray,
+                        }}>
+                        {ele.verify_date}
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Image
+                        source={icons.time}
+                        style={{
+                          height: 10,
+                          width: 10,
+                          tintColor: COLORS.darkGray,
+                          right: 3,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: COLORS.darkGray,
+                        }}>
+                        {ele.verify_time}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-              <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                <Text style={{...FONTS.h4, color: COLORS.black}}>
-                  Work{' - '}
+                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                  <Text style={{...FONTS.h4, color: COLORS.black}}>
+                    Work{' - '}
+                  </Text>
+                  {ele.work}
                 </Text>
-                {ele.work}
-              </Text>
-              <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                <Text style={{...FONTS.h4, color: COLORS.black}}>
-                  Msg{' - '}
+                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                  <Text style={{...FONTS.h4, color: COLORS.black}}>
+                    Msg{' - '}
+                  </Text>
+                  {ele.submit_work_text}
                 </Text>
-                {ele.submit_work_text}
-              </Text>
 
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: COLORS.gray,
-                  marginVertical: SIZES.base,
-                }}
-              />
-            </View>
-          );
-        }
-      })}
-    </View>
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: COLORS.gray,
+                    marginVertical: SIZES.base,
+                  }}
+                />
+              </View>
+            );
+          }
+        })}
+      </View>
+    </ScrollView>
   );
 
   const renderTabBar = props => {
@@ -324,8 +350,9 @@ const VerifyAndRevertWork = ({company_id}) => {
           revert: RevertWorksRoute,
         })}
         onIndexChange={setIndex}
-        style={{height: 350, maxHeight: 300}}
+        style={{height: 350}}
         renderTabBar={renderTabBar}
+        scrollEnabled={true}
         showPageIndicator={true}
       />
     </View>

@@ -27,10 +27,11 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useSelector, useDispatch} from 'react-redux';
 import {ConformationAlert} from '../../../Components';
 
-
-import { getProjectCategory, getProjects, deleteProjects } from '../../../controller/ProjectController';
-
-
+import {
+  getProjects,
+  getProjectType,
+  getProjectCategory,
+} from '../../../controller/ProjectController';
 
 const ProjectsBanner = ({company_id}) => {
   const navigation = useNavigation();
@@ -55,30 +56,68 @@ const ProjectsBanner = ({company_id}) => {
   const [projectlocation, setProjectLocation] = React.useState('');
   const [projectplotarea, setProjectPlotArea] = React.useState('');
   // getting categories from api - dropdown
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
+  const [openCategory, setOpenCategory] = React.useState(false);
+  const [categoryValue, setCategoryValue] = React.useState([]);
   const [projectCategory, setProjectCategory] = React.useState([]);
   // getting types from api - dropdown
-  const [open1, setOpen1] = React.useState(false);
-  const [value1, setValue1] = React.useState([]);
+  const [openType, setOpenType] = React.useState(false);
+  const [typeValue, setTypeValue] = React.useState([]);
   const [projectType, setProjectType] = React.useState([]);
   //project area units
-  const [open2, setOpen2] = React.useState(false);
-  const [value2, setValue2] = React.useState([]);
+  const [openUnit, setOpenUnit] = React.useState(false);
+  const [unitValue, setUnitValue] = React.useState([]);
   const [projectUnit, setProjectUnit] = React.useState([
-    {label: 'HA', value: '1'},
-    {label: 'Acre', value: '2'},
-    {label: 'SQm', value: '3'},
-    {label: 'SQF', value: '4'},
+    {label: 'ha', value: '1'},
+    {label: 'acre', value: '2'},
+    {label: 'sqm', value: '3'},
+    {label: 'sqf', value: '4'},
   ]);
+
+  // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
+  const onCategoryOpen = React.useCallback(() => {
+    setOpenType(false);
+    setOpenUnit(false);
+  }, []);
+
+  const onTypeOpen = React.useCallback(() => {
+    setOpenCategory(false);
+    setOpenUnit(false);
+  }, []);
+
+  const onUnitOpen = React.useCallback(() => {
+    setOpenCategory(false);
+    setOpenType(false);
+  }, []);
 
   //FORM VALIDATION ERROR STATES
   const [projectError, setProjectError] = React.useState('');
   const [projectLocationError, setProjectLocationError] = React.useState('');
   const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
 
+  // // get projects
+  // const fetchProjects = async () => {
+  //   const response = await getProjects(company_id);
+  //   setProjects(response);
+  //   fetchProjects();
+  // };
+
+  // // get project types
+  // const fetchProjectsTypes = async () => {
+  //   const response = await getProjectType();
+  //   let proTypeFromApi = response.map(item => {
+  //     return {label: item.project_type, value: item._id};
+  //   });
+  //   setProjectType(proTypeFromApi);
+  //   fetchProjectsTypes();
+  // };
+
+  // React.useEffect(() => {
+  //   fetchProjects();
+  //   fetchProjectsTypes();
+  // }, [company_id]);
+
   React.useEffect(() => {
-    fetch(`${Config.API_URL}projects`, {
+    fetch(`${Config.API_URL}projects/` + `${company_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -96,12 +135,8 @@ const ProjectsBanner = ({company_id}) => {
 
   console.log("object")
 
-  const toggleExpanded = async () => {
+  const toggleExpanded = () => {
     setCollapsed(!collapsed);
-    // if (collapsed) {
-    //   const projectList = await getProjects();
-    //   setProjects(projectList);
-    // }
   };
 
   // ON BUTTON SUBMISSON VALIDATION
@@ -158,9 +193,9 @@ const ProjectsBanner = ({company_id}) => {
       project_name: projectname,
       project_location: projectlocation,
       project_area: projectplotarea,
-      project_category: value,
-      project_type: value1,
-      project_measurement: value2,
+      project_category: categoryValue,
+      project_type: typeValue,
+      project_measurement: unitValue,
       company_id: company_id,
     };
     // setProjects(projectList);
@@ -182,9 +217,9 @@ const ProjectsBanner = ({company_id}) => {
             setProjectName('');
             setProjectLocation('');
             setProjectPlotArea('');
-            setValue('');
-            setValue1('');
-            setValue2('');
+            setCategoryValue('');
+            setTypeValue('');
+            setUnitValue('');
           }, 2000);
         }
       })
@@ -196,21 +231,23 @@ const ProjectsBanner = ({company_id}) => {
   // GETTING PROJECTS ID
   const [data, setData] = React.useState('');
   const modalHandler = id => {
+    console.log(id);
     setData(id);
     setProjectCrud(true);
   };
 
   // DELETE PROJECTS
-  const OnDeleteSubmit = (data) => {
-
-    // deleteProjects(data);
-
-    fetch(`${Config.API_URL}projects/` + `${data}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
+  const OnDeleteSubmit = () => {
+    fetch(
+      `${Config.API_URL}` + `projects/` + `${data}`,
+      // `${Config.API_URL}projects/` + `${data}`
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     setTimeout(() => {
       setProjectDeleteConfirmation(false);
@@ -231,10 +268,10 @@ const ProjectsBanner = ({company_id}) => {
   ) => {
     setProjectName(name);
     setProjectLocation(location);
-    setValue(category);
-    setValue1(type);
+    setCategoryValue(category);
+    setTypeValue(type);
     setProjectPlotArea(area);
-    setValue2(unit);
+    setUnitValue(unit);
   };
   // UPDATE PROJECTS
   const OnUpdateSubmit = () => {
@@ -242,9 +279,9 @@ const ProjectsBanner = ({company_id}) => {
       project_name: projectname,
       project_location: projectlocation,
       project_area: projectplotarea,
-      project_category: value,
-      project_type: value1,
-      project_measurement: value2,
+      project_category: categoryValue,
+      project_type: typeValue,
+      project_measurement: unitValue,
       company_id: company_id,
     };
 
@@ -279,9 +316,9 @@ const ProjectsBanner = ({company_id}) => {
     setProjectName('');
     setProjectLocation('');
     setProjectPlotArea('');
-    setValue('');
-    setValue1('');
-    setValue2('');
+    setCategoryValue('');
+    setTypeValue('');
+    setUnitValue('');
   }
 
   const createProject = async () => {
@@ -555,11 +592,11 @@ const ProjectsBanner = ({company_id}) => {
 
                   <CustomDropdown
                     placeholder="Select category"
-                    open={open}
-                    value={value}
+                    open={openCategory}
+                    value={categoryValue}
                     items={projectCategory}
-                    setOpen={setOpen}
-                    setValue={setValue}
+                    setOpen={setOpenCategory}
+                    setValue={setCategoryValue}
                     setItems={setProjectCategory}
                     multiple={false}
                     listParentLabelStyle={{
@@ -568,15 +605,16 @@ const ProjectsBanner = ({company_id}) => {
                     maxHeight={150}
                     zIndex={3000}
                     zIndexInverse={1000}
+                    onOpen={onCategoryOpen}
                   />
 
                   <CustomDropdown
                     placeholder="Select types"
-                    open={open1}
-                    value={value1}
+                    open={openType}
+                    value={typeValue}
                     items={projectType}
-                    setOpen={setOpen1}
-                    setValue={setValue1}
+                    setOpen={setOpenType}
+                    setValue={setTypeValue}
                     setItems={setProjectType}
                     listParentLabelStyle={{
                       color: COLORS.white,
@@ -584,6 +622,7 @@ const ProjectsBanner = ({company_id}) => {
                     maxHeight={150}
                     zIndex={2000}
                     zIndexInverse={2000}
+                    onOpen={onTypeOpen}
                   />
                   <View
                     style={{
@@ -611,11 +650,11 @@ const ProjectsBanner = ({company_id}) => {
                       }}>
                       <CustomDropdown
                         placeholder="Unit"
-                        open={open2}
-                        value={value2}
+                        open={openUnit}
+                        value={unitValue}
                         items={projectUnit}
-                        setOpen={setOpen2}
-                        setValue={setValue2}
+                        setOpen={setOpenUnit}
+                        setValue={setUnitValue}
                         setItems={setProjectUnit}
                         listParentLabelStyle={{
                           color: COLORS.white,
@@ -623,6 +662,7 @@ const ProjectsBanner = ({company_id}) => {
                         maxHeight={70}
                         zIndex={1000}
                         zIndexInverse={3000}
+                        onOpen={onUnitOpen}
                       />
                     </View>
                   </View>
@@ -771,11 +811,11 @@ const ProjectsBanner = ({company_id}) => {
 
                   <CustomDropdown
                     placeholder="Select category"
-                    open={open}
-                    value={value}
+                    open={openCategory}
+                    value={categoryValue}
                     items={projectCategory}
-                    setOpen={setOpen}
-                    setValue={setValue}
+                    setOpen={setOpenCategory}
+                    setValue={setCategoryValue}
                     setItems={setProjectCategory}
                     multiple={false}
                     listParentLabelStyle={{
@@ -784,15 +824,16 @@ const ProjectsBanner = ({company_id}) => {
                     maxHeight={150}
                     zIndex={3000}
                     zIndexInverse={1000}
+                    onOpen={onCategoryOpen}
                   />
 
                   <CustomDropdown
                     placeholder="Select types"
-                    open={open1}
-                    value={value1}
+                    open={openType}
+                    value={typeValue}
                     items={projectType}
-                    setOpen={setOpen1}
-                    setValue={setValue1}
+                    setOpen={setOpenType}
+                    setValue={setTypeValue}
                     setItems={setProjectType}
                     listParentLabelStyle={{
                       color: COLORS.white,
@@ -800,6 +841,7 @@ const ProjectsBanner = ({company_id}) => {
                     maxHeight={150}
                     zIndex={2000}
                     zIndexInverse={2000}
+                    onOpen={onTypeOpen}
                   />
                   <View
                     style={{
@@ -827,11 +869,11 @@ const ProjectsBanner = ({company_id}) => {
                       }}>
                       <CustomDropdown
                         placeholder="Unit"
-                        open={open2}
-                        value={value2}
+                        open={openUnit}
+                        value={unitValue}
                         items={projectUnit}
-                        setOpen={setOpen2}
-                        setValue={setValue2}
+                        setOpen={setOpenUnit}
+                        setValue={setUnitValue}
                         setItems={setProjectUnit}
                         listParentLabelStyle={{
                           color: COLORS.white,
@@ -839,6 +881,7 @@ const ProjectsBanner = ({company_id}) => {
                         maxHeight={70}
                         zIndex={1000}
                         zIndexInverse={3000}
+                        onOpen={onUnitOpen}
                       />
                     </View>
                   </View>

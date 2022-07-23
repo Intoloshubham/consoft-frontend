@@ -76,7 +76,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   // GETTING USER ROLES API
   React.useEffect(() => {
     fetch(`${Config.API_URL}role`, {
-      method: 'GET',
+      method: 'get',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -89,12 +89,12 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
         setUserRoles(roleDataFromApi);
       })
       .catch(error => console.log(error.message));
-  }, [userRoles]);
+  }, []);
 
   // GETTING USER FROM API ON CHANGE OF USER ROLES
   const OnChangeHandler = id => {
     fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
-      method: 'GET',
+      method: 'get',
       headers: {
         'Content-Type': 'application/json',
       },
