@@ -98,7 +98,7 @@ const CompanyRegistration = ({navigation}) => {
       <AuthLayout image={images.create_company} title="Let's Create Company">
         <View
           style={{
-            marginHorizontal: SIZES.padding,
+            marginHorizontal: SIZES.radius,
           }}>
           <FormInput
             label="Name"

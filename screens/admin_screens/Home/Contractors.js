@@ -19,6 +19,11 @@ import {
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import Config from '../../../config';
+import {
+  getContractors,
+  postContractors,
+  deleteContractors,
+} from '../../../controller/contractorController';
 
 const Contractors = ({route}) => {
   const {project_id} = route.params; //
@@ -32,47 +37,39 @@ const Contractors = ({route}) => {
   const [nameError, setNameError] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
 
-  // call api
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}contractor`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        setContractors(data);
-        // console.log("object")
-      })
-      .catch(error => console.log(error.message));
-  }, [contractors]);
+  // get contractors
+  const fetchContractors = async () => {
+    let data = await getContractors();
+    setContractors(data);
+  };
 
-  const OnSubmit = () => {
-    const FormData = {
+  // post contractors details
+  const SubmitContractors = async () => {
+    const formData = {
       project_id: project_id,
       contractor_name: name,
       phone_no: mobileNo,
     };
-    fetch(`${Config.API_URL}contractor`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(FormData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        if (data.status === 200) {
-          setShowContractorsModal(false);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    let data = await postContractors(formData);
+    if (data.status === 200) {
+      setShowContractorsModal(false);
+      setName('');
+      setMobileNo('');
+      fetchContractors();
+    }
   };
+
+  //delete contractors
+  const DeleteContractors = async id => {
+    let data = await deleteContractors(id);
+    if (data.status === 200) {
+      fetchContractors();
+    }
+  };
+
+  React.useEffect(() => {
+    fetchContractors();
+  }, []);
 
   const renderItem = ({item, index}) => (
     <View
@@ -120,7 +117,7 @@ const Contractors = ({route}) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                alert('delete name');
+                DeleteContractors(item._id);
               }}>
               <ImageBackground
                 style={{
@@ -158,8 +155,7 @@ const Contractors = ({route}) => {
         animationType="slide"
         transparent={true}
         visible={showContractorsModal}>
-        <TouchableWithoutFeedback
-          onPress={() => setShowContractorsModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
@@ -264,7 +260,7 @@ const Contractors = ({route}) => {
                       marginTop: SIZES.padding,
                       borderRadius: SIZES.radius,
                     }}
-                    onPress={() => OnSubmit()}
+                    onPress={() => SubmitContractors()}
                   />
                 </ScrollView>
               </View>
@@ -279,7 +275,6 @@ const Contractors = ({route}) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.lightblue_50,
       }}>
       <HeaderBar right={true} title="Contractors" />
       <TextButton
@@ -292,7 +287,11 @@ const Contractors = ({route}) => {
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
         }}
-        onPress={() => setShowContractorsModal(true)}
+        onPress={() => {
+          setName('');
+          setMobileNo('');
+          setShowContractorsModal(true);
+        }}
       />
       <View
         style={{
@@ -300,7 +299,7 @@ const Contractors = ({route}) => {
           marginHorizontal: SIZES.padding,
           padding: 20,
           borderRadius: SIZES.radius,
-          backgroundColor: COLORS.white,
+          backgroundColor: COLORS.white2,
           ...styles.shadow,
         }}>
         <FlatList

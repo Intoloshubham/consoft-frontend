@@ -10,17 +10,19 @@ import {
   StyleSheet,
   Switch,
   Linking,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import LinearGradient from 'react-native-linear-gradient';
 import utils from '../../utils';
 import Toast from 'react-native-toast-message';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
-
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
 import {useDispatch, useSelector} from 'react-redux';
-
 import {
   getCompanyId,
   getUserId,
@@ -129,24 +131,6 @@ const Login = ({navigation}) => {
       alert(`url is not correct: ${url}`);
     }
   };
-
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Login Successfully',
-      text2: 'Success',
-      visibilityTime: 400,
-    });
-
-  const showToastError = () =>
-    Toast.show({
-      position: 'top',
-      type: 'error',
-      text1: 'Please Enter Valid Mobile No. and Password',
-      text2: 'Error',
-      visibilityTime: 4000,
-    });
 
   function renderHeaderLogo() {
     return (
@@ -260,7 +244,7 @@ const Login = ({navigation}) => {
             buttonContainerStyle={{
               height: 45,
               alignItems: 'center',
-              marginTop: SIZES.padding,
+              marginVertical: SIZES.padding,
               borderRadius: SIZES.base,
             }}
             onPress={userOnSubmit}
@@ -351,15 +335,15 @@ const Login = ({navigation}) => {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: SIZES.padding * 1.5,
+            marginTop: SIZES.padding,
             justifyContent: 'center',
-            paddingBottom: SIZES.base,
+            paddingBottom: 5,
           }}>
           <TouchableOpacity onPress={() => console.log('Demo Video')}>
             <Text
               style={{
                 color: COLORS.black,
-                ...FONTS.body3,
+                ...FONTS.body4,
                 fontWeight: 'bold',
               }}>
               Demo{' '}
@@ -368,7 +352,7 @@ const Login = ({navigation}) => {
           <Text
             style={{
               color: COLORS.black,
-              ...FONTS.body3,
+              ...FONTS.body4,
               fontWeight: 'bold',
             }}>
             &
@@ -381,7 +365,7 @@ const Login = ({navigation}) => {
             }}
             labelStyle={{
               color: COLORS.rose_600,
-              ...FONTS.h3,
+              ...FONTS.h4,
               fontWeight: 'bold',
             }}
             onPress={() => navigation.navigate('CompanyRegistration')}
@@ -391,19 +375,19 @@ const Login = ({navigation}) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
-            paddingBottom: SIZES.padding,
+            paddingBottom: SIZES.radius,
           }}>
           <TextButton
             label="Purchase & Register"
             buttonContainerStyle={{
               backgroundColor: COLORS.lightblue_900,
-              paddingHorizontal: SIZES.padding * 2,
-              paddingVertical: SIZES.base,
-              borderRadius: SIZES.base,
+              paddingHorizontal: SIZES.radius * 3,
+              paddingVertical: 5,
+              borderRadius: 5,
             }}
             labelStyle={{
               color: COLORS.white,
-              ...FONTS.h3,
+              ...FONTS.h4,
             }}
             onPress={() => navigation.navigate('CompanyRegistration')}
           />
@@ -418,8 +402,8 @@ const Login = ({navigation}) => {
           <TouchableOpacity
             style={{
               backgroundColor: COLORS.white,
-              padding: 5,
-              borderRadius: SIZES.base,
+              padding: 6,
+              borderRadius: 5,
             }}
             onPress={() => {
               Linking.openURL(
@@ -439,8 +423,8 @@ const Login = ({navigation}) => {
           <TouchableOpacity
             style={{
               backgroundColor: COLORS.white,
-              padding: 5,
-              borderRadius: SIZES.base,
+              padding: 6,
+              borderRadius: 5,
             }}
             onPress={makeCall}>
             <Image
@@ -456,8 +440,8 @@ const Login = ({navigation}) => {
           <TouchableOpacity
             style={{
               backgroundColor: COLORS.white,
-              padding: 5,
-              borderRadius: SIZES.base,
+              padding: 6,
+              borderRadius: 5,
             }}
             onPress={() => {
               Linking.openURL('https://wa.me/9479505099');
@@ -474,8 +458,8 @@ const Login = ({navigation}) => {
           <TouchableOpacity
             style={{
               backgroundColor: COLORS.white,
-              padding: 5,
-              borderRadius: SIZES.base,
+              padding: 6,
+              borderRadius: 5,
             }}
             onPress={() => Linking.openURL('http://www.intoloindia.com/')}>
             <Image
@@ -531,18 +515,22 @@ const Login = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      behavior={Platform.OS === 'ios' ? SIZES.padding : SIZES.height}
       style={{flex: 1}}>
       <LinearGradient
-        colors={[COLORS.lightblue_50, COLORS.lightblue_300]}
+        colors={[COLORS.lightblue_100, COLORS.lightblue_300]}
         style={{flex: 1}}>
         {renderHeaderLogo()}
-        <Toast config={showToast} />
-        <Toast config={showToastError} />
-        <ScrollView>
-          {renderHeaderImage()}
-          {renderToggleButton()}
-          {switchValue ? renderCompanyForm() : renderUserForm()}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <KeyboardAwareScrollView
+            keyboardDismissMode="on-drag"
+            contentContainerStyle={{
+              flex: 1,
+            }}>
+            {renderHeaderImage()}
+            {renderToggleButton()}
+            {switchValue ? renderCompanyForm() : renderUserForm()}
+          </KeyboardAwareScrollView>
         </ScrollView>
       </LinearGradient>
     </KeyboardAvoidingView>
@@ -551,8 +539,8 @@ const Login = ({navigation}) => {
 
 const styles = StyleSheet.create({
   formContainer: {
-    paddingHorizontal: SIZES.padding,
-    paddingVertical: SIZES.radius,
+    paddingHorizontal: SIZES.radius,
+    paddingBottom: SIZES.padding,
   },
   shadow: {
     shadowColor: '#000',

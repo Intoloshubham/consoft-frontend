@@ -1,11 +1,33 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  LogBox,
+} from 'react-native';
 import {icons, COLORS, SIZES, FONTS} from '../../../constants';
 import {InProgressModal, DoneModal} from '../TaskModal';
 //saurabh
 import UserAssignWorks from './UserAssignWorks';
 
 const UserDashboard = () => {
+  // refresh
+  function delay(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
+  const [loading, setLoading] = React.useState(false);
+  const loadMore = React.useCallback(async () => {
+    setLoading(true);
+    delay(2000).then(() => setLoading(false));
+  }, [loading]);
+
   const [inProgressModal, setinProgressModal] = React.useState(false);
   const [doneModal, setdoneModal] = React.useState(false);
   const [inProgressModalnum, setinProgressModalNum] = React.useState(false);
@@ -20,8 +42,20 @@ const UserDashboard = () => {
     setdoneModal(true);
   };
 
+  React.useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
+
   return (
-    <View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          progressBackgroundColor="white"
+          tintColor="red"
+          refreshing={loading}
+          onRefresh={loadMore}
+        />
+      }>
       <UserAssignWorks />
       <View
         style={{
@@ -80,7 +114,7 @@ const UserDashboard = () => {
           <DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
