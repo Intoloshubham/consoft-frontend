@@ -30,21 +30,11 @@ const UserAssignWorks = () => {
     data.map(ele => {
       setAssignWorks(ele.assign_works);
     });
-<<<<<<< HEAD
   }, [userData._id]);
 
   useEffect(() => {
     fetchAssignWorks();
   }, [fetchAssignWorks]);
-=======
-   
-  }, [userData._id]) 
-    
-  useEffect(() => {
-    fetchAssignWorks()
-  }, [fetchAssignWorks]) 
-
->>>>>>> a2454d2f160d9a3c0d113bb963ae32058c45a8ce
 
   // submit comment
   const submitComment = async work_id => {
@@ -52,11 +42,7 @@ const UserAssignWorks = () => {
       submit_work_text: textMsg,
     };
 
-<<<<<<< HEAD
     const data = await submitWork(submit_data, work_id);
-=======
-    const data = await submitWork(submit_data, work_id)
->>>>>>> a2454d2f160d9a3c0d113bb963ae32058c45a8ce
     if (data.status === 200) {
       setTextMsg('');
       fetchAssignWorks();
