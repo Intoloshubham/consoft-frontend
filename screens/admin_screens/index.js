@@ -28,7 +28,13 @@ import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
 import Quantitywork from './Stock/Tools/Quantitywork'
 import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1'
-
+import Quantity from './Stock/Tools/Quantity'
+import Apps from './Stock/Tools/Apps'
+import UserReportdata from './Stock/Tools/UserReportdata'
+import HomeScreen from './Stock/Tools/HomeScreen'
+import Dynamicdata from './Stock/Tools/Dynamicdata'
+import Leaves from './Stock/Tools/Leaves'
+import Calender from './Stock/Tools/Calender'
 export {
   Account,
   CheckList,
@@ -47,9 +53,7 @@ export {
   ToolsAndMachinery,
   WorkAssignModal,
   CategoryandType,
-
   ReportsDisplay,
-
   Items,
   ManageStock,
   Unit,
@@ -60,4 +64,11 @@ export {
   Optiontype,
   Quantitywork,
   ToolsAndMachinery1,
+  Quantity,
+  Apps,
+  HomeScreen,
+  UserReportdata,
+  Dynamicdata,
+  Leaves,
+  Calender,
 };

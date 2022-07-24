@@ -15,7 +15,7 @@ import { TextInput } from 'react-native-paper';
 import { icons, COLORS, SIZES, FONTS } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import DatePicker from 'react-native-neat-date-picker'
+// import DatePicker from 'react-native-neat-date-picker'
 import { Divider } from '@ui-kitten/components';
 import { LogBox } from "react-native";
 

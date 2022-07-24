@@ -13,8 +13,8 @@ import {
 import {FormInput, TextButton, HeaderBar} from '../../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../../constants';
 import config from '../../../../config';
-import { getCompanyId,getToken } from '../../../../services/asyncStorageService';
-
+import {getCompanyId, getToken} from '../../../../services/asyncStorageService';
+import {Dropdown} from 'react-native-element-dropdown';
 
 const ToolAndMachinery1 = () => {
   const [toolmodal, settoolmodal] = useState(false);
@@ -25,21 +25,23 @@ const ToolAndMachinery1 = () => {
   const [tooldata, settooldata] = useState([]);
   const [toolsId, settoolsId] = useState('');
 
-   //get company id 
-   const [company_id, setCompany_id] = useState('')
-   const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
+  const [datalist, setdatalist] = React.useState([]);
+  const [value, setValue] = React.useState('');
+  const [isFocus, setIsFocus] = React.useState(false);
 
-   const _companyId =async () => {
-   
+  //get company id
+  const [company_id, setCompany_id] = useState('');
+  const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
+
+  const _companyId = async () => {
     const _id = await getCompanyId();
     setCompany_id(_id);
-  }
+  };
   //  console.log(company_id);
   //setting token
   React.useEffect(() => {
     (async () => await _companyId())();
-  }, [])
-
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -48,7 +50,6 @@ const ToolAndMachinery1 = () => {
     })();
   });
   //  console.log(accessTokenoptiontype);
-
 
   const tools = (id, name, qty) => {
     setupdatemodal(true);
@@ -62,7 +63,7 @@ const ToolAndMachinery1 = () => {
     const toolsupdate = {
       tools_machinery_name: Toolsname,
       qty: Toolquantity,
-      company_id:company_id,
+      company_id: company_id,
     };
     fetch('http://192.168.1.99:8000/api/tools-machinery/' + `${toolsId}`, {
       method: 'PUT',
@@ -77,7 +78,7 @@ const ToolAndMachinery1 = () => {
         fetchDatatools();
         setToolsname('');
         console.log('Success:', data);
-        
+
         {
           Toolsname == ''
             ? alert('plz fill Tools name')
@@ -92,14 +93,14 @@ const ToolAndMachinery1 = () => {
   };
 
   const fetchDatatools = async () => {
-    const resp = await fetch('http://192.168.1.99:8000/api/tools-machinery',{
+    const resp = await fetch('http://192.168.1.99:8000/api/tools-machinery', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'authorization': 'Bearer '+accessTokenoptiontype ,
+        authorization: 'Bearer ' + accessTokenoptiontype,
       },
-    })
+    });
     const data = await resp.json();
     // console.log(data);
     settooldata(data);
@@ -135,7 +136,7 @@ const ToolAndMachinery1 = () => {
       body: JSON.stringify({
         tools_machinery_name: Toolsname,
         qty: Toolquantity,
-        company_id:company_id,
+        company_id: company_id,
       }),
     })
       .then(response => response.json())
@@ -144,7 +145,7 @@ const ToolAndMachinery1 = () => {
         setToolquantity('');
         fetchDatatools();
         console.log('Success:', data);
-        
+
         // {
         //   Toolsname == ''
         //     ? alert('plz fill Tools name')
@@ -157,6 +158,17 @@ const ToolAndMachinery1 = () => {
         console.error('Error:', error);
       });
   };
+
+  const listData = async () => {
+    const resp = await fetch('http://192.168.1.99:8000/api/item');
+    const data = await resp.json();
+    //console.log(data);
+    setdatalist(data);
+  };
+  useEffect(()=>{
+    listData();
+  },[])
+
   const renderItem = ({item}) => {
     return (
       <View
@@ -172,13 +184,19 @@ const ToolAndMachinery1 = () => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <Text style={{...FONTS.h3, color: COLORS.darkGray,textTransform:"capitalize"}}>{item.tools_machinery_name}</Text>
+          <Text
+            style={{
+              ...FONTS.h3,
+              color: COLORS.darkGray,
+              textTransform: 'capitalize',
+            }}>
+            {item.tools_machinery_name}
+          </Text>
           <Text
             style={{
               ...FONTS.h3,
               color: COLORS.darkGray,
               fontWeight: 'bold',
-              
             }}>
             {item.qty}
           </Text>
@@ -186,7 +204,7 @@ const ToolAndMachinery1 = () => {
         <View style={{marginLeft: 40, flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => {
-              tools(item._id,item.tools_machinery_name,item.qty)
+              tools(item._id, item.tools_machinery_name, item.qty);
             }}>
             <Image
               source={icons.edit}
@@ -200,7 +218,7 @@ const ToolAndMachinery1 = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              DeleteTools(item._id)
+              DeleteTools(item._id);
             }}>
             <Image
               source={icons.delete_icon}
@@ -232,6 +250,7 @@ const ToolAndMachinery1 = () => {
           }}
           onPress={() => settoolmodal(true)}
         />
+       
         <Modal animationType="fade" visible={toolmodal} transparent={false}>
           <View
             style={{
@@ -335,6 +354,7 @@ const ToolAndMachinery1 = () => {
             }}
           />
         </View>
+        
         <Modal animationType="fade" visible={updatemodal} transparent={false}>
           <View
             style={{
@@ -403,7 +423,6 @@ const ToolAndMachinery1 = () => {
             </View>
           </View>
         </Modal>
-        <View></View>
       </View>
     </View>
   );
@@ -418,25 +437,11 @@ const styles = StyleSheet.create({
     height: 40,
     // borderRadius: 10,
   },
-  dropdown: {
-    height: 45,
-    borderWidth: 2,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    marginTop: 28,
-    width: '65%',
-  },
-  dropdown1: {
-    height: 45,
-    borderWidth: 2,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    marginTop: 28,
-  },
+  
   scroll: {
     maxHeight: 300,
   },
-
+  
   // container: {
   //   paddingTop: 100,
   //   paddingHorizontal: 30,
