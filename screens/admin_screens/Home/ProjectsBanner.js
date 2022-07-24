@@ -102,6 +102,8 @@ const ProjectsBanner = ({company_id}) => {
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
+
+  
   
    // get projects
   const fetchProjects = useCallback( async () => {

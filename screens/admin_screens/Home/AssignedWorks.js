@@ -56,10 +56,10 @@ const AssignedWorks = () => {
     fetchAssignWorkDelete();
   };
 
-  React.useEffect(() => {
-    fetchAssignWorks();
-    fetchUserRole();
-  }, []);
+  // React.useEffect(() => {
+  //   fetchAssignWorks();
+  //   fetchUserRole();
+  // }, []);
 
   // Get All Assign Works
   // React.useEffect(() => {

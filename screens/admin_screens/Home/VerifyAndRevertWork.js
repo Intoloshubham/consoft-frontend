@@ -29,7 +29,7 @@ const VerifyAndRevertWork = ({company_id}) => {
 
   React.useEffect(() => {
     fetchVerifyAndRevertWork();
-    // const abortCont = new AbortController();
+    const abortCont = new AbortController();
     // fetch(
     //   `${Config.API_URL}verify-revert-works/` + `${company_id}`,
     //   {signal: abortCont.signal},
@@ -54,8 +54,8 @@ const VerifyAndRevertWork = ({company_id}) => {
     //       console.log(err);
     //     }
     //   });
-    // return () => abortCont.abort();
-  }, [company_id]);
+    return () => abortCont.abort();
+  }, []);
 
   const VerifyWorksRoute = () => (
     <ScrollView

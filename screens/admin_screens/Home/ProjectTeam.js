@@ -78,7 +78,7 @@ const ProjectTeam = ({route}) => {
     }
   };
 
-  const getRolebyUser = async role_id => {
+  const getRolebyUser = async (role_id) => {
     const res = await roleByUser(role_id);
     if (res.status === STATUS.RES_SUCCESS) {
       let usersFromApi = res.data.map(ele => {

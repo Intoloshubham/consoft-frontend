@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -12,19 +12,32 @@ import {
   StyleSheet,RefreshControl
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
 import {IconButton, CustomDropdown, TextButton} from '../../../Components';
 import Config from '../../../config';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 import {useSelector} from 'react-redux';
+import { getUserRole, roleByUser } from '../../../controller/UserRoleController';
+import { assignWorks } from '../../../controller/AssignWorkController';
 
 const WorkAssignModal = ({projectId, isVisible, onClose}) => {
+  
   //COMPANY DATA
   const companyData = useSelector(state => state.company);
   //ADD DYNAMICALLY INPUT FEILD
   const [work, setWork] = React.useState([{key: '', value: ''}]);
   const [newWork, setNewWork] = React.useState([]);
+
+  //GETTING USER ROLES FROM API
+  const [openUserRole, setOpenUserRole] = React.useState(false);
+  const [userRoleValue, setUserRoleValue] = React.useState([]);
+  const [userRoles, setUserRoles] = React.useState([]);
+
+  //GETTING USER FROM APIS ON CHANGE OF USER ROLES
+  const [openUsers, setOpenUsers] = React.useState(false);
+  const [usersValue, setUsersValue] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
 
   const addHandler = () => {
     const inputs = [...work];
@@ -37,31 +50,51 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     setWork(inputs);
   };
 
+  const assignWorkArr = [];
   const inputHandler = (text, key) => {
     const inputs = [...work];
     inputs[key].value = text;
     inputs[key].key = key;
     setWork(inputs);
-  };
 
-  const assignWorkArr = [];
-  React.useEffect(() => {
     work.map((item, i) => {
       assignWorkArr.push(item.value);
       setNewWork(assignWorkArr);
     });
-  }, [work]);
 
-  // FORM DATA
-  //GETTING USER ROLES FROM API
-  const [openUserRole, setOpenUserRole] = React.useState(false);
-  const [userRoleValue, setUserRoleValue] = React.useState([]);
-  const [userRoles, setUserRoles] = React.useState([]);
+  };
 
-  //GETTING USER FROM APIS ON CHANGE OF USER ROLES
-  const [openUsers, setOpenUsers] = React.useState(false);
-  const [usersValue, setUsersValue] = React.useState([]);
-  const [users, setUsers] = React.useState([]);
+  // const fetchProjects = useCallback( async () => {
+  //   const  data = await getProjects(company_id);
+  //   setProjects(data);
+  // }, [company_id]) 
+    
+  useEffect(() => {
+    fetchUserRole()
+  }, [projectId])
+
+  console.log("object")
+  const fetchUserRole = async () => {
+    const res = await getUserRole();
+    // console.log(res)
+    if (res.status === STATUS.RES_SUCCESS) {
+      let roleFromApi = res.data.map(list => {
+        return {label: list.user_role, value: list._id};
+      });
+      setUserRoles(roleFromApi);
+    }
+  };
+  
+
+  const getRolebyUser = async (role_id) => {
+    const res = await roleByUser(role_id);
+    if (res.status === STATUS.RES_SUCCESS) {
+      let roleDataFromApi = res.data.map(list => {
+        return {label: list.name, value: list._id};
+      });
+      setUsers(roleDataFromApi);
+    }
+  };
 
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onRoleOpen = React.useCallback(() => {
@@ -72,47 +105,19 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     setOpenUserRole(false);
   }, []);
 
-  // ALL API'S
-  // GETTING USER ROLES API
-  // React.useEffect(() => {
-  fetch(`${Config.API_URL}role`, {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(response => response.json())
-    .then(data => {
-      let roleDataFromApi = data.map((one, i) => {
-        return {label: one.user_role, value: one._id};
-      });
-      setUserRoles(roleDataFromApi);
-    })
-    .catch(error => console.log(error.message));
-  // }, []);
+  
+  // const works = () => {
 
-  // GETTING USER FROM API ON CHANGE OF USER ROLES
-  const OnChangeHandler = id => {
-    fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        let roleDataFromApi = data.map(ele => {
-          return {label: ele.name, value: ele._id};
-        });
-        setUsers(roleDataFromApi);
-      })
-      .catch(error => console.log(error.message));
-  };
-
+  //   work.map((item, i) => {
+  //     assignWorkArr.push(item.value);
+  //     setNewWork(assignWorkArr);
+  //   });
+    
+  // };
+  
   // POST ASSIGN WORK DATA
-  const OnSubmit = () => {
-    const FormData = {
+  const OnSubmit = async () => {
+    const workData = {
       role_id: userRoleValue,
       user_id: usersValue,
       work: newWork,
@@ -121,13 +126,22 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       company_id: companyData._id,
       project_id: projectId,
     };
-    // console.log(FormData);
+
+    // const res = await assignWorks(workData);
+    // console.log(res)
+    // if (res.status === STATUS.RES_SUCCESS) {
+    //   showToast();
+    //   onClose;
+      
+    // }
+
+    // // console.log(FormData);
     fetch(`${Config.API_URL}assign-works`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(FormData),
+      body: JSON.stringify(workData),
     })
       .then(response => response.json())
       .then(data => {
@@ -142,6 +156,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       .catch(error => {
         console.error('Error:', error);
       });
+
   };
 
   // TOAST ON SUBMISSION OF ASSIGN WORK
@@ -331,8 +346,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
-              onChangeValue={value => OnChangeHandler(value)}
-              onSelectItem={value => console.log(value)}
+              onChangeValue={value => getRolebyUser(value)}
               onOpen={onRoleOpen}
               zIndex={2000}
               zIndexInverse={1000}

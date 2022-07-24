@@ -65,8 +65,8 @@ const CompanyTeam = ({navigation}) => {
       },
     })
       .then(response => response.json())
-      .then(data => {
-        let roleDataFromApi = data.map(one => {
+      .then(res => {
+        let roleDataFromApi = res.data.map(one => {
           return {label: one.user_role, value: one._id};
         });
         setRole(roleDataFromApi);
@@ -83,8 +83,8 @@ const CompanyTeam = ({navigation}) => {
       },
     })
       .then(response => response.json())
-      .then(data => {
-        let roleDataFromApi = data.map(ele => {
+      .then(res => {
+        let roleDataFromApi = res.data.map(ele => {
           return {label: ele.project_name, value: ele._id};
         });
         setProject(roleDataFromApi);

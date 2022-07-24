@@ -37,8 +37,10 @@ const SubmittedWorks = () => {
   };
 
   React.useEffect(() => {
+    const abortConst = new AbortController();
     fetchSubmitWork();
-  }, [company_id]);
+    return () => abortConst.abort();
+  }, []);
 
   // refresh page
 
