@@ -31,7 +31,14 @@ import {
   Optiontype,
   Quantitywork,
   ToolsAndMachinery1,
-  Boq,
+  Quantity,
+  Apps,
+  HomeScreen,
+  UserReportdata,
+  Dynamicdata,
+  Leaves,
+  Calender,
+  Boq
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
