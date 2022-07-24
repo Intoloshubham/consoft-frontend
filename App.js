@@ -63,7 +63,7 @@ const App = () => {
             headerShown: false,
           }}
 
-          initialRouteName={'Login'}>
+          initialRouteName={'UserDashboard'}>
 
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
