@@ -57,28 +57,28 @@ const Quantitywork = () => {
       item_id: value,
     };
 
-    fetch(`${config.API_URL}quantity-report`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(quantitywork),
-    })
-      .then(response => response.json())
-      .then(data => {
-        setvalue('');
-        setunitname('');
-        setparticulor('');
-        setlenght('');
-        setbreadth('');
-        setheight('');
-        settotal('');
-        console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    // fetch(`${config.API_URL}quantity-report`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(quantitywork),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     setvalue('');
+    //     setunitname('');
+    //     setparticulor('');
+    //     setlenght('');
+    //     setbreadth('');
+    //     setheight('');
+    //     settotal('');
+    //     console.log('Success:', data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
   };
 
   const saveQuantityitem = () => {
