@@ -10,26 +10,21 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-import {
-  removeCompanyId,
-  removeToken,
-} from '../../../services/asyncStorageService';
-import {useSelector} from 'react-redux';
-import {unSetCompanyInfo} from '../../../features/CompanySlice';
-import {unsetCompanyToken} from '../../../features/CompanyAuthSlice';
+
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {ProfileValue, LineDivider} from '../../../Components';
+import {useSelector, useDispatch} from 'react-redux';
+import { companyLogout } from '../../../services/companyAuthApi';
 
 const Account = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const companyData = useSelector(state => state.company);
   const [collapsed, setCollapsed] = useState(true);
 
-  const logout = async () => {
-    unSetCompanyInfo({_id: '', company_name: '', email: '', mobile: ''});
-    unsetCompanyToken({token: null});
-    await removeToken('token');
-    await removeCompanyId('company_id');
-    navigation.navigate('Dashboard');
+  const logout = () => {
+    dispatch(companyLogout());
+    navigation.navigate('Login');
   };
 
   React.useEffect(() => {
@@ -40,34 +35,6 @@ const Account = () => {
     setCollapsed(!collapsed);
   };
 
-  //getting company data from redux store    company -> name is reducer
-  const companyData = useSelector(state => state.company);
-  // console.log(companyData);
-
-  // const companyToken = useSelector(state => state.companyAuth)
-  // console.log(companyToken);
-
-  function renderHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          // marginTop: 30,
-          paddingHorizontal: SIZES.padding,
-          justifyContent: 'space-between',
-        }}>
-        <Text style={{...FONTS.h1, fontWeight: 'bold', color: COLORS.black}}>
-          Profile
-        </Text>
-        {/* <IconButton
-          icon={icons.sun}
-          iconStyle={{
-            tintColor: COLORS.black,
-          }}
-        /> */}
-      </View>
-    );
-  }
 
   function renderProfileCard() {
     return (
@@ -89,12 +56,12 @@ const Account = () => {
           }}
           onPress={() => alert('Upload Image')}>
           <Image
-            source={images.Profile7}
+            source={images.civil_eng}
             style={{
               width: '100%',
               height: '100%',
-              borderRadius: 40,
-              borderWidth: 2,
+              borderRadius: 15,
+              borderWidth: 3,
               borderColor: COLORS.white,
             }}
           />
@@ -204,6 +171,31 @@ const Account = () => {
           </View>
         </Collapsible>
         <LineDivider />
+        <Collapsible collapsed={collapsed} duration={300}>
+          <View style={{marginLeft: SIZES.padding * 1.8}}>
+            <ProfileValue
+              icon={icons.itemss}
+              value="Checklist"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('CheckList')}
+            />
+            <LineDivider />
+            <ProfileValue
+              icon={icons.units}
+              value="Optiontype"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('Optiontype')}
+            />
+            <LineDivider />
+            <ProfileValue
+              icon={icons.units}
+              value="Tools & Machinery1"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('ToolsAndMachinery1')}
+            />
+          </View>
+        </Collapsible>
+        <LineDivider />
         <ProfileValue
           icon={icons.supplier}
           value="Suppliers"
@@ -221,7 +213,11 @@ const Account = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" onPress={logout} />
+        <ProfileValue
+          icon={icons.logout}
+          value="LogOut"
+          onPress={() => logout()}
+        />
       </View>
     );
   }

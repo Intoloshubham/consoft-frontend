@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,63 +10,71 @@ import {
   StyleSheet,
   Switch,
   Linking,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import LinearGradient from 'react-native-linear-gradient';
-import utils from '../../utils'; 
+import utils from '../../utils';
 import Toast from 'react-native-toast-message';
-import Config from '../../config';
 import {FormInput, TextButton} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
-import { useLoginCompanyMutation } from '../../services/companyAuthApi';
-import { setCompanyId, storeToken, setUserId } from '../../services/asyncStorageService';
-
-import { useLoginUserMutation } from '../../services/userAuthApi';//
-
-
+import {userLogin} from '../../services/userAuthApi';
+import {companyLogin} from '../../services/companyAuthApi';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getCompanyId,
+  getUserId,
+  getToken,
+} from '../../services/asyncStorageService';
 
 const Login = ({navigation}) => {
-  const makeCall = () => {
-    let phoneNumber = ''; 
-    if (Platform.OS === 'android') {
-      phoneNumber = 'tel:+91-8109093551';
-    } else {
-      phoneNumber = 'telprompt:${+919988774455}';
-    }
-    Linking.openURL(phoneNumber);
-  };
-  const message = 'Hello';
-  const number = +919479505099;
-  const openURL = async url => {
-    const isSupported = await Linking.canOpenURL(url);
-    if (isSupported) {
-      await Linking.openURL(url);
-    } else {
-      alert(`url is not correct: ${url}`);
-    }
-  };
-  
+  const dispatch = useDispatch();
+
+  // const userData = useSelector(state => state.user);
+  // const companyData = useSelector(state => state.company);
+  // console.log(userData)
+  // console.log("userData")
+  // console.log(companyData)
+
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
     setSwitchValue(value);
   };
-  
+
   const [userMobileNo, setUserMobileNo] = React.useState('');
   const [userPassword, setUserPassword] = React.useState('');
   const [userMobileNoError, setUserMobileNoError] = React.useState('');
-  
   const [companyMobileNo, setCompanyMobileNo] = React.useState('');
   const [companyPassword, setCompanyPassword] = React.useState('');
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
-  
   const [showPass, setShowPass] = React.useState(false);
-  const [accessToken, setAccessToken] = useState(false);
-  
-  // const [login, setlogin] = React.useState(false)
 
-  //rtk
-  const [loginCompany] = useLoginCompanyMutation();
+  const [userId, setUserId] = React.useState('');
+  const [companyId, setCompanyId] = React.useState('');
+  const [token, setToken] = React.useState('');
 
-  const [ loginUser ] = useLoginUserMutation();
+  // useEffect( async () => {
+  //     const token = await getToken();
+  //     console.log(token)
+  //     setToken(token)
+
+  //     const company_id = await getCompanyId();
+  //     console.log("company_id")
+  //     console.log(company_id)
+  //     setCompanyId(company_id)
+
+  //     const user_id = await getUserId();
+  //     console.log("user_id")
+  //     console.log(user_id)
+  //     setUserId(user_id)
+
+  // }, []);
+
+  // {companyData.token && companyData._id ? ( navigation.navigate('Home') ): null}
+
+  // {userData.token && userData._id ? ( navigation.navigate('UserDashboard') ) : null }
 
   function isEnableLogin() {
     return (
@@ -76,135 +84,52 @@ const Login = ({navigation}) => {
       companyMobileNoError == ''
     );
   }
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Login Successfully',
-      text2: 'Success',
-      visibilityTime: 400,
-    });
 
-  const showToastError = () =>
-    Toast.show({
-      position: 'top',
-      type: 'error',
-      text1: 'Please Enter Valid Mobile No. and Password',
-      text2: 'Error',
-      visibilityTime: 4000,
-    });
-    
   const userOnSubmit = async () => {
-    setAccessToken(true)
-    // setlogin(true)
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
-
-    console.log(UserData)
-    const res = await loginUser(UserData);
-    console.log(res) 
-
-    let result;
-    if (res.data) {
-      result = res.data;
-    }
-    if (res.error) {
-      result = res.error;
-    }
-
-    if (result.status === 200) {
-      await setUserId(result._id);
-      await storeToken(result.access_token);   
+    const res = await dispatch(userLogin(UserData));
+    if (res.payload.status === 200) {
       navigation.navigate('UserDashboard');
-
+    } else {
+      alert(res.payload.message);
     }
-
-    if(result.status === 401){
-      alert(result.data.message);
-    }
-
-    // fetch(`${Config.API_URL}login`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(UserData),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     if (data.access_token) {
-    //       showToast();
-    //       setTimeout(() => {
-    //         navigation.navigate('UserDashboard');
-    //       }, 200);
-    //     }
-    //     if (!data.access_token) {
-    //       showToastError();
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
-  }
+  };
 
   const companyOnSubmit = async () => {
     const company_data = {
       mobile: companyMobileNo,
       password: companyPassword,
     };
-
-
-    const res = await loginCompany(company_data)
-    // console.log(res);
-
-    //store token in storage
-
-    let result;
-    if (res.data) {
-      result = res.data;
-    }
-    if (res.error) {
-      result = res.error;
-    }
-
-    if (result.status === 200) {
-      await setCompanyId(result.company_id);
-      await storeToken(result.access_token);
+    const res = await dispatch(companyLogin(company_data));
+    if (res.payload.status === 200) {
       navigation.navigate('Home');
+    } else {
+      alert(res.payload.message);
     }
+  };
 
-    if (result.status === 401) {
-      alert(result.data.message);
+  const makeCall = () => {
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:+91-8109093551';
+    } else {
+      phoneNumber = 'telprompt:${+919988774455}';
     }
+    Linking.openURL(phoneNumber);
+  };
 
-    // fetch(`${Config.API_URL}/company-login`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(company_data),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     if (data.access_token) {
-    //       showToast();
-    //       setTimeout(() => {
-    //         if (data.role == 'Editor' || data.role == 'Administrator') {
-    //           navigation.navigate('Home');
-    //         }
-    //       }, 200);
-    //     }
-    //     if (!data.access_token) {
-    //       showToastError();
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
+  const message = 'Hello';
+  const number = +919479505099;
+  const openURL = async url => {
+    const isSupported = await Linking.canOpenURL(url);
+    if (isSupported) {
+      await Linking.openURL(url);
+    } else {
+      alert(`url is not correct: ${url}`);
+    }
   };
 
   function renderHeaderLogo() {
@@ -226,6 +151,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderHeaderImage() {
     return (
       <View
@@ -245,6 +171,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderUserForm() {
     return (
       <View
@@ -314,15 +241,11 @@ const Login = ({navigation}) => {
           />
           <TextButton
             label="Login"
-            // disabled={isEnableSignIn() ? false : true}
             buttonContainerStyle={{
               height: 45,
               alignItems: 'center',
-              marginTop: SIZES.padding,
+              marginVertical: SIZES.padding,
               borderRadius: SIZES.base,
-              // backgroundColor: isEnableSignIn()
-              //   ? COLORS.lightblue_900
-              //   : COLORS.transparentPrimary,
             }}
             onPress={userOnSubmit}
           />
@@ -330,6 +253,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderCompanyForm() {
     return (
       <View
@@ -411,15 +335,15 @@ const Login = ({navigation}) => {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: SIZES.padding * 1.5,
+            marginTop: SIZES.padding,
             justifyContent: 'center',
-            paddingBottom: SIZES.base,
+            paddingBottom: 5,
           }}>
           <TouchableOpacity onPress={() => console.log('Demo Video')}>
             <Text
               style={{
                 color: COLORS.black,
-                ...FONTS.body3,
+                ...FONTS.body4,
                 fontWeight: 'bold',
               }}>
               Demo{' '}
@@ -428,7 +352,7 @@ const Login = ({navigation}) => {
           <Text
             style={{
               color: COLORS.black,
-              ...FONTS.body3,
+              ...FONTS.body4,
               fontWeight: 'bold',
             }}>
             &
@@ -441,7 +365,7 @@ const Login = ({navigation}) => {
             }}
             labelStyle={{
               color: COLORS.rose_600,
-              ...FONTS.h3,
+              ...FONTS.h4,
               fontWeight: 'bold',
             }}
             onPress={() => navigation.navigate('CompanyRegistration')}
@@ -451,19 +375,19 @@ const Login = ({navigation}) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
-            paddingBottom: SIZES.padding,
+            paddingBottom: SIZES.radius,
           }}>
           <TextButton
             label="Purchase & Register"
             buttonContainerStyle={{
               backgroundColor: COLORS.lightblue_900,
-              paddingHorizontal: SIZES.padding * 2,
-              paddingVertical: SIZES.base,
-              borderRadius: SIZES.base,
+              paddingHorizontal: SIZES.radius * 3,
+              paddingVertical: 5,
+              borderRadius: 5,
             }}
             labelStyle={{
               color: COLORS.white,
-              ...FONTS.h3,
+              ...FONTS.h4,
             }}
             onPress={() => navigation.navigate('CompanyRegistration')}
           />
@@ -478,8 +402,8 @@ const Login = ({navigation}) => {
           <TouchableOpacity
             style={{
               backgroundColor: COLORS.white,
-              padding: 5,
-              borderRadius: SIZES.base,
+              padding: 6,
+              borderRadius: 5,
             }}
             onPress={() => {
               Linking.openURL(
@@ -499,8 +423,8 @@ const Login = ({navigation}) => {
           <TouchableOpacity
             style={{
               backgroundColor: COLORS.white,
-              padding: 5,
-              borderRadius: SIZES.base,
+              padding: 6,
+              borderRadius: 5,
             }}
             onPress={makeCall}>
             <Image
@@ -516,8 +440,8 @@ const Login = ({navigation}) => {
           <TouchableOpacity
             style={{
               backgroundColor: COLORS.white,
-              padding: 5,
-              borderRadius: SIZES.base,
+              padding: 6,
+              borderRadius: 5,
             }}
             onPress={() => {
               Linking.openURL('https://wa.me/9479505099');
@@ -534,8 +458,8 @@ const Login = ({navigation}) => {
           <TouchableOpacity
             style={{
               backgroundColor: COLORS.white,
-              padding: 5,
-              borderRadius: SIZES.base,
+              padding: 6,
+              borderRadius: 5,
             }}
             onPress={() => Linking.openURL('http://www.intoloindia.com/')}>
             <Image
@@ -552,6 +476,7 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   function renderToggleButton() {
     return (
       <View
@@ -587,20 +512,25 @@ const Login = ({navigation}) => {
       </View>
     );
   }
+
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      behavior={Platform.OS === 'ios' ? SIZES.padding : SIZES.height}
       style={{flex: 1}}>
       <LinearGradient
-        colors={[COLORS.lightblue_50, COLORS.lightblue_300]}
+        colors={[COLORS.lightblue_100, COLORS.lightblue_300]}
         style={{flex: 1}}>
         {renderHeaderLogo()}
-        <Toast config={showToast} />
-        <Toast config={showToastError} />
-        <ScrollView>
-          {renderHeaderImage()}
-          {renderToggleButton()}
-          {switchValue ? renderCompanyForm() : renderUserForm()}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <KeyboardAwareScrollView
+            keyboardDismissMode="on-drag"
+            contentContainerStyle={{
+              flex: 1,
+            }}>
+            {renderHeaderImage()}
+            {renderToggleButton()}
+            {switchValue ? renderCompanyForm() : renderUserForm()}
+          </KeyboardAwareScrollView>
         </ScrollView>
       </LinearGradient>
     </KeyboardAvoidingView>
@@ -609,8 +539,8 @@ const Login = ({navigation}) => {
 
 const styles = StyleSheet.create({
   formContainer: {
-    paddingHorizontal: SIZES.padding,
-    paddingVertical: SIZES.radius,
+    paddingHorizontal: SIZES.radius,
+    paddingBottom: SIZES.padding,
   },
   shadow: {
     shadowColor: '#000',

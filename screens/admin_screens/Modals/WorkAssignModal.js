@@ -9,7 +9,7 @@ import {
   ScrollView,
   Image,
   TextInput,
-  StyleSheet,
+  StyleSheet,RefreshControl
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
@@ -17,9 +17,12 @@ import {IconButton, CustomDropdown, TextButton} from '../../../Components';
 import Config from '../../../config';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
+import {useSelector} from 'react-redux';
 
-const WorkAssignModal = ({isVisible, onClose}) => {
-  //assign work input
+const WorkAssignModal = ({projectId, isVisible, onClose}) => {
+  //COMPANY DATA
+  const companyData = useSelector(state => state.company);
+  //ADD DYNAMICALLY INPUT FEILD
   const [work, setWork] = React.useState([{key: '', value: ''}]);
   const [newWork, setNewWork] = React.useState([]);
 
@@ -49,16 +52,18 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     });
   }, [work]);
 
-  //user roles from api
+  // FORM DATA
+  //GETTING USER ROLES FROM API
   const [openUserRole, setOpenUserRole] = React.useState(false);
   const [userRoleValue, setUserRoleValue] = React.useState([]);
   const [userRoles, setUserRoles] = React.useState([]);
 
-  //users inside user roles
+  //GETTING USER FROM APIS ON CHANGE OF USER ROLES
   const [openUsers, setOpenUsers] = React.useState(false);
   const [usersValue, setUsersValue] = React.useState([]);
   const [users, setUsers] = React.useState([]);
 
+  // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onRoleOpen = React.useCallback(() => {
     setOpenUsers(false);
   }, []);
@@ -67,33 +72,29 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     setOpenUserRole(false);
   }, []);
 
-  // button enable function
-  function isEnableSubmit() {
-    return work != '' && workError == '';
-  }
-
-  // call apis
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}role`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  // ALL API'S
+  // GETTING USER ROLES API
+  // React.useEffect(() => {
+  fetch(`${Config.API_URL}role`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+      let roleDataFromApi = data.map((one, i) => {
+        return {label: one.user_role, value: one._id};
+      });
+      setUserRoles(roleDataFromApi);
     })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        let roleDataFromApi = data.map(one => {
-          return {label: one.user_role, value: one._id};
-        });
-        setUserRoles(roleDataFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
+    .catch(error => console.log(error.message));
+  // }, []);
 
+  // GETTING USER FROM API ON CHANGE OF USER ROLES
   const OnChangeHandler = id => {
     fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
-      method: 'GET',
+      method: 'get',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -101,32 +102,26 @@ const WorkAssignModal = ({isVisible, onClose}) => {
       .then(response => response.json())
       .then(data => {
         // console.log(data);
-        let userRolesFromApi = data.map(one => {
-          return {label: one.name, value: one._id};
+        let roleDataFromApi = data.map(ele => {
+          return {label: ele.name, value: ele._id};
         });
-        setUsers(userRolesFromApi);
+        setUsers(roleDataFromApi);
       })
       .catch(error => console.log(error.message));
   };
 
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Assign Work Successfully',
-      text2: 'Success',
-      visibilityTime: 1800,
-    });
-
-  // Post assign work data from api
+  // POST ASSIGN WORK DATA
   const OnSubmit = () => {
     const FormData = {
       role_id: userRoleValue,
       user_id: usersValue,
       work: newWork,
-      exp_completion_time: date,
+      exp_completion_date: formatedDate,
+      exp_completion_time: formatedTime,
+      company_id: companyData._id,
+      project_id: projectId,
     };
-
+    // console.log(FormData);
     fetch(`${Config.API_URL}assign-works`, {
       method: 'POST',
       headers: {
@@ -140,61 +135,57 @@ const WorkAssignModal = ({isVisible, onClose}) => {
         if (data.status == 200) {
           showToast();
           setTimeout(() => {
-            setShowAssignWorkModal(false);
+            onClose;
           }, 1000);
         }
-        // showToast();
       })
       .catch(error => {
         console.error('Error:', error);
       });
   };
 
-  //Modal
-  const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const [showAssignWorkModal, setShowAssignWorkModal] =
-    React.useState(isVisible);
+  // TOAST ON SUBMISSION OF ASSIGN WORK
+  const showToast = () =>
+    Toast.show({
+      position: 'top',
+      type: 'success',
+      text1: 'Assign Work Successfully',
+      text2: 'Success',
+      visibilityTime: 1800,
+    });
 
-  React.useEffect(() => {
-    if (showAssignWorkModal) {
-      Animated.timing(modalAnimatedValue, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
-    } else {
-      Animated.timing(modalAnimatedValue, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: false,
-      }).start(() => onClose());
-    }
-  }, [showAssignWorkModal]);
+  // DOCUMENT PICKER
+  // const [fileData, setFileData] = React.useState([]);
+  // const handleFilePicker = () => {
+  //   try {
+  //     const response = FilePicker.pick({
+  //       presentationStyle: 'fullScreen',
+  //       allowMultiSelection: true,
+  //       type: [types.images, types.pdf, types.plainText],
+  //     });
+  //     setFileData(response);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const modalY = modalAnimatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [SIZES.height, SIZES.height - 650],
-  });
-
-  // Document picker
-  const [fileData, setFileData] = React.useState([]);
-
-  const handleFilePicker = async () => {
-    try {
-      const response = await FilePicker.pick({
-        presentationStyle: 'fullScreen',
-        allowMultiSelection: true,
-        type: [types.images, types.pdf, types.plainText],
-      });
-      setFileData(response);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //date
+  // DATE & TIME
   const [date, setDate] = React.useState(new Date());
+
+  const formatedDate = `${date.getFullYear()}/${
+    date.getMonth() + 1
+  }/${date.getDate()}`;
+
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes.toString().padStart(2, '0');
+  let strTime = hours + ':' + minutes + ' ' + ampm;
+  const formatedTime = strTime;
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
@@ -234,7 +225,6 @@ const WorkAssignModal = ({isVisible, onClose}) => {
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            // marginLeft: SIZES.radius,
           }}>
           <View style={{flexDirection: 'row'}}>
             <Text
@@ -300,9 +290,11 @@ const WorkAssignModal = ({isVisible, onClose}) => {
           style={{
             position: 'absolute',
             left: SIZES.padding,
-            top: modalY,
+            top: 100,
+            // top: modalY,
             width: '90%',
-            height: '65%',
+            // height: '65%',
+            maxHeight: 400,
             padding: SIZES.padding,
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
@@ -322,7 +314,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               iconStyle={{
                 tintColor: COLORS.gray,
               }}
-              onPress={() => setShowAssignWorkModal(false)}
+              onPress={onClose}
             />
           </View>
           {/* <WorkAssign /> */}
@@ -339,10 +331,8 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
-              onChangeValue={value => {
-                OnChangeHandler(value);
-                console.log(value);
-              }}
+              onChangeValue={value => OnChangeHandler(value)}
+              onSelectItem={value => console.log(value)}
               onOpen={onRoleOpen}
               zIndex={2000}
               zIndexInverse={1000}
@@ -355,7 +345,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               setOpen={setOpenUsers}
               setValue={setUsersValue}
               setItems={setUsers}
-              categorySelectable={true}
+              // categorySelectable={true}
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
@@ -437,7 +427,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
               {/* </ScrollView> */}
             </View>
             <View style={{marginTop: SIZES.radius}}>{renderStartDate()}</View>
-            <Text
+            {/* <Text
               style={{
                 marginTop: SIZES.radius,
                 ...FONTS.body4,
@@ -482,7 +472,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
                   }}
                 />
               </TouchableOpacity>
-            </View>
+            </View> */}
 
             <TextButton
               label="Submit"
@@ -500,6 +490,7 @@ const WorkAssignModal = ({isVisible, onClose}) => {
     </Modal>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

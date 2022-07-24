@@ -16,72 +16,60 @@ import {
   TextButton,
   FormInput,
   IconButton,
-  CustomDropdown,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import Config from '../../../config';
+import {
+  getContractors,
+  postContractors,
+  deleteContractors,
+} from '../../../controller/contractorController';
 
-const contractorsDetails = [
-  {
-    id: 1,
-    name: 'Demo 1',
-    email: 'demo1@gmail.com',
-    mobile: 9988776655,
-    designation: 'editor',
-  },
-  {
-    id: 2,
-    name: 'Demo 2',
-    email: 'demo2@gmail.com',
-    mobile: 9988776655,
-    designation: 'editor',
-  },
-  {
-    id: 3,
-    name: 'Demo 3',
-    email: 'demo3@gmail.com',
-    mobile: 9988776655,
-    designation: 'editor',
-  },
-  {
-    id: 4,
-    name: 'Demo 1',
-    email: 'demo1@gmail.com',
-    mobile: 9988776655,
-    designation: 'editor',
-  },
-  {
-    id: 5,
-    name: 'Demo 2',
-    email: 'demo2@gmail.com',
-    mobile: 9988776655,
-    designation: 'editor',
-  },
-];
-
-const Contractors = () => {
-  const [contractorsData, setContractorsData] =
-    React.useState(contractorsDetails);
+const Contractors = ({route}) => {
+  const {project_id} = route.params; //
   const [showContractorsModal, setShowContractorsModal] = React.useState(false);
+
+  const [contractors, setContractors] = React.useState([]);
 
   // company team states
   const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
-  const [emailError, setEmailError] = React.useState('');
   const [nameError, setNameError] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
 
-  //drop
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
-  const [items, setItems] = React.useState([
-    {label: 'Engineer', value: '1'},
-    {label: 'Maneger', value: '2'},
-    {label: 'Supervisor', value: '3'},
-    {label: 'Asst. Supervisor', value: '4'},
-    {label: 'Site Engineer', value: '5'},
-    {label: 'Other staff', value: '6'},
-  ]);
+  // get contractors
+  const fetchContractors = async () => {
+    let data = await getContractors();
+    setContractors(data);
+  };
+
+  // post contractors details
+  const SubmitContractors = async () => {
+    const formData = {
+      project_id: project_id,
+      contractor_name: name,
+      phone_no: mobileNo,
+    };
+    let data = await postContractors(formData);
+    if (data.status === 200) {
+      setShowContractorsModal(false);
+      setName('');
+      setMobileNo('');
+      fetchContractors();
+    }
+  };
+
+  //delete contractors
+  const DeleteContractors = async id => {
+    let data = await deleteContractors(id);
+    if (data.status === 200) {
+      fetchContractors();
+    }
+  };
+
+  React.useEffect(() => {
+    fetchContractors();
+  }, []);
 
   const renderItem = ({item, index}) => (
     <View
@@ -101,8 +89,9 @@ const Contractors = () => {
             style={{
               ...FONTS.h3,
               color: COLORS.lightblue_900,
+              textTransform: 'capitalize',
             }}>
-            Mr.{item.name}
+            Mr. {item.contractor_name}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -128,7 +117,7 @@ const Contractors = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                alert('delete name');
+                DeleteContractors(item._id);
               }}>
               <ImageBackground
                 style={{
@@ -154,7 +143,7 @@ const Contractors = () => {
             color: COLORS.darkGray,
             textTransform: 'capitalize',
           }}>
-          Designation - {item.designation}
+          Mobile No - {item.phone_no}
         </Text>
       </View>
     </View>
@@ -166,8 +155,7 @@ const Contractors = () => {
         animationType="slide"
         transparent={true}
         visible={showContractorsModal}>
-        <TouchableWithoutFeedback
-          onPress={() => setShowContractorsModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
@@ -204,19 +192,6 @@ const Contractors = () => {
                   />
                 </View>
                 <ScrollView>
-                  <CustomDropdown
-                    placeholder="Select Role"
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
-                    categorySelectable={true}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                  />
                   <FormInput
                     label="Name"
                     keyboardType="default"
@@ -246,35 +221,7 @@ const Contractors = () => {
                       </View>
                     }
                   />
-                  <FormInput
-                    label="Email"
-                    keyboardType="email-address"
-                    autoCompleteType="email"
-                    onChange={value => {
-                      setEmail(value);
-                    }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            email == '' || (email != '' && emailError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              email == ''
-                                ? COLORS.gray
-                                : email != '' && emailError == ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
+
                   <FormInput
                     label="Mobile No."
                     keyboardType="numeric"
@@ -308,12 +255,12 @@ const Contractors = () => {
                   <TextButton
                     label="Submit"
                     buttonContainerStyle={{
-                      height: 55,
+                      height: 50,
                       alignItems: 'center',
                       marginTop: SIZES.padding,
                       borderRadius: SIZES.radius,
                     }}
-                    // onPress={OnSubmit}
+                    onPress={() => SubmitContractors()}
                   />
                 </ScrollView>
               </View>
@@ -328,7 +275,6 @@ const Contractors = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.lightblue_50,
       }}>
       <HeaderBar right={true} title="Contractors" />
       <TextButton
@@ -341,7 +287,11 @@ const Contractors = () => {
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
         }}
-        onPress={() => setShowContractorsModal(true)}
+        onPress={() => {
+          setName('');
+          setMobileNo('');
+          setShowContractorsModal(true);
+        }}
       />
       <View
         style={{
@@ -349,12 +299,12 @@ const Contractors = () => {
           marginHorizontal: SIZES.padding,
           padding: 20,
           borderRadius: SIZES.radius,
-          backgroundColor: COLORS.white,
+          backgroundColor: COLORS.white2,
           ...styles.shadow,
         }}>
         <FlatList
-          data={contractorsDetails}
-          keyExtractor={item => `${item.id}`}
+          data={contractors}
+          keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
           maxHeight={510}

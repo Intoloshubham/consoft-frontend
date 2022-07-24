@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,443 +7,370 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Modal,
+  TouchableWithoutFeedback,
+  TextInput,
 } from 'react-native';
-import {COLORS, SIZES, FONTS, icons, images} from '../../../constants';
-import {VictoryPie} from 'victory-native';
+import {useSelector} from 'react-redux';
+import Config from '../../../config';
+import {FormInput, ProgressBar} from '../../../Components';
+import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {getSubmitWorks} from '../../../controller/AssignWorkController';
+import {verifySubmitWorks} from '../../../controller/VerifyController';
+import {revertSubmitWorks} from '../../../controller/RevertController';
 
 const SubmittedWorks = () => {
-  // dummy data
-  const confirmStatus = 'C';
-  const pendingStatus = 'P';
+  //COMPANY DATA
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
 
-  let categoriesData = [
-    {
-      id: 1,
-      name: 'Education',
-      icon: icons.education,
-      color: COLORS.yellow_500,
-      expenses: [
-        {
-          id: 1,
-          title: 'Tuition Fee',
-          description: 'Tuition fee',
-          location: "ByProgrammers' tuition center",
-          total: 100.0,
-          status: pendingStatus,
-        },
-        {
-          id: 2,
-          title: 'Arduino',
-          description: 'Hardward',
-          location: "ByProgrammers' tuition center",
-          total: 30.0,
-          status: pendingStatus,
-        },
-        {
-          id: 3,
-          title: 'Javascript Books',
-          description: 'Javascript books',
-          location: "ByProgrammers' Book Store",
-          total: 20.0,
-          status: confirmStatus,
-        },
-        {
-          id: 4,
-          title: 'PHP Books',
-          description: 'PHP books',
-          location: "ByProgrammers' Book Store",
-          total: 20.0,
-          status: confirmStatus,
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Nutrition',
-      icon: icons.food,
-      color: COLORS.lightblue_400,
-      expenses: [
-        {
-          id: 5,
-          title: 'Vitamins',
-          description: 'Vitamin',
-          location: "ByProgrammers' Pharmacy",
-          total: 25.0,
-          status: pendingStatus,
-        },
+  const [submitWork, setSubmitWork] = React.useState([]);
 
-        {
-          id: 6,
-          title: 'Protein powder',
-          description: 'Protein',
-          location: "ByProgrammers' Pharmacy",
-          total: 50.0,
-          status: confirmStatus,
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: 'Child',
-      icon: icons.baby_car,
-      color: COLORS.green,
-      expenses: [
-        {
-          id: 7,
-          title: 'Toys',
-          description: 'toys',
-          location: "ByProgrammers' Toy Store",
-          total: 25.0,
-          status: confirmStatus,
-        },
-        {
-          id: 8,
-          title: 'Baby Car Seat',
-          description: 'Baby Car Seat',
-          location: "ByProgrammers' Baby Care Store",
-          total: 100.0,
-          status: pendingStatus,
-        },
-        {
-          id: 9,
-          title: 'Pampers',
-          description: 'Pampers',
-          location: "ByProgrammers' Supermarket",
-          total: 100.0,
-          status: pendingStatus,
-        },
-        {
-          id: 10,
-          title: 'Baby T-Shirt',
-          description: 'T-Shirt',
-          location: "ByProgrammers' Fashion Store",
-          total: 20.0,
-          status: pendingStatus,
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: 'Beauty & Care',
-      icon: icons.healthcare,
-      color: COLORS.rose_600,
-      expenses: [
-        {
-          id: 11,
-          title: 'Skin Care product',
-          description: 'skin care',
-          location: "ByProgrammers' Pharmacy",
-          total: 10.0,
-          status: pendingStatus,
-        },
-        {
-          id: 12,
-          title: 'Lotion',
-          description: 'Lotion',
-          location: "ByProgrammers' Pharmacy",
-          total: 50.0,
-          status: confirmStatus,
-        },
-        {
-          id: 13,
-          title: 'Face Mask',
-          description: 'Face Mask',
-          location: "ByProgrammers' Pharmacy",
-          total: 50.0,
-          status: pendingStatus,
-        },
-        {
-          id: 14,
-          title: 'Sunscreen cream',
-          description: 'Sunscreen cream',
-          location: "ByProgrammers' Pharmacy",
-          total: 50.0,
-          status: pendingStatus,
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: 'Sports',
-      icon: icons.sports_icon,
-      color: COLORS.gray,
-      expenses: [
-        {
-          id: 15,
-          title: 'Gym Membership',
-          description: 'Monthly Fee',
-          location: "ByProgrammers' Gym",
-          total: 45.0,
-          status: pendingStatus,
-        },
-        {
-          id: 16,
-          title: 'Gloves',
-          description: 'Gym Equipment',
-          location: "ByProgrammers' Gym",
-          total: 15.0,
-          status: confirmStatus,
-        },
-      ],
-    },
-    {
-      id: 6,
-      name: 'Clothing',
-      icon: icons.cloth_icon,
-      color: COLORS.red,
-      expenses: [
-        {
-          id: 17,
-          title: 'T-Shirt',
-          description: 'Plain Color T-Shirt',
-          location: "ByProgrammers' Mall",
-          total: 20.0,
-          status: pendingStatus,
-        },
-        {
-          id: 18,
-          title: 'Jeans',
-          description: 'Blue Jeans',
-          location: "ByProgrammers' Mall",
-          total: 50.0,
-          status: confirmStatus,
-        },
-      ],
-    },
-  ];
-  const submitWorkData = [
-    {
-      id: 1,
-      username: 'Rohit namdeo',
-      work: 'Consoft Application',
-      msg: 'We are reach 70%',
-    },
-    {
-      id: 2,
-      username: 'Shubham Sahu',
-      work: 'Water Tank Alarm',
-      msg: '90% work done',
-    },
-  ];
+  const [revertModal, setRevertModal] = React.useState(false);
+  const [revertMsg, setRevertMsg] = React.useState('');
+  const [revertId, setRevertId] = React.useState('');
 
-  const [categories, setCategories] = React.useState(categoriesData);
-  function processCategoryDataToDisplay() {
-    let chartData = categories.map(item => {
-      let confirmExpenses = item.expenses.filter(a => a.status == 'C');
-      var total = confirmExpenses.reduce((a, b) => a + (b.total || 0), 0);
-      return {
-        name: item.name,
-        y: total,
-        expensesCount: confirmExpenses.length,
-        color: item.color,
-        id: item.id,
-      };
-    });
+  const fetchSubmitWork = async () => {
+    const response = await getSubmitWorks(company_id);
+    setSubmitWork(response);
+    fetchSubmitWork();
+  };
 
-    let filterChartData = chartData.filter(a => a.y > 0);
-    let totalExpense = filterChartData.reduce((a, b) => a + (b.y || 0), 0);
-    let finalChartData = filterChartData.map(item => {
-      let percentage = ((item.y / totalExpense) * 100).toFixed(0);
-      return {
-        label: `${percentage}%`,
-        y: Number(item.y),
-        expensesCount: item.expensesCount,
-        color: item.color,
-        name: item.name,
-        id: item.id,
-      };
-    });
-    return finalChartData;
-  }
+  React.useEffect(() => {
+    fetchSubmitWork();
+  }, [company_id]);
 
-  function renderChart() {
-    let chartData = processCategoryDataToDisplay();
-    let colorScales = chartData.map(item => item.color);
-    let totalExpenseCount = chartData.reduce(
-      (a, b) => a + (b.expensesCount || 0),
-      0,
-    );
+  // refresh page
+
+  // React.useEffect(() => {
+  //   const abortConst = new AbortController();
+  //   fetch(
+  //     `${Config.API_URL}submit-works/` + `${company_id}`,
+  //     {signal: abortConst.signal},
+  //     {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     },
+  //   )
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // console.log(data)
+  //       setSubmitWork(data);
+  //     })
+  //     .catch(error => {
+  //       if (error.name == 'AbortError') {
+  //         console.log('fetch aborted');
+  //       } else {
+  //         console.log(error);
+  //       }
+  //     });
+
+  //   return () => abortConst.abort();
+  // }, [submitWork]);
+
+  // verify works
+  const verifyHandler = async work_Id => {
+    let data = await verifySubmitWorks(work_Id);
+    if (data.status === 200) {
+      fetchSubmitWork();
+    }
+    // await fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
+
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
+  };
+
+  const getRevertWorkId = id => {
+    setRevertId(id);
+  };
+
+  const OnSubmit = async () => {
+    const formData = {revert_msg: revertMsg};
+    let data = await revertSubmitWorks(revertId, formData);
+    if (data.status === 200) {
+      fetchSubmitWork();
+      setTimeout(() => {
+        setRevertModal(false);
+      }, 500);
+    }
+
+    // await fetch(`${Config.API_URL}revert-submit-work` + `/${revertId}`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(formData),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     if (data.status === 200) {
+    //       setTimeout(() => {
+    //         setRevertModal(false);
+    //       }, 1000);
+    //     }
+    //     console.log(data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
+  };
+
+  function renderRevertModal() {
     return (
-      <View>
-        <VictoryPie
-          data={chartData}
-          colorScale={colorScales}
-          labels={datum => `${datum.y}`}
-          radius={SIZES.width * 0.4 - 10}
-          innerRadius={60}
-          labelRadius={({innerRadius}) =>
-            (SIZES.width * 0.4 + innerRadius) / 2.5
-          }
-          style={{
-            labels: {fill: COLORS.white, ...FONTS.body3},
-          }}
-          width={SIZES.width * 0.8}
-          height={SIZES.height * 0.8}
-        />
-        <View style={{position: 'absolute', top: '45%', left: '40%'}}>
-          <Text style={{...FONTS.h1, textAlign: 'center'}}>
-            {totalExpenseCount}
-          </Text>
-          <Text style={{...FONTS.body3, textAlign: 'center'}}>Expenses</Text>
-        </View>
-      </View>
-    );
-  }
-
-  function renderExpenseSummary() {
-    let data = processCategoryDataToDisplay();
-    const renderItem = ({item}) => {
-      return (
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            height: 40,
-            paddingHorizontal: SIZES.radius,
-            borderRadius: 10,
-            marginTop: 5,
-            backgroundColor: item.color,
-          }}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+      <Modal animationType="slide" transparent={true} visible={revertModal}>
+        <TouchableWithoutFeedback onPress={() => setRevertModal(false)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
             <View
               style={{
-                width: 20,
-                height: 20,
-                backgroundColor: item.color,
-                borderRadius: 5,
-              }}></View>
-            <Text
-              style={{
-                marginLeft: SIZES.base,
-                ...FONTS.h3,
-                fontWeight: 'bold',
-                color: COLORS.black,
+                position: 'absolute',
+                backgroundColor: COLORS.white,
+                paddingHorizontal: SIZES.padding,
+                paddingVertical: SIZES.radius,
+                width: '80%',
+                top: '30%',
+                borderRadius: SIZES.base,
               }}>
-              {item.name}
-            </Text>
+              <View>
+                <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                  Comment
+                </Text>
+              </View>
+              <FormInput
+                placeholder=""
+                multiline={true}
+                numberOfLines={3}
+                onChange={value => {
+                  setRevertMsg(value);
+                }}
+              />
+              {/* <View
+                style={{
+                  marginTop: SIZES.base,
+                  paddingHorizontal: SIZES.base,
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.gray,
+                }}>
+                <TextInput
+                  placeholder="Write your message here.."
+                  
+                  multiline={true}
+                  numberOfLines={3}
+                  onChange={value => {
+                    setRevertMsg(value);
+                  }}
+                />
+              </View> */}
+              <TouchableOpacity
+                style={{
+                  marginTop: SIZES.radius,
+                  alignItems: 'flex-end',
+                }}
+                onPress={() => OnSubmit()}>
+                <Text
+                  style={{
+                    ...FONTS.h3,
+                    backgroundColor:
+                      revertMsg != null
+                        ? COLORS.lightblue_600
+                        : COLORS.darkGray,
+                    paddingHorizontal: SIZES.base,
+                    paddingVertical: 3,
+                    borderRadius: 2,
+                    color: COLORS.white,
+                  }}>
+                  Send
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={{justifyContent: 'center'}}>
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.h3,
-                fontWeight: 'bold',
-              }}>
-              {item.y} USD - {item.label}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-    return (
-      <View>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => `${item.id}`}
-        />
-      </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     );
   }
-
-  const [submitWork, setSubmitWork] = React.useState(submitWorkData);
-
-  const [pValue, setPValue] = React.useState(20);
 
   function renderSubmitWork() {
     const renderItem = ({item}) => {
       return (
         <View style={{}}>
-          {/* username */}
-
-          <Text
-            style={{
-              ...FONTS.h4,
-              color: COLORS.black,
-              textTransform: 'capitalize',
-            }}>
-            {item.username}
-          </Text>
-
-          {/* works lists  */}
+          {/* username  */}
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
-            {/* <Text style={{...FONTS.h4, flex: 1, color: COLORS.darkGray}}>
-              Work - {item.work}
-            </Text> */}
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                  fontWeight: 'bold',
+                }}>
+                {item.user_name}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 8,
+                  left: 3,
+                  paddingHorizontal: 3,
+                  backgroundColor: COLORS.yellow_400,
+                  color: COLORS.black,
+                }}>
+                {item.work_code}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View
+                style={{flexDirection: 'row', alignItems: 'center', right: 10}}>
+                <Image
+                  source={icons.date}
+                  style={{
+                    height: 10,
+                    width: 10,
+                    tintColor: COLORS.darkGray,
+                    right: 3,
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 10,
+                    color: COLORS.darkGray,
+                  }}>
+                  {item.submit_work_date}
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                  source={icons.time}
+                  style={{
+                    height: 10,
+                    width: 10,
+                    tintColor: COLORS.darkGray,
+                    right: 3,
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 10,
+                    color: COLORS.darkGray,
+                  }}>
+                  {item.submit_work_time}
+                </Text>
+              </View>
+            </View>
+          </View>
+          {/* work  */}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
             <Text
               style={{
+                flex: 1,
                 ...FONTS.h4,
-                flex: 1.4,
                 color: COLORS.black,
-                textAlign: 'auto',
               }}>
-              Work<Text style={{color: COLORS.darkGray}}> - {item.work}</Text>
+              Work
+              <Text style={{color: COLORS.darkGray}}> - {item.work}</Text>
             </Text>
-            <View style={{flex: 0.6}}>
-              {/* <CircularProgress
-                value={pValue}
-                radius={30}
-                duration={1000}
-                progressValueColor={COLORS.rose_600}
-                maxValue={100}
-                titleStyle={{fontWeight: 'bold'}}
-              /> */}
-            </View>
-            <TouchableOpacity
-              onPress={() => console.log('Verification Successfully...')}
-              style={{alignItems: 'flex-end'}}>
+            <TouchableOpacity onPress={() => verifyHandler(item._id)}>
               <ImageBackground
                 style={{
-                  backgroundColor: COLORS.lightblue_200,
-                  padding: 5,
-                  borderRadius: SIZES.padding,
+                  backgroundColor: COLORS.green,
+                  paddingHorizontal: 5,
+                  borderRadius: 2,
                 }}>
-                <Image
-                  source={icons.verify}
+                <Text style={{fontSize: 10, color: COLORS.white}}>Verify</Text>
+                {/* <Image
+                  source={verifyResponse == 200 ? icons.verify : icons.cancel}
                   resizeMode="contain"
                   style={{
                     height: 10,
                     width: 10,
                     tintColor: COLORS.lightblue_900,
                   }}
-                />
+                /> */}
               </ImageBackground>
             </TouchableOpacity>
           </View>
           {/* message  */}
           <View
             style={{
-              // marginTop: SIZES.base,
               flexDirection: 'row',
               justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
-            <Text style={{...FONTS.h4, color: COLORS.black}}>
-              Message
-              <Text style={{color: COLORS.darkGray}}> - {item.msg}</Text>
+            <Text
+              style={{
+                flex: 1,
+                ...FONTS.h4,
+                color: COLORS.black,
+              }}>
+              Msg
+              <Text style={{color: COLORS.darkGray}}>
+                - {item.submit_work_text}
+              </Text>
             </Text>
             <TouchableOpacity
-              onPress={() => console.log('You Have a Revert Message...')}>
+              onPress={() => {
+                getRevertWorkId(item._id), setRevertModal(true);
+              }}
+              style={{alignItems: 'flex-end'}}>
               <ImageBackground
                 style={{
-                  backgroundColor: COLORS.warning_200,
-                  padding: 5,
-                  borderRadius: SIZES.padding,
+                  backgroundColor: COLORS.rose_600,
+                  paddingHorizontal: 5,
+                  borderRadius: 2,
                 }}>
-                <Image
-                  source={icons.revert}
-                  resizeMode="contain"
+                <Text
                   style={{
-                    height: 10,
-                    width: 10,
-                    tintColor: COLORS.rose_600,
-                  }}
-                />
+                    fontSize: 10,
+                    color: COLORS.white,
+                  }}>
+                  Revert
+                </Text>
               </ImageBackground>
             </TouchableOpacity>
           </View>
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              style={{
+                flex: 1,
+                ...FONTS.h5,
+                color: COLORS.black,
+              }}>
+              Submit Date & Time :
+              <Text style={{color: COLORS.darkGray}}>
+                {' '}
+                {item.submit_work_date}
+                {'  '} {item.submit_work_time}
+              </Text>
+            </Text>
+          </View> */}
+          {/* <View style={{marginTop: SIZES.base}}>
+            <ProgressBar progress={item.persentage} />
+          </View> */}
         </View>
       );
     };
@@ -452,15 +379,18 @@ const SubmittedWorks = () => {
       <FlatList
         contentContainerStyle={{}}
         data={submitWork}
-        keyExtractor={item => `${item.id}`}
+        keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={true}
+        nestedScrollEnabled={true}
+        maxHeight={250}
         ItemSeparatorComponent={() => {
           return (
             <View
               style={{
-                borderBottomWidth: 0.3,
-                borderColor: COLORS.gray,
+                borderBottomWidth: 1,
+                borderColor: COLORS.gray2,
                 marginVertical: SIZES.radius,
               }}></View>
           );
@@ -471,12 +401,12 @@ const SubmittedWorks = () => {
   return (
     <View
       style={{
-        ...styles.shadow,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
         marginHorizontal: SIZES.padding,
         marginTop: SIZES.padding,
         borderRadius: SIZES.radius,
         padding: 20,
+        ...styles.shadow,
       }}>
       <View
         style={{
@@ -506,8 +436,7 @@ const SubmittedWorks = () => {
           marginVertical: SIZES.base,
         }}></View>
       {renderSubmitWork()}
-      {/* {renderChart()} */}
-      {/* {renderExpenseSummary()} */}
+      {renderRevertModal()}
     </View>
   );
 };

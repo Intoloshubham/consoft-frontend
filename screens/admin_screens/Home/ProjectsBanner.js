@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -20,119 +20,101 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
 import Toast from 'react-native-toast-message';
 import Config from '../../../config';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {ConformationAlert} from '../../../Components';
 
-const ProjectsBanner = () => {
+import {
+  getProjects,
+  saveProject,
+  updateProject,
+  deleteProject,
+  getProjectType,
+  getProjectCategory,
+} from '../../../controller/ProjectController';
+
+const ProjectsBanner = ({company_id}) => {
   const navigation = useNavigation();
-  const companyData = useSelector(state => state.company);
 
-  //collapse
+  //CONFIRMATION MODAL ON DELETE
+  const [projectDeleteConfirmation, setProjectDeleteConfirmation] =
+    React.useState(false);
+
+  //PROJECT BANNER COLLAPSED
   const [collapsed, setCollapsed] = React.useState(true);
+
+  //PROJECT CREATE & UPDATE MODAL
   const [showCreateProjectModal, setCreateProjectModal] = React.useState(false);
+  const [showUpdateProjectModal, setUpdateProjectModal] = React.useState(false);
   const [projectCrud, setProjectCrud] = React.useState(false);
+
+  // STORE PROJECT DATA
+  const [projects, setProjects] = React.useState([]);
+
+  // CREATE & UPDATE PROJECTS FORM DATA
+  const [projectname, setProjectName] = React.useState('');
+  const [projectlocation, setProjectLocation] = React.useState('');
+  const [projectplotarea, setProjectPlotArea] = React.useState('');
+  // getting categories from api - dropdown
+  const [openCategory, setOpenCategory] = React.useState(false);
+  const [categoryValue, setCategoryValue] = React.useState([]);
+  const [projectCategory, setProjectCategory] = React.useState([]);
+  // getting types from api - dropdown
+  const [openType, setOpenType] = React.useState(false);
+  const [typeValue, setTypeValue] = React.useState([]);
+  const [projectType, setProjectType] = React.useState([]);
+  //project area units
+  const [openUnit, setOpenUnit] = React.useState(false);
+  const [unitValue, setUnitValue] = React.useState([]);
+  const [projectUnit, setProjectUnit] = React.useState([
+    {label: 'ha', value: '1'},
+    {label: 'acre', value: '2'},
+    {label: 'sqm', value: '3'},
+    {label: 'sqf', value: '4'},
+  ]);
+
+  const [projectId, setProjectId] = React.useState('');
+
+  // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
+  const onCategoryOpen = React.useCallback(() => {
+    setOpenType(false);
+    setOpenUnit(false);
+  }, []);
+
+  const onTypeOpen = React.useCallback(() => {
+    setOpenCategory(false);
+    setOpenUnit(false);
+  }, []);
+
+  const onUnitOpen = React.useCallback(() => {
+    setOpenCategory(false);
+    setOpenType(false);
+  }, []);
+
+  //FORM VALIDATION ERROR STATES
+  const [projectError, setProjectError] = React.useState('');
+  const [projectLocationError, setProjectLocationError] = React.useState('');
+  const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
-    // setTimeout(() => {
-    //   setCollapsed(collapsed);
-    // }, 5000);
   };
+  
+   // get projects
+  const fetchProjects = useCallback( async () => {
+    const  data = await getProjects(company_id);
+    setProjects(data);
+  }, [company_id]) 
+    
+  useEffect(() => {
+    fetchProjects()
+  }, [fetchProjects]) 
 
-  // get projects
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}projects`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setProjects(data);
-  //     });
-  // }, []);
-  async function fetchData() {
-    fetch(`${Config.API_URL}projects`)
-      .then(res => res.json())
-      .then(data => setProjects(data));
-  }
-  React.useEffect(() => {
-    fetchData();
-  }, [projects]);
-  const [projects, setProjects] = React.useState([]);
-
-  // // project categories
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}project-category`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let proCatFromApi = data.map(item => {
-          return {label: item.category_name, value: item._id};
-        });
-        // console.log(data);
-        setProjectCategory(proCatFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
-
-  // project types
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}project-type`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        let proTypeFromApi = data.map(item => {
-          return {label: item.project_type, value: item._id};
-        });
-        // console.log(data);
-        setProjectType(proTypeFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
-
-  // create projects
-  const [projectname, setProjectName] = React.useState('');
-  const [projectError, setProjectError] = React.useState('');
-
-  const [projectlocation, setProjectLocation] = React.useState('');
-  const [projectLocationError, setProjectLocationError] = React.useState('');
-
-  const [projectplotarea, setProjectPlotArea] = React.useState('');
-  const [projectPlotAreaError, setProjectPlotAreaError] = React.useState('');
-
-  // fetch project category
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
-  const [projectCategory, setProjectCategory] = React.useState([]);
-
-  // project types
-  const [open1, setOpen1] = React.useState(false);
-  const [value1, setValue1] = React.useState([]);
-  const [projectType, setProjectType] = React.useState([]);
-
-  //units
-  const [open2, setOpen2] = React.useState(false);
-  const [value2, setValue2] = React.useState([]);
-  const [projectUnit, setProjectUnit] = React.useState([
-    {label: 'HA', value: '1'},
-    {label: 'Acre', value: '2'},
-    {label: 'SQm', value: '3'},
-    {label: 'SQF', value: '4'},
-  ]);
-
+  // console.log("objesdfsdct")
+  // ON BUTTON SUBMISSON VALIDATION
   function isEnableSubmit() {
     return (
       projectname != '' &&
@@ -144,148 +126,143 @@ const ProjectsBanner = () => {
     );
   }
 
+  //crete new project
+  const createProject = async () => {
+    createProjectModalForm();
+    setCreateProjectModal(true);
+    fetchProjectCategory()
+    fetchProjectsTypes();  
+  };
+
+  const fetchProjectCategory = async () => {
+    const res = await getProjectCategory();
+    let proCatFromApi = res.map(item => {
+      return {label: item.category_name, value: item._id};
+    });
+    setProjectCategory(proCatFromApi);
+  };
+ 
+  // get project types
+  const fetchProjectsTypes = async () => {
+    const response = await getProjectType();
+    let proTypeFromApi = response.map(item => {
+      return {label: item.project_type, value: item._id};
+    });
+    setProjectType(proTypeFromApi);
+    // fetchProjectsTypes();
+  };
+
+  //save project
+  const saveProjectSubmit = async () => {
+    const projectData = getProjectData();
+    const  res = await saveProject(projectData);
+      if (res.status === STATUS.RES_SUCCESS ) {
+        showToast();
+        fetchProjects();
+        setTimeout(() => {
+          setCreateProjectModal(false);
+          createProjectModalForm()
+        }, 1000);
+      }else{
+        alert(res.message);
+      }
+  };
+
+  // GETTING PROJECTS ID
+  const modalHandler = project_id => {
+    setProjectId(project_id);//project ID state
+    setProjectCrud(true);
+  };
+
+  const editProject = (
+    name,
+    location,
+    category,
+    type,
+    area,
+    unit,
+  ) => {
+    setProjectName(name);
+    setProjectLocation(location);
+    setCategoryValue(category);
+    setTypeValue(type);
+    setProjectPlotArea(area);
+    setUnitValue(unit);
+  };
+
+  //update project
+  const updateProjectSubmit = async () => {
+    const projectData = getProjectData();
+    const  res = await updateProject(projectId, projectData);
+    if (res.status === STATUS.RES_SUCCESS) {
+      showUpdateToast();
+      fetchProjects();
+      setTimeout(() => {
+        setUpdateProjectModal(false);
+        setProjectCrud(false);
+      }, 300);
+    }
+  };
+
+  // project data
+  const getProjectData = () => {
+    const projectData = {
+      project_name: projectname,
+      project_location: projectlocation,
+      project_area: projectplotarea,
+      project_category: categoryValue,
+      project_type: typeValue,
+      project_measurement: unitValue,
+      company_id: company_id,
+    };
+    return projectData;
+  }
+
+  // EMPTY ALL FORM STATED
+  function createProjectModalForm() {
+    setProjectName('');
+    setProjectLocation('');
+    setProjectPlotArea('');
+    setCategoryValue('');
+    setTypeValue('');
+    setUnitValue('');
+  }
+
+  // DELETE PROJECTS
+  const projectDeleteSubmit = async () => {
+    const res = await deleteProject(projectId);
+    if (res.status === STATUS.RES_SUCCESS) {
+      setTimeout(() => {
+        setProjectDeleteConfirmation(false);
+        setProjectCrud(false);
+      }, 300);
+      fetchProjects();
+    } 
+  };
+
+  // TOAST
   const showToast = () =>
     Toast.show({
       position: 'top',
       type: 'success',
-      activeOpacity:10,
-      text1: 'Update Successfully',
+      activeOpacity: 10,
+      text1: 'Submitted Successfully',
       text2: 'Success',
-      visibilityTime: 1800,
+      visibilityTime: 2000,
     });
+
   const showUpdateToast = () =>
     Toast.show({
       position: 'top',
       type: 'success',
       text1: 'Updated Successfully',
-      activeOpacity:10,
-      text1: 'Update Successfully',
+      activeOpacity: 10,
+      text1: 'Updated Successfully',
       text2: 'Success',
-      visibilityTime: 1800,
+      visibilityTime: 2000,
     });
 
-  const OnSubmit = () => {
-    const data = {
-      project_name: projectname,
-      project_location: projectlocation,
-      project_area: projectplotarea,
-      project_category: value,
-      project_type: value1,
-      project_measurement: value2,
-      company_id: companyData._id,
-    };
-    console.log(data);
-    fetch(`${Config.API_URL}projects`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 200) {
-          showToast();
-          setTimeout(() => {
-            setCreateProjectModal(false);
-            setProjectName('');
-            setProjectLocation('');
-            setProjectPlotArea('');
-            setValue('');
-            setValue1('');
-            setValue2('');
-          }, 2000);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    // setTimeout(() => {
-    //   setProjectName('');
-    //   setProjectLocation('');
-    //   setProjectPlotArea('');
-    //   setValue('');
-    //   setValue1('');
-    //   setValue2('');
-    // }, 2500);
-  };
-
-  function empltModalForm() {
-    setProjectName('');
-    setProjectLocation('');
-    setProjectPlotArea('');
-    setValue('');
-    setValue1('');
-    setValue2('');
-  }
-
-  // project id
-  const [data, setData] = React.useState('');
-  const modalHandler = id => {
-    setData(id);
-    // console.log(id);
-    setProjectCrud(true);
-  };
-
-  // delete projects
-  const OnDeleteSubmit = () => {
-    alert(data);
-    fetch(`${Config.API_URL}projects/` + `${data}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    // console.log('delete');
-    showToast();
-  };
-
-  // update projects
-  const OnUpdateSubmit = () => {
-    const updateData = {
-      project_name: projectname,
-      project_location: projectlocation,
-      project_area: projectplotarea,
-      project_category: value,
-      project_type: value1,
-      project_measurement: value2,
-      company_id: companyData._id,
-    };
-
-    fetch(`${Config.API_URL}projects/` + `${data}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updateData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        if (data.status === 200) {
-          showUpdateToast();
-          setTimeout(() => {
-            setCreateProjectModal(false);
-            setProjectCrud(false);
-          }, 2000);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  };
-
-  //edit projects
-  const editpro = (name, location, category, type, area, unit) => {
-    setProjectName(name);
-    setProjectLocation(location);
-    setValue(category);
-    setValue1(type);
-    setProjectPlotArea(area);
-    setValue2(unit);
-  };
-
-  //render projects
+  //RENDER PROJECTS
   function renderProjects() {
     const renderItem = ({item, index}) => (
       <TouchableOpacity
@@ -347,7 +324,7 @@ const ProjectsBanner = () => {
               <TouchableOpacity
                 onPress={() => {
                   modalHandler(item._id);
-                  editpro(
+                  editProject(
                     item.project_name,
                     item.project_location,
                     item.project_category,
@@ -402,7 +379,7 @@ const ProjectsBanner = () => {
     );
   }
 
-  // create project modal
+  // CREATE PROJECT MODAL
   function renderCreateProjectModal() {
     return (
       <Modal
@@ -423,7 +400,7 @@ const ProjectsBanner = () => {
                 backgroundColor: COLORS.white2,
                 position: 'absolute',
                 width: '100%',
-                height: '60%',
+                height: '65%',
                 // padding: SIZES.radius,
                 paddingHorizontal: SIZES.padding,
                 paddingTop: SIZES.radius,
@@ -444,6 +421,225 @@ const ProjectsBanner = () => {
                     tintColor: COLORS.gray,
                   }}
                   onPress={() => setCreateProjectModal(false)}
+                />
+              </View>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <KeyboardAwareScrollView
+                  keyboardDismissMode="on-drag"
+                  contentContainerStyle={{
+                    flex: 1,
+                  }}>
+                  <FormInput
+                    label="Name"
+                    keyboardType="default"
+                    autoCompleteType="username"
+                    // value={projectname}
+                    onChange={value => {
+                      utils.validateText(value, setProjectError);
+                      setProjectName(value);
+                    }}
+                    errorMsg={projectError}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            projectname == '' ||
+                            (projectname != '' && projectError == '')
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              projectname == ''
+                                ? COLORS.gray
+                                : projectname != '' && projectError == ''
+                                ? COLORS.green
+                                : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+                  <FormInput
+                    label="Location"
+                    keyboardType="default"
+                    autoCompleteType="username"
+                    // value={projectlocation}
+                    onChange={value => {
+                      utils.validateText(value, setProjectLocationError);
+                      setProjectLocation(value);
+                    }}
+                    errorMsg={projectLocationError}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            projectlocation == '' ||
+                            (projectlocation != '' &&
+                              projectLocationError == '')
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              projectlocation == ''
+                                ? COLORS.gray
+                                : projectlocation != '' &&
+                                  projectLocationError == ''
+                                ? COLORS.green
+                                : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+
+                  <CustomDropdown
+                    placeholder="Select category"
+                    open={openCategory}
+                    value={categoryValue}
+                    items={projectCategory}
+                    setOpen={setOpenCategory}
+                    setValue={setCategoryValue}
+                    setItems={setProjectCategory}
+                    multiple={false}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    maxHeight={150}
+                    zIndex={3000}
+                    zIndexInverse={1000}
+                    onOpen={onCategoryOpen}
+                  />
+
+                  <CustomDropdown
+                    placeholder="Select types"
+                    open={openType}
+                    value={typeValue}
+                    items={projectType}
+                    setOpen={setOpenType}
+                    setValue={setTypeValue}
+                    setItems={setProjectType}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    maxHeight={150}
+                    zIndex={2000}
+                    zIndexInverse={2000}
+                    onOpen={onTypeOpen}
+                  />
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <FormInput
+                      label="Plot area"
+                      keyboardType="numeric"
+                      autoCompleteType="cc-number"
+                      containerStyle={{width: '60%'}}
+                      // value={projectplotarea.toString()}
+                      onChange={value => {
+                        utils.validateNumber(value, setProjectPlotAreaError);
+                        setProjectPlotArea(value);
+                      }}
+                      errorMsg={projectPlotAreaError}
+                    />
+                    <View
+                      style={{
+                        marginTop: 13,
+                        marginLeft: SIZES.radius,
+                        width: '35%',
+                      }}>
+                      <CustomDropdown
+                        placeholder="Unit"
+                        open={openUnit}
+                        value={unitValue}
+                        items={projectUnit}
+                        setOpen={setOpenUnit}
+                        setValue={setUnitValue}
+                        setItems={setProjectUnit}
+                        listParentLabelStyle={{
+                          color: COLORS.white,
+                        }}
+                        maxHeight={70}
+                        zIndex={1000}
+                        zIndexInverse={3000}
+                        onOpen={onUnitOpen}
+                      />
+                    </View>
+                  </View>
+                  <TextButton
+                    label="Submit"
+                    disabled={isEnableSubmit() ? false : true}
+                    buttonContainerStyle={{
+                      height: 45,
+                      alignItems: 'center',
+                      marginTop: SIZES.padding,
+                      marginBottom: SIZES.padding,
+                      borderRadius: SIZES.base,
+                      backgroundColor: isEnableSubmit()
+                        ? COLORS.lightblue_700
+                        : COLORS.transparentPrimary,
+                    }}
+                    onPress={() => saveProjectSubmit()}
+                  />
+                </KeyboardAwareScrollView>
+              </ScrollView>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
+  // CREATE PROJECT MODAL
+  function renderUpdateProjectModal() {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showUpdateProjectModal}>
+        <TouchableWithoutFeedback>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              backgroundColor: COLORS.transparentBlack2,
+            }}>
+            <Toast config={showToast} />
+            <Toast config={showUpdateToast} />
+            <View
+              style={{
+                backgroundColor: COLORS.white2,
+                position: 'absolute',
+                width: '100%',
+                height: '65%',
+                // padding: SIZES.radius,
+                paddingHorizontal: SIZES.padding,
+                paddingTop: SIZES.radius,
+                paddingBottom: SIZES.padding,
+                borderTopRightRadius: SIZES.base,
+                borderTopLeftRadius: SIZES.base,
+                backgroundColor: COLORS.white,
+              }}>
+              <View style={{alignItems: 'flex-end'}}>
+                <IconButton
+                  containerStyle={{
+                    boborderWidth: 2,
+                    borderRadius: 10,
+                    borderColor: COLORS.gray2,
+                  }}
+                  icon={icons.cross}
+                  iconStyle={{
+                    tintColor: COLORS.gray,
+                  }}
+                  onPress={() => setUpdateProjectModal(false)}
                 />
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
@@ -523,32 +719,37 @@ const ProjectsBanner = () => {
 
                   <CustomDropdown
                     placeholder="Select category"
-                    open={open}
-                    value={value}
+                    open={openCategory}
+                    value={categoryValue}
                     items={projectCategory}
-                    setOpen={setOpen}
-                    setValue={setValue}
+                    setOpen={setOpenCategory}
+                    setValue={setCategoryValue}
                     setItems={setProjectCategory}
-                    zIndex={11000}
                     multiple={false}
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
+                    maxHeight={150}
+                    zIndex={3000}
+                    zIndexInverse={1000}
+                    onOpen={onCategoryOpen}
                   />
 
                   <CustomDropdown
                     placeholder="Select types"
-                    open={open1}
-                    value={value1}
+                    open={openType}
+                    value={typeValue}
                     items={projectType}
-                    setOpen={setOpen1}
-                    setValue={setValue1}
+                    setOpen={setOpenType}
+                    setValue={setTypeValue}
                     setItems={setProjectType}
-                    zIndex={10000}
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
-                    maxHeight={100}
+                    maxHeight={150}
+                    zIndex={2000}
+                    zIndexInverse={2000}
+                    onOpen={onTypeOpen}
                   />
                   <View
                     style={{
@@ -576,23 +777,24 @@ const ProjectsBanner = () => {
                       }}>
                       <CustomDropdown
                         placeholder="Unit"
-                        open={open2}
-                        value={value2}
+                        open={openUnit}
+                        value={unitValue}
                         items={projectUnit}
-                        setOpen={setOpen2}
-                        setValue={setValue2}
+                        setOpen={setOpenUnit}
+                        setValue={setUnitValue}
                         setItems={setProjectUnit}
                         listParentLabelStyle={{
                           color: COLORS.white,
                         }}
                         maxHeight={70}
-                        zIndex={8000}
-                        zIndexInverse={8000}
+                        zIndex={1000}
+                        zIndexInverse={3000}
+                        onOpen={onUnitOpen}
                       />
                     </View>
                   </View>
                   <TextButton
-                    label="Submit"
+                    label="Update"
                     disabled={isEnableSubmit() ? false : true}
                     buttonContainerStyle={{
                       height: 45,
@@ -604,7 +806,7 @@ const ProjectsBanner = () => {
                         ? COLORS.lightblue_700
                         : COLORS.transparentPrimary,
                     }}
-                    onPress={() => (data == '' ? OnSubmit() : OnUpdateSubmit())}
+                    onPress={() => updateProjectSubmit()}
                   />
                 </KeyboardAwareScrollView>
               </ScrollView>
@@ -615,7 +817,7 @@ const ProjectsBanner = () => {
     );
   }
 
-  // crud modal
+  // EDIT & UPDATE MODAL OF PROJECTS
   function renderProjectCrudModal() {
     return (
       <Modal animationType="fade" transparent={true} visible={projectCrud}>
@@ -625,7 +827,7 @@ const ProjectsBanner = () => {
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack2,
+              backgroundColor: COLORS.transparentBlack5,
             }}>
             <View
               style={{
@@ -634,7 +836,7 @@ const ProjectsBanner = () => {
                 backgroundColor: COLORS.white,
                 paddingHorizontal: SIZES.radius,
                 paddingVertical: SIZES.radius,
-                borderRadius: SIZES.base,
+                borderRadius: 3,
               }}>
               <ScrollView>
                 <TextButton
@@ -648,7 +850,7 @@ const ProjectsBanner = () => {
                     ...FONTS.h3,
                   }}
                   onPress={() => {
-                    setCreateProjectModal(true);
+                    setUpdateProjectModal(true);
                   }}
                 />
                 <View
@@ -668,7 +870,11 @@ const ProjectsBanner = () => {
                     color: COLORS.black,
                     ...FONTS.h3,
                   }}
-                  onPress={() => OnDeleteSubmit()}
+                  onPress={
+                    () => {
+                      setProjectDeleteConfirmation(true);
+                    }
+                  }
                 />
               </ScrollView>
             </View>
@@ -678,7 +884,7 @@ const ProjectsBanner = () => {
     );
   }
   return (
-    <TouchableOpacity
+    <View
       style={{
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
@@ -688,7 +894,8 @@ const ProjectsBanner = () => {
         borderRadius: SIZES.base,
         ...styles.shadow,
       }}
-      onPress={toggleExpanded}>
+      // onPress={toggleExpanded}
+    >
       <View
         style={{
           flex: 1,
@@ -714,27 +921,51 @@ const ProjectsBanner = () => {
             ...FONTS.body5,
           }}
           onPress={() => {
-            setCreateProjectModal(true);
-            empltModalForm();
+            createProject();
           }}
+          // onPress={ createProject()}
         />
-        <Image
-          source={collapsed ? icons.down_arrow : icons.up_arrow}
-          style={{
-            height: 18,
-            width: 18,
-            tintColor: COLORS.white,
-            justifyContent: 'flex-end',
-          }}
-        />
+        <TouchableOpacity onPress={toggleExpanded}>
+          <Image
+            source={collapsed ? icons.down_arrow : icons.up_arrow}
+            style={{
+              height: 18,
+              width: 18,
+              tintColor: COLORS.white,
+              justifyContent: 'flex-end',
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <Collapsible collapsed={collapsed}>{renderProjects()}</Collapsible>
-      {/* create project modal  */}
+
+      {/* PROJECT CREATE MODAL  */}
       {renderCreateProjectModal()}
+
+      {/* PROJECTS EDIT & UPDATE MODAL */}
       {renderProjectCrudModal()}
-    </TouchableOpacity>
+
+      {/* PROJECT UPDATE MODAL  */}
+      {renderUpdateProjectModal()}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      <ConformationAlert
+        isVisible={projectDeleteConfirmation}
+        onCancel={() => {
+          setProjectDeleteConfirmation(false);
+        }}
+        title="Delete Project"
+        message="Are you sure want to delete this project ?"
+        cancelText="Cancel"
+        confirmText="Yes"
+        onConfirmPressed={() => {
+          projectDeleteSubmit();
+        }}
+      />
+    </View>
   );
 };
+
 const styles = StyleSheet.create({
   shadow: {
     shadowColor: '#000',
