@@ -4,7 +4,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import * as eva from '@eva-design/eva';
 
-
 import {ApplicationProvider} from '@ui-kitten/components';
 import {
   Login,
@@ -20,7 +19,7 @@ import {
   StocksAndInventry,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  CheckList, 
+  CheckList,
   Items,
   Unit,
   CompanyTeam,
@@ -31,23 +30,23 @@ import {
   Suppliers,
   Optiontype,
   Quantitywork,
-  ToolsAndMachinery1
+  ToolsAndMachinery1,
+  Boq,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
-
 //setup redux
-import {store} from './app/store';
-import {Provider} from 'react-redux';
+import store from './app/store';
+import {Provider, useSelector} from 'react-redux';
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  React.useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+  // React.useEffect(() => {
+  //   SplashScreen.hide();
+  // }, []);
 
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
@@ -56,10 +55,7 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-
-
           initialRouteName={'Login'}>
-
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
@@ -92,6 +88,7 @@ const App = () => {
           {/* Tab screens */}
           <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="Suppliers" component={Suppliers} />
+          <Stack.Screen name="Boq" component={Boq} />
 
           {/* Account Screens */}
           <Stack.Screen name="CategoryandType" component={CategoryandType} />
@@ -102,9 +99,10 @@ const App = () => {
           <Stack.Screen name="CheckList" component={CheckList} />
           <Stack.Screen name="Optiontype" component={Optiontype} />
           <Stack.Screen name="Quantitywork" component={Quantitywork} />
-          <Stack.Screen name="ToolsAndMachinery1" component={ToolsAndMachinery1} />
-
-
+          <Stack.Screen
+            name="ToolsAndMachinery1"
+            component={ToolsAndMachinery1}
+          />
 
           {/* User Screens */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />
@@ -118,8 +116,6 @@ const App = () => {
     </ApplicationProvider>
   );
 };
-
-// export default App;
 
 //for redux
 export default () => {

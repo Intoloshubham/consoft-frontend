@@ -1,33 +1,46 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { setupListeners } from '@reduxjs/toolkit/query'
+import {configureStore} from '@reduxjs/toolkit';
+import {setupListeners} from '@reduxjs/toolkit/query';
 
-import { companyAuthApi } from '../services/companyAuthApi'
-import companyReducer from '../features/CompanySlice'
-import companyAuthReducer from '../features/CompanyAuthSlice'
+import companyAuthReducer from '../services/companyAuthApi';
+import userAuthReducer from '../services/userAuthApi';
 
-import { userAuthApi } from '../services/userAuthApi'
-import userReducer from '../features/UserSlice'
-import userAuthReducer from '../features/UserAuthSlice'
+//admin
+
+import assignWorksReducer from '../features/AssignWorksSlice';
+import projectReducer from '../features/ProjectsSlice';
+// import projectCategoryReducer from '../features/ProjectCategorySlice';
+
+//user
 
 export const store = configureStore({
   reducer: {
-    [companyAuthApi.reducerPath]: companyAuthApi.reducer,
-    [userAuthApi.reducerPath]: userAuthApi.reducer,
-    company:companyReducer,
-    companyAuth:companyAuthReducer,
-    user:userReducer,
-    userAuth:userAuthReducer
+
+    company: companyAuthReducer,
+    user: userAuthReducer,
+    assignworks: assignWorksReducer,
+    projects: projectReducer,
+    // projectcategory: projectCategoryReducer,
   },
-  
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware().concat(companyAuthApi.middleware),
+});
 
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([
-      companyAuthApi.middleware,
-      userAuthApi.middleware
-    ])
 
-})
+export default store;
 
-setupListeners(store.dispatch)
+// export const store = configureStore({
+//   reducer: {
+//     [companyAuthApi.reducerPath]: companyAuthApi.reducer,
+//     [userAuthApi.reducerPath]: userAuthApi.reducer,
+//     company:companyReducer,
+//     companyAuth:companyAuthReducer,
+//     user:userReducer,
+//     userAuth:userAuthReducer
+//   },
+
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware().concat([
+//       companyAuthApi.middleware,
+//       userAuthApi.middleware
+//     ])
+// })
+
+// setupListeners(store.dispatch)

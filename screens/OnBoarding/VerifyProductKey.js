@@ -6,52 +6,51 @@ import Config from '../../config';
 import {FormInput, TextButton, HeaderBar} from '../../Components';
 import {COLORS, images, SIZES, icons} from '../../constants';
 
-//redux
-import { getCompanyId, storeToken } from '../../services/asyncStorageService';
-import { useVerifyProductKeyMutation } from '../../services/companyAuthApi';
+import { useSelector, useDispatch } from 'react-redux';
+import { verifyProductKey } from '../../services/companyAuthApi';
 
 const VerifyProductKey = ({navigation}) => {
+
+  const dispatch = useDispatch()
+  const companyData = useSelector(state => state.company);
+  // console.log(companyData)
+
   const [productKey, setProductKey] = React.useState('');
   const [productKeyError, setProductKeyError] = React.useState('');
 
-  //redux
-  const [companyIdAsync, setCompanyIdAsync ] = React.useState();
-  const [ verifyProductKey ] = useVerifyProductKeyMutation();
-
-  useEffect(() => {
-    (async () => {
-      const company_id = await getCompanyId() 
-      setCompanyIdAsync(company_id)          
-    })();
-  })
-
-
   const OnSubmit = async () => {
-    const productdata = {
+    const productData = {
+      company_id: companyData._id,
       product_key: productKey,
-      company_id: companyIdAsync,
     };
-    const res = await verifyProductKey(productdata);
+
+    const result = await dispatch(verifyProductKey(productData));
+
+    if (result.payload.status === 200) {
+      navigation.navigate('Home');
+    }else{
+      alert(result.payload.message);
+    }
 
     // console.log(res);
     // console.log(result.error);
     // console.log(result);
-    let result;
-    if (res.data) {
-      result = res.data;
-    }
-    if (res.error) {
-      result = res.error;
-    }
+    // let result;
+    // if (res.data) {
+    //   result = res.data;
+    // }
+    // if (res.error) {
+    //   result = res.error;
+    // }
 
-    if (result.status === 200) {
-      await storeToken(result.access_token);   
-      navigation.navigate('Home');
-    }
+    // if (result.status === 200) {
+    //   await storeToken(result.access_token);   
+    //   navigation.navigate('Home');
+    // }
 
-    if(result.status === 406){
-      alert(result.data.message);
-    }
+    // if(result.status === 406){
+    //   alert(result.data.message);
+    // }
 
   };
 

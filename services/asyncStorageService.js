@@ -23,6 +23,7 @@ const getCompanyId = async () => {
 const removeCompanyId = async (id) => {
   try {
     await AsyncStorage.removeItem(id)
+    return true;
   } catch (error) {
     console.log(error)
   }
@@ -51,6 +52,7 @@ const getUserId = async () => {
 const removeUserId = async (id) => {
   try {
     await AsyncStorage.removeItem(id)
+    return true;
   } catch (error) {
     console.log(error)
   }
@@ -78,6 +80,7 @@ const getToken = async () => {
 const removeToken = async (value) => {
   try {
     await AsyncStorage.removeItem(value)
+    return true;
   } catch (error) {
     console.log(error)
   }

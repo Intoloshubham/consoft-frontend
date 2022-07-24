@@ -11,6 +11,7 @@ import {COLORS, SIZES, FONTS, images, icons} from '../../../constants';
 import {TextButton, HeaderBar} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
+import VerifyAndRevertWork from './VerifyAndRevertWork';
 
 const ProjectsDetails = ({route}) => {
   const navigation = useNavigation();
@@ -21,6 +22,7 @@ const ProjectsDetails = ({route}) => {
     {id: 4, img: icons.stock, name: 'Stock / Inventry'},
     {id: 5, img: icons.machine, name: 'Tools & Machinery'},
     {id: 6, img: icons.time_seh, name: 'Sehedule & Timeline'},
+    {id: 7, img: icons.boq, name: 'BOQ'},
   ];
 
   //get name of project from project banner screen using params
@@ -42,13 +44,15 @@ const ProjectsDetails = ({route}) => {
             : item.id == 2
             ? navigation.navigate('ProjectTeam', {project_id})
             : item.id == 3
-            ? navigation.navigate('Contractors')
+            ? navigation.navigate('Contractors', {project_id})
             : item.id == 4
             ? navigation.navigate('StocksAndInventry')
             : item.id == 5
-            ? navigation.navigate('ToolsAndMachinery')
+            ? navigation.navigate('ToolsAndMachinery', {project_id})
             : item.id == 6
             ? navigation.navigate('ProjectSeheduleTime')
+            : item.id == 7
+            ? navigation.navigate('Boq', {project_id})
             : null;
         }}>
         <Image
@@ -133,12 +137,14 @@ const ProjectsDetails = ({route}) => {
         }}
         onPress={() => setWorkModal(true)}
       />
-      {showWorkModal && (
-        <WorkAssignModal
-          isVisible={showWorkModal}
-          onClose={() => setWorkModal(false)}
-        />
-      )}
+      {/* {showWorkModal && ( */}
+      <WorkAssignModal
+        projectId={project_id}
+        isVisible={showWorkModal}
+        onClose={() => setWorkModal(false)}
+      />
+      {/* )} */}
+
       {renderProjectDetails()}
     </View>
   );

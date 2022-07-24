@@ -56,7 +56,7 @@ const items = require('../assets/icons/items.png');
 const stock_manage = require('../assets/icons/stock_manage.png');
 const delete_icon = require('../assets/icons/delete.png');
 const upload_files = require('../assets/icons/upload_files.png');
-
+const boq = require('../assets/icons/boq.png');
 //pd
 const stock = require('../assets/icons/pd/stock.png');
 const report1 = require('../assets/icons/pd/report.png');
@@ -84,6 +84,7 @@ const suppliers1 = require('../assets/icons/suppliers1.png');
 const staff = require('../assets/icons/staff.png');
 const verify = require('../assets/icons/verify.png');
 const revert = require('../assets/icons/revert.png');
+// const location = require('../assets/icons/location.png');
 
 //final selected
 const company_team = require('../assets/icons/final/company_team.png');
@@ -187,4 +188,5 @@ export default {
   Suppliers,
   suppliers1,
   staff,
+  boq,
 };
