@@ -17,11 +17,10 @@ const Drop = ({
   zIndex,
   zIndexInverse,
   onChangeValue,
-
   maxHeight,
   onOpen,
   closeAfterSelecting,
-
+  onSelectItem,
 }) => {
   return (
     <View>
@@ -33,7 +32,6 @@ const Drop = ({
           backgroundColor: COLORS.gray3,
           minHeight: 40,
           paddingHorizontal: SIZES.padding,
-
         }}
         maxHeight={maxHeight}
         dropDownContainerStyle={{
@@ -44,19 +42,16 @@ const Drop = ({
         textStyle={{
           fontSize: 15,
           color: COLORS.black,
-          textTransform: 'capitalize'
-
+          textTransform: 'capitalize',
         }}
         categorySelectable={categorySelectable}
         listParentLabelStyle={listParentLabelStyle}
         listChildContainerStyle={{
-          paddingLeft: 30
-
+          paddingLeft: 30,
         }}
         listChildLabelStyle={{
           color: COLORS.white,
-          fontSize: 15
-
+          fontSize: 15,
         }}
         placeholder={placeholder}
         open={open}
@@ -85,6 +80,7 @@ const Drop = ({
         zIndex={zIndex}
         zIndexInverse={zIndexInverse}
         onChangeValue={onChangeValue}
+        onSelectItem={onSelectItem}
         closeAfterSelecting={closeAfterSelecting}
       />
     </View>

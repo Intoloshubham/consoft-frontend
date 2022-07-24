@@ -1,6 +1,6 @@
 import Account from './Account/Account';
 import CheckList from './CheckList/CheckList';
-import Optiontype from './CheckList/Optiontype'
+import Optiontype from './CheckList/Optiontype';
 import CompanyTeam from './CompanyTeam/CompanyTeam';
 import AssignedWorks from './Home/AssignedWorks';
 import CompanyTeamShow from './Home/CompanyTeamShow';
@@ -16,9 +16,7 @@ import StocksAndInventry from './Home/StocksAndInventry';
 import ToolsAndMachinery from './Home/ToolsAndMachinery';
 import WorkAssignModal from './Modals/WorkAssignModal';
 import CategoryandType from './Project/CategoryandType';
-
 import ReportsDisplay from './Reports/ReportDisplay';
-
 import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
@@ -26,15 +24,11 @@ import Tasks from './Tasks/Tasks';
 import Tracker from './Tracker/Tracker';
 import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
-import Quantitywork from './Stock/Tools/Quantitywork'
-import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1'
-import Quantity from './Stock/Tools/Quantity'
-import Apps from './Stock/Tools/Apps'
-import UserReportdata from './Stock/Tools/UserReportdata'
-import HomeScreen from './Stock/Tools/HomeScreen'
-import Dynamicdata from './Stock/Tools/Dynamicdata'
-import Leaves from './Stock/Tools/Leaves'
-import Calender from './Stock/Tools/Calender'
+import Quantitywork from './Stock/Tools/Quantitywork';
+import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1';
+import VerifyAndRevertWork from './Home/VerifyAndRevertWork';
+import Boq from './Home/Boq';
+
 export {
   Account,
   CheckList,
@@ -64,11 +58,6 @@ export {
   Optiontype,
   Quantitywork,
   ToolsAndMachinery1,
-  Quantity,
-  Apps,
-  HomeScreen,
-  UserReportdata,
-  Dynamicdata,
-  Leaves,
-  Calender,
+  VerifyAndRevertWork,
+  Boq,
 };

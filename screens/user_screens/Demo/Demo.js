@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
+import {View, Text} from 'react-native';
 
 const Demo = () => {
   const [inputList, setInputList] = React.useState([
@@ -35,48 +35,8 @@ const Demo = () => {
   };
 
   return (
-    <View style={{marginHorizontal: 20, marginTop: 20}}>
-      {inputList.map((x, i) => {
-        return (
-          <View style={{flexDirection: 'row'}}>
-            <TextInput
-              placeholder="len"
-              value={x.len}
-              onChangeText={e => handleInputChange(e, i)}
-            />
-            <TextInput
-              placeholder="wid"
-              // value={x.wid}
-              onChangeText={e => handleInputChange(e, i)}
-            />
-            <TextInput
-              placeholder="height"
-              // value={x.hei}
-              onChangeText={e => handleInputChange(e, i)}
-            />
-            <TextInput
-              placeholder="remark"
-              // value={x.remark}1
-              onChangeText={e => handleInputChange(e, i)}
-            />
-            <View style={{left: 10}}>
-              {inputList.length !== 1 && (
-                <TouchableOpacity onPress={() => handleRemoveClick(i)}>
-                  <Text>Remove</Text>
-                </TouchableOpacity>
-              )}
-              {inputList.length - 1 === i && (
-                <TouchableOpacity
-                  style={{backgroundColor: 'red', padding: 5}}
-                  onPress={handleAddClick}>
-                  <Text style={{color: 'white'}}>Add</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        );
-      })}
-      <Text style={{fontSize: 15}}>{JSON.stringify(inputList)}</Text>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>Demo</Text>
     </View>
   );
 };
