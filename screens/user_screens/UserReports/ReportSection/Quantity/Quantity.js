@@ -485,7 +485,7 @@ const Quantity = () => {
           </View>
         </Modal>
       </>
-    );
+    ); 
   };
 
   const addmoreRowfuncation = () => {
