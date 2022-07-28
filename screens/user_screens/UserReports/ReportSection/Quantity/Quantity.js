@@ -97,15 +97,18 @@ const Quantity = () => {
   ]);
 
   const [subInputs, setSubInputs] = useState([
-    {
-      sub_numlangth: '',
-      sub_numwidth: '',
-      sub_numheight: '',
-      sub_total: '',
-      sub_remark: ''
-    }
+    // {
+    //   sub_numlangth: '',
+    //   sub_numwidth: '',
+    //   sub_numheight: '',
+    //   sub_total: '',
+    //   sub_remark: ''
+    // }
   ])
-
+  const [Add_main_handler_key, setAdd_main_handler_key] = useState(0);
+  const [Add_inside_handler_key, setAdd_inside_handler_key] = useState(0);
+  const addKeyref = useRef(0);
+  const [SubBoxkey, setSubBoxkey] = useState(0)
   //get company id
   const [company_id, setCompany_id] = useState('');
   const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
@@ -132,6 +135,9 @@ const Quantity = () => {
 
 
   const addHandler = () => {
+    setAdd_main_handler_key(inputs.length);
+    // console.log();
+    // console.log(inputs.length);
     const _inputs = [...inputs];
     _inputs.push({
       select: '',
@@ -383,23 +389,148 @@ const Quantity = () => {
     )
   }
 
-  const add_inside_handler = () => {
-    const _sub_inputs = [...subInputs];
-    _sub_inputs.push({
-      sub_numlangth: '',
-      sub_numwidth: '',
-      sub_numheight: '',
-      sub_total: '',
-      sub_Remark: '',
-    });
-    setSubInputs(_sub_inputs)
-  }
+  const add_inside_handler = (key, e) => {
+    let takekey = key;
+    addKeyref.current = takekey;
+    if (addKeyref.current == key ) {
+      setSubInputs([]);
+      const _sub_inputs = [...subInputs];
+      _sub_inputs.push({
+        sub_numlangth: '',
+        sub_numwidth: '',
+        sub_numheight: '',
+        sub_total: '',
+        sub_Remark: '',
+      });
+      setSubInputs(_sub_inputs)
 
+    } else if(addKeyref.current==key){
+      setSubInputs([]);
+      const _sub=[];
+      _sub.push({
+        sub_numlangth: '',
+        sub_numwidth: '',
+        sub_numheight: '',
+        sub_total: '',
+        sub_Remark: ''
+      })
+      setSubInputs(_sub)
+
+    }
+        // else {
+    // const _sub_inputs = [...subInputs];
+    // _sub_inputs.push({
+    //   sub_numlangth: '',
+    //   sub_numwidth: '',
+    //   sub_numheight: '',
+    //   sub_total: '',
+    //   sub_Remark: '',
+    // });
+    // setSubInputs(_sub_inputs)
+    // }
+  }
   const delete_inside_Handler = key => {
+    console.log(subInputs.length)
     const _sub_inputs = subInputs.filter((input, index) => index != key);
     setSubInputs(_sub_inputs);
   };
 
+
+  const add_subinput_field = (subkey, key, subinputs) => {
+
+    return (
+      key == addKeyref.current?
+      <View
+        key={subkey}
+        style={{ borderWidth: 2, padding: 5, margin: 4, borderColor: "green" }}
+      >
+        <Text style={{ color: COLORS.black }}>{subkey}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            justifyContent: "space-between"
+          }}>
+
+          <TextInput
+            style={inputfromone}
+            placeholder="SubLength"
+            placeholderTextColor={COLORS.gray}
+            value={subinputs.sub_numlangth}
+            keyboardType="numeric"
+            onChangeText={text => {
+              setSubLengthkey(subInputs.key)
+              Subinputlangth(text, subkey);
+            }}
+          />
+          <TextInput
+            style={inputfromone}
+            placeholder="SubWidth"
+            placeholderTextColor={COLORS.gray}
+            value={subinputs.sub_numwidth}
+            keyboardType="numeric"
+            onChangeText={text => {
+              setSubWidthkey(subInputs.key)
+              Subinputwidth(text, subkey);
+            }}
+          />
+          <TextInput
+            style={inputfromone}
+            placeholder="SubThickness"
+            placeholderTextColor={COLORS.gray}
+            value={subinputs.sub_numheight}
+            keyboardType="numeric"
+            onChangeText={text => {
+              setSubHeightkey(subInputs.key)
+              Subinputhight(text, subkey);
+            }}
+          />
+          <TextInput
+            style={inputfromtwo}
+            editable={false}
+            selectTextOnFocus={false}
+            placeholderTextColor={COLORS.white}
+            placeholder={'Total'}
+            value={subkey == subLengthKey == subWidthKey == subHeightKey ? (subinputs.sub_numlangth * subInputs.sub_numwidth * subinputs.sub_numheight).toString() : (subinputs.sub_numlangth * subInputs.sub_numwidth * subinputs.sub_numheight).toString()}
+            keyboardType="numeric"
+            onChangeText={value => {
+              Subinputtotal(value, subkey);
+              console.log(value)
+            }}
+          />
+        </View>
+        <TextInput
+          style={{
+            width: '90%',
+            borderWidth: 1,
+            height: 30,
+            padding: -6,
+            paddingLeft: 5,
+            marginBottom: 5,
+            borderRadius: 5,
+            marginLeft: 5,
+            color: COLORS.gray,
+            borderColor: COLORS.gray,
+            flexWrap: 'wrap',
+          }}
+          placeholder={'Remark'}
+          placeholderTextColor={COLORS.gray}
+          value={subInputs.sub_Remark}
+          onChangeText={text => SubinputRemark(text, subkey)}
+        />
+        <TouchableOpacity onPress={() => delete_inside_Handler(subkey)}>
+          <Image
+            source={subkey == 0 ? null : icons.delete_icon}
+            style={{
+              width: 20,
+              height: 20,
+              tintColor: COLORS.red,
+            }}
+          />
+        </TouchableOpacity>
+      </View>:null
+    )
+  }
 
   const add_qty_data_modal = () => {
     return (
@@ -466,6 +597,9 @@ const Quantity = () => {
               <View style={container}>
                 <ScrollView style={inputsContainer}>
                   {inputs ? inputs.map((input, key) => {
+
+                    console.log("input+++++++")
+                    console.log(input)
                     return (
                       <View style={inputContainer} key={key}>
                         <View
@@ -477,6 +611,7 @@ const Quantity = () => {
                           // key={key}
                           key="{(key+1)}"
                         >
+                          <Text style={{ color: COLORS.black }}>0{key}</Text>
                           <Dropdown
                             style={[
                               styles.dropdown,
@@ -493,12 +628,12 @@ const Quantity = () => {
                             labelField="item_name"
                             valueField="_id"
                             placeholder={!isFocus ? 'Select' : '...'}
+
                             searchPlaceholder="Search..."
                             value={input.value}
                             onChange={item => {
                               setSelectKey(input.key);
                               // if(input.key==key)
-                              // console.log(input)
                               // console.log(selectKey)
                               inputselect(item, key);
                               // setunitname(item.unitname);
@@ -527,9 +662,10 @@ const Quantity = () => {
 
                           <TouchableOpacity
                             key={key}
-                            onPress={() => {
+                            onPress={(e) => {
                               // moreItembox();
-                              add_inside_handler()
+
+                              add_inside_handler(key, e)
                               // alert(key);
                             }}>
                             <MaterialIcons
@@ -624,136 +760,15 @@ const Quantity = () => {
                           />
                         </TouchableOpacity>
                         <View>
-                          {subInputs ? subInputs.map((subinputs, key) => {
-                            return (
-                              <View
-                                key={key}
-                                style={{ borderWidth: 1, padding: 4, margin: 4 }}
-                              >
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    flexWrap: "nowrap",
-                                    justifyContent: "space-between"
-                                  }}>
-
-                                  <TextInput
-                                    style={inputfromone}
-                                    placeholder="SubLength"
-                                    placeholderTextColor={COLORS.gray}
-                                    value={subinputs.sub_numlangth}
-                                    keyboardType="numeric"
-                                    onChangeText={text => {
-                                      setSubLengthkey(subInputs.key)
-                                      Subinputlangth(text, key);
-                                    }}
-                                  />
-                                  <TextInput
-                                    style={inputfromone}
-                                    placeholder="SubWidth"
-                                    placeholderTextColor={COLORS.gray}
-                                    value={subinputs.sub_numwidth}
-                                    keyboardType="numeric"
-                                    onChangeText={text => {
-                                      setSubWidthkey(subInputs.key)
-                                      Subinputwidth(text, key);
-                                    }}
-                                  />
-                                  <TextInput
-                                    style={inputfromone}
-                                    placeholder="SubThickness"
-                                    placeholderTextColor={COLORS.gray}
-                                    value={subinputs.sub_numheight}
-                                    keyboardType="numeric"
-                                    onChangeText={text => {
-                                      setSubHeightkey(subInputs.key)
-                                      Subinputhight(text, key);
-                                    }}
-                                  />
-                                  <TextInput
-                                    style={inputfromtwo}
-                                    editable={false}
-                                    selectTextOnFocus={false}
-                                    placeholderTextColor={COLORS.white}
-                                    placeholder={'Total'}
-                                    value={key == subLengthKey == subWidthKey == subHeightKey ? (subinputs.sub_numlangth * subInputs.sub_numwidth * subinputs.sub_numheight).toString() : (subinputs.sub_numlangth * subInputs.sub_numwidth * subinputs.sub_numheight).toString()}
-                                    keyboardType="numeric"
-                                    onChangeText={value => {
-                                      Subinputtotal(value, key);
-                                      console.log(value)
-                                    }}
-                                  />
-                                </View>
-                                <TextInput
-                                  style={{
-                                    width: '90%',
-                                    borderWidth: 1,
-                                    height: 30,
-                                    padding: -6,
-                                    paddingLeft: 5,
-                                    marginBottom: 5,
-                                    borderRadius: 5,
-                                    marginLeft: 5,
-                                    color: COLORS.gray,
-                                    borderColor: COLORS.gray,
-                                    flexWrap: 'wrap',
-                                  }}
-                                  placeholder={'Remark'}
-                                  placeholderTextColor={COLORS.gray}
-                                  value={subInputs.sub_Remark}
-                                  onChangeText={text => SubinputRemark(text, key)}
-                                />
-                                <TouchableOpacity onPress={() => delete_inside_Handler(key)}>
-                                  <Image
-                                    source={key == 0 ? null : icons.delete_icon}
-                                    style={{
-                                      width: 20,
-                                      height: 20,
-                                      tintColor: COLORS.red,
-                                    }}
-                                  />
-                                </TouchableOpacity>
-
-                              </View>
-                            )
-                          }) : null}
+                          {
+                            subInputs.map((subinputs, subkey) => {
+                              return (
+                                 add_subinput_field(subkey, key, subinputs)
+                              )
+                            })
+                          }
                         </View>
-                        {/* <View style={{flexDirection: 'row'}}>
-                   {inputsmore.map((input, key) => (
-                     <View
-                       style={{flexDirection: 'row', flexWrap: 'wrap'}}
-                       key={key}>
-                       <TextInput
-                         style={{
-                           // width:"30%",
-                           borderWidth: 1,
-                           height: 30,
-                           padding: -6,
-                           paddingLeft: 5,
-                           marginBottom: 5,
-                           borderRadius: 10,
-                           marginLeft: 5,
-                           borderColor: COLORS.gray,
-                           flexWrap: 'wrap',
-                         }}
-                         placeholder={'Name'}
-                         value={input.value}
-                         onChangeText={text => inputHandler(text, key)}
-                       />
-                       <TouchableOpacity
-                         onPress={() => deleteHandlermore(key)}>
-                         <Image
-                           source={key == 0 ? null : icons.delete_icon}
-                           style={{
-                             width: 20,
-                             height: 20,
-                             tintColor: COLORS.red,
-                           }}
-                         />
-                       </TouchableOpacity>
-                     </View>
-                   ))}
-                 </View> */}
+
                       </View>
                     )
                   }) : null}
