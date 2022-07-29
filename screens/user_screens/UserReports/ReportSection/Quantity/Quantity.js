@@ -139,7 +139,7 @@ const Quantity = () => {
 
 
   const addHandler = () => {
-    
+
     setInputs([...inputs, {
       select: '', numlangth: '', numwidth: '', numheight: '', total: '', Remark: '',
       subinputs: [
@@ -188,7 +188,7 @@ const Quantity = () => {
     _inputselcet[key].select = item;
     _inputselcet[key].key = key;
     // console.log("_inputselcet");
-    // console.log(_inputselcet);
+    // console.log(item.unit_name);
     // setSelectKey(_inputselcet);
 
     setInputs(_inputselcet);
@@ -203,7 +203,7 @@ const Quantity = () => {
     const _inputsunit = [...inputs];
     _inputsunit[key].unit = text;
     _inputsunit[key].key = key;
-    // console.log(_inputsunit);
+    console.log(_inputsunit);
     setUnitKey(key);
     // console.log("unitKey");
     // console.log(unitKey);
@@ -213,6 +213,7 @@ const Quantity = () => {
     const _inputlangth = [...inputs];
     _inputlangth[key].numlangth = filterOnlyNumericValue(text);
     _inputlangth[key].key = key;
+    // console.log(text)
     setInputs(_inputlangth);
   };
   const inputwidth = (text, key) => {
@@ -232,6 +233,7 @@ const Quantity = () => {
     const _inputtotal = [...inputs];
     _inputtotal[key].total = value;
     _inputtotal[key].key = key;
+
     setInputs(_inputtotal);
   };
 
@@ -273,6 +275,7 @@ const Quantity = () => {
     const _subinputRemark = [...inputs];
     _subinputRemark[key].subinputs[index1].sub_Remark = text;
     _subinputRemark[key].subinputs[index1].key = key;
+
     setInputs(_subinputRemark);
   };
 
@@ -490,7 +493,7 @@ const Quantity = () => {
                 // marginBottom: 5,
                 borderRadius: 5,
                 marginLeft: 5,
-                color: COLORS.gray,
+                color: COLORS.black,
                 borderColor: COLORS.gray,
                 flexWrap: 'wrap',
               }}
@@ -585,7 +588,7 @@ const Quantity = () => {
               <View style={container}>
                 <ScrollView style={inputsContainer}>
                   {inputs ? inputs.map((input, key) => {
-                    console.log(inputs.length)
+                    {/* console.log(inputs.length) */ }
                     return (
                       <View style={inputContainer} key={key}>
                         <View
@@ -597,7 +600,6 @@ const Quantity = () => {
                           // key={key}
                           key="{(key+1)}"
                         >
-                          {/* <Text style={{ color: COLORS.black }}>0 {key}</Text> */}
                           <Dropdown
                             style={[
                               styles.dropdown,
@@ -619,11 +621,7 @@ const Quantity = () => {
                             value={input.value}
                             onChange={item => {
                               setSelectKey(input.key);
-                              // if(input.key==key)
-                              // console.log(selectKey)
                               inputselect(item, key);
-                              // setunitname(item.unitname);
-                              // setValue(item._id);
                             }}
                           />
                           <TextInput
@@ -632,9 +630,6 @@ const Quantity = () => {
                             selectTextOnFocus={false}
                             placeholder={'unit'}
 
-                            // value={(input.key === selectData.key) ? "null" : unitname} 
-                            // value={(selectData.index <= inputs.key)?unitname:"null"}
-                            //  value = {(input.key==selectData.key)? unitname : null}
                             // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
                             value={key == selectKey ? input.select.unit_name : input.select.unit_name}
                             onChangeText={text => { inputunit(text, key) }}
@@ -645,10 +640,8 @@ const Quantity = () => {
                           <TouchableOpacity
                             key={key}
                             onPress={(e) => {
-                              // moreItembox();
 
                               add_inside_handler(key, e)
-                              // alert(key);
                             }}>
                             <MaterialIcons
                               name="add-box"
@@ -667,7 +660,7 @@ const Quantity = () => {
                           <TextInput
                             style={inputfromone}
                             placeholder="Length"
-                            placeholderTextColor={COLORS.gray}
+                            placeholderTextColor={COLORS.black}
                             value={input.numlangth}
                             keyboardType="numeric"
                             onChangeText={text => {
@@ -678,7 +671,7 @@ const Quantity = () => {
                           <TextInput
                             style={inputfromone}
                             placeholder="Width"
-                            placeholderTextColor={COLORS.gray}
+                            placeholderTextColor={COLORS.black}
                             value={input.numwidth}
                             keyboardType="numeric"
                             onChangeText={text => {
@@ -689,7 +682,7 @@ const Quantity = () => {
                           <TextInput
                             style={inputfromone}
                             placeholder="Thickness"
-                            placeholderTextColor={COLORS.gray}
+                            placeholderTextColor={COLORS.black}
                             value={input.numheight}
                             keyboardType="numeric"
                             onChangeText={text => {
@@ -744,20 +737,20 @@ const Quantity = () => {
                             })
 
                           }
-                        <View style={{alignSelf:"flex-end"}}>
-                          <TouchableOpacity 
-                          style={{alignSelf:"flex-end"}}
-                          onPress={() => deleteHandler(key)}>
-                            <Image
-                              source={icons.delete_icon}
-                              style={{
-                                width: 20,
-                                height: 20,
-                                tintColor: COLORS.red,
-                              }}
-                            />
-                          </TouchableOpacity>
-                        </View>
+                          <View style={{ alignSelf: "flex-end" }}>
+                            <TouchableOpacity
+                              style={{ alignSelf: "flex-end" }}
+                              onPress={() => deleteHandler(key)}>
+                              <Image
+                                source={icons.delete_icon}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  tintColor: COLORS.red,
+                                }}
+                              />
+                            </TouchableOpacity>
+                          </View>
                         </View>
                       </View>
                     )
@@ -900,7 +893,16 @@ const Quantity = () => {
         }}
       >
         {/* button section adding contractor */}
-        {quant_ity ? add_quantity_icon_button() : null}
+        {quant_ity ?
+          <>
+            <View style={{backgroundColor:"red"}}>
+              {add_quantity_icon_button()}
+            </View>&&
+            <View>
+              <Text style={{ color: "black" }}>Rummy Rum</Text>
+            </View>
+          </>
+          : null}
       </View>
       {add_qty_data_modal()}
       {add_item_modal()}

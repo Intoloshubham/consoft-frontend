@@ -144,7 +144,7 @@ export default styles = StyleSheet.create({
         height: 30,
         padding: -6,
         textAlign:'center',
-        color:COLORS.gray,
+        color:COLORS.black,
         paddingLeft: 5,
         marginBottom: 5,
         borderRadius: 5,
