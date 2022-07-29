@@ -85,30 +85,34 @@ const Quantity = () => {
 
   const [unitKey, setUnitKey] = useState('');
 
+  // const [inputs, setInputs] = useState([
+  //   {
+  //     select: '',
+  //     numlangth: '',
+  //     numwidth: '',
+  //     numheight: '',
+  //     total: '',
+  //     Remark: '',
+  //   },
+  // ]);
   const [inputs, setInputs] = useState([
     {
-      select: '',
-      numlangth: '',
-      numwidth: '',
-      numheight: '',
-      total: '',
-      Remark: '',
-    },
+      select: '', numlangth: '', numwidth: '', numheight: '', total: '', Remark: ''
+      , subinputs: [
+        // { numlangth: '', numwidth: '', numheight: '', total: '', Remark: '', }
+      ]
+    }
   ]);
-
-  const [subInputs, setSubInputs] = useState([
-    // {
-    //   sub_numlangth: '',
-    //   sub_numwidth: '',
-    //   sub_numheight: '',
-    //   sub_total: '',
-    //   sub_remark: ''
-    // }
-  ])
-  const [Add_main_handler_key, setAdd_main_handler_key] = useState(0);
-  const [Add_inside_handler_key, setAdd_inside_handler_key] = useState(0);
+  // const [subInputs, setSubInputs] = useState([
+  //   // {
+  //   //   sub_numlangth: '',
+  //   //   sub_numwidth: '',
+  //   //   sub_numheight: '',
+  //   //   sub_total: '',
+  //   //   sub_remark: ''
+  //   // }
+  // ])
   const addKeyref = useRef(0);
-  const [SubBoxkey, setSubBoxkey] = useState(0)
   //get company id
   const [company_id, setCompany_id] = useState('');
   const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
@@ -135,19 +139,13 @@ const Quantity = () => {
 
 
   const addHandler = () => {
-    setAdd_main_handler_key(inputs.length);
-    // console.log();
-    // console.log(inputs.length);
-    const _inputs = [...inputs];
-    _inputs.push({
-      select: '',
-      numlangth: '',
-      numwidth: '',
-      numheight: '',
-      total: '',
-      Remark: '',
-    });
-    setInputs(_inputs)
+    
+    setInputs([...inputs, {
+      select: '', numlangth: '', numwidth: '', numheight: '', total: '', Remark: '',
+      subinputs: [
+        // { numlangth: '', numwidth: '', numheight: '', total: '', Remark: '' }
+      ]
+    }]);
   };
 
 
@@ -174,7 +172,9 @@ const Quantity = () => {
 
 
   const deleteHandler = key => {
-    const _inputs = inputs.filter((input, index) => index != key);
+    // const _inputs = inputs.filter((input, index) => index != key);
+    const _inputs = [...inputs]
+    _inputs.splice(key, 1);
     setInputs(_inputs);
   };
 
@@ -237,42 +237,43 @@ const Quantity = () => {
 
   const inputRemark = (text, key) => {
     const _inputRemark = [...inputs];
-    _inputRemark[key].sub_Remark = text;
+    _inputRemark[key].Remark = text;
     _inputRemark[key].key = key;
     setInputs(_inputRemark);
   };
   //for sub dynamic inputs
-  const Subinputlangth = (text, key) => {
-    const _subinputlangth = [...subInputs];
-    _subinputlangth[key].sub_numlangth = filterOnlyNumericValue(text);
-    _subinputlangth[key].key = key;
-    setSubInputs(_subinputlangth);
+  const Subinputlangth = (text, index1, key) => {
+    const _subinputlangth = [...inputs];
+    _subinputlangth[key].subinputs[index1].sub_numlangth = filterOnlyNumericValue(text);
+    _subinputlangth[key].subinputs[index1].key = key;
+    // setSubInputs(_subinputlangth);
+    setInputs(_subinputlangth);
   };
-  const Subinputwidth = (text, key) => {
-    const _subinputwidth = [...subInputs];
-    _subinputwidth[key].sub_numwidth = filterOnlyNumericValue(text);
-    _subinputwidth[key].key = key;
-    setSubInputs(_subinputwidth);
+  const Subinputwidth = (text, index1, key) => {
+    const _subinputwidth = [...inputs];
+    _subinputwidth[key].subinputs[index1].sub_numwidth = filterOnlyNumericValue(text);
+    _subinputwidth[key].subinputs[index1].key = key;
+    setInputs(_subinputwidth);
   };
-  const Subinputhight = (text, key) => {
-    const _subinputhight = [...subInputs];
-    _subinputhight[key].sub_numheight = filterOnlyNumericValue(text);
-    _subinputhight[key].key = key;
+  const Subinputhight = (text, index1, key) => {
+    const _subinputhight = [...inputs];
+    _subinputhight[key].subinputs[index1].sub_numheight = filterOnlyNumericValue(text);
+    _subinputhight[key].subinputs[index1].key = key;
 
-    setSubInputs(_subinputhight);
+    setInputs(_subinputhight);
   };
-  const Subinputtotal = (value, key) => {
-    const _subinputtotal = [...subInputs];
-    _subinputtotal[key].sub_total = value;
-    _subinputtotal[key].key = key;
-    setSubInputs(_subinputtotal);
+  const Subinputtotal = (value, index1, key) => {
+    const _subinputtotal = [...inputs];
+    _subinputtotal[key].subinputs[index1].sub_total = value;
+    _subinputtotal[key].subinputs[index1].key = key;
+    setInputs(_subinputtotal);
   };
 
-  const SubinputRemark = (text, key) => {
-    const _subinputRemark = [...subInputs];
-    _subinputRemark[key].Remark = text;
-    _subinputRemark[key].key = key;
-    setSubInputs(_subinputRemark);
+  const SubinputRemark = (text, index1, key) => {
+    const _subinputRemark = [...inputs];
+    _subinputRemark[key].subinputs[index1].sub_Remark = text;
+    _subinputRemark[key].subinputs[index1].key = key;
+    setInputs(_subinputRemark);
   };
 
   //close of sub dynamic inputs
@@ -392,59 +393,37 @@ const Quantity = () => {
   const add_inside_handler = (key, e) => {
     let takekey = key;
     addKeyref.current = takekey;
-    if (addKeyref.current == key ) {
-      setSubInputs([]);
-      const _sub_inputs = [...subInputs];
-      _sub_inputs.push({
-        sub_numlangth: '',
-        sub_numwidth: '',
-        sub_numheight: '',
-        sub_total: '',
-        sub_Remark: '',
-      });
-      setSubInputs(_sub_inputs)
+    const _inputs = [...inputs];
+    _inputs[key].subinputs.push({
+      sub_numlangth: '',
+      sub_numwidth: '',
+      sub_numheight: '',
+      sub_total: '',
+      sub_Remark: '',
+    });
 
-    } else if(addKeyref.current==key){
-      setSubInputs([]);
-      const _sub=[];
-      _sub.push({
-        sub_numlangth: '',
-        sub_numwidth: '',
-        sub_numheight: '',
-        sub_total: '',
-        sub_Remark: ''
-      })
-      setSubInputs(_sub)
+    setInputs(_inputs)
 
-    }
-        // else {
-    // const _sub_inputs = [...subInputs];
-    // _sub_inputs.push({
-    //   sub_numlangth: '',
-    //   sub_numwidth: '',
-    //   sub_numheight: '',
-    //   sub_total: '',
-    //   sub_Remark: '',
-    // });
-    // setSubInputs(_sub_inputs)
-    // }
   }
-  const delete_inside_Handler = key => {
-    console.log(subInputs.length)
-    const _sub_inputs = subInputs.filter((input, index) => index != key);
-    setSubInputs(_sub_inputs);
+
+  const delete_inside_Handler = (key, index1) => {
+    let _sub_inputs = [...inputs];
+    // const _sub_inputs = subInputs.filter((input, index) => index != key);
+    _sub_inputs[key].subinputs.splice(index1, 1);
+    // setSubInputs(_sub_inputs);
+    setInputs(_sub_inputs)
+
   };
 
 
-  const add_subinput_field = (subkey, key, subinputs) => {
+  const add_subinput_field = (index1, key, subinputs) => {
 
     return (
-      key == addKeyref.current?
       <View
-        key={subkey}
+        key={index1}
         style={{ borderWidth: 2, padding: 5, margin: 4, borderColor: "green" }}
       >
-        <Text style={{ color: COLORS.black }}>{subkey}</Text>
+        {/* <Text style={{ color: COLORS.black }}>{index1}</Text> */}
         <View
           style={{
             flexDirection: "row",
@@ -459,8 +438,8 @@ const Quantity = () => {
             value={subinputs.sub_numlangth}
             keyboardType="numeric"
             onChangeText={text => {
-              setSubLengthkey(subInputs.key)
-              Subinputlangth(text, subkey);
+              setSubLengthkey(subinputs.key)
+              Subinputlangth(text, index1, key);
             }}
           />
           <TextInput
@@ -470,8 +449,8 @@ const Quantity = () => {
             value={subinputs.sub_numwidth}
             keyboardType="numeric"
             onChangeText={text => {
-              setSubWidthkey(subInputs.key)
-              Subinputwidth(text, subkey);
+              setSubWidthkey(subinputs.key)
+              Subinputwidth(text, index1, key);
             }}
           />
           <TextInput
@@ -481,8 +460,8 @@ const Quantity = () => {
             value={subinputs.sub_numheight}
             keyboardType="numeric"
             onChangeText={text => {
-              setSubHeightkey(subInputs.key)
-              Subinputhight(text, subkey);
+              setSubHeightkey(subinputs.key)
+              Subinputhight(text, index1, key);
             }}
           />
           <TextInput
@@ -491,44 +470,53 @@ const Quantity = () => {
             selectTextOnFocus={false}
             placeholderTextColor={COLORS.white}
             placeholder={'Total'}
-            value={subkey == subLengthKey == subWidthKey == subHeightKey ? (subinputs.sub_numlangth * subInputs.sub_numwidth * subinputs.sub_numheight).toString() : (subinputs.sub_numlangth * subInputs.sub_numwidth * subinputs.sub_numheight).toString()}
+            value={index1 == subLengthKey == subWidthKey == subHeightKey ? (subinputs.sub_numlangth * subinputs.sub_numwidth * subinputs.sub_numheight).toString() : (subinputs.sub_numlangth * subinputs.sub_numwidth * subinputs.sub_numheight).toString()}
             keyboardType="numeric"
             onChangeText={value => {
-              Subinputtotal(value, subkey);
+              Subinputtotal(value, index1, key);
               console.log(value)
             }}
           />
         </View>
-        <TextInput
-          style={{
-            width: '90%',
-            borderWidth: 1,
-            height: 30,
-            padding: -6,
-            paddingLeft: 5,
-            marginBottom: 5,
-            borderRadius: 5,
-            marginLeft: 5,
-            color: COLORS.gray,
-            borderColor: COLORS.gray,
-            flexWrap: 'wrap',
-          }}
-          placeholder={'Remark'}
-          placeholderTextColor={COLORS.gray}
-          value={subInputs.sub_Remark}
-          onChangeText={text => SubinputRemark(text, subkey)}
-        />
-        <TouchableOpacity onPress={() => delete_inside_Handler(subkey)}>
-          <Image
-            source={subkey == 0 ? null : icons.delete_icon}
-            style={{
-              width: 20,
-              height: 20,
-              tintColor: COLORS.red,
-            }}
-          />
-        </TouchableOpacity>
-      </View>:null
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <View>
+            <TextInput
+              style={{
+                width: '450%',
+                borderWidth: 1,
+                height: 30,
+                padding: -6,
+                paddingLeft: 5,
+                // marginBottom: 5,
+                borderRadius: 5,
+                marginLeft: 5,
+                color: COLORS.gray,
+                borderColor: COLORS.gray,
+                flexWrap: 'wrap',
+              }}
+              placeholder={'Remark'}
+              placeholderTextColor={COLORS.gray}
+              value={subinputs.sub_Remark}
+              onChangeText={text => SubinputRemark(text, index1, key)}
+            />
+          </View>
+          <View>
+            <TouchableOpacity
+              style={{ alignSelf: "flex-end" }}
+              onPress={() => delete_inside_Handler(key, index1)}>
+              <Image
+                source={icons.delete_icon}
+                style={{
+                  width: 20,
+                  height: 20,
+                  tintColor: COLORS.green,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+      </View>
     )
   }
 
@@ -597,9 +585,7 @@ const Quantity = () => {
               <View style={container}>
                 <ScrollView style={inputsContainer}>
                   {inputs ? inputs.map((input, key) => {
-
-                    console.log("input+++++++")
-                    console.log(input)
+                    console.log(inputs.length)
                     return (
                       <View style={inputContainer} key={key}>
                         <View
@@ -611,7 +597,7 @@ const Quantity = () => {
                           // key={key}
                           key="{(key+1)}"
                         >
-                          <Text style={{ color: COLORS.black }}>0{key}</Text>
+                          {/* <Text style={{ color: COLORS.black }}>0 {key}</Text> */}
                           <Dropdown
                             style={[
                               styles.dropdown,
@@ -637,11 +623,7 @@ const Quantity = () => {
                               // console.log(selectKey)
                               inputselect(item, key);
                               // setunitname(item.unitname);
-
-
-
                               // setValue(item._id);
-                              // setIsFocus(false);
                             }}
                           />
                           <TextInput
@@ -749,26 +731,34 @@ const Quantity = () => {
                           value={input.Remark}
                           onChangeText={text => inputRemark(text, key)}
                         />
-                        <TouchableOpacity onPress={() => deleteHandler(key)}>
-                          <Image
-                            source={key == 0 ? null : icons.delete_icon}
-                            style={{
-                              width: 20,
-                              height: 20,
-                              tintColor: COLORS.red,
-                            }}
-                          />
-                        </TouchableOpacity>
+
+
+
                         <View>
                           {
-                            subInputs.map((subinputs, subkey) => {
+
+                            inputs[key].subinputs.map((subinputs, index1) => {
                               return (
-                                 add_subinput_field(subkey, key, subinputs)
+                                add_subinput_field(index1, key, subinputs)
                               )
                             })
-                          }
-                        </View>
 
+                          }
+                        <View style={{alignSelf:"flex-end"}}>
+                          <TouchableOpacity 
+                          style={{alignSelf:"flex-end"}}
+                          onPress={() => deleteHandler(key)}>
+                            <Image
+                              source={icons.delete_icon}
+                              style={{
+                                width: 20,
+                                height: 20,
+                                tintColor: COLORS.red,
+                              }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                        </View>
                       </View>
                     )
                   }) : null}
