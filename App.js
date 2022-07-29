@@ -37,8 +37,11 @@ import {
   UserReportdata,
   Dynamicdata,
   Leaves,
-  Calender,
-  Boq
+  Calenderleaves,
+  Boq,
+  CustomCalender,
+  NewCalender,
+  CalenderFuncation
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -62,7 +65,8 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'Login'}>
+          initialRouteName={'CalenderFuncation'}>
+
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
@@ -106,6 +110,21 @@ const App = () => {
           <Stack.Screen name="CheckList" component={CheckList} />
           <Stack.Screen name="Optiontype" component={Optiontype} />
           <Stack.Screen name="Quantitywork" component={Quantitywork} />
+          <Stack.Screen name="Calenderleaves" component={Calenderleaves} />
+          <Stack.Screen name="Leaves" component={Leaves} />
+          <Stack.Screen name="CustomCalender" component={CustomCalender} />
+          <Stack.Screen name="UserReportdata" component={UserReportdata} />
+          <Stack.Screen name="NewCalender" component={NewCalender} />
+          <Stack.Screen name="CalenderFuncation" component={CalenderFuncation} />
+
+          
+
+
+
+          
+
+
+
           <Stack.Screen
             name="ToolsAndMachinery1"
             component={ToolsAndMachinery1}

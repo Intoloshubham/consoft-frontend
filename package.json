@@ -28,6 +28,7 @@
     "@ui-kitten/components": "^5.1.2",
     "accordion-collapse-react-native": "^1.1.0",
     "axios": "^0.27.2",
+    "date-fns": "^2.29.1",
     "moment": "^2.29.3",
     "nodemon": "^2.0.19",
     "npm-force-resolutions": "^0.0.10",
@@ -35,6 +36,7 @@
     "react-native": "0.68.1",
     "react-native-animated-tree-view": "^0.1.4",
     "react-native-awesome-alerts": "^2.0.0",
+    "react-native-calendars": "^1.1285.0",
     "react-native-collapsible": "^1.6.0",
     "react-native-document-picker": "^8.1.1",
     "react-native-dotenv": "^3.3.1",
@@ -57,10 +59,13 @@
     "react-native-svg": "^12.3.0",
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-tab-view": "^3.1.1",
+    "react-native-tailwindcss": "^1.1.11",
     "react-native-toast-message": "^2.1.5",
     "react-native-vector-icons": "^9.1.0",
     "react-redux": "^8.0.2",
-    "react-swipeable-list": "^1.5.1"
+    "react-swipeable-list": "^1.5.1",
+    "tailwindcss-react-native": "^1.7.10",
+    "twrnc": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

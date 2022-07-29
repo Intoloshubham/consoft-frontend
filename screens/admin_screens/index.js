@@ -28,6 +28,12 @@ import Quantitywork from './Stock/Tools/Quantitywork';
 import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1';
 import VerifyAndRevertWork from './Home/VerifyAndRevertWork';
 import Boq from './Home/Boq';
+import Calenderleaves from './Stock/Tools/Calenderleaves'
+import Leaves from './Stock/Tools/Leaves'
+import CustomCalender from './Stock/Tools/CustomCalender'
+import UserReportdata from './Stock/Tools/UserReportdata'
+import NewCalender from './Stock/Tools/NewCalender'
+import CalenderFuncation from './Stock/Tools/CalenderFuncation'
 
 export {
   Account,
@@ -60,4 +66,10 @@ export {
   ToolsAndMachinery1,
   VerifyAndRevertWork,
   Boq,
+  Calenderleaves,
+  Leaves,
+  CustomCalender,
+  UserReportdata,
+  NewCalender,
+  CalenderFuncation
 };

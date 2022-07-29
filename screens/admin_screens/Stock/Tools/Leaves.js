@@ -12,54 +12,28 @@ import {HeaderBar, TextButton, FormInput} from '../../../../Components';
 import {Title, DataTable, Card} from 'react-native-paper';
 import {SIZES, COLORS, icons, FONTS} from '../../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Layout, RangeDatepicker, Calendar} from '@ui-kitten/components';
+import CustomCalender from './CustomCalender';
 
 
+// const DayCell = ({ date }, style) => (
+//   <View
+//     style={[styles.dayContainer, style.container]}>
+//     <Text style={style.text}>{`${date.getDate('p')}`}</Text>
+//     <Text style={[style.text, styles.value]}>
+     
+//     </Text>
+//   </View>
+// );
 const Leaves = () => {
   const [leavesmodal, setLeavesModal] = useState(false);
+  const [date, setDate] = React.useState(new Date());
 
-  var newdate = new Date();
-  var months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  
 
- 
-  newdate.getMonth(1);
-    var ndate = new Date(
-    newdate.getFullYear(),
-    newdate.getMonth() + 1, 
-    0
-    ).getDate();
-      // console.log(ndate);
-
-    const moveDate=(pera)=>{
-      if(pera=='pre'){
-        newdate.setMonth(newdate.getMonth()-1)
-      }
-      else if(pera=='next'){
-      newdate.setMonth(newdate.getMonth()+1)
-    }
-    }
-
-    var days = [];
-    var cells = '';
-
-    for (let i = 0; i <= ndate; i++) {
-      // console.log(i)
-    }
 
   return (
-    <View style={{flex: 1}}>
+    <View>
       <HeaderBar right={true} title="Leaves" />
       <View
         style={{
@@ -70,150 +44,154 @@ const Leaves = () => {
           marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
+          padding: 20,
+          borderWidth: 1,
+          elevation: 0.9,
         }}>
-        <Card style={{borderWidth: 1}}>
-          <Card.Content>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Title>Leaves</Title>
-              <TextButton
-                label="Leaves"
-                buttonContainerStyle={{
-                  paddingHorizontal: SIZES.base,
-                  borderRadius: 5,
-                }}
-                // labelStyle={{...FONTS.h5}}
-                onPress={() => setLeavesModal(true)}
-              />
-            </View>
-          </Card.Content>
-        </Card>
-        {/* leacves modal start  */}
-        <Modal transparent={false} visible={leavesmodal} animationType="slide">
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: '#000000aa',
-              // justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: '#fff',
-                margin: 10,
-                padding: 20,
-                borderRadius: 20,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  borderBottomWidth: 1,
-                }}>
-                <Title>Leaves from </Title>
-                <Pressable onPress={setLeavesModal}>
-                  <AntDesign name="close" size={30} color="black" />
-                </Pressable>
-              </View>
-              {/* <FormInput
-              label="name"
-              onChange={optionTypename => {
-                setoptionTypename(optionTypename);
-              }}
-            /> */}
-              <View>
-                <TextButton
-                  label="Save"
-                  buttonContainerStyle={{
-                    height: 45,
-                    borderRadius: SIZES.radius,
-                    marginTop: SIZES.padding,
-                  }}
-                  onPress={() => alert()}
-                />
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View>
-      <View
-        style={{
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.gray2,
-          ...styles.shadow,
-          marginHorizontal: SIZES.padding,
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-          padding: 10,
-        }}>
-        <View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity
-              onPress={() => {
-                moveDate('per');
-              }}>
-              <Text>Pre</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                moveDate('next');
-              }}>
-              <Text>Next</Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <Title style={{textAlign: 'center', marginVertical: -10}}>
-              {months[newdate.getMonth()]}
-            </Title>
-            <Title style={{textAlign: 'center'}}>
-              {newdate.toDateString()}
-            </Title>
-          </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 10,
+          }}>
+          <Text>Name</Text>
+          <Text>Designation</Text>
         </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            margin: 10,
-            borderBottomWidth: 1,
+            alignItems: 'center',
+            marginBottom: 10,
           }}>
-          <Text>Sun</Text>
-          <Text>Mon</Text>
-          <Text>Tus</Text>
-          <Text>Web</Text>
-          <Text>Thus</Text>
-          <Text>Fri</Text>
-          <Text>Sat</Text>
+          <Text>Email</Text>
         </View>
         <View
           style={{
-            // flex:1,
-            // flexDirection: 'row',
+            flexDirection: 'row',
             justifyContent: 'space-between',
-            margin: 10,
-            flexWrap: 'wrap',
             alignItems: 'center',
+            marginBottom: 10,
           }}>
-          <TouchableOpacity>
-            <Text>1</Text>
-          </TouchableOpacity>
-          <Text>2</Text>
-          <Text>3</Text>
-          <Text>4</Text>
-          <Text>5</Text>
-          <Text>6</Text>
-          <Text>7</Text>
+          <Text>Join_Date</Text>
+          <Text>Mobile-No</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 10,
+          }}>
+          <Text>Emp_id</Text>
+          <Text>A/c_no</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginTop: 10,
+          }}>
+          <TextButton
+            label="Leaves"
+            buttonContainerStyle={{
+              paddingHorizontal: SIZES.base,
+              borderRadius: 5,
+            }}
+            // labelStyle={{...FONTS.h5}}
+            onPress={() => setLeavesModal(true)}
+          />
         </View>
       </View>
+      {/* leacves modal start  */}
+      <Modal transparent={false} visible={leavesmodal} animationType="slide">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#000000aa',
+            // justifyContent: 'center',
+          }}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: '#fff',
+              margin: 10,
+              padding: 20,
+              borderRadius: 20,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+               
+              }}>
+              <Title>Leaves from </Title>
+              <Pressable onPress={setLeavesModal}>
+                <AntDesign name="close" size={30} color="black" />
+              </Pressable>
+            </View>
+            <View style={{marginTop:10}}>
+              <Layout style={styles.container} level="1">
+                <Calendar
+                  style={{borderWidth: 2, borderColor: 'black'}}
+                  date={date}
+                  isMultiSelection={true}
+                  // values={this.values}
+                  onSelect={nextDate => setDate(nextDate)}
+                />
+              </Layout>
+            </View>
+            <View>
+              <TextButton
+                label="Save"
+                buttonContainerStyle={{
+                  height: 45,
+                  borderRadius: SIZES.radius,
+                  marginTop: SIZES.padding,
+                }}
+                onPress={() => alert(date.toDateString())}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+      {/* modal end  */}
+      <View
+        style={{
+          marginBottom: SIZES.padding,
+          borderRadius: SIZES.radius,
+          backgroundColor: COLORS.white,
+          ...styles.shadow,
+          marginHorizontal: SIZES.padding,
+          marginBottom: SIZES.padding,
+          borderRadius: SIZES.radius,
+        }}>
+        <Title>Selected date: {date.toLocaleDateString()}</Title>
+        <View>
+          <Calendar
+            style={{borderWidth: 2, borderColor: 'black'}}
+            date={date}
+            onSelect={nextDate => setDate(nextDate)}
+            // max={20}
+            // min={yesterday}
+            // max={tomorrow}
+          />
+        </View>
+      </View>
+      {/* <CustomCalender /> */}
     </View>
   );
 };
 
 export default Leaves;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    minHeight: 360,
+  },
+});
 
 {
   /* <Title>days={newdate.getDay()}</Title>

@@ -14,10 +14,11 @@ import {SIZES, COLORS, icons} from '../../../../constants';
 const UserReportdata = () => {
 
   const userReport = {Remark:""};
-  const [userdata, setUserData] = useState([{Remark:''}]);
+
+  const [userdata, setUserData] = useState([userReport]);
 
   const addHandler = () => {
-    setUserData([...userdata,]);
+    setUserData([]);
   };
 
   const deleteHandler = index => {
