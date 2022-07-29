@@ -108,7 +108,7 @@ export default styles = StyleSheet.create({
         alignItems: 'center',
         flexWrap: 'wrap',
         borderWidth: 2,
-        borderColor: COLORS.gray,
+        borderColor: COLORS.black,
         borderRadius: 5,
         padding: 8,
         marginBottom: 10,
