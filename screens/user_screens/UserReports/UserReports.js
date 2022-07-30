@@ -190,7 +190,7 @@ const UserReports = ({ route }) => {
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Quantity */}
-              <Quantity />
+              <Quantity project_id={value}/>
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}

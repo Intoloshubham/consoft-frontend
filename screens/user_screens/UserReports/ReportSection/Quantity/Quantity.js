@@ -27,6 +27,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
 import config from '../../../../../config';
 import { getCompanyId, getToken } from '../../../../../services/asyncStorageService';
+import { Insert_report_data } from '../../ReportApi.js'
 import {
   COLORS,
   FONTS,
@@ -37,7 +38,7 @@ import {
 } from '../../../../../constants';
 import { FormInput, TextButton, HeaderBar } from '../../../../../Components';
 
-const Quantity = () => {
+const Quantity = ({ project_id }) => {
   const {
     header,
     con_body,
@@ -78,10 +79,21 @@ const Quantity = () => {
   const [widthKey, selectWidthkey] = useState('');
   const [heightKey, selectHeightkey] = useState('');
 
+  //setting Main input data to post
+  const [itemData, setItemData] = useState('')
+  const [unitData, setUnitData] = useState('')
+  const [lengthData, setLengthData] = useState('')
+  const [widthData, setWidthData] = useState('')
+  const [thicknessData, setThicknessData] = useState('')
+  const [totalData, setTotalData] = useState('')
+  const [remarkData, setRemarkData] = useState('')
+
   //sub key states of dynamic inputs
   const [subLengthKey, setSubLengthkey] = useState('');
   const [subWidthKey, setSubWidthkey] = useState('');
   const [subHeightKey, setSubHeightkey] = useState('');
+
+
 
   const [unitKey, setUnitKey] = useState('');
 
@@ -112,6 +124,8 @@ const Quantity = () => {
   //   //   sub_remark: ''
   //   // }
   // ])
+
+
   const addKeyref = useRef(0);
   //get company id
   const [company_id, setCompany_id] = useState('');
@@ -137,6 +151,53 @@ const Quantity = () => {
   const inputkeyRef = useRef(inputs);
   //  inputkey.current.unitname
 
+
+
+
+
+
+  const CONST_FIELD = {
+    MANPOWER: 'Manpower',
+    STOCK: 'Stock',
+    QUANTITY: 'Quantity',
+    QUALITY: 'Quality',
+    TANDP: 'Tandp'
+  }
+  console.log(CONST_FIELD)
+
+  //Invoking Report data functions in Report api
+  const insertQtyPostData = () => {
+    //  console.log(inputs);
+    console.log(inputs);
+    const report_post_data = {
+      company_id: company_id,
+      project_id: project_id,
+      item_id: itemData,
+      length: lengthData,
+      width: widthData,
+      qty: totalData,
+      height: thicknessData,
+      remark: remarkData
+    }
+
+    if (report_post_data) {
+      const data = Insert_report_data(report_post_data, CONST_FIELD)
+      data.then(res => res.json())
+        .then(result => {
+          // console.log("report list")
+          console.log(result)
+
+          // setReport_list(result)
+        })
+    } else {
+      alert("Not inserted")
+    }
+  }
+
+
+  // useMemo(() => {
+
+  // }, [report_post_data])
 
   const addHandler = () => {
 
@@ -203,7 +264,6 @@ const Quantity = () => {
     const _inputsunit = [...inputs];
     _inputsunit[key].unit = text;
     _inputsunit[key].key = key;
-    console.log(_inputsunit);
     setUnitKey(key);
     // console.log("unitKey");
     // console.log(unitKey);
@@ -226,14 +286,12 @@ const Quantity = () => {
     const _inputhight = [...inputs];
     _inputhight[key].numheight = filterOnlyNumericValue(text);
     _inputhight[key].key = key;
-
     setInputs(_inputhight);
   };
   const inputtotal = (value, key) => {
     const _inputtotal = [...inputs];
     _inputtotal[key].total = value;
     _inputtotal[key].key = key;
-
     setInputs(_inputtotal);
   };
 
@@ -281,9 +339,7 @@ const Quantity = () => {
 
   //close of sub dynamic inputs
 
-  const addsubmit = () => {
-    console.log(inputs);
-  }
+
 
 
   const fetchData = async () => {
@@ -621,6 +677,9 @@ const Quantity = () => {
                             value={input.value}
                             onChange={item => {
                               setSelectKey(input.key);
+                              setItemData(item._id)
+                              setUnitData(item.unit_name)
+                              // console.log(item._id)
                               inputselect(item, key);
                             }}
                           />
@@ -665,6 +724,8 @@ const Quantity = () => {
                             keyboardType="numeric"
                             onChangeText={text => {
                               selectLengthkey(input.key)
+                              setLengthData(text)
+                              // console.log(text)
                               inputlangth(text, key);
                             }}
                           />
@@ -676,6 +737,7 @@ const Quantity = () => {
                             keyboardType="numeric"
                             onChangeText={text => {
                               selectWidthkey(input.key)
+                              setWidthData(text)
                               inputwidth(text, key);
                             }}
                           />
@@ -687,6 +749,9 @@ const Quantity = () => {
                             keyboardType="numeric"
                             onChangeText={text => {
                               selectHeightkey(input.key)
+                              setThicknessData(text)
+                              setTotalData(input.total)
+                              // console.log(text)
                               inputhight(text, key);
                             }}
                           />
@@ -696,11 +761,11 @@ const Quantity = () => {
                             selectTextOnFocus={false}
                             placeholderTextColor={COLORS.white}
                             placeholder={'Total'}
-                            value={key == lengthKey == widthKey == heightKey ? (input.numlangth * input.numwidth * input.numheight).toString() : (input.numlangth * input.numwidth * input.numheight).toString()}
+                            value={key == lengthKey == widthKey == heightKey ? (input.total=input.numlangth * input.numwidth * input.numheight).toString() : (input.total=input.numlangth * input.numwidth * input.numheight).toString()}
                             keyboardType="numeric"
                             onChangeText={value => {
+                              
                               inputtotal(value, key);
-                              console.log(value)
                             }}
                           />
 
@@ -722,7 +787,10 @@ const Quantity = () => {
                           placeholder={'Remark'}
                           placeholderTextColor={COLORS.gray}
                           value={input.Remark}
-                          onChangeText={text => inputRemark(text, key)}
+                          onChangeText={text => {
+                            setRemarkData(text);
+                            inputRemark(text, key)
+                          }}
                         />
 
 
@@ -761,7 +829,7 @@ const Quantity = () => {
                 <Button
                   title="submit"
                   onPress={() => {
-                    addsubmit();
+                    insertQtyPostData();
                   }}
                 />
               </View>
@@ -894,14 +962,93 @@ const Quantity = () => {
       >
         {/* button section adding contractor */}
         {quant_ity ?
-          <>
-            <View style={{backgroundColor:"red"}}>
+          <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }} >
+            <View style={{ backgroundColor: "blue" }}>
               {add_quantity_icon_button()}
-            </View>&&
-            <View>
-              <Text style={{ color: "black" }}>Rummy Rum</Text>
             </View>
-          </>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: "skyblue",
+                width: SIZES.width * 0.92,
+                alignSelf: "flex-start",
+                // position:"absolute",
+                top: 20,
+                marginLeft: 17,
+                // marginBottom: -20,
+                padding: 5,
+                elevation: 1
+              }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+
+                <View style={{}}>
+                  <View style={{}}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>S.no</Text>
+                  </View>
+                  <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>01</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={{}}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>Item</Text>
+                  </View>
+                  <View style={{ borderRightWidth: 1, paddingHorizontal: 15, marginLeft: -15, borderColor: COLORS.lightGray1 }}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>02</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={{}}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>Length</Text>
+                  </View>
+                  <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>03</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={{}}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>Breadth</Text>
+                  </View>
+                  <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>04</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={{}}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>Thickness</Text>
+                  </View>
+                  <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>05</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={{}}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>Quantity</Text>
+                  </View>
+                  <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>06</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={{}}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>Unit</Text>
+                  </View>
+                  <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>07</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={{}}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>Remark</Text>
+                  </View>
+                  <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+                    <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>08</Text>
+                  </View>
+                </View>
+              </View>
+
+            </View>
+          </View>
           : null}
       </View>
       {add_qty_data_modal()}
