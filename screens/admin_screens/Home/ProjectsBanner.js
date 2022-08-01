@@ -22,11 +22,8 @@ import AuthLayout from '../../Authentication/AuthLayout';
 import utils from '../../../utils';
 import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
 import Toast from 'react-native-toast-message';
-import Config from '../../../config';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useSelector, useDispatch} from 'react-redux';
 import {ConformationAlert} from '../../../Components';
-
 import {
   getProjects,
   saveProject,
@@ -101,19 +98,18 @@ const ProjectsBanner = ({company_id}) => {
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
-  };
-
-  
+  };  
   
    // get projects
   const fetchProjects = useCallback( async () => {
     const  data = await getProjects(company_id);
+
     setProjects(data);
-  }, [company_id]) 
-    
+  }, []);
+
   useEffect(() => {
-    fetchProjects()
-  }, [fetchProjects]) 
+    fetchProjects();
+  }, []);
 
   // console.log("objesdfsdct")
   // ON BUTTON SUBMISSON VALIDATION
@@ -132,8 +128,8 @@ const ProjectsBanner = ({company_id}) => {
   const createProject = async () => {
     createProjectModalForm();
     setCreateProjectModal(true);
-    fetchProjectCategory()
-    fetchProjectsTypes();  
+    fetchProjectCategory();
+    fetchProjectsTypes();
   };
 
   const fetchProjectCategory = async () => {
@@ -143,7 +139,7 @@ const ProjectsBanner = ({company_id}) => {
     });
     setProjectCategory(proCatFromApi);
   };
- 
+
   // get project types
   const fetchProjectsTypes = async () => {
     const response = await getProjectType();
@@ -157,33 +153,26 @@ const ProjectsBanner = ({company_id}) => {
   //save project
   const saveProjectSubmit = async () => {
     const projectData = getProjectData();
-    const  res = await saveProject(projectData);
-      if (res.status === STATUS.RES_SUCCESS ) {
-        showToast();
-        fetchProjects();
-        setTimeout(() => {
-          setCreateProjectModal(false);
-          createProjectModalForm()
-        }, 1000);
-      }else{
-        alert(res.message);
-      }
+    const res = await saveProject(projectData);
+    if (res.status === STATUS.RES_SUCCESS) {
+      showToast();
+      fetchProjects();
+      setTimeout(() => {
+        setCreateProjectModal(false);
+        createProjectModalForm();
+      }, 1000);
+    } else {
+      alert(res.message);
+    }
   };
 
   // GETTING PROJECTS ID
   const modalHandler = project_id => {
-    setProjectId(project_id);//project ID state
+    setProjectId(project_id); //project ID state
     setProjectCrud(true);
   };
 
-  const editProject = (
-    name,
-    location,
-    category,
-    type,
-    area,
-    unit,
-  ) => {
+  const editProject = (name, location, category, type, area, unit) => {
     setProjectName(name);
     setProjectLocation(location);
     setCategoryValue(category);
@@ -195,7 +184,7 @@ const ProjectsBanner = ({company_id}) => {
   //update project
   const updateProjectSubmit = async () => {
     const projectData = getProjectData();
-    const  res = await updateProject(projectId, projectData);
+    const res = await updateProject(projectId, projectData);
     if (res.status === STATUS.RES_SUCCESS) {
       showUpdateToast();
       fetchProjects();
@@ -218,7 +207,7 @@ const ProjectsBanner = ({company_id}) => {
       company_id: company_id,
     };
     return projectData;
-  }
+  };
 
   // EMPTY ALL FORM STATED
   function createProjectModalForm() {
@@ -239,7 +228,7 @@ const ProjectsBanner = ({company_id}) => {
         setProjectCrud(false);
       }, 300);
       fetchProjects();
-    } 
+    }
   };
 
   // TOAST
@@ -727,7 +716,6 @@ const ProjectsBanner = ({company_id}) => {
                     setOpen={setOpenCategory}
                     setValue={setCategoryValue}
                     setItems={setProjectCategory}
-                    multiple={false}
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
@@ -872,11 +860,9 @@ const ProjectsBanner = ({company_id}) => {
                     color: COLORS.black,
                     ...FONTS.h3,
                   }}
-                  onPress={
-                    () => {
-                      setProjectDeleteConfirmation(true);
-                    }
-                  }
+                  onPress={() => {
+                    setProjectDeleteConfirmation(true);
+                  }}
                 />
               </ScrollView>
             </View>

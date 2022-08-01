@@ -41,7 +41,6 @@ const ToolsAndMachinery = ({route}) => {
   const fetchToolsAndMachinery = async () => {
     let data = await getToolsAndMachinery();
     setToolsAndMachinery(data);
-    console.log('object');
   };
 
   // post tools & machinery

@@ -33,13 +33,14 @@ const SubmittedWorks = () => {
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(company_id);
     setSubmitWork(response);
-    fetchSubmitWork();
   };
 
   React.useEffect(() => {
     const abortConst = new AbortController();
     fetchSubmitWork();
+
     return () => abortConst.abort();
+
   }, []);
 
   // refresh page

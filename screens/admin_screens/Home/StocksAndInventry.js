@@ -86,7 +86,7 @@ const StocksAndInventry = () => {
       location: location,
       vehicle_no: vehicleNo,
     };
-    console.log(FormData);
+    
     fetch(`${Config.API_URL}stock-entry`, {
       method: 'POST',
       headers: {
@@ -96,7 +96,7 @@ const StocksAndInventry = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
+    
         if (data.status == 200) {
           setTimeout(() => {
             setShowAddMaterialsModal(false);

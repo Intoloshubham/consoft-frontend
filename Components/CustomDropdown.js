@@ -42,7 +42,7 @@ const Drop = ({
         textStyle={{
           fontSize: 15,
           color: COLORS.black,
-          textTransform: 'capitalize',
+          // textTransform: 'capitalize',
         }}
         categorySelectable={categorySelectable}
         listParentLabelStyle={listParentLabelStyle}

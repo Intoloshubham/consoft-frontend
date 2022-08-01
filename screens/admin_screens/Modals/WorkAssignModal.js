@@ -9,7 +9,8 @@ import {
   ScrollView,
   Image,
   TextInput,
-  StyleSheet,RefreshControl
+  StyleSheet,
+  RefreshControl,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
@@ -105,8 +106,47 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     setOpenUserRole(false);
   }, []);
 
+
+  // ALL API'S
+  // GETTING USER ROLES API
+  // React.useEffect(() => {
+  fetch(`${Config.API_URL}role`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => response.json())
+    .then(res => {
+      let roleDataFromApi = res.data.map((one, i) => {
+        return {label: one.user_role, value: one._id};
+      });
+      setUserRoles(roleDataFromApi);
+    })
+    .catch(error => console.log(error.message));
+  // }, []);
+
+  // GETTING USER FROM API ON CHANGE OF USER ROLES
+  const OnChangeHandler = id => {
+    fetch(`${Config.API_URL}role-by-users/` + `${id}`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(res => {
+        let roleDataFromApi = res.data.map(ele => {
+          return {label: ele.name, value: ele._id};
+        });
+        setUsers(roleDataFromApi);
+      })
+      .catch(error => console.log(error.message));
+  };
+
   
   // const works = () => {
+
 
   //   work.map((item, i) => {
   //     assignWorkArr.push(item.value);
@@ -145,7 +185,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log(data);
+        console.log(data);
         if (data.status == 200) {
           showToast();
           setTimeout(() => {

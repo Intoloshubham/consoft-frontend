@@ -46,7 +46,7 @@ const Home = () => {
         <View
           style={{
             flex: 1,
-            marginBottom: 130,
+            marginBottom: 100,
           }}>
           <ProjectsBanner company_id={companyData._id} />
           <SubmittedWorks />
