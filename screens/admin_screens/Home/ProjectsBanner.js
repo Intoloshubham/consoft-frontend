@@ -98,11 +98,12 @@ const ProjectsBanner = ({company_id}) => {
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
-  };
+  };  
+  
+   // get projects
+  const fetchProjects = useCallback( async () => {
+    const  data = await getProjects(company_id);
 
-  // get projects
-  const fetchProjects = useCallback(async () => {
-    const data = await getProjects(company_id);
     setProjects(data);
   }, []);
 

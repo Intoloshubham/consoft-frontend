@@ -36,7 +36,11 @@ const SubmittedWorks = () => {
   };
 
   React.useEffect(() => {
+    const abortConst = new AbortController();
     fetchSubmitWork();
+
+    return () => abortConst.abort();
+
   }, []);
 
   // refresh page

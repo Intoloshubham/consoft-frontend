@@ -45,7 +45,36 @@ const VerifyAndRevertWork = ({company_id}) => {
 
   React.useEffect(() => {
     fetchVerifyAndRevertWork();
+
     filterDataBasedOnCondition();
+
+    const abortCont = new AbortController();
+    // fetch(
+    //   `${Config.API_URL}verify-revert-works/` + `${company_id}`,
+    //   {signal: abortCont.signal},
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //   },
+    // )
+    //   .then(response => {
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     setVerifyRevertWorks(data);
+    //     // console.log(data);
+    //   })
+    //   .catch(err => {
+    //     if (err.name === 'AbortError') {
+    //       console.log('fetch aborted');
+    //     } else {
+    //       console.log(err);
+    //     }
+    //   });
+    return () => abortCont.abort();
+
   }, []);
 
   const VerifyWorksRoute = () => {
