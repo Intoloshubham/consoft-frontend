@@ -19,11 +19,11 @@ import {
   FormInput,
   CustomDropdown,
   CustomToast,
-  ConformationAlert,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import Config from '../../../config';
 import {useSelector} from 'react-redux';
+import {getProjectCategory} from '../../../controller/ProjectCategoryAndTypeController';
 
 const CategoryandType = () => {
   React.useEffect(() => {
@@ -52,10 +52,14 @@ const CategoryandType = () => {
   const [value, setValue] = React.useState([]);
   const [items, setItems] = React.useState([]);
 
-  const unmounted = useRef();
+  // get project category
+  const projectCategory = () => {
+    var response = getProjectCategory();
+    console.log(response);
+  };
+  
   // get cat data
   const getData = name => {
-    // console.log(name);
     setCatName(name);
   };
 

@@ -14,7 +14,6 @@ import {
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {IconButton, ConformationAlert} from '../../../Components';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
-import Config from '../../../config';
 import {Swipeable} from 'react-native-gesture-handler';
 import {
   getAssignWorks,
@@ -61,54 +60,6 @@ const AssignedWorks = () => {
     fetchUserRole();
   }, []);
 
-  // Get All Assign Works
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}assign-works`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // console.log(data);
-  //       setAssignWorkData(data);
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }, [assignWorkData]);
-
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}role`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setItems(data);
-  //       // console.log(data)
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }, []);
-
-  // Delete Assign Works
-
-  // const OnDeleteAssignWorks = () => {
-  //   fetch(`${Config.API_URL}sub-assign-work/` + `${workId}`, {
-  //     method: 'DELETE',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // console.log(data);
-  //     })
-  //     .catch(error => console.log(error.message));
-  //   setDeleteConfirm(false);
-  // };
-
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {
       return (
@@ -135,7 +86,6 @@ const AssignedWorks = () => {
             style={{
               flex: 1,
               justifyContent: 'flex-end',
-              // backgroundColor: COLORS.transparentBlack2,
             }}>
             <View
               style={{

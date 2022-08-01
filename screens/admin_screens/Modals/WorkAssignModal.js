@@ -9,7 +9,8 @@ import {
   ScrollView,
   Image,
   TextInput,
-  StyleSheet,RefreshControl
+  StyleSheet,
+  RefreshControl,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
@@ -82,8 +83,8 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     },
   })
     .then(response => response.json())
-    .then(data => {
-      let roleDataFromApi = data.map((one, i) => {
+    .then(res => {
+      let roleDataFromApi = res.data.map((one, i) => {
         return {label: one.user_role, value: one._id};
       });
       setUserRoles(roleDataFromApi);
@@ -100,9 +101,8 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       },
     })
       .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        let roleDataFromApi = data.map(ele => {
+      .then(res => {
+        let roleDataFromApi = res.data.map(ele => {
           return {label: ele.name, value: ele._id};
         });
         setUsers(roleDataFromApi);
@@ -131,7 +131,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     })
       .then(response => response.json())
       .then(data => {
-        // console.log(data);
+        console.log(data);
         if (data.status == 200) {
           showToast();
           setTimeout(() => {

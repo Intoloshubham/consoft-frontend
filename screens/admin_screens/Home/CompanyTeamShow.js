@@ -11,7 +11,6 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {
   HeaderBar,
   TextButton,
@@ -42,7 +41,7 @@ const ProjectCompanyShow = () => {
         setComTeamDetails(data);
       })
       .catch(error => console.log(error.message));
-  }, [comTeamDetails]);
+  }, []);
 
   const [showCompanyAddTeamModal, setShowCompanyAddTeamModal] =
     React.useState(false);

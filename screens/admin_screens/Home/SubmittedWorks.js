@@ -33,12 +33,11 @@ const SubmittedWorks = () => {
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(company_id);
     setSubmitWork(response);
-    fetchSubmitWork();
   };
 
   React.useEffect(() => {
     fetchSubmitWork();
-  }, [company_id]);
+  }, []);
 
   // refresh page
 
