@@ -69,9 +69,26 @@ const deleteAssignWorks = async work_id => {
   }
 };
 
+const postAssignWork = async formData => {
+  try {
+    const res = await fetch(Config.API_URL + 'assign-works', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   getSubmitWorks,
   getVerifyAndRevertWorks,
   getAssignWorks,
   deleteAssignWorks,
+  postAssignWork,
 };

@@ -16,6 +16,8 @@ import {
   FormInput,
   IconButton,
   TextButton,
+  CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../constants';
 import {useSelector} from 'react-redux';
@@ -37,6 +39,16 @@ const ToolsAndMachinery = ({route}) => {
   const [toolsName, setToolsName] = React.useState('');
   const [toolsQty, setToolsQty] = React.useState('');
 
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
+  //
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+
+  //====================== Apis =========================================
+
   // get tools & machinery
   const fetchToolsAndMachinery = async () => {
     let data = await getToolsAndMachinery();
@@ -52,19 +64,37 @@ const ToolsAndMachinery = ({route}) => {
     };
     let data = await postToolsAndMachinery(formData);
     if (data.status === 200) {
+      setSubmitToast(true);
       setShowTAndMModal(false);
       setToolsName('');
       setToolsQty('');
       fetchToolsAndMachinery();
+    } else {
+      alert(data.message);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 1500);
+  };
+
+  const [toolId, setToolId] = React.useState('');
+
+  const deletetoolandmachine = id => {
+    setToolId(id);
+    setDeleteConfirm(true);
   };
 
   // delete tools & machinery
-  const DeleteToolsAndMachinery = async id => {
-    let data = await deleteToolsAndMachinery(id);
+  const DeleteToolsAndMachinery = async () => {
+    let data = await deleteToolsAndMachinery(toolId);
     if (data.status === 200) {
+      setDeleteToast(true);
       fetchToolsAndMachinery();
+      setDeleteConfirm(false);
     }
+    setTimeout(() => {
+      setDeleteToast(false);
+    }, 1500);
   };
 
   // edit tools & machinery
@@ -76,11 +106,17 @@ const ToolsAndMachinery = ({route}) => {
     };
     let data = await editToolsAndMachinery(formData, toolsId);
     if (data.status === 200) {
+      setUpdateToast(true);
       setShowEditTAndMModal(false);
       setToolsName('');
       setToolsQty('');
       fetchToolsAndMachinery();
+    } else {
+      alert(data.message);
     }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 1500);
   };
 
   React.useEffect(() => {
@@ -158,7 +194,11 @@ const ToolsAndMachinery = ({route}) => {
               />
             </ImageBackground>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => DeleteToolsAndMachinery(item._id)}>
+          <TouchableOpacity
+            onPress={() =>
+              // DeleteToolsAndMachinery(item._id)
+              deletetoolandmachine(item._id)
+            }>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.rose_600,
@@ -477,6 +517,38 @@ const ToolsAndMachinery = ({route}) => {
       {renderToolsAndMachinery()}
       {renderAddToolsAndMachineModal()}
       {renderEditToolsAndMachineModal()}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Addedd Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => DeleteToolsAndMachinery()}
+      />
     </View>
   );
 };

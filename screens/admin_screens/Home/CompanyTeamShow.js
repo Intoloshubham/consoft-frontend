@@ -145,7 +145,7 @@ const ProjectCompanyShow = () => {
           marginBottom: SIZES.padding,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
@@ -348,18 +348,6 @@ const ProjectCompanyShow = () => {
         flex: 1,
       }}>
       <HeaderBar right={true} title="Company Team" />
-      {/* <TextButton
-        label="Add New"
-        buttonContainerStyle={{
-          height: 45,
-          alignItems: 'center',
-          marginHorizontal: SIZES.padding,
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.lightblue_700,
-        }}
-        onPress={() => setShowCompanyAddTeamModal(true)}
-      /> */}
       {renderAddCompanyTeamModal()}
       {renderTeamList()}
     </View>

@@ -2,7 +2,7 @@ import Config from '../config';
 
 const getProjectCategory = async () => {
   try {
-    const res = await fetch(Config.API_URL + 'project-category', {
+    const res = await fetch(`${Config.API_URL}project-category`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ const getProjectCategory = async () => {
   }
 };
 
-const getProjectTypes = async () => {
+const getProjectType = async () => {
   try {
     const res = await fetch(Config.API_URL + 'project-type', {
       method: 'get',
@@ -77,10 +77,42 @@ const getProjectCategoryById = async id => {
   }
 };
 
-const updateProjectCategory = async id => {
+const updateProjectCategory = async (id, categoryData) => {
   try {
-    const res = await fetch(Config.API_URL + 'project-category' + id, {
+    const res = await fetch(Config.API_URL + 'project-category/' + id, {
       method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(categoryData),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateProjectType = async (id, typeData) => {
+  try {
+    const res = await fetch(Config.API_URL + 'project-type/' + id, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(typeData),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteProjectCategory = async id => {
+  try {
+    const res = await fetch(Config.API_URL + 'project-category/' + id, {
+      method: 'delete',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -92,9 +124,9 @@ const updateProjectCategory = async id => {
   }
 };
 
-const deleteProjectCategory = async id => {
+const deleteProjectType = async id => {
   try {
-    const res = await fetch(Config.API_URL + 'project-category' + id, {
+    const res = await fetch(Config.API_URL + 'project-Type/' + id, {
       method: 'delete',
       headers: {
         'Content-Type': 'application/json',
@@ -109,10 +141,12 @@ const deleteProjectCategory = async id => {
 
 export {
   getProjectCategory,
-  getProjectTypes,
+  getProjectType,
   postProjectCategory,
   postProjectType,
   getProjectCategoryById,
   updateProjectCategory,
   deleteProjectCategory,
+  updateProjectType,
+  deleteProjectType,
 };

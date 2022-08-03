@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  LogBox,
   SafeAreaView,
 } from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
@@ -309,7 +308,7 @@ const VerifyAndRevertWork = ({company_id}) => {
         backgroundColor: COLORS.white,
         paddingVertical: SIZES.radius,
         paddingHorizontal: SIZES.radius,
-        borderRadius: SIZES.radius,
+        borderRadius: 5,
         ...styles.shadow,
       }}>
       <View

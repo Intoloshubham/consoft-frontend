@@ -15,6 +15,7 @@ import {useSelector} from 'react-redux';
 
 const Home = () => {
   const companyData = useSelector(state => state.company);
+  
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
