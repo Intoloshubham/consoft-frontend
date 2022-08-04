@@ -23,7 +23,7 @@ import {useNavigation} from '@react-navigation/native';
 import utils from '../../../utils';
 import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {ConformationAlert} from '../../../Components';
+
 import {
   getProjects,
   saveProject,
@@ -35,11 +35,6 @@ import {
 
 const ProjectsBanner = ({company_id}) => {
   const navigation = useNavigation();
-  //CONFIRMATION MODAL ON DELETE
-  const [projectDeleteConfirmation, setProjectDeleteConfirmation] =
-    React.useState(false);
-
-  //PROJECT BANNER COLLAPSED
   const [collapsed, setCollapsed] = React.useState(true);
 
   //PROJECT CREATE & UPDATE MODAL
@@ -54,14 +49,17 @@ const ProjectsBanner = ({company_id}) => {
   const [projectname, setProjectName] = React.useState('');
   const [projectlocation, setProjectLocation] = React.useState('');
   const [projectplotarea, setProjectPlotArea] = React.useState('');
+
   // getting categories from api - dropdown
   const [openCategory, setOpenCategory] = React.useState(false);
   const [categoryValue, setCategoryValue] = React.useState([]);
   const [projectCategory, setProjectCategory] = React.useState([]);
+
   // getting types from api - dropdown
   const [openType, setOpenType] = React.useState(false);
   const [typeValue, setTypeValue] = React.useState([]);
   const [projectType, setProjectType] = React.useState([]);
+  
   //project area units
   const [openUnit, setOpenUnit] = React.useState(false);
   const [unitValue, setUnitValue] = React.useState([]);
@@ -920,19 +918,6 @@ const ProjectsBanner = ({company_id}) => {
       {renderUpdateProjectModal()}
 
       {/* DELETE CONFIRMATION MODAL */}
-      <ConformationAlert
-        isVisible={projectDeleteConfirmation}
-        onCancel={() => {
-          setProjectDeleteConfirmation(false);
-        }}
-        title="Delete Project"
-        message="Are you sure want to delete this project ?"
-        cancelText="Cancel"
-        confirmText="Yes"
-        onConfirmPressed={() => {
-          projectDeleteSubmit();
-        }}
-      />
 
       <CustomToast
         isVisible={submitToast}

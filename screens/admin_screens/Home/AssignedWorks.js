@@ -56,9 +56,7 @@ const AssignedWorks = () => {
   };
 
   React.useEffect(() => {
-    setInterval(() => {
-      fetchAssignWorks();
-    }, 5000);
+    fetchAssignWorks();
     fetchUserRole();
   }, []);
 

@@ -7,11 +7,10 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import {COLORS, SIZES, FONTS, images, icons} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {TextButton, HeaderBar} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
-import VerifyAndRevertWork from './VerifyAndRevertWork';
 
 const ProjectsDetails = ({route}) => {
   const navigation = useNavigation();
@@ -29,7 +28,6 @@ const ProjectsDetails = ({route}) => {
   const {name, project_id} = route.params; //
   const [showWorkModal, setWorkModal] = React.useState(false);
   const [projects, setProjects] = React.useState(ProjectList);
-
 
   function renderProjectDetails() {
     const renderItem = ({item}) => (
@@ -137,15 +135,14 @@ const ProjectsDetails = ({route}) => {
           ...styles.shadow,
         }}
         onPress={() => setWorkModal(true)}
-        // onPress={() => openAssignWorkModal()}
       />
-      {/* {showWorkModal && ( */}
-      <WorkAssignModal
-        projectId={project_id}
-        isVisible={showWorkModal}
-        onClose={ setWorkModal(false)}
-      />
-      {/* )} */}
+      {showWorkModal && (
+        <WorkAssignModal
+          projectId={project_id}
+          isVisible={showWorkModal}
+          onClose={setWorkModal(false)}
+        />
+      )}
 
       {renderProjectDetails()}
     </View>
