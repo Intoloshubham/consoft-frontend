@@ -30,6 +30,7 @@ const ProjectsDetails = ({route}) => {
   const [showWorkModal, setWorkModal] = React.useState(false);
   const [projects, setProjects] = React.useState(ProjectList);
 
+
   function renderProjectDetails() {
     const renderItem = ({item}) => (
       <TouchableOpacity
@@ -136,12 +137,13 @@ const ProjectsDetails = ({route}) => {
           ...styles.shadow,
         }}
         onPress={() => setWorkModal(true)}
+        // onPress={() => openAssignWorkModal()}
       />
       {/* {showWorkModal && ( */}
       <WorkAssignModal
         projectId={project_id}
         isVisible={showWorkModal}
-        onClose={() => setWorkModal(false)}
+        onClose={ setWorkModal(false)}
       />
       {/* )} */}
 

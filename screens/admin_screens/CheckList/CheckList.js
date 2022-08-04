@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -23,6 +23,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Checkbox} from 'react-native-paper';
 import {getCompanyId, getToken} from '../../../services/asyncStorageService';
 import {Dropdown} from 'react-native-element-dropdown';
+import config from '../../../config';
 
 const CheckList = () => {
   React.useEffect(() => {
@@ -51,6 +52,8 @@ const CheckList = () => {
   const [two, settwo] = React.useState(false);
   const [demo, setdemo] = React.useState(false);
   const [work, setwork] = React.useState(false);
+
+  const unmounted = useRef(false);
 
   //drop
   // const [data, setdata] = useState([]);
@@ -110,9 +113,10 @@ const CheckList = () => {
       checklist_name: createlist,
       checklist_item: inputslist,
       checklist_option_type_id: roleValue,
+      company_id: company_id_option_type,
     };
-    // console.log(data);
-    fetch('http://192.168.1.99:8000/api/checklists', {
+    console.log(data);
+    fetch(`${config.API_URL}checklists`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -143,9 +147,11 @@ const CheckList = () => {
 
   const checklistItem = async () => {
     try {
-      const resp = await fetch('http://192.168.1.99:8000/api/checklists');
+      const resp = await fetch(
+        `${config.API_URL}checklists/` + `${company_id_option_type}`,
+      );
       const datalist = await resp.json();
-      //  console.log(datalist);
+      // console.log(datalist);
       setshowdata(datalist);
     } catch (error) {
       console.log('error', error);
@@ -163,6 +169,7 @@ const CheckList = () => {
     setupdatelist(true);
     setchecklistId(id);
     setcreatelist(name);
+    //  setRoleValue(type)
     setInputs(
       items.map(ele => {
         return {
@@ -216,7 +223,7 @@ const CheckList = () => {
         console.log('Success:', data, alert(' update'));
         createlist === ' ';
       });
-    // setupdatelist(false);
+    
   };
 
   const createlistshowdata = (element, index) => {
@@ -273,8 +280,8 @@ const CheckList = () => {
                     update(
                       element._id,
                       element.checklist_name,
-                      element.list,
-                      element.list,
+                      element.items,
+                      element.option_type,
                     )
                   }>
                   <Image
@@ -301,8 +308,8 @@ const CheckList = () => {
             </View>
             <ScrollView style={styles.sa} nestedScrollEnabled={true}>
               {/* {console.log(element.list)} */}
-              {element.list !== undefined
-                ? element.list.map((ele, index) => {
+              {element.items !== undefined
+                ? element.items.map((ele, index) => {
                     return (
                       <View
                         key={index}
@@ -324,7 +331,7 @@ const CheckList = () => {
                           }}>
                           {ele.checklist_item}
                         </Text>
-                        <Text>{ele.option_type}</Text>
+                        <Text>{element.option_type}</Text>
                       </View>
                     );
                   })
@@ -338,6 +345,7 @@ const CheckList = () => {
   };
 
   const option_type_data = async () => {
+    try {
     const resp = await fetch(
       'http://192.168.1.99:8000/api/checklist-option-type',
       {
@@ -357,12 +365,20 @@ const CheckList = () => {
         value: ele._id,
       };
     });
+    // console.log(datafromapi);
     setRoleItems(datafromapi);
+  } catch (error) {
+      console.log(error,"error")
+  }
 
-    // console.log(datafromapi)
   };
+
+
   useEffect(() => {
     option_type_data();
+    return()=>{
+      unmounted.current = true;
+    }
   }, [roleItems]);
 
   const list_text_array = [];
@@ -384,17 +400,17 @@ const CheckList = () => {
 
   // console.log(data)
 
-  const deleteChecklist = async checklistId => {
-    let result = await fetch(
-      'http://192.168.1.99:8000/api/checklists/' + checklistId,
-      {
-        method: 'DELETE',
-      },
-    );
-    result = await result.json();
-    console.log(result, alert(' deleted '));
-    checklistItem();
-  };
+  // const deleteChecklist = async checklistId => {
+  //   let result = await fetch(
+  //     'http://192.168.1.99:8000/api/checklists/' + checklistId,
+  //     {
+  //       method: 'DELETE',
+  //     },
+  //   );
+  //   result = await result.json();
+  //   console.log(result, alert(' deleted '));
+  //   checklistItem();
+  // };
 
   // useEffect(()=>{
   //   deleteChecklist();
@@ -583,105 +599,105 @@ const CheckList = () => {
                   </Pressable>
                   <Title>Username CheckList</Title>
                 </View>
-                <ScrollView style={{maxHeight:500}}>
-                {showdata !== undefined
-                  ? showdata.map((element, index) => {
-                      return (
-                        <View key={index}>
-                          <Card
-                            style={{
-                              borderWidth: 3,
-                              marginTop: 10,
-                              borderRadius: 10,
-                            }}>
-                            <Card.Content>
-                              <View style={{flexDirection: 'row'}}>
-                                <Text
-                                  style={{fontSize: 15, fontWeight: 'bold'}}>
-                                  1
-                                </Text>
-                                <Checkbox
-                                  status={checked ? 'checked' : 'unchecked'}
-                                  onPress={() => {
-                                    setChecked(!checked);
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    ...FONTS.body3,
-                                    color: COLORS.darkGray,
-                                    textTransform: 'capitalize',
-                                    marginTop: SIZES.base,
-                                  }}>
-                                  {element.checklist_name}
-                                </Text>
-                              </View>
-                             
-                              {element.list !== undefined
-                                ? element.list.map((ele, index) => {
-                                    return (
-                                      <View
-                                        key={index}
-                                        style={{
-                                          // ...FONTS.body3,
-                                          // color: COLORS.darkGray,
-                                          // textTransform: 'capitalize',
-                                          // marginTop: SIZES.base,
-                                         flexDirection: 'row',
-                                          // // justifyContent: 'space-between',
-                                          // //  alignItems: 'center',
-                                          marginLeft:50
-                                        }}>
-                                        <Text
+                <ScrollView style={{maxHeight: 500}}>
+                  {showdata !== undefined
+                    ? showdata.map((element, index) => {
+                        return (
+                          <View key={index}>
+                            <Card
+                              style={{
+                                borderWidth: 3,
+                                marginTop: 10,
+                                borderRadius: 10,
+                              }}>
+                              <Card.Content>
+                                <View style={{flexDirection: 'row'}}>
+                                  <Text
+                                    style={{fontSize: 15, fontWeight: 'bold'}}>
+                                    1
+                                  </Text>
+                                  <Checkbox
+                                    status={checked ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                      setChecked(!checked);
+                                    }}
+                                  />
+                                  <Text
+                                    style={{
+                                      ...FONTS.body3,
+                                      color: COLORS.darkGray,
+                                      textTransform: 'capitalize',
+                                      marginTop: SIZES.base,
+                                    }}>
+                                    {element.checklist_name}
+                                  </Text>
+                                </View>
+
+                                {element.list !== undefined
+                                  ? element.list.map((ele, index) => {
+                                      return (
+                                        <View
+                                          key={index}
                                           style={{
-                                            ...FONTS.body3,
-                                            color: COLORS.darkGray,
-                                            textTransform: 'capitalize',
+                                            // ...FONTS.body3,
+                                            // color: COLORS.darkGray,
+                                            // textTransform: 'capitalize',
                                             // marginTop: SIZES.base,
+                                            flexDirection: 'row',
+                                            // // justifyContent: 'space-between',
+                                            // //  alignItems: 'center',
+                                            marginLeft: 50,
                                           }}>
-                                          {ele.checklist_item}
-                                        </Text>
-                                        <Text>{ele.option_type}</Text>
-                                      </View>
-                                    );
-                                  })
-                                : null}
-                               
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                }}>
-                                <Checkbox
-                                  status={one ? 'checked' : 'unchecked'}
-                                  onPress={() => {
-                                    setone(!one);
-                                  }}
-                                />
-                                <Text style={{fontSize: 15}}>Good</Text>
-                                <Checkbox
-                                  status={two ? 'checked' : 'unchecked'}
-                                  onPress={() => {
-                                    settwo(!two);
-                                  }}
-                                />
-                                <Text style={{fontSize: 15}}>Best</Text>
-                                <Checkbox
-                                  status={demo ? 'checked' : 'unchecked'}
-                                  onPress={() => {
-                                    setdemo(!demo);
-                                  }}
-                                />
-                                <Text style={{fontSize: 15}}>Excellent</Text>
-                              </View>
-                            </Card.Content>
-                          </Card>
-                        </View>
-                      );
-                    })
-                  : null}
-                   </ScrollView>
+                                          <Text
+                                            style={{
+                                              ...FONTS.body3,
+                                              color: COLORS.darkGray,
+                                              textTransform: 'capitalize',
+                                              // marginTop: SIZES.base,
+                                            }}>
+                                            {ele.checklist_item}
+                                          </Text>
+                                          <Text>{ele.option_type}</Text>
+                                        </View>
+                                      );
+                                    })
+                                  : null}
+
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                  }}>
+                                  <Checkbox
+                                    status={one ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                      setone(!one);
+                                    }}
+                                  />
+                                  <Text style={{fontSize: 15}}>Good</Text>
+                                  <Checkbox
+                                    status={two ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                      settwo(!two);
+                                    }}
+                                  />
+                                  <Text style={{fontSize: 15}}>Best</Text>
+                                  <Checkbox
+                                    status={demo ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                      setdemo(!demo);
+                                    }}
+                                  />
+                                  <Text style={{fontSize: 15}}>Excellent</Text>
+                                </View>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                        );
+                      })
+                    : null}
+                </ScrollView>
                 <View
                   style={{
                     flexDirection: 'row',
