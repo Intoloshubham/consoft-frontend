@@ -1,8 +1,8 @@
 import Config from '../config';
 
-const getUserRole = async () => {
+const getItem = async () => {
   try {
-    const res = await fetch(`${Config.API_URL}role`, {
+    const res = await fetch(Config.API_URL + 'item', {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -15,13 +15,29 @@ const getUserRole = async () => {
   }
 };
 
-const roleByUser = async role_id => {
+const getStockEntry = async () => {
   try {
-    const res = await fetch(Config.API_URL + 'role-by-users/' + role_id, {
-      method: 'GET',
+    const res = await fetch(Config.API_URL + 'stock-entry', {
+      method: 'get',
       headers: {
         'Content-Type': 'application/json',
       },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const postStockEntry = async formData => {
+  try {
+    const res = await fetch(Config.API_URL + 'stock-entry', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
     });
     const data = await res.json();
     return data;
@@ -30,18 +46,4 @@ const roleByUser = async role_id => {
   }
 };
 
-const getUsers = async () => {
-  try {
-    const res = await fetch(`${Config.API_URL}users`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-export {getUserRole, roleByUser, getUsers};
+export {getItem, getStockEntry, postStockEntry};

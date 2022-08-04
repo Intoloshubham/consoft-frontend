@@ -96,7 +96,7 @@ const ProjectsDetails = ({route}) => {
         style={{
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>

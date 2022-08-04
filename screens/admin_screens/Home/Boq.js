@@ -17,6 +17,7 @@ import {
   IconButton,
   TextButton,
   CustomDropdown,
+  CustomToast,
 } from '../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../constants';
 import {useSelector} from 'react-redux';
@@ -33,6 +34,13 @@ const Boq = ({route}) => {
   // get company id
   const companyData = useSelector(state => state.company);
   const {project_id} = route.params;
+
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
 
   const [addBoqModal, setAddBoqModal] = React.useState(false);
   const [addBoqNewItemModal, setAddBoqNewItemModal] = React.useState(false);
@@ -60,6 +68,7 @@ const Boq = ({route}) => {
   // get unit name for showing
   const [showUnitName, setShowUnitName] = React.useState('');
 
+
   // get boq item units
   const fetchUnit = async () => {
     let data = await getUnits();
@@ -82,7 +91,11 @@ const Boq = ({route}) => {
       setBoqItemName('');
       setUnitValue('');
       fetchUnit();
+      setSubmitToast(true);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
   };
 
   const addItemModal = () => {
@@ -129,12 +142,19 @@ const Boq = ({route}) => {
       qty: itemQty,
     };
     let data = await postBOQItem(formData);
+    console.log(data);
     if (data.status === 200) {
       setAddBoqModal(false);
       fetchBoqItems();
       setItemsValue('');
       setItemQty('');
+      setSubmitToast(true);
+    } else {
+      alert(data.message);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
   };
 
   const [boqItems, setBoqItems] = React.useState([]);
@@ -177,7 +197,13 @@ const Boq = ({route}) => {
       fetchBoqItems();
       setItemsValue('');
       setItemQty('');
+      setUpdateToast(true);
+    } else {
+      alert(data.message);
     }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 2000);
   };
 
   function renderEditBoqItem() {
@@ -400,11 +426,11 @@ const Boq = ({route}) => {
                   style={{
                     backgroundColor: COLORS.green,
                     padding: 3,
-                    borderRadius: 3,
+                    borderRadius: 2,
                   }}>
                   <Image
                     source={icons.edit}
-                    style={{height: 10, width: 10, tintColor: COLORS.white}}
+                    style={{height: 12, width: 12, tintColor: COLORS.white}}
                   />
                 </ImageBackground>
               </TouchableOpacity>
@@ -419,7 +445,7 @@ const Boq = ({route}) => {
         style={{
           marginHorizontal: SIZES.padding,
           padding: 15,
-          borderRadius: SIZES.base,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
@@ -831,6 +857,28 @@ const Boq = ({route}) => {
       {renderAddItemModal()}
       {renderBoqItems()}
       {renderEditBoqItem()}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
     </View>
   );
 };

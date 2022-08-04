@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -10,15 +10,11 @@ import {
   StyleSheet,
   Switch,
   Linking,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
 import LinearGradient from 'react-native-linear-gradient';
 import utils from '../../utils';
-import Toast from 'react-native-toast-message';
-import {FormInput, TextButton} from '../../Components';
+import {FormInput, TextButton, CustomToast} from '../../Components';
 import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
@@ -31,12 +27,6 @@ import {
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
-
-  // const userData = useSelector(state => state.user);
-  // const companyData = useSelector(state => state.company);
-  // console.log(userData)
-  // console.log("userData")
-  // console.log(companyData)
 
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
@@ -55,26 +45,10 @@ const Login = ({navigation}) => {
   const [companyId, setCompanyId] = React.useState('');
   const [token, setToken] = React.useState('');
 
-  // useEffect( async () => {
-  //     const token = await getToken();
-  //     console.log(token)
-  //     setToken(token)
-
-  //     const company_id = await getCompanyId();
-  //     console.log("company_id")
-  //     console.log(company_id)
-  //     setCompanyId(company_id)
-
-  //     const user_id = await getUserId();
-  //     console.log("user_id")
-  //     console.log(user_id)
-  //     setUserId(user_id)
-
-  // }, []);
-
-  // {companyData.token && companyData._id ? ( navigation.navigate('Home') ): null}
-
-  // {userData.token && userData._id ? ( navigation.navigate('UserDashboard') ) : null }
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
 
   function isEnableLogin() {
     return (
@@ -92,10 +66,14 @@ const Login = ({navigation}) => {
     };
     const res = await dispatch(userLogin(UserData));
     if (res.payload.status === 200) {
+      setSubmitToast(true);
       navigation.navigate('UserDashboard');
     } else {
       alert(res.payload.message);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 1500);
   };
 
   const companyOnSubmit = async () => {
@@ -105,10 +83,14 @@ const Login = ({navigation}) => {
     };
     const res = await dispatch(companyLogin(company_data));
     if (res.payload.status === 200) {
+      setSubmitToast(true);
       navigation.navigate('Home');
     } else {
       alert(res.payload.message);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 1500);
   };
 
   const makeCall = () => {
@@ -533,6 +515,27 @@ const Login = ({navigation}) => {
           </KeyboardAwareScrollView>
         </ScrollView>
       </LinearGradient>
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Login"
+        message="Login Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
     </KeyboardAvoidingView>
   );
 };

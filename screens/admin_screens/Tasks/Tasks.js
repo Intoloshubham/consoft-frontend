@@ -1,6 +1,8 @@
 import React from 'react';
 import {Text, View, Alert, TouchableOpacity} from 'react-native';
-import {COLORS, FONTS} from '../../../constants';
+
+import {COLORS, FONTS, icons} from '../../../constants';
+
 
 const Tasks = () => {
   const pressHandler = () => {
