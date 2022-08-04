@@ -74,6 +74,7 @@ const StocksAndInventry = () => {
       location: location,
       vehicle_no: vehicleNo,
     };
+
     let response = await postStockEntry(formData);
     if (response.status === 200) {
       setSubmitToast(true);
@@ -89,6 +90,7 @@ const StocksAndInventry = () => {
     setTimeout(() => {
       setSubmitToast(false);
     }, 2000);
+
   };
 
   React.useEffect(() => {

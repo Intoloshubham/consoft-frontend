@@ -129,7 +129,6 @@ const ProjectsBanner = ({company_id}) => {
     );
   }
 
-  //crete new project
 
   const fetchProjectCategory = async () => {
     const res = await getProjectCategory();

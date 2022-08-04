@@ -87,6 +87,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       }
     };
 
+
     const getUserByRoleId = async role_id => {
       let response = await roleByUser(role_id);
       if (response.status === 200) {
@@ -122,6 +123,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       setTimeout(() => {
         setSubmitToast(false);
       }, 1500);
+
     };
 
     React.useEffect(() => {
@@ -164,6 +166,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       setDate(currentDate);
     };
 
+
     const showMode = currentMode => {
       DateTimePickerAndroid.open({
         value: date,
@@ -171,6 +174,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
         mode: currentMode,
         locale: 'en-IN',
         display: 'spinner',
+
       });
     };
 

@@ -35,10 +35,12 @@ const Boq = ({route}) => {
   const companyData = useSelector(state => state.company);
   const {project_id} = route.params;
 
+
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
+
 
   const [addBoqModal, setAddBoqModal] = React.useState(false);
   const [addBoqNewItemModal, setAddBoqNewItemModal] = React.useState(false);
@@ -66,7 +68,6 @@ const Boq = ({route}) => {
   // get unit name for showing
   const [showUnitName, setShowUnitName] = React.useState('');
 
-  // TOAST
 
   // get boq item units
   const fetchUnit = async () => {

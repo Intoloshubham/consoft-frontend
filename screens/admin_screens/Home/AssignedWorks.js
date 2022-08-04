@@ -55,12 +55,14 @@ const AssignedWorks = () => {
     }
   };
 
+
   React.useEffect(() => {
     setInterval(() => {
       fetchAssignWorks();
     }, 5000);
     fetchUserRole();
   }, []);
+
 
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {

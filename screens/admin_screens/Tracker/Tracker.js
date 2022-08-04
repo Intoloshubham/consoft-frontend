@@ -4,6 +4,8 @@ import {CustomPopup} from '../../../Components';
 import {icons} from '../../../constants';
 
 const Tracker = () => {
+  const [modal, setmodal] = React.useState(false);
+
   return (
     <View>
       {/* <CustomPopup

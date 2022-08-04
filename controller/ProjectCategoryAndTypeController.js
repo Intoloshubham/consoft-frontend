@@ -2,7 +2,7 @@ import Config from '../config';
 
 const getProjectCategory = async () => {
   try {
-    const res = await fetch(`${Config.API_URL}project-category`, {
+    const res = await fetch(Config.API_URL + 'project-category', {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -14,6 +14,7 @@ const getProjectCategory = async () => {
     console.log(error);
   }
 };
+
 
 const getProjectType = async () => {
   try {
@@ -76,6 +77,7 @@ const getProjectCategoryById = async id => {
     console.log(error);
   }
 };
+
 
 const updateProjectCategory = async (id, categoryData) => {
   try {

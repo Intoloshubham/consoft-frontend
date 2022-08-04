@@ -43,7 +43,6 @@ const VerifyAndRevertWork = ({company_id}) => {
   };
 
   React.useEffect(() => {
-    
     fetchVerifyAndRevertWork();
     filterDataBasedOnCondition();
   }, []);
