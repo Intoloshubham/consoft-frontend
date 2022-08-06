@@ -36,10 +36,12 @@ const Boq = ({route}) => {
   const company_id = companyData._id;
   const {project_id} = route.params;
 
+
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
+
 
   const [addBoqModal, setAddBoqModal] = React.useState(false);
   const [addBoqNewItemModal, setAddBoqNewItemModal] = React.useState(false);

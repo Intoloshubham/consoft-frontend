@@ -29,8 +29,14 @@ import {
   Optiontype,
   Quantitywork,
   ToolsAndMachinery1,
-  VerifyAndRevertWork,
-  Boq,
+  Quantity,
+  Apps,
+  HomeScreen,
+  UserReportdata,
+  Dynamicdata,
+  Leaves,
+  Calender,
+  Boq
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -51,6 +57,7 @@ const App = () => {
             headerShown: false,
           }}
           initialRouteName={'Login'}>
+
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
@@ -98,6 +105,11 @@ const App = () => {
           <Stack.Screen name="CheckList" component={CheckList} />
           <Stack.Screen name="Optiontype" component={Optiontype} />
           <Stack.Screen name="Quantitywork" component={Quantitywork} />
+          <Stack.Screen name="Calenderleaves" component={Calenderleaves} />
+          <Stack.Screen name="Leaves" component={Leaves} />
+          <Stack.Screen name="Quantity" component={Quantity} />
+          <Stack.Screen name="CustomCalender" component={CustomCalender} />
+          <Stack.Screen name="CalenderFuncation" component={CalenderFuncation} />
           <Stack.Screen
             name="ToolsAndMachinery1"
             component={ToolsAndMachinery1}

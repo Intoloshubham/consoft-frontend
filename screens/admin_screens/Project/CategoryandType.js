@@ -23,6 +23,7 @@ import {
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {useSelector} from 'react-redux';
+
 import {
   deleteProjectCategory,
   getProjectCategory,
@@ -33,6 +34,7 @@ import {
   updateProjectType,
   deleteProjectType,
 } from '../../../controller/ProjectCategoryAndTypeController';
+
 
 const CategoryandType = () => {
   React.useEffect(() => {
@@ -66,6 +68,7 @@ const CategoryandType = () => {
   const [items, setItems] = React.useState([]);
 
   // get project category
+
   const projectCategory = async () => {
     let response = await getProjectCategory();
     let catFromApi = response.data.map(item => {
@@ -73,6 +76,7 @@ const CategoryandType = () => {
     });
     setProjectCategories(response.data);
     setItems(catFromApi);
+
   };
 
   const postCategory = async () => {

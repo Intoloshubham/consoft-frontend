@@ -55,10 +55,12 @@ const AssignedWorks = () => {
     }
   };
 
+
   React.useEffect(() => {
     fetchAssignWorks();
     fetchUserRole();
   }, []);
+
 
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {
