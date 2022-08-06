@@ -12,6 +12,9 @@ import CustomDropdown from './CustomDropdown';
 import ItemBox from './ItemBox';
 import ConformationAlert from './ConformationAlert';
 import CustomToast from './CustomToast';
+import CustomPopup from './CustomPopup';
+import DeleteConfirmationToast from './DeleteConfirmationToast';
+
 
 export {
   TextButton,
@@ -28,4 +31,6 @@ export {
   ItemBox,
   ConformationAlert,
   CustomToast,
+  CustomPopup,
+  DeleteConfirmationToast,
 };
