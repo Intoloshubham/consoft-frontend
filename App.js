@@ -1,9 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import SplashScreen from 'react-native-splash-screen';
 import * as eva from '@eva-design/eva';
-
 import {ApplicationProvider} from '@ui-kitten/components';
 import {
   Login,
@@ -19,7 +17,7 @@ import {
   StocksAndInventry,
   ToolsAndMachinery,
   ProjectSeheduleTime,
-  CheckList, 
+  CheckList,
   Items,
   Unit,
   CompanyTeam,
@@ -28,23 +26,22 @@ import {
   CategoryandType,
   ProjectReports,
   Suppliers,
+  Optiontype,
+  ToolsAndMachinery1,
+  Boq,
+  VerifyAndRevertWork,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
-
 //setup redux
-import {store} from './app/store';
+import store from './app/store';
 import {Provider} from 'react-redux';
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  React.useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
@@ -64,6 +61,10 @@ const App = () => {
 
           {/* Home screens */}
           <Stack.Screen name="Home" component={Tabs} />
+          <Stack.Screen
+            name="VerifyAndRevertWork"
+            component={VerifyAndRevertWork}
+          />
           <Stack.Screen name="ProjectsDetails" component={ProjectsDetails} />
           <Stack.Screen name="CompanyTeamShow" component={CompanyTeamShow} />
           <Stack.Screen name="ProjectTeam" component={ProjectTeam} />
@@ -85,6 +86,7 @@ const App = () => {
           {/* Tab screens */}
           <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="Suppliers" component={Suppliers} />
+          <Stack.Screen name="Boq" component={Boq} />
 
           {/* Account Screens */}
           <Stack.Screen name="CategoryandType" component={CategoryandType} />
@@ -93,6 +95,11 @@ const App = () => {
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />
           <Stack.Screen name="CheckList" component={CheckList} />
+          <Stack.Screen name="Optiontype" component={Optiontype} />
+          <Stack.Screen
+            name="ToolsAndMachinery1"
+            component={ToolsAndMachinery1}
+          />
 
           {/* User Screens */}
           <Stack.Screen name="UserDashboard" component={UserTabs} />
@@ -100,14 +107,11 @@ const App = () => {
           <Stack.Screen name="Demo" component={Demo} />
           <Stack.Screen name="Demo1" component={Demo1} />
           <Stack.Screen name="Demo2" component={Demo2} />
-          {/* <Stack.Screen name="user_tabs" component={user_tabs} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>
   );
 };
-
-// export default App;
 
 //for redux
 export default () => {

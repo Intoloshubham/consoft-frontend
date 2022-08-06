@@ -2,18 +2,16 @@ import React from 'react';
 import {View, Image} from 'react-native';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import Toast from 'react-native-toast-message';
-import Config from '../../config';
 import {FormInput, TextButton, HeaderBar} from '../../Components';
 import {COLORS, images, icons, SIZES} from '../../constants';
 
-//redux
-import {useRegisterCompanyMutation} from '../../services/companyAuthApi';
-import {setCompanyId} from '../../services/asyncStorageService';
-
-
+import {useDispatch} from 'react-redux';
+import {registerCompany} from '../../services/companyAuthApi';
+import {getCompanyId} from '../../services/asyncStorageService';
 
 const CompanyRegistration = ({navigation}) => {
+  const dispatch = useDispatch();
+
   const [cName, setCName] = React.useState('');
   //const [cPanNo, setCPanNo] = React.useState('');
   const [cMobileNo, setCMobileNo] = React.useState('');
@@ -24,8 +22,25 @@ const CompanyRegistration = ({navigation}) => {
   const [cMobileNoError, setCMobileNoError] = React.useState('');
   const [cEmailError, setCEmailError] = React.useState('');
 
-  //redux
-  const [registerCompany] = useRegisterCompanyMutation();
+  const onSubmit = async () => {
+    const companyData = {
+      company_name: cName,
+      //pan: cPanNo,
+      mobile: cMobileNo,
+      email: cEmail,
+    };
+
+    const result = await dispatch(registerCompany(companyData));
+
+    if (result.payload.status === 200) {
+      setTimeout(() => {
+        navigation.navigate('VerifyProductKey');
+      }, 300);
+    } else {
+      alert(res.payload.message);
+    }
+    // const company_id = await getCompanyId();
+  };
 
   function isEnableCreateCompany() {
     return (
@@ -40,74 +55,6 @@ const CompanyRegistration = ({navigation}) => {
     );
   }
 
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      topOffset: 10,
-      type: 'success',
-      text1: 'Successfully Created Company',
-      text2: 'Success',
-      visibilityTime: 700,
-    });
-
-  const showToastError = () =>
-    Toast.show({
-      position: 'top',
-      topOffset: 10,
-      type: 'error',
-      text1: 'Email & Mobile No. is Already Exist',
-      text2: 'If you want to continue with us, click on CONTINUE & PAYMENT',
-      visibilityTime: 4000,
-    });
-
-  const onSubmit = async () => {
-    const company_data = {
-      company_name: cName,
-      //pan: cPanNo,
-      mobile: cMobileNo,
-      email: cEmail,
-    };
-
-    const result = await registerCompany(company_data);
-    // console.log(result.error.data.message);
-    // console.log(result.data.status);
-    // console.log(result)
-    if (result.data.status == 200) {
-      await setCompanyId(result.data.company_id);
-      showToast();
-      setTimeout(() => {
-        navigation.navigate('VerifyProductKey');
-      }, 350);
-    }
-    if (result.data.status != 200) {
-      showToastError();
-    }
-
-    // fetch(`${Config.API_URL}/company`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     if (data.status == 200) {
-    //       showToast();
-    //       setTimeout(() => {
-    //         navigation.navigate('VerifyProductKey');
-    //       }, 350);
-    //     }
-    //     if (data.status != 200) {
-    //       showToastError();
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
-  };
-
   return (
     <View
       style={{
@@ -116,13 +63,10 @@ const CompanyRegistration = ({navigation}) => {
       }}>
       <HeaderBar right={true} title="registration" />
 
-      <Toast config={showToast} />
-      <Toast config={showToastError} />
-
       <AuthLayout image={images.create_company} title="Let's Create Company">
         <View
           style={{
-            marginHorizontal: SIZES.padding,
+            marginHorizontal: SIZES.radius,
           }}>
           <FormInput
             label="Name"

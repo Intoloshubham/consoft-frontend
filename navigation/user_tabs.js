@@ -1,44 +1,48 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, {useState, useRef} from 'react';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
-import { COLORS, FONTS, SIZES, icons, images } from '../constants';
+import {getUserId} from '../services/asyncStorageService.js';
+import {COLORS, FONTS, SIZES, icons, images} from '../constants';
 import {
   UserDashboard,
   Profile,
   Demo,
   Demo1,
   Demo2,
-  UserReports
+  UserReports,
 } from '../screens/user_screens';
 
 const Tab = createBottomTabNavigator();
 
-const TabBarCustomButton = ({ children, onPress }) => {
-  return (
-    <TouchableOpacity
-      style={{
-        top: -15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        ...styles.shadow,
-      }}
-      onPress={onPress}>
-
-      <LinearGradient
-        colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
+const UserTabs = ({navigation, route}) => {
+  const TabBarCustomButton = ({children, onPress}) => {
+    return (
+      <TouchableOpacity
         style={{
-          width: 60,
-          height: 60,
-          borderRadius: 35,
+          top: -15,
+          justifyContent: 'center',
+          alignItems: 'center',
+          ...styles.shadow,
+        }}
+        onPress={() => {
+          // Get_UserId_Data()
+          onPress();
         }}>
-        {children}
-      </LinearGradient>
-    </TouchableOpacity>
-  );
-};
-const UserTabs = ({navigation,route}) => {
-  const name_login_params = route.params.name_login;
+        <LinearGradient
+          colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 35,
+          }}>
+          {children}
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
+
+  // const selectedIdProjects = route.params.selectedIdProjects;
   return (
     <Tab.Navigator
       screenOptions={{
@@ -57,8 +61,8 @@ const UserTabs = ({navigation,route}) => {
         headerStyle: {
           // height: 78,
         },
-        navigation:{navigation},
-        route:{route},
+        navigation: {navigation},
+        route: {route},
         headerTitleAlign: 'left',
         headerRight: () => (
           <View
@@ -78,13 +82,12 @@ const UserTabs = ({navigation,route}) => {
       <Tab.Screen
         name="User Dashboard"
         screenOptions={{
-          tabBarShowLabel: false
-        }}  
-        component={UserDashboard}  
-        initialParams={{name_login_params: name_login_params}}
+          tabBarShowLabel: false,
+        }}
+        component={UserDashboard}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          tabBarIcon: ({focused}) => (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
                 source={icons.dashboard}
                 resizeMode="contain"
@@ -103,15 +106,15 @@ const UserTabs = ({navigation,route}) => {
               </Text>
             </View>
           ),
-          headerShown:true
+          headerShown: true,
         }}
       />
       <Tab.Screen
         name="Demo"
         component={Demo}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          tabBarIcon: ({focused}) => (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
                 source={icons.tasks}
                 style={{
@@ -132,10 +135,11 @@ const UserTabs = ({navigation,route}) => {
         }}
       />
       <Tab.Screen
-        name="Reports"
+        name="Report"
         component={UserReports}
+        // initialParams={{userId: useridRef}}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <Image
               source={icons.report}
               resizeMode="contain"
@@ -151,11 +155,11 @@ const UserTabs = ({navigation,route}) => {
         }}
       />
       <Tab.Screen
-        name="Demo2"
+        name="My Profile"
         component={Demo2}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          tabBarIcon: ({focused}) => (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
                 source={icons.tracker}
                 style={{
@@ -179,8 +183,8 @@ const UserTabs = ({navigation,route}) => {
         name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          tabBarIcon: ({focused}) => (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
                 source={icons.account}
                 style={{

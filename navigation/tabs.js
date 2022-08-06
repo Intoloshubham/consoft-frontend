@@ -3,7 +3,14 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
-import {Home, Account, Tracker, Reports, Tasks} from '../screens/admin_screens';
+
+import {
+  Home,
+  Account,
+  Profile,
+  ReportsDisplay,
+  Tasks,
+} from '../screens/admin_screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -65,7 +72,7 @@ const Tabs = () => {
         ),
       }}>
       <Tab.Screen
-        name="Dahsboard"
+        name="Dashboard"
         component={Home}
         options={{
           tabBarIcon: ({focused}) => (
@@ -116,8 +123,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Reports"
-        component={Reports}
+        name="Report"
+        component={ReportsDisplay}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
@@ -134,13 +141,13 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Tracker"
-        component={Tracker}
+        name="Profile"
+        component={Profile}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
-                source={icons.tracker}
+                source={icons.profile}
                 style={{
                   height: 18,
                   width: 18,
@@ -152,7 +159,7 @@ const Tabs = () => {
                   color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Tracker
+                Profile
               </Text>
             </View>
           ),

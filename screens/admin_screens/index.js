@@ -1,5 +1,6 @@
 import Account from './Account/Account';
 import CheckList from './CheckList/CheckList';
+import Optiontype from './CheckList/Optiontype';
 import CompanyTeam from './CompanyTeam/CompanyTeam';
 import AssignedWorks from './Home/AssignedWorks';
 import CompanyTeamShow from './Home/CompanyTeamShow';
@@ -15,13 +16,20 @@ import StocksAndInventry from './Home/StocksAndInventry';
 import ToolsAndMachinery from './Home/ToolsAndMachinery';
 import WorkAssignModal from './Modals/WorkAssignModal';
 import CategoryandType from './Project/CategoryandType';
-import Reports from './Reports/Reports';
+import ReportsDisplay from './Reports/ReportDisplay';
 import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
 import Tasks from './Tasks/Tasks';
-import Tracker from './Tracker/Tracker';
+import Profile from './Profile/Profile';
 import Suppliers from './Suppliers/Suppliers';
+import SubmittedWorks from './Home/SubmittedWorks';
+import Quantitywork from './Stock/Tools/Quantitywork';
+import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1';
+import VerifyAndRevertWork from './Home/VerifyAndRevertWork';
+import Boq from './Home/Boq';
+import VerifyWorks from './VerifyAndRevertWork.js/VerifyWorks';
+import RevertWorks from './VerifyAndRevertWork.js/RevertWorks';
 
 export {
   Account,
@@ -41,11 +49,19 @@ export {
   ToolsAndMachinery,
   WorkAssignModal,
   CategoryandType,
-  Reports,
+  ReportsDisplay,
   Items,
   ManageStock,
   Unit,
   Tasks,
-  Tracker,
+  Profile,
   Suppliers,
+  SubmittedWorks,
+  Optiontype,
+  Quantitywork,
+  ToolsAndMachinery1,
+  VerifyAndRevertWork,
+  Boq,
+  VerifyWorks,
+  RevertWorks,
 };

@@ -17,6 +17,7 @@ const Profile7 = require('../assets/images/Profile7.jpg');
 const green = require('../assets/images/green.png');
 const yellow = require('../assets/images/yellow.png');
 const red = require('../assets/images/red.png');
+const civil_eng = require('../assets/images/civil_eng.jpg');
 
 const b1 = require('../assets/images/building/b1.png');
 const b2 = require('../assets/images/building/b2.png');
@@ -27,6 +28,7 @@ const build_f = require('../assets/images/build_f.png');
 const build_f1 = require('../assets/images/build_f1.jpg');
 const create_company = require('../assets/images/create_company.png');
 const product_key = require('../assets/images/product_key.png');
+const Graph_paper = require('../assets/images/projects/Graph_paper.png');
 
 export default {
   background_01,
@@ -57,4 +59,6 @@ export default {
   build_f1,
   create_company,
   product_key,
+  Graph_paper,
+  civil_eng,
 };

@@ -7,145 +7,140 @@ import {
   Modal,
   TouchableWithoutFeedback,
   TouchableOpacity,
-  ScrollView,
+  FlatList,
+  Animated,
+  ImageBackground,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {CustomDropdown, IconButton, TextButton} from '../../../Components';
+import {IconButton, DeleteConfirmationToast} from '../../../Components';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
-import Config from '../../../config';
-import WorkAssignModal from '../Modals/WorkAssignModal';
+import {Swipeable} from 'react-native-gesture-handler';
+import {
+  getAssignWorks,
+  deleteAssignWorks,
+} from '../../../controller/AssignWorkController';
+import {getUserRole} from '../../../controller/UserRoleController';
 
 const AssignedWorks = () => {
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const [filterRoleModal, setFilterRoleModal] = React.useState(false);
-  const [showWorkModal, setWorkModal] = React.useState(false);
-
-  // dropdown
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
   const [items, setItems] = React.useState([]);
 
-  // Get All Assign Works
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}assign-works`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setAssignWorkData(data);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
-
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}role`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        let roleDataFromApi = data.map(one => {
-          return {label: one.user_role, value: one._id};
-        });
-        setItems(roleDataFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
-
-  // Edit Assign Works
-  const OnEdit = id => {
-    setWorkModal(true);
-    fetch(`${Config.API_URL}assign-works/` + `${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(),
-    });
+  //get assign works
+  const fetchAssignWorks = async () => {
+    const response = await getAssignWorks();
+    setAssignWorkData(response);
   };
 
-  // Delete Assign Works
-  const OnDeleteAssignWork = id => {
-    alert(id);
-    fetch(`${Config.API_URL}assign-works/` + `${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  //get user role
+  const fetchUserRole = async () => {
+    const response = await getUserRole();
+    setItems(response);
   };
 
-  function OnChangeValueHandler(id) {
-    console.log(id);
-  }
+  // get work id
+  const onDeleteAssignWork = id => {
+    setDeleteConfirm(true);
+    setWorkId(id);
+  };
+  const [workId, setWorkId] = React.useState('');
+
+  // delete assign works
+  const fetchAssignWorkDelete = async () => {
+    const response = await deleteAssignWorks(workId);
+    if (response.status === 200) {
+      fetchAssignWorks();
+      setDeleteConfirm(false);
+    }
+  };
+
+
+  React.useEffect(() => {
+    fetchAssignWorks();
+    fetchUserRole();
+  }, []);
+
 
   function renderRoleFilterModal() {
+    const renderItem = ({item}) => {
+      return (
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+          }}
+          onPress={() => OnChangeValueHandler(item._id)}>
+          <Text
+            style={{
+              ...FONTS.h3,
+              color: COLORS.white,
+              textTransform: 'capitalize',
+            }}>
+            {item.user_role}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
     return (
-      <Modal animationType="slide" transparent={true} visible={filterRoleModal}>
-        <TouchableWithoutFeedback onPress={() => setFilterRoleModal(false)}>
+      <Modal animationType="fade" transparent={true} visible={filterRoleModal}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack2,
+              justifyContent: 'flex-end',
             }}>
             <View
               style={{
-                height: 150,
-                width: SIZES.width * 0.8,
-                backgroundColor: COLORS.white,
-                borderRadius: SIZES.radius,
-                padding: 20,
+                backgroundColor: COLORS.darkBlue,
+                position: 'absolute',
+                width: '100%',
+                height: '40%',
+                paddingHorizontal: SIZES.radius,
+                paddingTop: SIZES.radius,
+                paddingBottom: SIZES.padding,
+                borderTopRightRadius: SIZES.base,
+                borderTopLeftRadius: SIZES.base,
               }}>
-              <View style={{}}>
-                {/* header */}
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
-                    Filter Data
-                  </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      height: 25,
-                      width: 25,
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setFilterRoleModal(false)}
-                  />
-                </View>
-                {/* <ScrollView scrollEnabled={true}> */}
-                <View>
-                  <CustomDropdown
-                    placeholder="Select Item"
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
-                    categorySelectable={true}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                    onChangeValue={value => {
-                      OnChangeValueHandler(value);
-                    }}
-                  />
-                </View>
-                {/* </ScrollView> */}
-              </View>
+              <TouchableOpacity
+                style={{alignItems: 'flex-end'}}
+                onPress={() => setFilterRoleModal(false)}>
+                <Image
+                  source={icons.cross}
+                  resizeMode="contain"
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor: COLORS.darkGray2,
+                  }}
+                />
+              </TouchableOpacity>
+
+              <FlatList
+                data={items}
+                keyExtractor={item => `${item._id}`}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => {
+                  return (
+                    <View
+                      style={{
+                        borderBottomWidth: 1,
+                        borderColor: COLORS.lightGray1,
+                        marginVertical: SIZES.base,
+                      }}></View>
+                  );
+                }}
+                style={{
+                  padding: SIZES.padding,
+                  marginBottom: SIZES.padding,
+                }}
+                ListFooterComponent={
+                  <View
+                    style={{
+                      marginBottom: SIZES.padding,
+                    }}></View>
+                }
+              />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -154,63 +149,157 @@ const AssignedWorks = () => {
   }
 
   function renderSwipeList() {
+    const renderRight = (progress, id) => {
+      const trans = progress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [10, 0],
+      });
+      return (
+        <Animated.View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            width: 80,
+            transform: [{translateX: 0}],
+          }}>
+          <TouchableOpacity onPress={() => onDeleteAssignWork(id)}>
+            <ImageBackground
+              style={{
+                backgroundColor: COLORS.warning_200,
+                padding: 3,
+                borderRadius: 2,
+                right: 10,
+              }}>
+              <Image
+                source={icons.delete_icon}
+                style={{height: 12, width: 12, tintColor: COLORS.rose_600}}
+              />
+            </ImageBackground>
+          </TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => alert('Edit...')}>
+            <ImageBackground
+              style={{
+                backgroundColor: COLORS.lightblue_200,
+                padding: 5,
+                borderRadius: SIZES.base,
+              }}>
+              <Image
+                source={icons.edit}
+                style={{height: 15, width: 15, tintColor: COLORS.lightblue_900}}
+              />
+            </ImageBackground>
+          </TouchableOpacity> */}
+        </Animated.View>
+      );
+    };
     const renderItem = ({item, index}) => {
       return (
         <View
           style={{
-            // height: 70,
-            backgroundColor: COLORS.lightblue_50,
+            backgroundColor: COLORS.lightblue_800,
             ...styles.cartItemContainer,
           }}>
           <View
             style={{
               flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
-            <Text
-              style={{
-                ...FONTS.h4,
-                color: COLORS.black,
-              }}>
-              U{index + 1} -
-            </Text>
-            <Text
-              style={{
-                ...FONTS.h4,
-                color: COLORS.black,
-                marginLeft: 5,
-              }}>
-              {item.user_name}
-            </Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.lightGray2,
+                }}>
+                {index + 1}
+                {' -'}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.lightGray2,
+                  marginLeft: 5,
+                  textTransform: 'capitalize',
+                }}>
+                {item.user_name}
+              </Text>
+            </View>
           </View>
           <View
             style={{
               width: '100%',
               height: 0.5,
-              backgroundColor: COLORS.gray,
-              marginTop: 1,
+              backgroundColor: COLORS.lightGray1,
+              marginTop: 5,
             }}></View>
           <View>
             {item.assign_works.map((ele, i) => {
+              // console.log(ele);
               return (
-                <View style={{flexDirection: 'row'}} key={i}>
-                  <Text
+                <Swipeable
+                  key={ele._id}
+                  renderRightActions={progress =>
+                    renderRight(progress, ele._id)
+                  }>
+                  <View
                     style={{
-                      ...FONTS.h5,
-                      color: COLORS.black,
+                      marginTop: SIZES.base,
+                      backgroundColor: COLORS.white,
+                      padding: SIZES.base,
+                      borderRadius: SIZES.base,
                     }}>
-                    w{i + 1}
-                    {' - '}
-                  </Text>
-                  <Text
-                    key={i}
-                    style={{
-                      ...FONTS.body5,
-                      color: COLORS.darkGray,
-                      textTransform: 'capitalize',
-                    }}>
-                    {ele.work}
-                  </Text>
-                </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                      }}>
+                      <Text
+                        style={{
+                          flex: 1,
+                          ...FONTS.h5,
+                          color: COLORS.black,
+                        }}>
+                        {ele.work_code}
+                        <Text style={{color: COLORS.darkGray, ...FONTS.h5}}>
+                          {' - '}
+                          {ele.work}
+                        </Text>
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          ...FONTS.h5,
+                          color: COLORS.darkGray,
+                        }}>
+                        exp completion date: {ele.exp_completion_date}
+                      </Text>
+                      <TouchableOpacity onPress={() => console.log('revert')}>
+                        <ImageBackground
+                          style={{
+                            backgroundColor: COLORS.warning_200,
+                            padding: 5,
+                            borderRadius: SIZES.padding,
+                          }}>
+                          <Image
+                            source={icons.revert}
+                            resizeMode="contain"
+                            style={{
+                              height: 10,
+                              width: 10,
+                              tintColor: COLORS.rose_600,
+                            }}
+                          />
+                        </ImageBackground>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Swipeable>
               );
             })}
           </View>
@@ -237,7 +326,7 @@ const AssignedWorks = () => {
               width: 20,
               right: 10,
             }}
-            onPress={() => OnEdit(item._id)}
+            onPress={() => alert('Edit...')}
           />
           <IconButton
             containerStyle={{justifyContent: 'flex-end'}}
@@ -246,11 +335,12 @@ const AssignedWorks = () => {
               height: 20,
               width: 20,
             }}
-            onPress={() => OnDeleteAssignWork(item._id)}
+            onPress={() => alert('Delete...')}
           />
         </View>
       );
     };
+
     return (
       <SwipeListView
         data={assignWorkData}
@@ -259,7 +349,7 @@ const AssignedWorks = () => {
           marginTop: SIZES.radius,
           paddingBottom: SIZES.padding * 2,
           marginBottom: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
+          paddingHorizontal: SIZES.radius,
         }}
         scrollEnabled={true}
         nestedScrollEnabled={true}
@@ -277,9 +367,8 @@ const AssignedWorks = () => {
       style={{
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
-        // padding: 20,
-        borderRadius: SIZES.radius,
-        backgroundColor: COLORS.lightblue_50,
+        borderRadius: 5,
+        backgroundColor: COLORS.lightblue_900,
         ...styles.shadow,
       }}>
       <View
@@ -290,7 +379,9 @@ const AssignedWorks = () => {
           paddingHorizontal: SIZES.padding,
           paddingTop: SIZES.radius,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Assign Works</Text>
+        <Text style={{...FONTS.h2, color: COLORS.lightGray1}}>
+          Assign Works
+        </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setFilterRoleModal(true)}>
             <Image
@@ -298,12 +389,11 @@ const AssignedWorks = () => {
               style={{
                 height: 15,
                 width: 15,
-                tintColor: COLORS.gray,
-                right: 8,
+                tintColor: COLORS.lightGray1,
               }}
             />
           </TouchableOpacity>
-          <Text
+          {/* <Text
             style={{
               color: COLORS.lightblue_50,
               backgroundColor: COLORS.lightblue_900,
@@ -311,18 +401,35 @@ const AssignedWorks = () => {
               paddingVertical: 2,
               borderRadius: SIZES.base,
             }}>
-            {/* {sum} */}25
-          </Text>
+            25
+          </Text> */}
         </View>
       </View>
       {renderSwipeList()}
       {renderRoleFilterModal()}
-      {showWorkModal && (
-        <WorkAssignModal
-          isVisible={showWorkModal}
-          onClose={() => setWorkModal(false)}
-        />
-      )}
+
+      {/* <ConformationAlert
+        isVisible={deleteConfirm}
+        onCancel={() => {
+          setDeleteConfirm(false);
+        }}
+        title="Delete Assign Work"
+        message="Are you sure want to delete this work ?"
+        cancelText="Cancel"
+        confirmText="Yes"
+        onConfirmPressed={() => {
+          fetchAssignWorkDelete();
+        }}
+      /> */}
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => fetchAssignWorkDelete()}
+      />
     </View>
   );
 };
@@ -339,14 +446,10 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   cartItemContainer: {
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    paddingVertical: SIZES.base,
-    marginTop: SIZES.radius,
+    marginTop: SIZES.base,
+    paddingVertical: SIZES.radius,
     paddingHorizontal: SIZES.radius,
-    borderRadius: SIZES.radius,
-
-    // borderRadius: SIZES.base,
+    borderRadius: SIZES.base,
   },
 });
 

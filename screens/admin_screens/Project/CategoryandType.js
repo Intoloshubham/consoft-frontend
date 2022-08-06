@@ -10,6 +10,7 @@ import {
   ScrollView,
   LogBox,
   Image,
+  ImageBackground,
 } from 'react-native';
 import {
   HeaderBar,
@@ -17,19 +18,44 @@ import {
   IconButton,
   FormInput,
   CustomDropdown,
+  CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import Toast from 'react-native-toast-message';
-import Config from '../../../config';
+import {useSelector} from 'react-redux';
 
-const CategoryandType = ({navigation}) => {
+import {
+  deleteProjectCategory,
+  getProjectCategory,
+  getProjectType,
+  postProjectCategory,
+  updateProjectCategory,
+  postProjectType,
+  updateProjectType,
+  deleteProjectType,
+} from '../../../controller/ProjectCategoryAndTypeController';
+
+
+const CategoryandType = () => {
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
 
-  // Store categories & types data from api
-  const [categories, setCategories] = React.useState([]);
-  const [types, setTypes] = React.useState([]);
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
+  // delete confirmation
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+  const [deleteConfirm1, setDeleteConfirm1] = React.useState(false);
+
+  // COMPANY DATA
+  const companyData = useSelector(state => state.company);
+
+  // STATES FOR STORING CATEGORIES & PROJECT TYPES DATA
+  const [projectCategories, setProjectCategories] = React.useState([]);
+  const [projectTypes, setProjectTypes] = React.useState([]);
   //Modal
   const [showCategoryModal, setShowCategoryModal] = React.useState(false);
   const [showTypesModal, setShowTypesModal] = React.useState(false);
@@ -41,208 +67,158 @@ const CategoryandType = ({navigation}) => {
   const [value, setValue] = React.useState([]);
   const [items, setItems] = React.useState([]);
 
-  // show toast on successfullt created
-  const catshowToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Created Successfully',
-      text2: 'Success',
-      visibilityTime: 2000,
-    });
+  // get project category
 
-  const updateShowToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Updated Successfully',
-      text2: 'Success',
-      visibilityTime: 2000,
+  const projectCategory = async () => {
+    let response = await getProjectCategory();
+    let catFromApi = response.data.map(item => {
+      return {label: item.category_name, value: item._id};
     });
+    setProjectCategories(response.data);
+    setItems(catFromApi);
 
-  const typeDeleteToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'info',
-      text1: 'Deleted Successfully',
-      text2: 'Delete',
-      visibilityTime: 2000,
-    });
+  };
 
-  // get cat id
+  const postCategory = async () => {
+    const formData = {
+      category_name: catName,
+      company_id: companyData._id,
+    };
+    let response = await postProjectCategory(formData);
+    if (response.status == 200) {
+      setShowCategoryModal(false);
+      setSubmitToast(true);
+      setCatName('');
+      projectCategory();
+    } else {
+      alert(response.message);
+    }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
+  };
+
   const [id, setId] = React.useState('');
   const getId = id => {
-    // console.log('onedit', id);
+    console.log(id);
     setId(id);
   };
 
   // get cat data
   const getData = name => {
-    // console.log(name);
     setCatName(name);
   };
 
-  // all apis & Get categories
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}project-category`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        setCategories(data);
-        setItems(catFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, [categories]);
-
-  // post categories
-  const OnSubmit = () => {
-    const data = {
+  const editCategory = async () => {
+    const formData = {
       category_name: catName,
+      company_id: companyData._id,
     };
+    let response = await updateProjectCategory(id, formData);
 
-    fetch(`${Config.API_URL}project-category`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    if (response.status == 200) {
+      setUpdateToast(true);
+      projectCategory();
+    } else {
+      alert(response.message);
+    }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 2000);
   };
 
-  // Edit categories
-  const OnEdit = () => {
-    const editData = {
-      category_name: catName,
+  const getCategoryId = id => {
+    setCategoryId(id);
+    setDeleteConfirm(true);
+  };
+  const [category_id, setCategoryId] = React.useState('');
+
+  const deletecategory = async () => {
+    let response = await deleteProjectCategory(category_id);
+    if (response.status == 200) {
+      setDeleteConfirm(false);
+      setDeleteToast(true);
+      projectCategory();
+    }
+    setTimeout(() => {
+      setDeleteToast(false);
+    }, 1500);
+  };
+
+  // get project types
+  const getprojectTypes = async () => {
+    let response = await getProjectType();
+    setProjectTypes(response.data);
+  };
+
+  const postTypes = async () => {
+    const formData = {
+      category_id: value,
+      project_type: typeName,
+      company_id: companyData._id,
     };
-    fetch(`${Config.API_URL}project-category` + `/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(editData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 200) {
-          updateShowToast();
-        }
-      });
+    let response = await postProjectType(formData);
+    if (response.status === 200) {
+      setSubmitToast(true);
+      setTypeName('');
+      getprojectTypes();
+    } else {
+      alert(response.message);
+    }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
   };
 
-  // Delete categories
-  const OnDelete = id => {
-    fetch(`${Config.API_URL}project-category` + `/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    // console.log('cat delete');
-  };
-
-  // All api of types
-  // get id
   const [typeid, setTypeId] = React.useState('');
   const gettypeId = id => {
-    // console.log('type', id);
     setTypeId(id);
   };
 
-  // get type data
   const getTypeData = (cat_id, name) => {
-    // console.log(name);
     setValue(cat_id);
     setTypeName(name);
   };
 
-  // Api call for types
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}project-type`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        setTypes(data);
-      })
-      .catch(error => console.log(error.message));
-  });
-
-  // post types
-  const OnSubmittypes = () => {
-    const data = {
+  const edittype = async () => {
+    const formData = {
       category_id: value,
       project_type: typeName,
+      company_id: companyData._id,
     };
-
-    fetch(`${Config.API_URL}project-type`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    let response = await updateProjectType(typeid, formData);
+    if (response.status === 200) {
+      setUpdateToast(true);
+      getprojectTypes();
+    } else {
+      alert(response.message);
+    }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 2000);
   };
 
-  // Edit types
-  const OnEditTypes = () => {
-    const editData = {
-      category_id: value,
-      project_type: typeName,
-    };
-    fetch(`${Config.API_URL}project-type` + `/${typeid}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(editData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 200) {
-          updateShowToast();
-        }
-      });
+  const getTypeId = id => {
+    setTypId(id);
+    setDeleteConfirm1(true);
   };
+  const [type_id, setTypId] = React.useState('');
 
-  // Delete types
-  const OnDeleteTypes = id => {
-    // console.log('delete', id);
-    fetch('http://192.168.1.99:8000/api/project-type/' + `${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    // console.log('type delete');
+  const deleteType = async () => {
+    let response = await deleteProjectType(type_id);
+    if (response.status === 200) {
+      setDeleteConfirm1(false);
+      setDeleteToast(true);
+      getprojectTypes();
+    }
+    setTimeout(() => {
+      setDeleteToast(false);
+    }, 1500);
   };
 
   React.useEffect(() => {
-    OnDeleteTypes;
-    OnEditTypes;
-    OnEdit;
+    projectCategory();
+    getprojectTypes();
   }, []);
 
   function renderCategories() {
@@ -267,6 +243,7 @@ const CategoryandType = ({navigation}) => {
                 ...FONTS.h3,
                 marginLeft: SIZES.radius,
                 color: COLORS.darkGray,
+                textTransform: 'capitalize',
               }}>
               {item.category_name}
             </Text>
@@ -282,23 +259,37 @@ const CategoryandType = ({navigation}) => {
                 getId(item._id);
                 getData(item.category_name);
                 setShowCategoryModal(true);
-                OnEdit();
+                // OnEdit();
               }}>
-              <Image
-                source={icons.edit}
+              <ImageBackground
                 style={{
-                  height: 15,
-                  width: 15,
-                  tintColor: COLORS.lightblue_800,
-                  right: 10,
-                }}
-              />
+                  backgroundColor: COLORS.green,
+                  padding: 3,
+                  borderRadius: 2,
+                  right: 15,
+                }}>
+                <Image
+                  source={icons.edit}
+                  style={{
+                    height: 12,
+                    width: 12,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => OnDelete(item._id)}>
-              <Image
-                source={icons.delete_icon}
-                style={{height: 15, width: 15, tintColor: COLORS.red}}
-              />
+            <TouchableOpacity onPress={() => getCategoryId(item._id)}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.rose_600,
+                  padding: 3,
+                  borderRadius: 2,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{height: 12, width: 12, tintColor: COLORS.white}}
+                />
+              </ImageBackground>
             </TouchableOpacity>
           </View>
         </View>
@@ -308,10 +299,10 @@ const CategoryandType = ({navigation}) => {
     return (
       <View
         style={{
-          marginTop: SIZES.padding,
+          marginTop: SIZES.radius,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.lightblue_50,
           ...styles.shadow,
         }}>
@@ -325,18 +316,23 @@ const CategoryandType = ({navigation}) => {
           <TextButton
             label="Add New"
             buttonContainerStyle={{
-              paddingHorizontal: SIZES.base,
-              borderRadius: 5,
+              paddingHorizontal: 5,
+              borderRadius: 2,
             }}
             labelStyle={{...FONTS.h5}}
-            onPress={() => setShowCategoryModal(true)}
+            onPress={() => {
+              setCatName(''), setShowCategoryModal(true);
+            }}
           />
         </View>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius}}
-          data={categories}
+          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
+          data={projectCategories}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
+          scrollEnabled={true}
+          nestedScrollEnabled={true}
+          maxHeight={350}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
@@ -345,7 +341,7 @@ const CategoryandType = ({navigation}) => {
                   width: '100%',
                   height: 1,
                   backgroundColor: COLORS.gray2,
-                  marginVertical: 5,
+                  // marginVertical: 5,
                 }}></View>
             );
           }}
@@ -376,6 +372,7 @@ const CategoryandType = ({navigation}) => {
                 ...FONTS.h3,
                 marginLeft: SIZES.radius,
                 color: COLORS.darkGray,
+                textTransform: 'capitalize',
               }}>
               {item.project_type}
             </Text>
@@ -391,23 +388,38 @@ const CategoryandType = ({navigation}) => {
                 gettypeId(item._id);
                 getTypeData(item.category_id, item.project_type);
                 setShowTypesModal(true);
-                OnEditTypes();
+                // OnEditTypes();
+                // edittype();
               }}>
-              <Image
-                source={icons.edit}
+              <ImageBackground
                 style={{
-                  height: 15,
-                  width: 15,
-                  tintColor: COLORS.lightblue_800,
-                  right: 10,
-                }}
-              />
+                  backgroundColor: COLORS.green,
+                  padding: 3,
+                  borderRadius: 2,
+                  right: 15,
+                }}>
+                <Image
+                  source={icons.edit}
+                  style={{
+                    height: 12,
+                    width: 12,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => OnDeleteTypes(item._id)}>
-              <Image
-                source={icons.delete_icon}
-                style={{height: 15, width: 15, tintColor: COLORS.red}}
-              />
+            <TouchableOpacity onPress={() => getTypeId(item._id)}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.rose_600,
+                  padding: 3,
+                  borderRadius: 2,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{height: 12, width: 12, tintColor: COLORS.white}}
+                />
+              </ImageBackground>
             </TouchableOpacity>
           </View>
         </View>
@@ -416,11 +428,10 @@ const CategoryandType = ({navigation}) => {
     return (
       <View
         style={{
-          marginTop: SIZES.padding,
-          marginBottom: SIZES.padding * 2,
+          marginVertical: SIZES.padding * 1.5,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.lightblue_50,
           ...styles.shadow,
         }}>
@@ -434,19 +445,26 @@ const CategoryandType = ({navigation}) => {
           <TextButton
             label="Add New"
             buttonContainerStyle={{
-              paddingHorizontal: SIZES.base,
-              borderRadius: 5,
+              paddingHorizontal: 5,
+              borderRadius: 2,
             }}
             labelStyle={{...FONTS.h5}}
-            onPress={() => setShowTypesModal(true)}
+            onPress={() => {
+              projectCategory();
+              setTypeName('');
+              setShowTypesModal(true);
+            }}
           />
         </View>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius}}
-          data={types}
+          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
+          data={projectTypes}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
-          showsVerticalScrollIndicator={true}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={true}
+          nestedScrollEnabled={true}
+          maxHeight={350}
           ItemSeparatorComponent={() => {
             return (
               <View
@@ -468,7 +486,7 @@ const CategoryandType = ({navigation}) => {
         animationType="slide"
         transparent={true}
         visible={showCategoryModal}>
-        <TouchableWithoutFeedback onPress={() => setShowCategoryModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
@@ -482,7 +500,7 @@ const CategoryandType = ({navigation}) => {
                 left: SIZES.padding,
                 width: '90%',
                 padding: SIZES.padding,
-                borderRadius: SIZES.radius,
+                borderRadius: 5,
                 backgroundColor: COLORS.white,
               }}>
               <View style={{}}>
@@ -526,9 +544,9 @@ const CategoryandType = ({navigation}) => {
                       borderRadius: SIZES.radius,
                     }}
                     onPress={() => {
-                      id == ''
-                        ? (OnSubmit(), setShowCategoryModal(false))
-                        : (OnEdit(), setShowCategoryModal(false));
+                      id === ''
+                        ? (postCategory(), setShowCategoryModal(false))
+                        : (editCategory(), setShowCategoryModal(false));
                     }}
                   />
                 </ScrollView>
@@ -543,7 +561,7 @@ const CategoryandType = ({navigation}) => {
   function renderAddTypesModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={showTypesModal}>
-        <TouchableWithoutFeedback onPress={() => setShowTypesModal(false)}>
+        <TouchableWithoutFeedback>
           <View
             style={{
               flex: 1,
@@ -557,7 +575,7 @@ const CategoryandType = ({navigation}) => {
                 left: SIZES.padding,
                 width: '90%',
                 padding: SIZES.padding,
-                borderRadius: SIZES.radius,
+                borderRadius: 5,
                 backgroundColor: COLORS.white,
               }}>
               <View style={{}}>
@@ -595,6 +613,7 @@ const CategoryandType = ({navigation}) => {
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
+                    maxHeight={170}
                   />
                   <FormInput
                     label="Name"
@@ -610,13 +629,13 @@ const CategoryandType = ({navigation}) => {
                     buttonContainerStyle={{
                       height: 50,
                       alignItems: 'center',
-                      marginTop: SIZES.padding,
+                      marginTop: SIZES.padding * 2,
                       borderRadius: SIZES.radius,
                     }}
                     onPress={() => {
-                      typeid == ''
-                        ? (OnSubmittypes(), setShowTypesModal(false))
-                        : (OnEditTypes(), setShowTypesModal(false));
+                      typeid === ''
+                        ? (postTypes(), setShowTypesModal(false))
+                        : (edittype(), setShowTypesModal(false));
                     }}
                   />
                 </ScrollView>
@@ -633,15 +652,54 @@ const CategoryandType = ({navigation}) => {
         flex: 1,
       }}>
       <HeaderBar right={true} title="Categories & Types" />
-      <Toast config={catshowToast} />
-      <Toast config={updateShowToast} />
-      <Toast config={typeDeleteToast} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderCategories()}
         {renderTypes()}
         {renderAddCategoriesModal()}
         {renderAddTypesModal()}
       </ScrollView>
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => {
+          deletecategory();
+        }}
+      />
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm1}
+        onClose={() => setDeleteConfirm1(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => deleteType()}
+      />
     </View>
   );
 };

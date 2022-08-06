@@ -33,6 +33,7 @@ const done = require('../assets/icons/done.png');
 const todo = require('../assets/icons/todo.png');
 const submit1 = require('../assets/icons/submit1.webp');
 const forward_arrow = require('../assets/icons/forward_arrow.png');
+const check = require('../assets/icons/check.png');
 
 const account = require('../assets/icons/account.png');
 const report = require('../assets/icons/report.png');
@@ -56,7 +57,7 @@ const items = require('../assets/icons/items.png');
 const stock_manage = require('../assets/icons/stock_manage.png');
 const delete_icon = require('../assets/icons/delete.png');
 const upload_files = require('../assets/icons/upload_files.png');
-
+const boq = require('../assets/icons/boq.png');
 //pd
 const stock = require('../assets/icons/pd/stock.png');
 const report1 = require('../assets/icons/pd/report.png');
@@ -82,8 +83,34 @@ const down1 = require('../assets/icons/down1.png');
 const Suppliers = require('../assets/icons/Suppliers.png');
 const suppliers1 = require('../assets/icons/suppliers1.png');
 const staff = require('../assets/icons/staff.png');
+const verify = require('../assets/icons/verify.png');
+const revert = require('../assets/icons/revert.png');
+// const location = require('../assets/icons/location.png');
+
+//final selected
+const company_team = require('../assets/icons/final/company_team.png');
+const down_arro = require('../assets/icons/final/down_arrow.png');
+const itemss = require('../assets/icons/final/items.png');
+const manage_stock = require('../assets/icons/final/manage_stock.png');
+const project_type = require('../assets/icons/final/project_type.png');
+const stock_management = require('../assets/icons/final/stock_management.png');
+const supplier = require('../assets/icons/final/supplier.png');
+const units = require('../assets/icons/final/units.png');
+const delete_withbg = require('../assets/icons/delete_withbg.png');
 
 export default {
+  // final
+  company_team,
+  down_arro,
+  itemss,
+  manage_stock,
+  project_type,
+  stock_management,
+  supplier,
+  units,
+  //
+  revert,
+  verify,
   account,
   report,
   tasks,
@@ -163,4 +190,7 @@ export default {
   Suppliers,
   suppliers1,
   staff,
+  boq,
+  check,
+  delete_withbg,
 };

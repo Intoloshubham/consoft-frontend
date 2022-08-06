@@ -21,10 +21,11 @@ const ProjectsDetails = ({route}) => {
     {id: 4, img: icons.stock, name: 'Stock / Inventry'},
     {id: 5, img: icons.machine, name: 'Tools & Machinery'},
     {id: 6, img: icons.time_seh, name: 'Sehedule & Timeline'},
+    {id: 7, img: icons.boq, name: 'BOQ'},
   ];
 
   //get name of project from project banner screen using params
-  const {name} = route.params; //
+  const {name, project_id} = route.params; //
   const [showWorkModal, setWorkModal] = React.useState(false);
   const [projects, setProjects] = React.useState(ProjectList);
 
@@ -40,15 +41,17 @@ const ProjectsDetails = ({route}) => {
           item.id == 1
             ? navigation.navigate('CompanyTeamShow')
             : item.id == 2
-            ? navigation.navigate('ProjectTeam')
+            ? navigation.navigate('ProjectTeam', {project_id})
             : item.id == 3
-            ? navigation.navigate('Contractors')
+            ? navigation.navigate('Contractors', {project_id})
             : item.id == 4
             ? navigation.navigate('StocksAndInventry')
             : item.id == 5
-            ? navigation.navigate('ToolsAndMachinery')
+            ? navigation.navigate('ToolsAndMachinery', {project_id})
             : item.id == 6
             ? navigation.navigate('ProjectSeheduleTime')
+            : item.id == 7
+            ? navigation.navigate('Boq', {project_id})
             : null;
         }}>
         <Image
@@ -91,7 +94,7 @@ const ProjectsDetails = ({route}) => {
         style={{
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
@@ -117,6 +120,7 @@ const ProjectsDetails = ({route}) => {
       </View>
     );
   }
+
   return (
     <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
       <HeaderBar right={true} title={name} />
@@ -133,12 +137,15 @@ const ProjectsDetails = ({route}) => {
         }}
         onPress={() => setWorkModal(true)}
       />
-      {showWorkModal && (
-        <WorkAssignModal
-          isVisible={showWorkModal}
-          onClose={() => setWorkModal(false)}
-        />
-      )}
+
+      {/* {showWorkModal && ( */}
+      <WorkAssignModal
+        projectId={project_id}
+        isVisible={showWorkModal}
+        onClose={() => setWorkModal(false)}
+      />
+      {/* )} */}
+
       {renderProjectDetails()}
     </View>
   );

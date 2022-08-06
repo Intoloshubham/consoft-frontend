@@ -29,14 +29,21 @@ export const COLORS = {
   rose_600: '#e11d48',
 
   warning_100: '#ffedd5',
+  warning_200: '#fecaca',
   primary: '#FF6C44', //orange
   // transparentPrimary: 'rgba(227, 120, 75, 0.4)',
+
+  //
+  red_300: '#fca5a5',
+  red_600: '#dc2626',
   transparentPrimary: '#bae6fd',
   orange: '#FFA133',
   lightOrange: '#FFA133',
   lightOrange2: '#FDDED4',
   lightOrange3: '#FFD9AD',
   green: '#27AE60',
+  green_200:'#bbf7d0',
+  green_400:'#4ade80',
   red: '#FF1717',
   blue: '#0064C0',
   darkBlue: '#111A2C',
@@ -47,15 +54,23 @@ export const COLORS = {
   gray3: '#CFD0D7',
   lightGray1: '#DDDDDD',
   lightGray2: '#F5F5F8',
+  white3: '#F8F8FF',
   white2: '#FBFBFB',
   white: '#FFFFFF',
   black: '#000000',
   tertiary50: '#ecfdf5',
-  
+
+  teal_400: '#2dd4bf',
+
   transparent: 'transparent',
-  transparentBlack1: 'rgba(0, 0, 0, 0.3)',
-  transparentBlack2: 'rgba(0, 0, 0, 0.4)',
+  transparentBlack1: 'rgba(0, 0, 0, 0.1)',
+  transparentBlack2: 'rgba(0, 0, 0, 0.2)',
+  transparentBlack3: 'rgba(0, 0, 0, 0.3)',
+  transparentBlack4: 'rgba(0, 0, 0, 0.4)',
+  transparentBlack5: 'rgba(0, 0, 0, 0.5)',
+  transparentBlack6: 'rgba(0, 0, 0, 0.6)',
   transparentBlack7: 'rgba(0, 0, 0, 0.7)',
+  transparentBlack8: 'rgba(0, 0, 0, 0.8)',
 };
 export const SIZES = {
   // global sizes

@@ -1,60 +1,59 @@
-import React, {useEffect, useState} from 'react';
-import {View, LogBox, ScrollView, SafeAreaView, Text} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  View,
+  LogBox,
+  ScrollView,
+  SafeAreaView,
+  RefreshControl,
+} from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
-import ProjectWorksIdentifier from './ProjectWorksIdentifier';
-
-import { getToken } from '../../../services/asyncStorageService';
-import { useGetLoggedCompanyQuery } from '../../../services/companyAuthApi';
-import { useDispatch } from 'react-redux';
-import { setCompanyInfo } from '../../../features/CompanySlice';
-import { setCompanyToken } from '../../../features/CompanyAuthSlice';
-import { useSelector } from 'react-redux';
+import SubmittedWorks from './SubmittedWorks';
+import VerifyAndRevertWork from './VerifyAndRevertWork';
+import {useSelector} from 'react-redux';
 
 const Home = () => {
-
-  const [accessToken, setAccessToken] = useState('');
+  const companyData = useSelector(state => state.company);
   
-  useEffect( () => {
-    (async() => {
-        const token = await getToken();
-        setAccessToken(token)
-        dispatch(setCompanyToken({ token:token }))
-      })();
-  })
-
-  const { data, isSuccess } = useGetLoggedCompanyQuery(accessToken)
-  // console.log(data)
-
-  //store data in redux store
-  const dispatch = useDispatch()
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(setCompanyInfo({ _id:data._id, company_name:data.company_name, email: data.email, mobile: data.mobile  }))
-    }
-  })
-
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
-  const companyData = useSelector(state => state.company);
-  console.log(companyData)
-  
+  // refresh
+  function delay(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
+  const [loading, setLoading] = React.useState(false);
+  const loadMore = React.useCallback(async () => {
+    setLoading(true);
+    delay(2000).then(() => setLoading(false));
+  }, [loading]);
+
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            progressBackgroundColor="white"
+            tintColor="red"
+            refreshing={loading}
+            onRefresh={loadMore}
+          />
+        }>
         <View
           style={{
             flex: 1,
-            marginBottom: 130,
+            marginBottom: 100,
           }}>
-          <Text>{accessToken}</Text>
-          <ProjectsBanner />
+          <ProjectsBanner company_id={companyData._id} />
+          <SubmittedWorks />
+          <ProjectReports />
           <AssignedWorks />
-          {/* <ProjectReports /> */}
-          {/* <ProjectWorksIdentifier /> */}
+          <VerifyAndRevertWork company_id={companyData._id} />
         </View>
       </ScrollView>
     </SafeAreaView>

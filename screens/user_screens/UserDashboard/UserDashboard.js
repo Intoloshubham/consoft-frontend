@@ -1,188 +1,133 @@
-import { View, Text, StyleSheet, Image, ScrollView, Modal, Pressable, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect, useRef } from 'react'
-import { useNavigation } from '@react-navigation/native';
-import { FONTS, icons, SIZES, COLORS } from '../../../constants'
-import LinearGradient from 'react-native-linear-gradient'
-import { dummyData } from '../../../constants'
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { Todo, InProgressModal, DoneModal } from '../TaskModal'
-import styles from './css/UserDashboardStyle'
-import Reports from '../UserReports/UserReports'
+import React from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  LogBox,
+} from 'react-native';
+import {icons, COLORS, SIZES, FONTS} from '../../../constants';
+import {InProgressModal, DoneModal} from '../TaskModal';
+//saurabh
+import UserAssignWorks from './UserAssignWorks';
 
-//redux
-import { getToken } from '../../../services/asyncStorageService';
-import { useGetLoggedUserQuery } from '../../../services/userAuthApi';
-import { setUserInfo } from '../../../features/UserSlice';
-import { setUserToken } from '../../../features/UserAuthSlice';
-import { useDispatch, useSelector } from 'react-redux';
-
-
-const UserDashboard = ({ navigation, route }) => {
-  const { name_login_params } = route.params;
-  //for saving token
-  const [accessToken, setAccessToken] = useState('');
-  const accessref = useRef('')
-
-  //for getting new task data
-  const [NewTaskRes, setNewTaskRes] = useState(null)
-
-
-
-
-  const dispatch = useDispatch()
-
-
-  async function Get_token_Data() {
-    const tokens = await getToken();
-    setAccessToken(tokens)
-    dispatch(setUserToken({ token: tokens }))
-
+const UserDashboard = () => {
+  // refresh
+  function delay(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
   }
 
-  // React.useEffect(() => {
-  //     Get_token_Data()
-  //   }, [name_login_params])
+  const [loading, setLoading] = React.useState(false);
+  const loadMore = React.useCallback(async () => {
+    setLoading(true);
+    delay(2000).then(() => setLoading(false));
+  }, [loading]);
 
+  const [inProgressModal, setinProgressModal] = React.useState(false);
+  const [doneModal, setdoneModal] = React.useState(false);
+  const [inProgressModalnum, setinProgressModalNum] = React.useState(false);
+  const [doneModalnum, setdoneModalNum] = React.useState(false);
 
-
-
-  
-  React.useEffect(() => {
-    Get_token_Data()
-  }, [])
-
-
-  // console.log(accessToken)
-
-
-  // console.log("Token " + accessToken)
-
-
-
-  // const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
-  // console.log("data "+ data);
-
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role_id: data.role_id  }))
-  //   }
-  // })
-
-
-
-
-
-
-  const [taskModal, settaskModal] = useState(false)
-  const [inProgressModal, setinProgressModal] = useState(false)
-  const [doneModal, setdoneModal] = useState(false)
-  const [taskModalnum, settaskModalNum] = useState(false)
-  const [inProgressModalnum, setinProgressModalNum] = useState(false)
-  const [doneModalnum, setdoneModalNum] = useState(false)
-
-  const handleTask = async () => {
-    // const new_task=await fetch('http://10.0.2.2:7000/api/user-assign-works/')
-    // const res=await new_task.json(new_task)
-    setNewTaskRes(res)
-    settaskModalNum(true);
-    settaskModal(true);
-  }
   const handleInProgressTask = () => {
-    setinProgressModalNum(true)
+    setinProgressModalNum(true);
     setinProgressModal(true);
-  }
+  };
   const handleDoneTask = () => {
     setdoneModalNum(true);
     setdoneModal(true);
-  }
+  };
 
-
-
-  const { data, isSuccess } = useGetLoggedUserQuery(accessToken)
-
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(setUserInfo({ _id:data._id, name:data.name, email: data.email, mobile: data.mobile, role: data.role, role_id: data.role_id  }))
-    }
-  },[])
-
-  const userData = useSelector(state => state.user);
-  const userToken = useSelector(state => state.userAuth);
-  // console.log(userToken);
+  React.useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   return (
-    <>
-      {/* <LinearGradient colors={[COLORS.lightGray2, COLORS.lightGray2, COLORS.lightGray2]} style={styles.container}> */}
-
-      <View style={styles.tasks}>
-        {/* <Text>{accessToken}</Text> */}
-        <TouchableOpacity style={styles.Intask} onPress={() => handleTask()}>
-          <View>
-            <Image
-
-              style={styles.icon1}
-              source={icons.todo}
-            />
-          </View>
-          <View style={{ justifyContent: 'space-between' }}>
-            <Text style={[styles.num_task, { left: -22 }]}>New Task</Text>
-          </View>
-          <View style={{ alignContent: "space-between" }}>
-            <Text style={[styles.tag, { color: "red" }]} >5</Text>
-          </View>
-        </TouchableOpacity>
-        {taskModalnum ? (<Todo taskModal={taskModal} settaskModal={settaskModal} />) : null}
-
-        <TouchableOpacity style={styles.Intask} onPress={() => handleInProgressTask()}>
-          <View>
-            <Image
-              style={styles.icon1}
-              source={icons.inprogress}
-            />
-          </View>
-          <View>
-            <Text style={styles.num_task}>Task In Progress</Text>
-          </View>
-          <View>
-            <Text style={[styles.tag, { color: "blue" }]}>2</Text>
-          </View>
-        </TouchableOpacity>
-        {inProgressModalnum ? (<InProgressModal inProgressModal={inProgressModal} setinProgressModal={setinProgressModal} />) : null}
-        <TouchableOpacity style={styles.Intask} onPress={() => handleDoneTask()}>
-          <View>
-            <Image
-              style={styles.icon1}
-              source={icons.done}
-            />
-          </View>
-          <View>
-            <Text style={[styles.num_task, { left: -22 }]}>  Completed </Text>
-          </View>
-          <View style={{ justifyContent: "space-between" }}>
-            <Text style={[styles.tag, { color: "green" }]}>3</Text>
-          </View>
-        </TouchableOpacity>
-        {doneModalnum ? (<DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />) : null}
-      </View>
-      <View style={styles.report_section_title}>
-        <Text style={styles.avai_text}>Reports</Text>
-      </View>
-      <View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          progressBackgroundColor="white"
+          tintColor="red"
+          refreshing={loading}
+          onRefresh={loadMore}
+        />
+      }>
+      <UserAssignWorks />
+      <View
+        style={{
+          marginHorizontal: SIZES.radius,
+          paddingHorizontal: SIZES.radius,
+          paddingVertical: SIZES.radius,
+          borderRadius: SIZES.base,
+          backgroundColor: COLORS.lightblue_500,
+          ...styles.shadow,
+        }}>
         <TouchableOpacity
-          style={styles.create_new_report_btn}
-          onPress={() => {
-            navigation.navigate('Reports');
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: COLORS.white,
+            padding: 10,
+            borderRadius: 5,
+            ...styles.shadow,
           }}
-        >
-          <Text style={{ color: COLORS.white, ...FONTS.body3 }}>Create New Report</Text>
+          onPress={() => handleInProgressTask()}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image source={icons.inprogress} style={{height: 25, width: 25}} />
+            <Text style={{...FONTS.h3, color: COLORS.darkGray, left: 10}}>
+              Task In Progress
+            </Text>
+          </View>
+          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>2</Text>
         </TouchableOpacity>
+        {inProgressModalnum && (
+          <InProgressModal
+            inProgressModal={inProgressModal}
+            setinProgressModal={setinProgressModal}
+          />
+        )}
+
+        <TouchableOpacity
+          style={{
+            marginTop: SIZES.base,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: COLORS.white,
+            padding: 10,
+            borderRadius: 5,
+            ...styles.shadow,
+          }}
+          onPress={() => handleDoneTask()}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image source={icons.done} style={{height: 25, width: 25}} />
+            <Text style={{...FONTS.h3, color: COLORS.darkGray, left: 10}}>
+              Completed
+            </Text>
+          </View>
+          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>3</Text>
+        </TouchableOpacity>
+        {doneModalnum && (
+          <DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />
+        )}
       </View>
-      {/* </LinearGradient> */}
+    </ScrollView>
+  );
+};
 
-    </>
-  )
-}
-
-
-export default UserDashboard
+const styles = StyleSheet.create({
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+});
+export default UserDashboard;
