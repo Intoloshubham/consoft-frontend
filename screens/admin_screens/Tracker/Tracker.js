@@ -1,11 +1,21 @@
 import React from 'react';
-import {Text, View} from 'react-native';
-import {COLORS, FONTS} from '../../../constants';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {CustomPopup} from '../../../Components';
+import {icons} from '../../../constants';
 
 const Tracker = () => {
+  const [modal, setmodal] = React.useState(false);
+
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Tracker</Text>
+    <View>
+      {/* <CustomPopup
+        msgType={'error'}
+        text={'Are you sure want to delete?'}
+        showColor={'red'}
+        time={10000}
+        icon={icons.cross}
+        onOff={true}
+      /> */}
     </View>
   );
 };

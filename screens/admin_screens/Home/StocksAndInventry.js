@@ -17,20 +17,17 @@ import {
   FormInput,
   IconButton,
   CustomDropdown,
+  CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import Config from '../../../config';
-
-const stockdetails = [
-  {id: 1, name: 'Bricks', quantity: 45},
-  {id: 2, name: 'Sand', quantity: 88},
-  {id: 3, name: 'Iron', quantity: 57},
-  {id: 4, name: 'Cement', quantity: 55},
-  {id: 5, name: 'Oil', quantity: 95},
-];
+import {
+  getItem,
+  getStockEntry,
+  postStockEntry,
+} from '../../../controller/StockController';
 
 const StocksAndInventry = () => {
-  const [details, setDetails] = React.useState(stockdetails);
   const [showAddMaterialsModal, setShowAddMaterialsModal] =
     React.useState(false);
   // company team states
@@ -45,68 +42,61 @@ const StocksAndInventry = () => {
 
   //Gey data of stock-entry
   const [stocks, setStocks] = React.useState([]);
-  //api
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}item`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        let itemFromApi = data.map(one => {
-          return {label: one.item_name, value: one._id};
-        });
-        setItems(itemFromApi);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
 
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}stock-entry`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setStocks(data);
-      })
-      .catch(error => console.log(error.message));
-  }, []);
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
 
-  const OnSubmit = () => {
-    const FormData = {
+  //
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+  // =============================== Apis ===================================
+
+  const stockItem = async () => {
+    let response = await getItem();
+    let itemFromApi = response.map(one => {
+      return {label: one.item_name, value: one._id};
+    });
+    setItems(itemFromApi);
+  };
+
+  const stockEntry = async () => {
+    let response = await getStockEntry();
+    if (response.status === 200) {
+      setStocks(response.data);
+    }
+  };
+
+  const postStockEntryData = async () => {
+    const formData = {
       item_id: value,
       qty: quantity,
       location: location,
       vehicle_no: vehicleNo,
     };
-    console.log(FormData);
-    fetch(`${Config.API_URL}stock-entry`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(FormData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        if (data.status == 200) {
-          setTimeout(() => {
-            setShowAddMaterialsModal(false);
-          }, 1000);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+
+    let response = await postStockEntry(formData);
+    if (response.status === 200) {
+      setSubmitToast(true);
+      stockEntry();
+      setQuantity('');
+      setLocation('');
+      setVehicleNo('');
+      setValue('');
+      setShowAddMaterialsModal(false);
+    } else {
+      alert(response.message);
+    }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
+
   };
+
+  React.useEffect(() => {
+    stockItem();
+    stockEntry();
+  }, []);
 
   function renderTeamList() {
     const renderItem = ({item}) => (
@@ -123,7 +113,14 @@ const StocksAndInventry = () => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{}</Text>
+          <Text
+            style={{
+              ...FONTS.h3,
+              color: COLORS.darkGray,
+              textTransform: 'capitalize',
+            }}>
+            {item.item_name}
+          </Text>
           <Text
             style={{
               ...FONTS.h3,
@@ -141,15 +138,15 @@ const StocksAndInventry = () => {
             <ImageBackground
               style={{
                 backgroundColor: COLORS.green,
-                padding: 5,
-                borderRadius: SIZES.base,
-                right: 10,
+                padding: 3,
+                borderRadius: 2,
+                right: 12,
               }}>
               <Image
                 source={icons.edit}
                 style={{
-                  width: 15,
-                  height: 15,
+                  width: 12,
+                  height: 12,
                   tintColor: COLORS.white,
                 }}
               />
@@ -157,19 +154,19 @@ const StocksAndInventry = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              alert('delete name');
+              setDeleteConfirm(true);
             }}>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.rose_600,
-                padding: 5,
-                borderRadius: SIZES.base,
+                padding: 3,
+                borderRadius: 2,
               }}>
               <Image
                 source={icons.delete_icon}
                 style={{
-                  width: 15,
-                  height: 15,
+                  width: 12,
+                  height: 12,
                   tintColor: COLORS.white,
                 }}
               />
@@ -184,7 +181,7 @@ const StocksAndInventry = () => {
           marginBottom: SIZES.padding,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
@@ -361,7 +358,7 @@ const StocksAndInventry = () => {
                       marginTop: SIZES.padding,
                       borderRadius: SIZES.radius,
                     }}
-                    onPress={OnSubmit}
+                    onPress={postStockEntryData}
                   />
                 </ScrollView>
               </View>
@@ -392,6 +389,38 @@ const StocksAndInventry = () => {
       />
       {renderTeamList()}
       {renderAddMaterialModal()}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => alert('delete')}
+      />
     </View>
   );
 };
