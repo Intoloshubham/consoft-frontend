@@ -14,9 +14,8 @@ import {HeaderBar, TextButton, FormInput} from '../../../Components';
 import {Title, Card} from 'react-native-paper';
 import {SIZES, COLORS, icons} from '../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {CustomCalender} from '../../admin_screens';
+import CustomCalender from './CustomCalender';
 import {useSelector, useDispatch} from 'react-redux';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import {Popable} from 'react-native-popable';
 import config from '../../../config';
 
@@ -34,11 +33,8 @@ const Demo2 = () => {
   const [showleaves, setShowLeaves] = useState([]);
   const [monthshow, setMonthShow] = useState([]);
   const [leavesday, setLeavesDay] = useState([]);
-  
-  // const [haliddayates, setHalidayDates] = useState([userDate]);
 
-
-  // console.log(leavesday);
+  const [haliddayates, setHalidayDates] = useState([]);
 
   // const [removedate, setRemoveDate] = useState(false)
   const [pushdate, setPushDate] = useState([]);
@@ -71,10 +67,10 @@ const Demo2 = () => {
       });
   }, [user_id]);
 
-  const dateClickHandler = (date, i) => {
+  const dateClickHandler = (date, i,index) => {
     //  const newDate= removedate?[...leavesdate, date]:leavesdate.pop(date);
     const selectDate = [...leavesdate, date];
-    // setLeavesDate(date=> [...leavesdate,  ${date.length}`]);
+    // setLeavesDate([...leavesdate, date,`${leavesdate.length}`]);
     // console.log(selectDate);
     setLeavesDate(selectDate);
     setSelectedId(i);
@@ -82,7 +78,7 @@ const Demo2 = () => {
     setPushDate(newselectdate);
   };
 
- 
+  
 
   const submitLeaves = () => {
     alert(JSON.stringify(pushdate));
@@ -136,7 +132,8 @@ const Demo2 = () => {
 
   useMemo(() => {
     if (monthshow.months) {
-      monthshow.months.map(month => {
+      monthshow.months.map((month,index) => {
+        // console.log(month)
         setLeavesDay(month);
       });
     }
@@ -144,24 +141,28 @@ const Demo2 = () => {
 
   // useMemo(() => {
   //   if (leavesday.leavedays) {
-  //      leavesday.leavedays.map(days => {
-  //       console.log(days)
+  //      leavesday.leavedays.map((days,index)=> {
+  //         console.log(days)
+  //       // console.log(index)
   //       let dates = days.leave_date
+  //         // console.log(dates)
   //       setHalidayDates(dates)
   //     });
   //   }
-  // }, [showleaves]);
+  // }, []);
 
+  // console.log(haliddayates)
 
   const ClearDate = () => {
     setPushDate('');
     setLeavesDate('');
   };
 
-
-  
-
+  // console.log(leavesday.leavedays.leave_date);
   var dt = new Date();
+  // console.log(dt.toDateString())
+  // dt.toLocaleTimeString();
+  // console.log(dt.toLocaleTimeString())
   var hours = dt.getHours(); // gives the value in 24 hours format
   var AmOrPm = hours >= 12 ? 'pm' : 'am';
   hours = hours % 12 || 12;
@@ -242,7 +243,7 @@ const Demo2 = () => {
           }}>
           <Text style={{fontSize: 15, fontWeight: 'bold'}}>Leaves Date</Text>
           <TextButton
-            label="Apply leaves"
+            label="Apply for leaves"
             buttonContainerStyle={{
               paddingHorizontal: SIZES.base,
               borderRadius: 5,
@@ -251,7 +252,8 @@ const Demo2 = () => {
             onPress={() => setLeavesModal(true)}
           />
         </View>
-        <View style={{marginTop: 5}}>
+      
+          <View style={{marginTop: 5}}>
           {leavesday.leavedays !== undefined
             ? leavesday.leavedays.map((Ldays, index) => {
                 // {console.log(Ldays)}
@@ -265,7 +267,7 @@ const Demo2 = () => {
                     }}>
                     <Text style={{fontSize: 15, fontWeight: 'bold'}}>
                       {Ldays.leave_date}
-                    </Text>
+                    </Text> 
 
                     <TouchableOpacity>
                       <Text
@@ -280,7 +282,7 @@ const Demo2 = () => {
                       </Text>
                     </TouchableOpacity>
                     <View style={{flexDirection: 'row'}}>
-                      {/* <TouchableOpacity onPress={()=>alert("Edit")}>
+                      <TouchableOpacity onPress={()=>alert("Edit")}>
                     <Image
                             source={icons.edit}
                             style={{
@@ -291,8 +293,8 @@ const Demo2 = () => {
                               marginTop:2
                             }}
                           />
-                    </TouchableOpacity> */}
-                      {/* <TouchableOpacity onPress={()=>alert('hello')}>
+                    </TouchableOpacity>  
+                      <TouchableOpacity onPress={()=>alert('hello')}>
                     <Image
                             source={icons.delete_icon}
                             style={{
@@ -302,15 +304,15 @@ const Demo2 = () => {
                               left: 12,marginTop:2
                             }}
                           />
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                     </View>
                   </View>
                 );
               })
             : null}
-        </View>
+        </View> 
+        {/* leacves modal start  */}
       </View>
-      {/* leacves modal start  */}
       <Modal transparent={false} visible={leavesmodal} animationType="slide">
         <View
           style={{
@@ -421,7 +423,7 @@ const Demo2 = () => {
                                 key={i}
                                 className={col.classes}
                                 onPress={() => {
-                                  dateClickHandler(col.date, i);
+                                  dateClickHandler(col.date, i,index);
                                 }}>
                                 <Title
                                   style={[
@@ -436,8 +438,7 @@ const Demo2 = () => {
                                           paddingHorizontal: 5,
                                           marginLeft: -5,
                                         }
-                                      : col.date == '15-8-2022' 
-                                        
+                                      : col.date == leavesdate[i]
                                       ? {
                                           backgroundColor: 'red',
                                           borderRadius: 50,
@@ -634,7 +635,7 @@ const Demo2 = () => {
                                     paddingHorizontal: 5,
                                     marginLeft: -5,
                                   }
-                                : col.date === [leavesday.leave_date]
+                                :   col.date == [leavesday.leave_date]
                                 ? {
                                     backgroundColor: 'blue',
                                     color: '#fff',
@@ -658,7 +659,7 @@ const Demo2 = () => {
                 </View>
               );
             })}
-
+            
             <View
               style={{
                 marginTop: 20,
@@ -683,7 +684,3 @@ const Demo2 = () => {
 export default Demo2;
 
 const styles = StyleSheet.create({});
-
-
-
-
