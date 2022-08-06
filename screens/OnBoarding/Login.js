@@ -73,7 +73,7 @@ const Login = ({navigation}) => {
     }
     setTimeout(() => {
       setSubmitToast(false);
-    }, 1500);
+    }, 2000);
   };
 
   const companyOnSubmit = async () => {
@@ -90,7 +90,7 @@ const Login = ({navigation}) => {
     }
     setTimeout(() => {
       setSubmitToast(false);
-    }, 1500);
+    }, 2000);
   };
 
   const makeCall = () => {

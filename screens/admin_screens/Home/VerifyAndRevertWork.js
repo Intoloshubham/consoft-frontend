@@ -1,304 +1,36 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  SafeAreaView,
-} from 'react-native';
-import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
 import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import VerifyWorks from '../VerifyAndRevertWork.js/VerifyWorks';
+import RevertWorks from '../VerifyAndRevertWork.js/RevertWorks';
 
+const Tab = createMaterialTopTabNavigator();
 const VerifyAndRevertWork = ({company_id}) => {
-  const [verifyRevertWorks, setVerifyRevertWorks] = React.useState([]);
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {key: 'verify', title: 'Verify'},
-    {key: 'revert', title: 'Revert'},
-  ]);
-
-  // call api for getting verified and reveted works
   const fetchVerifyAndRevertWork = async () => {
     const response = await getVerifyAndRevertWorks(company_id);
-    setVerifyRevertWorks(response);
+    if (response.status === 200) {
+      let v = response.data.map(ele => {
+        if (ele.verify === true) {
+          setVerify(ele);
+        }
+        if (ele.revert_status === true) {
+          setRevert(ele);
+        }
+      });
+    } else {
+      // alert(response.message);
+    }
   };
 
   // filter verify & revert works
   const [verify, setVerify] = React.useState([]);
   const [revert, setRevert] = React.useState([]);
 
-  const filterDataBasedOnCondition = () => {
-    var filterVerifyData = verifyRevertWorks.filter(function (item) {
-      return item.verify == true;
-    });
-    setVerify(filterVerifyData);
-
-    var filterRevertData = verifyRevertWorks.filter(function (item) {
-      return item.revert_status == true;
-    });
-    setRevert(filterRevertData);
-  };
-
   React.useEffect(() => {
     fetchVerifyAndRevertWork();
-    filterDataBasedOnCondition();
   }, []);
-
-  const VerifyWorksRoute = () => {
-    const renderItem = ({item}) => (
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text
-              style={{
-                ...FONTS.h4,
-                color: COLORS.darkGray,
-                textTransform: 'capitalize',
-                fontWeight: 'bold',
-              }}>
-              {item.user_name}
-            </Text>
-            <Text
-              style={{
-                fontSize: 9,
-                left: 3,
-                paddingHorizontal: 3,
-                backgroundColor: COLORS.green,
-                color: COLORS.white,
-                borderRadius: 2,
-              }}>
-              {item.work_code}
-            </Text>
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                right: 10,
-              }}>
-              <Image
-                source={icons.date}
-                style={{
-                  height: 10,
-                  width: 10,
-                  tintColor: COLORS.darkGray,
-                  right: 3,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: COLORS.darkGray,
-                }}>
-                {item.verify_date}
-              </Text>
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                source={icons.time}
-                style={{
-                  height: 10,
-                  width: 10,
-                  tintColor: COLORS.darkGray,
-                  right: 3,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: COLORS.darkGray,
-                }}>
-                {item.verify_time}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-          <Text style={{...FONTS.h4, color: COLORS.black}}>Work{' - '}</Text>
-          {item.work}
-        </Text>
-        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-          <Text style={{...FONTS.h4, color: COLORS.black}}>Msg{' - '}</Text>
-          {item.submit_work_text}
-        </Text>
-      </View>
-    );
-
-    return (
-      <SafeAreaView
-        style={{
-          padding: 5,
-          marginTop: SIZES.base,
-        }}>
-        <FlatList
-          data={verify}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.gray,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-          scrollEnabled={true}
-          nestedScrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-        />
-      </SafeAreaView>
-    );
-  };
-
-  const RevertWorksRoute = () => {
-    const renderItem = ({item}) => (
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text
-              style={{
-                ...FONTS.h4,
-                color: COLORS.darkGray,
-                textTransform: 'capitalize',
-                fontWeight: 'bold',
-              }}>
-              {item.user_name}
-            </Text>
-            <Text
-              style={{
-                fontSize: 9,
-                left: 3,
-                paddingHorizontal: 3,
-                backgroundColor: COLORS.rose_600,
-                color: COLORS.white,
-                borderRadius: 2,
-              }}>
-              {item.work_code}
-            </Text>
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                right: 10,
-              }}>
-              <Image
-                source={icons.date}
-                style={{
-                  height: 10,
-                  width: 10,
-                  tintColor: COLORS.darkGray,
-                  right: 3,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: COLORS.darkGray,
-                }}>
-                {item.verify_date}
-              </Text>
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                source={icons.time}
-                style={{
-                  height: 10,
-                  width: 10,
-                  tintColor: COLORS.darkGray,
-                  right: 3,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: COLORS.darkGray,
-                }}>
-                {item.verify_time}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-          <Text style={{...FONTS.h4, color: COLORS.black}}>Work{' - '}</Text>
-          {item.work}
-        </Text>
-        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-          <Text style={{...FONTS.h4, color: COLORS.black}}>Msg{' - '}</Text>
-          {item.submit_work_text}
-        </Text>
-      </View>
-    );
-    return (
-      <SafeAreaView style={{padding: 5, marginTop: SIZES.base}}>
-        <FlatList
-          data={revert}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.gray,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-          scrollEnabled={true}
-          nestedScrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-        />
-      </SafeAreaView>
-    );
-  };
-
-  const renderTabBar = props => {
-    return (
-      <TabBar
-        {...props}
-        renderLabel={({focused, route}) => {
-          return (
-            <Text
-              style={{
-                color: focused ? COLORS.black : COLORS.darkGray,
-              }}>
-              {route.title}
-            </Text>
-          );
-        }}
-        indicatorStyle={{
-          backgroundColor: COLORS.rose_600,
-          padding: 1.5,
-          marginBottom: -2,
-        }}
-        style={{
-          backgroundColor: COLORS.white,
-          borderBottomWidth: 0.5,
-          borderColor: COLORS.darkGray,
-        }}
-      />
-    );
-  };
 
   return (
     <View
@@ -334,17 +66,16 @@ const VerifyAndRevertWork = ({company_id}) => {
           />
         </TouchableOpacity>
       </View>
-      <TabView
-        navigationState={{index, routes}}
-        renderScene={SceneMap({
-          verify: VerifyWorksRoute,
-          revert: RevertWorksRoute,
-        })}
-        onIndexChange={setIndex}
-        style={{height: 350}}
-        renderTabBar={renderTabBar}
-        showPageIndicator={true}
-      />
+      <Tab.Navigator style={{height: 350}} initialRouteName="Verify">
+        <Tab.Screen
+          name="Verify"
+          children={() => <VerifyWorks VerifyData={verify} />}
+        />
+        <Tab.Screen
+          name="Revert"
+          children={() => <RevertWorks RevertData={revert} />}
+        />
+      </Tab.Navigator>
     </View>
   );
 };

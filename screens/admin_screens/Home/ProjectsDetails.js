@@ -11,7 +11,6 @@ import {COLORS, SIZES, FONTS, images, icons} from '../../../constants';
 import {TextButton, HeaderBar} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
-import VerifyAndRevertWork from './VerifyAndRevertWork';
 
 const ProjectsDetails = ({route}) => {
   const navigation = useNavigation();
@@ -29,7 +28,6 @@ const ProjectsDetails = ({route}) => {
   const {name, project_id} = route.params; //
   const [showWorkModal, setWorkModal] = React.useState(false);
   const [projects, setProjects] = React.useState(ProjectList);
-
 
   function renderProjectDetails() {
     const renderItem = ({item}) => (
@@ -122,6 +120,7 @@ const ProjectsDetails = ({route}) => {
       </View>
     );
   }
+
   return (
     <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
       <HeaderBar right={true} title={name} />
@@ -137,13 +136,13 @@ const ProjectsDetails = ({route}) => {
           ...styles.shadow,
         }}
         onPress={() => setWorkModal(true)}
-        // onPress={() => openAssignWorkModal()}
       />
+
       {/* {showWorkModal && ( */}
       <WorkAssignModal
         projectId={project_id}
         isVisible={showWorkModal}
-        onClose={ setWorkModal(false)}
+        onClose={() => setWorkModal(false)}
       />
       {/* )} */}
 
