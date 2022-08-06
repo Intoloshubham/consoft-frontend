@@ -16,7 +16,6 @@ import {SIZES, COLORS, icons} from '../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {CustomCalender} from '../../admin_screens';
 import {useSelector, useDispatch} from 'react-redux';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import {Popable} from 'react-native-popable';
 import config from '../../../config';
 
