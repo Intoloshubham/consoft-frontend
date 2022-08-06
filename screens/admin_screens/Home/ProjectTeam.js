@@ -60,12 +60,12 @@ const ProjectTeam = ({route}) => {
   const fetchProjectTeam = useCallback(async () => {
     const team = await getProjectTeam(project_id);
     setProjectTeam(team);
-  }, [project_id]);
+  }, []);
 
   useEffect(() => {
     fetchProjectTeam();
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, [fetchProjectTeam]);
+  }, []);
 
   const addProjectTeam = async () => {
     setAddProjectTeamModal(true);

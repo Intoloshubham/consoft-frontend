@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -21,14 +21,16 @@ import {
   CustomToast,
   ConformationAlert,
 } from '../../../Components';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
 import Config from '../../../config';
 import {useSelector} from 'react-redux';
 
+import { getProjectCategory } from '../../../controller/ProjectController';
+
+
 const CategoryandType = () => {
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
+  
+  const companyData = useSelector(state => state.company);
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
@@ -36,7 +38,6 @@ const CategoryandType = () => {
   const [deleteToast, setDeleteToast] = React.useState(false);
 
   // COMPANY DATA
-  const companyData = useSelector(state => state.company);
 
   // STATES FOR STORING CATEGORIES & PROJECT TYPES DATA
   const [projectCategories, setProjectCategories] = React.useState([]);
@@ -58,38 +59,58 @@ const CategoryandType = () => {
     // console.log(name);
     setCatName(name);
   };
+  //-------------------------
+
+  const fetchProjectCategory = useCallback(async () => {
+    const res = await getProjectCategory(companyData._id);
+    if (res.status === STATUS.RES_SUCCESS) {
+      let catFromApi = res.data.map(item => {
+        return {label: item.category_name, value: item._id};
+      });
+      setProjectCategories(res.data);
+      setItems(catFromApi);
+    }
+    
+    // setProjectTeam(team);
+  }, [companyData._id]);
+
+  console.log("object")
+  React.useEffect(() => {
+    fetchProjectCategory()
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  },[fetchProjectCategory]);
 
   // all apis & Get categories
-  React.useEffect(() => {
-    const abortConst = new AbortController();
-    fetch(
-      `${Config.API_URL}project-category`,
-      {signal: abortConst.signal},
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        let catFromApi = data.map(item => {
-          return {label: item.category_name, value: item._id};
-        });
-        setProjectCategories(data);
-        setItems(catFromApi);
-      })
-      .catch(error => {
-        if (error.name === 'AbortError') {
-          console.log('fetch aborted');
-        } else {
-          console.log(error);
-        }
-      });
-    return () => abortConst.abort();
-  }, [projectCategories]);
+  // React.useEffect(() => {
+  //   const abortConst = new AbortController();
+  //   fetch(
+  //     `${Config.API_URL}project-category`,
+  //     {signal: abortConst.signal},
+  //     {
+  //       method: 'GET',
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //     },
+  //   )
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       let catFromApi = data.map(item => {
+  //         return {label: item.category_name, value: item._id};
+  //       });
+  //       setProjectCategories(data);
+  //       setItems(catFromApi);
+  //     })
+  //     .catch(error => {
+  //       if (error.name === 'AbortError') {
+  //         console.log('fetch aborted');
+  //       } else {
+  //         console.log(error);
+  //       }
+  //     });
+  //   return () => abortConst.abort();
+  // }, [projectCategories]);
 
   // post categories
   const OnSubmit = () => {
@@ -190,33 +211,33 @@ const CategoryandType = () => {
   };
 
   // Api call for types
-  React.useEffect(() => {
-    const abortConst = new AbortController();
-    fetch(
-      `${Config.API_URL}project-type`,
-      {signal: abortConst.signal},
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        setProjectTypes(data);
-      })
-      .catch(error => {
-        if (error.name === 'AbortError') {
-          console.log('fetch aborted');
-        } else {
-          console.log(error);
-        }
-      });
-    return () => abortConst.abort();
-  }, [projectTypes]);
+  // React.useEffect(() => {
+  //   const abortConst = new AbortController();
+  //   fetch(
+  //     `${Config.API_URL}project-type`,
+  //     {signal: abortConst.signal},
+  //     {
+  //       method: 'GET',
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //     },
+  //   )
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // console.log(data);
+  //       setProjectTypes(data);
+  //     })
+  //     .catch(error => {
+  //       if (error.name === 'AbortError') {
+  //         console.log('fetch aborted');
+  //       } else {
+  //         console.log(error);
+  //       }
+  //     });
+  //   return () => abortConst.abort();
+  // }, [projectTypes]);
 
   // post types
   const OnSubmittypes = () => {
@@ -429,7 +450,7 @@ const CategoryandType = () => {
       </View>
     );
   }
-
+  console.log("df")
   function renderTypes() {
     const renderItem = ({item, index}) => {
       return (

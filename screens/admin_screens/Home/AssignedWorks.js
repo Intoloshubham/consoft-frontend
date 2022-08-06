@@ -27,13 +27,19 @@ const AssignedWorks = () => {
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const [filterRoleModal, setFilterRoleModal] = React.useState(false);
   const [items, setItems] = React.useState([]);
+  const [workId, setWorkId] = React.useState('');
 
   //get assign works
-  const fetchAssignWorks = async () => {
+  const fetchAssignWorks =  async () => {
     const response = await getAssignWorks();
     setAssignWorkData(response);
     fetchAssignWorks();
   };
+
+  React.useEffect(() => {
+    fetchAssignWorks();
+    fetchUserRole();
+  }, []);
 
   //get user role
   const fetchUserRole = async () => {
@@ -47,7 +53,7 @@ const AssignedWorks = () => {
     setDeleteConfirm(true);
     setWorkId(id);
   };
-  const [workId, setWorkId] = React.useState('');
+  
 
   // delete assign works
   const fetchAssignWorkDelete = async () => {
@@ -56,10 +62,7 @@ const AssignedWorks = () => {
     fetchAssignWorkDelete();
   };
 
-  // React.useEffect(() => {
-  //   fetchAssignWorks();
-  //   fetchUserRole();
-  // }, []);
+  
 
   // Get All Assign Works
   // React.useEffect(() => {
