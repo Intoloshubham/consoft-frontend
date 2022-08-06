@@ -47,61 +47,53 @@ const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
     body_ed_de_view,
   } = styles;
 
-  // console.log("Manpower")
-  // console.log(Main_drp_pro_value)
-  //Manpower collapse
-  const [TabCollapse, setTabCollapse] = useState(false);
+    console.log("Manpower")
+    // console.log(projectTeamList)
+    // console.log(ProList)
+    // console.log(Main_drp_pro_value)
+    //Manpower collapse
+    const [TabCollapse, setTabCollapse] = useState(false)
 
-  return (
-    <>
-      <Pressable
-        onPress={() => setTabCollapse(!TabCollapse)}
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: SIZES.base,
-          paddingVertical: 3,
-          // marginBottom: -SIZES.base,
-          width: SIZES.width * 0.35,
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          top: SIZES.base * 2,
-          borderColor: COLORS.lightblue_200,
-          borderWidth: 1,
-          borderRadius: 1,
-          elevation: 1,
-        }}>
-        <View style={{alignItems: 'center', alignSelf: 'center'}}>
-          <Text
-            onPress={() => setTabCollapse(!TabCollapse)}
-            style={[FONTS.h3, {color: COLORS.darkGray}]}>
-            Manpower
-          </Text>
-        </View>
-        <View style={{alignItems: 'center', alignSelf: 'center'}}>
-          <TouchableOpacity onPress={() => setTabCollapse(!TabCollapse)}>
-            <AntDesign name="caretdown" size={12} color={COLORS.gray} />
-          </TouchableOpacity>
-        </View>
-      </Pressable>
-      {TabCollapse ? (
-        <View style={{top: -10, marginBottom: -10}}>
-          <View>
-            {/* project team start */}
-            <ManPowerProjectTeam projectTeamList={projectTeamList} />
-            {/* Project Team close */}
-          </View>
-          <View>
-            {/* Contractors start */}
-            <ManpowerUserContractors
-              ProList={ProList}
-              Main_drp_pro_value={Main_drp_pro_value}
-            />
-            {/* Contractors close */}
-          </View>
-        </View>
-      ) : null}
-    </>
-  );
-};
+    return (
+        <>
+            <Pressable
+                onPress={() => setTabCollapse(!TabCollapse)}
+                style={{
+                    flexDirection: "row",
+                    paddingHorizontal: SIZES.base,
+                    paddingVertical: 3,
+                    // marginBottom: -SIZES.base,
+                    width: SIZES.width * 0.35,
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    top: SIZES.base * 2,
+                    borderColor: COLORS.lightblue_200,
+                    borderWidth: 1,
+                    borderRadius: 1,
+                    elevation: 1
+                }}>
+                <View style={{ alignItems: "center", alignSelf: "center" }}>
+                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.darkGray}]}>Manpower</Text>
+                </View>
+                <View style={{ alignItems: "center", alignSelf: "center" }}>
+                    <TouchableOpacity onPress={() => setTabCollapse(!TabCollapse)}>
+                        <AntDesign name='caretdown' size={12} color={COLORS.gray} />
+                    </TouchableOpacity>
+                </View>
+            </Pressable>
+            {TabCollapse ? <View style={{ top: -10, marginBottom: -10 }}>
+                <View>
+                    {/* project team start */}
+                    <ManPowerProjectTeam projectTeamList={projectTeamList} />
+                    {/* Project Team close */}
+                </View>
+                <View>
+                    {/* Contractors start */}
+                    <ManpowerUserContractors ProList={ProList} Main_drp_pro_value={Main_drp_pro_value} />
+                    {/* Contractors close */}
+                </View>
 
-export default Manpower;
+            </View> : null}
+        </>
+    )
+}
