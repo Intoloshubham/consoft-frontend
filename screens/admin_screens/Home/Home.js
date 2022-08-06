@@ -15,6 +15,7 @@ import {useSelector} from 'react-redux';
 
 const Home = () => {
   const companyData = useSelector(state => state.company);
+  
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
@@ -46,7 +47,7 @@ const Home = () => {
         <View
           style={{
             flex: 1,
-            marginBottom: 130,
+            marginBottom: 100,
           }}>
           <ProjectsBanner company_id={companyData._id} />
           <SubmittedWorks />

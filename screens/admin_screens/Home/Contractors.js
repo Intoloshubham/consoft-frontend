@@ -16,9 +16,10 @@ import {
   TextButton,
   FormInput,
   IconButton,
+  CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import Config from '../../../config';
 import {
   getContractors,
   postContractors,
@@ -28,14 +29,20 @@ import {
 const Contractors = ({route}) => {
   const {project_id} = route.params; //
   const [showContractorsModal, setShowContractorsModal] = React.useState(false);
-
   const [contractors, setContractors] = React.useState([]);
-
   // company team states
   const [name, setName] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
   const [nameError, setNameError] = React.useState('');
   const [mobileNoError, setMobileNoError] = React.useState('');
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
+  //
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
   // get contractors
   const fetchContractors = async () => {
@@ -52,19 +59,35 @@ const Contractors = ({route}) => {
     };
     let data = await postContractors(formData);
     if (data.status === 200) {
+      setSubmitToast(true);
       setShowContractorsModal(false);
       setName('');
       setMobileNo('');
       fetchContractors();
+    } else {
+      alert(data.message);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
   };
 
+  const [conId, setConId] = React.useState('');
+  const conDelete = id => {
+    setConId(id);
+    setDeleteConfirm(true);
+  };
   //delete contractors
-  const DeleteContractors = async id => {
-    let data = await deleteContractors(id);
+  const DeleteContractors = async () => {
+    let data = await deleteContractors(conId);
     if (data.status === 200) {
       fetchContractors();
+      setDeleteToast(true);
+      setDeleteConfirm(false);
     }
+    setTimeout(() => {
+      setDeleteToast(false);
+    }, 1500);
   };
 
   React.useEffect(() => {
@@ -101,15 +124,15 @@ const Contractors = ({route}) => {
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.green,
-                  padding: 5,
-                  borderRadius: SIZES.base,
-                  right: 10,
+                  padding: 3,
+                  borderRadius: 2,
+                  right: 12,
                 }}>
                 <Image
                   source={icons.edit}
                   style={{
-                    width: 15,
-                    height: 15,
+                    width: 12,
+                    height: 12,
                     tintColor: COLORS.white,
                   }}
                 />
@@ -117,19 +140,20 @@ const Contractors = ({route}) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                DeleteContractors(item._id);
+                conDelete(item._id);
+                // DeleteContractors(item._id);
               }}>
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.rose_600,
-                  padding: 5,
-                  borderRadius: SIZES.base,
+                  padding: 3,
+                  borderRadius: 2,
                 }}>
                 <Image
                   source={icons.delete_icon}
                   style={{
-                    width: 15,
-                    height: 15,
+                    width: 12,
+                    height: 12,
                     tintColor: COLORS.white,
                   }}
                 />
@@ -322,6 +346,38 @@ const Contractors = ({route}) => {
           }}
         />
         {renderAddContractorsModal()}
+
+        <CustomToast
+          isVisible={submitToast}
+          onClose={() => setSubmitToast(false)}
+          color={COLORS.green}
+          title="Add Team"
+          message="Addedd Successfully..."
+        />
+        <CustomToast
+          isVisible={updateToast}
+          onClose={() => setUpdateToast(false)}
+          color={COLORS.yellow_400}
+          title="Update"
+          message="Updated Successfully..."
+        />
+        <CustomToast
+          isVisible={deleteToast}
+          onClose={() => setDeleteToast(false)}
+          color={COLORS.rose_600}
+          title="Delete"
+          message="Deleted Successfully..."
+        />
+
+        <DeleteConfirmationToast
+          isVisible={deleteConfirm}
+          onClose={() => setDeleteConfirm(false)}
+          title={'Are You Sure?'}
+          message={'Do you really want to delete?'}
+          color={COLORS.rose_600}
+          icon={icons.delete_withbg}
+          onClickYes={() => DeleteContractors()}
+        />
       </View>
     </View>
   );
