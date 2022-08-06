@@ -19,7 +19,7 @@ const Manpower = ({ projectTeamList, ProList,Main_drp_pro_value }) => {
 
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
 
-    console.log("Manpower")
+    // console.log("Manpower")
     // console.log(projectTeamList)
     // console.log(ProList)
     // console.log(Main_drp_pro_value)

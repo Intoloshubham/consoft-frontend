@@ -63,11 +63,11 @@ const UserReports = ({ route }) => {
     console.log(userData._id)
     if (userData._id) {
       const sendUserId = () => {
-        fetch(`http://10.0.2.2:7000/api/user-by-projects/${userData._id}`)
+        fetch(`${process.env.REACT_APP_API_URL}user-by-projects/${userData._id}`)
           .then((response) => response.json())
           .then(data => {
-            console.log("data........")
-            console.log(data)
+            // console.log("data........")
+            // console.log(data)
             setSelectedIdProjects(data);
           })
       }
@@ -106,24 +106,24 @@ const UserReports = ({ route }) => {
     }
   }, [selectedIdProjects])
 
-  console.log("ProList..........121")
-  console.log(ProList) 
-  console.log(value)
+  // console.log("ProList..........121")
+  // console.log(ProList) 
+  // console.log(value)
 
   useMemo(() => {
     if (value) {
       const data = Get_Project_Team_Data(value)
       data.then(res => res.json())
         .then(result => {
-          console.log("result")
-          console.log(result)
+          // console.log("result")
+          // console.log(result)
           setProjectTeamList(result)
         })
     } else {
       return
     }
   }, [value])
-console.log(projectTeamList)
+// console.log(projectTeamList)
 
 
 
@@ -194,7 +194,7 @@ console.log(projectTeamList)
             </View>
             <View style={{ marginVertical: 5 }}  Main_drp_pro_value={value}>
               {/* Quantity */}
-              <Quantity project_id={value}/>
+              <Quantity project_id={value} Main_drp_pro_value={value}/>
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}

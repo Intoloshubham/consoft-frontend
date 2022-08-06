@@ -30,6 +30,7 @@ import { getCompanyId, getToken, getUserId } from '../../../../../services/async
 import { Insert_report_data, Get_report_data, edit_report_data } from '../../ReportApi.js'
 import { EditDeletebuttons } from '../../../index.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -86,7 +87,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   //setting Main input data to post
   const [itemData, setItemData] = useState('')
   const [companyIdData, setCompanyIdData] = useState('');
-
+  const [removeAddOnEdit, setRemoveAddOnEdit] = useState(false)
   const [editReportData, setEditReportData] = useState('')
 
   //for post setting data in main input
@@ -109,8 +110,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   //main get report data
   const [getRepPostData, setGetRepPostData] = useState('')
 
-  //then inside dates data getting
-  const [datesArray, setDatesArray] = useState('')
+
 
   //then again quantityitems data getting
   const [quantityItemsData, setQuantityItemsData] = useState('')
@@ -145,7 +145,9 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const companydata = useSelector(state => state.user);
   // console.log(companydata)
 
-
+  const current_dat = moment().format("YYYY%2FMM%2FDD")
+  // console.log(current_dat)
+  // 2022%2F08%2F05/
   // const _userId = async () => {
   //   const _id = await getUserId();
   //   setUser_id(_id);
@@ -207,7 +209,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
     if (report_post_data) {
       const data = Insert_report_data(report_post_data, CONST_FIELD)
-      data.then((res)=>res.json())
+      data.then((res) => res.json())
         .then((resp) => {
           console.log("resp report data")
           console.log(resp)
@@ -227,24 +229,28 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
   }
 
+ 
+  
   // console.log(postQtyData)
-  //getting report data functions
-  // React.useEffect(() => {
-  //   if (Main_drp_pro_value) {
-  //     const data = Get_report_data()
-  //     data.then(res => res.json())
-  //       .then(result => {
-  //         console.log("result=======")
-  //         console.log(result)
+  // getting report data functions
+  useMemo(() => {
+    if (Main_drp_pro_value || postQtyData) {
+      const data = Get_report_data(companydata._id,Main_drp_pro_value,current_dat)      
+      
+      data.then(res => res.json())
+        .then(result => {
+          setGetRepPostData(result);
+        })
+    }
+    else{
+      alert("Select Project first!")
+    }
+  }, [postQtyData, Main_drp_pro_value])
 
-  //         setGetRepPostData(result);
-
-  //       })
-  //   }
-  // }, [postQtyData, Main_drp_pro_value, ''])
-
+ 
 
   const editReportBtn = () => {
+    setRemoveAddOnEdit(true);
     setReportmodal(true);
     alert("edit")
     // if (mainCompId) {
@@ -277,31 +283,31 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // console.log("getRepPostData")
   // console.log(getRepPostData)
   // 
-  console.log("mainCompId")
-  console.log(mainCompId);
+  // console.log("mainCompId")
+  // console.log(mainCompId);
   // console.log("editReportData")
   // console.log(editReportData)
-  console.log(process.env.REACT_APP_API_URL)
-
-  //getting dates array from main data
-  useMemo(() => {
-    if (getRepPostData) {
-      getRepPostData.data.map((ele) => {
-        // console.log(ele._id)
-        setMainCompId(ele._id)
-        setDatesArray(ele)
-      })
-    }
-  }, [getRepPostData])
+  // console.log(process.env.REACT_APP_API_URL)
 
   //getting quantityItems data array from main data
-  useMemo(() => {
-    if (datesArray) {
-      datesArray.dates.map((element) => {
-        setQuantityItemsData(element)
-      })
-    }
-  }, [datesArray])
+  // useMemo(() => {
+  //   if (getRepPostData) {
+  //     getRepPostData.data.map((ele) => {
+  //       // console.log(ele._id)
+  //       setMainCompId(ele._id)
+  //       setQuantityItemsData(ele)
+  //     })
+  //   }
+  // }, [getRepPostData])
+
+  // console.log(quantityItemsData.quantityWorkItems)
+  // useMemo(() => {
+  //   if (datesArray) {
+  //     datesArray.dates.map((element) => {
+  //       setQuantityItemsData(element)
+  //     })
+  //   }
+  // }, [datesArray])
 
   // console.log("datesArray")
   // console.log(datesArray)
@@ -312,11 +318,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // setCompany_id(companyid);
   // console.log("companyid")
   // console.log(companyid)
-  // const Get_ComapnyId_Data = async () => {
-  //   const companyid = await getCompanyId();
-  //   const new_companyid = companyid;
-  //   setCompanyId(new_companyid);
-  // }
+  
 
   // console.log(user_id)
   //getting user id state
@@ -756,6 +758,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                 <Pressable onPress={() => {
                   inputs.splice(0, inputs.length);
                   setReportmodal(false);
+                  setRemoveAddOnEdit(false);
                 }}>
                   <AntDesign name="close" size={30} color={COLORS.black} />
                 </Pressable>
@@ -766,6 +769,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   justifyContent: 'space-between',
                   marginTop: 10,
                 }}>
+               {removeAddOnEdit?null:
                 <TouchableOpacity
                   style={{ borderWidth: 1, borderRadius: 5, borderColor: COLORS.gray, paddingHorizontal: 2, marginVertical: 2 }}
                   onPress={() => {
@@ -786,7 +790,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                       color={COLORS.green}
                     />
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity>}
                 <TouchableOpacity
                   style={{
                     borderWidth: 1, borderRadius: 2, paddingVertical: 1, marginVertical: 3,
@@ -990,6 +994,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                 <Button
                   title="submit"
                   onPress={() => {
+                    setRemoveAddOnEdit(false);
                     insertQtyPostData();
                   }}
                 />
@@ -1380,7 +1385,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                     }}>
                     <>
                       {
-                        quantityItemsData ? quantityItemsData.quantityitems.map((l, index) => (
+                        getRepPostData ? getRepPostData.data.map((l, index) => (
                           <View
                             style={{
                               flexDirection: "column",
@@ -1431,7 +1436,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                               }}>
                                 <View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray }]}>
-                                    {l.item_id}
+                                    {l.quantityWorkItems.item_name}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: 145, top: -10 }}>
@@ -1452,7 +1457,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.num_length}
+                                  {l.quantityWorkItems.num_length}
                                 </Text>
                               </View>
                               <View
@@ -1469,7 +1474,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.num_width}
+                                  {l.quantityWorkItems.num_width}
                                 </Text>
                               </View>
                               <View
@@ -1486,7 +1491,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.num_height}
+                                  {l.quantityWorkItems.num_height}
                                 </Text>
                               </View>
                               <View
@@ -1503,7 +1508,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.num_total}
+                                  {l.quantityWorkItems.num_total}
                                 </Text>
                               </View>
                               <View
@@ -1525,7 +1530,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                     <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
                                   </View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                    {l.unit_name}
+                                    {l.quantityWorkItems.unit_name}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: -4, top: -10 }}>
@@ -1546,7 +1551,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.remark}
+                                  {l.quantityWorkItems.remark}
                                 </Text>
                                 <View style={{ position: "absolute", width: 1, left: 210, top: -10 }}>
                                   <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
@@ -1572,7 +1577,8 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                             </View>
                             <View style={{ top: 10, position: "relative", left: 170 }}>
                               {
-                                quantityItemsData ? l.subquantityitems.map((res, index2) =>
+                                
+                                getRepPostData ? l.quantityWorkItems.subquantityitems.map((res, index2) =>
                                 (
                                   <View
                                     style={{
@@ -1713,9 +1719,9 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               </ScrollView>
             </View>
           </View>
-          :null
+          : null
         }
-           {/* <View style={{ top: 22, left: -40, borderWidth: 1, borderColor: COLORS.lightblue_300, paddingHorizontal: 60 }}><Text>Nothing to display!!</Text></View> */}
+        {/* <View style={{ top: 22, left: -40, borderWidth: 1, borderColor: COLORS.lightblue_300, paddingHorizontal: 60 }}><Text>Nothing to display!!</Text></View> */}
       </View>
       {add_qty_data_modal()}
       {add_item_modal()}

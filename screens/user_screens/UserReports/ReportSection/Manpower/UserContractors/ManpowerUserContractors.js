@@ -173,11 +173,12 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
       const data = Get_Contractor_Data(Main_drp_pro_value)
       data.then(res => res.json())
         .then(result => { 
-          console.log(Report_list)
+          // console.log(Report_list)
           
           setReport_list(result)            
         })      
-    }else{
+    }
+    else{
       alert("Select Project first!")
     }
   }, [postContData,Main_drp_pro_value])
