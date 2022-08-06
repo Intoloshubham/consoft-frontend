@@ -102,6 +102,8 @@ const Optiontype = () => {
     check();
   }, [Optiondata]);
 
+
+
   const submit = () => {
     const optiondata = {
       option_type: optionTypename,
