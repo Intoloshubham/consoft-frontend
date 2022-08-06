@@ -180,15 +180,15 @@ const ToolsAndMachinery = ({route}) => {
             <ImageBackground
               style={{
                 backgroundColor: COLORS.green,
-                padding: 5,
-                borderRadius: SIZES.base,
-                right: 10,
+                padding: 3,
+                borderRadius: 2,
+                right: 12,
               }}>
               <Image
                 source={icons.edit}
                 style={{
-                  width: 15,
-                  height: 15,
+                  width: 12,
+                  height: 12,
                   tintColor: COLORS.white,
                 }}
               />
@@ -202,14 +202,14 @@ const ToolsAndMachinery = ({route}) => {
             <ImageBackground
               style={{
                 backgroundColor: COLORS.rose_600,
-                padding: 5,
-                borderRadius: SIZES.base,
+                padding: 3,
+                borderRadius: 2,
               }}>
               <Image
                 source={icons.delete_icon}
                 style={{
-                  width: 15,
-                  height: 15,
+                  width: 12,
+                  height: 12,
                   tintColor: COLORS.white,
                 }}
               />

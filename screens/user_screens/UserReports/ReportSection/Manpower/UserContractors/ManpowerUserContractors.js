@@ -9,7 +9,6 @@ import {
   TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import Toast from 'react-native-toast-message';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Divider } from '@ui-kitten/components';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -127,14 +126,7 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
   ])
 
   //defining functions for all
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Contractor added Successfully',
-      text2: 'Success',
-      visibilityTime: 2000,
-    });
+ 
 
   //works on button click
   function Insert_Contractor_data() {
@@ -145,7 +137,7 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
     }
 // console.log(data)
 
-    fetch(`${Config.API_URL}contractor`, {
+    fetch(`${process.env.REACT_APP_API_URL}contractor`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -160,7 +152,7 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
           setContractorPhone('')
           // Get_Contractor_Data()
         }
-        showToast();
+       
       })
 
   }
@@ -173,7 +165,6 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
       const data = Get_Contractor_Data(Main_drp_pro_value)
       data.then(res => res.json())
         .then(result => { 
-          // console.log("report list")
           console.log(Report_list)
           
           setReport_list(result)            
@@ -272,7 +263,7 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
               justifyContent: 'center',
               backgroundColor: COLORS.transparentBlack7,
             }}>
-            <Toast config={showToast} />
+            
             <View
               style={{
                 borderRadius: SIZES.base,

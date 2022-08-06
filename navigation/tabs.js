@@ -7,11 +7,10 @@ import {COLORS, FONTS, SIZES, icons, images} from '../constants';
 import {
   Home,
   Account,
-  Tracker,
+  Profile,
   ReportsDisplay,
   Tasks,
 } from '../screens/admin_screens';
-
 
 const Tab = createBottomTabNavigator();
 
@@ -142,13 +141,13 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Tracker"
-        component={Tracker}
+        name="Profile"
+        component={Profile}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
-                source={icons.tracker}
+                source={icons.profile}
                 style={{
                   height: 18,
                   width: 18,
@@ -160,7 +159,7 @@ const Tabs = () => {
                   color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Tracker
+                Profile
               </Text>
             </View>
           ),

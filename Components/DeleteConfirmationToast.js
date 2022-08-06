@@ -22,21 +22,22 @@ const DeleteConfirmationToast = ({
 }) => {
   return (
     <View>
-      <Modal animationType="slide" transparent={true} visible={isVisible}>
+      <Modal animationType="fade" transparent={true} visible={isVisible}>
         <TouchableWithoutFeedback onPress={onClose}>
           <View
             style={{
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              marginHorizontal: SIZES.padding,
+              // marginHorizontal: SIZES.padding,
+              backgroundColor: COLORS.transparentBlack3,
             }}>
             <View
               style={{
                 position: 'absolute',
-                width: '100%',
+                width: '90%',
                 backgroundColor: COLORS.lightblue_50,
-                borderRadius: 10,
+                borderRadius: 5,
                 paddingHorizontal: SIZES.padding,
                 paddingVertical: 3,
                 ...styles.shadow,
@@ -65,8 +66,8 @@ const DeleteConfirmationToast = ({
                     style={{
                       right: 15,
                       backgroundColor: COLORS.gray,
-                      paddingHorizontal: 10,
-                      paddingVertical: 3,
+                      paddingHorizontal: 15,
+                      paddingVertical: 8,
                     }}
                     onPress={onClose}>
                     <Text style={{...FONTS.h3, color: COLORS.white}}>No</Text>
@@ -75,8 +76,8 @@ const DeleteConfirmationToast = ({
                     style={{
                       left: 15,
                       backgroundColor: color,
-                      paddingHorizontal: 10,
-                      paddingVertical: 3,
+                      paddingHorizontal: 15,
+                      paddingVertical: 8,
                     }}
                     onPress={onClickYes}>
                     <Text style={{...FONTS.h3, color: COLORS.white}}>Yes</Text>
