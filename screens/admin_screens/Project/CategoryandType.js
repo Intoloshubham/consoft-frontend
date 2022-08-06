@@ -19,6 +19,7 @@ import {
   FormInput,
   CustomDropdown,
   CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {useSelector} from 'react-redux';
@@ -42,6 +43,10 @@ const CategoryandType = () => {
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
+
+  // delete confirmation
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+  const [deleteConfirm1, setDeleteConfirm1] = React.useState(false);
 
   // COMPANY DATA
   const companyData = useSelector(state => state.company);
@@ -106,7 +111,6 @@ const CategoryandType = () => {
       company_id: companyData._id,
     };
     let response = await updateProjectCategory(id, formData);
-    console.log(response);
 
     if (response.status == 200) {
       setUpdateToast(true);
@@ -119,9 +123,16 @@ const CategoryandType = () => {
     }, 2000);
   };
 
-  const deletecategory = async id => {
-    let response = await deleteProjectCategory(id);
+  const getCategoryId = id => {
+    setCategoryId(id);
+    setDeleteConfirm(true);
+  };
+  const [category_id, setCategoryId] = React.useState('');
+
+  const deletecategory = async () => {
+    let response = await deleteProjectCategory(category_id);
     if (response.status == 200) {
+      setDeleteConfirm(false);
       setDeleteToast(true);
       projectCategory();
     }
@@ -183,10 +194,16 @@ const CategoryandType = () => {
     }, 2000);
   };
 
-  const deleteType = async id => {
-    let response = await deleteProjectType(id);
-    console.log(response);
+  const getTypeId = id => {
+    setTypId(id);
+    setDeleteConfirm1(true);
+  };
+  const [type_id, setTypId] = React.useState('');
+
+  const deleteType = async () => {
+    let response = await deleteProjectType(type_id);
     if (response.status === 200) {
+      setDeleteConfirm1(false);
       setDeleteToast(true);
       getprojectTypes();
     }
@@ -257,7 +274,7 @@ const CategoryandType = () => {
                 />
               </ImageBackground>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => deletecategory(item._id)}>
+            <TouchableOpacity onPress={() => getCategoryId(item._id)}>
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.rose_600,
@@ -387,7 +404,7 @@ const CategoryandType = () => {
                 />
               </ImageBackground>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => deleteType(item._id)}>
+            <TouchableOpacity onPress={() => getTypeId(item._id)}>
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.rose_600,
@@ -479,7 +496,7 @@ const CategoryandType = () => {
                 left: SIZES.padding,
                 width: '90%',
                 padding: SIZES.padding,
-                borderRadius: SIZES.radius,
+                borderRadius: 5,
                 backgroundColor: COLORS.white,
               }}>
               <View style={{}}>
@@ -554,7 +571,7 @@ const CategoryandType = () => {
                 left: SIZES.padding,
                 width: '90%',
                 padding: SIZES.padding,
-                borderRadius: SIZES.radius,
+                borderRadius: 5,
                 backgroundColor: COLORS.white,
               }}>
               <View style={{}}>
@@ -658,6 +675,26 @@ const CategoryandType = () => {
         color={COLORS.rose_600}
         title="Delete"
         message="Deleted Successfully..."
+      />
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => {
+          deletecategory();
+        }}
+      />
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm1}
+        onClose={() => setDeleteConfirm1(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => deleteType()}
       />
     </View>
   );

@@ -59,7 +59,7 @@ const ProjectsBanner = ({company_id}) => {
   const [openType, setOpenType] = React.useState(false);
   const [typeValue, setTypeValue] = React.useState([]);
   const [projectType, setProjectType] = React.useState([]);
-  
+
   //project area units
   const [openUnit, setOpenUnit] = React.useState(false);
   const [unitValue, setUnitValue] = React.useState([]);
@@ -106,13 +106,17 @@ const ProjectsBanner = ({company_id}) => {
   };
 
   // get projects
-  const fetchProjects = useCallback(async () => {
+  const fetchProjects = async () => {
     const data = await getProjects(company_id);
-    setProjects(data.data);
-  }, []);
+    if (data.status === 200) {
+      setProjects(data.data);
+    }
+  };
 
   useEffect(() => {
     fetchProjects();
+    fetchProjectCategory();
+    fetchProjectsTypes();
   }, []);
 
   // ON BUTTON SUBMISSON VALIDATION

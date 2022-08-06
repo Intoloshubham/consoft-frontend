@@ -1,9 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import SplashScreen from 'react-native-splash-screen';
 import * as eva from '@eva-design/eva';
-
 import {ApplicationProvider} from '@ui-kitten/components';
 import {
   Login,
@@ -31,14 +29,8 @@ import {
   Optiontype,
   Quantitywork,
   ToolsAndMachinery1,
-  Quantity,
-  Apps,
-  HomeScreen,
-  UserReportdata,
-  Dynamicdata,
-  Leaves,
-  Calender,
-  Boq
+  VerifyAndRevertWork,
+  Boq,
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -46,15 +38,11 @@ import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
 //setup redux
 import store from './app/store';
-import {Provider, useSelector} from 'react-redux';
+import {Provider} from 'react-redux';
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  // React.useEffect(() => {
-  //   SplashScreen.hide();
-  // }, []);
-
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
@@ -74,6 +62,10 @@ const App = () => {
 
           {/* Home screens */}
           <Stack.Screen name="Home" component={Tabs} />
+          <Stack.Screen
+            name="VerifyAndRevertWork"
+            component={VerifyAndRevertWork}
+          />
           <Stack.Screen name="ProjectsDetails" component={ProjectsDetails} />
           <Stack.Screen name="CompanyTeamShow" component={CompanyTeamShow} />
           <Stack.Screen name="ProjectTeam" component={ProjectTeam} />

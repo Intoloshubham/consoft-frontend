@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {COLORS, SIZES, FONTS, images, icons} from '../../../constants';
 import {TextButton, HeaderBar} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
@@ -120,6 +120,7 @@ const ProjectsDetails = ({route}) => {
       </View>
     );
   }
+
   return (
     <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
       <HeaderBar right={true} title={name} />
@@ -136,13 +137,14 @@ const ProjectsDetails = ({route}) => {
         }}
         onPress={() => setWorkModal(true)}
       />
-      {showWorkModal && (
-        <WorkAssignModal
-          projectId={project_id}
-          isVisible={showWorkModal}
-          onClose={setWorkModal(false)}
-        />
-      )}
+
+      {/* {showWorkModal && ( */}
+      <WorkAssignModal
+        projectId={project_id}
+        isVisible={showWorkModal}
+        onClose={() => setWorkModal(false)}
+      />
+      {/* )} */}
 
       {renderProjectDetails()}
     </View>
