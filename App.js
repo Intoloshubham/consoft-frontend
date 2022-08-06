@@ -34,13 +34,10 @@ import {
   Quantity,
   Apps,
   HomeScreen,
-  UserReportdata,
-  Dynamicdata,
   Leaves,
   Calenderleaves,
   Boq,
   CustomCalender,
-  NewCalender,
   CalenderFuncation
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, Demo2} from './screens/user_screens';
@@ -65,7 +62,7 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'CalenderFuncation'}>
+          initialRouteName={'Login'}>
 
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
@@ -112,19 +109,9 @@ const App = () => {
           <Stack.Screen name="Quantitywork" component={Quantitywork} />
           <Stack.Screen name="Calenderleaves" component={Calenderleaves} />
           <Stack.Screen name="Leaves" component={Leaves} />
+          <Stack.Screen name="Quantity" component={Quantity} />
           <Stack.Screen name="CustomCalender" component={CustomCalender} />
-          <Stack.Screen name="UserReportdata" component={UserReportdata} />
-          <Stack.Screen name="NewCalender" component={NewCalender} />
           <Stack.Screen name="CalenderFuncation" component={CalenderFuncation} />
-
-          
-
-
-
-          
-
-
-
           <Stack.Screen
             name="ToolsAndMachinery1"
             component={ToolsAndMachinery1}

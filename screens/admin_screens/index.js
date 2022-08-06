@@ -31,8 +31,7 @@ import Boq from './Home/Boq';
 import Calenderleaves from './Stock/Tools/Calenderleaves'
 import Leaves from './Stock/Tools/Leaves'
 import CustomCalender from './Stock/Tools/CustomCalender'
-import UserReportdata from './Stock/Tools/UserReportdata'
-import NewCalender from './Stock/Tools/NewCalender'
+import Quantity from './Stock/Tools/Quantity'
 import CalenderFuncation from './Stock/Tools/CalenderFuncation'
 
 export {
@@ -69,7 +68,6 @@ export {
   Calenderleaves,
   Leaves,
   CustomCalender,
-  UserReportdata,
-  NewCalender,
-  CalenderFuncation
+  CalenderFuncation,
+  Quantity
 };

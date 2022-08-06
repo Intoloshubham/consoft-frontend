@@ -166,7 +166,7 @@ const UserTabs = ({navigation,route}) => {
         }}
       />
       <Tab.Screen
-        name="Demo2"
+        name="My Profile"
         component={Demo2}
         options={{
           tabBarIcon: ({ focused }) => (
