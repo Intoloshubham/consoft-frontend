@@ -19,6 +19,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Get_Project_Team_Data } from '../UserReports/ReportApi.js'
 import { getToken, getUserId } from '../../../services/asyncStorageService';
 import Config from '../../../config'
+import { useDispatch, useSelector } from 'react-redux';
 const UserReports = ({ route }) => {
 
   LogBox.ignoreLogs(["EventEmitter.removeListener"]);
@@ -41,37 +42,38 @@ const UserReports = ({ route }) => {
 
 
   const [userid, setUserid] = useState(null)
+  const userData = useSelector(state => state.user);
 
-  const Get_UserId_Data = async () => {
-    const userid = await getUserId();
-    const new_userid = userid;
-    setUserid(new_userid);
-  }
+  // const Get_UserId_Data = async () => {
+  //   const userid = await getUserId();
+  //   const new_userid = userid;
+  //   setUserid(new_userid);
+  // }
   //getting user id state
-  useMemo(() => {
-    Get_UserId_Data();
+  // useMemo(() => {
+  //   Get_UserId_Data();
 
-    // console.log("seconde.....................")
+  //   // console.log("seconde.....................")
 
 
-  }, [getUserId])
+  // }, [getUserId])
 
   useMemo(() => {
     console.log("first...........")
-    console.log(userid)
-    if (userid) {
+    console.log(userData._id)
+    if (userData._id) {
       const sendUserId = () => {
-        fetch(`${Config.API_URL}user-by-projects/${userid}`)
+        fetch(`http://10.0.2.2:7000/api/user-by-projects/${userData._id}`)
           .then((response) => response.json())
           .then(data => {
-            // console.log("data........")
-            // console.log(data)
+            console.log("data........")
+            console.log(data)
             setSelectedIdProjects(data);
           })
       }
       sendUserId();
     }
-  }, [userid])
+  }, [])
   // console.log("selectedIdProjects..........584")
   // console.log(selectedIdProjects)
 
@@ -98,28 +100,30 @@ const UserReports = ({ route }) => {
       let ProData = selectedIdProjects.map(ele => {
         return { label: ele.project_name, value: ele.project_id };
       })
+
       setProList(ProData)
 
     }
   }, [selectedIdProjects])
 
-  // console.log("ProList..........121")
-  // console.log(ProList) 
+  console.log("ProList..........121")
+  console.log(ProList) 
+  console.log(value)
 
   useMemo(() => {
     if (value) {
       const data = Get_Project_Team_Data(value)
       data.then(res => res.json())
         .then(result => {
-          // console.log("result")
-          // console.log(result)
+          console.log("result")
+          console.log(result)
           setProjectTeamList(result)
         })
     } else {
       return
     }
   }, [value])
-
+console.log(projectTeamList)
 
 
 
@@ -188,7 +192,7 @@ const UserReports = ({ route }) => {
               {/* Stock component */}
               <Stock />
             </View>
-            <View style={{ marginVertical: 5 }}>
+            <View style={{ marginVertical: 5 }}  Main_drp_pro_value={value}>
               {/* Quantity */}
               <Quantity project_id={value}/>
             </View>

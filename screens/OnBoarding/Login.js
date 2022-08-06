@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,23 +13,23 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import LinearGradient from 'react-native-linear-gradient';
 import utils from '../../utils';
 import Toast from 'react-native-toast-message';
-import {FormInput, TextButton} from '../../Components';
-import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
-import {userLogin} from '../../services/userAuthApi';
-import {companyLogin} from '../../services/companyAuthApi';
-import {useDispatch, useSelector} from 'react-redux';
+import { FormInput, TextButton } from '../../Components';
+import { FONTS, COLORS, SIZES, icons, images } from '../../constants';
+import { userLogin } from '../../services/userAuthApi';
+import { companyLogin } from '../../services/companyAuthApi';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getCompanyId,
   getUserId,
   getToken,
 } from '../../services/asyncStorageService';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const dispatch = useDispatch();
 
   // const userData = useSelector(state => state.user);
@@ -81,7 +81,7 @@ const Login = ({navigation}) => {
       userMobileNo != '' &&
       userMobileNoError == '' &&
       companyMobileNo != '' &&
-      companyMobileNoError == ''
+      companyMobileNoError == ''  
     );
   }
 
@@ -97,7 +97,7 @@ const Login = ({navigation}) => {
       alert(res.payload.message);
     }
   };
-
+ 
   const companyOnSubmit = async () => {
     const company_data = {
       mobile: companyMobileNo,
@@ -192,11 +192,11 @@ const Login = ({navigation}) => {
             }}
             errorMsg={userMobileNoError}
             appendComponent={
-              <View style={{justifyContent: 'center'}}>
+              <View style={{ justifyContent: 'center' }}>
                 <Image
                   source={
                     userMobileNo == '' ||
-                    (userMobileNo != '' && userMobileNoError == '')
+                      (userMobileNo != '' && userMobileNoError == '')
                       ? icons.correct
                       : icons.cancel
                   }
@@ -207,8 +207,8 @@ const Login = ({navigation}) => {
                       userMobileNo == ''
                         ? COLORS.gray
                         : userMobileNo != '' && userMobileNoError == ''
-                        ? COLORS.green
-                        : COLORS.red,
+                          ? COLORS.green
+                          : COLORS.red,
                   }}
                 />
               </View>
@@ -274,11 +274,11 @@ const Login = ({navigation}) => {
             }}
             errorMsg={companyMobileNoError}
             appendComponent={
-              <View style={{justifyContent: 'center'}}>
+              <View style={{ justifyContent: 'center' }}>
                 <Image
                   source={
                     companyMobileNo == '' ||
-                    (companyMobileNo != '' && companyMobileNoError == '')
+                      (companyMobileNo != '' && companyMobileNoError == '')
                       ? icons.correct
                       : icons.cancel
                   }
@@ -289,8 +289,8 @@ const Login = ({navigation}) => {
                       companyMobileNo == ''
                         ? COLORS.gray
                         : companyMobileNo != '' && companyMobileNoError == ''
-                        ? COLORS.green
-                        : COLORS.red,
+                          ? COLORS.green
+                          : COLORS.red,
                   }}
                 />
               </View>
@@ -497,7 +497,7 @@ const Login = ({navigation}) => {
         <Switch
           onValueChange={toggleSwitch}
           value={switchValue}
-          trackColor={{false: COLORS.gray, true: COLORS.gray}}
+          trackColor={{ false: COLORS.gray, true: COLORS.gray }}
           thumbColor={switchValue ? COLORS.white : COLORS.white}
           ios_backgroundColor={COLORS.blue}
         />
@@ -516,10 +516,10 @@ const Login = ({navigation}) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? SIZES.padding : SIZES.height}
-      style={{flex: 1}}>
+      style={{ flex: 1 }}>
       <LinearGradient
         colors={[COLORS.lightblue_100, COLORS.lightblue_300]}
-        style={{flex: 1}}>
+        style={{ flex: 1 }}>
         {renderHeaderLogo()}
         <ScrollView showsVerticalScrollIndicator={false}>
           <KeyboardAwareScrollView
