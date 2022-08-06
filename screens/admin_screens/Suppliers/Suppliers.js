@@ -16,13 +16,17 @@ import {
   FormInput,
   TextButton,
   IconButton,
+  CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
-import {SIZES, COLORS, FONTS, images, icons} from '../../../constants';
-import AuthLayout from '../../Authentication/AuthLayout';
+import {SIZES, COLORS, FONTS, icons} from '../../../constants';
 import utils from '../../../utils';
-import Toast from 'react-native-toast-message';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import Config from '../../../config';
+import {
+  getSuppliers,
+  postSuppliers,
+  deleteSuppliers,
+} from '../../../controller/SupplierController';
 
 const Suppliers = () => {
   const [suppliersModal, setSuppliersModal] = React.useState(false);
@@ -39,6 +43,14 @@ const Suppliers = () => {
   const [emailError, setEmailError] = React.useState('');
   const [locationError, setLocationError] = React.useState('');
 
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
+  // delete confirmation
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+
   function isEnableSubmit() {
     return (
       name != '' &&
@@ -51,82 +63,63 @@ const Suppliers = () => {
       locationError == ''
     );
   }
-  // show toast on successfullt created
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Created Successfully',
-      text2: 'Success',
-      visibilityTime: 1500,
-    });
 
-  // get suppliers data
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}supplier`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setSuppliers(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [suppliers]);
+  // ============================== Apis ===================================
 
-  // POST DATA OF SUPPLIERS
-  const OnSubmit = () => {
-    const suppliersData = {
+  const getSupplier = async () => {
+    let response = await getSuppliers();
+    if (response.status === 200) {
+      setSuppliers(response.data);
+    } else {
+      alert(response.message);
+    }
+  };
+
+  const postSupplier = async () => {
+    const formData = {
       supplier_name: name,
       supplier_mobile: mobile,
       supplier_email: email,
       supplier_location: location,
     };
-
-    fetch(`${Config.API_URL}supplier`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(suppliersData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.status === 200) {
-          setTimeout(() => {
-            showToast();
-            setSuppliersModal(false);
-            setName('');
-            setMobile('');
-            setEmail('');
-            setLocation('');
-          }, 2500);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    let response = await postSuppliers(formData);
+    if (response.status === 200) {
+      getSupplier();
+      setSubmitToast(true);
+      setSuppliersModal(false);
+      setName('');
+      setMobile('');
+      setEmail('');
+      setLocation('');
+    } else {
+      alert(response.message);
+    }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
   };
 
-  const deleteHandler = id => {
-    console.log(id);
-    fetch(`${Config.API_URL}supplier/` + `${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => console.log(error.message));
+  const getSupplierId = id => {
+    setDeleteConfirm(true);
+    setSuppId(id);
   };
+  const [suppId, setSuppId] = React.useState('');
+
+  const deleteSupplier = async () => {
+    let response = await deleteSuppliers(suppId);
+    if (response.status === 200) {
+      setDeleteConfirm(false);
+      setDeleteToast(true);
+      getSupplier();
+    }
+    setTimeout(() => {
+      setDeleteToast(false);
+    }, 2000);
+  };
+
+  React.useEffect(() => {
+    getSupplier();
+  }, []);
 
   function renderSuppliersModal() {
     return (
@@ -306,7 +299,7 @@ const Suppliers = () => {
                         ? COLORS.lightblue_700
                         : COLORS.transparentPrimary,
                     }}
-                    onPress={() => OnSubmit()}
+                    onPress={() => postSupplier()}
                   />
                 </KeyboardAwareScrollView>
               </ScrollView>
@@ -394,18 +387,18 @@ const Suppliers = () => {
               {item.supplier_location}
             </Text>
           </View>
-          <TouchableOpacity onPress={() => deleteHandler(item._id)}>
+          <TouchableOpacity onPress={() => getSupplierId(item._id)}>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.warning_200,
-                padding: 5,
-                borderRadius: SIZES.base,
+                padding: 3,
+                borderRadius: 2,
               }}>
               <Image
                 source={icons.delete_icon}
                 style={{
-                  width: 10,
-                  height: 10,
+                  width: 12,
+                  height: 12,
                   tintColor: COLORS.rose_600,
                 }}
               />
@@ -422,7 +415,7 @@ const Suppliers = () => {
           marginBottom: SIZES.padding,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
@@ -451,7 +444,6 @@ const Suppliers = () => {
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
       <HeaderBar right={true} title="Suppliers" />
-      <Toast config={showToast} />
       <TextButton
         label="Add New"
         buttonContainerStyle={{
@@ -472,6 +464,37 @@ const Suppliers = () => {
       />
       {renderSuppliersModal()}
       {renderSuppliers()}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => deleteSupplier()}
+      />
     </View>
   );
 };

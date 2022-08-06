@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   View,
   Text,
@@ -16,16 +16,13 @@ import {
   CustomDropdown,
   IconButton,
   TextButton,
+  CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
-import { useNavigation } from '@react-navigation/native';
-import AuthLayout from '../../Authentication/AuthLayout';
+import {useNavigation} from '@react-navigation/native';
 import utils from '../../../utils';
-import { COLORS, SIZES, FONTS, icons, STATUS } from '../../../constants';
-import Toast from 'react-native-toast-message';
-import Config from '../../../config';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useSelector, useDispatch } from 'react-redux';
-import { ConformationAlert } from '../../../Components';
+import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
   getProjects,
@@ -36,14 +33,8 @@ import {
   getProjectCategory,
 } from '../../../controller/ProjectController';
 
-const ProjectsBanner = ({ company_id }) => {
+const ProjectsBanner = ({company_id}) => {
   const navigation = useNavigation();
-
-  //CONFIRMATION MODAL ON DELETE
-  const [projectDeleteConfirmation, setProjectDeleteConfirmation] =
-    React.useState(false);
-
-  //PROJECT BANNER COLLAPSED
   const [collapsed, setCollapsed] = React.useState(true);
 
   //PROJECT CREATE & UPDATE MODAL
@@ -58,25 +49,36 @@ const ProjectsBanner = ({ company_id }) => {
   const [projectname, setProjectName] = React.useState('');
   const [projectlocation, setProjectLocation] = React.useState('');
   const [projectplotarea, setProjectPlotArea] = React.useState('');
+
   // getting categories from api - dropdown
   const [openCategory, setOpenCategory] = React.useState(false);
   const [categoryValue, setCategoryValue] = React.useState([]);
   const [projectCategory, setProjectCategory] = React.useState([]);
+
   // getting types from api - dropdown
   const [openType, setOpenType] = React.useState(false);
   const [typeValue, setTypeValue] = React.useState([]);
   const [projectType, setProjectType] = React.useState([]);
+
   //project area units
   const [openUnit, setOpenUnit] = React.useState(false);
   const [unitValue, setUnitValue] = React.useState([]);
   const [projectUnit, setProjectUnit] = React.useState([
-    { label: 'ha', value: '1' },
-    { label: 'acre', value: '2' },
-    { label: 'sqm', value: '3' },
-    { label: 'sqf', value: '4' },
+    {label: 'ha', value: '1'},
+    {label: 'acre', value: '2'},
+    {label: 'sqm', value: '3'},
+    {label: 'sqf', value: '4'},
   ]);
 
   const [projectId, setProjectId] = React.useState('');
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
+  // delete confirmation
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onCategoryOpen = React.useCallback(() => {
@@ -103,22 +105,20 @@ const ProjectsBanner = ({ company_id }) => {
     setCollapsed(!collapsed);
   };
 
-  // console.log("object")
-
-
   // get projects
   const fetchProjects = async () => {
     const data = await getProjects(company_id);
-    setProjects(data);
-  }
+    if (data.status === 200) {
+      setProjects(data.data);
+    }
+  };
 
   useEffect(() => {
-    const abortConst = new AbortController();
-    fetchProjects()
-    return () => abortConst.abort();
-  }, [])
+    fetchProjects();
+    fetchProjectCategory();
+    fetchProjectsTypes();
+  }, []);
 
-  // console.log("objesdfsdct")
   // ON BUTTON SUBMISSON VALIDATION
   function isEnableSubmit() {
     return (
@@ -131,18 +131,11 @@ const ProjectsBanner = ({ company_id }) => {
     );
   }
 
-  //crete new project
-  const createProject = async () => {
-    createProjectModalForm();
-    setCreateProjectModal(true);
-    fetchProjectCategory()
-    fetchProjectsTypes();
-  };
 
   const fetchProjectCategory = async () => {
     const res = await getProjectCategory();
-    let proCatFromApi = res.map(item => {
-      return { label: item.category_name, value: item._id };
+    let proCatFromApi = res.data.map(item => {
+      return {label: item.category_name, value: item._id};
     });
     setProjectCategory(proCatFromApi);
   };
@@ -150,11 +143,10 @@ const ProjectsBanner = ({ company_id }) => {
   // get project types
   const fetchProjectsTypes = async () => {
     const response = await getProjectType();
-    let proTypeFromApi = response.map(item => {
-      return { label: item.project_type, value: item._id };
+    let proTypeFromApi = response.data.map(item => {
+      return {label: item.project_type, value: item._id};
     });
     setProjectType(proTypeFromApi);
-    // fetchProjectsTypes();
   };
 
   //save project
@@ -162,31 +154,25 @@ const ProjectsBanner = ({ company_id }) => {
     const projectData = getProjectData();
     const res = await saveProject(projectData);
     if (res.status === STATUS.RES_SUCCESS) {
-      showToast();
+      setSubmitToast(true);
       fetchProjects();
-      setTimeout(() => {
-        setCreateProjectModal(false);
-        createProjectModalForm()
-      }, 1000);
+      setCreateProjectModal(false);
+      createProjectModalForm();
     } else {
       alert(res.message);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 1500);
   };
 
   // GETTING PROJECTS ID
   const modalHandler = project_id => {
-    setProjectId(project_id);//project ID state
+    setProjectId(project_id); //project ID state
     setProjectCrud(true);
   };
 
-  const editProject = (
-    name,
-    location,
-    category,
-    type,
-    area,
-    unit,
-  ) => {
+  const editProject = (name, location, category, type, area, unit) => {
     setProjectName(name);
     setProjectLocation(location);
     setCategoryValue(category);
@@ -200,13 +186,16 @@ const ProjectsBanner = ({ company_id }) => {
     const projectData = getProjectData();
     const res = await updateProject(projectId, projectData);
     if (res.status === STATUS.RES_SUCCESS) {
-      showUpdateToast();
       fetchProjects();
-      setTimeout(() => {
-        setUpdateProjectModal(false);
-        setProjectCrud(false);
-      }, 300);
+      setUpdateToast(true);
+      setUpdateProjectModal(false);
+      setProjectCrud(false);
+    } else {
+      alert(res.message);
     }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 1500);
   };
 
   // project data
@@ -221,7 +210,7 @@ const ProjectsBanner = ({ company_id }) => {
       company_id: company_id,
     };
     return projectData;
-  }
+  };
 
   // EMPTY ALL FORM STATED
   function createProjectModalForm() {
@@ -238,40 +227,25 @@ const ProjectsBanner = ({ company_id }) => {
     const res = await deleteProject(projectId);
     if (res.status === STATUS.RES_SUCCESS) {
       setTimeout(() => {
-        setProjectDeleteConfirmation(false);
+        setDeleteConfirm(false);
         setProjectCrud(false);
       }, 300);
       fetchProjects();
     }
   };
 
-  // TOAST
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      activeOpacity: 10,
-      text1: 'Submitted Successfully',
-      text2: 'Success',
-      visibilityTime: 2000,
-    });
-
-  const showUpdateToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Updated Successfully',
-      activeOpacity: 10,
-      text1: 'Updated Successfully',
-      text2: 'Success',
-      visibilityTime: 2000,
-    });
+  const createProject = () => {
+    setCreateProjectModal(true);
+    createProjectModalForm();
+    fetchProjectCategory();
+    fetchProjectsTypes();
+  };
 
   //RENDER PROJECTS
   function renderProjects() {
-    const renderItem = ({ item, index }) => (
+    const renderItem = ({item, index}) => (
       <TouchableOpacity
-        style={{ marginVertical: SIZES.base }}
+        style={{marginVertical: SIZES.base}}
         onPress={() => {
           navigation.navigate('ProjectsDetails', {
             name: item.project_name,
@@ -280,7 +254,7 @@ const ProjectsBanner = ({ company_id }) => {
         }}>
         <View
           style={{
-            borderRadius: SIZES.radius,
+            borderRadius: 5,
             backgroundColor: COLORS.white2,
             paddingHorizontal: SIZES.radius,
             paddingVertical: SIZES.radius,
@@ -292,8 +266,8 @@ const ProjectsBanner = ({ company_id }) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ ...FONTS.h3, color: COLORS.black }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{...FONTS.h3, color: COLORS.black}}>
                 {index + 1}.
               </Text>
               <Text
@@ -398,14 +372,12 @@ const ProjectsBanner = ({ company_id }) => {
               justifyContent: 'flex-end',
               backgroundColor: COLORS.transparentBlack2,
             }}>
-            <Toast config={showToast} />
-            <Toast config={showUpdateToast} />
             <View
               style={{
                 backgroundColor: COLORS.white2,
                 position: 'absolute',
                 width: '100%',
-                height: '65%',
+                height: '70%',
                 // padding: SIZES.radius,
                 paddingHorizontal: SIZES.padding,
                 paddingTop: SIZES.radius,
@@ -414,7 +386,7 @@ const ProjectsBanner = ({ company_id }) => {
                 borderTopLeftRadius: SIZES.base,
                 backgroundColor: COLORS.white,
               }}>
-              <View style={{ alignItems: 'flex-end' }}>
+              <View style={{alignItems: 'flex-end'}}>
                 <IconButton
                   containerStyle={{
                     boborderWidth: 2,
@@ -445,11 +417,11 @@ const ProjectsBanner = ({ company_id }) => {
                     }}
                     errorMsg={projectError}
                     appendComponent={
-                      <View style={{ justifyContent: 'center' }}>
+                      <View style={{justifyContent: 'center'}}>
                         <Image
                           source={
                             projectname == '' ||
-                              (projectname != '' && projectError == '')
+                            (projectname != '' && projectError == '')
                               ? icons.correct
                               : icons.cancel
                           }
@@ -460,8 +432,8 @@ const ProjectsBanner = ({ company_id }) => {
                               projectname == ''
                                 ? COLORS.gray
                                 : projectname != '' && projectError == ''
-                                  ? COLORS.green
-                                  : COLORS.red,
+                                ? COLORS.green
+                                : COLORS.red,
                           }}
                         />
                       </View>
@@ -478,12 +450,12 @@ const ProjectsBanner = ({ company_id }) => {
                     }}
                     errorMsg={projectLocationError}
                     appendComponent={
-                      <View style={{ justifyContent: 'center' }}>
+                      <View style={{justifyContent: 'center'}}>
                         <Image
                           source={
                             projectlocation == '' ||
-                              (projectlocation != '' &&
-                                projectLocationError == '')
+                            (projectlocation != '' &&
+                              projectLocationError == '')
                               ? icons.correct
                               : icons.cancel
                           }
@@ -495,8 +467,8 @@ const ProjectsBanner = ({ company_id }) => {
                                 ? COLORS.gray
                                 : projectlocation != '' &&
                                   projectLocationError == ''
-                                  ? COLORS.green
-                                  : COLORS.red,
+                                ? COLORS.green
+                                : COLORS.red,
                           }}
                         />
                       </View>
@@ -547,7 +519,7 @@ const ProjectsBanner = ({ company_id }) => {
                       label="Plot area"
                       keyboardType="numeric"
                       autoCompleteType="cc-number"
-                      containerStyle={{ width: '60%' }}
+                      containerStyle={{width: '60%'}}
                       // value={projectplotarea.toString()}
                       onChange={value => {
                         utils.validateNumber(value, setProjectPlotAreaError);
@@ -617,8 +589,6 @@ const ProjectsBanner = ({ company_id }) => {
               justifyContent: 'flex-end',
               backgroundColor: COLORS.transparentBlack2,
             }}>
-            <Toast config={showToast} />
-            <Toast config={showUpdateToast} />
             <View
               style={{
                 backgroundColor: COLORS.white2,
@@ -633,7 +603,7 @@ const ProjectsBanner = ({ company_id }) => {
                 borderTopLeftRadius: SIZES.base,
                 backgroundColor: COLORS.white,
               }}>
-              <View style={{ alignItems: 'flex-end' }}>
+              <View style={{alignItems: 'flex-end'}}>
                 <IconButton
                   containerStyle={{
                     boborderWidth: 2,
@@ -664,11 +634,11 @@ const ProjectsBanner = ({ company_id }) => {
                     }}
                     errorMsg={projectError}
                     appendComponent={
-                      <View style={{ justifyContent: 'center' }}>
+                      <View style={{justifyContent: 'center'}}>
                         <Image
                           source={
                             projectname == '' ||
-                              (projectname != '' && projectError == '')
+                            (projectname != '' && projectError == '')
                               ? icons.correct
                               : icons.cancel
                           }
@@ -679,8 +649,8 @@ const ProjectsBanner = ({ company_id }) => {
                               projectname == ''
                                 ? COLORS.gray
                                 : projectname != '' && projectError == ''
-                                  ? COLORS.green
-                                  : COLORS.red,
+                                ? COLORS.green
+                                : COLORS.red,
                           }}
                         />
                       </View>
@@ -697,12 +667,12 @@ const ProjectsBanner = ({ company_id }) => {
                     }}
                     errorMsg={projectLocationError}
                     appendComponent={
-                      <View style={{ justifyContent: 'center' }}>
+                      <View style={{justifyContent: 'center'}}>
                         <Image
                           source={
                             projectlocation == '' ||
-                              (projectlocation != '' &&
-                                projectLocationError == '')
+                            (projectlocation != '' &&
+                              projectLocationError == '')
                               ? icons.correct
                               : icons.cancel
                           }
@@ -714,8 +684,8 @@ const ProjectsBanner = ({ company_id }) => {
                                 ? COLORS.gray
                                 : projectlocation != '' &&
                                   projectLocationError == ''
-                                  ? COLORS.green
-                                  : COLORS.red,
+                                ? COLORS.green
+                                : COLORS.red,
                           }}
                         />
                       </View>
@@ -730,7 +700,6 @@ const ProjectsBanner = ({ company_id }) => {
                     setOpen={setOpenCategory}
                     setValue={setCategoryValue}
                     setItems={setProjectCategory}
-                    multiple={false}
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
@@ -766,7 +735,7 @@ const ProjectsBanner = ({ company_id }) => {
                       label="Plot area"
                       keyboardType="numeric"
                       autoCompleteType="cc-number"
-                      containerStyle={{ width: '60%' }}
+                      containerStyle={{width: '60%'}}
                       value={projectplotarea.toString()}
                       onChange={value => {
                         utils.validateNumber(value, setProjectPlotAreaError);
@@ -875,11 +844,9 @@ const ProjectsBanner = ({ company_id }) => {
                     color: COLORS.black,
                     ...FONTS.h3,
                   }}
-                  onPress={
-                    () => {
-                      setProjectDeleteConfirmation(true);
-                    }
-                  }
+                  onPress={() => {
+                    setDeleteConfirm(true);
+                  }}
                 />
               </ScrollView>
             </View>
@@ -889,7 +856,6 @@ const ProjectsBanner = ({ company_id }) => {
     );
   }
   return (
-
     <View
       style={{
         marginTop: SIZES.padding,
@@ -897,10 +863,10 @@ const ProjectsBanner = ({ company_id }) => {
         paddingVertical: SIZES.radius,
         paddingHorizontal: SIZES.padding,
         backgroundColor: COLORS.lightblue_600,
-        borderRadius: SIZES.base,
+        borderRadius: 5,
         ...styles.shadow,
       }}
-    // onPress={toggleExpanded}
+      // onPress={toggleExpanded}
     >
       <View
         style={{
@@ -909,7 +875,7 @@ const ProjectsBanner = ({ company_id }) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <Text style={{ fontSize: 20, color: COLORS.white }}>Projects</Text>
+        <Text style={{fontSize: 20, color: COLORS.white}}>Projects</Text>
         <TextButton
           label="Create New"
           disabled={false}
@@ -929,7 +895,7 @@ const ProjectsBanner = ({ company_id }) => {
           onPress={() => {
             createProject();
           }}
-        // onPress={ createProject()}
+          // onPress={ createProject()}
         />
         <TouchableOpacity onPress={toggleExpanded}>
           <Image
@@ -955,18 +921,37 @@ const ProjectsBanner = ({ company_id }) => {
       {renderUpdateProjectModal()}
 
       {/* DELETE CONFIRMATION MODAL */}
-      <ConformationAlert
-        isVisible={projectDeleteConfirmation}
-        onCancel={() => {
-          setProjectDeleteConfirmation(false);
-        }}
-        title="Delete Project"
-        message="Are you sure want to delete this project ?"
-        cancelText="Cancel"
-        confirmText="Yes"
-        onConfirmPressed={() => {
-          projectDeleteSubmit();
-        }}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => projectDeleteSubmit()}
       />
     </View>
   );

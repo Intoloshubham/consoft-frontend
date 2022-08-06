@@ -12,9 +12,8 @@ import {
   ImageBackground,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {IconButton, ConformationAlert} from '../../../Components';
+import {IconButton, DeleteConfirmationToast} from '../../../Components';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
-import Config from '../../../config';
 import {Swipeable} from 'react-native-gesture-handler';
 import {
   getAssignWorks,
@@ -27,25 +26,17 @@ const AssignedWorks = () => {
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const [filterRoleModal, setFilterRoleModal] = React.useState(false);
   const [items, setItems] = React.useState([]);
-  const [workId, setWorkId] = React.useState('');
 
   //get assign works
-  const fetchAssignWorks =  async () => {
+  const fetchAssignWorks = async () => {
     const response = await getAssignWorks();
     setAssignWorkData(response);
-    fetchAssignWorks();
   };
-
-  React.useEffect(() => {
-    fetchAssignWorks();
-    fetchUserRole();
-  }, []);
 
   //get user role
   const fetchUserRole = async () => {
     const response = await getUserRole();
     setItems(response);
-    fetchUserRole();
   };
 
   // get work id
@@ -53,64 +44,23 @@ const AssignedWorks = () => {
     setDeleteConfirm(true);
     setWorkId(id);
   };
-  
+  const [workId, setWorkId] = React.useState('');
 
   // delete assign works
   const fetchAssignWorkDelete = async () => {
     const response = await deleteAssignWorks(workId);
-    setDeleteConfirm(false);
-    fetchAssignWorkDelete();
+    if (response.status === 200) {
+      fetchAssignWorks();
+      setDeleteConfirm(false);
+    }
   };
 
-  
 
-  // Get All Assign Works
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}assign-works`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // console.log(data);
-  //       setAssignWorkData(data);
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }, [assignWorkData]);
+  React.useEffect(() => {
+    fetchAssignWorks();
+    fetchUserRole();
+  }, []);
 
-  // React.useEffect(() => {
-  //   fetch(`${Config.API_URL}role`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setItems(data);
-  //       // console.log(data)
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }, []);
-
-  // Delete Assign Works
-
-  // const OnDeleteAssignWorks = () => {
-  //   fetch(`${Config.API_URL}sub-assign-work/` + `${workId}`, {
-  //     method: 'DELETE',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // console.log(data);
-  //     })
-  //     .catch(error => console.log(error.message));
-  //   setDeleteConfirm(false);
-  // };
 
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {
@@ -138,7 +88,6 @@ const AssignedWorks = () => {
             style={{
               flex: 1,
               justifyContent: 'flex-end',
-              // backgroundColor: COLORS.transparentBlack2,
             }}>
             <View
               style={{
@@ -218,13 +167,13 @@ const AssignedWorks = () => {
             <ImageBackground
               style={{
                 backgroundColor: COLORS.warning_200,
-                padding: 5,
-                borderRadius: SIZES.base,
+                padding: 3,
+                borderRadius: 2,
                 right: 10,
               }}>
               <Image
                 source={icons.delete_icon}
-                style={{height: 15, width: 15, tintColor: COLORS.rose_600}}
+                style={{height: 12, width: 12, tintColor: COLORS.rose_600}}
               />
             </ImageBackground>
           </TouchableOpacity>
@@ -418,7 +367,7 @@ const AssignedWorks = () => {
       style={{
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
-        borderRadius: SIZES.radius,
+        borderRadius: 5,
         backgroundColor: COLORS.lightblue_900,
         ...styles.shadow,
       }}>
@@ -459,7 +408,7 @@ const AssignedWorks = () => {
       {renderSwipeList()}
       {renderRoleFilterModal()}
 
-      <ConformationAlert
+      {/* <ConformationAlert
         isVisible={deleteConfirm}
         onCancel={() => {
           setDeleteConfirm(false);
@@ -471,6 +420,15 @@ const AssignedWorks = () => {
         onConfirmPressed={() => {
           fetchAssignWorkDelete();
         }}
+      /> */}
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => fetchAssignWorkDelete()}
       />
     </View>
   );

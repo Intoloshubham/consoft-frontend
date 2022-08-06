@@ -1,8 +1,8 @@
 import Config from '../config';
 
-const verifySubmitWorks = async id => {
+const getUserLeaves = async () => {
   try {
-    const res = await fetch(Config.API_URL + 'verify-submit-work/' + id, {
+    const res = await fetch('http://192.168.1.99:8000/api/' + 'leaves', {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -15,4 +15,4 @@ const verifySubmitWorks = async id => {
   }
 };
 
-export {verifySubmitWorks};
+export {getUserLeaves};

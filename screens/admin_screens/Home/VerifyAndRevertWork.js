@@ -1,313 +1,36 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
-import Config from '../../../config';
 import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import VerifyWorks from '../VerifyAndRevertWork.js/VerifyWorks';
+import RevertWorks from '../VerifyAndRevertWork.js/RevertWorks';
 
+const Tab = createMaterialTopTabNavigator();
 const VerifyAndRevertWork = ({company_id}) => {
-  const [verifyRevertWorks, setVerifyRevertWorks] = React.useState([]);
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {key: 'verify', title: 'Verify'},
-    {key: 'revert', title: 'Revert'},
-  ]);
-
-  // call api for getting verified and reveted works
   const fetchVerifyAndRevertWork = async () => {
     const response = await getVerifyAndRevertWorks(company_id);
-    setVerifyRevertWorks(response);
-    fetchVerifyAndRevertWork();
+    if (response.status === 200) {
+      let v = response.data.map(ele => {
+        if (ele.verify === true) {
+          setVerify(ele);
+        }
+        if (ele.revert_status === true) {
+          setRevert(ele);
+        }
+      });
+    } else {
+      // alert(response.message);
+    }
   };
+
+  // filter verify & revert works
+  const [verify, setVerify] = React.useState([]);
+  const [revert, setRevert] = React.useState([]);
 
   React.useEffect(() => {
     fetchVerifyAndRevertWork();
-    const abortCont = new AbortController();
-    // fetch(
-    //   `${Config.API_URL}verify-revert-works/` + `${company_id}`,
-    //   {signal: abortCont.signal},
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //   },
-    // )
-    //   .then(response => {
-    //     return response.json();
-    //   })
-    //   .then(data => {
-    //     setVerifyRevertWorks(data);
-    //     // console.log(data);
-    //   })
-    //   .catch(err => {
-    //     if (err.name === 'AbortError') {
-    //       console.log('fetch aborted');
-    //     } else {
-    //       console.log(err);
-    //     }
-    //   });
-    return () => abortCont.abort();
   }, []);
-
-  const VerifyWorksRoute = () => (
-    <ScrollView
-      style={{
-        padding: 5,
-        marginTop: SIZES.base,
-      }}
-      showsVerticalScrollIndicator={false}
-      scrollEnabled={true}
-      nestedScrollEnabled={true}>
-      <View>
-        {verifyRevertWorks.map(ele => {
-          if (ele.verify == true) {
-            return (
-              <View key={ele._id}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        color: COLORS.darkGray,
-                        textTransform: 'capitalize',
-                        fontWeight: 'bold',
-                      }}>
-                      {ele.user_name}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 9,
-                        left: 3,
-                        paddingHorizontal: 3,
-                        backgroundColor: COLORS.green,
-                        color: COLORS.white,
-                        borderRadius: 2,
-                      }}>
-                      {ele.work_code}
-                    </Text>
-                  </View>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        right: 10,
-                      }}>
-                      <Image
-                        source={icons.date}
-                        style={{
-                          height: 10,
-                          width: 10,
-                          tintColor: COLORS.darkGray,
-                          right: 3,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          color: COLORS.darkGray,
-                        }}>
-                        {ele.verify_date}
-                      </Text>
-                    </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      <Image
-                        source={icons.time}
-                        style={{
-                          height: 10,
-                          width: 10,
-                          tintColor: COLORS.darkGray,
-                          right: 3,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          color: COLORS.darkGray,
-                        }}>
-                        {ele.verify_time}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                  <Text style={{...FONTS.h4, color: COLORS.black}}>
-                    Work{' - '}
-                  </Text>
-                  {ele.work}
-                </Text>
-                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                  <Text style={{...FONTS.h4, color: COLORS.black}}>
-                    Msg{' - '}
-                  </Text>
-                  {ele.submit_work_text}
-                </Text>
-                <View
-                  style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: COLORS.gray,
-                    marginVertical: SIZES.base,
-                  }}
-                />
-              </View>
-            );
-          }
-        })}
-      </View>
-    </ScrollView>
-  );
-
-  const RevertWorksRoute = () => (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      scrollEnabled={true}
-      nestedScrollEnabled={true}
-      style={{padding: 10}}>
-      <View>
-        {verifyRevertWorks.map((ele, i) => {
-          if (ele.revert_status == true) {
-            return (
-              <View key={ele._id}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        color: COLORS.darkGray,
-                        textTransform: 'capitalize',
-                        fontWeight: 'bold',
-                      }}>
-                      {ele.user_name}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 9,
-                        left: 3,
-                        paddingHorizontal: 3,
-                        backgroundColor: COLORS.rose_600,
-                        color: COLORS.white,
-                        borderRadius: 2,
-                      }}>
-                      {ele.work_code}
-                    </Text>
-                  </View>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        right: 10,
-                      }}>
-                      <Image
-                        source={icons.date}
-                        style={{
-                          height: 10,
-                          width: 10,
-                          tintColor: COLORS.darkGray,
-                          right: 3,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          color: COLORS.darkGray,
-                        }}>
-                        {ele.verify_date}
-                      </Text>
-                    </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      <Image
-                        source={icons.time}
-                        style={{
-                          height: 10,
-                          width: 10,
-                          tintColor: COLORS.darkGray,
-                          right: 3,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          color: COLORS.darkGray,
-                        }}>
-                        {ele.verify_time}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                  <Text style={{...FONTS.h4, color: COLORS.black}}>
-                    Work{' - '}
-                  </Text>
-                  {ele.work}
-                </Text>
-                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                  <Text style={{...FONTS.h4, color: COLORS.black}}>
-                    Msg{' - '}
-                  </Text>
-                  {ele.submit_work_text}
-                </Text>
-
-                <View
-                  style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: COLORS.gray,
-                    marginVertical: SIZES.base,
-                  }}
-                />
-              </View>
-            );
-          }
-        })}
-      </View>
-    </ScrollView>
-  );
-
-  const renderTabBar = props => {
-    return (
-      <TabBar
-        {...props}
-        renderLabel={({focused, route}) => {
-          return (
-            <Text
-              style={{
-                color: focused ? COLORS.black : COLORS.darkGray,
-              }}>
-              {route.title}
-            </Text>
-          );
-        }}
-        indicatorStyle={{
-          backgroundColor: COLORS.rose_600,
-          padding: 1.5,
-          marginBottom: -2,
-        }}
-        style={{
-          backgroundColor: COLORS.white,
-          borderBottomWidth: 0.5,
-          borderColor: COLORS.darkGray,
-        }}
-      />
-    );
-  };
 
   return (
     <View
@@ -317,7 +40,7 @@ const VerifyAndRevertWork = ({company_id}) => {
         backgroundColor: COLORS.white,
         paddingVertical: SIZES.radius,
         paddingHorizontal: SIZES.radius,
-        borderRadius: SIZES.radius,
+        borderRadius: 5,
         ...styles.shadow,
       }}>
       <View
@@ -343,18 +66,16 @@ const VerifyAndRevertWork = ({company_id}) => {
           />
         </TouchableOpacity>
       </View>
-      <TabView
-        navigationState={{index, routes}}
-        renderScene={SceneMap({
-          verify: VerifyWorksRoute,
-          revert: RevertWorksRoute,
-        })}
-        onIndexChange={setIndex}
-        style={{height: 350}}
-        renderTabBar={renderTabBar}
-        scrollEnabled={true}
-        showPageIndicator={true}
-      />
+      <Tab.Navigator style={{height: 350}} initialRouteName="Verify">
+        <Tab.Screen
+          name="Verify"
+          children={() => <VerifyWorks VerifyData={verify} />}
+        />
+        <Tab.Screen
+          name="Revert"
+          children={() => <RevertWorks RevertData={revert} />}
+        />
+      </Tab.Navigator>
     </View>
   );
 };

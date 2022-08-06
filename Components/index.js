@@ -10,8 +10,9 @@ import UploadImage from './UplaodImage';
 import FloatingButton from './FloatingButton';
 import CustomDropdown from './CustomDropdown';
 import ItemBox from './ItemBox';
-import ConformationAlert from './ConformationAlert';
 import CustomToast from './CustomToast';
+import DeleteConfirmationToast from './DeleteConfirmationToast';
+
 
 export {
   TextButton,
@@ -26,6 +27,6 @@ export {
   FloatingButton,
   CustomDropdown,
   ItemBox,
-  ConformationAlert,
   CustomToast,
+  DeleteConfirmationToast,
 };

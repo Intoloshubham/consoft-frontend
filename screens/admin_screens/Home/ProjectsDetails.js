@@ -11,7 +11,6 @@ import {COLORS, SIZES, FONTS, images, icons} from '../../../constants';
 import {TextButton, HeaderBar} from '../../../Components';
 import {useNavigation} from '@react-navigation/native';
 import WorkAssignModal from '../Modals/WorkAssignModal';
-import VerifyAndRevertWork from './VerifyAndRevertWork';
 
 const ProjectsDetails = ({route}) => {
   const navigation = useNavigation();
@@ -95,7 +94,7 @@ const ProjectsDetails = ({route}) => {
         style={{
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
@@ -121,6 +120,7 @@ const ProjectsDetails = ({route}) => {
       </View>
     );
   }
+
   return (
     <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
       <HeaderBar right={true} title={name} />
@@ -137,6 +137,7 @@ const ProjectsDetails = ({route}) => {
         }}
         onPress={() => setWorkModal(true)}
       />
+
       {/* {showWorkModal && ( */}
       <WorkAssignModal
         projectId={project_id}

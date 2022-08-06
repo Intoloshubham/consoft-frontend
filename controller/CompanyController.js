@@ -1,12 +1,13 @@
 import Config from '../config';
 
-const verifySubmitWorks = async id => {
+const postCompanyTeam = async formData => {
   try {
-    const res = await fetch(Config.API_URL + 'verify-submit-work/' + id, {
-      method: 'get',
+    const res = await fetch(Config.API_URL + 'register', {
+      method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(formData),
     });
     const data = await res.json();
     return data;
@@ -15,4 +16,4 @@ const verifySubmitWorks = async id => {
   }
 };
 
-export {verifySubmitWorks};
+export {postCompanyTeam};

@@ -18,10 +18,10 @@ import {
   CustomDropdown,
   IconButton,
   ConformationAlert,
+  CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
 import {COLORS, FONTS, icons, SIZES, STATUS} from '../../../constants';
-import Config from '../../../config';
-import Toast from 'react-native-toast-message';
 import {
   getProjectTeam,
   saveProjectTeam,
@@ -34,6 +34,14 @@ const ProjectTeam = ({route}) => {
   const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
   const [projectTeam, setProjectTeam] = useState([]);
   const [teamDeleteConfirmation, setTeamDeleteConfirmation] = useState(false);
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
+  //
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
   //roloe dropdown
   const [openRole, setOpenRole] = useState(false);
@@ -55,17 +63,14 @@ const ProjectTeam = ({route}) => {
     setOpenRole(false);
   }, []);
 
-  //---------------------------------------
+  //==================================== Apis ==================================
+
   // fetch project team
-  const fetchProjectTeam = useCallback(async () => {
+  const fetchProjectTeam = async () => {
     const team = await getProjectTeam(project_id);
     setProjectTeam(team);
-  }, []);
+  };
 
-  useEffect(() => {
-    fetchProjectTeam();
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
 
   const addProjectTeam = async () => {
     setAddProjectTeamModal(true);
@@ -87,8 +92,6 @@ const ProjectTeam = ({route}) => {
       setUserItems(usersFromApi);
     }
   };
-  // console.log("object")
-  //---------------------------------------
 
   // post data
   const saveProjectTeamSubmit = async () => {
@@ -98,32 +101,35 @@ const ProjectTeam = ({route}) => {
     };
     const res = await saveProjectTeam(teamData);
     if (res.status === STATUS.RES_SUCCESS) {
-      showToast();
       setAddProjectTeamModal(false);
+      setSubmitToast(true);
       await fetchProjectTeam();
     } else {
       alert(res.message);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
   };
 
   const deleteTeamSubmit = async () => {
     const res = await deleteProjectTeam(project_id, userId)
     if (res.status === STATUS.RES_SUCCESS) {
       await fetchProjectTeam();
-      setTeamDeleteConfirmation(false);
+      setDeleteToast(true);
+      setDeleteConfirm(false);
     } else {
       alert(res.message);
     }
+    setTimeout(() => {
+      setDeleteToast(false);
+    }, 2000);
   };
 
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Added Successfully',
-      text2: 'Success',
-      visibilityTime: 2000,
-    });
+  useEffect(() => {
+    fetchProjectTeam();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   function renderTeamList() {
     const renderItem = ({item, index}) => (
@@ -180,19 +186,19 @@ const ProjectTeam = ({route}) => {
                     <TouchableOpacity
                       onPress={() => {
                         setUserId(ele.user_id);
-                        setTeamDeleteConfirmation(true);
+                        setDeleteConfirm(true);
                       }}>
                       <ImageBackground
                         style={{
                           backgroundColor: COLORS.rose_600,
-                          padding: 5,
-                          borderRadius: SIZES.base,
+                          padding: 3,
+                          borderRadius: 2,
                         }}>
                         <Image
                           source={icons.delete_icon}
                           style={{
-                            width: 15,
-                            height: 15,
+                            width: 12,
+                            height: 12,
                             tintColor: COLORS.white,
                           }}
                         />
@@ -215,7 +221,7 @@ const ProjectTeam = ({route}) => {
           marginBottom: SIZES.padding,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
@@ -365,21 +371,39 @@ const ProjectTeam = ({route}) => {
         }}
         onPress={() => addProjectTeam()}
       />
-      <Toast config={showToast} />
       {renderTeamList()}
       {renderAddProjectTeamModal()}
-      <ConformationAlert
-        isVisible={teamDeleteConfirmation}
-        onCancel={() => {
-          setTeamDeleteConfirmation(false);
-        }}
-        title="Team Delete"
-        message="Are you sure want to delete this member ?"
-        cancelText="Cancel"
-        confirmText="Yes"
-        onConfirmPressed={() => {
-          deleteTeamSubmit();
-        }}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Add Team"
+        message="Addedd Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => deleteTeamSubmit()}
       />
     </View>
   );

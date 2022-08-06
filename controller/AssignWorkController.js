@@ -21,7 +21,7 @@ const getSubmitWorks = async company_id => {
 const getVerifyAndRevertWorks = async company_id => {
   try {
     const res = await fetch(
-      `${Config.API_URL}verify-revert-works/` + `${company_id}`,
+      Config.API_URL + 'verify-revert-works/' + company_id,
       {
         method: 'get',
         headers: {
@@ -69,18 +69,15 @@ const deleteAssignWorks = async work_id => {
   }
 };
 
-const assignWorks = async (workData) => {
+const postAssignWork = async formData => {
   try {
-    const res = await fetch(
-      `${Config.API_URL}assign-works`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body:JSON.stringify(workData)
+    const res = await fetch(Config.API_URL + 'assign-works', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify(formData),
+    });
     const data = await res.json();
     return data;
   } catch (error) {
@@ -88,12 +85,10 @@ const assignWorks = async (workData) => {
   }
 };
 
-
-
 export {
   getSubmitWorks,
   getVerifyAndRevertWorks,
   getAssignWorks,
   deleteAssignWorks,
-  assignWorks
+  postAssignWork,
 };
