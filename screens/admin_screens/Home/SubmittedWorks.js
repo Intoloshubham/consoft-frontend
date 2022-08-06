@@ -9,10 +9,8 @@ import {
   ImageBackground,
   Modal,
   TouchableWithoutFeedback,
-  TextInput,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import Config from '../../../config';
 import {FormInput, ProgressBar} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {getSubmitWorks} from '../../../controller/AssignWorkController';
@@ -23,52 +21,18 @@ const SubmittedWorks = () => {
   //COMPANY DATA
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
-
   const [submitWork, setSubmitWork] = React.useState([]);
-
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
 
+  //=========================== Apis ==========================================
+
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(company_id);
     setSubmitWork(response);
-    fetchSubmitWork();
   };
 
-  React.useEffect(() => {
-    fetchSubmitWork();
-  }, [company_id]);
-
-  // refresh page
-
-  // React.useEffect(() => {
-  //   const abortConst = new AbortController();
-  //   fetch(
-  //     `${Config.API_URL}submit-works/` + `${company_id}`,
-  //     {signal: abortConst.signal},
-  //     {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     },
-  //   )
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       // console.log(data)
-  //       setSubmitWork(data);
-  //     })
-  //     .catch(error => {
-  //       if (error.name == 'AbortError') {
-  //         console.log('fetch aborted');
-  //       } else {
-  //         console.log(error);
-  //       }
-  //     });
-
-  //   return () => abortConst.abort();
-  // }, [submitWork]);
 
   // verify works
   const verifyHandler = async work_Id => {
@@ -76,20 +40,6 @@ const SubmittedWorks = () => {
     if (data.status === 200) {
       fetchSubmitWork();
     }
-    // await fetch(`${Config.API_URL}verify-submit-work` + `/${id}`, {
-
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
   };
 
   const getRevertWorkId = id => {
@@ -105,27 +55,11 @@ const SubmittedWorks = () => {
         setRevertModal(false);
       }, 500);
     }
-
-    // await fetch(`${Config.API_URL}revert-submit-work` + `/${revertId}`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(formData),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     if (data.status === 200) {
-    //       setTimeout(() => {
-    //         setRevertModal(false);
-    //       }, 1000);
-    //     }
-    //     console.log(data);
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
   };
+
+  React.useEffect(() => {
+    fetchSubmitWork();
+  }, []);
 
   function renderRevertModal() {
     return (
@@ -404,7 +338,7 @@ const SubmittedWorks = () => {
         backgroundColor: COLORS.white,
         marginHorizontal: SIZES.padding,
         marginTop: SIZES.padding,
-        borderRadius: SIZES.radius,
+        borderRadius: 5,
         padding: 20,
         ...styles.shadow,
       }}>

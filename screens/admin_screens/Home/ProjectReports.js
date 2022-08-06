@@ -287,7 +287,7 @@ const ProjectReports = () => {
         backgroundColor: COLORS.white,
         marginHorizontal: SIZES.padding,
         marginTop: SIZES.padding,
-        borderRadius: SIZES.radius,
+        borderRadius: 5,
         padding: 20,
         ...styles.shadow,
       }}>

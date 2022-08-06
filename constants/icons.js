@@ -33,6 +33,7 @@ const done = require('../assets/icons/done.png');
 const todo = require('../assets/icons/todo.png');
 const submit1 = require('../assets/icons/submit1.webp');
 const forward_arrow = require('../assets/icons/forward_arrow.png');
+const check = require('../assets/icons/check.png');
 
 const account = require('../assets/icons/account.png');
 const report = require('../assets/icons/report.png');
@@ -95,6 +96,7 @@ const project_type = require('../assets/icons/final/project_type.png');
 const stock_management = require('../assets/icons/final/stock_management.png');
 const supplier = require('../assets/icons/final/supplier.png');
 const units = require('../assets/icons/final/units.png');
+const delete_withbg = require('../assets/icons/delete_withbg.png');
 
 
 //user-end quantity report

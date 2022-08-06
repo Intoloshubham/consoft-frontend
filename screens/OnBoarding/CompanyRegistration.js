@@ -2,18 +2,15 @@ import React from 'react';
 import {View, Image} from 'react-native';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import Toast from 'react-native-toast-message';
-import Config from '../../config';
 import {FormInput, TextButton, HeaderBar} from '../../Components';
 import {COLORS, images, icons, SIZES} from '../../constants';
 
 import {useDispatch} from 'react-redux';
-import { registerCompany } from '../../services/companyAuthApi';
-import { getCompanyId } from '../../services/asyncStorageService';
+import {registerCompany} from '../../services/companyAuthApi';
+import {getCompanyId} from '../../services/asyncStorageService';
 
 const CompanyRegistration = ({navigation}) => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [cName, setCName] = React.useState('');
   //const [cPanNo, setCPanNo] = React.useState('');
@@ -25,7 +22,7 @@ const CompanyRegistration = ({navigation}) => {
   const [cMobileNoError, setCMobileNoError] = React.useState('');
   const [cEmailError, setCEmailError] = React.useState('');
 
-  const onSubmit = async ()=> {
+  const onSubmit = async () => {
     const companyData = {
       company_name: cName,
       //pan: cPanNo,
@@ -34,20 +31,16 @@ const CompanyRegistration = ({navigation}) => {
     };
 
     const result = await dispatch(registerCompany(companyData));
-    
+
     if (result.payload.status === 200) {
-      showToast();
       setTimeout(() => {
         navigation.navigate('VerifyProductKey');
       }, 300);
-    }else{
-      alert(res.payload.message)
+    } else {
+      alert(res.payload.message);
     }
     // const company_id = await getCompanyId();
-    
   };
-
-
 
   function isEnableCreateCompany() {
     return (
@@ -62,28 +55,6 @@ const CompanyRegistration = ({navigation}) => {
     );
   }
 
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      topOffset: 10,
-      type: 'success',
-      text1: 'Successfully Created Company',
-      text2: 'Success',
-      visibilityTime: 700,
-    });
-
-  const showToastError = () =>
-    Toast.show({
-      position: 'top',
-      topOffset: 10,
-      type: 'error',
-      text1: 'Email & Mobile No. is Already Exist',
-      text2: 'If you want to continue with us, click on CONTINUE & PAYMENT',
-      visibilityTime: 4000,
-    });
-
-  
-
   return (
     <View
       style={{
@@ -91,9 +62,6 @@ const CompanyRegistration = ({navigation}) => {
         backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="registration" />
-
-      <Toast config={showToast} />
-      <Toast config={showToastError} />
 
       <AuthLayout image={images.create_company} title="Let's Create Company">
         <View

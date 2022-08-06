@@ -1,8 +1,8 @@
 import Config from '../config';
 
-const getUserRole = async () => {
+const getSuppliers = async () => {
   try {
-    const res = await fetch(`${Config.API_URL}role`, {
+    const res = await fetch(Config.API_URL + 'supplier', {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -15,25 +15,26 @@ const getUserRole = async () => {
   }
 };
 
-const roleByUser = async role_id => {
+const postSuppliers = async formData => {
   try {
-    const res = await fetch(Config.API_URL + 'role-by-users/' + role_id, {
-      method: 'GET',
+    const res = await fetch(Config.API_URL + 'supplier', {
+      method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(formData),
     });
     const data = await res.json();
     return data;
   } catch (error) {
-    return error;
+    console.log(error);
   }
 };
 
-const getUsers = async () => {
+const deleteSuppliers = async id => {
   try {
-    const res = await fetch(`${Config.API_URL}users`, {
-      method: 'get',
+    const res = await fetch(Config.API_URL + 'supplier/' + id, {
+      method: 'delete',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -44,4 +45,5 @@ const getUsers = async () => {
     console.log(error);
   }
 };
-export {getUserRole, roleByUser, getUsers};
+
+export {getSuppliers, postSuppliers, deleteSuppliers};

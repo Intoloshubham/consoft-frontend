@@ -230,8 +230,9 @@ const Quantity = () => {
         `${config.API_URL}quantity-report-item/` + `${company_id}`,
       );
       const quantitydata = await resp.json();
-      // console.log(quantitydata);
+    //   console.log(quantitydata);
       setReportdata(quantitydata);
+      reportdataitem();
     } catch (error) {
       console.log(error, 'error');
     }

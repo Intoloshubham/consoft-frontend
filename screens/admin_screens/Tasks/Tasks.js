@@ -1,11 +1,16 @@
 import React from 'react';
-import {Text, View} from 'react-native';
-import {COLORS, FONTS} from '../../../constants';
 
-const Tasks = () => {
+import {Text, View, Alert, TouchableOpacity} from 'react-native';
+
+import {COLORS, FONTS, icons} from '../../../constants';
+
+const Tasks = ({navigation}) => {
   return (
+
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Tasks</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('ProjectsDetails')}>
+        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Tasks</Text>
+      </TouchableOpacity>
     </View>
   );
 };

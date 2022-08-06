@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  TouchableOpacity,
   StyleSheet,
   ScrollView,
   LogBox,
@@ -11,7 +10,6 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {
   HeaderBar,
   TextButton,
@@ -20,7 +18,7 @@ import {
   CustomDropdown,
 } from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
-import Config from '../../../config';
+import {getUsers} from '../../../controller/UserRoleController';
 
 const ProjectCompanyShow = () => {
   React.useEffect(() => {
@@ -28,21 +26,6 @@ const ProjectCompanyShow = () => {
   }, []);
 
   const [comTeamDetails, setComTeamDetails] = React.useState([]);
-
-  React.useEffect(() => {
-    fetch(`${Config.API_URL}users`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data);
-        setComTeamDetails(data);
-      })
-      .catch(error => console.log(error.message));
-  }, [comTeamDetails]);
 
   const [showCompanyAddTeamModal, setShowCompanyAddTeamModal] =
     React.useState(false);
@@ -65,6 +48,18 @@ const ProjectCompanyShow = () => {
     {label: 'Other staff', value: '6'},
   ]);
 
+  //============================ Apis =====================================
+
+  const getCompanyTeam = async () => {
+    let response = await getUsers();
+    console.log(response);
+    setComTeamDetails(response);
+  };
+
+  React.useEffect(() => {
+    getCompanyTeam();
+  }, []);
+
   function renderTeamList() {
     const renderItem = ({item, index}) => (
       <View
@@ -82,7 +77,7 @@ const ProjectCompanyShow = () => {
             }}>
             <Text
               style={{
-                ...FONTS.h4,
+                ...FONTS.h3,
                 color: COLORS.lightblue_900,
                 textTransform: 'capitalize',
               }}>
@@ -120,7 +115,7 @@ const ProjectCompanyShow = () => {
           </View>
           <Text
             style={{
-              ...FONTS.body5,
+              ...FONTS.body4,
               textTransform: 'capitalize',
               color: COLORS.darkGray,
             }}>
@@ -128,13 +123,13 @@ const ProjectCompanyShow = () => {
           </Text>
           <Text
             style={{
-              ...FONTS.body5,
+              ...FONTS.body4,
               textTransform: 'capitalize',
               color: COLORS.darkGray,
             }}>
             Mobile No - +91-{item.mobile}
           </Text>
-          <Text style={{...FONTS.body5, color: COLORS.darkGray}}>
+          <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
             Email - {item.email}
           </Text>
         </View>
@@ -146,7 +141,7 @@ const ProjectCompanyShow = () => {
           marginBottom: SIZES.padding,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 3,
           backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
@@ -349,18 +344,6 @@ const ProjectCompanyShow = () => {
         flex: 1,
       }}>
       <HeaderBar right={true} title="Company Team" />
-      {/* <TextButton
-        label="Add New"
-        buttonContainerStyle={{
-          height: 45,
-          alignItems: 'center',
-          marginHorizontal: SIZES.padding,
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.lightblue_700,
-        }}
-        onPress={() => setShowCompanyAddTeamModal(true)}
-      /> */}
       {renderAddCompanyTeamModal()}
       {renderTeamList()}
     </View>
