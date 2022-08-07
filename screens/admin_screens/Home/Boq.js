@@ -36,12 +36,10 @@ const Boq = ({route}) => {
   const company_id = companyData._id;
   const {project_id} = route.params;
 
-
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
-
 
   const [addBoqModal, setAddBoqModal] = React.useState(false);
   const [addBoqNewItemModal, setAddBoqNewItemModal] = React.useState(false);
@@ -63,7 +61,7 @@ const Boq = ({route}) => {
   const [itemQty, setItemQty] = React.useState('');
 
   // get unit for show
-  const [unit, getUnit] = React.useState([]);
+  const [unit, getUnit] = React.useState('');
   // onselect
   const [unitId, getUnitId] = React.useState('');
   // get unit name for showing
@@ -112,8 +110,7 @@ const Boq = ({route}) => {
   // get boq items
   const fetchBoqItemsList = async () => {
     let response = await getBoqItemsList(company_id);
-    // console.log(response);
-    getUnit(response.data);
+    getUnit(response);
     let unitFromApi = response.map(ele => {
       return {label: ele.item_name, value: ele._id};
     });
@@ -129,8 +126,8 @@ const Boq = ({route}) => {
   };
 
   const OnSelectHandler = id => {
-    let dd = unit.map(ele => {
-      if (ele._id == id) {
+    unit.map(ele => {
+      if (ele._id === id) {
         setShowUnitName(ele.unit_name);
         getUnitId(ele._id);
       }

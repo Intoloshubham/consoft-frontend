@@ -7,33 +7,57 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import {COLORS, SIZES, FONTS, icons, images} from '../../../constants';
+import {COLORS, SIZES, FONTS} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
 import CalendarPicker from 'react-native-calendar-picker';
-import {getUserLeaves} from '../../../controller/LeavesController';
+import {
+  getUserLeaves,
+  postUserLeaves,
+} from '../../../controller/LeavesController';
+import {CustomToast} from '../../../Components';
 
 const Profile = () => {
   const [selectedStartDate, setSelectedStartDate] = React.useState(null);
   const [selectedEndDate, setSelectedEndDate] = React.useState(null);
   const [leaves, setLeaves] = React.useState([]);
   const [checked, setChecked] = React.useState({});
+  const [data, setData] = React.useState('');
+  const arr = {leavedates: data};
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
 
-  const [nnew, setNnew] = React.useState([]);
-
-  const checkBoxHandler = (leave_date_id, i) => {
-    // console.log(leave_date_id);
-    // console.log(i);
+  const checkBoxHandler = leave_date_id => {
+    let d = [...data, leave_date_id];
+    setData(d);
   };
 
-  const onDateChange = date => {
+  const onDateChange = (date, type) => {
+    //function to handle the date change
+    // if (type === 'END_DATE') {
+    //   setSelectedEndDate(date);
+    // } else {
+    //   setSelectedEndDate(null);
     setSelectedStartDate(date);
+    // }
   };
+
+  // ========================== Apis ==========================
 
   const userLeaves = async () => {
     let response = await getUserLeaves();
     if (response.status === 200) {
       setLeaves(response.data);
     }
+  };
+
+  const postLeaves = async id => {
+    let response = await postUserLeaves(id, arr);
+    if (response.status === 200) {
+      setSubmitToast(true);
+    }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 1500);
   };
 
   React.useEffect(() => {
@@ -71,7 +95,7 @@ const Profile = () => {
                 paddingVertical: 0.5,
                 borderRadius: 1,
               }}
-              onPress={() => alert('Approved')}>
+              onPress={() => postLeaves(item._id)}>
               <Text style={{color: 'white', fontSize: 10, textAlign: 'center'}}>
                 Approve
               </Text>
@@ -90,35 +114,39 @@ const Profile = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {item.months.map((ele, i) => {
+        {item.leavedates.map((el, index) => {
           return (
-            <View key={i}>
-              {/* <Text key={i}>{ele.month_name}</Text> */}
-              {ele.leavedays.map((el, index) => {
-                return (
-                  <View key={index} style={{}}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}>
-                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                        {index + 1}. {el.leave_date}
-                      </Text>
-                      <CheckBox
-                        disabled={false}
-                        value={checked[el._id]}
-                        onValueChange={newValue => {
-                          setChecked({...checked, [el._id]: newValue});
-                          checkBoxHandler(el._id, index);
-                        }}
-                        style={{height: 20}}
-                      />
-                    </View>
-                  </View>
-                );
-              })}
+            <View key={index} style={{}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  <Text style={{...FONTS.h5, color: COLORS.darkGray}}>
+                    {index + 1}.{' '}
+                  </Text>
+                  <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                    Leave date -{' '}
+                  </Text>
+                  <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                    {el.leave_date}
+                  </Text>
+                </View>
+                <CheckBox
+                  disabled={false}
+                  value={checked[el._id]}
+                  onValueChange={newValue => {
+                    setChecked({...checked, [el._id]: newValue});
+                  }}
+                  onChange={() => checkBoxHandler({leave_date_id: el._id})}
+                  style={{height: 20}}
+                />
+              </View>
             </View>
           );
         })}
@@ -129,10 +157,10 @@ const Profile = () => {
       <View
         style={{
           marginTop: SIZES.padding,
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           paddingHorizontal: SIZES.padding,
           paddingVertical: SIZES.radius,
-          backgroundColor: COLORS.lightblue_50,
+          backgroundColor: COLORS.white,
           borderRadius: 3,
           ...styles.shadow,
         }}>
@@ -167,7 +195,7 @@ const Profile = () => {
     return (
       <View
         style={{
-          marginBottom: 50,
+          marginBottom: 60,
           marginTop: 30,
           marginHorizontal: SIZES.radius,
           padding: 10,
@@ -220,7 +248,7 @@ const Profile = () => {
           nextTitleStyle={{fontSize: 25}}
           selectedDayColor={'#16a34a'}
           selectedDayTextColor={'white'}
-          selectedDayTextStyle={{fontSize: 20}}
+          selectedDayTextStyle={{fontSize: 18}}
           textStyle={{fontSize: 15}}
           selectMonthTitle={'Select Month '}
           selectYearTitle={'Select Year'}
@@ -230,9 +258,16 @@ const Profile = () => {
   }
 
   return (
-    <ScrollView style={{}} showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false}>
       {renderUserLeavesList()}
       {renderCalender()}
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Approved"
+        message="Approved Successfully..."
+      />
     </ScrollView>
   );
 };

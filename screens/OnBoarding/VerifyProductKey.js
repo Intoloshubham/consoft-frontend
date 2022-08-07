@@ -1,57 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, Image} from 'react-native';
 import AuthLayout from '../Authentication/AuthLayout';
 import utils from '../../utils';
-import Config from '../../config';
-import {FormInput, TextButton, HeaderBar} from '../../Components';
+import {FormInput, TextButton, HeaderBar, CustomToast} from '../../Components';
 import {COLORS, images, SIZES, icons} from '../../constants';
-
-import { useSelector, useDispatch } from 'react-redux';
-import { verifyProductKey } from '../../services/companyAuthApi';
+import {useSelector, useDispatch} from 'react-redux';
+import {verifyProductKey} from '../../services/companyAuthApi';
 
 const VerifyProductKey = ({navigation}) => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
-  // console.log(companyData)
-
   const [productKey, setProductKey] = React.useState('');
   const [productKeyError, setProductKeyError] = React.useState('');
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
 
   const OnSubmit = async () => {
     const productData = {
       company_id: companyData._id,
       product_key: productKey,
     };
-
     const result = await dispatch(verifyProductKey(productData));
-
     if (result.payload.status === 200) {
+      setSubmitToast(true);
       navigation.navigate('Home');
-    }else{
+      setProductKey('');
+    } else {
       alert(result.payload.message);
     }
-
-    // console.log(res);
-    // console.log(result.error);
-    // console.log(result);
-    // let result;
-    // if (res.data) {
-    //   result = res.data;
-    // }
-    // if (res.error) {
-    //   result = res.error;
-    // }
-
-    // if (result.status === 200) {
-    //   await storeToken(result.access_token);   
-    //   navigation.navigate('Home');
-    // }
-
-    // if(result.status === 406){
-    //   alert(result.data.message);
-    // }
-
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 1500);
   };
 
   return (
@@ -115,6 +95,13 @@ const VerifyProductKey = ({navigation}) => {
           />
         </View>
       </AuthLayout>
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Success"
+        message="Verification Successful..."
+      />
     </View>
   );
 };

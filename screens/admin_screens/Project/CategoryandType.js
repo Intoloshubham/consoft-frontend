@@ -23,7 +23,6 @@ import {
 } from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import {useSelector} from 'react-redux';
-
 import {
   deleteProjectCategory,
   getProjectCategory,
