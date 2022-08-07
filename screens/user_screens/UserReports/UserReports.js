@@ -59,15 +59,15 @@ const UserReports = ({ route }) => {
   // }, [getUserId])
 
   useMemo(() => {
-    console.log("first...........")
-    console.log(userData._id)
+    // console.log("first...........")
+    // console.log(userData._id)
     if (userData._id) {
       const sendUserId = () => {
-        fetch(`http://10.0.2.2:7000/api/user-by-projects/${userData._id}`)
+        fetch(`${process.env.API_URL}user-by-projects/` + `${userData._id}`)
           .then((response) => response.json())
           .then(data => {
-            console.log("data........")
-            console.log(data)
+            // console.log("data........")
+            // console.log(data)
             setSelectedIdProjects(data);
           })
       }
@@ -106,9 +106,9 @@ const UserReports = ({ route }) => {
     }
   }, [selectedIdProjects])
 
-  console.log("ProList..........121")
-  console.log(ProList) 
-  console.log(value)
+  // console.log("ProList..........121")
+  // console.log(ProList) 
+  // console.log(value)
 
   useMemo(() => {
     if (value) {
@@ -123,7 +123,7 @@ const UserReports = ({ route }) => {
       return
     }
   }, [value])
-console.log(projectTeamList)
+// console.log(projectTeamList)
 
 
 
