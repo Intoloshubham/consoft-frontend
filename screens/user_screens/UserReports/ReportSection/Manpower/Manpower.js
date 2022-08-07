@@ -97,3 +97,5 @@ const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
         </>
     )
 }
+
+export default Manpower;

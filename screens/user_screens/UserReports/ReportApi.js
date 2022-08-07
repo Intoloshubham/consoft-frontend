@@ -39,32 +39,42 @@ const Insert_report_data = async (report_post_data, CONST_FIELD) => {
 
 const edit_report_data = (Id) => {
     try {
-        const res = fetch(`${process.env.REACT_APP_API_URL}quantity-report/${Id}`)
+        const res = fetch(`${process.env.REACT_APP_API_URL}edit-quantity-report/${Id}`)
         return res;
     } catch (error) {
-
+        console.log(error);
     }
 }
 
 const delete_report_data = (Id) => {
     try {
-        const res = fetch(`${process.env.REACT_APP_API_URL}quantity-report/${Id}`)
+        const res = fetch(`${process.env.REACT_APP_API_URL}delete-quantity-report/${Id}`)
+
         return res;
     } catch (error) {
-
+        console.log(error);
     }
 }
 
 const Get_report_data = async (user_id, project_id, user_date) => {
     try {
         const res = await fetch(`${process.env.REACT_APP_API_URL}quantity-report/${user_id}/${project_id}/${user_date}/`)
-        // http://localhost:7000/api/quantity-report/62c827689c1d4cb814ead866/62c827499c1d4cb814ead624/2022%2F08%2F06/
+        return res;
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+const check_quantity_item_exist = async () => {
+    try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}quantity-item-exist`)
         return res;
     } catch (error) {
         console.log(error)
     }
 }
 
-export { Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data, delete_report_data }
+export { Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data, delete_report_data,check_quantity_item_exist }
 
 
