@@ -90,7 +90,6 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     }
   };
 
-
   const getUserByRoleId = async role_id => {
     let response = await roleByUser(role_id);
     if (response.status === 200) {
@@ -112,7 +111,6 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       project_id: projectId,
     };
     let response = await postAssignWork(formData);
-    console.log(response);
     if (response.status === 200) {
       setSubmitToast(true);
       onClose();
