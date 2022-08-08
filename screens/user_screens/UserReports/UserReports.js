@@ -63,7 +63,7 @@ const UserReports = ({ route }) => {
     console.log(userData._id)
     if (userData._id) {
       const sendUserId = () => {
-        fetch(`${process.env.REACT_APP_API_URL}user-by-projects/${userData._id}`)
+        fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
           .then((response) => response.json())
           .then(data => {
             // console.log("data........")
