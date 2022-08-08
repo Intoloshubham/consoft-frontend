@@ -59,8 +59,8 @@ const UserReports = ({ route }) => {
   // }, [getUserId])
 
   useMemo(() => {
-    console.log("first...........")
-    console.log(userData._id)
+    // console.log("first...........")
+    // console.log(userData._id)
     if (userData._id) {
       const sendUserId = () => {
         fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)

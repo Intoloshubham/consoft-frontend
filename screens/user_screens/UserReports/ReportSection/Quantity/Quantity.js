@@ -22,7 +22,6 @@ import {
 import { Card, Title, DataTable, Divider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Toast from 'react-native-toast-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
@@ -41,7 +40,7 @@ import {
   icons,
   images,
 } from '../../../../../constants';
-import { FormInput, TextButton, HeaderBar } from '../../../../../Components';
+import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
 
 const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const {
@@ -63,6 +62,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     inputfromone,
     cont_Project_list_drop
   } = styles;
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
 
   // state
   const [quantityitem, setquantityitem] = useState('');
@@ -168,29 +173,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // });
 
   const inputkeyRef = useRef(inputs);
-  //  inputkey.current.unitname
-
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Data added Successfully',
-      text2: 'Success',
-      visibilityTime: 2000,
-    });
-
-  const showToastItem = (data, type) =>
-    Toast.show({
-      position: 'top',
-      type: type,
-      text1: data,
-      text2: data,
-      visibilityTime: 2000,
-    });
-
-
-
-
+  
 
   const CONST_FIELD = {
     MANPOWER: 'Manpower',
@@ -218,7 +201,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
           setPostQtyData(resp)
           if (resp.status == '200') {
-            showToast();
+            setSubmitToast(true)
             setTimeout(() => {
               setReportmodal(false);
             }, 1500);
@@ -226,7 +209,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
           }
         })
-    } else {
+    } else { 
       alert("Not inserted")
     }
   }
@@ -561,7 +544,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   };
   // get data api list
 
-  useEffect(() => {
+  useMemo(() => {
     fetchData();
   }, []);
   //  console.log(companyIdData)
@@ -587,12 +570,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           if (data.status == 200) {
             setvalue('');
             setquantityitem('');
-            showToastItem(data.message, "success");
+            alert(data.message)
             setTimeout(() => {
               setadditem(false);
             }, 1500);
           } else {
-            showToastItem(data.message, "info");
+            alert(data.message)
           }
           reportdataitem();
         });
@@ -1176,7 +1159,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   }}
                 />
               </View>
-              <Toast config={showToastItem} />
+              {/* <Toast config={showToastItem} /> */}
             </View>
           </View>
         </Modal>
@@ -1748,6 +1731,29 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       </View>
       {add_qty_data_modal()}
       {add_item_modal()}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+
     </View>
   );
 };
