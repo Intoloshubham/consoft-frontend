@@ -40,6 +40,13 @@ const Login = ({navigation}) => {
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
     setSwitchValue(value);
+    if (value) {
+      setUserMobileNo('');
+      setUserPassword('');
+    } else {
+      setCompanyMobileNo('');
+      setCompanyPassword('');
+    }
   };
 
   const [userId, setUserId] = React.useState('');
@@ -220,14 +227,14 @@ const Login = ({navigation}) => {
     return (
       <View
         style={{
-          marginTop: SIZES.padding,
+          marginTop: SIZES.base,
           marginHorizontal: SIZES.radius,
           ...styles.formContainer,
         }}>
+        <Text style={{textAlign: 'center', color: 'black', fontSize: 15}}>
+          Registered Company Login
+        </Text>
         <View>
-          <Text style={{textAlign: 'center', color: 'black', fontSize: 15}}>
-            Registered Company Login
-          </Text>
           <FormInput
             placeholder="Mobile No."
             keyboardType="phone-pad"

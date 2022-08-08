@@ -3,6 +3,7 @@ import {View, Text, FlatList, Image} from 'react-native';
 import {COLORS, FONTS, icons} from '../../../constants';
 
 const VerifyWorks = ({VerifyData}) => {
+  const verify = [VerifyData];
   const renderItem = ({item}) => (
     <View>
       <View
@@ -91,7 +92,7 @@ const VerifyWorks = ({VerifyData}) => {
   return (
     <View style={{marginTop: 5, padding: 10}}>
       <FlatList
-        data={[VerifyData]}
+        data={verify}
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         ItemSeparatorComponent={() => {

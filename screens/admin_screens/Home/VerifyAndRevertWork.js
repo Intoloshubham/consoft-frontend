@@ -7,7 +7,13 @@ import VerifyWorks from '../VerifyAndRevertWork.js/VerifyWorks';
 import RevertWorks from '../VerifyAndRevertWork.js/RevertWorks';
 
 const Tab = createMaterialTopTabNavigator();
+
 const VerifyAndRevertWork = ({company_id}) => {
+  // filter verify & revert works
+  const [verify, setVerify] = React.useState([]);
+  const [revert, setRevert] = React.useState([]);
+
+  // ============================== Apis ==============================
   const fetchVerifyAndRevertWork = async () => {
     const response = await getVerifyAndRevertWorks(company_id);
     if (response.status === 200) {
@@ -23,10 +29,6 @@ const VerifyAndRevertWork = ({company_id}) => {
       // alert(response.message);
     }
   };
-
-  // filter verify & revert works
-  const [verify, setVerify] = React.useState([]);
-  const [revert, setRevert] = React.useState([]);
 
   React.useEffect(() => {
     fetchVerifyAndRevertWork();
