@@ -66,15 +66,33 @@ const Get_report_data = async (user_id, project_id, user_date) => {
 
 }
 
-const check_quantity_item_exist = async () => {
+const check_quantity_item_exist = async (project_id,user_id) => {
     try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}quantity-item-exist`)
+        const res = await fetch(`${process.env.REACT_APP_API_URL}quantity-item-exist/${project_id}/${user_id}`)
         return res;
     } catch (error) {
         console.log(error)
     }
 }
 
-export { Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data, delete_report_data,check_quantity_item_exist }
+const update_quantity_data = async (Id, inputs) => {
+    try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}quantity-report/${Id}`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inputs),
+        })
+        return res;
+
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export { Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data, delete_report_data, check_quantity_item_exist, update_quantity_data }
 
 

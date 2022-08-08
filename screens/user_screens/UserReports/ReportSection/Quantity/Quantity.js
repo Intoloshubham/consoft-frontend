@@ -27,7 +27,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
 import { getCompanyId, getToken, getUserId } from '../../../../../services/asyncStorageService';
-import { Insert_report_data, Get_report_data, edit_report_data,check_quantity_item_exist } from '../../ReportApi.js'
+import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data } from '../../ReportApi.js'
 import { EditDeletebuttons } from '../../../index.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment';
@@ -85,18 +85,18 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const [heightKey, selectHeightkey] = useState('');
 
   //setting Main input data to post
-  const [itemData, setItemData] = useState('')
+  const [itemData, setItemData] = useState(reportdata.data)
   const [companyIdData, setCompanyIdData] = useState('');
   const [removeAddOnEdit, setRemoveAddOnEdit] = useState(false)
-  const [editReportData, setEditReportData] = useState('')
-
+  // const [editReportData, setEditReportData] = useState('')
+  const [updateId, setUpdateId] = useState('')
   //for post setting data in main input
-  const [unitData, setUnitData] = useState('')
-  const [lengthData, setLengthData] = useState('')
-  const [widthData, setWidthData] = useState('')
-  const [thicknessData, setThicknessData] = useState('')
-  const [totalData, setTotalData] = useState('')
-  const [remarkData, setRemarkData] = useState('')
+  // const [unitData, setUnitData] = useState('')
+  // const [lengthData, setLengthData] = useState('')
+  // const [widthData, setWidthData] = useState('')
+  // const [thicknessData, setThicknessData] = useState('')
+  // const [totalData, setTotalData] = useState('')
+  // const [remarkData, setRemarkData] = useState('')
 
   //setting state in subfield of subinput
   // const [subLengthData, setSubLengthData] = useState('') 
@@ -113,7 +113,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
   //then again quantityitems data getting
-  const [quantityItemsData, setQuantityItemsData] = useState('')
+  // const [quantityItemsData, setQuantityItemsData] = useState('')
 
   //sub key states of dynamic inputs
   const [subLengthKey, setSubLengthkey] = useState('');
@@ -137,10 +137,10 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const addKeyref = useRef(0);
   //get company id
-  const [company_id, setCompany_id] = useState('');
-  const [mainCompId, setMainCompId] = useState('')
-  const [user_id, setUser_id] = useState('');
-  const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
+  // const [company_id, setCompany_id] = useState('');
+  // const [mainCompId, setMainCompId] = useState('')
+  // const [user_id, setUser_id] = useState('');
+  // const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
 
   const companydata = useSelector(state => state.user);
   // console.log(companydata)
@@ -207,13 +207,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       user_id: companydata._id,
       inputs
     }
-    // console.log(inputs)
     if (report_post_data) {
       const data = Insert_report_data(report_post_data, CONST_FIELD)
       data.then((res) => res.json())
         .then((resp) => {
           // console.log("resp report data")
-          console.log(resp)
+          // console.log(resp)
 
           setPostQtyData(resp)
           if (resp.status == '200') {
@@ -230,14 +229,37 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
   }
 
+  const updateQuantityData = () => {
 
+    // alert(updateId);
+    const resp = {
+      inputs
+    }
+    console.log("🚀 ~ file: Quantity.js ~ line 236 ~ updateQuantityData ~ resp", resp)
+    
+    const data = update_quantity_data(updateId, resp)
+    data.then((res) => {
+      res.json()
+    })
+      .then((resp) => {
+        console.log("🚀 ~ file: Quantity.js ~ line 239 ~ .then ~ resp", resp);
+        if (resp.status == '200') {
+          showToast();
+          setTimeout(() => {
+            setReportmodal(false);
+          }, 1500);
+          inputs.splice(0, inputs.length);
+
+        }
+      })
+  }
 
   // console.log(postQtyData)
   // getting report data functions
   // let count=0;
   useEffect(() => {
     if (Main_drp_pro_value || postQtyData) {
-      console.log(companydata._id, Main_drp_pro_value, current_dat)
+      // console.log(companydata._id, Main_drp_pro_value, current_dat)
       const data = Get_report_data(companydata._id, Main_drp_pro_value, current_dat)
       data.then(res => res.json())
         .then(result => {
@@ -253,16 +275,17 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const editReportBtn = (id) => {
     setRemoveAddOnEdit(true);
+    setUpdateId(id);
     setReportmodal(true);
     if (id) {
       const data = edit_report_data(id)
       data.then(res => res.json())
         .then(result => {
+          // console.log("🚀 ~ file: Quantity.js ~ line 280 ~ editReportBtn ~ result", result)
           // setEditReportData(result);
-          // console.log(result)
           if (result.data !== null) {
             setInputs([...inputs, {
-              item_id: result.data.item_name, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
+              item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
               num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name,
               subquantityitems: [
                 // { num_length: '', num_width: '', num_height: '', total: '', remark: '' }
@@ -293,14 +316,21 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
 
-  useMemo(() => {
-    // const check_item_exist = () => {
-      const data = check_quantity_item_exist();
-      // console.log(data);
-    // }
-    data.then((res)=>res.json())
-    .then(res=>console.log(res))
-  }, [postQtyData,Main_drp_pro_value])
+  // useMemo(() => {
+  //   const data = check_quantity_item_exist();
+  //   data.then((res) => res.json())
+  //     .then(res => {
+
+  //       if (res) {
+  //         res.data.map(ele => {
+
+  //             console.log(ele)
+  //         })
+
+  //       }
+
+  //     })
+  // }, [postQtyData, Main_drp_pro_value])
 
 
 
@@ -311,8 +341,63 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // }, [getUserId])
 
 
+  // const data = check_quantity_item_exist();
+  // data.then((res) => res.json())
+  //   .then(result1 => {
+
+  // if (result1) {
+
+  // result1.data.map((ele, key) => {
+  // reportdata.data.map((ele2, key2) => {
+  //   if (ele.item_id == ele2._id) {
+  //     reportdata.data.splice(reportdata.data.findIndex(a => a._id === ele.item_id), 1)
+
+  //     setItemData(reportdata.data);
+
+  //     // console.log(reportdata.data.length)
+  //   } else {
+
+  //     setItemData(ele2);
+  //   }
+
+
+  // })
+  // })
+
+  // }
+
+
+
+  // });
   const addHandler = () => {
 
+    if (Main_drp_pro_value) {
+      const data = check_quantity_item_exist(Main_drp_pro_value, companydata._id);
+      data.then((res) => res.json())
+        .then(result1 => {
+          if (result1.status == 200) {
+            if (removeAddOnEdit) {
+              // alert("if ")
+              let result = reportdata.data.filter(function ({ _id }) {
+                return this.has(_id);
+              }, new Set(result1.data.map(({ item_id }) => item_id)));
+              setItemData(result);
+            } else {
+              // alert("else")
+              let result = reportdata.data.filter(function ({ _id }) {
+                return !this.has(_id);
+              }, new Set(result1.data.map(({ item_id }) => item_id)));
+              setItemData(result);
+            }
+          } else {
+            setItemData(reportdata.data)
+          }
+        })
+    }
+
+
+    // console.log("🚀 ~ file: Quantity.js ~ line 381 ~ addHandler ~ reportdata", reportdata.data)
+    // console.log("🚀 ~ file: Quantity.js ~ line 359 ~ addHandler ~ ItemData", itemData)
     setInputs([...inputs, {
       item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '',
       subquantityitems: [
@@ -716,10 +801,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       </View>
     )
   }
+
   const add_input_and_subinput = () => {
     return (<View style={container}>
       <ScrollView style={inputsContainer}>
         {inputs ? inputs.map((input, key) => {
+          {/* console.log(input) */ }
 
           {/* console.log("key===="+key)
        */}
@@ -747,6 +834,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
                   inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
                   data={reportdata.data}
+                  // data={itemData}
                   search
                   maxHeight={300}
                   labelField="item_name"
@@ -981,15 +1069,24 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               {add_input_and_subinput()}
               {/*  */}
               <Toast config={showToast} />
-              <View style={{ marginTop: 10 }}>
-                <Button
-                  title="submit"
-                  onPress={() => {
-                    setRemoveAddOnEdit(false);
-                    insertQtyPostData();
-                  }}
-                />
-              </View>
+              {removeAddOnEdit ?
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    title="Update"
+                    onPress={() => {
+                      updateQuantityData();
+                    }}
+                  />
+                </View> :
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    title="submit"
+                    onPress={() => {
+                      setRemoveAddOnEdit(false);
+                      insertQtyPostData();
+                    }}
+                  />
+                </View>}
             </View>
           </View>
         </Modal>
