@@ -64,6 +64,7 @@ const Login = ({ navigation }) => {
       mobile: userMobileNo,
       password: userPassword,
     };
+    console.log(process.env.API_URL+'login')
     const res = await dispatch(userLogin(UserData));
     if (res.payload.status === 200) {
       setSubmitToast(true);

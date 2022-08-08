@@ -137,7 +137,7 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
     }
 // console.log(data)
 
-    fetch(`${process.env.REACT_APP_API_URL}contractor`, {
+    fetch(`${process.env.API_URL}contractor`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

@@ -548,7 +548,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
   const fetchData = async () => {
-    const resp = await fetch(`${process.env.REACT_APP_API_URL}unit`);
+    const resp = await fetch(`${process.env.API_URL}unit`);
     const data = await resp.json();
     setdata(data);
   };
@@ -566,7 +566,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       company_id: companydata.company_id,
     };
     try {
-      fetch(`${process.env.REACT_APP_API_URL}quantity-report-item`, {
+      fetch(`${process.env.API_URL}quantity-report-item`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -597,7 +597,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const reportdataitem = async () => {
     try {
       const resp = await fetch(
-        `${process.env.REACT_APP_API_URL}quantity-report-item/` + `${companydata.company_id}`,
+        `${process.env.API_URL}quantity-report-item/` + `${companydata.company_id}`,
       );
       const quantitydata = await resp.json();
 
