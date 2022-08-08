@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useMemo} from 'react';
+import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import {
   View,
   Animated,
@@ -11,6 +11,7 @@ import {
   ScrollView,
   Modal,
   Pressable,
+  Button,
   TextInput,
   TouchableWithoutFeedback,
   TouchableOpacity,
@@ -18,13 +19,18 @@ import {
   LayoutAnimation,
   ImageBackground,
 } from 'react-native';
-import {Card, Title, DataTable, Divider, Button} from 'react-native-paper';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Card, Title, DataTable, Divider } from 'react-native-paper';
+import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
-import config from '../../../../../config';
+import { getCompanyId, getToken, getUserId } from '../../../../../services/asyncStorageService';
+import { Insert_report_data, Get_report_data, edit_report_data } from '../../ReportApi.js'
+import { EditDeletebuttons } from '../../../index.js'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useDispatch, useSelector } from 'react-redux';
 import {
   COLORS,
   FONTS,
@@ -33,9 +39,9 @@ import {
   icons,
   images,
 } from '../../../../../constants';
-import {FormInput, TextButton, HeaderBar} from '../../../../../Components';
+import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
 
-const Quantity = () => {
+const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const {
     header,
     con_body,
@@ -45,130 +51,434 @@ const Quantity = () => {
     body_del_btn,
     body_edit_btn,
     body_ed_de_view,
+    dropdown,
+    dropdown1,
+    container,
+    inputContainer,
+    inputsContainer,
+    inputfrom,
+    inputfromtwo,
+    inputfromone,
+    cont_Project_list_drop
   } = styles;
-  //all states by rahul sir
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
+
+  // state
+  const [quantityitem, setquantityitem] = useState('');
   const [value, setvalue] = useState(null);
   const [isFocus, setIsFocus] = React.useState(false);
-  const [value1, setvalue1] = useState(null);
-  const [isFocus1, setIsFocus1] = React.useState(false);
-
-  const [quantityitem, setquantityitem] = useState('');
-  const [unitname, setunitname] = useState('');
-  const [lenght, setlenght] = useState('');
-  const [height, setheight] = useState('');
-  const [breadth, setbreadth] = useState('');
-  const [quantity, setquantity] = useState('');
-  const [total, settotal] = useState(0);
-  const [particulor, setparticulor] = useState('');
-
-  const [datalist, setdatalist] = useState([]);
-  const [quantityitemdata, setquantityitemdata] = useState([]);
-  // const [tabalshowdata, settabalshowdata] = useState([]);
-  // const [tabalshowdatamore, settabalshowdatamore] = useState([]);
-
-  // const [table, settable] = useState(false);
+  // modal
   const [additem, setadditem] = useState(false);
-  const [workmodal, setworkmodal] = useState(false);
-  // const [showcardlist, setshowcardlist] = useState(false);
+  const [reportmodal, setReportmodal] = useState(false);
+  const [data, setdata] = useState([]);
+  const [reportdata, setReportdata] = useState([]);
+  // qtytotal
+  // console.log(qtyTotal)
 
   //Quantity collapse
   const [quant_ity, setQuantity] = useState(false);
+  //key states of dynamic inputs
+  const [selectKey, setSelectKey] = useState('');
+  const [lengthKey, selectLengthkey] = useState('');
+  const [widthKey, selectWidthkey] = useState('');
+  const [heightKey, selectHeightkey] = useState('');
 
-  //adding row
-  //for s.no counter
-  const [counter, setCounter] = useState(0);
-  const [counter1, setCounter1] = useState(0);
+  //setting Main input data to post
+  const [itemData, setItemData] = useState('')
+  const [companyIdData, setCompanyIdData] = useState('');
 
-  // this will be attached with each input onChangeText
-  const [particulartextValue, setParticularTextValue] = useState('');
-  const [numtextValue, setNumtextValue] = useState('');
-  const [lengthtextValue, setlengthtextValue] = useState('');
-  const [bredthtextValue, setBredthtextValue] = useState('');
-  const [highttextValue, setHighttextValue] = useState('');
-  const [rowqtytextValue, setRowqtytextValue] = useState('');
-  const [remarktextValue, setRemarktextValue] = useState('');
-  const [remarktextValue1, setRemarktextValue1] = useState('');
-  const [remarktextValueButton, setRemarktextValueButton] = useState('');
+  const [editReportData, setEditReportData] = useState('')
 
-  const [numtextValue1, setNumtextValue1] = useState('');
+  //for post setting data in main input
+  const [unitData, setUnitData] = useState('')
+  const [lengthData, setLengthData] = useState('')
+  const [widthData, setWidthData] = useState('')
+  const [thicknessData, setThicknessData] = useState('')
+  const [totalData, setTotalData] = useState('')
+  const [remarkData, setRemarkData] = useState('')
 
-  // our number of inputs, we can add the length or decrease
-  const [numInputs, setNumInputs] = useState(1);
-  const [numInputs1, setNumInputs1] = useState(0);
-  // all our input fields are tracked with this array
-  const refParticularInputs = useRef([particulartextValue]);
-  const refNum1 = useRef([remarktextValue1]);
-  const refButton = useRef([remarktextValueButton]);
+  //setting state in subfield of subinput
+  // const [subLengthData, setSubLengthData] = useState('') 
+  // const [subWidthData, setSubWidthData] = useState('')
+  // const [subThicknessData, setSubThicknessData] = useState('')
+  // const [subTotalData, setSubTotalData] = useState('')
+  // const [subRemarkData, setSubRemarkData] = useState('')
 
-  const refNum = useRef([numtextValue]);
-  const refLength = useRef([lengthtextValue]);
-  const refBredth = useRef([bredthtextValue]);
-  const refHight = useRef([highttextValue]);
-  const refRowqty = useRef([rowqtytextValue]);
-  const refRemark = useRef([remarktextValue]);
+  //setting post qty data  status 
+  const [postQtyData, setPostQtyData] = useState('')
+  //main get report data
+  const [getRepPostData, setGetRepPostData] = useState('')
 
-  const refNumone = useRef([numtextValue1]);
+  //then inside dates data getting
+  const [datesArray, setDatesArray] = useState('')
+
+  //then again quantityitems data getting
+  const [quantityItemsData, setQuantityItemsData] = useState('')
+
+  //sub key states of dynamic inputs
+  const [subLengthKey, setSubLengthkey] = useState('');
+  const [subWidthKey, setSubWidthkey] = useState('');
+  const [subHeightKey, setSubHeightkey] = useState('');
+
+
+
+  const [unitKey, setUnitKey] = useState('');
+
+  const [inputs, setInputs] = useState([
+    {
+      item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: ''
+      , subquantityitems: [
+        // { num_length: '', num_width: '', num_height: '', num_total: '', Remark: '', }
+      ]
+    }
+  ]);
+
+
+
+  const addKeyref = useRef(0);
+  //get company id
+  const [company_id, setCompany_id] = useState('');
+  const [mainCompId, setMainCompId] = useState('')
+  const [user_id, setUser_id] = useState('');
+  const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
+
+  const companydata = useSelector(state => state.user);
+  // console.log(companydata)
+
+
+  // const _userId = async () => {
+  //   const _id = await getUserId();
+  //   setUser_id(_id);
+  // };
+
+  //setting token
+  // React.useMemo(() => {
+  //   (async () => await _userId())();
+  // }, []);
+
+  // useMemo(() => {
+  //   (async () => {
+  //     const token = await getToken();
+  //     setAccessTokenoptiontype(token);
+  //   })();
+  // });
+
+  const inputkeyRef = useRef(inputs);
+  
+
+  const CONST_FIELD = {
+    MANPOWER: 'Manpower',
+    STOCK: 'Stock',
+    QUANTITY: 'Quantity',
+    QUALITY: 'Quality',
+    TANDP: 'Tandp'
+  }
+
+  //Invoking Report data functions in Report api
+  const insertQtyPostData = () => {
+
+    const report_post_data = {
+      company_id: companyIdData,
+      project_id: project_id,
+      user_id: companydata._id,
+      inputs
+    }
+    if (report_post_data) {
+      const data = Insert_report_data(report_post_data, CONST_FIELD)
+      data.then((res)=>res.json())
+        .then((resp) => {
+          console.log("resp report data")
+          console.log(resp)
+          setPostQtyData(resp)
+
+          if (resp.status == '200') {
+            setSubmitToast(true)
+            setTimeout(() => {
+              setReportmodal(false);
+            }, 1500);
+            inputs.splice(0, inputs.length);
+
+          }
+        })
+    } else {
+      alert("Not inserted")
+    }
+  }
+
+  // console.log(postQtyData)
+  //getting report data functions
+  // React.useEffect(() => {
+  //   if (Main_drp_pro_value) {
+  //     const data = Get_report_data()
+  //     data.then(res => res.json())
+  //       .then(result => {
+  //         console.log("result=======")
+  //         console.log(result)
+
+  //         setGetRepPostData(result);
+
+  //       })
+  //   }
+  // }, [postQtyData, Main_drp_pro_value, ''])
+
+
+  const editReportBtn = () => {
+    setReportmodal(true);
+    alert("edit")
+    // if (mainCompId) {
+    //   const data = edit_report_data(mainCompId)
+    //   data.then(res => res.json())
+    //     .then(result => {
+
+    //       setEditReportData(result);
+
+    //     })
+    // }
+  }
+
+  const deleteReportButton = () => {
+    setReportmodal(true);
+    alert("delete")
+    //  if (mainCompId) {
+    //   const data = delete_report_data(mainCompId)
+    //   data.then(res => res.json())
+    //    .then(result => {
+    //       console.log(result)
+    //     })
+    // }
+  }
+
+
+
+
+
+  // console.log("getRepPostData")
+  // console.log(getRepPostData)
+  // 
+  console.log("mainCompId")
+  console.log(mainCompId);
+  // console.log("editReportData")
+  // console.log(editReportData)
+  console.log(process.env.API_URL)
+
+  //getting dates array from main data
+  useMemo(() => {
+    if (getRepPostData) {
+      getRepPostData.data.map((ele) => {
+        // console.log(ele._id)
+        setMainCompId(ele._id)
+        setDatesArray(ele)
+      })
+    }
+  }, [getRepPostData])
+
+  //getting quantityItems data array from main data
+  useMemo(() => {
+    if (datesArray) {
+      datesArray.dates.map((element) => {
+        setQuantityItemsData(element)
+      })
+    }
+  }, [datesArray])
+
+  // console.log("datesArray")
+  // console.log(datesArray)
+  // console.log("qtyitemsdata")
+  // console.log(quantityItemsData.quantityitems)
+
+  // const [companyId, setCompanyId] = useState(null)
+  // setCompany_id(companyid);
+  // console.log("companyid")
+  // console.log(companyid)
+  // const Get_ComapnyId_Data = async () => {
+  //   const companyid = await getCompanyId();
+  //   const new_companyid = companyid;
+  //   setCompanyId(new_companyid);
+  // }
+
+  // console.log(user_id)
+  //getting user id state
+  // useMemo(() => {
+  //   Get_ComapnyId_Data();
+  // }, [getUserId])
+
+
+  const addHandler = () => {
+
+    setInputs([...inputs, {
+      item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '',
+      subquantityitems: [
+        // { num_length: '', num_width: '', num_height: '', total: '', remark: '' }
+      ]
+    }]);
+  };
+
+
+
+
+  // console.log(inputs);
+  //setting num_total in state
+  // useMemo(() => {
+  //   inputs.map((ele, index) => {
+  //     // if (ele.key === index) {
+  //     // setSelectData(ele.select) 
+  //     setnum_totalData(ele.num_total)
+  //     // }
+  //   }) 
+  // }, [lengthData,widthData,thicknessData])
+
+  // const selectunitdata = useCallback(()=>{
+  //   inputs.map((ele,index)=>{ 
+  //         if(ele.key===index){
+  //           setSelectData(ele.select)
+  //         }
+  //       })
+  // },[selectData])
+
+
+
+  const deleteHandler = key => {
+    // const _inputs = inputs.filter((input, index) => index != key);
+    const _inputs = [...inputs]
+    _inputs.splice(key, 1);
+    setInputs(_inputs);
+  };
+
+
+  // function filterOnlyNumericValue(value) {
+  //   return value.replace(/[^0-9]/g, '');
+  // }
+
+  const inputselect = (item, key) => {
+    // console.log(item.unit_name)
+    // setUnitKey(item.unit_name)
+    const _inputselcet = [...inputs];
+    _inputselcet[key].item_id = item._id;
+    _inputselcet[key].unit_name = item.unit_name;
+    _inputselcet[key].key = key;
+
+    // console.log("_inputselcet");
+    // console.log(item.unit_name);
+    // setSelectKey(_inputselcet);
+
+    setInputs(_inputselcet);
+  };
+
+
+
+
+  // console.log(selectData);
+
+  const inputunit = (text, key) => {
+    const _inputsunit = [...inputs];
+    _inputsunit[key].unit = text;
+    _inputsunit[key].key = key;
+    setUnitKey(key);
+    // console.log("unitKey");
+    // console.log(unitKey);
+    setInputs(_inputsunit);
+  };
+  const inputlangth = (text, key) => {
+    // console.log(text)
+    const _inputlangth = [...inputs];
+    // _inputlangth[key].num_length = filterOnlyNumericValue([text]);
+    _inputlangth[key].num_length = text;
+    _inputlangth[key].key = key;
+    // console.log(text)
+    setInputs(_inputlangth);
+  };
+  const inputwidth = (text, key) => {
+    const _inputwidth = [...inputs];
+    _inputwidth[key].num_width = text;
+    _inputwidth[key].key = key;
+    setInputs(_inputwidth);
+  };
+  const inputhight = (text, key) => {
+    const _inputhight = [...inputs];
+    _inputhight[key].num_height = text;
+    _inputhight[key].key = key;
+    setInputs(_inputhight);
+  };
+  const inputtotal = (value, key) => {
+    const _inputtotal = [...inputs];
+    _inputtotal[key].num_total = value;
+    _inputtotal[key].key = key;
+    // console.log(_inputtotal)
+    setInputs(_inputtotal);
+  };
+
+  const inputRemark = (text, key) => {
+    const _inputRemark = [...inputs];
+    _inputRemark[key].remark = text;
+    _inputRemark[key].key = key;
+    setInputs(_inputRemark);
+  };
+  //for sub dynamic inputs
+  const Subinputlangth = (text, index1, key) => {
+    const _subinputlangth = [...inputs];
+    _subinputlangth[key].subquantityitems[index1].sub_length = text;
+    _subinputlangth[key].subquantityitems[index1].key = key;
+    // setSubInputs(_subinputlangth);
+    setInputs(_subinputlangth);
+  };
+  const Subinputwidth = (text, index1, key) => {
+    const _subinputwidth = [...inputs];
+    _subinputwidth[key].subquantityitems[index1].sub_width = text;
+    _subinputwidth[key].subquantityitems[index1].key = key;
+    setInputs(_subinputwidth);
+  };
+  const Subinputhight = (text, index1, key) => {
+    const _subinputhight = [...inputs];
+    _subinputhight[key].subquantityitems[index1].sub_height = text;
+    _subinputhight[key].subquantityitems[index1].key = key;
+
+    setInputs(_subinputhight);
+  };
+  const Subinputtotal = (value, index1, key) => {
+    const _subinputtotal = [...inputs];
+    _subinputtotal[key].subquantityitems[index1].sub_total = value;
+    _subinputtotal[key].subquantityitems[index1].key = key;
+    setInputs(_subinputtotal);
+  };
+
+  const SubinputRemark = (text, index1, key) => {
+    const _subinputRemark = [...inputs];
+    _subinputRemark[key].subquantityitems[index1].sub_remark = text;
+    _subinputRemark[key].subquantityitems[index1].key = key;
+
+    setInputs(_subinputRemark);
+  };
+
+  //close of sub dynamic inputs 
+
+
+
+
+  const fetchData = async () => {
+    const resp = await fetch(`${process.env.API_URL}unit`);
+    const data = await resp.json();
+    setdata(data);
+  };
+  // get data api list
 
   useMemo(() => {
-    const quantitytotal = lenght * breadth * height;
-    setquantity(quantitytotal);
-  }, [lenght, breadth, height]);
+    fetchData();
+  }, []);
+  //  console.log(companyIdData)
+  const saveItems = () => {
 
-  const addsavedailyreport = () => {
-    // alert('clicked');
-    const repordata = {
-      value1: value1,
-      numtextValue: numtextValue,
-      lengthtextValue: lengthtextValue,
-      bredthtextValue: bredthtextValue,
-      highttextValue: highttextValue,
-      rowqtytextValue: rowqtytextValue,
-      remarktextValue: remarktextValue,
-    };
-    console.log(repordata);
-  };
-
-  const savedata = () => {
-    const quantitywork = {
-      particular: particulor,
-      width: breadth,
-      length: lenght,
-      height: height,
-      qty: quantity,
-      item_id: value,
-    };
-
-    fetch(`${config.API_URL}quantity-report`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(quantitywork),
-    })
-      .then(response => response.json())
-      .then(data => {
-        setvalue('');
-        setunitname('');
-        setparticulor('');
-        setlenght('');
-        setbreadth('');
-        setheight('');
-        settotal('');
-        console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  };
-
-  const saveQuantityitem = () => {
     const quantityworkitem = {
       item_name: quantityitem,
       unit_id: value,
+      company_id: companydata.company_id,
     };
     try {
-      fetch(`${config.API_URL}quantity-report-item`, {
+      fetch(`${process.env.API_URL}quantity-report-item`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -178,96 +488,505 @@ const Quantity = () => {
       })
         .then(response => response.json())
         .then(data => {
-          setvalue('');
-          setquantityitem('');
-          console.log('Success:', data);
+
+          if (data.status == 200) {
+            setvalue('');
+            setquantityitem('');
+            alert(data.message)
+            setTimeout(() => {
+              setadditem(false);
+            }, 1500);
+          } else {
+            alert(data.message)
+          }
+          reportdataitem();
         });
     } catch (error) {
       console.log('Error:', error);
     }
   };
 
-  // quantity work get api
-  const quantityworkdata = async () => {
-    const resp = await fetch(`${config.API_URL}quantity-report-item`);
-    const quantitydata = await resp.json();
-    // console.log(quantitydata);
-    setquantityitemdata(quantitydata);
-  };
-  useEffect(() => {
-    quantityworkdata();
-  }, []);
-
-  // table data quantitytable api fetch api
-  const quantitytable = async () => {
+  const reportdataitem = async () => {
     try {
-      const resp = await fetch(`${config.API_URL}quantity-report`);
-      const tabledata = await resp.json();
-      //  console.log(tabledata);
-      const data = tabledata.map(data => {
-        return data.quantity;
-        // data.quantity.map((ab)=>{
-        //   return(console.log(ab.particular))
-        // })
-      });
+      const resp = await fetch(
+        `${process.env.API_URL}quantity-report-item/` + `${companydata.company_id}`,
+      );
+      const quantitydata = await resp.json();
+
+      // console.log("quantitydata"); 
+      // console.log(quantitydata); 
+      setReportdata(quantitydata);
     } catch (error) {
-      console.log('error', error);
+      console.log(error, 'error');
     }
   };
+  React.useMemo(() => {
+    reportdataitem();
+  }, [companydata.company_id]);
 
-  useEffect(() => {
-    quantitytable();
-  }, []);
 
-  //   unit api
-  const listData = async () => {
-    const resp = await fetch(`${config.API_URL}unit`);
-    const data = await resp.json();
-    //  console.log(data);
-    setdatalist(data);
-  };
-  useEffect(() => {
-    listData();
-  }, []);
-  //button add item function
-  const add_item = () => {
+
+  const add_quantity_icon_button = () => {
     return (
       <TouchableOpacity
         style={{
           // backgroundColor: COLORS.white,
           borderRadius: SIZES.radius * 0.2,
-          justifyContent: 'center',
-          flexDirection: 'row',
+          justifyContent: "center",
+          flexDirection: "row",
           paddingHorizontal: 2,
+
         }}
         onPress={() => {
-          LayoutAnimation.easeInEaseOut();
+          // LayoutAnimation.easeInEaseOut(); 
           // addInput()
-          setadditem(true);
+          // const _inputs = [...inputs]
+          inputs.splice(0, inputs.length);
+          setReportmodal(true);
         }}>
-        <View
-          style={{
-            alignSelf: 'center',
-            padding: 2,
-            borderWidth: 1,
-            borderColor: COLORS.lightblue_200,
-            paddingHorizontal: 4,
-            borderRadius: 5,
-          }}>
-          {/* <MaterialIcons
-                        name='add-box'
-                        size={25}
-                        color={COLORS.lightblue_400}
-                    /> */}
-          <Text style={{...FONTS.h4, color: COLORS.darkGray2}}>Add Item</Text>
+        <View style={{
+          alignSelf: "center",
+          alignItems: "center",
+          position: "absolute",
+          justifyContent: "space-evenly",
+          flexDirection: "row",
+          backgroundColor: COLORS.lightblue_400,
+          padding: SIZES.base * 0.1,
+          paddingHorizontal: 2,
+          paddingVertical: -2,
+          borderRadius: 5,
+          top: -SIZES.base * 1.2
+        }}>
+          <View>
+            <Text style={[FONTS.body5, { color: COLORS.white }]}>Add</Text>
+          </View>
+          <View>
+            <MaterialIcons
+              name='add'
+              size={15}
+              color={COLORS.white}
+            />
+          </View>
+          {/* <Text style={{color:COLORS.gray}}>Add Quantity item</Text> */}
+
+
         </View>
       </TouchableOpacity>
-    );
+    )
+  }
+
+  const add_inside_handler = (key, e) => {
+    let takekey = key;
+    addKeyref.current = takekey;
+    const _inputs = [...inputs];
+    _inputs[key].subquantityitems.push({
+      sub_length: '',
+      sub_width: '',
+      sub_height: '',
+      sub_total: '',
+      sub_remark: '',
+    });
+
+    setInputs(_inputs)
+
+  }
+
+  const delete_inside_Handler = (key, index1) => {
+    let _sub_inputs = [...inputs];
+    // const _sub_inputs = subquantityitems.filter((input, index) => index != key);
+    _sub_inputs[key].subquantityitems.splice(index1, 1);
+    // setsubquantityitems(_sub_inputs);
+    setInputs(_sub_inputs)
+
   };
-  //  add item model
+
+
+  const add_subinput_field = (index1, key, subquantityitems) => {
+
+    return (
+      <View
+        key={index1}
+        style={{ borderWidth: 2, padding: 5, margin: 4, borderColor: "green" }}
+      >
+        {/* <Text style={{ color: COLORS.black }}>{index1}</Text> */}
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            justifyContent: "space-between"
+          }}>
+
+          <TextInput
+            style={inputfromone}
+            placeholder="Length"
+            placeholderTextColor={COLORS.gray}
+            value={subquantityitems.sub_length}
+            keyboardType="numeric"
+            onChangeText={text => {
+              // console.log(subquantityitems)
+              setSubLengthkey(subquantityitems.key)
+              // setSubLengthData(text)
+              Subinputlangth(text, index1, key);
+            }}
+          />
+          <TextInput
+            style={inputfromone}
+            placeholder="Breadth"
+            placeholderTextColor={COLORS.gray}
+            value={subquantityitems.sub_width}
+            keyboardType="numeric"
+            onChangeText={text => {
+              setSubWidthkey(subquantityitems.key)
+              // setSubWidthData(text)
+              Subinputwidth(text, index1, key);
+            }}
+          />
+          <TextInput
+            style={inputfromone}
+            placeholder="Thicknes"
+            placeholderTextColor={COLORS.gray}
+            value={subquantityitems.sub_height}
+            keyboardType="numeric"
+            onChangeText={text => {
+              setSubHeightkey(subquantityitems.key)
+              // setSubThicknessData(text)
+              Subinputhight(text, index1, key);
+            }}
+          />
+          <TextInput
+            style={inputfromtwo}
+            editable={false}
+            selectTextOnFocus={false}
+            placeholderTextColor={COLORS.white}
+            placeholder={'Total'}
+            value={index1 == subLengthKey == subWidthKey == subHeightKey ? (subquantityitems.sub_total = subquantityitems.sub_length * subquantityitems.sub_width * subquantityitems.sub_height).toString() : (subquantityitems.sub_total = subquantityitems.sub_length * subquantityitems.sub_width * subquantityitems.sub_height).toString()}
+            keyboardType="numeric"
+            onChangeText={value => {
+              Subinputtotal(value, index1, key);
+
+              // console.log(value)
+            }}
+          />
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <View>
+            <TextInput
+              style={{
+                width: '450%',
+                borderWidth: 1,
+                height: 30,
+                padding: -6,
+                paddingLeft: 5,
+                // marginBottom: 5,
+                borderRadius: 5,
+                marginLeft: 5,
+                color: COLORS.black,
+                borderColor: COLORS.gray,
+                flexWrap: 'wrap',
+              }}
+              placeholder={'Remark'}
+              placeholderTextColor={COLORS.gray}
+              value={subquantityitems.sub_remark}
+              onChangeText={text => {
+                SubinputRemark(text, index1, key)
+                // setSubTotalData(subquantityitems.sub_total)
+                // setSubRemarkData(text)
+              }}
+            />
+          </View>
+          <View>
+            <TouchableOpacity
+              style={{ alignSelf: "flex-end" }}
+              onPress={() => delete_inside_Handler(key, index1)}>
+              <Image
+                source={icons.delete_icon}
+                style={{
+                  width: 20,
+                  height: 20,
+                  tintColor: COLORS.green,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+      </View>
+    )
+  }
+
+
+  const add_qty_data_modal = () => {
+
+    return (
+      <View>
+        <Modal visible={reportmodal} transparent={false} animationType="slide">
+          <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: '#fff',
+                marginTop: 50,
+                borderRadius: 20,
+                padding: 22,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  borderBottomWidth: 1,
+                  justifyContent: 'space-between',
+                }}>
+                <Title>Add Quantity Data</Title>
+                <Pressable onPress={() => {
+                  inputs.splice(0, inputs.length);
+                  setReportmodal(false);
+                }}>
+                  <AntDesign name="close" size={30} color={COLORS.black} />
+                </Pressable>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  style={{ borderWidth: 1, borderRadius: 5, borderColor: COLORS.gray, paddingHorizontal: 2, marginVertical: 2 }}
+                  onPress={() => {
+                    addHandler();
+                    // selectunitdata();
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingVertical: 1
+                    }}>
+                    <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add</Text>
+                    <MaterialIcons
+                      name="add-box"
+                      size={20}
+                      color={COLORS.green}
+                    />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    borderWidth: 1, borderRadius: 2, paddingVertical: 1, marginVertical: 3,
+                    paddingHorizontal: 4
+                  }}
+                  onPress={() => {
+                    setadditem(true);
+                  }}>
+                  <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add ITEM</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={container}>
+                <ScrollView style={inputsContainer}>
+                  {inputs ? inputs.map((input, key) => {
+
+                    {/* console.log("key===="+key)
+                     */}
+                    {/* console.log(input.unit_name[0])  */ }
+
+                    return (
+                      <View style={inputContainer} key={key}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            // alignItems: 'center',
+                          }}
+                          // key={key}
+                          key="{(key+1)}"
+                        >
+                          <Dropdown
+                            style={[
+                              styles.dropdown,
+                              // cont_Project_list_drop,
+                              isFocus && { borderColor: 'blue' },
+                            ]}
+                            selectedTextStyle={{ color: COLORS.gray, }
+                            }
+                            placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
+                            inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
+                            data={reportdata.data}
+                            search
+                            maxHeight={300}
+                            labelField="item_name"
+                            valueField="_id"
+                            placeholder={!isFocus ? 'Select' : '...'}
+
+                            searchPlaceholder="Search..."
+                            value={input.value}
+                            onChange={item => {
+                              setSelectKey(input.key);
+                              // setItemData(item._id)
+                              setCompanyIdData(item.company_id)
+                              // setUnitData(item.unit_name)
+                              // console.log(item)
+                              inputselect(item, key);
+                            }}
+                          />
+                          <TextInput
+                            style={inputfromtwo}
+                            // editable={false}
+                            selectTextOnFocus={false}
+                            placeholder={'unit'}
+
+                            // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
+                            value={key == selectKey ? input.unit_name : input.unit_name}
+                            onChangeText={text => { inputunit(text, key) }}
+                          />
+
+
+
+                          <TouchableOpacity
+                            key={key}
+                            onPress={(e) => {
+
+                              add_inside_handler(key, e)
+                            }}>
+                            <MaterialIcons
+                              name="add-box"
+                              size={25}
+                              color={COLORS.darkBlue}
+                              style={{ alignItems: 'center' }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                          }}>
+                          <TextInput
+                            style={inputfromone}
+                            placeholder="Length"
+                            placeholderTextColor={COLORS.gray}
+                            value={input.num_length}
+                            keyboardType="numeric"
+                            onChangeText={text => {
+                              selectLengthkey(input.key)
+                              // setLengthData(text)
+                              // console.log(text)
+                              inputlangth(text, key);
+                            }}
+                          />
+                          <TextInput
+                            style={inputfromone}
+                            placeholder="Breadth"
+                            placeholderTextColor={COLORS.gray}
+                            value={input.num_width}
+                            keyboardType="numeric"
+                            onChangeText={text => {
+                              selectWidthkey(input.key)
+                              // setWidthData(text)
+                              inputwidth(text, key);
+                            }}
+                          />
+                          <TextInput
+                            style={inputfromone}
+                            placeholder="Thickness"
+                            placeholderTextColor={COLORS.gray}
+                            value={input.num_height}
+                            keyboardType="numeric"
+                            onChangeText={text => {
+                              selectHeightkey(input.key)
+                              // setThicknessData(text)
+                              // setTotalData()
+
+                              // console.log(tot)
+                              inputhight(text, key);
+                            }}
+                          />
+                          <TextInput
+                            style={inputfromtwo}
+                            editable={false}
+                            selectTextOnFocus={false}
+                            placeholderTextColor={COLORS.white}
+                            placeholder={'Total'}
+                            value={key == lengthKey == widthKey == heightKey ? (input.num_total = input.num_length * input.num_width * input.num_height).toString() : (input.num_total = input.num_length * input.num_width * input.num_height).toString()}
+                            keyboardType="numeric"
+                            onChangeText={value => {
+                              inputtotal(value, key);
+                            }}
+                          />
+                        </View>
+                        <TextInput
+                          style={{
+                            width: '90%',
+                            borderWidth: 1,
+                            height: 30,
+                            padding: -6,
+                            paddingLeft: 5,
+                            marginBottom: 5,
+                            borderRadius: 5,
+                            marginLeft: 5,
+                            color: COLORS.gray,
+                            borderColor: COLORS.gray,
+                            flexWrap: 'wrap',
+                          }}
+                          placeholder={'Remark'}
+                          placeholderTextColor={COLORS.gray}
+                          value={input.remark}
+                          onChangeText={text => {
+                            // setTotalData(input.num_total)
+                            // setRemarkData(text);
+                            inputRemark(text, key)
+                          }}
+                        />
+
+
+                        <View>
+                          {
+                            inputs[key].subquantityitems.map((subquantityitems, index1) => {
+                              return (
+                                add_subinput_field(index1, key, subquantityitems)
+                              )
+                            })
+
+                          }
+                          <View style={{ alignSelf: "flex-end" }}>
+                            <TouchableOpacity
+                              style={{ alignSelf: "flex-end" }}
+                              onPress={() => deleteHandler(key)}>
+                              <Image
+                                source={icons.delete_icon}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  tintColor: COLORS.red,
+                                }}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+                    )
+                  }) : null}
+                </ScrollView>
+              </View>
+              {/* <Toast config={showToast} /> */}
+              <View style={{ marginTop: 10 }}>
+                <Button
+                  title="submit"
+                  onPress={() => {
+                    insertQtyPostData();
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    )
+  }
+
   const add_item_modal = () => {
     return (
-      <>
+      <View>
         <Modal transparent={false} visible={additem} animationType="slide">
           <View
             style={{
@@ -291,41 +1010,37 @@ const Quantity = () => {
                   alignItems: 'center',
                   // borderBottomWidth: 1,
                 }}>
-                <Text style={{...FONTS.body2, color: COLORS.darkGray}}>
-                  Quantity item
-                </Text>
+                <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Quantity item</Text>
                 <Pressable onPress={setadditem}>
-                  <AntDesign name="close" color={COLORS.darkGray} size={30} />
+                  <AntDesign name="close" size={30} color={COLORS.black} />
                 </Pressable>
               </View>
-              <View style={{marginTop: 20}}>
+              <View style={{ marginTop: 20 }}>
                 <FormInput
                   label="Name"
                   onChange={quantityitem => {
                     setquantityitem(quantityitem);
                   }}
-                  style={{...FONTS.h4, color: COLORS.black}}
                 />
-              </View>
-              <View>
                 <Dropdown
-                  style={[styles1.dropdown1, isFocus && {borderColor: 'blue'}]}
-                  placeholderStyle={{...FONTS.h4, color: COLORS.darkGray}}
-                  selectedTextStyle={{...FONTS.h4, color: COLORS.darkGray}}
-                  inputSearchStyle={{...FONTS.h4, color: COLORS.darkGray}}
-                  iconStyle={styles1.iconStyle}
-                  data={datalist}
+                  style={[dropdown1, isFocus && { borderColor: 'blue' }]}
+                  data={data}
                   search
                   maxHeight={300}
                   labelField="unit_name"
                   valueField="_id"
                   placeholder={!isFocus ? 'Select' : '...'}
+                  placeholderStyle={{ fontSize: 16, color: COLORS.darkGray, left: 5 }}
+                  selectedTextStyle={{ color: COLORS.gray, }
+                  }
+                  inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
                   value={value}
                   searchPlaceholder="Search..."
                   onFocus={() => setIsFocus(true)}
                   onBlur={() => setIsFocus(false)}
                   onChange={item => {
                     setvalue(item._id);
+                    // setunitname(item.unit_name);
                     setIsFocus(false);
                   }}
                 />
@@ -339,924 +1054,709 @@ const Quantity = () => {
                     marginTop: SIZES.padding,
                   }}
                   onPress={() => {
-                    saveQuantityitem();
+                    saveItems();
                   }}
                 />
               </View>
+              {/* <Toast config={showToastItem} /> */}
             </View>
           </View>
         </Modal>
-      </>
-    );
-  };
+      </View>
+    )
+  }
 
-  // add work modal
-  const add_list_work_modal = () => {
+
+
+
+  const Edit_delete_button = ({ edit_size, del_size, __id }) => {
     return (
       <>
-        <Modal transparent={false} visible={workmodal} animationType="slide">
-          <View style={{flex: 1, backgroundColor: '#000000aa'}}>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: '#fff',
-                marginTop: 80,
-                padding: 20,
-                borderRadius: 20,
-                margin: 10,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  borderBottomWidth: 1,
-                }}>
-                <Text style={{...FONTS.body2}}></Text>
-                <Pressable onPress={setworkmodal}>
-                  <AntDesign name="close" size={30} color="black" />
-                </Pressable>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Dropdown
-                  style={[styles1.dropdown, isFocus && {borderColor: 'blue'}]}
-                  placeholderStyle={styles1.placeholderStyle}
-                  selectedTextStyle={styles1.selectedTextStyle}
-                  inputSearchStyle={styles1.inputSearchStyle}
-                  iconStyle={styles1.iconStyle}
-                  data={quantityitemdata}
-                  search
-                  maxHeight={300}
-                  labelField="item_name"
-                  valueField="_id"
-                  placeholder={!isFocus ? 'Select' : '...'}
-                  value={value}
-                  searchPlaceholder="Search..."
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={item => {
-                    setvalue(item._id);
-                    setunitname(item.unit_name);
-                    setIsFocus(false);
-                  }}
-                />
-                <FormInput
-                  containerStyle={{width: '30%'}}
-                  editable={false}
-                  selectTextOnFocus={false}
-                  placeholder={unitname}
-                  onChange={unitname => {
-                    setunitname(unitname);
-                  }}
-                />
-              </View>
-              <ScrollView style={{maxHeight: 250}}>
-                <View>
-                  <FormInput
-                    label="Particular"
-                    onChange={particulor => {
-                      setparticulor(particulor);
-                    }}
-                  />
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <FormInput
-                    containerStyle={{width: '30%'}}
-                    label="L"
-                    keyboardType="numeric"
-                    onChange={lenght => {
-                      setlenght(lenght);
-                    }}
-                  />
-                  <FormInput
-                    containerStyle={{width: '30%'}}
-                    label="B"
-                    keyboardType="numeric"
-                    onChange={breadth => {
-                      setbreadth(breadth);
-                    }}
-                  />
-                  <FormInput
-                    containerStyle={{width: '30%'}}
-                    label="H"
-                    keyboardType="numeric"
-                    onChange={height => {
-                      setheight(height);
-                    }}
-                  />
-                </View>
-                <View>
-                  <FormInput
-                    label="Quantity"
-                    // editable={false}
-                    selectTextOnFocus={false}
-                    onChange={text => {
-                      settotal(text);
-                      // console.log(quantity)
-                    }}
-                    value={quantity.toString()}
-                  />
-                </View>
-              </ScrollView>
-              <View>
-                <TextButton
-                  label="save"
-                  buttonContainerStyle={{
-                    height: 45,
-                    borderRadius: SIZES.radius,
-                    marginTop: SIZES.padding,
-                  }}
-                  onPress={() => {
-                    savedata();
-                  }}
-                />
-              </View>
-            </View>
+        <View style={body_ed_de_view}>
+          <View style={body_del_btn}>
+            <TouchableOpacity
+              onPress={() => editReportBtn(__id)}
+            >
+              {/* <Foundation name='page-edit' color={item.id == selectedEditId ? "#2aaeff" : null} size={24} /> */}
+              <FontAwesome name='edit' color={COLORS.blue} size={edit_size} />
+            </TouchableOpacity>
           </View>
-        </Modal>
-      </>
-    );
-  };
-
-  const addmoreRowfuncation = () => {
-    setCounter(prev => prev + 1);
-    refNumone.current.push('');
-
-    setNumInputs1(value => value + 1);
-  };
-
-  //add Row to table code
-
-  //add field element
-  const addRowfunction = () => {
-    setCounter(prev => prev + 1);
-    //adding new element in our refinput
-    refParticularInputs.current.push('');
-    refNum1.current.push('');
-    refNum.current.push('');
-    refLength.current.push('');
-    refBredth.current.push('');
-    refHight.current.push('');
-    refRowqty.current.push('');
-    refRemark.current.push('');
-    refButton.current.push('');
-
-    //increase the no. of inputs)
-    setNumInputs(value => value + 1);
-  };
-  //remove field elements
-  const removeRowfunction = i => {
-    //remove element from array by index
-    refParticularInputs.current.splice(i, 1)[0];
-    refNum1.current.slice(i, 1)[0];
-    refNum.current.splice(i, 1)[0];
-    refLength.current.splice(i, 1)[0];
-    refBredth.current.splice(i, 1)[0];
-    refHight.current.splice(i, 1)[0];
-    refRowqty.current.splice(i, 1)[0];
-    refRemark.current.splice(i, 1)[0];
-    refButton.current.splice(i, 1)[0];
-
-    //decrease no. of inputs
-    setNumInputs(value => value - 1);
-  };
-
-  // add button
-  const setbuttonvalue = (index, value) => {
-    //first storing input value to refinputs
-    const button_value = refButton.current;
-    button_value[index] = value;
-    //also setting text value to input
-    setRemarktextValueButton(value);
-  };
-
-  //set value to to field onchange event code
-  const setParticularInputValue = (index, value) => {
-    //first storing input value to refinputs
-    const particular_inputs = refParticularInputs.current;
-    particular_inputs[index] = value;
-    //also setting text value to input
-    setParticularTextValue(value);
-  };
-
-  const setNumInputValue1 = (index, value) => {
-    //first storing input value to refinputs
-    const Num_inputs1 = refNum1.current;
-    Num_inputs1[index] = value;
-    //also setting text value to input
-    setRemarktextValue1(value);
-  };
-  const setNumInputValue = (index, value) => {
-    //first storing input value to refinputs
-    const Num_inputs = refNum.current;
-    Num_inputs[index] = value;
-    //also setting text value to input
-    setNumtextValue(value);
-  };
-  const setLengthInputValue = (index, value) => {
-    //first storing input value to refinputs
-    const Length_inputs = refLength.current;
-    Length_inputs[index] = value;
-    //also setting text value to input
-    setlengthtextValue(value);
-  };
-  const setBreadthInputValue = (index, value) => {
-    //first storing input value to refinputs
-    const breadth_inputs = refBredth.current;
-    breadth_inputs[index] = value;
-    //also setting text value to input
-    setBredthtextValue(value);
-  };
-  const setHeightInputValue = (index, value) => {
-    //first storing input value to refinputs
-    const height_inputs = refHight.current;
-    height_inputs[index] = value;
-    //also setting text value to input
-    setHighttextValue(value);
-  };
-  const setQtyInputValue = (index, value) => {
-    //first storing input value to refinputs
-    const qty_inputs = refRowqty.current;
-    qty_inputs[index] = value;
-    //also setting text value to input
-    setRowqtytextValue(value);
-  };
-  const setRemarkInputValue = (index, value) => {
-    //first storing input value to refinputs
-    const remark_inputs = refRemark.current;
-    remark_inputs[index] = value;
-    //also setting text value to input
-    setRemarktextValue(value);
-  };
-
-  const setNumInputValueone = (index, value) => {
-    //first storing input value to refinputs
-    const Num_inputone = refNumone.current;
-    Num_inputone[index] = value;
-    //also setting text value to input
-    setNumtextValue1(value);
-  };
-  //generating input fields
-  const particular_inputs = [];
-  const Num_inputs1 = [];
-  const Num_inputs = [];
-  const Length_inputs = [];
-  const breadth_inputs = [];
-  const height_inputs = [];
-  const qty_inputs = [];
-  const remark_inputs = [];
-  const unitrow = [];
-  const counter_test = [];
-  const button_value = [];
-
-  const Num_inputsone = [];
-  // insert row
-  for (let i = 0; i < numInputs1; i++) {
-    Num_inputsone.push(
-      <View key={i} style={{alignItems: 'flex-start', top: 0}}>
-        <TextInput
-          style={[styles1.common_textInput, {width: 60, borderColor: 'black'}]}
-          onChangeText={value => setNumInputValueone(i, value)}
-          value={refNumone.current[i]}
-          placeholderStyle={{padding: -6, top: 8}}
-          placeholderTextColor={COLORS.gray2}
-        />
-      </View>,
-    );
-  }
-
-  // function Testinput() {
-  for (let i = 0; i < numInputs; i++) {
-    particular_inputs.push(
-      <View key={i} style={{alignItems: 'flex-start', top: 0}}>
-        <TextInput
-          style={[styles1.common_textInput, {width: 60}]}
-          onChangeText={value => setParticularInputValue(i, value)}
-          value={refParticularInputs.current[i]}
-          placeholderStyle={{padding: -6, top: 8}}
-          placeholder="Particular"
-          placeholderTextColor={COLORS.gray2}
-        />
-        {/* <Pressable onPress={() => removeRowfunction(i)} style={{ marginLeft: 5 }}>
-                        <AntDesign
-                            name="minuscircleo"
-                            size={20}
-                            color="red"
-                        />
-                    </Pressable> */}
-      </View>,
-    );
-
-    Num_inputs1.push(
-      <View
-        key={i}
-        style={{alignItems: 'flex-start', top: 0, flexDirection: 'row'}}>
-        <Dropdown
-          style={{
-            height: 22,
-            borderWidth: 1,
-            padding: 5,
-            marginBottom: 3,
-            width: 80,
-            borderRadius: 10,
-          }}
-          placeholderStyle={{fontSize: 15, width: 50, height: 20}}
-          selectedTextStyle={{fontSize: 15}}
-          //   inputSearchStyle={styles.inputSearchStyle}
-          //   iconStyle={styles.iconStyle}
-          data={datalist}
-          search
-          maxHeight={200}
-          labelField="unit_name"
-          valueField="_id"
-          placeholder={!isFocus ? 'Select' : '...'}
-          searchPlaceholder="Search..."
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setNumInputValue1(i, value);
-            console.log(item);
-            setvalue1(item._id);
-            setIsFocus1(false);
-          }}
-        />
-      </View>,
-    );
-
-    // add button
-    button_value.push(
-      <View key={i}>
-        <TouchableOpacity
-          style={[styles1.common_textInput, {width: 25}]}
-          onChangeText={value => setbuttonvalue(i, value)}
-          value={refButton.current[i]}
-          onPress={() => {
-            addmoreRowfuncation();
-          }}>
-          <MaterialIcons
-            name="add-box"
-            size={20}
-            color={COLORS.lightblue_700}
-          />
-        </TouchableOpacity>
-      </View>,
-    );
-    Num_inputs.push(
-      <View key={i} style={{alignItems: 'flex-start', top: 0}}>
-        <TextInput
-          style={[styles1.common_textInput, {width: 25}]}
-          onChangeText={value => setNumInputValue(i, value)}
-          value={refNum.current[i]}
-          placeholderStyle={{padding: -6, top: 8}}
-          placeholder="Num"
-          placeholderTextColor={COLORS.gray2}
-        />
-
-        {/* <Pressable onPress={() => removeRowfunction(i)} style={{ marginLeft: 5 }}>
-                        <AntDesign
-                            name="minuscircleo"
-                            size={20}
-                            color="red"
-                        />
-                    </Pressable> */}
-      </View>,
-    );
-    Length_inputs.push(
-      <View key={i} style={{alignItems: 'flex-start', top: 0}}>
-        <TextInput
-          style={[styles1.common_textInput, {width: 25}]}
-          onChangeText={value => setLengthInputValue(i, value)}
-          value={refLength.current[i]}
-          placeholderStyle={{padding: -6, top: 8}}
-          placeholder="Length"
-          placeholderTextColor={COLORS.gray2}
-        />
-        {/* <Pressable onPress={() => removeRowfunction(i)} style={{ marginLeft: 5 }}>
-                        <AntDesign
-                            name="minuscircleo"
-                            size={20}
-                            color="red"
-                        />
-                    </Pressable> */}
-      </View>,
-    );
-    breadth_inputs.push(
-      <View key={i} style={{alignItems: 'flex-start', top: 0}}>
-        <TextInput
-          style={[styles1.common_textInput, {width: 25}]}
-          onChangeText={value => setBreadthInputValue(i, value)}
-          value={refBredth.current[i]}
-          placeholderStyle={{padding: -6, top: 8}}
-          placeholder="Breadth"
-          placeholderTextColor={COLORS.gray2}
-        />
-        {/* <Pressable onPress={() => removeRowfunction(i)} style={{ marginLeft: 5 }}>
-                        <AntDesign
-                            name="minuscircleo"
-                            size={20}
-                            color="red"
-                        />
-                    </Pressable> */}
-      </View>,
-    );
-    height_inputs.push(
-      <View key={i} style={{alignItems: 'flex-start', top: 0}}>
-        <TextInput
-          style={[styles1.common_textInput, {width: 25}]}
-          onChangeText={value => setHeightInputValue(i, value)}
-          value={refHight.current[i]}
-          placeholderStyle={{padding: -6, top: 8}}
-          placeholder="Height"
-          placeholderTextColor={COLORS.gray2}
-        />
-        {/* <Pressable onPress={() => removeRowfunction(i)} style={{ marginLeft: 5 }}>
-                        <AntDesign
-                            name="minuscircleo"
-                            size={20}
-                            color="red"
-                        />
-                    </Pressable> */}
-      </View>,
-    );
-    qty_inputs.push(
-      <View key={i} style={{alignItems: 'flex-start', top: 0}}>
-        <TextInput
-          style={[styles1.common_textInput, {width: 32}]}
-          onChangeText={value => setQtyInputValue(i, value)}
-          value={refRowqty.current[i]}
-          placeholderStyle={{padding: -6, top: 8}}
-          placeholder="Qty"
-          placeholderTextColor={COLORS.gray2}
-        />
-        {/* <Pressable onPress={() => removeRowfunction(i)} style={{ marginLeft: 5 }}>
-                        <AntDesign
-                            name="minuscircleo"
-                            size={20}
-                            color="red"
-                        />
-                    </Pressable> */}
-      </View>,
-    );
-    remark_inputs.push(
-      <View key={i} style={{alignItems: 'flex-start', top: 0}}>
-        <TextInput
-          style={[styles1.common_textInput, {width: 48}]}
-          onChangeText={value => setRemarkInputValue(i, value)}
-          value={refRemark.current[i]}
-          placeholderStyle={{padding: -6, top: 8}}
-          placeholder="Remark"
-          placeholderTextColor={COLORS.gray2}
-        />
-        {/* <Pressable onPress={() => removeRowfunction(i)} style={{ marginLeft: 5 }}>
-                        <AntDesign
-                            name="minuscircleo"
-                            size={20}
-                            color="red"
-                        />
-                    </Pressable> */}
-      </View>,
-    );
-
-    unitrow.push(
-      <View key={i}>
-        <Text style={styles1.data_cell_head}>unit</Text>
-      </View>,
-    );
-
-    counter_test.push(
-      <View key={i}>
-        <Text style={styles1.common_textInput}>{counter}</Text>
-      </View>,
-    );
-  }
-  // }
-
-  // table view data
-  const table_view = () => {
-    return (
-      <>
-        <View
-          style={{
-            borderLeftWidth: 1,
-            borderRightWidth: 1,
-            borderColor: COLORS.lightblue_100,
-            marginTop: 10,
-          }}>
-          <View>
-            <View
-              style={{
-                overflow: 'scroll',
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                alignContent: 'center',
-                paddingHorizontal: -SIZES.body2,
-              }}>
-              <View>
-                <View>
-                  <Text style={styles1.data_cell_head}>S.no</Text>
-                </View>
-                <View style={{flexDirection: 'column', left: 10}}>
-                  {Num_inputs.map((key, index) => {
-                    return (
-                      <View style={{flexDirection: 'column'}} key={index}>
-                        <Text style={{...FONTS.body4, color: COLORS.black}}>
-                          {index + 1}
-                        </Text>
-                      </View>
-                    );
-                  })}
-                </View>
-              </View>
-              <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row'}}>
-                  <View>
-                    <Text style={styles1.data_cell_head}>Item</Text>
-                  </View>
-                  <View>
-                    <View style={{paddingLeft: SIZES.base * 0.4}}>
-                      <Pressable
-                        style={{alignSelf: 'flex-end'}}
-                        onPress={() => {
-                          // Testinput();
-                          addRowfunction();
-                        }}>
-                        <MaterialIcons
-                          name="add-box"
-                          size={20}
-                          color={COLORS.lightblue_400}
-                        />
-                      </Pressable>
-                    </View>
-                  </View>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View>{Num_inputs1}</View>
-                  <View>{button_value}</View>
-                </View>
-                <View>
-                  <View></View>
-                <View style={{flexDirection: 'row'}}>{Num_inputsone}</View>
-                </View>
-              </View>
-
-              {/* <View style={{ flexDirection: "column" }}>
-                                <View>
-                                    <Text style={styles1.data_cell_head} >Particular</Text>
-                                </View>
-                                <View>
-                                    {particular_inputs}
-                                </View>
-                            </View> */}
-
-              <View>
-                <View>
-                  <Text style={styles1.data_cell_head}>No.</Text>
-                </View>
-                <View>{Num_inputs}</View>
-              </View>
-
-              <View>
-                <View>
-                  <Text style={styles1.data_cell_head}>L</Text>
-                </View>
-                <View>{Length_inputs}</View>
-              </View>
-              <View>
-                <View>
-                  <Text style={styles1.data_cell_head}>B</Text>
-                </View>
-                <View>{breadth_inputs}</View>
-              </View>
-              <View>
-                <View>
-                  <Text style={styles1.data_cell_head}>H</Text>
-                </View>
-                <View>{height_inputs}</View>
-              </View>
-              <View>
-                <View>
-                  <Text style={styles1.data_cell_head}>Qty</Text>
-                </View>
-                <View>{qty_inputs}</View>
-              </View>
-              <View>
-                <View>
-                  <Text style={styles1.data_cell_head}>Unit</Text>
-                </View>
-                <View>{unitrow}</View>
-              </View>
-              <View>
-                <View>
-                  <Text style={styles1.data_cell_head}>Remark</Text>
-                </View>
-                <View>{remark_inputs}</View>
-              </View>
-            </View>
-            <View
-              style={{
-                marginTop: 10,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  addsavedailyreport();
-                }}>
-                <Text style={{borderWidth: 1,padding:2}}>add</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* <Divider
-              style={{
-                backgroundColor: COLORS.black,
-                width: SIZES.width * 0.9,
-                marginHorizontal: 2,
-                top: 5,
-              }}
-            /> */}
-            <ScrollView style={styles1.scroll} nestedScrollEnabled={true}>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  alignContent: 'flex-start',
-                  top: 12,
-                  marginBottom: 25,
-                }}>
-                <ScrollView>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      alignContent: 'center',
-                      paddingHorizontal: 10,
-                    }}>
-                    {/* <View style={{ flexDirection: "column" }}>
-                                            {
-                                                Num_inputs.map((key, index) => {
-                                                    return (
-                                                        <View style={{ flexDirection: "column" }} key={index}>
-                                                            <Text style={{ ...FONTS.body4, color: COLORS.black }} >{index + 1}</Text>
-                                                        </View>
-                                                    )
-                                                })
-                                            }
-                                        </View> */}
-                    {/* <View>
-                                            <Text style={{ ...FONTS.body4, color: COLORS.black }} >Drop item</Text>
-                                        </View> */}
-                    {/* <View>
-                                            {particular_inputs}
-                                        </View> */}
-                    {/* <View>
-                                            {Num_inputs}
-                                        </View> */}
-                    {/* <View>
-                                            {Length_inputs}
-                                        </View> */}
-                    {/* <View>
-                                            {breadth_inputs}
-                                        </View> */}
-                    {/* <View>
-                                            {height_inputs}
-                                        </View>
-                                        <View>
-                                            {qty_inputs}
-                                        </View>
-                                        <View>
-                                            {unitrow}
-                                        </View>
-                                        <View>
-                                            {remark_inputs}
-                                        </View> */}
-                  </View>
-                </ScrollView>
-              </View>
-            </ScrollView>
+          <View style={body_edit_btn}>
+            <TouchableOpacity
+              onPress={() => deleteReportButton(__id)}
+            >
+              <MaterialCommunityIcons name='delete' color={COLORS.red} size={del_size} />
+            </TouchableOpacity>
           </View>
         </View>
       </>
-    );
-  };
+    )
+  }
+
+
+  // const FlatList_Header = () => {
+  //   return (
+
+
+  //     <ScrollView contentContainerStyle={{ flexDirection: "row", justifyContent: "space-between" }}>
+  //       <View style={{ backgroundColor: "red" }}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>S.no</Text>
+  //       </View>
+  //       <View style={{ backgroundColor: "green" }}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Item</Text>
+  //       </View>
+
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Length</Text>
+  //       </View>
+
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Breadth</Text>
+  //       </View>
+
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Thickness</Text>
+  //       </View>
+
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Quantity</Text>
+  //       </View>
+
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Unit</Text>
+  //       </View>
+
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Remark</Text>
+  //       </View>
+
+  //     </ScrollView>
+
+
+  //   );
+  // }
+
+
+  // const renderReportData = (item, index) => {
+  //   console.log(item)
+  //   return (
+  //     <ScrollView contentContainerStyle={{ flexDirection: "row", justifyContent: "space-around" }}>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.black }}>{index}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderRightWidth: 1, paddingHorizontal: 15, marginLeft: -15, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.item_id}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_length}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_width}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_height}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_total}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.unit_name}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.remark}</Text>
+  //         </View>
+  //       </View>
+  //     </ScrollView>
+  //   )
+  // }
+
 
   return (
     <View>
-      <View>
-        {/* Quantity */}
-        <Pressable
-          onPress={() => setQuantity(!quant_ity)}
-          style={{
-            flexDirection: 'row',
-            paddingHorizontal: SIZES.base,
-            paddingVertical: 3,
-            width: SIZES.width * 0.35,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            top: SIZES.base * 2,
-            borderColor: COLORS.lightblue_200,
-            borderWidth: 1,
-            borderRadius: 1,
-            elevation: 1,
-          }}>
-          <View style={{alignItems: 'center', alignSelf: 'center'}}>
-            <Text
-              onPress={() => setQuantity(!quant_ity)}
-              style={[FONTS.h3, {color: COLORS.darkGray}]}>
-              Quantity
-            </Text>
-          </View>
-          <View style={{alignItems: 'center', alignSelf: 'center'}}>
-            <TouchableOpacity onPress={() => setQuantity(!quant_ity)}>
-              <AntDesign name="caretdown" size={12} color={COLORS.gray} />
-            </TouchableOpacity>
-          </View>
-        </Pressable>
-      </View>
-      {/* <View
-                style={{
-                    alignSelf: "flex-end",
-                    flexDirection: "row",
-                }}
-            >
-                {quant_ity ? add_item() : null}
-            </View> */}
+      {/* Quantity */}
+      <Pressable
+        onPress={() => setQuantity(!quant_ity)}
+        style={{
+          flexDirection: 'row',
+          paddingHorizontal: SIZES.base,
+          paddingVertical: 3,
+          width: SIZES.width * 0.35,
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          top: SIZES.base * 2,
+          borderColor: COLORS.lightblue_200,
+          borderWidth: 1,
+          borderRadius: 1,
+          elevation: 1,
+        }}>
+        <View style={{ alignItems: 'center', alignSelf: 'center' }}>
+          <Text
+            onPress={() => setQuantity(!quant_ity)}
+            style={[FONTS.h3, { color: COLORS.darkGray }]}>
+            Quantity
+          </Text>
+        </View>
+        <View style={{ alignItems: 'center', alignSelf: 'center' }}>
+          <TouchableOpacity onPress={() => setQuantity(!quant_ity)}>
+            <AntDesign name="caretdown" size={12} color={COLORS.gray} />
+          </TouchableOpacity>
+        </View>
+      </Pressable>
+      <View
+        style={{
+          alignSelf: "center",
+          flexDirection: "row",
+          right: SIZES.base * 2,
 
-      {add_item_modal()}
-      <View style={{top: 22}}>
-        {quant_ity ? (
-          <>
+        }}
+      >
+        {/* button section adding contractor */}
+        {quant_ity ?
+          <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }} >
+            <View style={{ backgroundColor: "blue" }}>
+              {add_quantity_icon_button()}
+            </View>
             <View
               style={{
                 borderWidth: 1,
-                backgroundColor: COLORS.lightGray2,
-                borderColor: COLORS.lightblue_200,
+                borderColor: "skyblue",
+                width: SIZES.width * 0.92,
+                alignSelf: "flex-start",
+                position: "relative",
+                top: 20,
+                marginLeft: 17,
+                height: 250,
+                // flex:2,
+                // marginBottom: -20,
+                // padding: 5,
+                elevation: 1
               }}>
-              <View>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
-                    Daily Quantity Report
-                  </Text>
-                  <Divider
-                    style={{
-                      backgroundColor: COLORS.black,
-                      width: SIZES.width * 0.9,
-                      marginHorizontal: 2,
-                      top: 5,
-                    }}
-                  />
+              <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
+                <View style={{}}>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
+                    <View
+                      style={{
+                        paddingHorizontal: 5,
+                        marginRight: 2,
+                        marginLeft: 16,
+                        // borderRightWidth: 2,
+                        justifyContent: 'center',
+                        width: 45,
+                        //  borderColor: COLORS.lightblue_200 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>S.no</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        //  borderRightWidth: 2,
+                        justifyContent: 'center',
+                        width: 145,
+                        //  borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Item Name</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        justifyContent: 'center',
+                        width: 50,
+                        // borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Length</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        // borderLeftWidth: 2, 
+                        paddingLeft: 4,
+                        justifyContent: 'center',
+                        width: 55,
+                        // borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Breadth</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 15,
+                        // borderLeftWidth: 2, 
+                        paddingLeft: 4,
+                        justifyContent: 'center',
+                        width: 70,
+                        // borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Thickness</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        //  borderLeftWidth: 2, 
+                        justifyContent: 'center',
+                        width: 60,
+                        // borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Total</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 15,
+                        //  borderLeftWidth: 2,
+                        // borderRightWidth: 2, 
+                        justifyContent: 'center',
+                        //  width: 50, borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Unit</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        justifyContent: 'center',
+                        paddingLeft: 25,
+                        width: SIZES.width * 0.5,
+                        // borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Remark</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        paddingLeft: 15,
+                        // borderLeftWidth: 2, 
+                        //  borderRightWidth: 2,
+                        justifyContent: 'center',
+                        width: 60,
+                        //  borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Action</Text>
+                    </View>
+                  </View>
+                  <ScrollView nestedScrollEnabled={true} maxHeight={400}
+                    contentContainerStyle={{
+                      height: 800,
+                      top: 10,
+                      // borderWidth: 3,
+                      // borderColor: COLORS.lightblue_200,
+                    }}>
+                    <>
+                      {
+                        quantityItemsData ? quantityItemsData.quantityitems.map((l, index) => (
+                          <View
+                            style={{
+                              flexDirection: "column",
+                              alignContent: "space-between",
+                              paddingVertical: 20,
+                              top: -20
+                            }} key={index}>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                justifyContent: "space-evenly",
+                                top: 10,
+                                paddingVertical: 3,
+                                left: -26,
+                              }} >
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: 45,
+                                  position: "absolute",
 
-                  {/* <TouchableOpacity
-                                        style={{
-                                            borderWidth: 1,
-                                            width: 70,
-                                            alignItems: 'center',
-                                            bottom:5,
-                                            borderRadius: 2
-                                            // marginVertical: 2,
-                                            // marginHorizontal:2,
-                                            // paddingHorizontal:6
-                                        }}
-                                        onPress={() => {
-                                            setworkmodal(true);
-                                        }}>
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                paddingHorizontal:5
-                                            }}>
-                                            <Title>Add</Title>
-                                            <MaterialIcons
-                                                name='add-box'
-                                                size={25}
-                                                color={COLORS.lightblue_400}
-                                            />
-                                        </View>
-                                    </TouchableOpacity> */}
-                </View>
-                {/* <ScrollView style={styles1.scroll} nestedScrollEnabled={true}> */}
-                {/* <TouchableOpacity
-                                        onPress={() => {
-                                            settable(!table);
-                                        }}>
-                                        {quantityitemdata.map((ele, key) => {
-                                            return (
-                                                <View key={key}>
-                                                    <Title style={{ textTransform: 'capitalize' }}>
-                                                        {ele.item_name}
-                                                    </Title>
-                                                </View>
-                                            );
-                                        })}
-                                    </TouchableOpacity> */}
+                                  left: 29,
+                                  // right: 10,
+                                  //  left:0,
+                                  top: 3,
+                                  //  bottom:0                             
+                                }} >
+                                <View>
+                                  <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                    {index}
+                                  </Text>
+                                </View>
+                                <View style={{ position: "absolute", width: 1, left: 42, top: -10 }}>
+                                  <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                </View>
+                              </View>
+                              <View style={{
+                                alignContent: "center",
+                                alignSelf: "center",
+                                width: 145,
+                                position: "absolute",
+                                left: 85,
+                                top: 3,
 
-                {table_view()}
-                <View
-                  style={{
-                    alignSelf: 'flex-end',
-                    flexDirection: 'row',
-                    paddingHorizontal: 5,
-                    paddingVertical: 5,
-                  }}>
-                  {quant_ity ? add_item() : null}
+                                // right: 10,
+
+                              }}>
+                                <View>
+                                  <Text style={[FONTS.h4, { color: COLORS.darkGray }]}>
+                                    {l.item_id}
+                                  </Text>
+                                </View>
+                                <View style={{ position: "absolute", width: 1, left: 145, top: -10 }}>
+                                  <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                </View>
+                              </View>
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: 50,
+                                  position: "absolute",
+                                  left: 239,
+                                  top: 3,
+                                  // borderWidth: 1,
+                                  // borderColor: COLORS.lightblue_200,
+                                  // right: 10,
+                                }}
+                              >
+                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                  {l.num_length}
+                                </Text>
+                              </View>
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: 55,
+                                  position: "absolute",
+                                  left: 296,
+                                  top: 3,
+                                  // borderWidth: 1,
+                                  // borderColor: COLORS.lightblue_200,
+                                  // right: 10,
+                                }}
+                              >
+                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                  {l.num_width}
+                                </Text>
+                              </View>
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: 70,
+                                  position: "absolute",
+                                  left: 358,
+                                  top: 3,
+                                  // borderWidth: 1,
+                                  // borderColor: COLORS.lightblue_200,
+                                  // right: 10,
+                                }}
+                              >
+                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                  {l.num_height}
+                                </Text>
+                              </View>
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: 60,
+                                  position: "absolute",
+                                  left: 437,
+                                  top: 3,
+                                  // borderWidth: 1,
+                                  // borderColor: COLORS.lightblue_200,
+                                  // right: 10,
+                                }}
+                              >
+                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                  {l.num_total}
+                                </Text>
+                              </View>
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: 50,
+                                  position: "absolute",
+                                  left: 505,
+                                  top: 3,
+                                  // borderWidth: 1,
+                                  // borderColor: COLORS.lightblue_200,
+
+                                  // right: 10,
+                                }}
+                              >
+                                <View>
+                                  <View style={{ position: "absolute", width: 1, left: 50, top: -10 }}>
+                                    <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                  </View>
+                                  <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                    {l.unit_name}
+                                  </Text>
+                                </View>
+                                <View style={{ position: "absolute", width: 1, left: -4, top: -10 }}>
+                                  <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                </View>
+                              </View>
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: SIZES.width * 0.5,
+                                  position: "absolute",
+                                  left: 563,
+                                  top: 3,
+                                  // borderWidth: 1,
+                                  // borderColor: COLORS.lightblue_200,
+                                  // right: 10,
+                                }}
+                              >
+                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                  {l.remark}
+                                </Text>
+                                <View style={{ position: "absolute", width: 1, left: 210, top: -10 }}>
+                                  <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                </View>
+                              </View>
+                              <View
+                                style={{
+                                  // alignContent: "center",
+                                  // alignSelf: "center",
+                                  width: 60,
+                                  position: "absolute",
+                                  left: 777,
+                                  top: 3,
+                                  // borderWidth: 1,
+                                  // borderColor: COLORS.lightblue_200,
+                                  // right: 10,
+                                }}
+                              >
+                                <View style={{ justifyContent: "center", alignSelf: "center" }}>
+                                  <Edit_delete_button edit_size={18} del_size={22} __id={l.item_id} />
+                                </View>
+                              </View>
+                            </View>
+                            <View style={{ top: 10, position: "relative", left: 170 }}>
+                              {
+                                quantityItemsData ? l.subquantityitems.map((res, index2) =>
+                                (
+                                  <View
+                                    style={{
+                                      flexDirection: "row",
+                                      // borderRightWidth: 2,
+                                      // borderWidth: 1,
+
+                                      // borderColor: COLORS.lightblue_200,
+                                      alignContent: "center",
+                                      position: "relative",
+                                      paddingBottom: 12,
+                                      top: 35,
+                                      marginBottom: 0,
+                                    }} key={index2}>
+
+                                    <View
+                                      style={{
+                                        width: 50,
+                                        position: "absolute",
+                                        top: 10,
+                                        left: 40,
+                                        // borderWidth: 1,
+                                        // borderColor: COLORS.lightblue_200,
+
+                                      }}
+                                    >
+                                      <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                        {res.sub_length}
+                                      </Text>
+                                      <View style={{ position: "absolute", width: 1, left: 60, top: -59 }}>
+                                        <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                      </View>
+                                    </View>
+                                    <View
+                                      style={{
+                                        width: 50,
+                                        position: "absolute",
+                                        top: 10,
+                                        left: 100,
+                                        // borderWidth: 1,
+                                        // borderColor: COLORS.lightblue_200,
+
+                                      }}
+                                    >
+                                      <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                        {res.sub_width}
+                                      </Text>
+                                      <View style={{ position: "absolute", width: 1, left: 62, top: -59 }}>
+                                        <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                      </View>
+                                    </View>
+                                    <View
+                                      style={{
+                                        width: 70,
+                                        position: "absolute",
+                                        top: 10,
+                                        left: 160,
+                                        // borderWidth: 1,
+                                        // borderColor: COLORS.lightblue_200,
+
+                                      }}
+                                    >
+                                      <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                        {res.sub_height}
+                                      </Text>
+                                      <View style={{ position: "absolute", width: 1, left: 80, top: -59 }}>
+                                        <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                      </View>
+                                    </View>
+                                    <View
+                                      style={{
+                                        width: 60,
+                                        position: "absolute",
+                                        top: 10,
+                                        left: 238,
+                                        // borderWidth: 1,
+                                        // borderColor: COLORS.lightblue_200,
+
+                                      }}
+                                    >
+                                      <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                        {res.sub_total}
+                                      </Text>
+                                    </View>
+
+                                    <View
+                                      style={{
+                                        width: SIZES.width * 0.5,
+                                        // position: "absolute",
+                                        // backgroundColor:"red",
+                                        top: 10,
+                                        left: 368,
+                                        // borderWidth: 1,
+                                        // borderColor: COLORS.lightblue_200,
+
+                                      }}
+                                    >
+                                      <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                        {res.sub_remark}
+                                      </Text>
+                                    </View>
+                                    <View
+                                      style={{
+                                        width: 60,
+                                        // position: "absolute",
+                                        // backgroundColor:"red",
+                                        top: 10,
+                                        left: 374,
+                                        // borderWidth: 1,
+                                        // borderColor: COLORS.lightblue_200,
+
+                                      }}
+                                    >
+                                      <View style={{ justifyContent: "center", alignSelf: "center" }}>
+                                        <Edit_delete_button edit_size={18} del_size={22} __id={l.item_id} />
+                                      </View>
+                                      {/* <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                        Action
+                                      </Text> */}
+                                    </View>
+                                  </View>
+
+                                )) : null
+                              }
+                            </View>
+                            <View style={{ position: "absolute", top: 23 }}>
+                              <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 3, marginHorizontal: 2, top: 5 }} />
+                            </View>
+                          </View>
+
+                        )) : null
+                      }
+
+                    </>
+
+                  </ScrollView>
                 </View>
-                {/* </ScrollView> */}
-              </View>
-              {add_list_work_modal()}
+              </ScrollView>
             </View>
-          </>
-        ) : null}
+          </View>
+          :null
+        }
+           {/* <View style={{ top: 22, left: -40, borderWidth: 1, borderColor: COLORS.lightblue_300, paddingHorizontal: 60 }}><Text>Nothing to display!!</Text></View> */}
       </View>
+      {add_qty_data_modal()}
+      {add_item_modal()}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+
     </View>
   );
 };
+{/* <FlatList
+  data={quantityItemsData.quantityitems} 
+  scrollEnabled
+  // horizontal={true}
+  scrollToOverflowEnabled={true}
+  ListHeaderComponent={FlatList_Header}
+  ListHeaderComponentStyle={{ borderBottomColor: 'red', borderBottomWidth: 2 }}
+  renderItem={({ item, index }) => renderReportData(item, index)}
+  keyExtractor={(item, index) => index.toString()}
+  // numColumns={2} 
+/> */}
 
 export default Quantity;
-const styles1 = StyleSheet.create({
-  dropdown: {
-    height: 45,
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    marginTop: 28,
-    width: '65%',
-  },
-  dropdown1: {
-    height: 45,
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 8,
-    marginTop: 28,
-  },
+const styles_m = StyleSheet.create({
 
-  scroll: {
-    maxHeight: 200,
+
+  databeBox: {
+    margin: 0,
+    textAlign: 'center',
+    overflow: "visible",
+    // flexDirection: "row",
+    justifyContent: "space-evenly",
+
   },
-  data_cell_head: {
-    ...FONTS.body4,
-    color: COLORS.darkGray,
-  },
-  data_cell_row: {
-    ...FONTS.body4,
-    color: COLORS.gray,
-  },
-  common_textInput: {
-    ...FONTS.h5,
-    borderWidth: 1,
-    height: 20,
-    padding: -6,
-    margin: 2,
-    color: COLORS.darkGray,
-    borderColor: COLORS.lightblue_200,
-  },
-  dropdown2: {
-    height: 30,
-    borderWidth: 2,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    marginTop: 15,
-    width: '22%',
-  },
-  icon: {
-    marginRight: 15,
-  },
-  label: {
-    position: 'absolute',
-    backgroundColor: 'red',
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-  },
+  databeHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "space-between",
+    margin: 5,
+    paddingHorizontal: 5
+  }
 });

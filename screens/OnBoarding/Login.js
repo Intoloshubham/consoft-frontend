@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -59,6 +59,7 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
+    // console.log(res);
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('UserDashboard');

@@ -28,6 +28,7 @@ import {
   Suppliers,
   Optiontype,
   ToolsAndMachinery1,
+
   Boq,
   VerifyAndRevertWork,
 } from './screens/admin_screens';
@@ -49,7 +50,10 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
+
           initialRouteName={'Login'}>
+
+
           {/* Company Resgistration & User */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
@@ -96,6 +100,8 @@ const App = () => {
           <Stack.Screen name="ManageStock" component={ManageStock} />
           <Stack.Screen name="CheckList" component={CheckList} />
           <Stack.Screen name="Optiontype" component={Optiontype} />
+
+
           <Stack.Screen
             name="ToolsAndMachinery1"
             component={ToolsAndMachinery1}

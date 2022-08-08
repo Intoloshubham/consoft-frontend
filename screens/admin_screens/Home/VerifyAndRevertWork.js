@@ -26,7 +26,7 @@ const VerifyAndRevertWork = ({company_id}) => {
         }
       });
     } else {
-      // alert(response.message);
+      alert(response.message);
     }
   };
 
