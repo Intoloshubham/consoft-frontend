@@ -231,9 +231,9 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const updateQuantityData = () => {
 
-    // alert(updateId);
+    // alert(updateId); 
     const resp = {
-      inputs
+      inputs 
     }
     console.log("🚀 ~ file: Quantity.js ~ line 236 ~ updateQuantityData ~ resp", resp)
     
