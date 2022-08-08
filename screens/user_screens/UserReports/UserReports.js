@@ -63,7 +63,7 @@ const UserReports = ({ route }) => {
     // console.log(userData._id)
     if (userData._id) {
       const sendUserId = () => {
-        fetch(`${process.env.API_URL}user-by-projects/` + `${userData._id}`)
+        fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
           .then((response) => response.json())
           .then(data => {
             // console.log("data........")
@@ -115,8 +115,8 @@ const UserReports = ({ route }) => {
       const data = Get_Project_Team_Data(value)
       data.then(res => res.json())
         .then(result => {
-          console.log("result")
-          console.log(result)
+          // console.log("result")
+          // console.log(result)
           setProjectTeamList(result)
         })
     } else {
@@ -194,7 +194,7 @@ const UserReports = ({ route }) => {
             </View>
             <View style={{ marginVertical: 5 }}  Main_drp_pro_value={value}>
               {/* Quantity */}
-              <Quantity project_id={value}/>
+              <Quantity project_id={value} Main_drp_pro_value={value}/>
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}

@@ -64,6 +64,7 @@ const Login = ({ navigation }) => {
       mobile: userMobileNo,
       password: userPassword,
     };
+    console.log(process.env.API_URL+'login')
     const res = await dispatch(userLogin(UserData));
     // console.log(res);
     if (res.payload.status === 200) {
