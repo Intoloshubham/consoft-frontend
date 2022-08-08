@@ -205,7 +205,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
           }
         })
-    } else {
+    } else { 
       alert("Not inserted")
     }
   }
