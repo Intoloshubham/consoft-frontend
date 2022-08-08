@@ -22,7 +22,6 @@ import {
 import { Card, Title, DataTable, Divider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Toast from 'react-native-toast-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
@@ -40,7 +39,7 @@ import {
   icons,
   images,
 } from '../../../../../constants';
-import { FormInput, TextButton, HeaderBar } from '../../../../../Components';
+import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
 
 const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const {
@@ -62,6 +61,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     inputfromone,
     cont_Project_list_drop
   } = styles;
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
 
   // state
   const [quantityitem, setquantityitem] = useState('');
@@ -164,29 +169,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // });
 
   const inputkeyRef = useRef(inputs);
-  //  inputkey.current.unitname
-
-  const showToast = () =>
-    Toast.show({
-      position: 'top',
-      type: 'success',
-      text1: 'Data added Successfully',
-      text2: 'Success',
-      visibilityTime: 2000,
-    });
-
-  const showToastItem = (data, type) =>
-    Toast.show({
-      position: 'top',
-      type: type,
-      text1: data,
-      text2: data,
-      visibilityTime: 2000,
-    });
-
-
-
-
+  
 
   const CONST_FIELD = {
     MANPOWER: 'Manpower',
@@ -214,7 +197,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           setPostQtyData(resp)
 
           if (resp.status == '200') {
-            showToast();
+            setSubmitToast(true)
             setTimeout(() => {
               setReportmodal(false);
             }, 1500);
@@ -281,7 +264,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   console.log(mainCompId);
   // console.log("editReportData")
   // console.log(editReportData)
-  console.log(process.env.REACT_APP_API_URL)
+  console.log(process.env.API_URL)
 
   //getting dates array from main data
   useMemo(() => {
@@ -477,13 +460,13 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
   const fetchData = async () => {
-    const resp = await fetch(`${process.env.REACT_APP_API_URL}unit`);
+    const resp = await fetch(`${process.env.API_URL}unit`);
     const data = await resp.json();
     setdata(data);
   };
   // get data api list
 
-  useEffect(() => {
+  useMemo(() => {
     fetchData();
   }, []);
   //  console.log(companyIdData)
@@ -495,7 +478,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       company_id: companydata.company_id,
     };
     try {
-      fetch(`${process.env.REACT_APP_API_URL}quantity-report-item`, {
+      fetch(`${process.env.API_URL}quantity-report-item`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -509,12 +492,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           if (data.status == 200) {
             setvalue('');
             setquantityitem('');
-            showToastItem(data.message, "success");
+            alert(data.message)
             setTimeout(() => {
               setadditem(false);
             }, 1500);
           } else {
-            showToastItem(data.message, "info");
+            alert(data.message)
           }
           reportdataitem();
         });
@@ -526,7 +509,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const reportdataitem = async () => {
     try {
       const resp = await fetch(
-        `${process.env.REACT_APP_API_URL}quantity-report-item/` + `${companydata.company_id}`,
+        `${process.env.API_URL}quantity-report-item/` + `${companydata.company_id}`,
       );
       const quantitydata = await resp.json();
 
@@ -985,7 +968,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   }) : null}
                 </ScrollView>
               </View>
-              <Toast config={showToast} />
+              {/* <Toast config={showToast} /> */}
               <View style={{ marginTop: 10 }}>
                 <Button
                   title="submit"
@@ -1075,7 +1058,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   }}
                 />
               </View>
-              <Toast config={showToastItem} />
+              {/* <Toast config={showToastItem} /> */}
             </View>
           </View>
         </Modal>
@@ -1111,96 +1094,96 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   }
 
 
-  const FlatList_Header = () => {
-    return (
+  // const FlatList_Header = () => {
+  //   return (
 
 
-      <ScrollView contentContainerStyle={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <View style={{ backgroundColor: "red" }}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>S.no</Text>
-        </View>
-        <View style={{ backgroundColor: "green" }}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Item</Text>
-        </View>
+  //     <ScrollView contentContainerStyle={{ flexDirection: "row", justifyContent: "space-between" }}>
+  //       <View style={{ backgroundColor: "red" }}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>S.no</Text>
+  //       </View>
+  //       <View style={{ backgroundColor: "green" }}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Item</Text>
+  //       </View>
 
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Length</Text>
-        </View>
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Length</Text>
+  //       </View>
 
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Breadth</Text>
-        </View>
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Breadth</Text>
+  //       </View>
 
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Thickness</Text>
-        </View>
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Thickness</Text>
+  //       </View>
 
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Quantity</Text>
-        </View>
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Quantity</Text>
+  //       </View>
 
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Unit</Text>
-        </View>
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Unit</Text>
+  //       </View>
 
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Remark</Text>
-        </View>
+  //       <View style={{}}>
+  //         <Text style={{ ...FONTS.h5, color: COLORS.black }}>Remark</Text>
+  //       </View>
 
-      </ScrollView>
-
-
-    );
-  }
+  //     </ScrollView>
 
 
-  const renderReportData = (item, index) => {
-    console.log(item)
-    return (
-      <ScrollView contentContainerStyle={{ flexDirection: "row", justifyContent: "space-around" }}>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.black }}>{index}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderRightWidth: 1, paddingHorizontal: 15, marginLeft: -15, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.item_id}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_length}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_width}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_height}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_total}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.unit_name}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.remark}</Text>
-          </View>
-        </View>
-      </ScrollView>
-    )
-  }
+  //   );
+  // }
+
+
+  // const renderReportData = (item, index) => {
+  //   console.log(item)
+  //   return (
+  //     <ScrollView contentContainerStyle={{ flexDirection: "row", justifyContent: "space-around" }}>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.black }}>{index}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderRightWidth: 1, paddingHorizontal: 15, marginLeft: -15, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.item_id}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_length}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_width}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_height}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_total}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.unit_name}</Text>
+  //         </View>
+  //       </View>
+  //       <View>
+  //         <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
+  //           <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.remark}</Text>
+  //         </View>
+  //       </View>
+  //     </ScrollView>
+  //   )
+  // }
 
 
   return (
@@ -1719,6 +1702,29 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       </View>
       {add_qty_data_modal()}
       {add_item_modal()}
+
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+
     </View>
   );
 };

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {COLORS, SIZES, FONTS, icons, images} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
-import CalendarPicker from 'react-native-calendar-picker';
+// import CalendarPicker from 'react-native-calendar-picker';
 import {getUserLeaves} from '../../../controller/LeavesController';
 
 const Profile = () => {
@@ -232,7 +232,7 @@ const Profile = () => {
   return (
     <ScrollView style={{}} showsVerticalScrollIndicator={false}>
       {renderUserLeavesList()}
-      {renderCalender()}
+      {/* {renderCalender()} */}
     </ScrollView>
   );
 };
