@@ -2152,30 +2152,12 @@
   "resolved" "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"
   "version" "5.3.2"
 
-<<<<<<< HEAD
-"acorn-node@^1.8.2":
-  "integrity" "sha512-8mt+fslDufLYntIoPAaIMUe/lrbrehIiwmR3t2k9LljIzoigEPF27eLk2hy8zSGzmR/ogr7zbRKINMo1u0yh5A=="
-  "resolved" "https://registry.npmjs.org/acorn-node/-/acorn-node-1.8.2.tgz"
-  "version" "1.8.2"
-  dependencies:
-    "acorn" "^7.0.0"
-    "acorn-walk" "^7.0.0"
-    "xtend" "^4.0.2"
-
-"acorn-walk@^7.0.0", "acorn-walk@^7.1.1":
-  "integrity" "sha512-OPdCF6GsMIP+Az+aWfAAOEt2/+iVDKE7oy6lJ098aoe59oAmK76qV6Gw60SbZ8jHuG2wH058GF4pLFbYamYrVA=="
-  "resolved" "https://registry.npmjs.org/acorn-walk/-/acorn-walk-7.2.0.tgz"
-  "version" "7.2.0"
-
-"acorn@^6.0.0 || ^7.0.0 || ^8.0.0", "acorn@^7.0.0", "acorn@^7.1.1", "acorn@^7.3.1", "acorn@^7.4.0":
-  "integrity" "sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A=="
-  "resolved" "https://registry.npmjs.org/acorn/-/acorn-7.4.1.tgz"
-=======
 "acorn-walk@^7.1.1":
   "version" "7.2.0"
 
 "acorn@^6.0.0 || ^7.0.0 || ^8.0.0", "acorn@^7.1.1", "acorn@^7.3.1", "acorn@^7.4.0":
->>>>>>> IntoloIndia-master
+  "integrity" "sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A=="
+  "resolved" "https://registry.npmjs.org/acorn/-/acorn-7.4.1.tgz"
   "version" "7.4.1"
 
 "acorn@^8.2.4":
@@ -2676,17 +2658,9 @@
     "base64-js" "^1.3.1"
     "ieee754" "^1.1.13"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 "bytes@3.0.0":
   "integrity" "sha512-pMhOfFDPiv9t5jjIXkHosWmkSyQbvsgEVNkz0ERHbuLh2T/7j4Mqqpz523Fe8MVY89KC6Sh/QfS2sM+SjgFDcw=="
   "resolved" "https://registry.npmjs.org/bytes/-/bytes-3.0.0.tgz"
-=======
-"bytes@^3.0.0", "bytes@3.0.0":
->>>>>>> IntoloIndia-master
-=======
-"bytes@3.0.0":
->>>>>>> b5f40983bb0eb7ceb4391391e1393bff4051e9ce
   "version" "3.0.0"
 
 "cache-base@^1.0.1":
@@ -2756,17 +2730,9 @@
   dependencies:
     "rsvp" "^4.8.4"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 "chalk@^2.0.0", "chalk@^2.0.1", "chalk@^2.4.2":
   "integrity" "sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ=="
   "resolved" "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz"
-=======
-"chalk@^2.0.0", "chalk@^2.0.1", "chalk@^2.4.1", "chalk@^2.4.2":
->>>>>>> IntoloIndia-master
-=======
-"chalk@^2.0.0", "chalk@^2.0.1", "chalk@^2.4.2":
->>>>>>> b5f40983bb0eb7ceb4391391e1393bff4051e9ce
   "version" "2.4.2"
   dependencies:
     "ansi-styles" "^3.2.1"
@@ -3421,13 +3387,9 @@
   "resolved" "https://registry.npmjs.org/escape-html/-/escape-html-1.0.3.tgz"
   "version" "1.0.3"
 
-<<<<<<< HEAD
-"escape-string-regexp@^1.0.3", "escape-string-regexp@^1.0.5":
+"escape-string-regexp@^1.0.5":
   "integrity" "sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg=="
   "resolved" "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
-=======
-"escape-string-regexp@^1.0.5":
->>>>>>> IntoloIndia-master
   "version" "1.0.5"
 
 "escape-string-regexp@^2.0.0":
@@ -3914,17 +3876,9 @@
     "jsonfile" "^2.1.0"
     "klaw" "^1.0.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 "fs-extra@^8.1.0":
   "integrity" "sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g=="
   "resolved" "https://registry.npmjs.org/fs-extra/-/fs-extra-8.1.0.tgz"
-=======
-"fs-extra@^8.0.0", "fs-extra@^8.1.0":
->>>>>>> IntoloIndia-master
-=======
-"fs-extra@^8.1.0":
->>>>>>> b5f40983bb0eb7ceb4391391e1393bff4051e9ce
   "version" "8.1.0"
   dependencies:
     "graceful-fs" "^4.2.0"
@@ -4476,13 +4430,9 @@
   "resolved" "https://registry.npmjs.org/is-generator-fn/-/is-generator-fn-2.1.0.tgz"
   "version" "2.1.0"
 
-<<<<<<< HEAD
-"is-glob@^4.0.0", "is-glob@^4.0.1", "is-glob@^4.0.3", "is-glob@~4.0.1":
+"is-glob@^4.0.0", "is-glob@^4.0.1", "is-glob@~4.0.1":
   "integrity" "sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg=="
   "resolved" "https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz"
-=======
-"is-glob@^4.0.0", "is-glob@^4.0.1", "is-glob@~4.0.1":
->>>>>>> IntoloIndia-master
   "version" "4.0.3"
   dependencies:
     "is-extglob" "^2.1.1"
@@ -5446,17 +5396,9 @@
   "resolved" "https://registry.npmjs.org/lodash.truncate/-/lodash.truncate-4.4.2.tgz"
   "version" "4.4.2"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 "lodash@*", "lodash@^4.17.10", "lodash@^4.17.14", "lodash@^4.17.15", "lodash@^4.17.21", "lodash@^4.7.0":
   "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
   "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
-=======
-"lodash@*", "lodash@^4.17.10", "lodash@^4.17.11", "lodash@^4.17.14", "lodash@^4.17.15", "lodash@^4.17.21", "lodash@^4.7.0":
->>>>>>> IntoloIndia-master
-=======
-"lodash@*", "lodash@^4.17.10", "lodash@^4.17.14", "lodash@^4.17.15", "lodash@^4.17.21", "lodash@^4.7.0":
->>>>>>> b5f40983bb0eb7ceb4391391e1393bff4051e9ce
   "version" "4.17.21"
 
 "log-symbols@^2.2.0":
@@ -5846,13 +5788,9 @@
     "snapdragon" "^0.8.1"
     "to-regex" "^3.0.2"
 
-<<<<<<< HEAD
-"micromatch@^4.0.2", "micromatch@^4.0.4", "micromatch@^4.0.5":
+"micromatch@^4.0.2", "micromatch@^4.0.4":
   "integrity" "sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA=="
   "resolved" "https://registry.npmjs.org/micromatch/-/micromatch-4.0.5.tgz"
-=======
-"micromatch@^4.0.2", "micromatch@^4.0.4":
->>>>>>> IntoloIndia-master
   "version" "4.0.5"
   dependencies:
     "braces" "^3.0.2"
@@ -5918,21 +5856,6 @@
     "minimist" "^1.2.6"
 
 "moment@^2.11.2", "moment@^2.24.0", "moment@^2.29.4", "moment@>=2.0.0":
-<<<<<<< HEAD
-  "integrity" "sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w=="
-  "resolved" "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
-=======
-<<<<<<< HEAD
-"moment@^2.11.2", "moment@^2.24.0", "moment@^2.29.4", "moment@>=2.0.0":
-  "integrity" "sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w=="
-  "resolved" "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
-=======
-"moment@^2.24.0", "moment@^2.29.3":
-
->>>>>>> fba6c4ee6c50c4c6548d18dbf18704d33ea6873a
->>>>>>> IntoloIndia-master
-=======
->>>>>>> b5f40983bb0eb7ceb4391391e1393bff4051e9ce
   "version" "2.29.4"
 
 "ms@^2.1.1", "ms@2.1.2":
@@ -5950,13 +5873,9 @@
   "resolved" "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   "version" "2.1.3"
 
-<<<<<<< HEAD
-"nanoid@^3.1.23", "nanoid@^3.3.4":
+"nanoid@^3.1.23":
   "integrity" "sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw=="
   "resolved" "https://registry.npmjs.org/nanoid/-/nanoid-3.3.4.tgz"
-=======
-"nanoid@^3.1.23":
->>>>>>> IntoloIndia-master
   "version" "3.3.4"
 
 "nanomatch@^1.2.9":
@@ -6540,23 +6459,9 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.6.0", "prop-types@^15.6.1", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
+"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
   "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
-=======
-<<<<<<< HEAD
-"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
-=======
-
-"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.6.1", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
-
->>>>>>> fba6c4ee6c50c4c6548d18dbf18704d33ea6873a
->>>>>>> IntoloIndia-master
-=======
-"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1", "prop-types@>=15.5.0":
->>>>>>> b5f40983bb0eb7ceb4391391e1393bff4051e9ce
   "version" "15.8.1"
   dependencies:
     "loose-envify" "^1.4.0"
@@ -6867,31 +6772,6 @@
 "react-native-tab-view@^3.1.1", "react-native-tab-view@>= 3.0.0":
   "version" "3.1.1"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-"react-native-table-component@^1.2.2":
-  "integrity" "sha512-7bbsi5431iWcjj3toASh8lFHGi6AG/+MTd4M7GuksXKxx/CFs/Qwv1Ys7D2wgyuYKe3hxWNfSVrteFj0tOYXYw=="
-  "resolved" "https://registry.npmjs.org/react-native-table-component/-/react-native-table-component-1.2.2.tgz"
-  "version" "1.2.2"
-=======
-<<<<<<< HEAD
-=======
-"react-native-tailwindcss@^1.1.11":
-  "integrity" "sha512-NgqkDowWWfIl3FNLUXgxaJCt0auuKVVJHRdV68zDg/f6zTFjUYtbWhr/mcSZvwO4+JNtASlF3noPdrIZSW/smA=="
-  "resolved" "https://registry.npmjs.org/react-native-tailwindcss/-/react-native-tailwindcss-1.1.11.tgz"
-  "version" "1.1.11"
-  dependencies:
-    "tailwindcss" "1.1.4"
->>>>>>> IntoloIndia-master
-
-"react-native-toast-message@^2.1.5":
-  "integrity" "sha512-mk3rELtBEhrhWBCN6CTaw0gypgL9ZNauX3xx1LUs4uee9vc0pVsghrKxO57vroUCcNL2hDeZSLJWdQNMCkGeaQ=="
-  "resolved" "https://registry.npmjs.org/react-native-toast-message/-/react-native-toast-message-2.1.5.tgz"
-  "version" "2.1.5"
-
->>>>>>> fba6c4ee6c50c4c6548d18dbf18704d33ea6873a
-=======
->>>>>>> b5f40983bb0eb7ceb4391391e1393bff4051e9ce
 "react-native-vector-icons@*", "react-native-vector-icons@^9.1.0":
   "version" "9.1.0"
   dependencies:
@@ -6913,21 +6793,9 @@
 "react-native-virtualized-view@*":
   "version" "1.0.0"
 
-<<<<<<< HEAD
-"react-native-walkthrough-tooltip@^1.4.0":
-  "integrity" "sha512-nyBuynmCuzPKJN9NRGhSzCutGOk7/WqszGtX01gjDtlRfoJ25cSM0h+TEi/lsLbSCTEdB+e65qOTvoVhIq2gzA=="
-  "resolved" "https://registry.npmjs.org/react-native-walkthrough-tooltip/-/react-native-walkthrough-tooltip-1.4.0.tgz"
-  "version" "1.4.0"
-  dependencies:
-    "prop-types" "^15.6.1"
-    "react-fast-compare" "^2.0.4"
-
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.69 || 1000.0.0", "react-native@>= 0.30.0", "react-native@>= 0.60.2", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.44", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.59", "react-native@>=0.61.5", "react-native@>=0.63.0", "react-native@>=0.65.0", "react-native@0.68.1":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.69 || 1000.0.0", "react-native@>= 0.30.0", "react-native@>= 0.60.2", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.44", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.59", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
   "integrity" "sha512-5gfvslo5NO2Ece2k/q41eVOK3ca4u1QAOf+qM+auvOiUA4/QR5Yr0WfSGbRpUr2GaFgv7qP11F4+elCravg7uQ=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.68.1.tgz"
-=======
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.69 || 1000.0.0", "react-native@>= 0.30.0", "react-native@>= 0.60.2", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.44", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.59", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
->>>>>>> IntoloIndia-master
   "version" "0.68.1"
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
@@ -7818,17 +7686,9 @@
   "resolved" "https://registry.npmjs.org/sudo-prompt/-/sudo-prompt-9.2.1.tgz"
   "version" "9.2.1"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 "supports-color@^5.3.0", "supports-color@^5.5.0":
   "integrity" "sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow=="
   "resolved" "https://registry.npmjs.org/supports-color/-/supports-color-5.5.0.tgz"
-=======
-"supports-color@^5.3.0", "supports-color@^5.4.0", "supports-color@^5.5.0":
->>>>>>> IntoloIndia-master
-=======
-"supports-color@^5.3.0", "supports-color@^5.5.0":
->>>>>>> b5f40983bb0eb7ceb4391391e1393bff4051e9ce
   "version" "5.5.0"
   dependencies:
     "has-flag" "^3.0.0"
@@ -8196,13 +8056,9 @@
   "resolved" "https://registry.npmjs.org/use/-/use-3.1.1.tgz"
   "version" "3.1.1"
 
-<<<<<<< HEAD
-"util-deprecate@^1.0.1", "util-deprecate@^1.0.2", "util-deprecate@~1.0.1":
+"util-deprecate@^1.0.1", "util-deprecate@~1.0.1":
   "integrity" "sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw=="
   "resolved" "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
-=======
-"util-deprecate@^1.0.1", "util-deprecate@~1.0.1":
->>>>>>> IntoloIndia-master
   "version" "1.0.2"
 
 "utils-merge@1.0.1":
@@ -8474,13 +8330,9 @@
 "xmlhttprequest@^1.8.0":
   "version" "1.8.0"
 
-<<<<<<< HEAD
-"xtend@^4.0.2", "xtend@~4.0.1":
+"xtend@~4.0.1":
   "integrity" "sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ=="
   "resolved" "https://registry.npmjs.org/xtend/-/xtend-4.0.2.tgz"
-=======
-"xtend@~4.0.1":
->>>>>>> IntoloIndia-master
   "version" "4.0.2"
 
 "y18n@^4.0.0":
