@@ -14,8 +14,8 @@ import { Get_Contractor_Data, Get_user_role } from '../../../ReportApi.js'
 import styles from '../../../ReportStyle.js'
 
 const ManPowerProjectTeam = ({ projectTeamList }) => {
-    console.log("ManpowerProjectTeam")
-    console.log(projectTeamList)
+    // console.log("ManpowerProjectTeam")
+    // console.log(projectTeamList)
     //css
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
     //for projectteam collapse

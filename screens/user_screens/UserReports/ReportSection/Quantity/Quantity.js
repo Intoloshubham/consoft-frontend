@@ -27,9 +27,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
 import { getCompanyId, getToken, getUserId } from '../../../../../services/asyncStorageService';
-import { Insert_report_data, Get_report_data, edit_report_data } from '../../ReportApi.js'
+import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data } from '../../ReportApi.js'
 import { EditDeletebuttons } from '../../../index.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -84,18 +85,18 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const [heightKey, selectHeightkey] = useState('');
 
   //setting Main input data to post
-  const [itemData, setItemData] = useState('')
+  const [itemData, setItemData] = useState(reportdata.data)
   const [companyIdData, setCompanyIdData] = useState('');
-
-  const [editReportData, setEditReportData] = useState('')
-
+  const [removeAddOnEdit, setRemoveAddOnEdit] = useState(false)
+  // const [editReportData, setEditReportData] = useState('')
+  const [updateId, setUpdateId] = useState('')
   //for post setting data in main input
-  const [unitData, setUnitData] = useState('')
-  const [lengthData, setLengthData] = useState('')
-  const [widthData, setWidthData] = useState('')
-  const [thicknessData, setThicknessData] = useState('')
-  const [totalData, setTotalData] = useState('')
-  const [remarkData, setRemarkData] = useState('')
+  // const [unitData, setUnitData] = useState('')
+  // const [lengthData, setLengthData] = useState('')
+  // const [widthData, setWidthData] = useState('')
+  // const [thicknessData, setThicknessData] = useState('')
+  // const [totalData, setTotalData] = useState('')
+  // const [remarkData, setRemarkData] = useState('')
 
   //setting state in subfield of subinput
   // const [subLengthData, setSubLengthData] = useState('') 
@@ -109,11 +110,10 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   //main get report data
   const [getRepPostData, setGetRepPostData] = useState('')
 
-  //then inside dates data getting
-  const [datesArray, setDatesArray] = useState('')
+
 
   //then again quantityitems data getting
-  const [quantityItemsData, setQuantityItemsData] = useState('')
+  // const [quantityItemsData, setQuantityItemsData] = useState('')
 
   //sub key states of dynamic inputs
   const [subLengthKey, setSubLengthkey] = useState('');
@@ -137,15 +137,17 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const addKeyref = useRef(0);
   //get company id
-  const [company_id, setCompany_id] = useState('');
-  const [mainCompId, setMainCompId] = useState('')
-  const [user_id, setUser_id] = useState('');
-  const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
+  // const [company_id, setCompany_id] = useState('');
+  // const [mainCompId, setMainCompId] = useState('')
+  // const [user_id, setUser_id] = useState('');
+  // const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
 
   const companydata = useSelector(state => state.user);
   // console.log(companydata)
 
-
+  const current_dat = moment().format("YYYY%2FMM%2FDD")
+  // console.log(current_dat)
+  // 2022%2F08%2F05/
   // const _userId = async () => {
   //   const _id = await getUserId();
   //   setUser_id(_id);
@@ -207,12 +209,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
     if (report_post_data) {
       const data = Insert_report_data(report_post_data, CONST_FIELD)
-      data.then((res)=>res.json())
+      data.then((res) => res.json())
         .then((resp) => {
-          console.log("resp report data")
-          console.log(resp)
-          setPostQtyData(resp)
+          // console.log("resp report data")
+          // console.log(resp)
 
+          setPostQtyData(resp)
           if (resp.status == '200') {
             showToast();
             setTimeout(() => {
@@ -227,40 +229,81 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
   }
 
-  // console.log(postQtyData)
-  //getting report data functions
-  // React.useEffect(() => {
-  //   if (Main_drp_pro_value) {
-  //     const data = Get_report_data()
-  //     data.then(res => res.json())
-  //       .then(result => {
-  //         console.log("result=======")
-  //         console.log(result)
+  const updateQuantityData = () => {
 
-  //         setGetRepPostData(result);
+    // alert(updateId);
+    const resp = {
+      inputs
+    }
+    console.log("🚀 ~ file: Quantity.js ~ line 236 ~ updateQuantityData ~ resp", resp)
+    
+    const data = update_quantity_data(updateId, resp)
+    data.then((res) => {
+      res.json()
+    })
+      .then((resp) => {
+        console.log("🚀 ~ file: Quantity.js ~ line 239 ~ .then ~ resp", resp);
+        if (resp.status == '200') {
+          showToast();
+          setTimeout(() => {
+            setReportmodal(false);
+          }, 1500);
+          inputs.splice(0, inputs.length);
 
-  //       })
-  //   }
-  // }, [postQtyData, Main_drp_pro_value, ''])
-
-
-  const editReportBtn = () => {
-    setReportmodal(true);
-    alert("edit")
-    // if (mainCompId) {
-    //   const data = edit_report_data(mainCompId)
-    //   data.then(res => res.json())
-    //     .then(result => {
-
-    //       setEditReportData(result);
-
-    //     })
-    // }
+        }
+      })
   }
 
-  const deleteReportButton = () => {
+  // console.log(postQtyData)
+  // getting report data functions
+  // let count=0;
+  useEffect(() => {
+    if (Main_drp_pro_value || postQtyData) {
+      // console.log(companydata._id, Main_drp_pro_value, current_dat)
+      const data = Get_report_data(companydata._id, Main_drp_pro_value, current_dat)
+      data.then(res => res.json())
+        .then(result => {
+          // console.log(result)
+          setGetRepPostData(result);
+        })
+    }
+
+  }, [postQtyData, Main_drp_pro_value])
+
+
+
+
+  const editReportBtn = (id) => {
+    setRemoveAddOnEdit(true);
+    setUpdateId(id);
     setReportmodal(true);
-    alert("delete")
+    if (id) {
+      const data = edit_report_data(id)
+      data.then(res => res.json())
+        .then(result => {
+          // console.log("🚀 ~ file: Quantity.js ~ line 280 ~ editReportBtn ~ result", result)
+          // setEditReportData(result);
+          if (result.data !== null) {
+            setInputs([...inputs, {
+              item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
+              num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name,
+              subquantityitems: [
+                // { num_length: '', num_width: '', num_height: '', total: '', remark: '' }
+              ]
+            }]);
+          }
+
+        })
+    }
+
+    // {add_input_and_subinput(editReportData)}  
+  }
+
+  // console.log("editReportData")
+  // console.log(editReportData.data._id.toString())
+  const deleteReportButton = () => {
+    // setReportmodal(true);
+    // alert("delete")
     //  if (mainCompId) {
     //   const data = delete_report_data(mainCompId)
     //   data.then(res => res.json())
@@ -273,50 +316,23 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
 
+  // useMemo(() => {
+  //   const data = check_quantity_item_exist();
+  //   data.then((res) => res.json())
+  //     .then(res => {
 
-  // console.log("getRepPostData")
-  // console.log(getRepPostData)
-  // 
-  console.log("mainCompId")
-  console.log(mainCompId);
-  // console.log("editReportData")
-  // console.log(editReportData)
-  console.log(process.env.REACT_APP_API_URL)
+  //       if (res) {
+  //         res.data.map(ele => {
 
-  //getting dates array from main data
-  useMemo(() => {
-    if (getRepPostData) {
-      getRepPostData.data.map((ele) => {
-        // console.log(ele._id)
-        setMainCompId(ele._id)
-        setDatesArray(ele)
-      })
-    }
-  }, [getRepPostData])
+  //             console.log(ele)
+  //         })
 
-  //getting quantityItems data array from main data
-  useMemo(() => {
-    if (datesArray) {
-      datesArray.dates.map((element) => {
-        setQuantityItemsData(element)
-      })
-    }
-  }, [datesArray])
+  //       }
 
-  // console.log("datesArray")
-  // console.log(datesArray)
-  // console.log("qtyitemsdata")
-  // console.log(quantityItemsData.quantityitems)
+  //     })
+  // }, [postQtyData, Main_drp_pro_value])
 
-  // const [companyId, setCompanyId] = useState(null)
-  // setCompany_id(companyid);
-  // console.log("companyid")
-  // console.log(companyid)
-  // const Get_ComapnyId_Data = async () => {
-  //   const companyid = await getCompanyId();
-  //   const new_companyid = companyid;
-  //   setCompanyId(new_companyid);
-  // }
+
 
   // console.log(user_id)
   //getting user id state
@@ -325,8 +341,63 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // }, [getUserId])
 
 
+  // const data = check_quantity_item_exist();
+  // data.then((res) => res.json())
+  //   .then(result1 => {
+
+  // if (result1) {
+
+  // result1.data.map((ele, key) => {
+  // reportdata.data.map((ele2, key2) => {
+  //   if (ele.item_id == ele2._id) {
+  //     reportdata.data.splice(reportdata.data.findIndex(a => a._id === ele.item_id), 1)
+
+  //     setItemData(reportdata.data);
+
+  //     // console.log(reportdata.data.length)
+  //   } else {
+
+  //     setItemData(ele2);
+  //   }
+
+
+  // })
+  // })
+
+  // }
+
+
+
+  // });
   const addHandler = () => {
 
+    if (Main_drp_pro_value) {
+      const data = check_quantity_item_exist(Main_drp_pro_value, companydata._id);
+      data.then((res) => res.json())
+        .then(result1 => {
+          if (result1.status == 200) {
+            if (removeAddOnEdit) {
+              // alert("if ")
+              let result = reportdata.data.filter(function ({ _id }) {
+                return this.has(_id);
+              }, new Set(result1.data.map(({ item_id }) => item_id)));
+              setItemData(result);
+            } else {
+              // alert("else")
+              let result = reportdata.data.filter(function ({ _id }) {
+                return !this.has(_id);
+              }, new Set(result1.data.map(({ item_id }) => item_id)));
+              setItemData(result);
+            }
+          } else {
+            setItemData(reportdata.data)
+          }
+        })
+    }
+
+
+    // console.log("🚀 ~ file: Quantity.js ~ line 381 ~ addHandler ~ reportdata", reportdata.data)
+    // console.log("🚀 ~ file: Quantity.js ~ line 359 ~ addHandler ~ ItemData", itemData)
     setInputs([...inputs, {
       item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '',
       subquantityitems: [
@@ -537,7 +608,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       console.log(error, 'error');
     }
   };
-  React.useMemo(() => {
+  useMemo(() => {
     reportdataitem();
   }, [companydata.company_id]);
 
@@ -731,6 +802,200 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     )
   }
 
+  const add_input_and_subinput = () => {
+    return (<View style={container}>
+      <ScrollView style={inputsContainer}>
+        {inputs ? inputs.map((input, key) => {
+          {/* console.log(input) */ }
+
+          {/* console.log("key===="+key)
+       */}
+          {/* console.log(input.unit_name[0])  */ }
+
+          return (
+            <View style={inputContainer} key={key}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  // alignItems: 'center',
+                }}
+                // key={key}
+                key="{(key+1)}"
+              >
+                <Dropdown
+                  style={[
+                    styles.dropdown,
+                    // cont_Project_list_drop,
+                    isFocus && { borderColor: 'blue' },
+                  ]}
+                  selectedTextStyle={{ color: COLORS.gray, }
+                  }
+                  placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
+                  inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
+                  data={reportdata.data}
+                  // data={itemData}
+                  search
+                  maxHeight={300}
+                  labelField="item_name"
+                  valueField="_id"
+                  placeholder={!isFocus ? 'Select' : '...'}
+
+                  searchPlaceholder="Search..."
+                  value={input.item_id}
+                  onChange={item => {
+                    setSelectKey(input.key);
+                    // console.log(item)
+                    // setItemData(item._id)
+                    setCompanyIdData(item.company_id)
+                    // setUnitData(item.unit_name)
+                    // console.log(item)
+                    inputselect(item, key);
+                  }}
+                />
+                <TextInput
+                  style={inputfromtwo}
+                  // editable={false}
+                  selectTextOnFocus={false}
+                  placeholder={'unit'}
+
+                  // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
+                  value={key == selectKey ? input.unit_name : input.unit_name}
+                  onChangeText={text => { inputunit(text, key) }}
+                />
+
+
+
+                <TouchableOpacity
+                  key={key}
+                  onPress={(e) => {
+
+                    add_inside_handler(key, e)
+                  }}>
+                  <MaterialIcons
+                    name="add-box"
+                    size={25}
+                    color={COLORS.darkBlue}
+                    style={{ alignItems: 'center' }}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <TextInput
+                  style={inputfromone}
+                  placeholder="Length"
+                  placeholderTextColor={COLORS.gray}
+                  value={input.num_length}
+                  keyboardType="numeric"
+                  onChangeText={text => {
+                    selectLengthkey(input.key)
+                    // setLengthData(text)
+                    // console.log(text)
+                    inputlangth(text, key);
+                  }}
+                />
+                <TextInput
+                  style={inputfromone}
+                  placeholder="Breadth"
+                  placeholderTextColor={COLORS.gray}
+                  value={input.num_width}
+                  keyboardType="numeric"
+                  onChangeText={text => {
+                    selectWidthkey(input.key)
+                    // setWidthData(text)
+                    inputwidth(text, key);
+                  }}
+                />
+                <TextInput
+                  style={inputfromone}
+                  placeholder="Thickness"
+                  placeholderTextColor={COLORS.gray}
+                  value={input.num_height}
+                  keyboardType="numeric"
+                  onChangeText={text => {
+                    selectHeightkey(input.key)
+                    // setThicknessData(text)
+                    // setTotalData()
+
+                    // console.log(tot)
+                    inputhight(text, key);
+                  }}
+                />
+                <TextInput
+                  style={inputfromtwo}
+                  editable={false}
+                  selectTextOnFocus={false}
+                  placeholderTextColor={COLORS.white}
+                  placeholder={'Total'}
+                  value={key == lengthKey == widthKey == heightKey ? (input.num_total = input.num_length * input.num_width * input.num_height).toString() : (input.num_total = input.num_length * input.num_width * input.num_height).toString()}
+                  keyboardType="numeric"
+                  onChangeText={value => {
+                    inputtotal(value, key);
+                  }}
+                />
+              </View>
+              <TextInput
+                style={{
+                  width: '90%',
+                  borderWidth: 1,
+                  height: 30,
+                  padding: -6,
+                  paddingLeft: 5,
+                  marginBottom: 5,
+                  borderRadius: 5,
+                  marginLeft: 5,
+                  color: COLORS.gray,
+                  borderColor: COLORS.gray,
+                  flexWrap: 'wrap',
+                }}
+                placeholder={'Remark'}
+                placeholderTextColor={COLORS.gray}
+                value={input.remark}
+                onChangeText={text => {
+                  // setTotalData(input.num_total)
+                  // setRemarkData(text);
+                  inputRemark(text, key)
+                }}
+              />
+
+
+              <View>
+                {
+                  inputs[key].subquantityitems.map((subquantityitems, index1) => {
+                    return (
+                      add_subinput_field(index1, key, subquantityitems)
+                    )
+                  })
+
+                }
+                <View style={{ alignSelf: "flex-end" }}>
+                  <TouchableOpacity
+                    style={{ alignSelf: "flex-end" }}
+                    onPress={() => deleteHandler(key)}>
+                    <Image
+                      source={icons.delete_icon}
+                      style={{
+                        width: 20,
+                        height: 20,
+                        tintColor: COLORS.red,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          )
+        }) : null}
+      </ScrollView>
+    </View>)
+  }
+
+
 
   const add_qty_data_modal = () => {
 
@@ -756,6 +1021,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                 <Pressable onPress={() => {
                   inputs.splice(0, inputs.length);
                   setReportmodal(false);
+                  setRemoveAddOnEdit(false);
                 }}>
                   <AntDesign name="close" size={30} color={COLORS.black} />
                 </Pressable>
@@ -766,27 +1032,28 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   justifyContent: 'space-between',
                   marginTop: 10,
                 }}>
-                <TouchableOpacity
-                  style={{ borderWidth: 1, borderRadius: 5, borderColor: COLORS.gray, paddingHorizontal: 2, marginVertical: 2 }}
-                  onPress={() => {
-                    addHandler();
-                    // selectunitdata();
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      paddingVertical: 1
+                {removeAddOnEdit ? null :
+                  <TouchableOpacity
+                    style={{ borderWidth: 1, borderRadius: 5, borderColor: COLORS.gray, paddingHorizontal: 2, marginVertical: 2 }}
+                    onPress={() => {
+                      addHandler();
+                      // selectunitdata();
                     }}>
-                    <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add</Text>
-                    <MaterialIcons
-                      name="add-box"
-                      size={20}
-                      color={COLORS.green}
-                    />
-                  </View>
-                </TouchableOpacity>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingVertical: 1
+                      }}>
+                      <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add Existing Item</Text>
+                      <MaterialIcons
+                        name="add-box"
+                        size={20}
+                        color={COLORS.green}
+                      />
+                    </View>
+                  </TouchableOpacity>}
                 <TouchableOpacity
                   style={{
                     borderWidth: 1, borderRadius: 2, paddingVertical: 1, marginVertical: 3,
@@ -795,205 +1062,31 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   onPress={() => {
                     setadditem(true);
                   }}>
-                  <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add ITEM</Text>
+                  <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add New ITEM</Text>
                 </TouchableOpacity>
               </View>
-              <View style={container}>
-                <ScrollView style={inputsContainer}>
-                  {inputs ? inputs.map((input, key) => {
-
-                    {/* console.log("key===="+key)
-                     */}
-                    {/* console.log(input.unit_name[0])  */ }
-
-                    return (
-                      <View style={inputContainer} key={key}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            // alignItems: 'center',
-                          }}
-                          // key={key}
-                          key="{(key+1)}"
-                        >
-                          <Dropdown
-                            style={[
-                              styles.dropdown,
-                              // cont_Project_list_drop,
-                              isFocus && { borderColor: 'blue' },
-                            ]}
-                            selectedTextStyle={{ color: COLORS.gray, }
-                            }
-                            placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
-                            inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
-                            data={reportdata.data}
-                            search
-                            maxHeight={300}
-                            labelField="item_name"
-                            valueField="_id"
-                            placeholder={!isFocus ? 'Select' : '...'}
-
-                            searchPlaceholder="Search..."
-                            value={input.value}
-                            onChange={item => {
-                              setSelectKey(input.key);
-                              // setItemData(item._id)
-                              setCompanyIdData(item.company_id)
-                              // setUnitData(item.unit_name)
-                              // console.log(item)
-                              inputselect(item, key);
-                            }}
-                          />
-                          <TextInput
-                            style={inputfromtwo}
-                            // editable={false}
-                            selectTextOnFocus={false}
-                            placeholder={'unit'}
-
-                            // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
-                            value={key == selectKey ? input.unit_name : input.unit_name}
-                            onChangeText={text => { inputunit(text, key) }}
-                          />
-
-
-
-                          <TouchableOpacity
-                            key={key}
-                            onPress={(e) => {
-
-                              add_inside_handler(key, e)
-                            }}>
-                            <MaterialIcons
-                              name="add-box"
-                              size={25}
-                              color={COLORS.darkBlue}
-                              style={{ alignItems: 'center' }}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                          }}>
-                          <TextInput
-                            style={inputfromone}
-                            placeholder="Length"
-                            placeholderTextColor={COLORS.gray}
-                            value={input.num_length}
-                            keyboardType="numeric"
-                            onChangeText={text => {
-                              selectLengthkey(input.key)
-                              // setLengthData(text)
-                              // console.log(text)
-                              inputlangth(text, key);
-                            }}
-                          />
-                          <TextInput
-                            style={inputfromone}
-                            placeholder="Breadth"
-                            placeholderTextColor={COLORS.gray}
-                            value={input.num_width}
-                            keyboardType="numeric"
-                            onChangeText={text => {
-                              selectWidthkey(input.key)
-                              // setWidthData(text)
-                              inputwidth(text, key);
-                            }}
-                          />
-                          <TextInput
-                            style={inputfromone}
-                            placeholder="Thickness"
-                            placeholderTextColor={COLORS.gray}
-                            value={input.num_height}
-                            keyboardType="numeric"
-                            onChangeText={text => {
-                              selectHeightkey(input.key)
-                              // setThicknessData(text)
-                              // setTotalData()
-
-                              // console.log(tot)
-                              inputhight(text, key);
-                            }}
-                          />
-                          <TextInput
-                            style={inputfromtwo}
-                            editable={false}
-                            selectTextOnFocus={false}
-                            placeholderTextColor={COLORS.white}
-                            placeholder={'Total'}
-                            value={key == lengthKey == widthKey == heightKey ? (input.num_total = input.num_length * input.num_width * input.num_height).toString() : (input.num_total = input.num_length * input.num_width * input.num_height).toString()}
-                            keyboardType="numeric"
-                            onChangeText={value => {
-                              inputtotal(value, key);
-                            }}
-                          />
-                        </View>
-                        <TextInput
-                          style={{
-                            width: '90%',
-                            borderWidth: 1,
-                            height: 30,
-                            padding: -6,
-                            paddingLeft: 5,
-                            marginBottom: 5,
-                            borderRadius: 5,
-                            marginLeft: 5,
-                            color: COLORS.gray,
-                            borderColor: COLORS.gray,
-                            flexWrap: 'wrap',
-                          }}
-                          placeholder={'Remark'}
-                          placeholderTextColor={COLORS.gray}
-                          value={input.remark}
-                          onChangeText={text => {
-                            // setTotalData(input.num_total)
-                            // setRemarkData(text);
-                            inputRemark(text, key)
-                          }}
-                        />
-
-
-                        <View>
-                          {
-                            inputs[key].subquantityitems.map((subquantityitems, index1) => {
-                              return (
-                                add_subinput_field(index1, key, subquantityitems)
-                              )
-                            })
-
-                          }
-                          <View style={{ alignSelf: "flex-end" }}>
-                            <TouchableOpacity
-                              style={{ alignSelf: "flex-end" }}
-                              onPress={() => deleteHandler(key)}>
-                              <Image
-                                source={icons.delete_icon}
-                                style={{
-                                  width: 20,
-                                  height: 20,
-                                  tintColor: COLORS.red,
-                                }}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    )
-                  }) : null}
-                </ScrollView>
-              </View>
+              {/*  */}
+              {add_input_and_subinput()}
+              {/*  */}
               <Toast config={showToast} />
-              <View style={{ marginTop: 10 }}>
-                <Button
-                  title="submit"
-                  onPress={() => {
-                    insertQtyPostData();
-                  }}
-                />
-              </View>
+              {removeAddOnEdit ?
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    title="Update"
+                    onPress={() => {
+                      updateQuantityData();
+                    }}
+                  />
+                </View> :
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    title="submit"
+                    onPress={() => {
+                      setRemoveAddOnEdit(false);
+                      insertQtyPostData();
+                    }}
+                  />
+                </View>}
             </View>
           </View>
         </Modal>
@@ -1111,103 +1204,16 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   }
 
 
-  const FlatList_Header = () => {
-    return (
-
-
-      <ScrollView contentContainerStyle={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <View style={{ backgroundColor: "red" }}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>S.no</Text>
-        </View>
-        <View style={{ backgroundColor: "green" }}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Item</Text>
-        </View>
-
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Length</Text>
-        </View>
-
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Breadth</Text>
-        </View>
-
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Thickness</Text>
-        </View>
-
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Quantity</Text>
-        </View>
-
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Unit</Text>
-        </View>
-
-        <View style={{}}>
-          <Text style={{ ...FONTS.h5, color: COLORS.black }}>Remark</Text>
-        </View>
-
-      </ScrollView>
-
-
-    );
-  }
-
-
-  const renderReportData = (item, index) => {
-    console.log(item)
-    return (
-      <ScrollView contentContainerStyle={{ flexDirection: "row", justifyContent: "space-around" }}>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.black }}>{index}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderRightWidth: 1, paddingHorizontal: 15, marginLeft: -15, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.item_id}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_length}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_width}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_height}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.num_total}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.unit_name}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ borderLeftWidth: 1, borderRightWidth: 1, paddingHorizontal: 5, borderColor: COLORS.lightGray1 }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.darkGray }}>{item.remark}</Text>
-          </View>
-        </View>
-      </ScrollView>
-    )
-  }
 
 
   return (
     <View>
       {/* Quantity */}
       <Pressable
-        onPress={() => setQuantity(!quant_ity)}
+        onPress={() => {
+          Main_drp_pro_value ? null : alert("Select Project First!")
+          setQuantity(!quant_ity)
+        }}
         style={{
           flexDirection: 'row',
           paddingHorizontal: SIZES.base,
@@ -1223,13 +1229,21 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         }}>
         <View style={{ alignItems: 'center', alignSelf: 'center' }}>
           <Text
-            onPress={() => setQuantity(!quant_ity)}
+            onPress={() => {
+              Main_drp_pro_value ? null : alert("Select Project First!")
+              setQuantity(!quant_ity)
+            }}
             style={[FONTS.h3, { color: COLORS.darkGray }]}>
             Quantity
           </Text>
         </View>
         <View style={{ alignItems: 'center', alignSelf: 'center' }}>
-          <TouchableOpacity onPress={() => setQuantity(!quant_ity)}>
+          <TouchableOpacity onPress={() => {
+            setQuantity(!quant_ity)
+            Main_drp_pro_value ? null : alert("Select Project First!")
+
+
+          }}>
             <AntDesign name="caretdown" size={12} color={COLORS.gray} />
           </TouchableOpacity>
         </View>
@@ -1252,18 +1266,21 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               style={{
                 borderWidth: 1,
                 borderColor: "skyblue",
+
                 width: SIZES.width * 0.92,
                 alignSelf: "flex-start",
                 position: "relative",
                 top: 20,
                 marginLeft: 17,
-                height: 250,
+                // height: 200,
+                maxHeight: 200,
+                paddingBottom: 6,
                 // flex:2,
                 // marginBottom: -20,
                 // padding: 5,
                 elevation: 1
               }}>
-              <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
                 <View style={{}}>
                   <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
                     <View
@@ -1272,6 +1289,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                         marginRight: 2,
                         marginLeft: 16,
                         // borderRightWidth: 2,
+                        paddingVertical: 5,
                         justifyContent: 'center',
                         width: 45,
                         //  borderColor: COLORS.lightblue_200 
@@ -1371,16 +1389,16 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                       <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Action</Text>
                     </View>
                   </View>
-                  <ScrollView nestedScrollEnabled={true} maxHeight={400}
+                  <ScrollView nestedScrollEnabled={true}
                     contentContainerStyle={{
-                      height: 800,
+                      // height: 230,
                       top: 10,
                       // borderWidth: 3,
                       // borderColor: COLORS.lightblue_200,
                     }}>
                     <>
                       {
-                        quantityItemsData ? quantityItemsData.quantityitems.map((l, index) => (
+                        getRepPostData ? getRepPostData.data.map((l, index) => (
                           <View
                             style={{
                               flexDirection: "column",
@@ -1431,7 +1449,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                               }}>
                                 <View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray }]}>
-                                    {l.item_id}
+                                    {l.quantityWorkItems.item_name}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: 145, top: -10 }}>
@@ -1452,7 +1470,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.num_length}
+                                  {l.quantityWorkItems.num_length}
                                 </Text>
                               </View>
                               <View
@@ -1469,7 +1487,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.num_width}
+                                  {l.quantityWorkItems.num_width}
                                 </Text>
                               </View>
                               <View
@@ -1486,7 +1504,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.num_height}
+                                  {l.quantityWorkItems.num_height}
                                 </Text>
                               </View>
                               <View
@@ -1503,7 +1521,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.num_total}
+                                  {l.quantityWorkItems.num_total}
                                 </Text>
                               </View>
                               <View
@@ -1525,7 +1543,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                     <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
                                   </View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                    {l.unit_name}
+                                    {l.quantityWorkItems.unit_name}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: -4, top: -10 }}>
@@ -1546,7 +1564,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.remark}
+                                  {l.quantityWorkItems.remark}
                                 </Text>
                                 <View style={{ position: "absolute", width: 1, left: 210, top: -10 }}>
                                   <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
@@ -1566,13 +1584,14 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <View style={{ justifyContent: "center", alignSelf: "center" }}>
-                                  <Edit_delete_button edit_size={18} del_size={22} __id={l.item_id} />
+                                  <Edit_delete_button edit_size={18} del_size={22} __id={l.quantityWorkItems._id} />
                                 </View>
                               </View>
                             </View>
                             <View style={{ top: 10, position: "relative", left: 170 }}>
                               {
-                                quantityItemsData ? l.subquantityitems.map((res, index2) =>
+
+                                getRepPostData ? l.quantityWorkItems.subquantityitems.map((res, index2) =>
                                 (
                                   <View
                                     style={{
@@ -1686,9 +1705,9 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
                                       }}
                                     >
-                                      <View style={{ justifyContent: "center", alignSelf: "center" }}>
+                                      {/* <View style={{ justifyContent: "center", alignSelf: "center" }}>
                                         <Edit_delete_button edit_size={18} del_size={22} __id={l.item_id} />
-                                      </View>
+                                      </View> */}
                                       {/* <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
                                         Action
                                       </Text> */}
@@ -1713,9 +1732,9 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               </ScrollView>
             </View>
           </View>
-          :null
+          : null
         }
-           {/* <View style={{ top: 22, left: -40, borderWidth: 1, borderColor: COLORS.lightblue_300, paddingHorizontal: 60 }}><Text>Nothing to display!!</Text></View> */}
+        {/* <View style={{ top: 22, left: -40, borderWidth: 1, borderColor: COLORS.lightblue_300, paddingHorizontal: 60 }}><Text>Nothing to display!!</Text></View> */}
       </View>
       {add_qty_data_modal()}
       {add_item_modal()}
