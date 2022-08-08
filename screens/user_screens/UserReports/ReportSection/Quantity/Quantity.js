@@ -95,6 +95,8 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const [removeAddOnEdit, setRemoveAddOnEdit] = useState(false)
   // const [editReportData, setEditReportData] = useState('')
   const [updateId, setUpdateId] = useState('')
+  const [updateStatus, setUpdateStatus] = useState('')
+  const [existingItemIds, setExistingItemIds] = useState('')
   //for post setting data in main input
   // const [unitData, setUnitData] = useState('')
   // const [lengthData, setLengthData] = useState('')
@@ -212,36 +214,32 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
   }
 
-  const updateQuantityData = () => {
+  const updateQuantityData = async () => {
 
-    // alert(updateId);
+    // alert(updateId); 
     const resp = {
       inputs
     }
-    console.log("🚀 ~ file: Quantity.js ~ line 236 ~ updateQuantityData ~ resp", resp)
-    
-    const data = update_quantity_data(updateId, resp)
-    data.then((res) => {
-      res.json()
-    })
-      .then((resp) => {
-        console.log("🚀 ~ file: Quantity.js ~ line 239 ~ .then ~ resp", resp);
-        if (resp.status == '200') {
-          showToast();
-          setTimeout(() => {
-            setReportmodal(false);
-          }, 1500);
-          inputs.splice(0, inputs.length);
 
-        }
-      })
+
+    const data = await update_quantity_data(updateId, resp)
+    setUpdateStatus(data)
+
+    if (data.status == '200') {
+      showToast();
+      setTimeout(() => {
+        setReportmodal(false);
+      }, 1500);
+      inputs.splice(0, inputs.length);
+
+    }
   }
 
   // console.log(postQtyData)
   // getting report data functions
   // let count=0;
   useEffect(() => {
-    if (Main_drp_pro_value || postQtyData) {
+    if (Main_drp_pro_value || postQtyData || updateStatus) {
       // console.log(companydata._id, Main_drp_pro_value, current_dat)
       const data = Get_report_data(companydata._id, Main_drp_pro_value, current_dat)
       data.then(res => res.json())
@@ -251,36 +249,53 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         })
     }
 
-  }, [postQtyData, Main_drp_pro_value])
+  }, [postQtyData, Main_drp_pro_value, updateStatus])
 
 
 
 
-  const editReportBtn = (id) => {
+  const editReportBtn = async (id) => {
+
     setRemoveAddOnEdit(true);
     setUpdateId(id);
     setReportmodal(true);
+
+
+    setItemData(reportdata.data);
+
     if (id) {
       const data = edit_report_data(id)
       data.then(res => res.json())
         .then(result => {
-          // console.log("🚀 ~ file: Quantity.js ~ line 280 ~ editReportBtn ~ result", result)
-          // setEditReportData(result);
-          if (result.data !== null) {
+          if (result.data.subquantityitems.length == 0) {
             setInputs([...inputs, {
               item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
               num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name,
-              subquantityitems: [
-                // { num_length: '', num_width: '', num_height: '', total: '', remark: '' }
-              ]
+              subquantityitems: []
             }]);
-          }
+          } else {
+            setInputs([...inputs, {
+              item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
+              num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name,
+              subquantityitems:
+                // [
+                result.data.subquantityitems.map(ele => {
+                  return {
+                    sub_height: ele.sub_height.toString(), sub_length: ele.sub_length.toString(), sub_remark: ele.sub_remark, sub_total: ele.sub_total.toString(),
+                    sub_width: ele.sub_width.toString()
+                  }
+                })
+              // ]
+            }]);  //setinput close
+
+          }  //else close
 
         })
-    }
+    }  //main if close
 
-    // {add_input_and_subinput(editReportData)}  
   }
+
+
 
   // console.log("editReportData")
   // console.log(editReportData.data._id.toString())
@@ -359,19 +374,11 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       data.then((res) => res.json())
         .then(result1 => {
           if (result1.status == 200) {
-            if (removeAddOnEdit) {
-              // alert("if ")
-              let result = reportdata.data.filter(function ({ _id }) {
-                return this.has(_id);
-              }, new Set(result1.data.map(({ item_id }) => item_id)));
-              setItemData(result);
-            } else {
-              // alert("else")
-              let result = reportdata.data.filter(function ({ _id }) {
-                return !this.has(_id);
-              }, new Set(result1.data.map(({ item_id }) => item_id)));
-              setItemData(result);
-            }
+            setExistingItemIds(result1)
+            let result = reportdata.data.filter(function ({ _id }) {
+              return !this.has(_id);
+            }, new Set(result1.data.map(({ item_id }) => item_id)));
+            setItemData(result);
           } else {
             setItemData(reportdata.data)
           }
@@ -612,6 +619,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           // LayoutAnimation.easeInEaseOut(); 
           // addInput()
           // const _inputs = [...inputs]
+          setRemoveAddOnEdit(false);
           inputs.splice(0, inputs.length);
           setReportmodal(true);
         }}>
@@ -816,8 +824,8 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   }
                   placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
                   inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
-                  data={reportdata.data}
-                  // data={itemData}
+                  // data={reportdata.data}
+                  data={itemData}
                   search
                   maxHeight={300}
                   labelField="item_name"
@@ -1223,6 +1231,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         <View style={{ alignItems: 'center', alignSelf: 'center' }}>
           <TouchableOpacity onPress={() => {
             setQuantity(!quant_ity)
+
             Main_drp_pro_value ? null : alert("Select Project First!")
 
 
@@ -1376,6 +1385,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                     contentContainerStyle={{
                       // height: 230,
                       top: 10,
+                      paddingBottom:10
                       // borderWidth: 3,
                       // borderColor: COLORS.lightblue_200,
                     }}>
@@ -1412,7 +1422,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }} >
                                 <View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                    {index}
+                                    {index+1}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: 42, top: -10 }}>

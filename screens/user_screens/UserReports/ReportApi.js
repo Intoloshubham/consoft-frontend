@@ -66,7 +66,7 @@ const Get_report_data = async (user_id, project_id, user_date) => {
 
 }
 
-const check_quantity_item_exist = async (project_id,user_id) => {
+const check_quantity_item_exist = async (project_id, user_id) => {
     try {
         const res = await fetch(`${process.env.API_URL}quantity-item-exist/${project_id}/${user_id}`)
         return res;
@@ -85,7 +85,8 @@ const update_quantity_data = async (Id, inputs) => {
             },
             body: JSON.stringify(inputs),
         })
-        return res;
+        const data = await res.json();
+        return data;
 
 
     } catch (error) {
