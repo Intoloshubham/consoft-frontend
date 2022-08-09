@@ -150,6 +150,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
 
   const companydata = useSelector(state => state.user);
+  console.log("🚀 ~ file: Quantity.js ~ line 153 ~ Quantity ~ companydata", companydata)
   // console.log(companydata)
 
   const current_dat = moment().format("YYYY%2FMM%2FDD")
@@ -173,7 +174,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // });
 
   const inputkeyRef = useRef(inputs);
-  
+
 
   const CONST_FIELD = {
     MANPOWER: 'Manpower',
@@ -209,7 +210,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
           }
         })
-    } else { 
+    } else {
       alert("Not inserted")
     }
   }
@@ -226,7 +227,8 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     setUpdateStatus(data)
 
     if (data.status == '200') {
-      showToast();
+      // showToast();
+      setUpdateToast(true);
       setTimeout(() => {
         setReportmodal(false);
       }, 1500);
@@ -238,17 +240,48 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // console.log(postQtyData)
   // getting report data functions
   // let count=0;
+
+  // useEffect(() => {
+
+  //   if (Main_drp_pro_value || postQtyData || updateStatus) {
+  //     // You can await here
+  //     const data = Get_report_data(companydata._id, Main_drp_pro_value, current_dat)
+
+  //     data.then(res => {
+  //               res.json()
+  //     }).then(res=>{
+
+  //       console.log("🚀 ~ file: Quantity.js ~ line 252 ~ useEffect ~ res", res)
+  //     })
+
+  //     // if (data.status == 200) {
+  //     //   setGetRepPostData(data);
+  //     //   // res.json()
+  //     // } else {
+  //     //   console.log("data not found!")
+  //     // }
+  //     // ...
+  //   }
+
+  //   // getRreportData();
+  // }, [postQtyData, Main_drp_pro_value, updateStatus])
+
   useEffect(() => {
-    if (Main_drp_pro_value || postQtyData || updateStatus) {
-      // console.log(companydata._id, Main_drp_pro_value, current_dat)
-      const data = Get_report_data(companydata._id, Main_drp_pro_value, current_dat)
-      data.then(res => res.json())
-        .then(result => {
-          // console.log(result)
-          setGetRepPostData(result);
-        })
+
+    async function getRreportData() {
+      if (Main_drp_pro_value || postQtyData || updateStatus) {
+        // You can await here
+        const data = await Get_report_data(companydata._id, Main_drp_pro_value, current_dat)
+        if (data.status == 200) {
+          setGetRepPostData(data);
+        } else {
+          console.log("data not found!")
+        }
+
+      }
     }
 
+    getRreportData();
   }, [postQtyData, Main_drp_pro_value, updateStatus])
 
 
@@ -256,17 +289,19 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const editReportBtn = async (id) => {
 
-    setRemoveAddOnEdit(true);
-    setUpdateId(id);
-    setReportmodal(true);
-
-
     setItemData(reportdata.data);
-
+    setRemoveAddOnEdit(true);
+    setReportmodal(true);
+    
+    
+    
     if (id) {
       const data = edit_report_data(id)
+      setUpdateId(id);
       data.then(res => res.json())
         .then(result => {
+        console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result)
+          
           if (result.data.subquantityitems.length == 0) {
             setInputs([...inputs, {
               item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
@@ -301,7 +336,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // console.log(editReportData.data._id.toString())
   const deleteReportButton = () => {
     // setReportmodal(true);
-    // alert("delete")
+    alert("delete")
     //  if (mainCompId) {
     //   const data = delete_report_data(mainCompId)
     //   data.then(res => res.json())
@@ -314,80 +349,32 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
 
-  // useMemo(() => {
-  //   const data = check_quantity_item_exist();
-  //   data.then((res) => res.json())
-  //     .then(res => {
-
-  //       if (res) {
-  //         res.data.map(ele => {
-
-  //             console.log(ele)
-  //         })
-
-  //       }
-
-  //     })
-  // }, [postQtyData, Main_drp_pro_value])
 
 
 
-  // console.log(user_id)
-  //getting user id state
-  // useMemo(() => {
-  //   Get_ComapnyId_Data();
-  // }, [getUserId])
 
 
-  // const data = check_quantity_item_exist();
-  // data.then((res) => res.json())
-  //   .then(result1 => {
-
-  // if (result1) {
-
-  // result1.data.map((ele, key) => {
-  // reportdata.data.map((ele2, key2) => {
-  //   if (ele.item_id == ele2._id) {
-  //     reportdata.data.splice(reportdata.data.findIndex(a => a._id === ele.item_id), 1)
-
-  //     setItemData(reportdata.data);
-
-  //     // console.log(reportdata.data.length)
-  //   } else {
-
-  //     setItemData(ele2);
-  //   }
+  
 
 
-  // })
-  // })
+  const addHandler = async () => {
 
-  // }
+    // if (Main_drp_pro_value) {
+      const result1 = await check_quantity_item_exist(Main_drp_pro_value, companydata._id);
 
+      if (result1.data.length != 0) {
+        console.log("🚀 ~ file: Quantity.js ~ line 422 ~ addHandler ~ length", result1.data.length)
+        let result = reportdata.data.filter(function ({ _id }) {
+          return !this.has(_id);
+        }, new Set(result1.data.map(({ item_id }) => item_id)));
+        setItemData(result);
+      }else{
+        setItemData(reportdata.data)
+      }
 
+  
+    // }
 
-  // });
-  const addHandler = () => {
-
-    if (Main_drp_pro_value) {
-      const data = check_quantity_item_exist(Main_drp_pro_value, companydata._id);
-      data.then((res) => res.json())
-        .then(result1 => {
-          if (result1.status == 200) {
-            setExistingItemIds(result1)
-            let result = reportdata.data.filter(function ({ _id }) {
-              return !this.has(_id);
-            }, new Set(result1.data.map(({ item_id }) => item_id)));
-            setItemData(result);
-          } else {
-            setItemData(reportdata.data)
-          }
-        })
-    }
-
-
-    // console.log("🚀 ~ file: Quantity.js ~ line 381 ~ addHandler ~ reportdata", reportdata.data)
-    // console.log("🚀 ~ file: Quantity.js ~ line 359 ~ addHandler ~ ItemData", itemData)
     setInputs([...inputs, {
       item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '',
       subquantityitems: [
@@ -399,24 +386,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
 
-  // console.log(inputs);
-  //setting num_total in state
-  // useMemo(() => {
-  //   inputs.map((ele, index) => {
-  //     // if (ele.key === index) {
-  //     // setSelectData(ele.select) 
-  //     setnum_totalData(ele.num_total)
-  //     // }
-  //   }) 
-  // }, [lengthData,widthData,thicknessData])
-
-  // const selectunitdata = useCallback(()=>{
-  //   inputs.map((ele,index)=>{ 
-  //         if(ele.key===index){
-  //           setSelectData(ele.select)
-  //         }
-  //       })
-  // },[selectData])
+  
 
 
 
@@ -454,7 +424,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const inputunit = (text, key) => {
     const _inputsunit = [...inputs];
-    _inputsunit[key].unit = text;
+    _inputsunit[key].unit_name = text;
     _inputsunit[key].key = key;
     setUnitKey(key);
     // console.log("unitKey");
@@ -590,6 +560,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         `${process.env.API_URL}quantity-report-item/` + `${companydata.company_id}`,
       );
       const quantitydata = await resp.json();
+      console.log("🚀 ~ file: Quantity.js ~ line 638 ~ reportdataitem ~ quantitydata", quantitydata)
 
       // console.log("quantitydata"); 
       // console.log(quantitydata); 
@@ -616,9 +587,6 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
         }}
         onPress={() => {
-          // LayoutAnimation.easeInEaseOut(); 
-          // addInput()
-          // const _inputs = [...inputs]
           setRemoveAddOnEdit(false);
           inputs.splice(0, inputs.length);
           setReportmodal(true);
@@ -646,7 +614,6 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               color={COLORS.white}
             />
           </View>
-          {/* <Text style={{color:COLORS.gray}}>Add Quantity item</Text> */}
 
 
         </View>
@@ -697,7 +664,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
           <TextInput
             style={inputfromone}
-            placeholder="Length"
+            placeholder="L"
             placeholderTextColor={COLORS.gray}
             value={subquantityitems.sub_length}
             keyboardType="numeric"
@@ -710,7 +677,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           />
           <TextInput
             style={inputfromone}
-            placeholder="Breadth"
+            placeholder="B"
             placeholderTextColor={COLORS.gray}
             value={subquantityitems.sub_width}
             keyboardType="numeric"
@@ -722,7 +689,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           />
           <TextInput
             style={inputfromone}
-            placeholder="Thicknes"
+            placeholder="T"
             placeholderTextColor={COLORS.gray}
             value={subquantityitems.sub_height}
             keyboardType="numeric"
@@ -831,12 +798,10 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   labelField="item_name"
                   valueField="_id"
                   placeholder={!isFocus ? 'Select' : '...'}
-
                   searchPlaceholder="Search..."
                   value={input.item_id}
                   onChange={item => {
                     setSelectKey(input.key);
-                    // console.log(item)
                     // setItemData(item._id)
                     setCompanyIdData(item.company_id)
                     // setUnitData(item.unit_name)
@@ -1059,7 +1024,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               {/*  */}
               {add_input_and_subinput()}
               {/*  */}
-              <Toast config={showToast} />
+              {/* <Toast config={showToast} /> */}
               {removeAddOnEdit ?
                 <View style={{ marginTop: 10 }}>
                   <Button
@@ -1385,7 +1350,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                     contentContainerStyle={{
                       // height: 230,
                       top: 10,
-                      paddingBottom:10
+                      paddingBottom: 10
                       // borderWidth: 3,
                       // borderColor: COLORS.lightblue_200,
                     }}>
@@ -1422,7 +1387,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }} >
                                 <View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                    {index+1}
+                                    {index + 1}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: 42, top: -10 }}>

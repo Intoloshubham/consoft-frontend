@@ -66,6 +66,7 @@ const UserReports = ({ route }) => {
         fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
           .then((response) => response.json())
           .then(data => {
+          console.log("🚀 ~ file: UserReports.js ~ line 69 ~ all projects ~ data", data)
             // console.log("data........")
             // console.log(data)
             setSelectedIdProjects(data);
