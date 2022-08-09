@@ -26,7 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
 import { getCompanyId, getToken, getUserId } from '../../../../../services/asyncStorageService';
-import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data,get_quality_type } from '../../ReportApi.js'
+import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type } from '../../ReportApi.js'
 import { EditDeletebuttons } from '../../../index.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment';
@@ -140,18 +140,18 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
   ]);
 
-  const [isLiked, setIsLiked] = useState([
-    { id: 1, value: true, name: "Good", selected: false },
-    { id: 2, value: false, name: "Average", selected: false },
-    { id: 3, value: false, name: "Poor", selected: false }
-  ]);
+  // const [isLiked, setIsLiked] = useState([
+  //   { id: 1, value: true, name: "Good", selected: false },
+  //   { id: 2, value: false, name: "Average", selected: false },
+  //   { id: 3, value: false, name: "Poor", selected: false }
+  // ]);
 
   const getQualityType = async () => {
     const data = await get_quality_type();
 
     qualityType.push(...data.data);
   }
-  
+
   console.log("🚀 ~ file: Quantity.js ~ line 153 ~ getQualityType ~ qualityType", qualityType)
 
 
@@ -778,14 +778,15 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const onRadioBtnClick = (item) => {
     console.log("🚀 ~ file: Quantity.js ~ line 780 ~ onRadioBtnClick ~ item", item)
-
-    let updatedState = isLiked.map((isLikedItem) =>
-      isLikedItem.id === item.id
-        ? { ...isLikedItem, selected: true }
-        : { ...isLikedItem, selected: false }
-    );
-    setIsLiked(updatedState);
-  };
+    if (qualityType.status == 200) {
+      let updatedState = qualityType.map((isLikedItem) =>
+        isLikedItem._id === item._id
+          ? { ...isLikedItem, selected: true }
+          : { ...isLikedItem, selected: false }
+      );
+      setQualityType(updatedState);
+    };
+  }
   // console.log("🚀 ~ file: Quantity.js ~ line 783 ~ onRadioBtnClick ~ isLiked", isLiked)
 
   const add_input_and_subinput = () => {
@@ -942,15 +943,15 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   inputRemark(text, key)
                 }}
               />
-              {isLiked.map((item) => (
+              {qualityType ? qualityType.map((item) => (
                 <RadioButton
                   onPress={() => onRadioBtnClick(item)}
                   selected={item.selected}
-                  key={item.id}
+                  key={item._id}
                 >
                   {item.name}
                 </RadioButton>
-              ))}
+              )) : null}
 
               <View>
                 {
