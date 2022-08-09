@@ -15,7 +15,7 @@ import {useSelector} from 'react-redux';
 
 const Home = () => {
   const companyData = useSelector(state => state.company);
-  
+
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
@@ -35,15 +35,7 @@ const Home = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            progressBackgroundColor="white"
-            tintColor="red"
-            refreshing={loading}
-            onRefresh={loadMore}
-          />
-        }>
+      <ScrollView>
         <View
           style={{
             flex: 1,

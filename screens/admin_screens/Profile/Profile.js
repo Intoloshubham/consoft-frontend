@@ -6,8 +6,14 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
+  Image,
+  ImageBackground,
+  Modal,
+  TouchableWithoutFeedback,
+  VirtualizedList,
+  SafeAreaView,
 } from 'react-native';
-import {COLORS, SIZES, FONTS} from '../../../constants';
+import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
 import CalendarPicker from 'react-native-calendar-picker';
 import {
@@ -15,6 +21,7 @@ import {
   postUserLeaves,
 } from '../../../controller/LeavesController';
 import {CustomToast} from '../../../Components';
+import {getUsers} from '../../../controller/UserRoleController';
 
 const Profile = () => {
   const [selectedStartDate, setSelectedStartDate] = React.useState(null);
@@ -25,6 +32,11 @@ const Profile = () => {
   const arr = {leavedates: data};
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
+
+  const [filterModal, setFilterModal] = React.useState(false);
+  const [users, setUsers] = React.useState([]);
+
+  // ====================================
 
   const checkBoxHandler = leave_date_id => {
     let d = [...data, leave_date_id];
@@ -54,10 +66,23 @@ const Profile = () => {
     let response = await postUserLeaves(id, arr);
     if (response.status === 200) {
       setSubmitToast(true);
+      userLeaves();
     }
     setTimeout(() => {
       setSubmitToast(false);
     }, 1500);
+  };
+
+  const getusers = async () => {
+    let response = await getUsers();
+    setUsers(response);
+  };
+
+  const [userId, setUserId] = React.useState('');
+  console.log(userId);
+  const OnUserSelecter = user_id => {
+    setUserId(user_id);
+    setFilterModal(false);
   };
 
   React.useEffect(() => {
@@ -157,7 +182,7 @@ const Profile = () => {
       <View
         style={{
           marginTop: SIZES.padding,
-          marginHorizontal: SIZES.radius,
+          marginHorizontal: SIZES.padding,
           paddingHorizontal: SIZES.padding,
           paddingVertical: SIZES.radius,
           backgroundColor: COLORS.white,
@@ -194,18 +219,20 @@ const Profile = () => {
   function renderCalender() {
     return (
       <View
-        style={{
-          marginBottom: 60,
-          marginTop: 30,
-          marginHorizontal: SIZES.radius,
-          padding: 10,
-          borderRadius: 5,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-        }}>
+        style={
+          {
+            // marginBottom: 60,
+            // marginTop: 30,
+            // marginHorizontal: SIZES.radius,
+            // padding: 10,
+            // borderRadius: 5,
+            // backgroundColor: COLORS.white,
+            // ...styles.shadow,
+          }
+        }>
         <CalendarPicker
-          width={350}
-          height={350}
+          width={320}
+          height={320}
           showDayStragglers={true}
           startFromMonday={true}
           minDate={new Date(2000, 1, 1)}
@@ -257,10 +284,107 @@ const Profile = () => {
     );
   }
 
+  function renderfilterModal() {
+    return (
+      <Modal animationType="slide" transparent={true} visible={filterModal}>
+        <TouchableWithoutFeedback onPress={() => setFilterModal(false)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                width: '60%',
+                maxHeight: 300,
+                padding: SIZES.padding,
+                borderRadius: SIZES.base,
+                backgroundColor: COLORS.white,
+              }}>
+              <ScrollView showsVerticalScrollIndicator={true}>
+                {users.map((ele, i) => {
+                  return (
+                    <View key={i}>
+                      <TouchableOpacity
+                        key={i}
+                        onPress={() => OnUserSelecter(ele._id)}
+                        style={{alignItems: 'flex-start'}}>
+                        <Text
+                          style={{
+                            ...FONTS.h3,
+                            color: COLORS.darkGray,
+                            textTransform: 'capitalize',
+                          }}>
+                          {ele.name}
+                        </Text>
+                      </TouchableOpacity>
+                      <View
+                        style={{
+                          height: 1,
+                          backgroundColor: COLORS.gray2,
+                          marginVertical: 12,
+                        }}></View>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
+  function renderShowUserDetails() {
+    return (
+      <View
+        style={{
+          marginHorizontal: SIZES.padding,
+          marginVertical: SIZES.padding,
+          backgroundColor: COLORS.white,
+          ...styles.shadow,
+        }}>
+        <View
+          style={{
+            paddingHorizontal: SIZES.padding,
+            paddingVertical: SIZES.radius,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text></Text>
+          <TouchableOpacity
+            onPress={() => {
+              setFilterModal(true), getusers();
+            }}>
+            <ImageBackground
+              style={{
+                backgroundColor: COLORS.darkGray,
+                padding: 3,
+                borderRadius: 2,
+              }}>
+              <Image
+                source={icons.filter}
+                style={{height: 12, width: 12, tintColor: COLORS.white}}
+              />
+            </ImageBackground>
+          </TouchableOpacity>
+        </View>
+        <View style={{marginBottom: 20}}>
+          {userId == '' ? renderCalender() : <Text>Other</Text>}
+        </View>
+      </View>
+    );
+  }
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       {renderUserLeavesList()}
-      {renderCalender()}
+      {/* {renderCalender()} */}
+      {renderShowUserDetails()}
+      {renderfilterModal()}
       <CustomToast
         isVisible={submitToast}
         onClose={() => setSubmitToast(false)}
