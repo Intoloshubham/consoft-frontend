@@ -66,7 +66,7 @@ const UserReports = ({ route }) => {
         fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
           .then((response) => response.json())
           .then(data => {
-          console.log("🚀 ~ file: UserReports.js ~ line 69 ~ all projects ~ data", data)
+            console.log("🚀 ~ file: UserReports.js ~ line 69 ~ all projects ~ data", data)
             // console.log("data........")
             // console.log(data)
             setSelectedIdProjects(data);
@@ -124,7 +124,7 @@ const UserReports = ({ route }) => {
       return
     }
   }, [value])
-// console.log(projectTeamList)
+  // console.log(projectTeamList)
 
 
 
@@ -185,7 +185,7 @@ const UserReports = ({ route }) => {
           }}>
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
-          <View >
+          {value ? <View >
             <View style={{ marginVertical: 5 }}>
               <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} />
             </View>
@@ -193,9 +193,9 @@ const UserReports = ({ route }) => {
               {/* Stock component */}
               <Stock />
             </View>
-            <View style={{ marginVertical: 5 }}  Main_drp_pro_value={value}>
+            <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>
               {/* Quantity */}
-              <Quantity project_id={value} Main_drp_pro_value={value}/>
+              <Quantity project_id={value} Main_drp_pro_value={value} />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}
@@ -205,7 +205,7 @@ const UserReports = ({ route }) => {
               {/* Quality */}
               <TAndP />
             </View>
-          </View>
+          </View> : null}
         </View>
       </ScrollView>
     </View>

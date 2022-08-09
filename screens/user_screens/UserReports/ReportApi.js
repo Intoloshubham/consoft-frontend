@@ -68,6 +68,17 @@ const Get_report_data = async (user_id, project_id, user_date) => {
 
 }
 
+
+const get_quality_type = async () => {
+    try {
+        const res = await fetch(`${process.env.API_URL}quality-type`)
+        const data = await res.json();
+        return data;
+    } catch (error) {
+
+    }
+}
+
 const check_quantity_item_exist = async (project_id, user_id) => {
     try {
         const res = await fetch(`${process.env.API_URL}quantity-item-exist/${project_id}/${user_id}`)
@@ -97,6 +108,9 @@ const update_quantity_data = async (Id, inputs) => {
     }
 }
 
-export { Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data, delete_report_data, check_quantity_item_exist, update_quantity_data }
+export {
+    Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data,
+    delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type
+}
 
 

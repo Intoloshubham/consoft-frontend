@@ -26,7 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
 import { getCompanyId, getToken, getUserId } from '../../../../../services/asyncStorageService';
-import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data } from '../../ReportApi.js'
+import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data,get_quality_type } from '../../ReportApi.js'
 import { EditDeletebuttons } from '../../../index.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment';
@@ -117,7 +117,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   //main get report data
   const [getRepPostData, setGetRepPostData] = useState('')
 
-
+  const [qualityType, setQualityType] = useState([])
 
   //then again quantityitems data getting
   // const [quantityItemsData, setQuantityItemsData] = useState('')
@@ -140,14 +140,32 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
   ]);
 
+  const [isLiked, setIsLiked] = useState([
+    { id: 1, value: true, name: "Good", selected: false },
+    { id: 2, value: false, name: "Average", selected: false },
+    { id: 3, value: false, name: "Poor", selected: false }
+  ]);
+
+  const getQualityType = async () => {
+    const data = await get_quality_type();
+
+    qualityType.push(...data.data);
+  }
+  
+  console.log("🚀 ~ file: Quantity.js ~ line 153 ~ getQualityType ~ qualityType", qualityType)
+
+
+
+
+
+  useMemo(() =>
+    getQualityType()
+    , [Main_drp_pro_value])
+
 
 
   const addKeyref = useRef(0);
-  //get company id
-  // const [company_id, setCompany_id] = useState('');
-  // const [mainCompId, setMainCompId] = useState('')
-  // const [user_id, setUser_id] = useState('');
-  // const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
+
 
   const companydata = useSelector(state => state.user);
   console.log("🚀 ~ file: Quantity.js ~ line 153 ~ Quantity ~ companydata", companydata)
@@ -155,23 +173,8 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const current_dat = moment().format("YYYY%2FMM%2FDD")
   // console.log(current_dat)
-  // 2022%2F08%2F05/
-  // const _userId = async () => {
-  //   const _id = await getUserId();
-  //   setUser_id(_id);
-  // };
 
-  //setting token
-  // React.useMemo(() => {
-  //   (async () => await _userId())();
-  // }, []);
 
-  // useMemo(() => {
-  //   (async () => {
-  //     const token = await getToken();
-  //     setAccessTokenoptiontype(token);
-  //   })();
-  // });
 
   const inputkeyRef = useRef(inputs);
 
@@ -292,16 +295,16 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     setItemData(reportdata.data);
     setRemoveAddOnEdit(true);
     setReportmodal(true);
-    
-    
-    
+
+
+
     if (id) {
       const data = edit_report_data(id)
       setUpdateId(id);
       data.then(res => res.json())
         .then(result => {
-        console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result)
-          
+          console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result)
+
           if (result.data.subquantityitems.length == 0) {
             setInputs([...inputs, {
               item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
@@ -354,25 +357,26 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
 
-  
+
 
 
   const addHandler = async () => {
 
     // if (Main_drp_pro_value) {
-      const result1 = await check_quantity_item_exist(Main_drp_pro_value, companydata._id);
+    const result1 = await check_quantity_item_exist(Main_drp_pro_value, companydata._id);
+    console.log("🚀 ~ file: Quantity.js ~ line 364 ~ addHandler ~ result1", result1)
 
-      if (result1.data.length != 0) {
-        console.log("🚀 ~ file: Quantity.js ~ line 422 ~ addHandler ~ length", result1.data.length)
-        let result = reportdata.data.filter(function ({ _id }) {
-          return !this.has(_id);
-        }, new Set(result1.data.map(({ item_id }) => item_id)));
-        setItemData(result);
-      }else{
-        setItemData(reportdata.data)
-      }
+    if (result1.status != 401) {
+      // console.log("🚀 ~ file: Quantity.js ~ line 422 ~ addHandler ~ length", result1.data.length)
+      let result = reportdata.data.filter(function ({ _id }) {
+        return !this.has(_id);
+      }, new Set(result1.data.map(({ item_id }) => item_id)));
+      setItemData(result);
+    } else {
+      setItemData(reportdata.data)
+    }
 
-  
+
     // }
 
     setInputs([...inputs, {
@@ -386,7 +390,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
 
-  
+
 
 
 
@@ -509,6 +513,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const fetchData = async () => {
     const resp = await fetch(`${process.env.API_URL}unit`);
+    console.log("🚀 ~ file: Quantity.js ~ line 513 ~ fetchData ~ resp", resp)
     const data = await resp.json();
     setdata(data);
   };
@@ -573,7 +578,18 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     reportdataitem();
   }, [companydata.company_id]);
 
-
+  const RadioButton = ({ onPress, selected, children }) => {
+    return (
+      <View style={styles_m.radioButtonContainer}>
+        <TouchableOpacity onPress={onPress} style={styles_m.radioButton}>
+          {selected ? <View style1={styles_m.radioButtonIcon} /> : null}
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles_m.radioButtonText}>{children}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const add_quantity_icon_button = () => {
     return (
@@ -665,7 +681,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           <TextInput
             style={inputfromone}
             placeholder="L"
-            placeholderTextColor={COLORS.gray}
+            placeholderTextColor={COLORS.lightGray1}
             value={subquantityitems.sub_length}
             keyboardType="numeric"
             onChangeText={text => {
@@ -678,7 +694,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           <TextInput
             style={inputfromone}
             placeholder="B"
-            placeholderTextColor={COLORS.gray}
+            placeholderTextColor={COLORS.lightGray1}
             value={subquantityitems.sub_width}
             keyboardType="numeric"
             onChangeText={text => {
@@ -690,7 +706,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           <TextInput
             style={inputfromone}
             placeholder="T"
-            placeholderTextColor={COLORS.gray}
+            placeholderTextColor={COLORS.lightGray1}
             value={subquantityitems.sub_height}
             keyboardType="numeric"
             onChangeText={text => {
@@ -731,7 +747,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                 flexWrap: 'wrap',
               }}
               placeholder={'Remark'}
-              placeholderTextColor={COLORS.gray}
+              placeholderTextColor={COLORS.lightGray1}
               value={subquantityitems.sub_remark}
               onChangeText={text => {
                 SubinputRemark(text, index1, key)
@@ -760,15 +776,23 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     )
   }
 
+  const onRadioBtnClick = (item) => {
+    console.log("🚀 ~ file: Quantity.js ~ line 780 ~ onRadioBtnClick ~ item", item)
+
+    let updatedState = isLiked.map((isLikedItem) =>
+      isLikedItem.id === item.id
+        ? { ...isLikedItem, selected: true }
+        : { ...isLikedItem, selected: false }
+    );
+    setIsLiked(updatedState);
+  };
+  // console.log("🚀 ~ file: Quantity.js ~ line 783 ~ onRadioBtnClick ~ isLiked", isLiked)
+
   const add_input_and_subinput = () => {
     return (<View style={container}>
       <ScrollView style={inputsContainer}>
         {inputs ? inputs.map((input, key) => {
-          {/* console.log(input) */ }
 
-          {/* console.log("key===="+key)
-       */}
-          {/* console.log(input.unit_name[0])  */ }
 
           return (
             <View style={inputContainer} key={key}>
@@ -918,7 +942,15 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   inputRemark(text, key)
                 }}
               />
-
+              {isLiked.map((item) => (
+                <RadioButton
+                  onPress={() => onRadioBtnClick(item)}
+                  selected={item.selected}
+                  key={item.id}
+                >
+                  {item.name}
+                </RadioButton>
+              ))}
 
               <View>
                 {
@@ -1722,6 +1754,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     </View>
   );
 };
+
 {/* <FlatList
   data={quantityItemsData.quantityitems} 
   scrollEnabled
@@ -1752,5 +1785,30 @@ const styles_m = StyleSheet.create({
     alignContent: "space-between",
     margin: 5,
     paddingHorizontal: 5
+  },
+  radioButtonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5
+  },
+  radioButton: {
+    height: 20,
+    width: 20,
+    backgroundColor: "#E9E9E9",
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#E6E6E6",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  radioButtonIcon: {
+    height: 14,
+    width: 14,
+    borderRadius: 7,
+    backgroundColor: "green"
+  },
+  radioButtonText: {
+    fontSize: 16,
+    marginLeft: 16
   }
 });
