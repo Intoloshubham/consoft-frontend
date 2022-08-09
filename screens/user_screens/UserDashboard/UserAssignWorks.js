@@ -212,7 +212,7 @@ const UserAssignWorks = () => {
           color: COLORS.darkGray,
           marginBottom: SIZES.base,
         }}>
-        Assign Works
+        Assigned Works
       </Text>
 
       {/* {

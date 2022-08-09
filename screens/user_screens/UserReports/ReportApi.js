@@ -15,12 +15,12 @@ const Get_Contractor_Data = async (project_id) => {
     return getData
 
 }
- 
+
 
 const Get_user_role = async () => {
     const res = await fetch(`${process.env.API_URL}role`)
     return res;
-} 
+}
 
 const Insert_report_data = async (report_post_data, CONST_FIELD) => {
 
@@ -37,29 +37,80 @@ const Insert_report_data = async (report_post_data, CONST_FIELD) => {
 
 }
 
-const edit_report_data=(Id)=>{
+const edit_report_data = (Id) => {
     try {
-           const res=fetch(`${process.env.API_URL}quantity-report/${Id}`)
-           return res;
+        const res = fetch(`${process.env.API_URL}edit-quantity-report/${Id}`)
+        return res;
     } catch (error) {
-         
+        console.log(error);
     }
 }
 
-const delete_report_data=(Id)=>{
+const delete_report_data = (Id) => {
     try {
-           const res=fetch(`${process.env.API_URL}quantity-report/${Id}`)
-           return res;
+        const res = fetch(`${process.env.API_URL}delete-quantity-report/${Id}`)
+
+        return res;
     } catch (error) {
-         
+        console.log(error);
     }
 }
 
-const Get_report_data = async () => {
-    const res = await fetch(`${process.env.API_URL}quantity-report`)
-    return res;
+const Get_report_data = async (user_id, project_id, user_date) => {
+    try {
+        const res = await fetch(`${process.env.API_URL}quantity-report/${user_id}/${project_id}/${user_date}/`)
+        // return res;
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
-export { Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data,Get_report_data,edit_report_data,delete_report_data }
+
+const get_quality_type = async () => {
+    try {
+        const res = await fetch(`${process.env.API_URL}quality-type`)
+        const data = await res.json();
+        return data;
+    } catch (error) {
+
+    }
+}
+
+const check_quantity_item_exist = async (project_id, user_id) => {
+    try {
+        const res = await fetch(`${process.env.API_URL}quantity-item-exist/${project_id}/${user_id}`)
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const update_quantity_data = async (Id, inputs) => {
+    try {
+        const res = await fetch(`${process.env.API_URL}quantity-report/${Id}`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inputs),
+        })
+        const data = await res.json();
+        return data;
+
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export {
+    Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data,
+    delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type
+}
 
 
