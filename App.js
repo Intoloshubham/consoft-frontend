@@ -28,7 +28,6 @@ import {
   Suppliers,
   Optiontype,
   ToolsAndMachinery1,
-
   Boq,
   VerifyAndRevertWork,
 } from './screens/admin_screens';
