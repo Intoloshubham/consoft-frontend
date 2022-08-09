@@ -9,6 +9,7 @@ import {
   ScrollView,
   Modal,
   TouchableWithoutFeedback,
+  LogBox,
 } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {
@@ -117,6 +118,7 @@ const ProjectsBanner = ({company_id}) => {
     fetchProjects();
     fetchProjectCategory();
     fetchProjectsTypes();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
   // ON BUTTON SUBMISSON VALIDATION
@@ -130,7 +132,6 @@ const ProjectsBanner = ({company_id}) => {
       projectPlotAreaError == ''
     );
   }
-
 
   const fetchProjectCategory = async () => {
     const res = await getProjectCategory();
@@ -865,9 +866,7 @@ const ProjectsBanner = ({company_id}) => {
         backgroundColor: COLORS.lightblue_600,
         borderRadius: 5,
         ...styles.shadow,
-      }}
-      // onPress={toggleExpanded}
-    >
+      }}>
       <View
         style={{
           flex: 1,
@@ -911,16 +910,9 @@ const ProjectsBanner = ({company_id}) => {
       </View>
       <Collapsible collapsed={collapsed}>{renderProjects()}</Collapsible>
 
-      {/* PROJECT CREATE MODAL  */}
       {renderCreateProjectModal()}
-
-      {/* PROJECTS EDIT & UPDATE MODAL */}
       {renderProjectCrudModal()}
-
-      {/* PROJECT UPDATE MODAL  */}
       {renderUpdateProjectModal()}
-
-      {/* DELETE CONFIRMATION MODAL */}
 
       <CustomToast
         isVisible={submitToast}
