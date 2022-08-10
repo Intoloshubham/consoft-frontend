@@ -838,7 +838,7 @@ const ManpowerUserContractors = ({ProList,Main_drp_pro_value}) => {
         (
           <View
             // nestedScrollEnabled={true}
-            style={{ }}
+            style={{ bottom:0}}
           >
             <FlatList
               data={Report_list}
