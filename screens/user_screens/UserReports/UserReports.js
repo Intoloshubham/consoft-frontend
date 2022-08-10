@@ -191,16 +191,15 @@ const UserReports = ({ route }) => {
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
-              <Stock />
+              <Stock project_id={value} Main_drp_pro_value={value}/>
             </View>
             <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>
               {/* Quantity */}
               <Quantity project_id={value} Main_drp_pro_value={value} />
             </View>
-            <View style={{ marginVertical: 5 }}>
-              {/* Quality */}
+            {/* <View style={{ marginVertical: 5 }}>
               <Quality />
-            </View>
+            </View> */}
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}
               <TAndP />

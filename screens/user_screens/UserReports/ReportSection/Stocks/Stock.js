@@ -1,21 +1,385 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import {
-    View, Animated,
-    Easing, Switch,
+    View,
     Text, FlatList,
     StyleSheet, Image,
     ScrollView, Modal,
-    Pressable, TextInput, TouchableWithoutFeedback,
-    TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
+    Pressable, TextInput,
+    TouchableOpacity, Button
 } from 'react-native'
 import styles from '../../ReportStyle.js'
+import { Title, Divider } from 'react-native-paper';
+import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { get_stock_item_name, insert_stock_data } from '../../ReportApi.js'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useSelector } from 'react-redux';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
+import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
+const Stock = ({ project_id, Main_drp_pro_value }) => {
+    const {
+        header,
+        con_body,
+        input,
+        body_del,
+        body_edit,
+        body_del_btn,
+        body_edit_btn,
+        body_ed_de_view,
+        dropdown,
+        dropdown1,
+        container,
+        inputContainer,
+        inputsContainer,
+        inputfrom,
+        inputfromtwo,
+        inputfromone,
+        cont_Project_list_drop
+    } = styles;
 
-const Stock = () => {
-    const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view } = styles
-      //Stock collapse
-  const [stockCollapse, setStockCollapse] = useState(false)
+    //Stock collapse
+    const [stockCollapse, setStockCollapse] = useState(false)
+    // CUSTOM TOAST OF CRUD OPERATIONS
+    const [submitToast, setSubmitToast] = useState(false);
+    const [updateToast, setUpdateToast] = useState(false);
+    const [deleteToast, setDeleteToast] = useState(false);
+    const [stockResponseStatus, setStockResponseStatus] = useState('')
+    const [isFocus, setIsFocus] = useState(false);
+
+    //Insertion modal
+    const [stockReportModal, setStockReportModal] = useState(false);
+    const userCompanyData = useSelector(state => state.user);
+    const [stockItemData, setStockItemData] = useState([])
+
+    // all input fields
+    const [stockEntry, setStockEntry] = useState([
+        {
+            item_id: '', unit_name: '', qty: '', vehicle_no: '', location: ''
+        }
+    ]);
+
+    const [selectKey, setSelectKey] = useState('');
+
+
+
+
+
+
+    const getStockDataItems = async () => {
+        try {
+            const data = await get_stock_item_name();
+            console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
+            setStockItemData(data);
+        } catch (error) {
+
+        }
+    }
+
+    useMemo(() => {
+        getStockDataItems();
+    }, [userCompanyData.company_id])
+
+
+
+    const postStockDataItems = async () => {
+        try {
+            const stock_post_data = {
+                company_id: userCompanyData.company_id,
+                project_id: project_id,
+                user_id: userCompanyData._id,
+                stockEntry: stockEntry
+            }
+            // console.log("🚀 ~ file: Stock.js ~ line 93 ~ postStockDataItems ~ stock_post_data", stock_post_data)
+
+            if (stock_post_data) {
+                const data = await insert_stock_data(stock_post_data)
+                setStockResponseStatus(data)
+                if (data.status == '200') {
+                    setSubmitToast(true)
+                    setTimeout(() => {
+                        setStockReportModal(false);
+                    }, 1500);
+                    stockEntry.splice(0, stockEntry.length);
+                }
+            } else {
+                alert("Not inserted")
+            }
+        } catch (error) {
+
+        }
+    }
+
+    const inputUnitName = (text, key) => {
+        const _inputs = [...stockEntry];
+        _inputs[key].unit_name = text;
+        _inputs[key].key = key;
+        setStockEntry(_inputs);
+    };
+    const inputQuantity = (text, key) => {
+        const _inputs = [...stockEntry];
+        _inputs[key].qty = text;
+        _inputs[key].key = key;
+        setStockEntry(_inputs);
+    };
+    const inputVehicleNo = (text, key) => {
+        const _inputs = [...stockEntry];
+        _inputs[key].vehicle_no = text;
+        _inputs[key].key = key;
+        setStockEntry(_inputs);
+    };
+    const inputLocation = (text, key) => {
+        const _inputs = [...stockEntry];
+        _inputs[key].location = text;
+        _inputs[key].key = key;
+        setStockEntry(_inputs);
+    };
+
+    const inputSelectItem = (item, key) => {
+
+        const _inputs = [...stockEntry];
+        _inputs[key].item_id = item._id;
+        _inputs[key].unit_name = item.unit_name;
+        _inputs[key].key = key;
+        setStockEntry(_inputs);
+    };
+
+
+    const deleteStockHandler = (key) => {
+        const _inputs = [...stockEntry]
+        _inputs.splice(key, 1);
+        setStockEntry(_inputs);
+    }
+
+    const addStockInputHandler = () => {
+
+        setStockEntry([...stockEntry, { item_id: '', unit_name: '', qty: '', location: '', vehicle_no: '' }])
+    }
+
+
+    const add_stock_input = () => {
+        return (
+            <View style={container}>
+                <ScrollView style={inputsContainer}>
+                    {stockEntry ? stockEntry.map((input, key) => {
+
+                        return (
+                            <View style={inputContainer} key={key}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        paddingHorizontal: 5
+                                        // alignItems: 'center',
+                                    }}
+                                    // key={key}
+                                    key="{(key+1)}"
+                                >
+                                    <Dropdown
+                                        style={[
+                                            styles.dropdown,
+                                            // cont_Project_list_drop,
+                                            isFocus && { borderColor: 'blue' },
+                                        ]}
+                                        selectedTextStyle={{ color: COLORS.gray, }
+                                        }
+                                        placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
+                                        inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
+                                        data={stockItemData}
+                                        search
+                                        maxHeight={300}
+                                        labelField="item_name"
+                                        valueField="_id"
+                                        placeholder={!isFocus ? 'Select' : '...'}
+                                        searchPlaceholder="Search..."
+                                        value={input.item_id}
+                                        onChange={item => {
+                                            setSelectKey(input.key);
+                                            inputSelectItem(item, key);
+                                        }}
+                                    />
+                                    <TextInput
+                                        style={inputfromtwo}
+                                        // editable={false}
+                                        selectTextOnFocus={false}
+                                        placeholder={'unit name'}
+
+                                        // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
+                                        value={key == selectKey ? input.unit_name : input.unit_name}
+                                        onChangeText={text => { inputUnitName(text, key) }}
+                                    />
+                                </View>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        alignItems: 'center',
+                                    }}>
+                                    <TextInput
+                                        style={[inputfromone, { width: "27%" }]}
+                                        placeholder="Qty"
+                                        keyboardType="numeric"
+                                        placeholderTextColor={COLORS.gray}
+                                        value={input.qty}
+                                        onChangeText={text => {
+                                            inputQuantity(text, key);
+                                        }}
+                                    />
+                                    <TextInput
+                                        style={[inputfromone, { width: "28%" }]}
+                                        placeholder="Vehicle no"
+                                        placeholderTextColor={COLORS.gray}
+                                        value={input.vehicle_no}
+                                        onChangeText={text => {
+                                            inputVehicleNo(text, key);
+                                        }}
+                                    />
+                                    <TextInput
+                                        style={[inputfromone, { width: "40%" }]}
+                                        placeholder="Location"
+                                        placeholderTextColor={COLORS.gray}
+                                        value={input.location}
+                                        onChangeText={text => {
+                                            inputLocation(text, key);
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ alignSelf: "flex-end" }}>
+                                    <TouchableOpacity
+                                        style={{ paddingLeft: 310 }}
+                                        onPress={() => deleteStockHandler(key)}>
+                                        <Image
+                                            source={icons.delete_icon}
+                                            style={{
+                                                width: 20,
+                                                height: 20,
+                                                tintColor: COLORS.red,
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )
+                    }) : null}
+                </ScrollView>
+            </View>
+        )
+    }
+
+    const add_stock_data_modal = () => {
+
+        return (
+            <View>
+                <Modal visible={stockReportModal} transparent={false} animationType="slide">
+                    <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: '#fff',
+                                marginTop: 50,
+                                borderRadius: 20,
+                                padding: 22,
+                            }}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    borderBottomWidth: 1,
+                                    justifyContent: 'space-between',
+                                }}>
+                                <Title>Add Quality Data</Title>
+                                <Pressable onPress={() => {
+                                    // inputs.splice(0, inputs.length);
+                                    setStockReportModal(false);
+                                }}>
+                                    <AntDesign name="close" size={30} color={COLORS.black} />
+                                </Pressable>
+                            </View>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    marginTop: 10,
+                                }}>
+                                <TouchableOpacity
+                                    style={{ borderWidth: 1, borderRadius: 5, borderColor: COLORS.gray, paddingHorizontal: 2, marginVertical: 2 }}
+                                    onPress={() => {
+                                        addStockInputHandler();
+                                    }}>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            paddingVertical: 1
+                                        }}>
+                                        <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add Material Item</Text>
+                                        <MaterialIcons
+                                            name="add-box"
+                                            size={20}
+                                            color={COLORS.green}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            {add_stock_input()}
+                            <View style={{ marginTop: 10 }}>
+                                <Button
+                                    title="submit"
+                                    onPress={() => {
+                                        postStockDataItems();
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+        )
+    }
+
+    const add_stock_icon_button = () => {
+        return (
+            <TouchableOpacity
+                style={{
+                    // backgroundColor: COLORS.white,
+                    borderRadius: SIZES.radius * 0.2,
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    paddingHorizontal: 2,
+                }}
+                onPress={() => {
+                    stockEntry.splice(0, stockEntry.length);
+                    setStockReportModal(true);
+                }}>
+                <View style={{
+                    alignSelf: "center",
+                    alignItems: "center",
+                    position: "absolute",
+                    justifyContent: "space-evenly",
+                    flexDirection: "row",
+                    backgroundColor: COLORS.lightblue_400,
+                    padding: SIZES.base * 0.1,
+                    paddingHorizontal: 2,
+                    paddingVertical: -2,
+                    borderRadius: 5,
+                    top: -SIZES.base * 1.2
+                }}>
+                    <View>
+                        <Text style={[FONTS.body5, { color: COLORS.white }]}>Add</Text>
+                    </View>
+                    <View>
+                        <MaterialIcons
+                            name='add'
+                            size={15}
+                            color={COLORS.white}
+                        />
+                    </View>
+
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <>
             {/* Stock */}
@@ -32,10 +396,13 @@ const Stock = () => {
                     borderColor: COLORS.lightblue_200,
                     borderWidth: 1,
                     borderRadius: 1,
-                    elevation:1
+                    elevation: 1
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => setStockCollapse(!stockCollapse)} style={[FONTS.h3, { color: COLORS.darkGray }]}>Stock</Text>
+                    <Text onPress={() => {
+                        Main_drp_pro_value ? null : alert("Select Project First!")
+                        setStockCollapse(!stockCollapse)
+                    }} style={[FONTS.h3, { color: COLORS.darkGray }]}>Stock</Text>
                 </View>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <TouchableOpacity onPress={() => setStockCollapse(!stockCollapse)}>
@@ -43,6 +410,66 @@ const Stock = () => {
                     </TouchableOpacity>
                 </View>
             </Pressable>
+            <View
+                style={{
+                    alignSelf: "center",
+                    flexDirection: "row",
+                    right: SIZES.base * 2,
+                }}
+            >
+                {stockCollapse ?
+                    <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}>
+                        <View style={{ backgroundColor: "blue" }}>
+                            {add_stock_icon_button()}
+                        </View>
+                        <View
+                            style={{
+                                borderWidth: 1,
+                                borderColor: "skyblue",
+                                width: SIZES.width * 0.92,
+                                alignSelf: "flex-start",
+                                position: "relative",
+                                top: 20,
+                                marginLeft: 17,
+                                // height: 200,
+                                maxHeight: 200,
+                                paddingBottom: 6,
+                                // flex:2,
+                                // marginBottom: -20,
+                                // padding: 5,
+                                elevation: 1
+                            }}
+                        >
+
+                        </View>
+
+
+                    </View> : null
+                }
+                {add_stock_data_modal()}
+            </View>
+
+            <CustomToast
+                isVisible={submitToast}
+                onClose={() => setSubmitToast(false)}
+                color={COLORS.green}
+                title="Submit"
+                message="Submitted Successfully..."
+            />
+            <CustomToast
+                isVisible={updateToast}
+                onClose={() => setUpdateToast(false)}
+                color={COLORS.yellow_400}
+                title="Update"
+                message="Updated Successfully..."
+            />
+            <CustomToast
+                isVisible={deleteToast}
+                onClose={() => setDeleteToast(false)}
+                color={COLORS.rose_600}
+                title="Delete"
+                message="Deleted Successfully..."
+            />
         </>
     )
 }
