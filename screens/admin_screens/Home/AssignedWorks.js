@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   View,
   Text,
@@ -31,7 +31,7 @@ const AssignedWorks = () => {
   //get assign works
   const fetchAssignWorks = async () => {
     const response = await getAssignWorks();
-    setAssignWorkData(response);
+    setAssignWorkData(response.data);
   };
 
   //get user role
@@ -58,10 +58,14 @@ const AssignedWorks = () => {
     }
   };
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //   fetchAssignWorks();
+  //   fetchUserRole();
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // }, []);
+
+  React.useMemo(() => {
     fetchAssignWorks();
-    fetchUserRole();
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
   function renderRoleFilterModal() {
