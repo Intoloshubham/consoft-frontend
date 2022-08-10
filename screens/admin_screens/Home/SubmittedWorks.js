@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Modal,
   TouchableWithoutFeedback,
+  LogBox,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {FormInput, ProgressBar} from '../../../Components';
@@ -33,7 +34,6 @@ const SubmittedWorks = () => {
     setSubmitWork(response);
   };
 
-
   // verify works
   const verifyHandler = async work_Id => {
     let data = await verifySubmitWorks(work_Id);
@@ -57,9 +57,16 @@ const SubmittedWorks = () => {
     }
   };
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //   fetchSubmitWork();
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // }, []);
+
+  React.useMemo(() => {
     fetchSubmitWork();
+    // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
+
 
   function renderRevertModal() {
     return (

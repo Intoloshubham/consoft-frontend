@@ -81,17 +81,13 @@ const Demo2 = () => {
     setPushDate(newselectdate);
   };
 
-
-
   const submitLeaves = () => {
-    alert(JSON.stringify(pushdate));
     const applyleaves = {
       leavedays: pushdate,
       user_id: user_id,
     };
-    console.log(applyleaves);
     try {
-      fetch(`${config.API_URL}attendance`, {
+      fetch(`${process.env.API_URL}apply-leaves`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -113,9 +109,7 @@ const Demo2 = () => {
   // get data api leaves apply for user
 
   const showleavesdata = async () => {
-    const resp = await fetch(
-      'http://192.168.1.99:8000/api/attendance/' + user_id,
-    );
+    const resp = await fetch(process.env.API_URL+'attendance/' + user_id);
     const leavesDate = await resp.json();
     // console.log(leavesDate);
     setShowLeaves(leavesDate);
@@ -137,8 +131,6 @@ const Demo2 = () => {
     if (monthshow.months) {
 
       monthshow.months.map((month,index) => {
-        // console.log(month)
-
         setLeavesDay(month);
       });
     }
@@ -675,7 +667,7 @@ const Demo2 = () => {
                                 : {
                                     backgroundColor: COLORS.gray3,
                                     borderRadius: 50,
-                                    paddingHorizontal: 10,
+                                    paddingHorizontal: 5,
                                     marginLeft: -5,
                                   },
                             ]}>

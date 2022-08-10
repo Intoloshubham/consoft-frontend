@@ -38,11 +38,11 @@ const UserAssignWorks = () => {
         setAssignWorks(ele.assign_works);
       });
     }
-  }, [userData]);
+  }, []);
 
   useEffect(() => {
     fetchAssignWorks();
-  }, [fetchAssignWorks]);
+  }, []);
 
   // submit comment
   const submitComment = async work_id => {
