@@ -10,8 +10,6 @@ import {
   ImageBackground,
   Modal,
   TouchableWithoutFeedback,
-  VirtualizedList,
-  SafeAreaView,
 } from 'react-native';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
@@ -30,6 +28,7 @@ const Profile = () => {
   const [checked, setChecked] = React.useState({});
   const [data, setData] = React.useState('');
   const arr = {leavedates: data};
+
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
 
@@ -44,13 +43,7 @@ const Profile = () => {
   };
 
   const onDateChange = (date, type) => {
-    //function to handle the date change
-    // if (type === 'END_DATE') {
-    //   setSelectedEndDate(date);
-    // } else {
-    //   setSelectedEndDate(null);
     setSelectedStartDate(date);
-    // }
   };
 
   // ========================== Apis ==========================
@@ -79,7 +72,6 @@ const Profile = () => {
   };
 
   const [userId, setUserId] = React.useState('');
-  console.log(userId);
   const OnUserSelecter = user_id => {
     setUserId(user_id);
     setFilterModal(false);
@@ -284,6 +276,17 @@ const Profile = () => {
     );
   }
 
+  function renderCustomCalenderWithDetails() {
+    return (
+      <View
+        style={{
+          padding: 10,
+        }}>
+        <Text>renderCustomCalenderWithDetails</Text>
+      </View>
+    );
+  }
+
   function renderfilterModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={filterModal}>
@@ -355,25 +358,48 @@ const Profile = () => {
             alignItems: 'center',
           }}>
           <Text></Text>
-          <TouchableOpacity
-            onPress={() => {
-              setFilterModal(true), getusers();
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
-            <ImageBackground
-              style={{
-                backgroundColor: COLORS.darkGray,
-                padding: 3,
-                borderRadius: 2,
+            <TouchableOpacity onPress={() => setUserId('')} style={{right: 10}}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.rose_600,
+                  borderRadius: 2,
+                  padding: 2,
+                }}>
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    fontSize: 10,
+                  }}>
+                  Clear
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFilterModal(true), getusers();
               }}>
-              <Image
-                source={icons.filter}
-                style={{height: 12, width: 12, tintColor: COLORS.white}}
-              />
-            </ImageBackground>
-          </TouchableOpacity>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.darkGray,
+                  padding: 3,
+                  borderRadius: 2,
+                }}>
+                <Image
+                  source={icons.filter}
+                  style={{height: 12, width: 12, tintColor: COLORS.white}}
+                />
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={{marginBottom: 20}}>
-          {userId == '' ? renderCalender() : <Text>Other</Text>}
+          {userId == '' ? renderCalender() : renderCustomCalenderWithDetails()}
         </View>
       </View>
     );
@@ -382,7 +408,6 @@ const Profile = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       {renderUserLeavesList()}
-      {/* {renderCalender()} */}
       {renderShowUserDetails()}
       {renderfilterModal()}
       <CustomToast

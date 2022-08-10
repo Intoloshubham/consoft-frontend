@@ -1,11 +1,5 @@
-import React, {useEffect} from 'react';
-import {
-  View,
-  LogBox,
-  ScrollView,
-  SafeAreaView,
-  RefreshControl,
-} from 'react-native';
+import React from 'react';
+import {View, ScrollView, SafeAreaView} from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
@@ -15,23 +9,6 @@ import {useSelector} from 'react-redux';
 
 const Home = () => {
   const companyData = useSelector(state => state.company);
-
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-
-  // refresh
-  function delay(timeout) {
-    return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
-  }
-
-  const [loading, setLoading] = React.useState(false);
-  const loadMore = React.useCallback(async () => {
-    setLoading(true);
-    delay(2000).then(() => setLoading(false));
-  }, [loading]);
 
   return (
     <SafeAreaView>
