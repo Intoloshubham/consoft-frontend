@@ -36,6 +36,21 @@ const Insert_report_data = async (report_post_data, CONST_FIELD) => {
     }
 
 }
+const insert_stock_data =  (quality_post_data) => {
+
+    try {
+        const res = fetch(`${process.env.API_URL}stock-entry/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quality_post_data)
+        })
+        // const data = await res.json();
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+
+}
 
 const edit_report_data = (Id) => {
     try {
@@ -59,7 +74,6 @@ const delete_report_data = (Id) => {
 const Get_report_data = async (user_id, project_id, user_date) => {
     try {
         const res = await fetch(`${process.env.API_URL}quantity-report/${user_id}/${project_id}/${user_date}/`)
-        // return res;
         const data = await res.json();
         return data;
     } catch (error) {
@@ -75,7 +89,7 @@ const get_quality_type = async () => {
         const data = await res.json();
         return data;
     } catch (error) {
-
+        console.log(error)
     }
 }
 
@@ -108,9 +122,20 @@ const update_quantity_data = async (Id, inputs) => {
     }
 }
 
+const get_stock_item_name = async () => {
+    try {
+        const res = await fetch(`${process.env.API_URL}item`)
+        const data = await res.json();
+        return data;
+    } catch (error) {
+
+    }
+}
+
 export {
     Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data,
-    delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type
+    delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type,
+    get_stock_item_name,insert_stock_data
 }
 
 

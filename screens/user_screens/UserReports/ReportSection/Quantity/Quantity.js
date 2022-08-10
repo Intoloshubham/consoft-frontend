@@ -1,37 +1,27 @@
-import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import {
   View,
-  Animated,
-  Easing,
-  Switch,
   Text,
-  FlatList,
   StyleSheet,
   Image,
   ScrollView,
   Modal,
   Pressable,
   Button,
-  TextInput,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  LogBox,
-  LayoutAnimation,
-  ImageBackground,
+  TextInput,  
+  TouchableOpacity
+
 } from 'react-native';
-import { Card, Title, DataTable, Divider } from 'react-native-paper';
+import { Title,  Divider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
-import { getCompanyId, getToken, getUserId } from '../../../../../services/asyncStorageService';
-import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data,get_quality_type } from '../../ReportApi.js'
-import { EditDeletebuttons } from '../../../index.js'
+import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type } from '../../ReportApi.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   COLORS,
   FONTS,
@@ -96,21 +86,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   // const [editReportData, setEditReportData] = useState('')
   const [updateId, setUpdateId] = useState('')
   const [updateStatus, setUpdateStatus] = useState('')
-  const [existingItemIds, setExistingItemIds] = useState('')
-  //for post setting data in main input
-  // const [unitData, setUnitData] = useState('')
-  // const [lengthData, setLengthData] = useState('')
-  // const [widthData, setWidthData] = useState('')
-  // const [thicknessData, setThicknessData] = useState('')
-  // const [totalData, setTotalData] = useState('')
-  // const [remarkData, setRemarkData] = useState('')
 
-  //setting state in subfield of subinput
-  // const [subLengthData, setSubLengthData] = useState('') 
-  // const [subWidthData, setSubWidthData] = useState('')
-  // const [subThicknessData, setSubThicknessData] = useState('')
-  // const [subTotalData, setSubTotalData] = useState('')
-  // const [subRemarkData, setSubRemarkData] = useState('')
 
   //setting post qty data  status 
   const [postQtyData, setPostQtyData] = useState('')
@@ -119,8 +95,6 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const [qualityType, setQualityType] = useState([])
 
-  //then again quantityitems data getting
-  // const [quantityItemsData, setQuantityItemsData] = useState('')
 
   //sub key states of dynamic inputs
   const [subLengthKey, setSubLengthkey] = useState('');
@@ -133,34 +107,15 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const [inputs, setInputs] = useState([
     {
-      item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: ''
+      item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '', quality_type: ''
       , subquantityitems: [
         // { num_length: '', num_width: '', num_height: '', num_total: '', Remark: '', }
       ]
     }
   ]);
 
-  const [isLiked, setIsLiked] = useState([
-    { id: 1, value: true, name: "Good", selected: false },
-    { id: 2, value: false, name: "Average", selected: false },
-    { id: 3, value: false, name: "Poor", selected: false }
-  ]);
 
-  const getQualityType = async () => {
-    const data = await get_quality_type();
-
-    qualityType.push(...data.data);
-  }
-  
-  console.log("🚀 ~ file: Quantity.js ~ line 153 ~ getQualityType ~ qualityType", qualityType)
-
-
-
-
-
-  useMemo(() =>
-    getQualityType()
-    , [Main_drp_pro_value])
+ 
 
 
 
@@ -240,34 +195,28 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     }
   }
 
-  // console.log(postQtyData)
-  // getting report data functions
-  // let count=0;
 
-  // useEffect(() => {
 
-  //   if (Main_drp_pro_value || postQtyData || updateStatus) {
-  //     // You can await here
-  //     const data = Get_report_data(companydata._id, Main_drp_pro_value, current_dat)
 
-  //     data.then(res => {
-  //               res.json()
-  //     }).then(res=>{
+  const getQualityType = async () => {
+    if (qualityType.length == 0) {
+      const data = await get_quality_type();
+      qualityType.push(...data.data);
+    }
 
-  //       console.log("🚀 ~ file: Quantity.js ~ line 252 ~ useEffect ~ res", res)
-  //     })
+  }
 
-  //     // if (data.status == 200) {
-  //     //   setGetRepPostData(data);
-  //     //   // res.json()
-  //     // } else {
-  //     //   console.log("data not found!")
-  //     // }
-  //     // ...
-  //   }
+  console.log("🚀 ~ file: Quantity.js ~ line 153 ~ getQualityType ~ qualityType", qualityType)
 
-  //   // getRreportData();
-  // }, [postQtyData, Main_drp_pro_value, updateStatus])
+
+
+
+
+  // useMemo(() =>
+  //   getQualityType()
+  //   , [Main_drp_pro_value])
+
+
 
   useEffect(() => {
 
@@ -280,11 +229,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         } else {
           console.log("data not found!")
         }
-
+ 
       }
     }
 
     getRreportData();
+    getQualityType();
   }, [postQtyData, Main_drp_pro_value, updateStatus])
 
 
@@ -293,6 +243,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const editReportBtn = async (id) => {
 
     setItemData(reportdata.data);
+    inputs.splice(0, inputs.length);
     setRemoveAddOnEdit(true);
     setReportmodal(true);
 
@@ -303,24 +254,24 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       setUpdateId(id);
       data.then(res => res.json())
         .then(result => {
-          console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result)
+          console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result.data.quality_type)
 
           if (result.data.subquantityitems.length == 0) {
             setInputs([...inputs, {
               item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
-              num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name,
+              num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name, quality_type: result.data.quality_type,
               subquantityitems: []
             }]);
           } else {
             setInputs([...inputs, {
               item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
-              num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name,
+              num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name, quality_type: result.data.quality_type,
               subquantityitems:
                 // [
                 result.data.subquantityitems.map(ele => {
                   return {
                     sub_height: ele.sub_height.toString(), sub_length: ele.sub_length.toString(), sub_remark: ele.sub_remark, sub_total: ele.sub_total.toString(),
-                    sub_width: ele.sub_width.toString()
+                    sub_width: ele.sub_width.toString(), sub_quality_type: ele.sub_quality_type
                   }
                 })
               // ]
@@ -380,7 +331,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     // }
 
     setInputs([...inputs, {
-      item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '',
+      item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '', quality_type: '',
       subquantityitems: [
         // { num_length: '', num_width: '', num_height: '', total: '', remark: '' }
       ]
@@ -578,11 +529,23 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     reportdataitem();
   }, [companydata.company_id]);
 
-  const RadioButton = ({ onPress, selected, children }) => {
+  const QualityTypeRadioButton = ({ onPress, selected, children, type, mainKey }) => {
+
     return (
       <View style={styles_m.radioButtonContainer}>
-        <TouchableOpacity onPress={onPress} style={styles_m.radioButton}>
-          {selected ? <View style1={styles_m.radioButtonIcon} /> : null}
+        <TouchableOpacity onPress={onPress} style={[inputs[mainKey].quality_type == type ? styles_m.radioButton : styles_m.radioButton2]}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles_m.radioButtonText}>{children}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  const SubQualityTypeRadioButton = ({ onPress, selected, children, type, mainKey, subKey }) => {
+
+    return (
+      <View style={styles_m.radioButtonContainer}>
+        <TouchableOpacity onPress={onPress} style={[inputs[mainKey].subquantityitems[subKey].sub_quality_type == type ? styles_m.radioButton : styles_m.radioButton2]}>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPress}>
           <Text style={styles_m.radioButtonText}>{children}</Text>
@@ -647,6 +610,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       sub_height: '',
       sub_total: '',
       sub_remark: '',
+      sub_quality_type: ''
     });
 
     setInputs(_inputs)
@@ -756,37 +720,74 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               }}
             />
           </View>
-          <View>
-            <TouchableOpacity
-              style={{ alignSelf: "flex-end" }}
-              onPress={() => delete_inside_Handler(key, index1)}>
-              <Image
-                source={icons.delete_icon}
-                style={{
-                  width: 20,
-                  height: 20,
-                  tintColor: COLORS.green,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
+
+        </View>
+        <View style={{ justifyContent: "center" }}>
+          <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "left", paddingHorizontal: 10 }]}>Quality Test:</Text>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+          {qualityType ? qualityType.map((subQualityRadioItem, subQualityIndex) => (
+            <SubQualityTypeRadioButton
+              onPress={() => onSubQualityRadioBtnClick(subQualityRadioItem, key, index1)}
+              selected={subQualityRadioItem.selected}
+              key={subQualityRadioItem._id}
+              type={subQualityRadioItem.type}
+              mainKey={key}
+              subKey={index1}
+            >
+              <Text style={[FONTS.h4, { color: COLORS.black }]}>
+                {subQualityRadioItem.type}
+              </Text>
+            </SubQualityTypeRadioButton>
+          )) : null}
+        <View>
+          <TouchableOpacity
+            style={{ alignSelf: "flex-end" }}
+            onPress={() => delete_inside_Handler(key, index1)}>
+            <Image
+              source={icons.delete_icon}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: COLORS.green,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
         </View>
 
       </View>
     )
   }
+  //for main box quality
+  const onRadioBtnClick = (radioitem, key) => {
+    const _input = [...inputs];
+    _input[key].quality_type = radioitem.type;
+    _input[key].key = key;
 
-  const onRadioBtnClick = (item) => {
-    console.log("🚀 ~ file: Quantity.js ~ line 780 ~ onRadioBtnClick ~ item", item)
-
-    let updatedState = isLiked.map((isLikedItem) =>
-      isLikedItem.id === item.id
+    setInputs(_input);
+    let updatedState = qualityType.map((isLikedItem) =>
+      isLikedItem._id === radioitem._id
         ? { ...isLikedItem, selected: true }
         : { ...isLikedItem, selected: false }
     );
-    setIsLiked(updatedState);
-  };
-  // console.log("🚀 ~ file: Quantity.js ~ line 783 ~ onRadioBtnClick ~ isLiked", isLiked)
+    setQualityType(updatedState);
+  }
+
+  //for sub box quality
+  const onSubQualityRadioBtnClick = (subQualityRadioItem, key, index1) => {
+    const _inputs = [...inputs];
+    _inputs[key].subquantityitems[index1].sub_quality_type = subQualityRadioItem.type;
+    _inputs[key].subquantityitems[index1].key = key;
+    setInputs(_inputs);
+
+    let updatedState = qualityType.map((isLikedItem) =>
+      isLikedItem._id === subQualityRadioItem._id
+        ? { ...isLikedItem, selected: true }
+        : { ...isLikedItem, selected: false }
+    );
+    setQualityType(updatedState);
+  }
 
   const add_input_and_subinput = () => {
     return (<View style={container}>
@@ -942,15 +943,19 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   inputRemark(text, key)
                 }}
               />
-              {isLiked.map((item) => (
-                <RadioButton
-                  onPress={() => onRadioBtnClick(item)}
-                  selected={item.selected}
-                  key={item.id}
+              {qualityType ? qualityType.map((radioitem) => (
+                <QualityTypeRadioButton
+                  onPress={() => onRadioBtnClick(radioitem, key)}
+                  selected={radioitem.selected}
+                  key={radioitem._id}
+                  type={radioitem.type}
+                  mainKey={key}
                 >
-                  {item.name}
-                </RadioButton>
-              ))}
+                  <Text style={[FONTS.h4, { color: COLORS.black }]}>
+                    {radioitem.type}
+                  </Text>
+                </QualityTypeRadioButton>
+              )) : null}
 
               <View>
                 {
@@ -1196,7 +1201,6 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   return (
     <View>
-      {/* Quantity */}
       <Pressable
         onPress={() => {
           Main_drp_pro_value ? null : alert("Select Project First!")
@@ -1268,7 +1272,8 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                 // marginBottom: -20,
                 // padding: 5,
                 elevation: 1
-              }}>
+              }}
+              >
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
                 <View style={{}}>
                   <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
@@ -1278,7 +1283,6 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                         marginRight: 2,
                         marginLeft: 16,
                         // borderRightWidth: 2,
-                        paddingVertical: 5,
                         justifyContent: 'center',
                         width: 45,
                         //  borderColor: COLORS.lightblue_200 
@@ -1360,9 +1364,22 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                         paddingLeft: 25,
                         width: SIZES.width * 0.5,
                         // borderColor: COLORS.lightblue_200, 
+                        // borderWidth:1
                       }}
                     >
                       <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Remark</Text>
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 8,
+                        justifyContent: 'center',
+                        width: 120,
+                        // borderColor: COLORS.lightblue_200, 
+                        // borderWidth:1
+                        // borderColor: COLORS.lightblue_200, 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Quality Test</Text>
                     </View>
                     <View
                       style={{
@@ -1382,13 +1399,13 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                     contentContainerStyle={{
                       // height: 230,
                       top: 10,
-                      paddingBottom: 10
+                      paddingBottom: 15
                       // borderWidth: 3,
                       // borderColor: COLORS.lightblue_200,
                     }}>
                     <>
                       {
-                        getRepPostData ? getRepPostData.data.map((l, index) => (
+                        getRepPostData ? getRepPostData.data.map((list, index) => (
                           <View
                             style={{
                               flexDirection: "column",
@@ -1439,7 +1456,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                               }}>
                                 <View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray }]}>
-                                    {l.quantityWorkItems.item_name}
+                                    {list.quantityWorkItems.item_name}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: 145, top: -10 }}>
@@ -1460,7 +1477,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.quantityWorkItems.num_length}
+                                  {list.quantityWorkItems.num_length}
                                 </Text>
                               </View>
                               <View
@@ -1477,7 +1494,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.quantityWorkItems.num_width}
+                                  {list.quantityWorkItems.num_width}
                                 </Text>
                               </View>
                               <View
@@ -1494,7 +1511,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.quantityWorkItems.num_height}
+                                  {list.quantityWorkItems.num_height}
                                 </Text>
                               </View>
                               <View
@@ -1511,7 +1528,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.quantityWorkItems.num_total}
+                                  {list.quantityWorkItems.num_total}
                                 </Text>
                               </View>
                               <View
@@ -1533,7 +1550,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                     <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
                                   </View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                    {l.quantityWorkItems.unit_name}
+                                    {list.quantityWorkItems.unit_name}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: -4, top: -10 }}>
@@ -1554,9 +1571,29 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {l.quantityWorkItems.remark}
+                                  {list.quantityWorkItems.remark}
                                 </Text>
                                 <View style={{ position: "absolute", width: 1, left: 210, top: -10 }}>
+                                  <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                </View>
+                              </View>
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: SIZES.width * 0.5,
+                                  position: "absolute",
+                                  left: 720,
+                                  top: 3,
+                                  // borderWidth: 1,
+                                  // borderColor: COLORS.lightblue_200,
+                                  // right: 10,
+                                }}
+                              >
+                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                  {list.quantityWorkItems.quality_type}
+                                </Text>
+                                <View style={{ position: "absolute", width: 1, left: 165, top: -10 }}>
                                   <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
                                 </View>
                               </View>
@@ -1566,7 +1603,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                   // alignSelf: "center",
                                   width: 60,
                                   position: "absolute",
-                                  left: 777,
+                                  left: 905,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1574,14 +1611,14 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <View style={{ justifyContent: "center", alignSelf: "center" }}>
-                                  <Edit_delete_button edit_size={18} del_size={22} __id={l.quantityWorkItems._id} />
+                                  <Edit_delete_button edit_size={18} del_size={22} __id={list.quantityWorkItems._id} />
                                 </View>
                               </View>
                             </View>
                             <View style={{ top: 10, position: "relative", left: 170 }}>
                               {
 
-                                getRepPostData ? l.quantityWorkItems.subquantityitems.map((res, index2) =>
+                                getRepPostData ? list.quantityWorkItems.subquantityitems.map((res, index2) =>
                                 (
                                   <View
                                     style={{
@@ -1689,7 +1726,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                         // position: "absolute",
                                         // backgroundColor:"red",
                                         top: 10,
-                                        left: 374,
+                                        left: 395,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 
@@ -1698,9 +1735,9 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                       {/* <View style={{ justifyContent: "center", alignSelf: "center" }}>
                                         <Edit_delete_button edit_size={18} del_size={22} __id={l.item_id} />
                                       </View> */}
-                                      {/* <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                        Action
-                                      </Text> */}
+                                      <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                        {res.sub_quality_type}
+                                      </Text>
                                     </View>
                                   </View>
 
@@ -1755,17 +1792,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   );
 };
 
-{/* <FlatList
-  data={quantityItemsData.quantityitems} 
-  scrollEnabled
-  // horizontal={true}
-  scrollToOverflowEnabled={true}
-  ListHeaderComponent={FlatList_Header}
-  ListHeaderComponentStyle={{ borderBottomColor: 'red', borderBottomWidth: 2 }}
-  renderItem={({ item, index }) => renderReportData(item, index)}
-  keyExtractor={(item, index) => index.toString()}
-  // numColumns={2} 
-/> */}
+
 
 export default Quantity;
 const styles_m = StyleSheet.create({
@@ -1791,13 +1818,23 @@ const styles_m = StyleSheet.create({
     alignItems: "center",
     marginBottom: 5
   },
-  radioButton: {
-    height: 20,
-    width: 20,
+  radioButton2: {
+    height: 18,
+    width: 18,
     backgroundColor: "#E9E9E9",
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "#E6E6E6",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  radioButton: {
+    height: 18,
+    width: 18,
+    backgroundColor: "green",
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: COLORS.lightGray1,
     alignItems: "center",
     justifyContent: "center"
   },
