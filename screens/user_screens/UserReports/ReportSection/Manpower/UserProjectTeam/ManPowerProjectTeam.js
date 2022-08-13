@@ -93,7 +93,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                 style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
-                    marginTop: 30,
+                    marginTop: 24,
                     paddingVertical: 2,
                     paddingHorizontal: 10,
                     borderWidth: 1,
