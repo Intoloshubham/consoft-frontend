@@ -32,7 +32,7 @@ const roleByUser = async role_id => {
 
 const getUsers = async () => {
   try {
-    const res = await fetch(`${Config.API_URL}users`, {
+    const res = await fetch(Config.API_URL + 'users', {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
