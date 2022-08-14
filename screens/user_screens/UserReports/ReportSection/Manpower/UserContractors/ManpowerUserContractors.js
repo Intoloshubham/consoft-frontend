@@ -16,7 +16,8 @@ import Config from '../../../../../../config'
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../../constants'
 import { FormInput, Drop, IconButton, CustomDropdown, TextButton, CustomToast } from '../../../../../../Components';
 import { EditDeletebuttons, ManPowerProjectTeam } from '../../../../index.js'
-import { Get_Contractor_Data, insert_new_category, get_new_category, insert_new_sub_category, get_new_sub_category, insert_manpower_report } from '../../../ReportApi.js'
+import { Get_Contractor_Data, insert_new_category, get_new_category, insert_new_sub_category, get_new_sub_category,
+   insert_manpower_report,get_manpower_report } from '../../../ReportApi.js'
 import utils from '../../../../../../utils';
 import styles from '../../../ReportStyle.js'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -86,6 +87,14 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
   const [addFieldInput, setAddFieldInput] = useState('')
   const [getNewSubCategory, setGetNewSubCategory] = useState([])
 
+  const CONST_FIELD = {
+    MANPOWER: 'Manpower',
+    STOCK: 'Stock',
+    QUANTITY: 'Quantity',
+    QUALITY: 'Quality',
+    TANDP: 'Tandp'
+  }
+
 
 
   //defining functions for all
@@ -140,10 +149,12 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
 
   // for new category
   const SaveNewCategory = async () => {
+
     const data = {
       company_id: companydata.company_id,
       manpower_category: categName
     }
+
     const res = await insert_new_category(data);
     if (res.status == '200') {
       setSubmitToast(true)
@@ -156,10 +167,22 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
   }
   //for inserting manpower data
   const InsertManpowerReport = async () => {
+
     let data = {
+      company_id: companydata.company_id,
+      manpowerCategoryId,
+      categName,
+      memberCount
+    }
+
+    let res = await insert_manpower_report(data,CONST_FIELD);
+    if (res.status == 200) {
+      setSubmitToast(true)
+      setTimeout(() => {
+        setAddConMemberReportModal(false);
+      }, 800);
 
     }
-    let res = await insert_manpower_report();
   }
 
 
@@ -181,6 +204,10 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
 
       }, 800);
     }
+  }
+
+  const GetManpowerData = async () => {
+    const get_data=await get_manpower_report();
   }
 
   const GetNewCategories = async () => {
@@ -231,15 +258,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
     );
   }
 
-  //for validation
-  function isEnableMemberSubmit() {
-    return (
-      membername != '' &&
-      memberErrorMsg == '' &&
-      memberCount != '' &&
-      memberCountErrorMsg == ''
-    );
-  }
+
 
   //create contractor model   
   function renderCreateContractorModal() {
@@ -764,7 +783,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
                         searchPlaceholder="Search..."
                         value={"_id"}
                         onChange={item => {
-                          setManpowerMainCategoryId(item._id)
+                          GetNewSubCategories(item._id);
+                          setManpowerMainCategoryId(item._id);
+
 
                         }}
 
@@ -888,18 +909,18 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
                     }
                     <TextButton
                       label="Submit"
-                      disabled={isEnableMemberSubmit() ? false : true}
+                      // disabled={isEnableMemberSubmit() ? false : true}
                       buttonContainerStyle={{
                         height: 55,
                         alignItems: 'center',
                         marginTop: SIZES.padding,
                         borderRadius: SIZES.radius,
-                        backgroundColor: isEnableMemberSubmit()
-                          ? COLORS.lightblue_700
-                          : COLORS.lightblue_100,
+                        backgroundColor: COLORS.lightblue_700
+
                       }}
                       onPress={() => {
-                        // Insert_Contractor_data()
+                        InsertManpowerReport()
+
                       }
                       }
                     />
@@ -1108,15 +1129,19 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
             style={{ marginBottom: -24 }}
 
           >
-            <FlatList
-              data={Report_list}
-              scrollEnabled={true}
-              horizontal={false}
-              maxHeight={150}
-              nestedScrollEnabled={true}
-              renderItem={({ item, index }) => _head(item, index)}
-              keyExtractor={(item, index) => index.toString()}
-            />
+            <ScrollView
+              horizontal={true}
+              contentContainerStyle={{ width: '100%', height: '100%' }}>
+              <FlatList
+                data={Report_list}
+                scrollEnabled={true}
+                horizontal={false}
+                maxHeight={150}
+                nestedScrollEnabled={true}
+                renderItem={({ item, index }) => _head(item, index)}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </ScrollView>
           </View>
         ) : null
       }

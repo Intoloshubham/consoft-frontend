@@ -37,10 +37,10 @@ const Insert_report_data = async (report_post_data, CONST_FIELD) => {
 
 }
 
-const insert_manpower_report = async (manpower_post_data, Id) => {
+const insert_manpower_report = async (manpower_post_data, CONST_FIELD) => {
 
     try {
-        const res = fetch(`${process.env.API_URL}mapower-report/${CONST_FIELD.QUANTITY}`, {
+        const res = fetch(`${process.env.API_URL}manpower-category/${CONST_FIELD.MANPOWER}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(manpower_post_data)
@@ -120,6 +120,16 @@ const get_stock_data = async () => {
     }
 }
 
+const get_manpower_report = async (Id) => {
+    try {
+        const res = fetch(`${process.env.API_URL}manpower-report/${Id}`)
+        return res;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 
 const edit_report_data = (Id) => {
     try {
@@ -139,6 +149,8 @@ const delete_report_data = (Id) => {
         console.log(error);
     }
 }
+
+
 
 const Get_report_data = async (user_id, project_id, user_date) => {
     try {
@@ -205,7 +217,7 @@ export {
     Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data,
     delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type, get_new_sub_category,
     get_stock_item_name, insert_stock_data, get_stock_data, insert_new_category, get_new_category, insert_new_sub_category,
-    insert_manpower_report
+    insert_manpower_report,get_manpower_report
 }
 
 

@@ -67,20 +67,10 @@ const UserReports = ({ route }) => {
     if (userData._id) {
       const sendUserId =async () => {
        let data= await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
-       console.log(`${process.env.API_URL}user-by-projects/${userData._id}`)
        let resp=await data.json();
        console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
-
-          // .then((response) => {
-          //   console.log("🚀 ~ file: UserReports.js ~ line 71 ~ .then ~ response", response.json())
-          //   response.json()
-          // })
-          // .then(resp => {
-          //   console.log("🚀 ~ file: UserReports.js ~ line 69 ~ all projects ~ data", resp)
-          //   // console.log("data........")
-          //   // console.log(data)
-          //   setSelectedIdProjects(data);
-          // })
+       setSelectedIdProjects(resp);
+     
       }
       sendUserId();
     }

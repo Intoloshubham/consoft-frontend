@@ -4,9 +4,9 @@ import {
     Easing, Switch,
     Text, FlatList,
     StyleSheet, Image,
-    ScrollView, Modal, SectionList, 
+    ScrollView, Modal, SectionList,
     Pressable, TextInput, TouchableWithoutFeedback, SafeAreaView,
-    TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
+    TouchableOpacity, LogBox, LayoutAnimation, ImageBackground, VirtualizedList
 } from 'react-native'
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../../constants'
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -87,6 +87,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
         )
     }
 
+
     return (
         <View>
             <Pressable
@@ -113,24 +114,21 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                 </View>
             </Pressable>
             {proTeamTabCollapse &&
-                (
-                    <SafeAreaView
-                        style={{ flex: 1 }}
-                    >
-                        <FlatList
-                            data={ProjectTeamName}
-                            horizontal={false}
-                            scrollEnabled={true}
-                            nestedScrollEnabled={true}
-                            maxHeight={100}
-                            renderItem={({ item, index }) => _project_team(item, index)}
-                            keyExtractor={(item, index) => index.toString()}
-                        />
-                        {
+                (<ScrollView
+                    horizontal={true}
+                    contentContainerStyle={{ width: '100%', height: '100%' }}>
+                    <FlatList
+                        data={ProjectTeamName}
+                        horizontal={false}
+                        scrollEnabled={true}
+                        nestedScrollEnabled={true}
+                        maxHeight={100}
+                        renderItem={({ item, index }) => _project_team(item, index)}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
 
-                        }
+                </ScrollView>
 
-                    </SafeAreaView>
                 )
             }
         </View>
