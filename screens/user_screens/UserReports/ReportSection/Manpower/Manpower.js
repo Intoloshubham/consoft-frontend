@@ -81,7 +81,9 @@ const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
                     </TouchableOpacity>
                 </View>
             </Pressable>
-            {TabCollapse ? <View style={{ justifyContent:"space-evenly",paddingBottom:-2 }}>
+
+            {TabCollapse ? <View style={{ justifyContent:"space-evenly" }}>
+
                 <View>
                     {/* project team start */}
                     <ManPowerProjectTeam projectTeamList={projectTeamList} />
