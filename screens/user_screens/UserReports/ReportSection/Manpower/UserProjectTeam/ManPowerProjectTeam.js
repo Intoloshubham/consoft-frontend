@@ -5,14 +5,15 @@ import {
     Text, FlatList,
     StyleSheet, Image,
     ScrollView, Modal, SectionList,
-    Pressable, TextInput, TouchableWithoutFeedback,
-    TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
+    Pressable, TextInput, TouchableWithoutFeedback, SafeAreaView,
+    TouchableOpacity, LogBox, LayoutAnimation, ImageBackground, VirtualizedList
 } from 'react-native'
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../../constants'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Get_Contractor_Data, Get_user_role } from '../../../ReportApi.js'
 import styles from '../../../ReportStyle.js'
 
+LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 const ManPowerProjectTeam = ({ projectTeamList }) => {
     // console.log("ManpowerProjectTeam")
     // console.log(projectTeamList)
@@ -67,7 +68,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
         return (
             <>
                 <TouchableOpacity
-                    style={[header, 
+                    style={[header,
                         {
                             width: SIZES.width * 0.7,
                             justifyContent: "center",
@@ -85,6 +86,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
             </>
         )
     }
+
 
     return (
         <View>
@@ -112,24 +114,21 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                 </View>
             </Pressable>
             {proTeamTabCollapse &&
-                (
-                    <View
-                        style={{}}
-                    >
-                        <FlatList
-                            data={ProjectTeamName}
-                            horizontal={false}
-                            scrollEnabled={true}
-                            nestedScrollEnabled={true}
-                            maxHeight={100}
-                            renderItem={({ item, index }) => _project_team(item, index)}
-                            keyExtractor={(item, index) => index.toString()}                
-                        />
-                        {
+                (<ScrollView
+                    horizontal={true}
+                    contentContainerStyle={{ width: '100%', height: '100%' }}>
+                    <FlatList
+                        data={ProjectTeamName}
+                        horizontal={false}
+                        scrollEnabled={true}
+                        nestedScrollEnabled={true}
+                        maxHeight={100}
+                        renderItem={({ item, index }) => _project_team(item, index)}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
 
-                        }
-            
-                    </View>
+                </ScrollView>
+
                 )
             }
         </View>

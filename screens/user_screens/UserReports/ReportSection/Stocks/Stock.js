@@ -103,6 +103,12 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
             console.log(error)
         }
     }
+
+    useMemo(() => {
+        let isMount=true;
+        GetStockData();
+        return ()=>{isMount=false}
+    }, [userCompanyData.company_id])
     // console.log("🚀 ~ file: Stock.js ~ line 95 ~ GetStockData ~ getStockData", getStockData)
 
 
