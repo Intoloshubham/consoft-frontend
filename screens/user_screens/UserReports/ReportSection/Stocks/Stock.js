@@ -12,7 +12,9 @@ import { Title, Divider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { get_stock_item_name, insert_stock_data } from '../../ReportApi.js'
+
+import { get_stock_item_name, insert_stock_data, get_stock_data } from '../../ReportApi.js'
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useSelector } from 'react-redux';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
@@ -52,6 +54,9 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
     const userCompanyData = useSelector(state => state.user);
     const [stockItemData, setStockItemData] = useState([])
 
+    const [getStockData, setGetStockData] = useState([])
+
+
     // all input fields
     const [stockEntry, setStockEntry] = useState([
         {
@@ -73,12 +78,38 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
             setStockItemData(data);
         } catch (error) {
 
+            console.log(error)
+
         }
     }
 
     useMemo(() => {
         getStockDataItems();
     }, [userCompanyData.company_id])
+
+
+
+    const GetStockData = async () => {
+        try {
+            const data = await get_stock_data();
+            const res = await data.json();
+            if (res.status == 200) {
+                const temp_data = res.data.map(ele => {
+                    return ele.stockEntryData;
+                })
+                setGetStockData(temp_data);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useMemo(() => {
+        let isMount=true;
+        GetStockData();
+        return ()=>{isMount=false}
+    }, [userCompanyData.company_id])
+    // console.log("🚀 ~ file: Stock.js ~ line 95 ~ GetStockData ~ getStockData", getStockData)
 
 
 
@@ -381,10 +412,13 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
     }
 
     return (
-        <>
+        <View>
             {/* Stock */}
             <Pressable
-                onPress={() => setStockCollapse(!stockCollapse)}
+                onPress={() => {
+                    GetStockData();
+                    setStockCollapse(!stockCollapse)
+                }}
                 style={{
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
@@ -441,6 +475,261 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                             }}
                         >
 
+
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
+                                <View style={{}}>
+                                    <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
+                                        <View
+                                            style={{
+                                                paddingHorizontal: 5,
+                                                marginRight: 2,
+                                                marginLeft: 16,
+                                                // borderRightWidth: 2,
+                                                justifyContent: 'center',
+                                                width: 45,
+                                                //  borderColor: COLORS.lightblue_200 
+                                            }}
+                                        >
+                                            <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>S.no</Text>
+                                        </View>
+                                        <View
+                                            style={{
+                                                marginLeft: 8,
+                                                //  borderRightWidth: 2,
+                                                justifyContent: 'center',
+                                                width: 145,
+                                                //  borderColor: COLORS.lightblue_200, 
+                                            }}
+                                        >
+                                            <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Item Name</Text>
+                                        </View>
+                                        <View
+                                            style={{
+                                                marginLeft: 24,
+                                                justifyContent: 'center',
+                                                width: 70,
+                                                // borderColor: COLORS.lightblue_200, 
+                                            }}
+                                        >
+                                            <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Unit Name</Text>
+                                        </View>
+                                        <View
+                                            style={{
+                                                marginLeft: 18,
+                                                // borderLeftWidth: 2, 
+                                                paddingLeft: 8,
+                                                justifyContent: 'center',
+                                                width: 80,
+                                                // borderColor: COLORS.lightblue_200, 
+                                            }}
+                                        >
+                                            <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Quantity</Text>
+                                        </View>
+                                        <View
+                                            style={{
+                                                marginLeft: 15,
+                                                // borderLeftWidth: 2, 
+                                                paddingLeft: 15,
+                                                justifyContent: 'center',
+                                                width: 100,
+                                                // borderColor: COLORS.lightblue_200, 
+                                            }}
+                                        >
+                                            <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Vehicle No.</Text>
+                                        </View>
+                                        <View
+                                            style={{
+                                                marginLeft: 18,
+                                                //  borderLeftWidth: 2, 
+                                                justifyContent: 'center',
+                                                width: 125,
+                                                // borderColor: COLORS.lightblue_200, 
+                                            }}
+                                        >
+                                            <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Location</Text>
+                                        </View>
+                                    </View>
+                                    {/* getStockData */}
+                                    {/* vertical scrool view */}
+                                    <ScrollView nestedScrollEnabled={true}
+                                        contentContainerStyle={{
+                                            top: 10,
+                                            paddingBottom: 15
+                                        }}>
+
+                                        <>
+                                            {
+                                                getStockData ? getStockData.map((list, index) => (
+                                                    <View
+                                                        style={{
+                                                            flexDirection: "column",
+                                                            alignContent: "space-between",
+                                                            paddingVertical: 20,
+                                                            top: -20
+                                                        }} key={index}>
+                                                        <View
+                                                            style={{
+                                                                flexDirection: "row",
+                                                                justifyContent: "space-evenly",
+                                                                top: 10,
+                                                                paddingVertical: 3,
+                                                                left: -26,
+                                                            }} >
+                                                            <View
+                                                                style={{
+                                                                    alignContent: "center",
+                                                                    alignSelf: "center",
+                                                                    width: 45,
+                                                                    position: "absolute",
+
+                                                                    left: 29,
+                                                                    // right: 10,
+                                                                    //  left:0,
+                                                                    top: 3,
+                                                                    //  bottom:0                             
+                                                                }} >
+                                                                <View>
+                                                                    <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                        {index + 1}
+                                                                    </Text>
+                                                                </View>
+                                                                <View style={{ position: "absolute", width: 1, left: 42, top: -10 }}>
+                                                                    <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                                                </View>
+                                                            </View>
+                                                            <View style={{
+                                                                alignContent: "center",
+                                                                alignSelf: "center",
+                                                                width: 145,
+                                                                position: "absolute",
+                                                                left: 155,
+                                                                top: 3,
+
+                                                                // right: 10,
+
+                                                            }}>
+                                                                <View>
+                                                                    <Text style={[FONTS.h4, { color: COLORS.darkGray }]}>
+                                                                        {list.item_name}
+                                                                    </Text>
+                                                                </View>
+                                                                <View style={{ position: "absolute", width: 1, left: 85, top: -10 }}>
+                                                                    <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                                                </View>
+                                                            </View>
+                                                            <View
+                                                                style={{
+                                                                    alignContent: "center",
+                                                                    alignSelf: "center",
+                                                                    width: 70,
+                                                                    position: "absolute",
+                                                                    left: 250,
+                                                                    top: 3,
+                                                                    // borderWidth: 1,
+                                                                    // borderColor: COLORS.lightblue_200,
+                                                                    // right: 10,
+                                                                }}
+                                                            >
+                                                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                    {list.unit_name}
+                                                                </Text>
+                                                                <View style={{ position: "absolute", width: 1, left: 85, top: -10 }}>
+                                                                    <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                                                </View>
+                                                            </View>
+                                                            <View
+                                                                style={{
+                                                                    alignContent: "center",
+                                                                    alignSelf: "center",
+                                                                    width: 80,
+                                                                    position: "absolute",
+                                                                    left: 350,
+                                                                    top: 3,
+                                                                    // borderWidth: 1,
+                                                                    // borderColor: COLORS.lightblue_200,
+                                                                    // right: 10,
+                                                                }}
+                                                            >
+                                                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                    {list.qty}
+                                                                </Text>
+                                                                <View style={{ position: "absolute", width: 1, left: 85, top: -10 }}>
+                                                                    <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                                                </View>
+                                                            </View>
+                                                            <View
+                                                                style={{
+                                                                    alignContent: "center",
+                                                                    alignSelf: "center",
+                                                                    width: 100,
+                                                                    position: "absolute",
+                                                                    left: 450,
+                                                                    top: 3,
+                                                                    // borderWidth: 1,
+                                                                    // borderColor: COLORS.lightblue_200,
+                                                                    // right: 10,
+                                                                }}
+                                                            >
+                                                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                    {list.vehicle_no}
+                                                                </Text>
+                                                                <View style={{ position: "absolute", width: 1, left: 100, top: -10 }}>
+                                                                    <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                                                </View>
+                                                            </View>
+                                                            <View
+                                                                style={{
+                                                                    alignContent: "center",
+                                                                    alignSelf: "center",
+                                                                    width: 125,
+                                                                    position: "absolute",
+                                                                    left: 560,
+                                                                    top: 3,
+                                                                    // borderWidth: 1,
+                                                                    // borderColor: COLORS.lightblue_200,
+                                                                    // right: 10,
+                                                                }}
+                                                            >
+                                                                <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                    {list.location}
+                                                                </Text>
+                                                                {/* <View style={{ position: "absolute", width: 3, left: 100, top: -10 }}>
+                                                                    <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                                                </View> */}
+                                                            </View>
+                                                            {/* <View
+                                                                style={{
+                                                                    // alignContent: "center",
+                                                                    // alignSelf: "center",
+                                                                    width: 60,
+                                                                    position: "absolute",
+                                                                    left: 905,
+                                                                    top: 3,
+                                                                    // borderWidth: 1,
+                                                                    // borderColor: COLORS.lightblue_200,
+                                                                    // right: 10,
+                                                                }}
+                                                            >
+                                                                <View style={{ justifyContent: "center", alignSelf: "center" }}>
+                                                                    <Edit_delete_button edit_size={18} del_size={22} __id={list.quantityWorkItems._id} />
+                                                                </View>
+                                                            </View> */}
+                                                        </View>
+                                                        {/* sub items  */}
+                                                        <View style={{ position: "absolute", top: 23 }}>
+                                                            <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 3, marginHorizontal: 2, top: 5 }} />
+                                                        </View>
+                                                    </View>
+
+                                                )) : null
+                                            }
+
+                                        </>
+                                    </ScrollView>
+                                </View>
+                            </ScrollView>
+
+
                         </View>
 
 
@@ -470,7 +759,9 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                 title="Delete"
                 message="Deleted Successfully..."
             />
-        </>
+
+        </View>
+
     )
 }
 

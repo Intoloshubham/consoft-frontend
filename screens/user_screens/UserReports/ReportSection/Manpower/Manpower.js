@@ -1,51 +1,55 @@
-import React, {useState, useEffect, useRef, useMemo} from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
-  View,
-  Animated,
-  Easing,
-  Switch,
-  Text,
-  FlatList,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Modal,
-  Pressable,
-  TextInput,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  LogBox,
-  LayoutAnimation,
-  ImageBackground,
+    View,
+    Animated,
+    Easing,
+    Switch,
+    Text,
+    FlatList,
+    StyleSheet,
+    Image,
+    ScrollView, 
+    Modal,
+    Pressable,
+    TextInput,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    LogBox,
+    LayoutAnimation,
+    ImageBackground,
 } from 'react-native';
 import {
-  COLORS,
-  FONTS,
-  SIZES,
-  dummyData,
-  icons,
-  images,
+    COLORS,
+    FONTS,
+    SIZES,
+    dummyData,
+    icons,
+    images,
 } from '../../../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from '../../ReportStyle.js';
 import {
-  EditDeletebuttons,
-  ManPowerProjectTeam,
-  ManpowerUserContractors,
+    EditDeletebuttons,
+    ManPowerProjectTeam,
+    ManpowerUserContractors,
 } from '../../../index.js';
-import {Get_Contractor_Data} from '../../ReportApi.js';
+import { Get_Contractor_Data } from '../../ReportApi.js';
 
-const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
-  const {
-    header,
-    con_body,
-    input,
-    body_del,
-    body_edit,
-    body_del_btn,
-    body_edit_btn,
-    body_ed_de_view,
-  } = styles;
+const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value }) => {
+
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    }, []);
+    const {
+        header,
+        con_body,
+        input,
+        body_del,
+        body_edit,
+        body_del_btn,
+        body_edit_btn,
+        body_ed_de_view,
+    } = styles;
 
     // console.log("Manpower")
     // console.log(projectTeamList)
@@ -73,7 +77,7 @@ const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
                     elevation: 1
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.darkGray}]}>Manpower</Text>
+                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.darkGray }]}>Manpower</Text>
                 </View>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <TouchableOpacity onPress={() => setTabCollapse(!TabCollapse)}>
@@ -81,7 +85,7 @@ const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
                     </TouchableOpacity>
                 </View>
             </Pressable>
-            {TabCollapse ? <View style={{ justifyContent:"space-evenly",paddingBottom:-2 }}>
+            {TabCollapse ? <View style={{ justifyContent: "space-evenly" }}>
                 <View>
                     {/* project team start */}
                     <ManPowerProjectTeam projectTeamList={projectTeamList} />
