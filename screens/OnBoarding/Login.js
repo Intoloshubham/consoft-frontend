@@ -35,7 +35,7 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   const [showPass, setShowPass] = React.useState(false);
 
-  // CUSTOM TOAST OF CRUD OPERATIONS 
+  // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
