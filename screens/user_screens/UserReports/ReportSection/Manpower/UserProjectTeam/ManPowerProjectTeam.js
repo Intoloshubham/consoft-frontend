@@ -4,8 +4,8 @@ import {
     Easing, Switch,
     Text, FlatList,
     StyleSheet, Image,
-    ScrollView, Modal, SectionList,
-    Pressable, TextInput, TouchableWithoutFeedback,
+    ScrollView, Modal, SectionList, 
+    Pressable, TextInput, TouchableWithoutFeedback, SafeAreaView,
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../../constants'
@@ -13,6 +13,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Get_Contractor_Data, Get_user_role } from '../../../ReportApi.js'
 import styles from '../../../ReportStyle.js'
 
+LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 const ManPowerProjectTeam = ({ projectTeamList }) => {
     // console.log("ManpowerProjectTeam")
     // console.log(projectTeamList)
@@ -67,7 +68,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
         return (
             <>
                 <TouchableOpacity
-                    style={[header, 
+                    style={[header,
                         {
                             width: SIZES.width * 0.7,
                             justifyContent: "center",
@@ -113,8 +114,8 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
             </Pressable>
             {proTeamTabCollapse &&
                 (
-                    <View
-                        style={{}}
+                    <SafeAreaView
+                        style={{ flex: 1 }}
                     >
                         <FlatList
                             data={ProjectTeamName}
@@ -123,13 +124,13 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                             nestedScrollEnabled={true}
                             maxHeight={100}
                             renderItem={({ item, index }) => _project_team(item, index)}
-                            keyExtractor={(item, index) => index.toString()}                
+                            keyExtractor={(item, index) => index.toString()}
                         />
                         {
 
                         }
-            
-                    </View>
+
+                    </SafeAreaView>
                 )
             }
         </View>

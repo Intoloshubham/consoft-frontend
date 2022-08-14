@@ -36,6 +36,21 @@ const Insert_report_data = async (report_post_data, CONST_FIELD) => {
     }
 
 }
+
+const insert_manpower_report = async (manpower_post_data, Id) => {
+
+    try {
+        const res = fetch(`${process.env.API_URL}mapower-report/${CONST_FIELD.QUANTITY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(manpower_post_data)
+        })
+        return res;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const insert_stock_data = (quality_post_data) => {
 
     try {
@@ -61,7 +76,7 @@ const insert_new_category = (new_categ_post) => {
         })
         return res;
     } catch (error) {
-           console.log(error)
+        console.log(error)
     }
 }
 const insert_new_sub_category = (new_subCateg_post) => {
@@ -73,24 +88,24 @@ const insert_new_sub_category = (new_subCateg_post) => {
         })
         return res;
     } catch (error) {
-           console.log(error)
+        console.log(error)
     }
 }
 
-const get_new_category = (Id) =>{
+const get_new_category = (Id) => {
     try {
         const res = fetch(`${process.env.API_URL}manpower-category/${Id}`)
         return res;
     } catch (error) {
-     console.log(error)   
+        console.log(error)
     }
 }
-const get_new_sub_category = (Id) =>{
+const get_new_sub_category = (Id) => {
     try {
         const res = fetch(`${process.env.API_URL}manpower-sub-category/${Id}`)
         return res;
     } catch (error) {
-     console.log(error)   
+        console.log(error)
     }
 }
 
@@ -185,9 +200,9 @@ const get_stock_item_name = async () => {
 
 export {
     Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data,
-    delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type,get_new_sub_category,
-    get_stock_item_name, insert_stock_data, get_stock_data,insert_new_category,get_new_category,insert_new_sub_category
+    delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type, get_new_sub_category,
+    get_stock_item_name, insert_stock_data, get_stock_data, insert_new_category, get_new_category, insert_new_sub_category,
+    insert_manpower_report
 }
 
 
- 
