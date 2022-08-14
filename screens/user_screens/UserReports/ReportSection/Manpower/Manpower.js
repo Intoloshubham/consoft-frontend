@@ -8,7 +8,7 @@ import {
     FlatList,
     StyleSheet,
     Image,
-    ScrollView,
+    ScrollView, 
     Modal,
     Pressable,
     TextInput,
