@@ -53,6 +53,7 @@ const insert_manpower_report = async (manpower_post_data, Id) => {
 
 const insert_stock_data = (quality_post_data) => {
 
+
     try {
         const res = fetch(`${process.env.API_URL}stock-entry/`, {
             method: 'POST',
@@ -66,6 +67,7 @@ const insert_stock_data = (quality_post_data) => {
     }
 
 }
+
 
 const insert_new_category = (new_categ_post) => {
     try {
@@ -117,6 +119,7 @@ const get_stock_data = async () => {
         console.log(error)
     }
 }
+
 
 const edit_report_data = (Id) => {
     try {

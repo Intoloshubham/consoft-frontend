@@ -12,7 +12,9 @@ import { Title, Divider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import { get_stock_item_name, insert_stock_data, get_stock_data } from '../../ReportApi.js'
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useSelector } from 'react-redux';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
@@ -51,7 +53,9 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
     const [stockReportModal, setStockReportModal] = useState(false);
     const userCompanyData = useSelector(state => state.user);
     const [stockItemData, setStockItemData] = useState([])
+
     const [getStockData, setGetStockData] = useState([])
+
 
     // all input fields
     const [stockEntry, setStockEntry] = useState([
@@ -73,13 +77,16 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
             console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
             setStockItemData(data);
         } catch (error) {
+
             console.log(error)
+
         }
     }
 
     useMemo(() => {
         getStockDataItems();
     }, [userCompanyData.company_id])
+
 
 
     const GetStockData = async () => {
@@ -97,6 +104,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
         }
     }
     // console.log("🚀 ~ file: Stock.js ~ line 95 ~ GetStockData ~ getStockData", getStockData)
+
 
 
     const postStockDataItems = async () => {
@@ -461,6 +469,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                             }}
                         >
 
+
                             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
                                 <View style={{}}>
                                     <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
@@ -714,6 +723,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                 </View>
                             </ScrollView>
 
+
                         </View>
 
 
@@ -743,7 +753,9 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                 title="Delete"
                 message="Deleted Successfully..."
             />
+
         </View>
+
     )
 }
 

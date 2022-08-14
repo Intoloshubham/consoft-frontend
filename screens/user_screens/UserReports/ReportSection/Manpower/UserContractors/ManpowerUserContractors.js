@@ -1103,8 +1103,10 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
       {conTeamTabCollapse ?
         (
           <View
+
             // nestedScrollEnabled={true}            
             style={{ marginBottom: -24 }}
+
           >
             <FlatList
               data={Report_list}
