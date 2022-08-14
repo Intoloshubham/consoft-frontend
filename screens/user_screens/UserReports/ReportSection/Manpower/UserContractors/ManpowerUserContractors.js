@@ -103,6 +103,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
   //works on button click
   function Insert_Contractor_data() {
     const data = {
+      company_id:companydata.company_id,
       contractor_name: ContractorName,
       phone_no: ContractorPhone,
       project_id: value
