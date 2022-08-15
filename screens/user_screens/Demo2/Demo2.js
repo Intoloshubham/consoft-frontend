@@ -306,62 +306,16 @@ const Demo2 = () => {
                         }}>
                         Pending
                       </Text>
-<<<<<<< HEAD
-                    </TouchableOpacity> */}
+
+                    </TouchableOpacity> 
                       </View>
-                      {/* <View style={{flexDirection: 'row'}}>
-=======
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 'bold',
-                          backgroundColor: 'orange',
-                          marginTop: 2,
-                          padding: 2,
-                          margin:2
-                        }}>
-                        Pending
-                      </Text>
-                    </TouchableOpacity> */}
-                      </View>
-                      {/* <View style={{flexDirection: 'row'}}>
-
-                      <TouchableOpacity onPress={()=>alert("Edit")}>
-
-                    <Image
-                            source={icons.edit}
-                            style={{
-                              height: 18,
-                              width: 18,
-                              tintColor: COLORS.blue,
-                              right: 8,
-                              marginTop:2
-                            }}
-                          />
-
-                    </TouchableOpacity>  
-                      <TouchableOpacity onPress={()=>alert('hello')}>
-
-                    <Image
-                            source={icons.delete_icon}
-                            style={{
-                              height: 18,
-                              width: 15,
-                              tintColor: COLORS.red,
-                              left: 12,marginTop:2
-                            }}
-                          />
-
-                    </TouchableOpacity>
-
-                    </View> */}
-                    </View>
+                      
+                     
+                     
+                   
                   );
                 })
               : null}
-  
         </View>
           {/* leacves modal start  */}
         </View>
@@ -742,6 +696,7 @@ const Demo2 = () => {
           </Card.Content>
         </Card>
       </View>
+      </ScrollView>
     </View>
   );
 };
