@@ -32,7 +32,7 @@ const CustomToast = ({isVisible, onClose, color, title, message}) => {
                 borderLeftWidth: 10,
                 borderRadius: 5,
                 paddingHorizontal: SIZES.padding,
-                paddingVertical: 3,
+                paddingVertical: 5,
                 ...styles.shadow,
               }}>
               <TouchableOpacity>

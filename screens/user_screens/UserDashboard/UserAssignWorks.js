@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
-import {AccordionList} from 'accordion-collapse-react-native';
-import {TextInput} from 'react-native-paper';
-import {Divider} from '@ui-kitten/components';
-import {useSelector, useDispatch} from 'react-redux';
+import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
+import { AccordionList } from 'accordion-collapse-react-native';
+import { TextInput } from 'react-native-paper';
+import { Divider } from '@ui-kitten/components';
+import { useSelector, useDispatch } from 'react-redux';
 import Config from '../../../config';
 import {
   getAssignWorks,
@@ -23,14 +23,22 @@ const UserAssignWorks = () => {
   const [assignWorksData, setAssignWorksData] = React.useState([]);
   const [assignWorks, setAssignWorks] = React.useState([]);
   const [textMsg, setTextMsg] = React.useState('');
-  const userData = useSelector(state => state.user);
+  const [userDataId, setUserDataId] = useState('')
 
+
+  const userData = useSelector(state => state.user);
+  // console.log(userData._id)
   const fetchAssignWorks = useCallback(async () => {
+    setUserDataId(userData._id)
     const data = await getAssignWorks(userData._id);
-    data.map(ele => {
-      setAssignWorks(ele.assign_works);
-    });
-  }, [userData._id]);
+    // console.log("assign works data")
+    // console.log(data)
+    if (data) {
+      data.map(ele => {
+        setAssignWorks(ele.assign_works);
+      });
+    }
+  }, [userData]);
 
   useEffect(() => {
     fetchAssignWorks();
@@ -49,7 +57,7 @@ const UserAssignWorks = () => {
     }
   };
 
-  const WorkDetails = ({item, message, color, index}) => {
+  const WorkDetails = ({ item, message, color, index }) => {
     return (
       <View
         style={{
@@ -66,7 +74,7 @@ const UserAssignWorks = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
             <Text
               style={{
                 fontSize: 12,
@@ -88,10 +96,10 @@ const UserAssignWorks = () => {
           </View>
           <Image
             source={icons.down_arrow}
-            style={{height: 15, width: 15, tintColor: COLORS.white}}
+            style={{ height: 15, width: 15, tintColor: COLORS.white }}
           />
         </View>
-        <Text style={{color: color, marginTop: 3}}>{message}</Text>
+        <Text style={{ color: color, marginTop: 3 }}>{message}</Text>
       </View>
     );
   };
@@ -100,8 +108,8 @@ const UserAssignWorks = () => {
     return (
       <View>
         {item.work_status == true &&
-        item.verify == false &&
-        item.revert_status == false ? (
+          item.verify == false &&
+          item.revert_status == false ? (
           <WorkDetails
             item={item}
             message={'Pending from the admin side'}
@@ -135,10 +143,10 @@ const UserAssignWorks = () => {
             style={{
               flexDirection: 'row',
             }}>
-            <Text style={{...FONTS.h5, color: COLORS.white}}>
+            <Text style={{ ...FONTS.h5, color: COLORS.white }}>
               Date: {item.exp_completion_date}
             </Text>
-            <Text style={{...FONTS.h5, color: COLORS.white, left: 10}}>
+            <Text style={{ ...FONTS.h5, color: COLORS.white, left: 10 }}>
               Time: {item.exp_completion_time}
             </Text>
           </View>
@@ -148,8 +156,8 @@ const UserAssignWorks = () => {
               marginVertical: SIZES.base,
             }}
           />
-          <View style={{flexdirection: 'row'}}>
-            <View style={{backgroundColor: COLORS.white, borderRadius: 5}}>
+          <View style={{ flexdirection: 'row' }}>
+            <View style={{ backgroundColor: COLORS.white, borderRadius: 5 }}>
               <TextInput
                 style={{
                   paddingHorizontal: SIZES.radius,

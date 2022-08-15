@@ -21,7 +21,7 @@ const getSubmitWorks = async company_id => {
 const getVerifyAndRevertWorks = async company_id => {
   try {
     const res = await fetch(
-      `${Config.API_URL}verify-revert-works/` + `${company_id}`,
+      Config.API_URL + 'verify-revert-works/' + company_id,
       {
         method: 'get',
         headers: {
