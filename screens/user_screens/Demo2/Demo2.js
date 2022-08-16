@@ -649,7 +649,7 @@ const Demo2 = () => {
                                 ? {
                                     backgroundColor: 'orange',
                                     borderRadius: 50,
-                                    paddingHorizontal: 5,
+                                    paddingHorizontal: 5, //10
                                     marginLeft: -5,
                                   }
 
