@@ -1,6 +1,7 @@
 import Config from '../config';
 
 const postBoqNewAddItem = async formData => {
+ 
   try {
     const res = await fetch(Config.API_URL + 'quantity-report-item', {
       method: 'post',
@@ -16,14 +17,17 @@ const postBoqNewAddItem = async formData => {
   }
 };
 
-const getBoqItemsList = async () => {
+const getBoqItemsList = async company_id => {
   try {
-    const res = await fetch(`${Config.API_URL}quantity-report-item`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      Config.API_URL + 'quantity-report-item/' + company_id,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
     const data = await res.json();
     return data;
   } catch (error) {

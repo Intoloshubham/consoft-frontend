@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   FlatList,
   Animated,
   ImageBackground,
+  LogBox,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {IconButton, DeleteConfirmationToast} from '../../../Components';
@@ -30,13 +31,15 @@ const AssignedWorks = () => {
   //get assign works
   const fetchAssignWorks = async () => {
     const response = await getAssignWorks();
-    setAssignWorkData(response);
+    setAssignWorkData(response.data);
   };
 
   //get user role
   const fetchUserRole = async () => {
     const response = await getUserRole();
-    setItems(response);
+    if (response.status === 200) {
+      setItems(response.data);
+    }
   };
 
   // get work id
@@ -55,14 +58,15 @@ const AssignedWorks = () => {
     }
   };
 
+  // React.useEffect(() => {
+  //   fetchAssignWorks();
+  //   fetchUserRole();
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // }, []);
 
-  React.useEffect(() => {
-    setInterval(() => {
-      fetchAssignWorks();
-    }, 5000);
-    fetchUserRole();
+  React.useMemo(() => {
+    fetchAssignWorks();
   }, []);
-
 
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {
@@ -395,34 +399,11 @@ const AssignedWorks = () => {
               }}
             />
           </TouchableOpacity>
-          {/* <Text
-            style={{
-              color: COLORS.lightblue_50,
-              backgroundColor: COLORS.lightblue_900,
-              paddingHorizontal: SIZES.base,
-              paddingVertical: 2,
-              borderRadius: SIZES.base,
-            }}>
-            25
-          </Text> */}
         </View>
       </View>
       {renderSwipeList()}
       {renderRoleFilterModal()}
 
-      {/* <ConformationAlert
-        isVisible={deleteConfirm}
-        onCancel={() => {
-          setDeleteConfirm(false);
-        }}
-        title="Delete Assign Work"
-        message="Are you sure want to delete this work ?"
-        cancelText="Cancel"
-        confirmText="Yes"
-        onConfirmPressed={() => {
-          fetchAssignWorkDelete();
-        }}
-      /> */}
       <DeleteConfirmationToast
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}

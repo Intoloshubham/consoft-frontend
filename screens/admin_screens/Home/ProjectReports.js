@@ -8,10 +8,15 @@ import {
   Modal,
   TouchableWithoutFeedback,
   FlatList,
+  LogBox,
 } from 'react-native';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
 
 const ProjectReports = () => {
+  React.useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
+
   const [reportFilterModal, setReportFilterModal] = React.useState(false);
   const filtertypes = [
     {id: 1, name: 'Cost & Timeline', filtertype: 1},

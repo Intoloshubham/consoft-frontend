@@ -17,6 +17,7 @@ import {
   TextButton,
   IconButton,
   CustomToast,
+  DeleteConfirmationToast,
 } from '../../../Components';
 import {SIZES, COLORS, FONTS, icons} from '../../../constants';
 import utils from '../../../utils';
@@ -46,6 +47,9 @@ const Suppliers = () => {
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
+
+  // delete confirmation
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
   function isEnableSubmit() {
     return (
@@ -95,9 +99,16 @@ const Suppliers = () => {
     }, 2000);
   };
 
-  const deleteSupplier = async id => {
-    let response = await deleteSuppliers(id);
+  const getSupplierId = id => {
+    setDeleteConfirm(true);
+    setSuppId(id);
+  };
+  const [suppId, setSuppId] = React.useState('');
+
+  const deleteSupplier = async () => {
+    let response = await deleteSuppliers(suppId);
     if (response.status === 200) {
+      setDeleteConfirm(false);
       setDeleteToast(true);
       getSupplier();
     }
@@ -109,8 +120,6 @@ const Suppliers = () => {
   React.useEffect(() => {
     getSupplier();
   }, []);
-
-  console.log("object")
 
   function renderSuppliersModal() {
     return (
@@ -378,7 +387,7 @@ const Suppliers = () => {
               {item.supplier_location}
             </Text>
           </View>
-          <TouchableOpacity onPress={() => deleteSupplier(item._id)}>
+          <TouchableOpacity onPress={() => getSupplierId(item._id)}>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.warning_200,
@@ -476,6 +485,15 @@ const Suppliers = () => {
         color={COLORS.rose_600}
         title="Delete"
         message="Deleted Successfully..."
+      />
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => deleteSupplier()}
       />
     </View>
   );

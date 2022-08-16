@@ -19,10 +19,14 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Get_Project_Team_Data } from '../UserReports/ReportApi.js'
 import { getToken, getUserId } from '../../../services/asyncStorageService';
 import Config from '../../../config'
+import { useDispatch, useSelector } from 'react-redux';
 const UserReports = ({ route }) => {
 
   LogBox.ignoreLogs(["EventEmitter.removeListener"]);
-  LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
 
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, Project_list_drop } = styles
@@ -41,37 +45,36 @@ const UserReports = ({ route }) => {
 
 
   const [userid, setUserid] = useState(null)
+  const userData = useSelector(state => state.user);
 
-  const Get_UserId_Data = async () => {
-    const userid = await getUserId();
-    const new_userid = userid;
-    setUserid(new_userid);
-  }
+  // const Get_UserId_Data = async () => {
+  //   const userid = await getUserId();
+  //   const new_userid = userid;
+  //   setUserid(new_userid);
+  // }
   //getting user id state
-  useMemo(() => {
-    Get_UserId_Data();
+  // useMemo(() => {
+  //   Get_UserId_Data();
 
-    // console.log("seconde.....................")
+  //   // console.log("seconde.....................")
 
-
-  }, [getUserId])
+ 
+  // }, [getUserId])
 
   useMemo(() => {
     console.log("first...........")
-    console.log(userid)
-    if (userid) {
-      const sendUserId = () => {
-        fetch(`${Config.API_URL}user-by-projects/${userid}`)
-          .then((response) => response.json())
-          .then(data => {
-            // console.log("data........")
-            // console.log(data)
-            setSelectedIdProjects(data);
-          })
+    console.log(userData._id)
+    if (userData._id) {
+      const sendUserId =async () => {
+       let data= await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
+       let resp=await data.json();
+       console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
+       setSelectedIdProjects(resp);
+     
       }
       sendUserId();
     }
-  }, [userid])
+  }, [])
   // console.log("selectedIdProjects..........584")
   // console.log(selectedIdProjects)
 
@@ -98,6 +101,7 @@ const UserReports = ({ route }) => {
       let ProData = selectedIdProjects.map(ele => {
         return { label: ele.project_name, value: ele.project_id };
       })
+
       setProList(ProData)
 
     }
@@ -105,6 +109,7 @@ const UserReports = ({ route }) => {
 
   // console.log("ProList..........121")
   // console.log(ProList) 
+  // console.log(value)
 
   useMemo(() => {
     if (value) {
@@ -119,7 +124,7 @@ const UserReports = ({ route }) => {
       return
     }
   }, [value])
-
+  // console.log(projectTeamList)
 
 
 
@@ -180,27 +185,26 @@ const UserReports = ({ route }) => {
           }}>
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
-          <View >
+          {value ? <View >
             <View style={{ marginVertical: 5 }}>
               <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
-              <Stock />
+              <Stock project_id={value} Main_drp_pro_value={value} />
             </View>
-            <View style={{ marginVertical: 5 }}>
+            <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>
               {/* Quantity */}
-              <Quantity />
+              <Quantity project_id={value} Main_drp_pro_value={value} />
             </View>
-            <View style={{ marginVertical: 5 }}>
-              {/* Quality */}
+            {/* <View style={{ marginVertical: 5 }}>
               <Quality />
-            </View>
+            </View> */}
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}
               <TAndP />
             </View>
-          </View>
+          </View> : null}
         </View>
       </ScrollView>
     </View>

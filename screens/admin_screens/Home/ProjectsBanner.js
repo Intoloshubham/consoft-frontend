@@ -9,6 +9,7 @@ import {
   ScrollView,
   Modal,
   TouchableWithoutFeedback,
+  LogBox,
 } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {
@@ -23,7 +24,7 @@ import {useNavigation} from '@react-navigation/native';
 import utils from '../../../utils';
 import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {ConformationAlert} from '../../../Components';
+
 import {
   getProjects,
   saveProject,
@@ -35,11 +36,6 @@ import {
 
 const ProjectsBanner = ({company_id}) => {
   const navigation = useNavigation();
-  //CONFIRMATION MODAL ON DELETE
-  const [projectDeleteConfirmation, setProjectDeleteConfirmation] =
-    React.useState(false);
-
-  //PROJECT BANNER COLLAPSED
   const [collapsed, setCollapsed] = React.useState(true);
 
   //PROJECT CREATE & UPDATE MODAL
@@ -54,14 +50,17 @@ const ProjectsBanner = ({company_id}) => {
   const [projectname, setProjectName] = React.useState('');
   const [projectlocation, setProjectLocation] = React.useState('');
   const [projectplotarea, setProjectPlotArea] = React.useState('');
+
   // getting categories from api - dropdown
   const [openCategory, setOpenCategory] = React.useState(false);
   const [categoryValue, setCategoryValue] = React.useState([]);
   const [projectCategory, setProjectCategory] = React.useState([]);
+
   // getting types from api - dropdown
   const [openType, setOpenType] = React.useState(false);
   const [typeValue, setTypeValue] = React.useState([]);
   const [projectType, setProjectType] = React.useState([]);
+
   //project area units
   const [openUnit, setOpenUnit] = React.useState(false);
   const [unitValue, setUnitValue] = React.useState([]);
@@ -108,13 +107,18 @@ const ProjectsBanner = ({company_id}) => {
   };
 
   // get projects
-  const fetchProjects = useCallback(async () => {
+  const fetchProjects = async () => {
     const data = await getProjects(company_id);
-    setProjects(data.data);
-  }, []);
+    if (data.status === 200) {
+      setProjects(data.data);
+    }
+  };
 
   useEffect(() => {
     fetchProjects();
+    fetchProjectCategory();
+    fetchProjectsTypes();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
   // ON BUTTON SUBMISSON VALIDATION
@@ -128,7 +132,6 @@ const ProjectsBanner = ({company_id}) => {
       projectPlotAreaError == ''
     );
   }
-
 
   const fetchProjectCategory = async () => {
     const res = await getProjectCategory();
@@ -863,9 +866,7 @@ const ProjectsBanner = ({company_id}) => {
         backgroundColor: COLORS.lightblue_600,
         borderRadius: 5,
         ...styles.shadow,
-      }}
-      // onPress={toggleExpanded}
-    >
+      }}>
       <View
         style={{
           flex: 1,
@@ -909,29 +910,9 @@ const ProjectsBanner = ({company_id}) => {
       </View>
       <Collapsible collapsed={collapsed}>{renderProjects()}</Collapsible>
 
-      {/* PROJECT CREATE MODAL  */}
       {renderCreateProjectModal()}
-
-      {/* PROJECTS EDIT & UPDATE MODAL */}
       {renderProjectCrudModal()}
-
-      {/* PROJECT UPDATE MODAL  */}
       {renderUpdateProjectModal()}
-
-      {/* DELETE CONFIRMATION MODAL */}
-      <ConformationAlert
-        isVisible={projectDeleteConfirmation}
-        onCancel={() => {
-          setProjectDeleteConfirmation(false);
-        }}
-        title="Delete Project"
-        message="Are you sure want to delete this project ?"
-        cancelText="Cancel"
-        confirmText="Yes"
-        onConfirmPressed={() => {
-          projectDeleteSubmit();
-        }}
-      />
 
       <CustomToast
         isVisible={submitToast}

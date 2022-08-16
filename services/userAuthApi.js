@@ -53,6 +53,7 @@ export const STATUSES = Object.freeze({
 const initialState = {
   token: "",
   _id: "",
+  company_id: "",
   status:STATUSES.IDLE,
 }
 
@@ -63,12 +64,14 @@ export const userSlice = createSlice({
     setUserToken: (state, action) => {
       state.token = action.payload.access_token,
       state._id = action.payload._id,
+      state.company_id = action.payload.company_id,
       state.status = STATUSES.IDLE
     },
     
     userLogout:(state, action)=>{
       state.token = null,
       state._id = null,
+      state.company_id = null,
       state.status = STATUSES.LOGOUT
       removeToken('token')
       removeUserId('user_id')
@@ -86,9 +89,10 @@ export const userSlice = createSlice({
               state.status = STATUSES.IDLE;
               state.token = action.payload.access_token;
               state._id = action.payload._id;
+              state.company_id = action.payload.company_id;
               setUserId(action.payload._id);
               storeToken(action.payload.access_token);
-            } 
+            }  
         })
         .addCase(userLogin.rejected, (state, action) => {
             state.status = STATUSES.ERROR;
@@ -101,8 +105,8 @@ export const userSlice = createSlice({
 export const { setUserToken, userLogout } = userSlice.actions
 export default userSlice.reducer
 
-export const userLogin = createAsyncThunk('user/login', async (userData) => {
-  const res = await fetch(Config.API_URL+'login',{
+export const userLogin = createAsyncThunk('user/login', async (userData) => { 
+  const res = await fetch(process.env.API_URL+'login',{
     method:"post",
     body:JSON.stringify(userData),
     headers:{

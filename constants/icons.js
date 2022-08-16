@@ -98,6 +98,10 @@ const supplier = require('../assets/icons/final/supplier.png');
 const units = require('../assets/icons/final/units.png');
 const delete_withbg = require('../assets/icons/delete_withbg.png');
 
+
+//user-end quantity report
+const add_qty_item=require('../assets/icons/add_qty_item.png')
+const add_qty_item1=require('../assets/icons/add_qty_item1.png')
 export default {
   // final
   company_team,
@@ -191,6 +195,6 @@ export default {
   suppliers1,
   staff,
   boq,
-  check,
-  delete_withbg,
+  add_qty_item,
+  add_qty_item1,delete_withbg
 };

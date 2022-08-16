@@ -33,14 +33,13 @@ import {
 const Boq = ({route}) => {
   // get company id
   const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
   const {project_id} = route.params;
-
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
-
 
   const [addBoqModal, setAddBoqModal] = React.useState(false);
   const [addBoqNewItemModal, setAddBoqNewItemModal] = React.useState(false);
@@ -62,12 +61,15 @@ const Boq = ({route}) => {
   const [itemQty, setItemQty] = React.useState('');
 
   // get unit for show
-  const [unit, getUnit] = React.useState([]);
+  const [unit, getUnit] = React.useState('');
   // onselect
   const [unitId, getUnitId] = React.useState('');
   // get unit name for showing
   const [showUnitName, setShowUnitName] = React.useState('');
 
+  const onBoqListOpen = React.useCallback(() => {
+    fetchBoqItemsList();
+  }, []);
 
   // get boq item units
   const fetchUnit = async () => {
@@ -107,9 +109,9 @@ const Boq = ({route}) => {
 
   // get boq items
   const fetchBoqItemsList = async () => {
-    let data = await getBoqItemsList();
-    getUnit(data);
-    let unitFromApi = data.map(ele => {
+    let response = await getBoqItemsList(company_id);
+    getUnit(response);
+    let unitFromApi = response.data.map(ele => {
       return {label: ele.item_name, value: ele._id};
     });
     setItems(unitFromApi);
@@ -124,8 +126,8 @@ const Boq = ({route}) => {
   };
 
   const OnSelectHandler = id => {
-    let dd = unit.map(ele => {
-      if (ele._id == id) {
+    unit.map(ele => {
+      if (ele._id === id) {
         setShowUnitName(ele.unit_name);
         getUnitId(ele._id);
       }
@@ -142,7 +144,6 @@ const Boq = ({route}) => {
       qty: itemQty,
     };
     let data = await postBOQItem(formData);
-    console.log(data);
     if (data.status === 200) {
       setAddBoqModal(false);
       fetchBoqItems();
@@ -159,7 +160,7 @@ const Boq = ({route}) => {
 
   const [boqItems, setBoqItems] = React.useState([]);
   const fetchBoqItems = async () => {
-    let data = await getBOQItems(companyData._id, project_id);
+    let data = await getBOQItems(company_id, project_id);
     const filterData = data.data.map(ele => {
       return ele;
     });
@@ -238,7 +239,7 @@ const Boq = ({route}) => {
                   style={{
                     backgroundColor: COLORS.darkGray,
                     padding: 3,
-                    borderRadius: 3,
+                    borderRadius: 2,
                   }}>
                   <TouchableOpacity onPress={() => setEditBoq(false)}>
                     <Image
@@ -758,6 +759,7 @@ const Boq = ({route}) => {
                       }}
                       onSelectItem={value => OnSelectHandler(value.value)}
                       autoScroll={false}
+                      onOpen={onBoqListOpen}
                       // searchable={true}
                       // searchPlaceholder="Search..."
                       // searchContainerStyle={{

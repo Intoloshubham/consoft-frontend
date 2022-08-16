@@ -54,6 +54,7 @@ const StocksAndInventry = () => {
 
   const stockItem = async () => {
     let response = await getItem();
+    console.log(response)
     let itemFromApi = response.map(one => {
       return {label: one.item_name, value: one._id};
     });
@@ -145,8 +146,8 @@ const StocksAndInventry = () => {
               <Image
                 source={icons.edit}
                 style={{
-                  width: 15,
-                  height: 15,
+                  width: 12,
+                  height: 12,
                   tintColor: COLORS.white,
                 }}
               />
