@@ -5,7 +5,7 @@ import {
     StyleSheet, Image,
     ScrollView, Modal,
     Pressable, TextInput,
-    TouchableOpacity, Button
+    TouchableOpacity, Button, Keyboard
 } from 'react-native'
 import styles from '../../ReportStyle.js'
 import { Title, Divider } from 'react-native-paper';
@@ -105,9 +105,9 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
     }
 
     useMemo(() => {
-        let isMount=true;
+        let isMount = true;
         GetStockData();
-        return ()=>{isMount=false}
+        return () => { isMount = false }
     }, [userCompanyData.company_id])
     // console.log("🚀 ~ file: Stock.js ~ line 95 ~ GetStockData ~ getStockData", getStockData)
 
@@ -128,6 +128,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                 setStockResponseStatus(data)
                 if (data.status == '200') {
                     setSubmitToast(true)
+                    GetStockData();
                     setTimeout(() => {
                         setStockReportModal(false);
                     }, 1500);
@@ -191,7 +192,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
     const add_stock_input = () => {
         return (
             <View style={container}>
-                <ScrollView style={inputsContainer}>
+                <ScrollView style={inputsContainer} keyboardShouldPersistTaps={'never'}  >
                     {stockEntry ? stockEntry.map((input, key) => {
 
                         return (
@@ -252,6 +253,8 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                         keyboardType="numeric"
                                         placeholderTextColor={COLORS.gray}
                                         value={input.qty}
+                                        // onSubmitEditing={Keyboard.dismiss()}
+                                        // blurOnSubmit={false}
                                         onChangeText={text => {
                                             inputQuantity(text, key);
                                         }}
@@ -317,7 +320,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                     borderBottomWidth: 1,
                                     justifyContent: 'space-between',
                                 }}>
-                                <Title>Add Quality Data</Title>
+                                <Title>Add Stock Data</Title>
                                 <Pressable onPress={() => {
                                     // inputs.splice(0, inputs.length);
                                     setStockReportModal(false);
@@ -353,13 +356,20 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                 </TouchableOpacity>
                             </View>
                             {add_stock_input()}
+
                             <View style={{ marginTop: 10 }}>
-                                <Button
-                                    title="submit"
-                                    onPress={() => {
-                                        postStockDataItems();
-                                    }}
-                                />
+                                <ScrollView keyboardShouldPersistTaps='always'>
+                                    <Button
+                                        title="submit"
+                                        onPress={() => {
+                                            postStockDataItems();
+                                        }}
+
+                                    // onTouchstart={()=>{
+
+                                    // }}
+                                    />
+                                </ScrollView>
                             </View>
                         </View>
                     </View>

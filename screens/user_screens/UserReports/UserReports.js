@@ -62,11 +62,12 @@ const UserReports = ({ route }) => {
   // }, [getUserId])
 
   useMemo(() => {
-    console.log("first...........")
+    console.log("userbyproject...........") 
     console.log(userData._id)
     if (userData._id) {
       const sendUserId =async () => {
        let data= await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
+      //  console.log("🚀 ~ file: UserReports.js ~ line 70 ~ sendUserId ~ data", data)
        let resp=await data.json();
        console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
        setSelectedIdProjects(resp);

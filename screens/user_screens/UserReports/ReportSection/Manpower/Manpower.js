@@ -52,9 +52,9 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value }) => {
     } = styles;
 
     // console.log("Manpower")
-    // console.log(projectTeamList)
-    // console.log(ProList)
-    // console.log(Main_drp_pro_value)
+    // console.log("🚀 ~ file: Manpower.js ~ line 56 ~ Manpower ~ projectTeamList", projectTeamList)
+    // console.log("🚀 ~ file: Manpower.js ~ line 58 ~ Manpower ~ ProList", ProList)
+    // console.log("🚀 ~ file: Manpower.js ~ line 60 ~ Manpower ~ Main_drp_pro_value", Main_drp_pro_value)
     //Manpower collapse
     const [TabCollapse, setTabCollapse] = useState(false)
 
@@ -87,7 +87,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value }) => {
             </Pressable>
             {TabCollapse ? <View style={{ justifyContent: "space-evenly" }}>
                 <View>
-                    {/* project team start */}
+                    {/* project team start */} 
                     <ManPowerProjectTeam projectTeamList={projectTeamList} />
                     {/* Project Team close */}
                 </View>

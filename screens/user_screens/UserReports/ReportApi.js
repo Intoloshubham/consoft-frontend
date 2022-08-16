@@ -102,6 +102,7 @@ const get_new_category = (Id) => {
         console.log(error)
     }
 }
+
 const get_new_sub_category = (Id) => {
     try {
         const res = fetch(`${process.env.API_URL}manpower-sub-category/${Id}`)
@@ -149,6 +150,22 @@ const delete_report_data = (Id) => {
         console.log(error);
     }
 }
+
+const delete_manpower_data = async (Id) => {
+    try {
+        const res = await fetch(`${process.env.API_URL}contractor/${Id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return error;
+    }
+}
+
 
 
 
@@ -217,7 +234,7 @@ export {
     Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data,
     delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type, get_new_sub_category,
     get_stock_item_name, insert_stock_data, get_stock_data, insert_new_category, get_new_category, insert_new_sub_category,
-    insert_manpower_report,get_manpower_report
+    insert_manpower_report, get_manpower_report, delete_manpower_data
 }
 
 
