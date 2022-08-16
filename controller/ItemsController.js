@@ -35,7 +35,7 @@ const saveUnitname = async unitdata => {
 
 const getUnits = async () => {
   try {
-    const res = await fetch(`${Config.API_URL}unit`, {
+    const res = await fetch(`${Config.API_URL}unit`,{
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
