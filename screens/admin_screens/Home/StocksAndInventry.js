@@ -54,6 +54,7 @@ const StocksAndInventry = () => {
 
   const stockItem = async () => {
     let response = await getItem();
+    console.log(response)
     let itemFromApi = response.map(one => {
       return {label: one.item_name, value: one._id};
     });

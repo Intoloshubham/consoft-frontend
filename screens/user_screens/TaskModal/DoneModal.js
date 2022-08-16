@@ -98,6 +98,7 @@ const DoneModal = ({doneModal, setdoneModal}) => {
           <View style={{marginTop: SIZES.h1, marginLeft: -15}}>
             <FlatList
               data={dummyData.comp_tasks_var}
+              scrollEnabled={false}
               renderItem={renderItem}
               keyExtractor={item => item.id}
             />

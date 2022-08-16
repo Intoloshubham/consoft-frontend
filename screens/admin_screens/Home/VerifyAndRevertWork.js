@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
 import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
@@ -7,28 +7,37 @@ import VerifyWorks from '../VerifyAndRevertWork.js/VerifyWorks';
 import RevertWorks from '../VerifyAndRevertWork.js/RevertWorks';
 
 const Tab = createMaterialTopTabNavigator();
-const VerifyAndRevertWork = ({company_id}) => {
-  const fetchVerifyAndRevertWork = async () => {
-    const response = await getVerifyAndRevertWorks(company_id);
-    if (response.status === 200) {
-      let v = response.data.map(ele => {
-        if (ele.verify === true) {
-          setVerify(ele);
-        }
-        if (ele.revert_status === true) {
-          setRevert(ele);
-        }
-      });
-    } else {
-      // alert(response.message);
-    }
-  };
 
-  // filter verify & revert works
+const VerifyAndRevertWork = ({company_id}) => {
+  const [verifyAndRevert, setVerifyAndRevert] = React.useState([]);
   const [verify, setVerify] = React.useState([]);
   const [revert, setRevert] = React.useState([]);
 
-  React.useEffect(() => {
+  // ============================== Apis ==============================
+  const fetchVerifyAndRevertWork = async () => {
+    const response = await getVerifyAndRevertWorks(company_id);
+    setVerifyAndRevert(response.data);
+
+    //filter revert & verify
+    const verify_data = response.data.filter(el => el.verify === true);
+    setVerify(verify_data);
+    const revert_data = response.data.filter(el => el.revert_status === true);
+    setRevert(revert_data);
+  };
+
+  // const filterData = () => {
+  //   const verify_data = verifyAndRevert.filter(el => el.verify === true);
+  //   setVerify(verify_data);
+  //   const revert_data = verifyAndRevert.filter(el => el.revert_status === true);
+  //   console.log(revert_data);
+  //   setRevert(revert_data);
+  // };
+
+  // React.useEffect(() => {
+  //   fetchVerifyAndRevertWork();
+  // }, []);
+
+  React.useMemo(() => {
     fetchVerifyAndRevertWork();
   }, []);
 
