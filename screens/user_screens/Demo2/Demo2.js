@@ -8,7 +8,7 @@ import {
   Pressable,
   Image,
   Button,
-  TouchableHighlight,
+  ScrollView,
 } from 'react-native';
 import {HeaderBar, TextButton, FormInput} from '../../../Components';
 import {Title, Card} from 'react-native-paper';
@@ -20,6 +20,7 @@ import CustomCalender from './CustomCalender';
 import {useSelector, useDispatch} from 'react-redux';
 import {Popable} from 'react-native-popable';
 import config from '../../../config';
+// import CalendarPicker from 'react-native-calendar-picker';
 
 const Demo2 = () => {
   // const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const Demo2 = () => {
   // console.log(user_id);
 
   const [leavesmodal, setLeavesModal] = useState(false);
-  const [leavesdate, setLeavesDate] = useState('');
+  const [leavesdate, setLeavesDate] = useState([]);
   const [selectedId, setSelectedId] = useState('');
   const [userDetail, setUserDetail] = useState([]);
   const [showleaves, setShowLeaves] = useState([]);
@@ -50,6 +51,7 @@ const Demo2 = () => {
     getNextMonth,
     getPrevMonth,
   } = CustomCalender();
+  // console.log(todayFormatted)
 
   useEffect(() => {
     fetch(`${config.API_URL}user`, {
@@ -74,16 +76,21 @@ const Demo2 = () => {
     //  const newDate= removedate?[...leavesdate, date]:leavesdate.pop(date);
     const selectDate = [...leavesdate, date];
     // setLeavesDate(date=> [...leavesdate,  ${date.length}`]);
-    // console.log(selectDate);
+    // if(leavesdate){
+    // const obj = [...new Map(
+    // leavesdate.map(item => [JSON.stringify(item), item])).values()];
+    // setPushDate(obj);
+    // }
     setLeavesDate(selectDate);
     setSelectedId(i);
-    const newselectdate = [...new Set(leavesdate), date];
-    setPushDate(newselectdate);
+    // const newselectdate = [...new Set(leavesdate), date];
+    // console.log(newselectdate);
+    // setPushDate(newselectdate);
   };
 
   const submitLeaves = () => {
     const applyleaves = {
-      leavedays: pushdate,
+      leavedates: leavesdate,
       user_id: user_id,
     };
     try {
@@ -117,11 +124,12 @@ const Demo2 = () => {
 
   useEffect(() => {
     showleavesdata();
-  }, [showleaves]);
+  }, []);
 
   useMemo(() => {
     if (showleaves.data) {
       showleaves.data.map(ele => {
+        // console.log(ele)
         setMonthShow(ele);
       });
     }
@@ -156,11 +164,11 @@ const Demo2 = () => {
     setLeavesDate('');
   };
 
-  // console.log(leavesday.leavedays.leave_date);
+  // const TodayDate = () => {
+
+  // };
+
   var dt = new Date();
-  // console.log(dt.toDateString())
-  // dt.toLocaleTimeString();
-  // console.log(dt.toLocaleTimeString())
 
   
 
@@ -176,88 +184,88 @@ const Demo2 = () => {
   return (
     <View>
       {/* <HeaderBar right={true} title="Leaves" /> */}
-      <View
-        style={{
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-          marginHorizontal: SIZES.padding,
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-          padding: 20,
-          borderWidth: 1,
-          elevation: 0.9,
-        }}>
+      <ScrollView>
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 10,
+            marginBottom: SIZES.padding,
+            borderRadius: SIZES.radius,
+            backgroundColor: COLORS.white,
+            ...styles.shadow,
+            marginHorizontal: SIZES.padding,
+            marginBottom: SIZES.padding,
+            borderRadius: SIZES.radius,
+            padding: 20,
+            borderWidth: 1,
+            elevation: 0.9,
           }}>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-            Name:-{userDetail.name}
-          </Text>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-            Designation:-{userDetail.role}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 10,
-          }}>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-            Email:-{userDetail.email}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 10,
-          }}>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-            Emp_id:-{userDetail.role_id}
-          </Text>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-            {/* Join_Date:-{'20/08/2021'} */}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-            Mobile-No:-{userDetail.mobile}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 10,
-          }}>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>Leaves Date</Text>
-          <TextButton
-
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 10,
+            }}>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+              Name:-{userDetail.name}
+            </Text>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+              Designation:-{userDetail.role}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 10,
+            }}>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+              Email:-{userDetail.email}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 10,
+            }}>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+              Emp_id:-{userDetail.role_id}
+            </Text>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+              {/* Join_Date:-{'20/08/2021'} */}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+              Mobile-No:-{userDetail.mobile}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 10,
+            }}>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>Leaves Date</Text>
+            <TextButton
+  
             label="Apply for leaves"
-
+  
             buttonContainerStyle={{
-              paddingHorizontal: SIZES.base,
-              borderRadius: 5,
-            }}
-            // labelStyle={{...FONTS.h5}}
-            onPress={() => setLeavesModal(true)}
-          />
-        </View>
-      
+                paddingHorizontal: SIZES.base,
+                borderRadius: 5,
+              }}
+              // labelStyle={{...FONTS.h5}}
+              onPress={() => setLeavesModal(true)}
+            />
+          </View>
           <View style={{marginTop: 5}}>
 
           {leavesday.leavedays !== undefined
@@ -285,122 +293,101 @@ const Demo2 = () => {
                           backgroundColor: 'orange',
                           marginTop: 2,
                           padding: 2,
+                          margin:2
                         }}>
                         Pending
                       </Text>
-                    </TouchableOpacity>
-                    <View style={{flexDirection: 'row'}}>
 
-                      <TouchableOpacity onPress={()=>alert("Edit")}>
-
-                    <Image
-                            source={icons.edit}
-                            style={{
-                              height: 18,
-                              width: 18,
-                              tintColor: COLORS.blue,
-                              right: 8,
-                              marginTop:2
-                            }}
-                          />
-
-                    </TouchableOpacity>  
-                      <TouchableOpacity onPress={()=>alert('hello')}>
-
-                    <Image
-                            source={icons.delete_icon}
-                            style={{
-                              height: 18,
-                              width: 15,
-                              tintColor: COLORS.red,
-                              left: 12,marginTop:2
-                            }}
-                          />
-
-                    </TouchableOpacity>
-
-                    </View>
-                  </View>
-                );
-              })
-            : null}
-
-        </View> 
-        {/* leacves modal start  */}
-      </View>
-
+                    </TouchableOpacity> 
+                      </View>
+                      
+                     
+                     
+                   
+                  );
+                })
+              : null}
+        </View>
+          {/* leacves modal start  */}
+        </View>
+  
       <Modal transparent={false} visible={leavesmodal} animationType="slide">
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#000000aa',
-            // justifyContent: 'center',
-          }}>
           <View
             style={{
               flex: 1,
-              backgroundColor: '#fff',
-              marginTop: 50,
-              padding: 10,
-              borderRadius: 20,
+              backgroundColor: '#000000aa',
+              // justifyContent: 'center',
             }}>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                flex: 1,
+                backgroundColor: '#fff',
+                marginTop: 50,
+                padding: 10,
+                borderRadius: 20,
               }}>
-              <Title>Leaves from </Title>
-              <Pressable onPress={setLeavesModal}>
-                <AntDesign name="close" size={30} color="black" />
-              </Pressable>
-            </View>
-            <View style={{marginTop: 10}}>
-              <View>
-                <Card style={{borderWidth: 2, elevation: 10, margin: 10}}>
-                  <Card.Content>
-                    <View>
-                      {/* <Card style={{borderWidth: 2}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Title>Leaves from </Title>
+                <Pressable onPress={setLeavesModal}>
+                  <AntDesign name="close" size={30} color="black" />
+                </Pressable>
+              </View>
+              <View style={{marginTop: 10}}>
+                <View>
+                  <Card style={{borderWidth: 2, elevation: 10, margin: 10}}>
+                    <Card.Content>
+                      <View>
+                        {/* <Card style={{borderWidth: 2}}>
                         <Card.Content> */}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                          }}>
+                          <Title>
+                            {`${
+                              monthNames[selectedDate.getMonth()]
+                            }-${selectedDate.getFullYear()}`}
+                          </Title>
+                          {/* <Text>Today{todayFormatted}</Text> */}
+                          <View style={{flexDirection: 'row'}}>
+                            <TouchableOpacity onPress={getPrevMonth}>
+                              <Text style={{marginRight: 10, fontSize: 18}}>
+                                Prev
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={getNextMonth}>
+                              <Text style={{fontSize: 18}}>Next</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        {/* </Card.Content>
+                      </Card> */}
+                      </View>
                       <View
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'space-between',
-                          alignItems: 'center',
+                          borderBottomWidth: 1,
+                          marginBottom: 15,
+                          marginTop: 25,
+                          // backgroundColor:COLORS.lightblue_700,
                         }}>
-                        <Title>
-                          {`${
-                            monthNames[selectedDate.getMonth()]
-                          }-${selectedDate.getFullYear()}`}
-                        </Title>
-                        {/* <Text>Today{todayFormatted}</Text> */}
-                        <View style={{flexDirection: 'row'}}>
-                          <TouchableOpacity onPress={getNextMonth}>
-                            <Text style={{fontSize: 18}}>Next</Text>
-                          </TouchableOpacity>
-                        </View>
+                        {daysShort.map((day, index) => (
+                          // console.log(day,index)
+                          <Title
+                            style={[index == 6 ? {color: 'red'} : null]}
+                            key={index}>
+                            {day}
+                          </Title>
+                        ))}
                       </View>
-                      {/* </Card.Content>
-                      </Card> */}
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        borderBottomWidth: 1,
-                        marginBottom: 15,
-                        marginTop: 25,
-                        // backgroundColor:COLORS.lightblue_700,
-                      }}>
-                      {daysShort.map((day, index) => (
-                        // console.log(day,index)
-                        <Title
-                          style={[index == 6 ? {color: 'red'} : null]}
-                          key={index}>
-                          {day}
-                        </Title>
-                      ))}
-                    </View>
 
                     {Object.values(calendarRows).map((cols, index) => {
                       // {console.log(cols)}
@@ -481,98 +468,100 @@ const Demo2 = () => {
                       );
                     })}
 
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'flex-end',
-                        marginTop: 5,
-                      }}>
-                      {/* <Button title='Today'onPress={()=>{TodayDate()}} /> */}
-                      <Button
-                        title="clear"
-                        onPress={() => {
-                          ClearDate();
-                        }}
-                      />
-                    </View>
-                  </Card.Content>
-                </Card>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-end',
+                          marginTop: 5,
+                        }}>
+                        {/* <Button title='Today'onPress={()=>{TodayDate()}} /> */}
+                        <Button
+                          title="clear"
+                          onPress={() => {
+                            ClearDate();
+                          }}
+                        />
+                      </View>
+                    </Card.Content>
+                  </Card>
+                </View>
               </View>
-            </View>
-            <View>
-              <TextButton
-                label="Apply"
-                buttonContainerStyle={{
-                  height: 45,
-                  borderRadius: SIZES.radius,
-                  marginTop: SIZES.padding,
-                }}
-                onPress={() => submitLeaves()}
-              />
               <View>
-                <Title>{JSON.stringify(leavesdate)}</Title>
-                <Title>{JSON.stringify(pushdate)}</Title>
+                <TextButton
+                  label="Apply"
+                  buttonContainerStyle={{
+                    height: 45,
+                    borderRadius: SIZES.radius,
+                    marginTop: SIZES.padding,
+                  }}
+                  onPress={() => submitLeaves()}
+                />
+                <View>
+                  {/* <Title>{JSON.stringify(leavesdate)}</Title> */}
+                  <Title>{JSON.stringify(pushdate)}</Title>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </Modal>
-      {/* modal end  */}
+        </Modal>
+        {/* modal end  */}
 
-      <View
-        style={{
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-          marginHorizontal: SIZES.padding,
-          marginBottom: SIZES.padding,
-          borderRadius: SIZES.radius,
-        }}>
-        <Card style={{borderWidth: 2, elevation: 10, borderRadius: 10}}>
-          <Card.Content>
-            <View>
-              {/* <Card style={{borderWidth: 2}}>
+        <View
+          style={{
+            marginBottom: SIZES.padding,
+            borderRadius: SIZES.radius,
+            backgroundColor: COLORS.white,
+            ...styles.shadow,
+            marginHorizontal: SIZES.padding,
+            marginBottom: SIZES.padding,
+            borderRadius: SIZES.radius,
+          }}>
+          <Card style={{borderWidth: 2, elevation: 10, borderRadius: 10}}>
+            <Card.Content>
+              <View>
+                {/* <Card style={{borderWidth: 2}}>
                 <Card.Content> */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Title>
+                    {`${
+                      monthNames[selectedDate.getMonth()]
+                    }-${selectedDate.getFullYear()}`}
+                  </Title>
+                  {/* <Text>Today{todayFormatted}</Text> */}
+                  <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity onPress={getPrevMonth}>
+                      <Text style={{marginRight: 10, fontSize: 18}}>Prev</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={getNextMonth}>
+                      <Text style={{fontSize: 18}}>Next</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {/* </Card.Content>
+              </Card> */}
+              </View>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
+                  borderBottomWidth: 1,
+                  marginBottom: 5,
+                  marginTop: 5,
                 }}>
-                <Title>
-                  {`${
-                    monthNames[selectedDate.getMonth()]
-                  }-${selectedDate.getFullYear()}`}
-                </Title>
-                {/* <Text>Today{todayFormatted}</Text> */}
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity onPress={getPrevMonth}>
-                    <Text style={{marginRight: 10, fontSize: 18}}>Prev</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={getNextMonth}>
-                    <Text style={{fontSize: 18}}>Next</Text>
-                  </TouchableOpacity>
-                </View>
+                {daysShort.map((day, index) => (
+                  // console.log(day,index)
+                  <Title
+                    style={[index == 6 ? {color: 'red'} : null]}
+                    key={index}>
+                    {day}
+                  </Title>
+                ))}
               </View>
-              {/* </Card.Content>
-              </Card> */}
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                borderBottomWidth: 1,
-                marginBottom: 10,
-                marginTop: 5,
-              }}>
-              {daysShort.map((day, index) => (
-                // console.log(day,index)
-                <Title style={[index == 6 ? {color: 'red'} : null]} key={index}>
-                  {day}
-                </Title>
-              ))}
-            </View>
 
             {Object.values(calendarRows).map((cols, index) => {
               return (
@@ -651,7 +640,7 @@ const Demo2 = () => {
                                 ? {
                                     backgroundColor: 'orange',
                                     borderRadius: 50,
-                                    paddingHorizontal: 5,
+                                    paddingHorizontal: 5, //10
                                     marginLeft: -5,
                                   }
 
@@ -698,6 +687,7 @@ const Demo2 = () => {
           </Card.Content>
         </Card>
       </View>
+      </ScrollView>
     </View>
   );
 };
