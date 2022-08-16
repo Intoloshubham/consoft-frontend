@@ -665,7 +665,7 @@ const Demo2 = () => {
                                 : {
                                     backgroundColor: COLORS.gray3,
                                     borderRadius: 50,
-                                    paddingHorizontal: 10,
+                                    paddingHorizontal: 5,
                                     marginLeft: -5,
                                   },
                             ]}>
