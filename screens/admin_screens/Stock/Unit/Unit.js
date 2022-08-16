@@ -16,9 +16,7 @@ import {
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
 import {SIZES, COLORS, icons, Images, FONTS} from '../../../../constants';
-import { getUnits,postunits,unitdalete,updateunitname} from '../../../../controller/unitController';
-
-const url = 'http://192.168.1.99:8000/api/unit';
+import { getUnits, postUnits, unitDelete, updateUnit } from '../../../../controller/UnitController';
 
 const Unit = () => {
   const [unitname, setUintname] = useState('');
@@ -42,7 +40,7 @@ const Unit = () => {
       unit_name: unitname,
     };
     
-     let data = await updateunitname(unitid, updateunitdata)
+     let data = await updateUnit(unitid, updateunitdata)
         setUintname('');
         fetchData();
         alert('unit successfull update ');
@@ -68,7 +66,7 @@ const Unit = () => {
     const unitdata = {
       unit_name: unitname,
     };
-      let data = await postunits(unitdata)
+      let data = await postUnits(unitdata)
       if(data.status===200){
         setUintname('');
         fetchData();
@@ -86,7 +84,7 @@ const Unit = () => {
 
   //  delete unit api
   const DeleteUnit = async unitid=> {
-    let data = await unitdalete(unitid)
+    let data = await unitDelete(unitid)
       alert('this unit  deleted ');
     fetchData();
   };

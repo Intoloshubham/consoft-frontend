@@ -15,7 +15,7 @@ const getUnits = async () => {
   }
 };
 
-const postunits = async unitdata => {
+const postUnits = async unitdata => {
   try {
     const res = await fetch(Config.API_URL + 'unit', {
       method: 'post',
@@ -31,7 +31,7 @@ const postunits = async unitdata => {
   }
 };
 
-const unitdalete = async id => {
+const unitDelete = async id => {
   // console.log('object', id);
   try {
     const res = await fetch(Config.API_URL + 'unit/' + id, {
@@ -47,7 +47,7 @@ const unitdalete = async id => {
   }
 };
 
-const updateunitname = async (unitid, updateunitdata) => {
+const updateUnit = async (unitid, updateunitdata) => {
   try {
     const res = await fetch(`${Config.API_URL}unit/` + unitid, {
       method: 'put',
@@ -63,4 +63,4 @@ const updateunitname = async (unitid, updateunitdata) => {
   }
 };
 
-export {getUnits,postunits,unitdalete,updateunitname};
+export {getUnits,postUnits,unitDelete,updateUnit};
