@@ -21,8 +21,13 @@ import {
   deleteAssignWorks,
 } from '../../../controller/AssignWorkController';
 import {getUserRole} from '../../../controller/UserRoleController';
+import {useSelector} from 'react-redux';
 
 const AssignedWorks = () => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+  // console.log(companyData._id)
+
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const [filterRoleModal, setFilterRoleModal] = React.useState(false);
@@ -30,13 +35,15 @@ const AssignedWorks = () => {
 
   //get assign works
   const fetchAssignWorks = async () => {
-    const response = await getAssignWorks();
-    setAssignWorkData(response.data);
+    const response = await getAssignWorks(company_id);
+    if (response.status === 200) {
+      setAssignWorkData(response.data);
+    }
   };
 
   //get user role
   const fetchUserRole = async () => {
-    const response = await getUserRole();
+    const response = await getUserRole(company_id);
     if (response.status === 200) {
       setItems(response.data);
     }

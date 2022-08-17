@@ -19,8 +19,13 @@ import {
 } from '../../../Components';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
 import {getUsers} from '../../../controller/UserRoleController';
+import {useSelector} from 'react-redux';
 
 const ProjectCompanyShow = () => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+  // console.log(companyData._id)
+
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
@@ -51,8 +56,10 @@ const ProjectCompanyShow = () => {
   //============================ Apis =====================================
 
   const getCompanyTeam = async () => {
-    let response = await getUsers();
-    setComTeamDetails(response);
+    let response = await getUsers(company_id);
+    if (response.status === 200) {
+      setComTeamDetails(response.data);
+    }
   };
 
   React.useEffect(() => {

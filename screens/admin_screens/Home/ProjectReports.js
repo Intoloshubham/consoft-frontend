@@ -19,46 +19,13 @@ const ProjectReports = () => {
 
   const [reportFilterModal, setReportFilterModal] = React.useState(false);
   const filtertypes = [
-    {id: 1, name: 'Cost & Timeline', filtertype: 1},
-    {id: 2, name: 'Stock & Manpower', filtertype: 2},
-    {id: 3, name: 'Quality & Safety', filtertype: 3},
-    {id: 4, name: 'Technical', filtertype: 4},
+    // {id: 1, name: 'Cost & Timeline', filtertype: 1},
+    // {id: 2, name: 'Stock & Manpower', filtertype: 2},
+    // {id: 3, name: 'Quality & Safety', filtertype: 3},
+    // {id: 4, name: 'Technical', filtertype: 4},
   ];
 
-  const repData = [
-    {
-      id: 1,
-      name: 'Dream Homes',
-      cost: '12/100',
-      startdate: '10/05/22',
-      h_name: 'cost',
-      category_id: 1,
-    },
-    {
-      id: 2,
-      name: 'Shawn elizey',
-      cost: '40/100',
-      startdate: '3/01/22',
-      h_name: 'timeline',
-      category_id: 2,
-    },
-    {
-      id: 3,
-      name: 'JP contruction',
-      cost: '60/100',
-      startdate: '10/09/21',
-      h_name: 'timeline',
-      category_id: 3,
-    },
-    {
-      id: 4,
-      name: 'CDS builders',
-      cost: '45/100',
-      // startdate: '15/05/22',
-      h_name: 'stock',
-      category_id: 4,
-    },
-  ];
+  const repData = [];
 
   const filterDataHandler = (id, i) => {
     let filt = repData?.filter(a => a.category_id == id);
@@ -145,44 +112,45 @@ const ProjectReports = () => {
         maxHeight={250}
         nestedScrollEnabled={true}
         ListHeaderComponent={
-          <View
-            style={{
-              flexDirection: 'row',
-              marginBottom: SIZES.base,
-            }}>
-            <Text
-              style={{
-                flex: 1,
-                ...FONTS.h3,
-                color: COLORS.darkGray,
-                fontWeight: 'bold',
-              }}>
-              Projects
-            </Text>
+          <></>
+          // <View
+          //   style={{
+          //     flexDirection: 'row',
+          //     marginBottom: SIZES.base,
+          //   }}>
+          //   <Text
+          //     style={{
+          //       flex: 1,
+          //       ...FONTS.h3,
+          //       color: COLORS.darkGray,
+          //       fontWeight: 'bold',
+          //     }}>
+          //     Projects
+          //   </Text>
 
-            <Text
-              style={{
-                ...FONTS.h3,
-                flex: 1,
-                color: COLORS.darkGray,
-                textAlign: 'right',
-                fontWeight: 'bold',
-              }}>
-              {nullIndex == '' ? 'Cost' : heading1}
-              {/* {heading1} */}
-            </Text>
-            <Text
-              style={{
-                ...FONTS.h3,
-                flex: 1,
-                color: COLORS.darkGray,
-                textAlign: 'right',
-                fontWeight: 'bold',
-              }}>
-              {nullIndex == '' ? 'Timeline' : heading2}
-              {/* {heading2} */}
-            </Text>
-          </View>
+          //   <Text
+          //     style={{
+          //       ...FONTS.h3,
+          //       flex: 1,
+          //       color: COLORS.darkGray,
+          //       textAlign: 'right',
+          //       fontWeight: 'bold',
+          //     }}>
+          //     {nullIndex == '' ? 'Cost' : heading1}
+          //     {/* {heading1} */}
+          //   </Text>
+          //   <Text
+          //     style={{
+          //       ...FONTS.h3,
+          //       flex: 1,
+          //       color: COLORS.darkGray,
+          //       textAlign: 'right',
+          //       fontWeight: 'bold',
+          //     }}>
+          //     {nullIndex == '' ? 'Timeline' : heading2}
+          //     {/* {heading2} */}
+          //   </Text>
+          // </View>
         }
         ItemSeparatorComponent={() => {
           return (

@@ -14,11 +14,11 @@ import Collapsible from 'react-native-collapsible';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {ProfileValue, LineDivider} from '../../../Components';
 import {useSelector, useDispatch} from 'react-redux';
-import { companyLogout } from '../../../services/companyAuthApi';
+import {companyLogout} from '../../../services/companyAuthApi';
 
 const Account = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
   const [collapsed, setCollapsed] = useState(true);
 
@@ -34,7 +34,6 @@ const Account = () => {
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
-
 
   function renderProfileCard() {
     return (
@@ -131,6 +130,13 @@ const Account = () => {
           value="Project Categories & Types"
           image={icons.right_arr}
           onPress={() => navigation.navigate('CategoryandType')}
+        />
+        <LineDivider />
+        <ProfileValue
+          icon={icons.user_role}
+          value="Create User Role"
+          image={icons.right_arr}
+          onPress={() => navigation.navigate('UserRole')}
         />
         <LineDivider />
         <ProfileValue

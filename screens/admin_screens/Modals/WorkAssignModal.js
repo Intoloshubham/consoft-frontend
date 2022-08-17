@@ -81,7 +81,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   //=================================== Apis ===================================
 
   const getUserRoles = async () => {
-    let response = await getUserRole();
+    let response = await getUserRole(companyData._id);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map((one, i) => {
         return {label: one.user_role, value: one._id};

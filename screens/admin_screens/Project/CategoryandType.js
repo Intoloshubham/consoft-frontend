@@ -34,7 +34,6 @@ import {
   deleteProjectType,
 } from '../../../controller/ProjectCategoryAndTypeController';
 
-
 const CategoryandType = () => {
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -51,6 +50,8 @@ const CategoryandType = () => {
 
   // COMPANY DATA
   const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+  // console.log("object",company_id)
 
   // STATES FOR STORING CATEGORIES & PROJECT TYPES DATA
   const [projectCategories, setProjectCategories] = React.useState([]);
@@ -67,15 +68,13 @@ const CategoryandType = () => {
   const [items, setItems] = React.useState([]);
 
   // get project category
-
   const projectCategory = async () => {
-    let response = await getProjectCategory();
+    let response = await getProjectCategory(company_id);
     let catFromApi = response.data.map(item => {
       return {label: item.category_name, value: item._id};
     });
     setProjectCategories(response.data);
     setItems(catFromApi);
-
   };
 
   const postCategory = async () => {
@@ -146,7 +145,7 @@ const CategoryandType = () => {
 
   // get project types
   const getprojectTypes = async () => {
-    let response = await getProjectType();
+    let response = await getProjectType(company_id);
     setProjectTypes(response.data);
   };
 

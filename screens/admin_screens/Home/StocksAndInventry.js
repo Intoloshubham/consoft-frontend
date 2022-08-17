@@ -26,8 +26,14 @@ import {
   getStockEntry,
   postStockEntry,
 } from '../../../controller/StockController';
+import {useSelector} from 'react-redux';
 
-const StocksAndInventry = () => {
+const StocksAndInventry = ({route}) => {
+  const {project_id} = route.params; //
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+  // console.log(companyData._id)
+
   const [showAddMaterialsModal, setShowAddMaterialsModal] =
     React.useState(false);
   // company team states
@@ -54,7 +60,7 @@ const StocksAndInventry = () => {
 
   const stockItem = async () => {
     let response = await getItem();
-    console.log(response)
+    console.log(response);
     let itemFromApi = response.map(one => {
       return {label: one.item_name, value: one._id};
     });
@@ -74,6 +80,8 @@ const StocksAndInventry = () => {
       qty: quantity,
       location: location,
       vehicle_no: vehicleNo,
+      company_id: company_id,
+      project_id: project_id,
     };
 
     let response = await postStockEntry(formData);
@@ -91,7 +99,6 @@ const StocksAndInventry = () => {
     setTimeout(() => {
       setSubmitToast(false);
     }, 2000);
-
   };
 
   React.useEffect(() => {

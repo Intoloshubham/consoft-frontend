@@ -1,8 +1,8 @@
 import Config from '../config';
 
-const getProjectCategory = async () => {
+const getProjectCategory = async company_id => {
   try {
-    const res = await fetch(Config.API_URL + 'project-category', {
+    const res = await fetch(Config.API_URL + 'project-category/' + company_id, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -15,10 +15,9 @@ const getProjectCategory = async () => {
   }
 };
 
-
-const getProjectType = async () => {
+const getProjectType = async company_id => {
   try {
-    const res = await fetch(Config.API_URL + 'project-type', {
+    const res = await fetch(Config.API_URL + 'project-type/' + company_id, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +76,6 @@ const getProjectCategoryById = async id => {
     console.log(error);
   }
 };
-
 
 const updateProjectCategory = async (id, categoryData) => {
   try {

@@ -31,7 +31,9 @@ const SubmittedWorks = () => {
 
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(company_id);
-    setSubmitWork(response);
+    if (response.status === 200) {
+      setSubmitWork(response.data);
+    }
   };
 
   // verify works
@@ -66,7 +68,6 @@ const SubmittedWorks = () => {
     fetchSubmitWork();
     // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
-
 
   function renderRevertModal() {
     return (

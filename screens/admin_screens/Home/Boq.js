@@ -110,7 +110,7 @@ const Boq = ({route}) => {
   // get boq items
   const fetchBoqItemsList = async () => {
     let response = await getBoqItemsList(company_id);
-    getUnit(response);
+    getUnit(response.data);
     let unitFromApi = response.data.map(ele => {
       return {label: ele.item_name, value: ele._id};
     });
@@ -533,6 +533,7 @@ const Boq = ({route}) => {
             </View>
           }
         />
+        
       </View>
     );
   }
