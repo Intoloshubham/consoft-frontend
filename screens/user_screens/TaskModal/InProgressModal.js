@@ -306,6 +306,7 @@ function InProgressModal({inProgressModal, setinProgressModal}) {
                 contentContainerStyle={{flexGrow: 1}}
                 pagingEnabled={true}
                 horizontal={false}
+                scrollEnabled={false}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={true}
                 legacyImplementation={false}

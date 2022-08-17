@@ -35,5 +35,4 @@ export {
   ManPowerProjectTeam,
   ManpowerUserContractors,
   UserAssignWorks,
- 
 };

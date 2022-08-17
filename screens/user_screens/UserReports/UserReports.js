@@ -23,7 +23,10 @@ import { useDispatch, useSelector } from 'react-redux';
 const UserReports = ({ route }) => {
 
   LogBox.ignoreLogs(["EventEmitter.removeListener"]);
-  LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
 
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, Project_list_drop } = styles
@@ -55,22 +58,19 @@ const UserReports = ({ route }) => {
 
   //   // console.log("seconde.....................")
 
-
+ 
   // }, [getUserId])
 
   useMemo(() => {
-    // console.log("first...........")
-    // console.log(userData._id)
+    console.log("first...........")
+    console.log(userData._id)
     if (userData._id) {
-      const sendUserId = () => {
-        fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
-          .then((response) => response.json())
-          .then(data => {
-            console.log("🚀 ~ file: UserReports.js ~ line 69 ~ all projects ~ data", data)
-            // console.log("data........")
-            // console.log(data)
-            setSelectedIdProjects(data);
-          })
+      const sendUserId =async () => {
+       let data= await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
+       let resp=await data.json();
+       console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
+       setSelectedIdProjects(resp);
+     
       }
       sendUserId();
     }
@@ -191,16 +191,15 @@ const UserReports = ({ route }) => {
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
-              <Stock />
+              <Stock project_id={value} Main_drp_pro_value={value} />
             </View>
             <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>
               {/* Quantity */}
               <Quantity project_id={value} Main_drp_pro_value={value} />
             </View>
-            <View style={{ marginVertical: 5 }}>
-              {/* Quality */}
+            {/* <View style={{ marginVertical: 5 }}>
               <Quality />
-            </View>
+            </View> */}
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}
               <TAndP />

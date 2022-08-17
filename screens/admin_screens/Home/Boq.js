@@ -533,6 +533,7 @@ const Boq = ({route}) => {
             </View>
           }
         />
+        
       </View>
     );
   }

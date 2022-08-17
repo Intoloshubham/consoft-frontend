@@ -16,8 +16,7 @@ import {
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
 import {SIZES, COLORS, icons, Images, FONTS} from '../../../../constants';
-
-const url = 'http://192.168.1.99:8000/api/unit';
+import { getUnits, postUnits, unitDelete, updateUnit } from '../../../../controller/UnitController';
 
 const Unit = () => {
   const [unitname, setUintname] = useState('');
@@ -36,36 +35,23 @@ const Unit = () => {
     //  console.log(name)
   };
 
-  const Update = () => {
-    const data1 = {
+  const Update = async () => {
+    const updateunitdata = {
       unit_name: unitname,
     };
-    fetch('http://192.168.1.99:8000/api/unit/' + `${unitid}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data1),
-    })
-      .then(response => response.json())
-      .then(data => {
+    
+     let data = await updateUnit(unitid, updateunitdata)
+        setUintname('');
         fetchData();
-        console.log('Success:', data, alert('unit update'));
-        //  unitname == ''
-        //     // ? alert('plz fill unitname')
-        //     // : data.message == 'This unit is already exist'
-        //     // ? alert('This unit is already exist')
-        //     : alert('unit successfull update ');
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+        alert('unit successfull update ');
+         unitname == ''
+            
+    
+     setShowBox(false)
   };
 
   const fetchData = async () => {
-    const resp = await fetch('http://192.168.1.99:8000/api/unit/');
-    const data = await resp.json();
-    //  console.log(data);
+   const data = await getUnits()
     setdata(data);
   };
   // get data api list
@@ -76,22 +62,16 @@ const Unit = () => {
 
   // console.log(data);
 
-  function submit(e) {
-    const data = {
+  const submit = async(e)=> {
+    const unitdata = {
       unit_name: unitname,
     };
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
+      let data = await postUnits(unitdata)
+      if(data.status===200){
         setUintname('');
         fetchData();
-        console.log('Success:', data.message);
+        
+      }
         {
           unitname == ''
             ? alert('plz fill unitname')
@@ -99,20 +79,13 @@ const Unit = () => {
             ? alert('This unit is already exist')
             : alert(' create ');
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+     setModal(false)
   }
 
   //  delete unit api
-  const DeleteUnit = async id => {
-    console.log(id);
-    let result = await fetch(`http://192.168.1.99:8000/api/unit/${id}`, {
-      method: 'DELETE',
-    });
-    result = await result.json();
-    console.log(result, alert('this unit deleted '));
+  const DeleteUnit = async unitid=> {
+    let data = await unitDelete(unitid)
+      alert('this unit  deleted ');
     fetchData();
   };
 
