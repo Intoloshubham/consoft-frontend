@@ -111,7 +111,7 @@ const Boq = ({route}) => {
   const fetchBoqItemsList = async () => {
     let response = await getBoqItemsList(company_id);
     getUnit(response);
-    let unitFromApi = response.map(ele => {
+    let unitFromApi = response.data.map(ele => {
       return {label: ele.item_name, value: ele._id};
     });
     setItems(unitFromApi);

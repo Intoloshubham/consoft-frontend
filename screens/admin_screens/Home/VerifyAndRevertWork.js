@@ -33,7 +33,11 @@ const VerifyAndRevertWork = ({company_id}) => {
   //   setRevert(revert_data);
   // };
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //   fetchVerifyAndRevertWork();
+  // }, []);
+
+  React.useMemo(() => {
     fetchVerifyAndRevertWork();
   }, []);
 

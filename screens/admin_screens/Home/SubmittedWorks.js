@@ -57,10 +57,16 @@ const SubmittedWorks = () => {
     }
   };
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //   fetchSubmitWork();
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // }, []);
+
+  React.useMemo(() => {
     fetchSubmitWork();
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
+
 
   function renderRevertModal() {
     return (

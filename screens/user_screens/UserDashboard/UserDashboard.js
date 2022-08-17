@@ -66,7 +66,7 @@ const UserDashboard = () => {
           backgroundColor: COLORS.lightblue_500,
           ...styles.shadow,
         }}>
-        <TouchableOpacity
+        <TouchableOpacity 
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',

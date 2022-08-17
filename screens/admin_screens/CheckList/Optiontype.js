@@ -15,7 +15,7 @@ import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import config from '../../../config';
 import { getCompanyId,getToken } from '../../../services/asyncStorageService';
-
+import { postoptionitem,getoptiontypeitem,updateOptionitems,optionItemDelete } from '../../../controller/OptiontypeController';
 
 const Optiontype = () => {
     
@@ -30,11 +30,11 @@ const Optiontype = () => {
   const [company_id, setCompany_id] = useState('')
   const [accessTokenoptiontype, setAccessTokenoptiontype] = useState('');
 
-  const optionid = (id, name) => {
+  const optionidmodal = (id, name) => {
     setoptiontypemodalupdate(true);
     setOptionid(id);
     setoptionTypename(name);
-    console.log(id, name);
+    // console.log(id, name);
   };
 
   const _companyId =async () => {
@@ -58,90 +58,47 @@ const Optiontype = () => {
   });
   //  console.log(accessTokenoptiontype);
 
-  const updateOption = () => {
+  const updateOption = async () => {
     const optiondataupdate = {
       option_type: optionTypename,
       company_id:company_id,
     };
-    // console.log(optiondataupdate);
-    fetch('http://192.168.1.99:8000/api/checklist-option-type/' + Optionid, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(optiondataupdate),
-    })
-      .then(response => response.json())
-      .then(data => {
+    let data = await updateOptionitems(Optionid,optiondataupdate)
         check();
         setoptionTypename('');
-        console.log('Success:', data);
-
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+       alert('update option type item')
+       setoptiontypemodalupdate(false);
   };
 
   const check = async () => {
-      const resp = await fetch(
-        'http://192.168.1.99:8000/api/checklist-option-type',{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': 'Bearer '+accessTokenoptiontype ,
-        },
-      });
-      let dataitem = await resp.json();
+      let dataitem =  await getoptiontypeitem(accessTokenoptiontype);
       //  console.log(dataitem);
        setOptiondata(dataitem);
   }
 
   useEffect(() => {
     check();
-  }, [Optiondata]);
+  }, []);
 
 
 
-  const submit = () => {
+  const submit = async () => {
     const optiondata = {
       option_type: optionTypename,
       company_id:company_id
     };
-    try {
-      fetch(`${config.API_URL}checklist-option-type`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(optiondata),
-      })
-        .then(response => response.json())
-        .then(data => {
-          check();
-          console.log('Success:', data);
-        });
-    } catch (error) {
-      console.error('Error:', error);
+    let data = await postoptionitem(optiondata)
+    if(data.status === 200){
+      setoptionTypename('');
+      check()
     }
+    setoptiontypemodal(false)
   };
 
   const DeleteOption = async Optionid => {
-    try {
-      let result = await fetch(
-        `${config.API_URL}checklist-option-type/` + Optionid,
-        {
-          method: 'DELETE',
-        },
-      );
-      result = await result.json();
-      check();
-      console.log(result, alert('deleted'));
-    } catch (error) {
-      console.log('error', error.message);
-    }
+   let data = await optionItemDelete(Optionid)
+   alert('Delete')
+   check();
   };
 
   const renderItem = ({item}) => {
@@ -179,7 +136,7 @@ const Optiontype = () => {
         <View style={{marginLeft: 40, flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => {
-              optionid(item._id, item.option_type);
+              optionidmodal(item._id, item.option_type);
             }}>
             <Image
               source={icons.edit}
@@ -362,7 +319,7 @@ const Optiontype = () => {
           </View>
         </View>
       </Modal>
-      <View
+      {/* <View
         style={{
           marginBottom: SIZES.padding,
           // marginTop: 5,
@@ -413,7 +370,7 @@ const Optiontype = () => {
             );
           }}
         />
-      </View>
+      </View> */}
     </View>
   );
 };
