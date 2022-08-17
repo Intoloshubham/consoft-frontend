@@ -28,8 +28,13 @@ import {
   deleteProjectTeam,
 } from '../../../controller/ProjectTeamController';
 import {getUserRole, roleByUser} from '../../../controller/UserRoleController';
+import {useSelector} from 'react-redux';
 
 const ProjectTeam = ({route}) => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id
+  // console.log(companyData._id)
+
   const {project_id} = route.params; //
   const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
   const [projectTeam, setProjectTeam] = useState([]);
@@ -73,7 +78,7 @@ const ProjectTeam = ({route}) => {
 
   const addProjectTeam = async () => {
     setAddProjectTeamModal(true);
-    const res = await getUserRole();
+    const res = await getUserRole(company_id);
     if (res.status === STATUS.RES_SUCCESS) {
       let roleFromApi = res.data.map(list => {
         return {label: list.user_role, value: list._id};

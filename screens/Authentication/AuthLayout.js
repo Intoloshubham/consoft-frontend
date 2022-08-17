@@ -11,7 +11,7 @@ const AuthLayout = ({
   children,
 }) => {
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View
         style={{
           flex: 1,

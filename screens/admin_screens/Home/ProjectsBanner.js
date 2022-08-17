@@ -117,7 +117,7 @@ const ProjectsBanner = ({company_id}) => {
   useEffect(() => {
     fetchProjects();
     fetchProjectCategory();
-    fetchProjectsTypes();
+    // fetchProjectsTypes();
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
@@ -134,16 +134,16 @@ const ProjectsBanner = ({company_id}) => {
   }
 
   const fetchProjectCategory = async () => {
-    const res = await getProjectCategory();
-    let proCatFromApi = res.data.map(item => {
+    const response = await getProjectCategory(company_id);
+    let proCatFromApi = response.data.map(item => {
       return {label: item.category_name, value: item._id};
     });
     setProjectCategory(proCatFromApi);
   };
 
   // get project types
-  const fetchProjectsTypes = async () => {
-    const response = await getProjectType();
+  const fetchProjectsTypes = async category_id => {
+    const response = await getProjectType(category_id);
     let proTypeFromApi = response.data.map(item => {
       return {label: item.project_type, value: item._id};
     });
@@ -238,8 +238,8 @@ const ProjectsBanner = ({company_id}) => {
   const createProject = () => {
     setCreateProjectModal(true);
     createProjectModalForm();
-    fetchProjectCategory();
-    fetchProjectsTypes();
+    // fetchProjectCategory();
+    // fetchProjectsTypes();
   };
 
   //RENDER PROJECTS
@@ -492,6 +492,7 @@ const ProjectsBanner = ({company_id}) => {
                     zIndex={3000}
                     zIndexInverse={1000}
                     onOpen={onCategoryOpen}
+                    onChangeValue={value => fetchProjectsTypes(value)}
                   />
 
                   <CustomDropdown
@@ -708,6 +709,7 @@ const ProjectsBanner = ({company_id}) => {
                     zIndex={3000}
                     zIndexInverse={1000}
                     onOpen={onCategoryOpen}
+                    onChangeValue={value => fetchProjectsTypes(value)}
                   />
 
                   <CustomDropdown

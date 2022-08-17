@@ -28,9 +28,9 @@ import Quantitywork from './Stock/Tools/Quantitywork';
 import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1';
 import VerifyAndRevertWork from './Home/VerifyAndRevertWork';
 import Boq from './Home/Boq';
-
 import VerifyWorks from './VerifyAndRevertWork.js/VerifyWorks';
 import RevertWorks from './VerifyAndRevertWork.js/RevertWorks';
+import UserRole from './CreateUserRole/UserRole';
 
 export {
   Account,
@@ -63,7 +63,7 @@ export {
   ToolsAndMachinery1,
   VerifyAndRevertWork,
   Boq,
-
   VerifyWorks,
   RevertWorks,
+  UserRole
 };
