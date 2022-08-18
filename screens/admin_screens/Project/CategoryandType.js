@@ -600,7 +600,7 @@ const CategoryandType = () => {
                 listParentLabelStyle={{
                   color: COLORS.white,
                 }}
-                maxHeight={170}
+                // maxHeight={270}
               />
               <FormInput
                 label="Name"
