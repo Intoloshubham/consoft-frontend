@@ -38,6 +38,7 @@ const Drop = ({
           marginTop: SIZES.radius * 1.4,
           backgroundColor: COLORS.lightblue_800,
           borderWidth: null,
+          // marginBottom:20
         }}
         textStyle={{
           fontSize: 15,
