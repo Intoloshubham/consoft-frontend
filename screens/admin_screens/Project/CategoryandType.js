@@ -72,11 +72,13 @@ const CategoryandType = () => {
   // get project category
   const projectCategory = async () => {
     let response = await getProjectCategory(company_id);
-    let catFromApi = response.data.map(item => {
-      return {label: item.category_name, value: item._id};
-    });
-    setProjectCategories(response.data);
-    setItems(catFromApi);
+    if (response.status === 200) {
+      let catFromApi = response.data.map(item => {
+        return {label: item.category_name, value: item._id};
+      });
+      setProjectCategories(response.data);
+      setItems(catFromApi);
+    }
   };
 
   const postCategory = async () => {
@@ -150,7 +152,9 @@ const CategoryandType = () => {
   // get project types
   const getprojectTypes = async () => {
     let response = await getProjectType(company_id);
-    setProjectTypes(response.data);
+    if (response.status === 200) {
+      setProjectTypes(response.data);
+    }
   };
 
   const postTypes = async () => {

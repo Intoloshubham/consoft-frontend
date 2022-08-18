@@ -65,10 +65,10 @@ const ProjectsBanner = ({company_id}) => {
   const [openUnit, setOpenUnit] = React.useState(false);
   const [unitValue, setUnitValue] = React.useState([]);
   const [projectUnit, setProjectUnit] = React.useState([
-    {label: 'ha', value: '1'},
-    {label: 'acre', value: '2'},
-    {label: 'sqm', value: '3'},
-    {label: 'sqf', value: '4'},
+    {label: 'Hect', value: '1'},
+    {label: 'Acre', value: '2'},
+    {label: 'Sqm', value: '3'},
+    {label: 'Sqf', value: '4'},
   ]);
 
   const [projectId, setProjectId] = React.useState('');
@@ -324,19 +324,19 @@ const ProjectsBanner = ({company_id}) => {
               </TouchableOpacity>
             </View>
           </View>
-          <Text
+          {/* <Text
             style={{
               ...FONTS.body4,
               color: COLORS.gray,
             }}>
             Project code - {index + 1}
-          </Text>
+          </Text> */}
           <Text
             style={{
               ...FONTS.body4,
               color: COLORS.gray,
             }}>
-            Progress - 89%
+            Progress - 0%
           </Text>
         </View>
       </TouchableOpacity>
@@ -513,7 +513,7 @@ const ProjectsBanner = ({company_id}) => {
                     justifyContent: 'space-between',
                   }}>
                   <FormInput
-                    label="Plot area"
+                    label="Land area"
                     keyboardType="numeric"
                     autoCompleteType="cc-number"
                     containerStyle={{width: '60%'}}
@@ -729,7 +729,7 @@ const ProjectsBanner = ({company_id}) => {
                       justifyContent: 'space-between',
                     }}>
                     <FormInput
-                      label="Plot area"
+                      label="Land area"
                       keyboardType="numeric"
                       autoCompleteType="cc-number"
                       containerStyle={{width: '60%'}}
@@ -870,8 +870,36 @@ const ProjectsBanner = ({company_id}) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <Text style={{fontSize: 20, color: COLORS.white}}>Projects</Text>
-        <TextButton
+        <Text style={{...FONTS.h2, color: COLORS.white}}>Projects</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity
+            style={{
+              right: 10,
+              alignItems: 'center',
+              backgroundColor: COLORS.yellow_400,
+              paddingHorizontal: 5,
+              paddingVertical: 1,
+              borderRadius: 3,
+            }}
+            onPress={() => {
+              createProject();
+            }}>
+            <Text style={{...FONTS.h4, color: COLORS.black}}>
+              Create New
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={toggleExpanded}>
+            <Image
+              source={collapsed ? icons.down_arrow : icons.up_arrow}
+              style={{
+                height: 18,
+                width: 18,
+                tintColor: COLORS.white,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        {/* <TextButton
           label="Create New"
           disabled={false}
           buttonContainerStyle={{
@@ -902,7 +930,7 @@ const ProjectsBanner = ({company_id}) => {
               justifyContent: 'flex-end',
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <Collapsible collapsed={collapsed}>{renderProjects()}</Collapsible>
 

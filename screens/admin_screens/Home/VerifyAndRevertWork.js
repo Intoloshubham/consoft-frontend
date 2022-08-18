@@ -62,7 +62,7 @@ const VerifyAndRevertWork = ({company_id}) => {
           marginTop: SIZES.base,
         }}>
         <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
-          All Work Tasks
+          All work tasks
         </Text>
         <TouchableOpacity onPress={() => alert('filter')}>
           <Image
@@ -75,7 +75,12 @@ const VerifyAndRevertWork = ({company_id}) => {
           />
         </TouchableOpacity>
       </View>
-      <Tab.Navigator style={{height: 350}} initialRouteName="Verify">
+      <Tab.Navigator
+        style={{height: 350}}
+        initialRouteName="Verify"
+        screenOptions={{
+          tabBarLabelStyle: {...FONTS.h3},
+        }}>
         <Tab.Screen
           name="Verify"
           children={() => <VerifyWorks VerifyData={verify} />}

@@ -99,10 +99,11 @@ const units = require('../assets/icons/final/units.png');
 const delete_withbg = require('../assets/icons/delete_withbg.png');
 const user_role = require('../assets/icons/group.png');
 
-
 //user-end quantity report
-const add_qty_item=require('../assets/icons/add_qty_item.png')
-const add_qty_item1=require('../assets/icons/add_qty_item1.png')
+const add_qty_item = require('../assets/icons/add_qty_item.png');
+const add_qty_item1 = require('../assets/icons/add_qty_item1.png');
+const help1 = require('../assets/icons/question.png');
+
 export default {
   // final
   company_team,
@@ -197,5 +198,8 @@ export default {
   staff,
   boq,
   add_qty_item,
-  add_qty_item1,delete_withbg,user_role
+  add_qty_item1,
+  delete_withbg,
+  user_role,
+  help1,
 };

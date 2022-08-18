@@ -211,7 +211,7 @@ const AssignedWorks = () => {
       return (
         <View
           style={{
-            backgroundColor: COLORS.lightblue_800,
+            backgroundColor: COLORS.lightblue_600,
             ...styles.cartItemContainer,
           }}>
           <View
@@ -329,7 +329,7 @@ const AssignedWorks = () => {
             justifyContent: 'flex-end',
             alignItems: 'center',
             flexDirection: 'row',
-            backgroundColor: COLORS.lightblue_800,
+            backgroundColor: COLORS.lightblue_700,
             ...styles.cartItemContainer,
           }}>
           <IconButton
@@ -382,7 +382,7 @@ const AssignedWorks = () => {
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
         borderRadius: 5,
-        backgroundColor: COLORS.lightblue_900,
+        backgroundColor: COLORS.white,
         ...styles.shadow,
       }}>
       <View
@@ -393,8 +393,8 @@ const AssignedWorks = () => {
           paddingHorizontal: SIZES.padding,
           paddingTop: SIZES.radius,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.lightGray1}}>
-          Assign Works
+        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
+          Assigned works
         </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setFilterRoleModal(true)}>
@@ -403,7 +403,7 @@ const AssignedWorks = () => {
               style={{
                 height: 15,
                 width: 15,
-                tintColor: COLORS.lightGray1,
+                tintColor: COLORS.darkGray,
               }}
             />
           </TouchableOpacity>
