@@ -52,6 +52,7 @@ const UserRole = () => {
       setSubmitToast(true);
       setCreateUserModal(false);
       setUserRole('');
+      getUsersRole();
     } else {
       alert(response.message);
     }
@@ -62,6 +63,7 @@ const UserRole = () => {
 
   const getUsersRole = async () => {
     let response = await getUserRole(company_id);
+    console.log(response)
     if (response.status === 200) {
       setUserRoles(response.data);
     }

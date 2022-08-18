@@ -73,7 +73,7 @@ const CompanyTeam = () => {
   };
 
   const userRole = async () => {
-    let response = await getUserRole();
+    let response = await getUserRole(company_id);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map(one => {
         return {label: one.user_role, value: one._id};
