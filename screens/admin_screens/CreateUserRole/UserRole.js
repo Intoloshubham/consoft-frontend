@@ -52,6 +52,7 @@ const UserRole = () => {
       setSubmitToast(true);
       setCreateUserModal(false);
       setUserRole('');
+      getUsersRole()
     } else {
       alert(response.message);
     }
