@@ -402,173 +402,167 @@ const ProjectsBanner = ({company_id}) => {
                 />
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <KeyboardAwareScrollView
-                  keyboardDismissMode="on-drag"
-                  contentContainerStyle={{
+                <FormInput
+                  label="Name"
+                  keyboardType="default"
+                  autoCompleteType="username"
+                  // value={projectname}
+                  onChange={value => {
+                    utils.validateText(value, setProjectError);
+                    setProjectName(value);
+                  }}
+                  errorMsg={projectError}
+                  appendComponent={
+                    <View style={{justifyContent: 'center'}}>
+                      <Image
+                        source={
+                          projectname == '' ||
+                          (projectname != '' && projectError == '')
+                            ? icons.correct
+                            : icons.cancel
+                        }
+                        style={{
+                          height: 20,
+                          width: 20,
+                          tintColor:
+                            projectname == ''
+                              ? COLORS.gray
+                              : projectname != '' && projectError == ''
+                              ? COLORS.green
+                              : COLORS.red,
+                        }}
+                      />
+                    </View>
+                  }
+                />
+                <FormInput
+                  label="Location"
+                  keyboardType="default"
+                  autoCompleteType="username"
+                  // value={projectlocation}
+                  onChange={value => {
+                    utils.validateText(value, setProjectLocationError);
+                    setProjectLocation(value);
+                  }}
+                  errorMsg={projectLocationError}
+                  appendComponent={
+                    <View style={{justifyContent: 'center'}}>
+                      <Image
+                        source={
+                          projectlocation == '' ||
+                          (projectlocation != '' && projectLocationError == '')
+                            ? icons.correct
+                            : icons.cancel
+                        }
+                        style={{
+                          height: 20,
+                          width: 20,
+                          tintColor:
+                            projectlocation == ''
+                              ? COLORS.gray
+                              : projectlocation != '' &&
+                                projectLocationError == ''
+                              ? COLORS.green
+                              : COLORS.red,
+                        }}
+                      />
+                    </View>
+                  }
+                />
+
+                <CustomDropdown
+                  placeholder="Select category"
+                  open={openCategory}
+                  value={categoryValue}
+                  items={projectCategory}
+                  setOpen={setOpenCategory}
+                  setValue={setCategoryValue}
+                  setItems={setProjectCategory}
+                  multiple={false}
+                  listParentLabelStyle={{
+                    color: COLORS.white,
+                  }}
+                  maxHeight={150}
+                  zIndex={3000}
+                  zIndexInverse={1000}
+                  onOpen={onCategoryOpen}
+                  onChangeValue={value => fetchProjectsTypes(value)}
+                />
+
+                <CustomDropdown
+                  placeholder="Select types"
+                  open={openType}
+                  value={typeValue}
+                  items={projectType}
+                  setOpen={setOpenType}
+                  setValue={setTypeValue}
+                  setItems={setProjectType}
+                  listParentLabelStyle={{
+                    color: COLORS.white,
+                  }}
+                  maxHeight={150}
+                  zIndex={2000}
+                  zIndexInverse={2000}
+                  onOpen={onTypeOpen}
+                />
+
+                <View
+                  style={{
                     flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}>
                   <FormInput
-                    label="Name"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    // value={projectname}
+                    label="Plot area"
+                    keyboardType="numeric"
+                    autoCompleteType="cc-number"
+                    containerStyle={{width: '60%'}}
+                    // value={projectplotarea.toString()}
                     onChange={value => {
-                      utils.validateText(value, setProjectError);
-                      setProjectName(value);
+                      utils.validateNumber(value, setProjectPlotAreaError);
+                      setProjectPlotArea(value);
                     }}
-                    errorMsg={projectError}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            projectname == '' ||
-                            (projectname != '' && projectError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              projectname == ''
-                                ? COLORS.gray
-                                : projectname != '' && projectError == ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-                  <FormInput
-                    label="Location"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    // value={projectlocation}
-                    onChange={value => {
-                      utils.validateText(value, setProjectLocationError);
-                      setProjectLocation(value);
-                    }}
-                    errorMsg={projectLocationError}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            projectlocation == '' ||
-                            (projectlocation != '' &&
-                              projectLocationError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              projectlocation == ''
-                                ? COLORS.gray
-                                : projectlocation != '' &&
-                                  projectLocationError == ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-
-                  <CustomDropdown
-                    placeholder="Select category"
-                    open={openCategory}
-                    value={categoryValue}
-                    items={projectCategory}
-                    setOpen={setOpenCategory}
-                    setValue={setCategoryValue}
-                    setItems={setProjectCategory}
-                    multiple={false}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                    maxHeight={150}
-                    zIndex={3000}
-                    zIndexInverse={1000}
-                    onOpen={onCategoryOpen}
-                    onChangeValue={value => fetchProjectsTypes(value)}
-                  />
-
-                  <CustomDropdown
-                    placeholder="Select types"
-                    open={openType}
-                    value={typeValue}
-                    items={projectType}
-                    setOpen={setOpenType}
-                    setValue={setTypeValue}
-                    setItems={setProjectType}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                    maxHeight={150}
-                    zIndex={2000}
-                    zIndexInverse={2000}
-                    onOpen={onTypeOpen}
+                    errorMsg={projectPlotAreaError}
                   />
                   <View
                     style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      marginTop: 13,
+                      marginLeft: SIZES.radius,
+                      width: '35%',
                     }}>
-                    <FormInput
-                      label="Plot area"
-                      keyboardType="numeric"
-                      autoCompleteType="cc-number"
-                      containerStyle={{width: '60%'}}
-                      // value={projectplotarea.toString()}
-                      onChange={value => {
-                        utils.validateNumber(value, setProjectPlotAreaError);
-                        setProjectPlotArea(value);
+                    <CustomDropdown
+                      placeholder="Unit"
+                      open={openUnit}
+                      value={unitValue}
+                      items={projectUnit}
+                      setOpen={setOpenUnit}
+                      setValue={setUnitValue}
+                      setItems={setProjectUnit}
+                      listParentLabelStyle={{
+                        color: COLORS.white,
                       }}
-                      errorMsg={projectPlotAreaError}
+                      maxHeight={100}
+                      zIndex={1000}
+                      zIndexInverse={3000}
+                      onOpen={onUnitOpen}
                     />
-                    <View
-                      style={{
-                        marginTop: 13,
-                        marginLeft: SIZES.radius,
-                        width: '35%',
-                      }}>
-                      <CustomDropdown
-                        placeholder="Unit"
-                        open={openUnit}
-                        value={unitValue}
-                        items={projectUnit}
-                        setOpen={setOpenUnit}
-                        setValue={setUnitValue}
-                        setItems={setProjectUnit}
-                        listParentLabelStyle={{
-                          color: COLORS.white,
-                        }}
-                        maxHeight={70}
-                        zIndex={1000}
-                        zIndexInverse={3000}
-                        onOpen={onUnitOpen}
-                      />
-                    </View>
                   </View>
-                  <TextButton
-                    label="Submit"
-                    disabled={isEnableSubmit() ? false : true}
-                    buttonContainerStyle={{
-                      height: 45,
-                      alignItems: 'center',
-                      marginTop: SIZES.padding,
-                      marginBottom: SIZES.padding,
-                      borderRadius: SIZES.base,
-                      backgroundColor: isEnableSubmit()
-                        ? COLORS.lightblue_700
-                        : COLORS.transparentPrimary,
-                    }}
-                    onPress={() => saveProjectSubmit()}
-                  />
-                </KeyboardAwareScrollView>
+                </View>
+                <TextButton
+                  label="Submit"
+                  disabled={isEnableSubmit() ? false : true}
+                  buttonContainerStyle={{
+                    height: 45,
+                    alignItems: 'center',
+                    marginTop: SIZES.padding,
+                    marginBottom: SIZES.padding,
+                    borderRadius: SIZES.base,
+                    backgroundColor: isEnableSubmit()
+                      ? COLORS.lightblue_700
+                      : COLORS.transparentPrimary,
+                  }}
+                  onPress={() => saveProjectSubmit()}
+                />
               </ScrollView>
             </View>
           </View>
@@ -763,7 +757,7 @@ const ProjectsBanner = ({company_id}) => {
                         listParentLabelStyle={{
                           color: COLORS.white,
                         }}
-                        maxHeight={70}
+                        maxHeight={100}
                         zIndex={1000}
                         zIndexInverse={3000}
                         onOpen={onUnitOpen}

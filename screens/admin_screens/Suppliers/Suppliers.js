@@ -287,22 +287,22 @@ const Suppliers = () => {
                       </View>
                     }
                   />
-                  <TextButton
-                    label="Save"
-                    disabled={isEnableSubmit() ? false : true}
-                    buttonContainerStyle={{
-                      height: 45,
-                      alignItems: 'center',
-                      marginTop: SIZES.padding,
-                      borderRadius: SIZES.base,
-                      backgroundColor: isEnableSubmit()
-                        ? COLORS.lightblue_700
-                        : COLORS.transparentPrimary,
-                    }}
-                    onPress={() => postSupplier()}
-                  />
                 </KeyboardAwareScrollView>
               </ScrollView>
+              <TextButton
+                label="Save"
+                disabled={isEnableSubmit() ? false : true}
+                buttonContainerStyle={{
+                  height: 45,
+                  alignItems: 'center',
+                  marginTop: SIZES.padding,
+                  borderRadius: SIZES.base,
+                  backgroundColor: isEnableSubmit()
+                    ? COLORS.lightblue_700
+                    : COLORS.transparentPrimary,
+                }}
+                onPress={() => postSupplier()}
+              />
             </View>
           </View>
         </TouchableWithoutFeedback>
