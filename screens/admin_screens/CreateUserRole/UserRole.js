@@ -8,6 +8,9 @@ import {
   Image,
   FlatList,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import {
   HeaderBar,
@@ -71,20 +74,20 @@ const UserRole = () => {
   function renderAddUserRoleModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={createUserModal}>
-        <View
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.transparentBlack5,
+            backgroundColor: COLORS.transparentBlack7,
           }}>
           <View
             style={{
-              position: 'absolute',
-              backgroundColor: COLORS.white,
-              padding: SIZES.padding,
-              borderRadius: SIZES.radius,
               width: '90%',
+              padding: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.white,
             }}>
             <View
               style={{
@@ -107,7 +110,7 @@ const UserRole = () => {
                 </TouchableOpacity>
               </ImageBackground>
             </View>
-            <View>
+            <ScrollView>
               <FormInput
                 label="User role"
                 keyboardType="default"
@@ -139,24 +142,23 @@ const UserRole = () => {
                   </View>
                 }
               />
-
-              <TextButton
-                label="Save"
-                disabled={isEnableSubmit() ? false : true}
-                buttonContainerStyle={{
-                  height: 45,
-                  alignItems: 'center',
-                  marginTop: SIZES.padding,
-                  borderRadius: SIZES.base,
-                  backgroundColor: isEnableSubmit()
-                    ? COLORS.lightblue_700
-                    : COLORS.transparentPrimary,
-                }}
-                onPress={submitUserRole}
-              />
-            </View>
+            </ScrollView>
+            <TextButton
+              label="Save"
+              disabled={isEnableSubmit() ? false : true}
+              buttonContainerStyle={{
+                height: 45,
+                alignItems: 'center',
+                marginTop: SIZES.padding,
+                borderRadius: SIZES.base,
+                backgroundColor: isEnableSubmit()
+                  ? COLORS.lightblue_700
+                  : COLORS.transparentPrimary,
+              }}
+              onPress={submitUserRole}
+            />
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }

@@ -9,6 +9,8 @@ import {
   ScrollView,
   Image,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
@@ -248,32 +250,22 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   return (
     <View>
       <Modal animationType="fade" transparent={true} visible={isVisible}>
-        <View style={{flex: 1, backgroundColor: COLORS.transparentBlack7}}>
-          {/* transparent background */}
-          <TouchableWithoutFeedback>
-            <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-              }}></View>
-          </TouchableWithoutFeedback>
-          <Animated.View
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
+          <View
             style={{
-              position: 'absolute',
-              left: SIZES.padding,
-              top: 100,
-              // top: modalY,
               width: '90%',
-              // height: '65%',
-              maxHeight: 400,
               padding: SIZES.padding,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.white,
+              maxHeight: 400,
             }}>
-            {/* header */}
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
                 Assign Work
@@ -291,8 +283,6 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 onPress={onClose}
               />
             </View>
-            {/* <WorkAssign /> */}
-
             <ScrollView showsVerticalScrollIndicator={false}>
               <CustomDropdown
                 placeholder="Select"
@@ -448,20 +438,19 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 />
                 </TouchableOpacity>
               </View> */}
-
-              <TextButton
-                label="Submit"
-                buttonContainerStyle={{
-                  height: 50,
-                  alignItems: 'center',
-                  marginTop: SIZES.padding * 1.5,
-                  borderRadius: SIZES.radius,
-                }}
-                onPress={() => postAssignWorks()}
-              />
             </ScrollView>
-          </Animated.View>
-        </View>
+            <TextButton
+              label="Submit"
+              buttonContainerStyle={{
+                height: 50,
+                alignItems: 'center',
+                marginTop: SIZES.padding * 1.5,
+                borderRadius: SIZES.radius,
+              }}
+              onPress={() => postAssignWorks()}
+            />
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
       <CustomToast
         isVisible={submitToast}
