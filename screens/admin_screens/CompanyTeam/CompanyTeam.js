@@ -8,6 +8,8 @@ import {
   ImageBackground,
   StyleSheet,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 import {
@@ -127,12 +129,13 @@ const CompanyTeam = () => {
   function renderAddTeamModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={addTeamModal}>
-        <View
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.transparentBlack5,
+            backgroundColor: COLORS.transparentBlack7,
           }}>
           <View
             style={{
@@ -302,7 +305,7 @@ const CompanyTeam = () => {
               />
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }

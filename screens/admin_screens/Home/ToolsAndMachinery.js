@@ -10,6 +10,8 @@ import {
   ScrollView,
   Image,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {
   HeaderBar,
@@ -26,7 +28,7 @@ import {
   postToolsAndMachinery,
   deleteToolsAndMachinery,
   editToolsAndMachinery,
-} from '../../../controller/toolsAndMachineryController';
+} from '../../../controller/ToolsAndMachineryController';
 
 const ToolsAndMachinery = ({route}) => {
   const companyData = useSelector(state => state.company);
@@ -252,118 +254,113 @@ const ToolsAndMachinery = ({route}) => {
   function renderAddToolsAndMachineModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={showTAndMModal}>
-        <TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
           <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              width: '90%',
+              padding: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.white,
             }}>
-            <View
-              style={{
-                position: 'absolute',
-                left: SIZES.padding,
-                width: '90%',
-                padding: SIZES.padding,
-                borderRadius: SIZES.radius,
-                backgroundColor: COLORS.white,
-              }}>
-              <View style={{}}>
-                {/* header */}
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
-                    Tools & Machine
-                  </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setShowTAndMModal(false)}
-                  />
-                </View>
-                <ScrollView>
-                  <FormInput
-                    label="Item name"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    // value={toolsName}
-                    onChange={value => {
-                      setToolsName(value);
-                    }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            toolsName == '' || toolsName != ''
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              toolsName == ''
-                                ? COLORS.gray
-                                : toolsName != ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-                  <FormInput
-                    label="Quantity"
-                    keyboardType="numeric"
-                    // value={toolsQty.toString()}
-                    onChange={value => {
-                      setToolsQty(value);
-                    }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            toolsQty == '' || toolsQty != ''
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              toolsQty == ''
-                                ? COLORS.gray
-                                : toolsQty != ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-                  <TextButton
-                    label="Submit"
-                    buttonContainerStyle={{
-                      height: 45,
-                      marginTop: SIZES.padding * 1.5,
-                      alignItems: 'center',
-                      borderRadius: SIZES.radius,
-                      backgroundColor: COLORS.lightblue_700,
-                    }}
-                    onPress={() => SubmitToolsAndMachinery()}
-                  />
-                </ScrollView>
-              </View>
+            {/* header */}
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                Tools & Machine
+              </Text>
+              <IconButton
+                containerStyle={{
+                  boborderWidth: 2,
+                  borderRadius: 10,
+                  borderColor: COLORS.gray2,
+                }}
+                icon={icons.cross}
+                iconStyle={{
+                  tintColor: COLORS.gray,
+                }}
+                onPress={() => setShowTAndMModal(false)}
+              />
             </View>
+            <ScrollView>
+              <FormInput
+                label="Item name"
+                keyboardType="default"
+                autoCompleteType="username"
+                // value={toolsName}
+                onChange={value => {
+                  setToolsName(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        toolsName == '' || toolsName != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          toolsName == ''
+                            ? COLORS.gray
+                            : toolsName != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <FormInput
+                label="Quantity"
+                keyboardType="numeric"
+                // value={toolsQty.toString()}
+                onChange={value => {
+                  setToolsQty(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        toolsQty == '' || toolsQty != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          toolsQty == ''
+                            ? COLORS.gray
+                            : toolsQty != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+            </ScrollView>
+            <TextButton
+              label="Submit"
+              buttonContainerStyle={{
+                height: 45,
+                marginTop: SIZES.padding * 1.5,
+                alignItems: 'center',
+                borderRadius: SIZES.radius,
+                backgroundColor: COLORS.lightblue_700,
+              }}
+              onPress={() => SubmitToolsAndMachinery()}
+            />
           </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }

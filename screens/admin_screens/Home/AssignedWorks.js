@@ -36,6 +36,7 @@ const AssignedWorks = () => {
   //get assign works
   const fetchAssignWorks = async () => {
     const response = await getAssignWorks(company_id);
+    // console.log(response)
     if (response.status === 200) {
       setAssignWorkData(response.data);
     }

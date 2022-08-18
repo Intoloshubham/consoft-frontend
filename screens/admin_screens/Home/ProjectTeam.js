@@ -32,7 +32,7 @@ import {useSelector} from 'react-redux';
 
 const ProjectTeam = ({route}) => {
   const companyData = useSelector(state => state.company);
-  const company_id = companyData._id
+  const company_id = companyData._id;
   // console.log(companyData._id)
 
   const {project_id} = route.params; //
@@ -233,7 +233,7 @@ const ProjectTeam = ({route}) => {
         <FlatList
           contentContainerStyle={{marginTop: SIZES.radius}}
           data={projectTeam}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
           maxHeight={510}
