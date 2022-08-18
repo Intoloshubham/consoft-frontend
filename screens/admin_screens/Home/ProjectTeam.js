@@ -107,7 +107,7 @@ const ProjectTeam = ({route}) => {
     if (res.status === STATUS.RES_SUCCESS) {
       setAddProjectTeamModal(false);
       setSubmitToast(true);
-      await fetchProjectTeam();
+      fetchProjectTeam();
     } else {
       alert(res.message);
     }
@@ -119,7 +119,7 @@ const ProjectTeam = ({route}) => {
   const deleteTeamSubmit = async () => {
     const res = await deleteProjectTeam(project_id, userId);
     if (res.status === STATUS.RES_SUCCESS) {
-      await fetchProjectTeam();
+      fetchProjectTeam();
       setDeleteToast(true);
       setDeleteConfirm(false);
     } else {

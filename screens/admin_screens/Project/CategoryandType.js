@@ -100,7 +100,7 @@ const CategoryandType = () => {
 
   const [id, setId] = React.useState('');
   const getId = id => {
-    console.log(id);
+    // console.log(id);
     setId(id);
   };
 
@@ -119,6 +119,8 @@ const CategoryandType = () => {
     if (response.status == 200) {
       setUpdateToast(true);
       projectCategory();
+      setId('');
+      setCatName('');
     } else {
       alert(response.message);
     }
@@ -161,6 +163,7 @@ const CategoryandType = () => {
     if (response.status === 200) {
       setSubmitToast(true);
       setTypeName('');
+      setValue('');
       getprojectTypes();
     } else {
       alert(response.message);
@@ -171,7 +174,9 @@ const CategoryandType = () => {
   };
 
   const [typeid, setTypeId] = React.useState('');
+  // console.log("object", typeid)
   const gettypeId = id => {
+    // console.log(id)
     setTypeId(id);
   };
 
@@ -190,6 +195,9 @@ const CategoryandType = () => {
     if (response.status === 200) {
       setUpdateToast(true);
       getprojectTypes();
+      setTypeName('');
+      setTypeId('');
+      setValue('');
     } else {
       alert(response.message);
     }
@@ -530,9 +538,9 @@ const CategoryandType = () => {
               />
             </ScrollView>
             <TextButton
-              label="Submit"
+              label={id === '' ? 'Submit' : 'Update'}
               buttonContainerStyle={{
-                height: 50,
+                height: 45,
                 alignItems: 'center',
                 marginTop: SIZES.padding,
                 borderRadius: SIZES.radius,
@@ -613,11 +621,11 @@ const CategoryandType = () => {
               />
             </ScrollView>
             <TextButton
-              label="Submit"
+              label={typeid === '' ? 'Submit' : 'Update'}
               buttonContainerStyle={{
-                height: 50,
+                height: 45,
                 alignItems: 'center',
-                marginTop: SIZES.padding * 2,
+                marginTop: SIZES.padding,
                 borderRadius: SIZES.radius,
               }}
               onPress={() => {

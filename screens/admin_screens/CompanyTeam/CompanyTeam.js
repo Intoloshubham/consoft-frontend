@@ -63,13 +63,23 @@ const CompanyTeam = () => {
       emailError == ''
     );
   }
+  // ================================================
+  // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
+  const onRoleOpen = React.useCallback(() => {
+    setOpenProject(false);
+  }, []);
+
+  const onProjectOpen = React.useCallback(() => {
+    setOpenRole(false);
+  }, []);
 
   // ================================ Apis ====================================
 
   const getCompanyTeam = async () => {
-    let response = await getUsers();
-    // console.log(response);
-    setCompanyTeam(response);
+    let response = await getUsers(company_id);
+    if (response.status === 200) {
+      setCompanyTeam(response.data);
+    }
   };
 
   const userRole = async () => {
@@ -182,6 +192,7 @@ const CompanyTeam = () => {
                 }}
                 zIndex={4000}
                 maxHeight={150}
+                onOpen={onRoleOpen}
               />
               <FormInput
                 label="Name"
@@ -288,6 +299,7 @@ const CompanyTeam = () => {
                 }}
                 zIndex={3000}
                 maxHeight={150}
+                onOpen={onProjectOpen}
               />
               <TextButton
                 label="Save"
