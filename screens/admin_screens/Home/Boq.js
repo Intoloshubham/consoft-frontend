@@ -21,7 +21,7 @@ import {
 } from '../../../Components';
 import {COLORS, FONTS, SIZES, icons} from '../../../constants';
 import {useSelector} from 'react-redux';
-import {getUnits} from '../../../controller/unitController';
+import {getUnits} from '../../../controller/UnitController';
 import {
   postBoqNewAddItem,
   getBoqItemsList,
