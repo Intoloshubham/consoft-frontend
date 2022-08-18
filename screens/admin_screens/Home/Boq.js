@@ -9,6 +9,8 @@ import {
   FlatList,
   StyleSheet,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -28,7 +30,7 @@ import {
   postBOQItem,
   getBOQItems,
   updateBoqItem,
-} from '../../../controller/boqController';
+} from '../../../controller/BoqController';
 
 const Boq = ({route}) => {
   // get company id
@@ -140,7 +142,7 @@ const Boq = ({route}) => {
       company_id: companyData._id,
       project_id: project_id,
       item_id: itemsValue,
-      unit_id: unitId,
+      unit_name: showUnitName,
       qty: itemQty,
     };
     let data = await postBOQItem(formData);
@@ -159,12 +161,12 @@ const Boq = ({route}) => {
   };
 
   const [boqItems, setBoqItems] = React.useState([]);
+
   const fetchBoqItems = async () => {
-    let data = await getBOQItems(company_id, project_id);
-    const filterData = data.data.map(ele => {
-      return ele;
-    });
-    setBoqItems(filterData);
+    let response = await getBOQItems(company_id, project_id);
+    if (response.status === 200) {
+      setBoqItems(response.data);
+    }
   };
 
   React.useEffect(() => {
@@ -172,13 +174,12 @@ const Boq = ({route}) => {
   }, []);
 
   const [getId, setGetId] = React.useState('');
-  const [getItemId, setGetItemId] = React.useState('');
 
-  const editBoqItems = (item_id, id, itemQty) => {
-    setGetItemId(item_id);
+  const editBoqItems = (item_id, id, itemQty, unitName) => {
     setGetId(id);
     setItemsValue(item_id);
     setItemQty(itemQty);
+    setShowUnitName(unitName);
     setEditBoq(true);
     fetchBoqItemsList();
   };
@@ -189,10 +190,10 @@ const Boq = ({route}) => {
       company_id: companyData._id,
       project_id: project_id,
       item_id: itemsValue,
-      unit_id: unitId,
+      unit_name: showUnitName,
       qty: itemQty,
     };
-    let data = await updateBoqItem(getId, getItemId, formData);
+    let data = await updateBoqItem(getId, formData);
     if (data.status === 200) {
       setEditBoq(false);
       fetchBoqItems();
@@ -210,21 +211,47 @@ const Boq = ({route}) => {
   function renderEditBoqItem() {
     return (
       <Modal animationType="slide" visible={editBoq} transparent={true}>
-        <TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
           <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack5,
+              width: '90%',
+              padding: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.white,
             }}>
             <View
               style={{
-                position: 'absolute',
-                backgroundColor: COLORS.white,
-                padding: SIZES.padding,
-                borderRadius: SIZES.radius,
-                width: '90%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={{fontSize: 20, color: COLORS.darkGray}}>
+                Update BOQ
+              </Text>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.darkGray,
+                  padding: 3,
+                  borderRadius: 2,
+                }}>
+                <TouchableOpacity onPress={() => setEditBoq(false)}>
+                  <Image
+                    source={icons.cross}
+                    style={{height: 12, width: 12, tintColor: COLORS.white}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
+            </View>
+            <View
+              style={{
+                marginTop: SIZES.padding,
               }}>
               <View
                 style={{
@@ -232,212 +259,178 @@ const Boq = ({route}) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={{fontSize: 20, color: COLORS.darkGray}}>
-                  Update BOQ
-                </Text>
-                <ImageBackground
-                  style={{
-                    backgroundColor: COLORS.darkGray,
-                    padding: 3,
-                    borderRadius: 2,
-                  }}>
-                  <TouchableOpacity onPress={() => setEditBoq(false)}>
-                    <Image
-                      source={icons.cross}
-                      style={{height: 12, width: 12, tintColor: COLORS.white}}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View
-                style={{
-                  marginTop: SIZES.padding,
-                }}>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    width: '82%',
                   }}>
-                  <View
+                  <DropDownPicker
                     style={{
-                      width: '82%',
-                    }}>
-                    <DropDownPicker
-                      style={{
-                        borderWidth: null,
-                        backgroundColor: COLORS.gray3,
-                        minHeight: 40,
-                      }}
-                      dropDownContainerStyle={{
-                        backgroundColor: COLORS.lightblue_800,
-                        borderWidth: null,
-                      }}
-                      textStyle={{
-                        fontSize: 15,
-                        color: COLORS.black,
-                        textTransform: 'capitalize',
-                      }}
-                      listParentLabelStyle={{color: COLORS.white, fontSize: 15}}
-                      placeholder="Select items..."
-                      open={openItems}
-                      value={itemsValue}
-                      items={items}
-                      setOpen={setOpenItems}
-                      setValue={setItemsValue}
-                      setItems={setItems}
-                      tickIconStyle={{
-                        width: 15,
-                        height: 15,
-                        backgroundColor: COLORS.success_300,
-                        borderRadius: SIZES.base,
-                      }}
-                      onSelectItem={value => OnSelectHandler(value.value)}
-                      autoScroll={false}
-                      // searchable={true}
-                      // searchPlaceholder="Search..."
-                      // searchContainerStyle={{
-                      //   borderBottomColor: COLORS.white,
-                      //   borderWidth: null,
-                      //   borderColor: null,
-                      //   height: 50,
-                      // }}
-                      // searchTextInputStyle={{
-                      //   color: COLORS.black,
-                      //   backgroundColor: COLORS.lightGray1,
-                      // }}
-                      // searchPlaceholderTextColor={COLORS.black}
-                    />
-                  </View>
-                  <Text
-                    style={{
-                      height: 40,
+                      borderWidth: null,
                       backgroundColor: COLORS.gray3,
-                      padding: 8,
-                      borderRadius: SIZES.base,
+                      minHeight: 40,
+                    }}
+                    dropDownContainerStyle={{
+                      backgroundColor: COLORS.lightblue_800,
+                      borderWidth: null,
+                    }}
+                    textStyle={{
                       fontSize: 15,
                       color: COLORS.black,
-                      textAlign: 'center',
-                    }}>
-                    {showUnitName}
-                  </Text>
+                      textTransform: 'capitalize',
+                    }}
+                    listParentLabelStyle={{color: COLORS.white, fontSize: 15}}
+                    placeholder="Select items..."
+                    open={openItems}
+                    value={itemsValue}
+                    items={items}
+                    setOpen={setOpenItems}
+                    setValue={setItemsValue}
+                    setItems={setItems}
+                    tickIconStyle={{
+                      width: 15,
+                      height: 15,
+                      backgroundColor: COLORS.success_300,
+                      borderRadius: SIZES.base,
+                    }}
+                    onSelectItem={value => OnSelectHandler(value.value)}
+                    autoScroll={false}
+                    // searchable={true}
+                    // searchPlaceholder="Search..."
+                    // searchContainerStyle={{
+                    //   borderBottomColor: COLORS.white,
+                    //   borderWidth: null,
+                    //   borderColor: null,
+                    //   height: 50,
+                    // }}
+                    // searchTextInputStyle={{
+                    //   color: COLORS.black,
+                    //   backgroundColor: COLORS.lightGray1,
+                    // }}
+                    // searchPlaceholderTextColor={COLORS.black}
+                  />
                 </View>
-                <FormInput
-                  label="Quantity"
-                  keyboardType="numeric"
-                  value={itemQty}
-                  onChange={value => {
-                    setItemQty(value);
-                  }}
-                  appendComponent={
-                    <View style={{justifyContent: 'center'}}>
-                      <Image
-                        source={
-                          itemQty == '' || itemQty != ''
-                            ? icons.correct
-                            : icons.cancel
-                        }
-                        style={{
-                          height: 20,
-                          width: 20,
-                          tintColor:
-                            itemQty == ''
-                              ? COLORS.gray
-                              : itemQty != ''
-                              ? COLORS.green
-                              : COLORS.red,
-                        }}
-                      />
-                    </View>
-                  }
-                />
-                <TextButton
-                  label="Update"
-                  buttonContainerStyle={{
-                    height: 45,
-                    marginTop: SIZES.padding * 1.5,
-                    alignItems: 'center',
-                    borderRadius: SIZES.radius,
-                    backgroundColor: COLORS.lightblue_700,
-                  }}
-                  onPress={() => updateBoq()}
-                />
+                <Text
+                  style={{
+                    height: 40,
+                    backgroundColor: COLORS.gray3,
+                    padding: 8,
+                    borderRadius: SIZES.base,
+                    fontSize: 15,
+                    color: COLORS.black,
+                    textAlign: 'center',
+                  }}>
+                  {showUnitName}
+                </Text>
               </View>
+              <FormInput
+                label="Quantity"
+                keyboardType="numeric"
+                value={itemQty}
+                onChange={value => {
+                  setItemQty(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        itemQty == '' || itemQty != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          itemQty == ''
+                            ? COLORS.gray
+                            : itemQty != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <TextButton
+                label="Update"
+                buttonContainerStyle={{
+                  height: 45,
+                  marginTop: SIZES.padding * 1.5,
+                  alignItems: 'center',
+                  borderRadius: SIZES.radius,
+                  backgroundColor: COLORS.lightblue_700,
+                }}
+                onPress={() => updateBoq()}
+              />
             </View>
           </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }
 
   function renderBoqItems() {
-    const renderItem = ({item}) => (
-      <View style={{}}>
-        {item.boqitems.map((ele, i) => {
-          return (
-            <View
-              key={i}
-              style={{
-                flexDirection: 'row',
-                marginTop: i == 0 ? null : 10,
-              }}>
-              <Text
-                style={{
-                  ...FONTS.h4,
-                  flex: 0.5,
-                  color: COLORS.darkGray,
-                }}>
-                {i + 1}.
-              </Text>
-              <Text
-                style={{
-                  flex: 2.2,
-                  ...FONTS.h3,
-                  color: COLORS.darkGray,
-                }}>
-                {ele.item_name}
-              </Text>
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  flex: 1.3,
-                  color: COLORS.darkGray,
-                  textAlign: 'right',
-                  // fontWeight: 'bold',
-                }}>
-                {ele.qty}
-              </Text>
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  flex: 0.8,
-                  color: COLORS.darkGray,
-                  textAlign: 'right',
-                }}>
-                {/* {ele.unit_name} */}
-              </Text>
+    const renderItem = ({item, index}) => (
+      <View
+        style={{
+          flexDirection: 'row',
+        }}>
+        <Text
+          style={{
+            ...FONTS.h4,
+            flex: 0.5,
+            color: COLORS.darkGray,
+          }}>
+          {index + 1}.
+        </Text>
+        <Text
+          style={{
+            flex: 2.2,
+            ...FONTS.h3,
+            color: COLORS.darkGray,
+          }}>
+          {item.item_name}
+        </Text>
+        <Text
+          style={{
+            ...FONTS.h3,
+            flex: 1.3,
+            color: COLORS.darkGray,
+            textAlign: 'right',
+            // fontWeight: 'bold',
+          }}>
+          {item.qty}
+        </Text>
+        <Text
+          style={{
+            ...FONTS.h3,
+            flex: 0.8,
+            color: COLORS.darkGray,
+            textAlign: 'right',
+          }}>
+          {item.unit_name}
+        </Text>
 
-              <TouchableOpacity
-                style={{
-                  flex: 1.2,
-                  alignItems: 'flex-end',
-                }}
-                onPress={() => editBoqItems(ele.item_id, item._id, ele.qty)}>
-                <ImageBackground
-                  style={{
-                    backgroundColor: COLORS.green,
-                    padding: 3,
-                    borderRadius: 2,
-                  }}>
-                  <Image
-                    source={icons.edit}
-                    style={{height: 12, width: 12, tintColor: COLORS.white}}
-                  />
-                </ImageBackground>
-              </TouchableOpacity>
-            </View>
-          );
-        })}
+        <TouchableOpacity
+          style={{
+            flex: 1.2,
+            alignItems: 'flex-end',
+          }}
+          onPress={() =>
+            editBoqItems(item.item_id, item._id, item.qty, item.unit_name)
+          }>
+          <ImageBackground
+            style={{
+              backgroundColor: COLORS.green,
+              padding: 3,
+              borderRadius: 2,
+            }}>
+            <Image
+              source={icons.edit}
+              style={{height: 12, width: 12, tintColor: COLORS.white}}
+            />
+          </ImageBackground>
+        </TouchableOpacity>
       </View>
     );
 
@@ -533,7 +526,6 @@ const Boq = ({route}) => {
             </View>
           }
         />
-        
       </View>
     );
   }
@@ -544,35 +536,160 @@ const Boq = ({route}) => {
         animationType="slide"
         transparent={true}
         visible={addBoqNewItemModal}>
-        <TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
           <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack5,
+              width: '92%',
+              padding: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.white,
             }}>
             <View
               style={{
-                position: 'absolute',
-                backgroundColor: COLORS.white,
-                padding: SIZES.padding,
-                borderRadius: SIZES.radius,
-                width: '92%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}>
-              <View
+              <Text
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+                  ...FONTS.h3,
+                  fontSize: 20,
                 }}>
-                <Text
+                Add items
+              </Text>
+              <IconButton
+                containerStyle={{
+                  boborderWidth: 2,
+                  borderRadius: 10,
+                  borderColor: COLORS.gray2,
+                }}
+                icon={icons.cross}
+                iconStyle={{
+                  tintColor: COLORS.gray,
+                }}
+                onPress={() => setAddBoqNewItemModal(false)}
+              />
+            </View>
+            <View style={{marginTop: SIZES.radius}}>
+              <FormInput
+                label="Item Name"
+                keyboardType="default"
+                onChange={value => {
+                  setBoqItemName(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        boqItemName == '' || boqItemName != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          boqItemName == ''
+                            ? COLORS.gray
+                            : boqItemName != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <CustomDropdown
+                placeholder="Select unit"
+                open={openUnit}
+                value={unitValue}
+                items={units}
+                setOpen={setOpenUnit}
+                setValue={setUnitValue}
+                setItems={setUnits}
+                categorySelectable={true}
+                listParentLabelStyle={{
+                  color: COLORS.white,
+                }}
+                maxHeight={150}
+              />
+              <TextButton
+                label="Submit"
+                buttonContainerStyle={{
+                  height: 45,
+                  marginTop: SIZES.padding * 1.5,
+                  alignItems: 'center',
+                  borderRadius: SIZES.radius,
+                  backgroundColor: COLORS.lightblue_700,
+                }}
+                onPress={() => postBoqNewListItem()}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+    );
+  }
+
+  function renderAddBoqModal() {
+    return (
+      <Modal animationType="slide" transparent={true} visible={addBoqModal}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
+          <View
+            style={{
+              width: '90%',
+              padding: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.white,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  fontSize: 20,
+                }}>
+                BOQ
+              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  onPress={addItemModal}
                   style={{
-                    ...FONTS.h3,
-                    fontSize: 20,
+                    backgroundColor: COLORS.lightblue_700,
+                    paddingHorizontal: 4,
+                    borderRadius: 3,
+                    height: 20,
+                    right: 5,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                  Add items
-                </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h5,
+                      color: COLORS.white,
+                      textAlign: 'center',
+                    }}>
+                    Add item
+                  </Text>
+                </TouchableOpacity>
                 <IconButton
                   containerStyle={{
                     boborderWidth: 2,
@@ -583,89 +700,13 @@ const Boq = ({route}) => {
                   iconStyle={{
                     tintColor: COLORS.gray,
                   }}
-                  onPress={() => setAddBoqNewItemModal(false)}
-                />
-              </View>
-              <View style={{marginTop: SIZES.radius}}>
-                <FormInput
-                  label="Item Name"
-                  keyboardType="default"
-                  onChange={value => {
-                    setBoqItemName(value);
-                  }}
-                  appendComponent={
-                    <View style={{justifyContent: 'center'}}>
-                      <Image
-                        source={
-                          boqItemName == '' || boqItemName != ''
-                            ? icons.correct
-                            : icons.cancel
-                        }
-                        style={{
-                          height: 20,
-                          width: 20,
-                          tintColor:
-                            boqItemName == ''
-                              ? COLORS.gray
-                              : boqItemName != ''
-                              ? COLORS.green
-                              : COLORS.red,
-                        }}
-                      />
-                    </View>
-                  }
-                />
-                <CustomDropdown
-                  placeholder="Select unit"
-                  open={openUnit}
-                  value={unitValue}
-                  items={units}
-                  setOpen={setOpenUnit}
-                  setValue={setUnitValue}
-                  setItems={setUnits}
-                  categorySelectable={true}
-                  listParentLabelStyle={{
-                    color: COLORS.white,
-                  }}
-                  maxHeight={150}
-                />
-                <TextButton
-                  label="Submit"
-                  buttonContainerStyle={{
-                    height: 45,
-                    marginTop: SIZES.padding * 1.5,
-                    alignItems: 'center',
-                    borderRadius: SIZES.radius,
-                    backgroundColor: COLORS.lightblue_700,
-                  }}
-                  onPress={() => postBoqNewListItem()}
+                  onPress={() => setAddBoqModal(false)}
                 />
               </View>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    );
-  }
-
-  function renderAddBoqModal() {
-    return (
-      <Modal animationType="slide" transparent={true} visible={addBoqModal}>
-        <TouchableWithoutFeedback>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
-            }}>
             <View
               style={{
-                position: 'absolute',
-                backgroundColor: COLORS.white,
-                padding: SIZES.padding,
-                borderRadius: SIZES.radius,
-                width: '90%',
+                marginTop: SIZES.padding,
               }}>
               <View
                 style={{
@@ -673,165 +714,112 @@ const Boq = ({route}) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    fontSize: 20,
-                  }}>
-                  BOQ
-                </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity
-                    onPress={addItemModal}
-                    style={{
-                      backgroundColor: COLORS.lightblue_700,
-                      paddingHorizontal: 4,
-                      borderRadius: 3,
-                      height: 20,
-                      right: 5,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        ...FONTS.h5,
-                        color: COLORS.white,
-                        textAlign: 'center',
-                      }}>
-                      Add item
-                    </Text>
-                  </TouchableOpacity>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setAddBoqModal(false)}
-                  />
-                </View>
-              </View>
-              <View
-                style={{
-                  marginTop: SIZES.padding,
-                }}>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    width: '82%',
                   }}>
-                  <View
+                  <DropDownPicker
                     style={{
-                      width: '82%',
-                    }}>
-                    <DropDownPicker
-                      style={{
-                        borderWidth: null,
-                        backgroundColor: COLORS.gray3,
-                        minHeight: 40,
-                      }}
-                      dropDownContainerStyle={{
-                        backgroundColor: COLORS.lightblue_800,
-                        borderWidth: null,
-                      }}
-                      textStyle={{
-                        fontSize: 15,
-                        color: COLORS.black,
-                        textTransform: 'capitalize',
-                      }}
-                      listParentLabelStyle={{color: COLORS.white, fontSize: 15}}
-                      placeholder="Select items..."
-                      open={openItems}
-                      value={itemsValue}
-                      items={items}
-                      setOpen={setOpenItems}
-                      setValue={setItemsValue}
-                      setItems={setItems}
-                      tickIconStyle={{
-                        width: 15,
-                        height: 15,
-                        backgroundColor: COLORS.success_300,
-                        borderRadius: SIZES.base,
-                      }}
-                      onSelectItem={value => OnSelectHandler(value.value)}
-                      autoScroll={false}
-                      onOpen={onBoqListOpen}
-                      // searchable={true}
-                      // searchPlaceholder="Search..."
-                      // searchContainerStyle={{
-                      //   borderBottomColor: COLORS.white,
-                      //   borderWidth: null,
-                      //   borderColor: null,
-                      //   height: 50,
-                      // }}
-                      // searchTextInputStyle={{
-                      //   color: COLORS.black,
-                      //   backgroundColor: COLORS.lightGray1,
-                      // }}
-                      // searchPlaceholderTextColor={COLORS.black}
-                    />
-                  </View>
-                  <Text
-                    style={{
-                      height: 40,
+                      borderWidth: null,
                       backgroundColor: COLORS.gray3,
-                      padding: 8,
-                      borderRadius: SIZES.base,
+                      minHeight: 40,
+                    }}
+                    dropDownContainerStyle={{
+                      backgroundColor: COLORS.lightblue_800,
+                      borderWidth: null,
+                    }}
+                    textStyle={{
                       fontSize: 15,
                       color: COLORS.black,
-                      textAlign: 'center',
-                    }}>
-                    {showUnitName}
-                  </Text>
+                      textTransform: 'capitalize',
+                    }}
+                    listParentLabelStyle={{color: COLORS.white, fontSize: 15}}
+                    placeholder="Select items..."
+                    open={openItems}
+                    value={itemsValue}
+                    items={items}
+                    setOpen={setOpenItems}
+                    setValue={setItemsValue}
+                    setItems={setItems}
+                    tickIconStyle={{
+                      width: 15,
+                      height: 15,
+                      backgroundColor: COLORS.success_300,
+                      borderRadius: SIZES.base,
+                    }}
+                    onSelectItem={value => OnSelectHandler(value.value)}
+                    autoScroll={false}
+                    onOpen={onBoqListOpen}
+                    // searchable={true}
+                    // searchPlaceholder="Search..."
+                    // searchContainerStyle={{
+                    //   borderBottomColor: COLORS.white,
+                    //   borderWidth: null,
+                    //   borderColor: null,
+                    //   height: 50,
+                    // }}
+                    // searchTextInputStyle={{
+                    //   color: COLORS.black,
+                    //   backgroundColor: COLORS.lightGray1,
+                    // }}
+                    // searchPlaceholderTextColor={COLORS.black}
+                  />
                 </View>
-                <FormInput
-                  label="Quantity"
-                  keyboardType="numeric"
-                  onChange={value => {
-                    setItemQty(value);
-                  }}
-                  appendComponent={
-                    <View style={{justifyContent: 'center'}}>
-                      <Image
-                        source={
-                          itemQty == '' || itemQty != ''
-                            ? icons.correct
-                            : icons.cancel
-                        }
-                        style={{
-                          height: 20,
-                          width: 20,
-                          tintColor:
-                            itemQty == ''
-                              ? COLORS.gray
-                              : itemQty != ''
-                              ? COLORS.green
-                              : COLORS.red,
-                        }}
-                      />
-                    </View>
-                  }
-                />
-                <TextButton
-                  label="Submit"
-                  buttonContainerStyle={{
-                    height: 45,
-                    marginTop: SIZES.padding * 1.5,
-                    alignItems: 'center',
-                    borderRadius: SIZES.radius,
-                    backgroundColor: COLORS.lightblue_700,
-                  }}
-                  onPress={() => postBoqItem()}
-                />
+                <Text
+                  style={{
+                    height: 40,
+                    backgroundColor: COLORS.gray3,
+                    padding: 8,
+                    borderRadius: SIZES.base,
+                    fontSize: 15,
+                    color: COLORS.black,
+                    textAlign: 'center',
+                  }}>
+                  {showUnitName}
+                </Text>
               </View>
+              <FormInput
+                label="Quantity"
+                keyboardType="numeric"
+                onChange={value => {
+                  setItemQty(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        itemQty == '' || itemQty != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          itemQty == ''
+                            ? COLORS.gray
+                            : itemQty != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <TextButton
+                label="Submit"
+                buttonContainerStyle={{
+                  height: 45,
+                  marginTop: SIZES.padding * 1.5,
+                  alignItems: 'center',
+                  borderRadius: SIZES.radius,
+                  backgroundColor: COLORS.lightblue_700,
+                }}
+                onPress={() => postBoqItem()}
+              />
             </View>
           </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }

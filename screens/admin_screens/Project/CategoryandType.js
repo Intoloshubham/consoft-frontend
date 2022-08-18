@@ -11,6 +11,8 @@ import {
   LogBox,
   Image,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {
   HeaderBar,
@@ -484,74 +486,65 @@ const CategoryandType = () => {
         animationType="slide"
         transparent={true}
         visible={showCategoryModal}>
-        <TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
           <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              width: '90%',
+              padding: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.white,
             }}>
-            <View
-              style={{
-                position: 'absolute',
-                left: SIZES.padding,
-                width: '90%',
-                padding: SIZES.padding,
-                borderRadius: 5,
-                backgroundColor: COLORS.white,
-              }}>
-              <View style={{}}>
-                {/* header */}
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
-                    Project Categories
-                  </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setShowCategoryModal(false)}
-                  />
-                </View>
-                <ScrollView
-                  style={{
-                    marginTop: SIZES.radius,
-                  }}>
-                  <FormInput
-                    label="Name"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    value={catName}
-                    onChange={value => {
-                      setCatName(value);
-                    }}
-                  />
-                  <TextButton
-                    label="Submit"
-                    buttonContainerStyle={{
-                      height: 50,
-                      alignItems: 'center',
-                      marginTop: SIZES.padding,
-                      borderRadius: SIZES.radius,
-                    }}
-                    onPress={() => {
-                      id === ''
-                        ? (postCategory(), setShowCategoryModal(false))
-                        : (editCategory(), setShowCategoryModal(false));
-                    }}
-                  />
-                </ScrollView>
-              </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                Project Categories
+              </Text>
+              <IconButton
+                containerStyle={{
+                  boborderWidth: 2,
+                  borderRadius: 10,
+                  borderColor: COLORS.gray2,
+                }}
+                icon={icons.cross}
+                iconStyle={{
+                  tintColor: COLORS.gray,
+                }}
+                onPress={() => setShowCategoryModal(false)}
+              />
             </View>
+            <ScrollView>
+              <FormInput
+                label="Name"
+                keyboardType="default"
+                autoCompleteType="username"
+                value={catName}
+                onChange={value => {
+                  setCatName(value);
+                }}
+              />
+            </ScrollView>
+            <TextButton
+              label="Submit"
+              buttonContainerStyle={{
+                height: 50,
+                alignItems: 'center',
+                marginTop: SIZES.padding,
+                borderRadius: SIZES.radius,
+              }}
+              onPress={() => {
+                id === ''
+                  ? (postCategory(), setShowCategoryModal(false))
+                  : (editCategory(), setShowCategoryModal(false));
+              }}
+            />
           </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }
@@ -559,88 +552,82 @@ const CategoryandType = () => {
   function renderAddTypesModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={showTypesModal}>
-        <TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
           <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              width: '90%',
+              padding: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.white,
             }}>
-            <View
-              style={{
-                position: 'absolute',
-                left: SIZES.padding,
-                width: '90%',
-                padding: SIZES.padding,
-                borderRadius: 5,
-                backgroundColor: COLORS.white,
-              }}>
-              <View style={{}}>
-                {/* header */}
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
-                    Project Types
-                  </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setShowTypesModal(false)}
-                  />
-                </View>
-                <ScrollView
-                  style={{
-                    marginTop: SIZES.base,
-                  }}>
-                  <CustomDropdown
-                    placeholder="Select Categories"
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
-                    categorySelectable={true}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                    maxHeight={170}
-                  />
-                  <FormInput
-                    label="Name"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    value={typeName}
-                    onChange={value => {
-                      setTypeName(value);
-                    }}
-                  />
-                  <TextButton
-                    label="Submit"
-                    buttonContainerStyle={{
-                      height: 50,
-                      alignItems: 'center',
-                      marginTop: SIZES.padding * 2,
-                      borderRadius: SIZES.radius,
-                    }}
-                    onPress={() => {
-                      typeid === ''
-                        ? (postTypes(), setShowTypesModal(false))
-                        : (edittype(), setShowTypesModal(false));
-                    }}
-                  />
-                </ScrollView>
-              </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                Project Types
+              </Text>
+              <IconButton
+                containerStyle={{
+                  boborderWidth: 2,
+                  borderRadius: 10,
+                  borderColor: COLORS.gray2,
+                }}
+                icon={icons.cross}
+                iconStyle={{
+                  tintColor: COLORS.gray,
+                }}
+                onPress={() => setShowTypesModal(false)}
+              />
             </View>
+            <ScrollView
+              style={{
+                marginTop: SIZES.base,
+              }}>
+              <CustomDropdown
+                placeholder="Select Categories"
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+                categorySelectable={true}
+                listParentLabelStyle={{
+                  color: COLORS.white,
+                }}
+                maxHeight={170}
+              />
+              <FormInput
+                label="Name"
+                keyboardType="default"
+                autoCompleteType="username"
+                value={typeName}
+                onChange={value => {
+                  setTypeName(value);
+                }}
+              />
+            </ScrollView>
+            <TextButton
+              label="Submit"
+              buttonContainerStyle={{
+                height: 50,
+                alignItems: 'center',
+                marginTop: SIZES.padding * 2,
+                borderRadius: SIZES.radius,
+              }}
+              onPress={() => {
+                typeid === ''
+                  ? (postTypes(), setShowTypesModal(false))
+                  : (edittype(), setShowTypesModal(false));
+              }}
+            />
           </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }
@@ -650,12 +637,11 @@ const CategoryandType = () => {
         flex: 1,
       }}>
       <HeaderBar right={true} title="Categories & Types" />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {renderCategories()}
-        {renderTypes()}
-        {renderAddCategoriesModal()}
-        {renderAddTypesModal()}
-      </ScrollView>
+
+      {renderCategories()}
+      {renderTypes()}
+      {renderAddCategoriesModal()}
+      {renderAddTypesModal()}
 
       <CustomToast
         isVisible={submitToast}
