@@ -275,7 +275,7 @@ const ProjectReports = () => {
             ...FONTS.h2,
             color: COLORS.darkGray,
           }}>
-          Report
+          Project at a glance
         </Text>
         <TouchableOpacity onPress={() => setReportFilterModal(true)}>
           <Image
