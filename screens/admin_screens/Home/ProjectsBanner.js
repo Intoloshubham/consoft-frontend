@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -20,10 +20,10 @@ import {
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import utils from '../../../utils';
-import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { COLORS, SIZES, FONTS, icons, STATUS } from '../../../constants';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import {
   getProjects,
@@ -35,8 +35,10 @@ import {
 } from '../../../controller/ProjectController';
 import Tooltip from 'react-native-walkthrough-tooltip';
 
+
 const ProjectsBanner = ({company_id}) => {
   const [showTip, setTip] = React.useState(false);
+
 
   const navigation = useNavigation();
   const [collapsed, setCollapsed] = React.useState(true);
@@ -68,10 +70,10 @@ const ProjectsBanner = ({company_id}) => {
   const [openUnit, setOpenUnit] = React.useState(false);
   const [unitValue, setUnitValue] = React.useState([]);
   const [projectUnit, setProjectUnit] = React.useState([
-    {label: 'Hect', value: '1'},
-    {label: 'Acre', value: '2'},
-    {label: 'Sqm', value: '3'},
-    {label: 'Sqf', value: '4'},
+    { label: 'Hect', value: '1' },
+    { label: 'Acre', value: '2' },
+    { label: 'Sqm', value: '3' },
+    { label: 'Sqf', value: '4' },
   ]);
 
   const [projectId, setProjectId] = React.useState('');
@@ -138,19 +140,23 @@ const ProjectsBanner = ({company_id}) => {
 
   const fetchProjectCategory = async () => {
     const response = await getProjectCategory(company_id);
-    let proCatFromApi = response.data.map(item => {
-      return {label: item.category_name, value: item._id};
-    });
-    setProjectCategory(proCatFromApi);
+    if (response.status === 200) {
+      let proCatFromApi = response.data.map(item => {
+        return { label: item.category_name, value: item._id };
+      });
+      setProjectCategory(proCatFromApi);
+    }
   };
 
   // get project types
   const fetchProjectsTypes = async category_id => {
     const response = await getProjectType(category_id);
-    let proTypeFromApi = response.data.map(item => {
-      return {label: item.project_type, value: item._id};
-    });
-    setProjectType(proTypeFromApi);
+    if (response.status === 200) {
+      let proTypeFromApi = response.data.map(item => {
+        return { label: item.project_type, value: item._id };
+      });
+      setProjectType(proTypeFromApi);
+    }
   };
 
   //save project
@@ -241,15 +247,15 @@ const ProjectsBanner = ({company_id}) => {
   const createProject = () => {
     setCreateProjectModal(true);
     createProjectModalForm();
-    // fetchProjectCategory();
-    // fetchProjectsTypes();
+    fetchProjectCategory();
+    fetchProjectsTypes();
   };
 
   //RENDER PROJECTS
   function renderProjects() {
-    const renderItem = ({item, index}) => (
+    const renderItem = ({ item, index }) => (
       <TouchableOpacity
-        style={{marginVertical: SIZES.base}}
+        style={{ marginVertical: SIZES.base }}
         onPress={() => {
           navigation.navigate('ProjectsDetails', {
             name: item.project_name,
@@ -270,8 +276,8 @@ const ProjectsBanner = ({company_id}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{...FONTS.h3, color: COLORS.black}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ ...FONTS.h3, color: COLORS.black }}>
                 {index + 1}.
               </Text>
               <Text
@@ -390,7 +396,7 @@ const ProjectsBanner = ({company_id}) => {
                 borderTopLeftRadius: SIZES.base,
                 backgroundColor: COLORS.white,
               }}>
-              <View style={{alignItems: 'flex-end'}}>
+              <View style={{ alignItems: 'flex-end' }}>
                 <IconButton
                   containerStyle={{
                     boborderWidth: 2,
@@ -416,11 +422,11 @@ const ProjectsBanner = ({company_id}) => {
                   }}
                   errorMsg={projectError}
                   appendComponent={
-                    <View style={{justifyContent: 'center'}}>
+                    <View style={{ justifyContent: 'center' }}>
                       <Image
                         source={
                           projectname == '' ||
-                          (projectname != '' && projectError == '')
+                            (projectname != '' && projectError == '')
                             ? icons.correct
                             : icons.cancel
                         }
@@ -431,8 +437,8 @@ const ProjectsBanner = ({company_id}) => {
                             projectname == ''
                               ? COLORS.gray
                               : projectname != '' && projectError == ''
-                              ? COLORS.green
-                              : COLORS.red,
+                                ? COLORS.green
+                                : COLORS.red,
                         }}
                       />
                     </View>
@@ -449,11 +455,11 @@ const ProjectsBanner = ({company_id}) => {
                   }}
                   errorMsg={projectLocationError}
                   appendComponent={
-                    <View style={{justifyContent: 'center'}}>
+                    <View style={{ justifyContent: 'center' }}>
                       <Image
                         source={
                           projectlocation == '' ||
-                          (projectlocation != '' && projectLocationError == '')
+                            (projectlocation != '' && projectLocationError == '')
                             ? icons.correct
                             : icons.cancel
                         }
@@ -465,8 +471,8 @@ const ProjectsBanner = ({company_id}) => {
                               ? COLORS.gray
                               : projectlocation != '' &&
                                 projectLocationError == ''
-                              ? COLORS.green
-                              : COLORS.red,
+                                ? COLORS.green
+                                : COLORS.red,
                         }}
                       />
                     </View>
@@ -571,7 +577,7 @@ const ProjectsBanner = ({company_id}) => {
                     label="Land area"
                     keyboardType="numeric"
                     autoCompleteType="cc-number"
-                    containerStyle={{width: '60%'}}
+                    containerStyle={{ width: '60%' }}
                     // value={projectplotarea.toString()}
                     onChange={value => {
                       utils.validateNumber(value, setProjectPlotAreaError);
@@ -654,7 +660,7 @@ const ProjectsBanner = ({company_id}) => {
                 borderTopLeftRadius: SIZES.base,
                 backgroundColor: COLORS.white,
               }}>
-              <View style={{alignItems: 'flex-end'}}>
+              <View style={{ alignItems: 'flex-end' }}>
                 <IconButton
                   containerStyle={{
                     boborderWidth: 2,
@@ -685,11 +691,11 @@ const ProjectsBanner = ({company_id}) => {
                     }}
                     errorMsg={projectError}
                     appendComponent={
-                      <View style={{justifyContent: 'center'}}>
+                      <View style={{ justifyContent: 'center' }}>
                         <Image
                           source={
                             projectname == '' ||
-                            (projectname != '' && projectError == '')
+                              (projectname != '' && projectError == '')
                               ? icons.correct
                               : icons.cancel
                           }
@@ -700,8 +706,8 @@ const ProjectsBanner = ({company_id}) => {
                               projectname == ''
                                 ? COLORS.gray
                                 : projectname != '' && projectError == ''
-                                ? COLORS.green
-                                : COLORS.red,
+                                  ? COLORS.green
+                                  : COLORS.red,
                           }}
                         />
                       </View>
@@ -718,12 +724,12 @@ const ProjectsBanner = ({company_id}) => {
                     }}
                     errorMsg={projectLocationError}
                     appendComponent={
-                      <View style={{justifyContent: 'center'}}>
+                      <View style={{ justifyContent: 'center' }}>
                         <Image
                           source={
                             projectlocation == '' ||
-                            (projectlocation != '' &&
-                              projectLocationError == '')
+                              (projectlocation != '' &&
+                                projectLocationError == '')
                               ? icons.correct
                               : icons.cancel
                           }
@@ -735,8 +741,8 @@ const ProjectsBanner = ({company_id}) => {
                                 ? COLORS.gray
                                 : projectlocation != '' &&
                                   projectLocationError == ''
-                                ? COLORS.green
-                                : COLORS.red,
+                                  ? COLORS.green
+                                  : COLORS.red,
                           }}
                         />
                       </View>
@@ -787,7 +793,7 @@ const ProjectsBanner = ({company_id}) => {
                       label="Land area"
                       keyboardType="numeric"
                       autoCompleteType="cc-number"
-                      containerStyle={{width: '60%'}}
+                      containerStyle={{ width: '60%' }}
                       value={projectplotarea.toString()}
                       onChange={value => {
                         utils.validateNumber(value, setProjectPlotAreaError);
@@ -925,8 +931,8 @@ const ProjectsBanner = ({company_id}) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.white}}>Projects</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Text style={{ ...FONTS.h2, color: COLORS.white }}>Projects</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
             style={{
               right: 10,

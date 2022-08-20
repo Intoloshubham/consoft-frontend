@@ -22,7 +22,7 @@ import {Popable} from 'react-native-popable';
 import config from '../../../config';
 // import CalendarPicker from 'react-native-calendar-picker';
 
-const Demo2 = () => {
+const MyProfile = () => {
   // const dispatch = useDispatch();
   const userData = useSelector(state => state.user);
   // console.log(userData)
@@ -191,7 +191,7 @@ const Demo2 = () => {
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
             ...styles.shadow,
-            marginHorizontal: SIZES.padding,
+            marginHorizontal: SIZES.radius,
             marginBottom: SIZES.padding,
             borderRadius: SIZES.radius,
             padding: 20,
@@ -512,7 +512,7 @@ const Demo2 = () => {
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.white,
             ...styles.shadow,
-            marginHorizontal: SIZES.padding,
+            marginHorizontal: SIZES.radius,
             marginBottom: SIZES.padding,
             borderRadius: SIZES.radius,
           }}>
@@ -654,6 +654,7 @@ const Demo2 = () => {
                                     marginLeft: -5,
                                   }
                                 : {
+                                    // textAlign:"center",
                                     backgroundColor: COLORS.gray3,
                                     borderRadius: 50,
                                     paddingHorizontal: 5,
@@ -670,7 +671,7 @@ const Demo2 = () => {
               );
             })}
 
-            <View
+            {/* <View
               style={{
                 marginTop: 20,
                 flexDirection: 'row',
@@ -683,7 +684,8 @@ const Demo2 = () => {
               <Text style={{fontSize: 18, fontWeight: 'bold'}}>
                 T days:{30}
               </Text>
-            </View>
+            </View> */}
+
           </Card.Content>
         </Card>
       </View>
@@ -692,7 +694,7 @@ const Demo2 = () => {
   );
 };
 
-export default Demo2;
+export default MyProfile;
 
 const styles = StyleSheet.create({});
 
