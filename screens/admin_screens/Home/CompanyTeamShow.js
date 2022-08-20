@@ -140,7 +140,7 @@ const ProjectCompanyShow = () => {
     return (
       <Modal animationType="slide" transparent={true} visible={addTeamModal}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -152,7 +152,7 @@ const ProjectCompanyShow = () => {
               position: 'absolute',
               backgroundColor: COLORS.white,
               padding: SIZES.padding,
-              borderRadius: SIZES.radius,
+              borderRadius: 5,
               width: '90%',
             }}>
             <View
@@ -166,14 +166,14 @@ const ProjectCompanyShow = () => {
               </Text>
               <ImageBackground
                 style={{
-                  backgroundColor: COLORS.darkGray,
-                  padding: 3,
-                  borderRadius: 3,
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
                 }}>
                 <TouchableOpacity onPress={() => setAddTeamModal(false)}>
                   <Image
                     source={icons.cross}
-                    style={{height: 12, width: 12, tintColor: COLORS.white}}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
                   />
                 </TouchableOpacity>
               </ImageBackground>
@@ -303,15 +303,11 @@ const ProjectCompanyShow = () => {
               />
               <TextButton
                 label="Save"
-                disabled={isEnableSubmit() ? false : true}
                 buttonContainerStyle={{
                   height: 45,
                   alignItems: 'center',
                   marginTop: SIZES.padding,
                   borderRadius: SIZES.base,
-                  backgroundColor: isEnableSubmit()
-                    ? COLORS.lightblue_700
-                    : COLORS.transparentPrimary,
                 }}
                 onPress={postTeam}
               />
@@ -359,16 +355,16 @@ const ProjectCompanyShow = () => {
       <View
         style={{
           marginTop: SIZES.radius,
-          marginHorizontal: SIZES.padding,
-          backgroundColor: COLORS.lightblue_50,
-          padding: 20,
-          ...styles.shadow,
+          marginHorizontal: SIZES.radius,
+          // backgroundColor: COLORS.lightblue_50,
+          // padding: 20,
+          // ...styles.shadow,
         }}>
         <FlatList
           data={companyTeam}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
-          maxHeight={450}
+          maxHeight={520}
           scrollEnabled={true}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
@@ -399,7 +395,7 @@ const ProjectCompanyShow = () => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,

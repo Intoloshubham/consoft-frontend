@@ -5,7 +5,6 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   Modal,
   ScrollView,
   LogBox,
@@ -35,12 +34,11 @@ import {
   updateProjectType,
   deleteProjectType,
 } from '../../../controller/ProjectCategoryAndTypeController';
+import Tooltip from 'react-native-walkthrough-tooltip';
 
 const CategoryandType = () => {
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
-
+  const [showTip, setTip] = React.useState(false);
+  const [showTip1, setTip1] = React.useState(false);
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
@@ -325,17 +323,64 @@ const CategoryandType = () => {
             justifyContent: 'space-between',
           }}>
           <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Categories</Text>
-          <TextButton
-            label="Add New"
-            buttonContainerStyle={{
-              paddingHorizontal: 5,
-              borderRadius: 2,
-            }}
-            labelStyle={{...FONTS.h5}}
-            onPress={() => {
-              setCatName(''), setShowCategoryModal(true);
-            }}
-          />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <TextButton
+              label="Add New"
+              buttonContainerStyle={{
+                paddingHorizontal: 5,
+                borderRadius: 2,
+                right: 10,
+              }}
+              labelStyle={{...FONTS.h5}}
+              onPress={() => {
+                setCatName(''), setShowCategoryModal(true);
+              }}
+            />
+            <Tooltip
+              isVisible={showTip}
+              content={
+                <View style={{padding: 5}}>
+                  <Text
+                    style={{
+                      ...FONTS.h4,
+                      color: COLORS.lightblue_600,
+                      fontWeight: 'bold',
+                    }}>
+                    Help
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h4,
+                      color: COLORS.darkGray,
+                      textAlign: 'left',
+                    }}>
+                    Project categories like residential, commercial, industrial,
+                    institutional, mixed-use, etc.
+                  </Text>
+                </View>
+              }
+              onClose={() => setTip(false)}
+              placement="bottom"
+              // topAdjustment={
+              //   Platform.OS === 'android' ? -StatusBar.currentHeight : 0
+              // }
+            >
+              <TouchableOpacity style={{}} onPress={() => setTip(true)}>
+                <Image
+                  source={icons.help1}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor: COLORS.lightblue_600,
+                  }}
+                />
+              </TouchableOpacity>
+            </Tooltip>
+          </View>
         </View>
         <FlatList
           contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
@@ -344,7 +389,7 @@ const CategoryandType = () => {
           renderItem={renderItem}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={350}
+          maxHeight={200}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
@@ -454,19 +499,69 @@ const CategoryandType = () => {
             justifyContent: 'space-between',
           }}>
           <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Types</Text>
-          <TextButton
-            label="Add New"
-            buttonContainerStyle={{
-              paddingHorizontal: 5,
-              borderRadius: 2,
-            }}
-            labelStyle={{...FONTS.h5}}
-            onPress={() => {
-              projectCategory();
-              setTypeName('');
-              setShowTypesModal(true);
-            }}
-          />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <TextButton
+              label="Add New"
+              buttonContainerStyle={{
+                paddingHorizontal: 5,
+                borderRadius: 2,
+                right: 10,
+              }}
+              labelStyle={{...FONTS.h5}}
+              onPress={() => {
+                projectCategory();
+                setTypeName('');
+                setShowTypesModal(true);
+              }}
+            />
+            <Tooltip
+              isVisible={showTip1}
+              content={
+                <View style={{padding: 5}}>
+                  <Text
+                    style={{
+                      ...FONTS.h4,
+                      color: COLORS.lightblue_600,
+                      fontWeight: 'bold',
+                    }}>
+                    Help
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h4,
+                      color: COLORS.darkGray,
+                      textAlign: 'left',
+                    }}>
+                    Project Types like Residential - bungalows, duplexes,
+                    high-rise apartments, mid-rise apartments, Commercial -
+                    offices, malls & multiplexes, Industrial - warehouses,
+                    factories, Institutional - schools, colleges, Mixed-use -
+                    nursing homes, restaurants, etc.
+                  </Text>
+                </View>
+              }
+              onClose={() => setTip1(false)}
+              placement="bottom"
+              // topAdjustment={
+              //   Platform.OS === 'android' ? -StatusBar.currentHeight : 0
+              // }
+            >
+              <TouchableOpacity style={{}} onPress={() => setTip1(true)}>
+                <Image
+                  source={icons.help1}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor: COLORS.lightblue_600,
+                  }}
+                />
+              </TouchableOpacity>
+            </Tooltip>
+          </View>
         </View>
         <FlatList
           contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
@@ -476,7 +571,7 @@ const CategoryandType = () => {
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={350}
+          maxHeight={200}
           ItemSeparatorComponent={() => {
             return (
               <View
@@ -499,7 +594,7 @@ const CategoryandType = () => {
         transparent={true}
         visible={showCategoryModal}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -510,25 +605,31 @@ const CategoryandType = () => {
             style={{
               width: '90%',
               padding: SIZES.padding,
-              borderRadius: SIZES.base,
+              borderRadius: 5,
               backgroundColor: COLORS.white,
             }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
-                Project Categories
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <Text style={{flex: 1, fontSize: 25, color: COLORS.darkGray}}>
+                Categories
               </Text>
-              <IconButton
-                containerStyle={{
-                  boborderWidth: 2,
-                  borderRadius: 10,
-                  borderColor: COLORS.gray2,
-                }}
-                icon={icons.cross}
-                iconStyle={{
-                  tintColor: COLORS.gray,
-                }}
-                onPress={() => setShowCategoryModal(false)}
-              />
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
+                }}>
+                <TouchableOpacity onPress={() => setShowCategoryModal(false)}>
+                  <Image
+                    source={icons.cross}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
             <ScrollView>
               <FormInput
@@ -565,7 +666,7 @@ const CategoryandType = () => {
     return (
       <Modal animationType="slide" transparent={true} visible={showTypesModal}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -576,44 +677,47 @@ const CategoryandType = () => {
             style={{
               width: '90%',
               padding: SIZES.padding,
-              borderRadius: SIZES.base,
+              borderRadius: 5,
               backgroundColor: COLORS.white,
             }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <Text style={{flex: 1, fontSize: 25, color: COLORS.darkGray}}>
                 Project Types
               </Text>
-              <IconButton
-                containerStyle={{
-                  boborderWidth: 2,
-                  borderRadius: 10,
-                  borderColor: COLORS.gray2,
-                }}
-                icon={icons.cross}
-                iconStyle={{
-                  tintColor: COLORS.gray,
-                }}
-                onPress={() => setShowTypesModal(false)}
-              />
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
+                }}>
+                <TouchableOpacity onPress={() => setShowTypesModal(false)}>
+                  <Image
+                    source={icons.cross}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
-            <ScrollView
-              style={{
-                marginTop: SIZES.base,
-              }}>
-              <CustomDropdown
-                placeholder="Select Categories"
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
-                categorySelectable={true}
-                listParentLabelStyle={{
-                  color: COLORS.white,
-                }}
-                // maxHeight={270}
-              />
+            <CustomDropdown
+              placeholder="Select Categories"
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              categorySelectable={true}
+              listParentLabelStyle={{
+                color: COLORS.white,
+              }}
+              maxHeight={150}
+            />
+            <View style={{marginTop: 30}}>
               <FormInput
                 label="Name"
                 keyboardType="default"
@@ -623,7 +727,7 @@ const CategoryandType = () => {
                   setTypeName(value);
                 }}
               />
-            </ScrollView>
+            </View>
             <TextButton
               label={typeid === '' ? 'Submit' : 'Update'}
               buttonContainerStyle={{

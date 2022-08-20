@@ -33,8 +33,11 @@ import {
   getProjectType,
   getProjectCategory,
 } from '../../../controller/ProjectController';
+import Tooltip from 'react-native-walkthrough-tooltip';
 
 const ProjectsBanner = ({company_id}) => {
+  const [showTip, setTip] = React.useState(false);
+
   const navigation = useNavigation();
   const [collapsed, setCollapsed] = React.useState(true);
 
@@ -469,25 +472,77 @@ const ProjectsBanner = ({company_id}) => {
                     </View>
                   }
                 />
-
-                <CustomDropdown
-                  placeholder="Select category"
-                  open={openCategory}
-                  value={categoryValue}
-                  items={projectCategory}
-                  setOpen={setOpenCategory}
-                  setValue={setCategoryValue}
-                  setItems={setProjectCategory}
-                  multiple={false}
-                  listParentLabelStyle={{
-                    color: COLORS.white,
-                  }}
-                  maxHeight={150}
-                  zIndex={3000}
-                  zIndexInverse={1000}
-                  onOpen={onCategoryOpen}
-                  onChangeValue={value => fetchProjectsTypes(value)}
-                />
+                <View
+                  style={{
+                    // flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <View
+                    style={{
+                      width: '90%',
+                    }}>
+                    <CustomDropdown
+                      placeholder="Select category"
+                      open={openCategory}
+                      value={categoryValue}
+                      items={projectCategory}
+                      setOpen={setOpenCategory}
+                      setValue={setCategoryValue}
+                      setItems={setProjectCategory}
+                      multiple={false}
+                      listParentLabelStyle={{
+                        color: COLORS.white,
+                      }}
+                      maxHeight={150}
+                      zIndex={3000}
+                      zIndexInverse={1000}
+                      onOpen={onCategoryOpen}
+                      onChangeValue={value => fetchProjectsTypes(value)}
+                    />
+                  </View>
+                  <View style={{marginTop: 15}}>
+                    <Tooltip
+                      isVisible={showTip}
+                      content={
+                        <View style={{padding: 5}}>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              color: COLORS.lightblue_600,
+                              fontWeight: 'bold',
+                            }}>
+                            Help
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              color: COLORS.darkGray,
+                              textAlign: 'left',
+                            }}>
+                            Before creating the new projects, Click on the
+                            account tab and create the project categories and
+                            it's types, it's compulsory for creating a new
+                            project.
+                          </Text>
+                        </View>
+                      }
+                      onClose={() => setTip(false)}
+                      placement="bottom">
+                      <TouchableOpacity style={{}} onPress={() => setTip(true)}>
+                        <Image
+                          source={icons.help1}
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor: COLORS.lightblue_600,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </Tooltip>
+                  </View>
+                </View>
 
                 <CustomDropdown
                   placeholder="Select types"
@@ -884,9 +939,7 @@ const ProjectsBanner = ({company_id}) => {
             onPress={() => {
               createProject();
             }}>
-            <Text style={{...FONTS.h4, color: COLORS.black}}>
-              Create New
-            </Text>
+            <Text style={{...FONTS.h4, color: COLORS.black}}>Create New</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleExpanded}>
             <Image

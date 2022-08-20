@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 
 const Tasks = () => {
   return (
-    <View style={{flex: 1}}>
+    <View>
       <Text>Tasks</Text>
     </View>
   );

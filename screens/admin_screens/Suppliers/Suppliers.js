@@ -128,35 +128,45 @@ const Suppliers = () => {
           <View
             style={{
               flex: 1,
-              justifyContent: 'flex-end',
-              backgroundColor: COLORS.transparentBlack3,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
             }}>
             <View
               style={{
-                backgroundColor: COLORS.white2,
                 position: 'absolute',
-                width: '100%',
-                height: '60%',
-                // padding: SIZES.radius,
-                paddingHorizontal: SIZES.padding,
-                paddingTop: SIZES.radius,
-                paddingBottom: SIZES.padding,
-                borderTopRightRadius: SIZES.base,
-                borderTopLeftRadius: SIZES.base,
+                backgroundColor: COLORS.white,
+                padding: SIZES.padding,
+                borderRadius: 5,
+                width: '90%',
               }}>
-              <View style={{alignItems: 'flex-end'}}>
-                <IconButton
-                  containerStyle={{
-                    boborderWidth: 2,
-                    borderRadius: 10,
-                    borderColor: COLORS.gray2,
-                  }}
-                  icon={icons.cross}
-                  iconStyle={{
-                    tintColor: COLORS.gray,
-                  }}
-                  onPress={() => setSuppliersModal(false)}
-                />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
+                <Text style={{fontSize: 25, color: COLORS.darkGray}}>
+                  Supplier
+                </Text>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity onPress={() => setSuppliersModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
                 <KeyboardAwareScrollView

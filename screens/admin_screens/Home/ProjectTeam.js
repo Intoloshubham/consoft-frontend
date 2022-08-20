@@ -73,7 +73,9 @@ const ProjectTeam = ({route}) => {
   // fetch project team
   const fetchProjectTeam = async () => {
     const team = await getProjectTeam(project_id);
-    setProjectTeam(team);
+    if (team.status === 200) {
+      setProjectTeam(team.data);
+    }
   };
 
   const addProjectTeam = async () => {
@@ -100,6 +102,7 @@ const ProjectTeam = ({route}) => {
   // post data
   const saveProjectTeamSubmit = async () => {
     const teamData = {
+      company_id: company_id,
       project_id: project_id,
       user_id: userValue,
     };
@@ -117,7 +120,7 @@ const ProjectTeam = ({route}) => {
   };
 
   const deleteTeamSubmit = async () => {
-    const res = await deleteProjectTeam(project_id, userId);
+    const res = await deleteProjectTeam(userId);
     if (res.status === STATUS.RES_SUCCESS) {
       fetchProjectTeam();
       setDeleteToast(true);
@@ -137,35 +140,28 @@ const ProjectTeam = ({route}) => {
 
   function renderTeamList() {
     const renderItem = ({item, index}) => (
-      <View>
-        {item.project_team.map((ele, i) => {
-          return (
-            <TouchableOpacity
-              key={i}
+      <View
+        style={{
+          flexDirection: 'row',
+        }}>
+        <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}</Text>
+        <View style={{flex: 1, marginLeft: SIZES.radius}}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text
               style={{
-                flexDirection: 'row',
-                paddingVertical: SIZES.base,
+                ...FONTS.h3,
+                color: COLORS.lightblue_900,
+                textTransform: 'capitalize',
               }}>
-              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
-                {i + 1}.
-              </Text>
-              <View style={{flex: 1, marginLeft: SIZES.radius}}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text
-                    style={{
-                      ...FONTS.h3,
-                      color: COLORS.lightblue_900,
-                      textTransform: 'capitalize',
-                    }}>
-                    Mr.{ele.user_name}
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    {/* <TouchableOpacity
+              Mr.{item.user_name}
+            </Text>
+            <View style={{flexDirection: 'row'}}>
+              {/* <TouchableOpacity
                       onPress={() => {
                         alert('edit name');
                       }}>
@@ -187,47 +183,49 @@ const ProjectTeam = ({route}) => {
                         />
                       </ImageBackground>
                     </TouchableOpacity> */}
-                    <TouchableOpacity
-                      onPress={() => {
-                        setUserId(ele.user_id);
-                        setDeleteConfirm(true);
-                      }}>
-                      <ImageBackground
-                        style={{
-                          backgroundColor: COLORS.rose_600,
-                          padding: 3,
-                          borderRadius: 2,
-                        }}>
-                        <Image
-                          source={icons.delete_icon}
-                          style={{
-                            width: 12,
-                            height: 12,
-                            tintColor: COLORS.white,
-                          }}
-                        />
-                      </ImageBackground>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <Text style={{...FONTS.body4, color: COLORS.darkGray}}>
-                  Designation - {item.designation}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+              <TouchableOpacity
+                onPress={() => {
+                  setUserId(item._id);
+                  setDeleteConfirm(true);
+                }}>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.rose_600,
+                    padding: 3,
+                    borderRadius: 2,
+                  }}>
+                  <Image
+                    source={icons.delete_icon}
+                    style={{
+                      width: 12,
+                      height: 12,
+                      tintColor: COLORS.white,
+                    }}
+                  />
+                </ImageBackground>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Text
+            style={{
+              ...FONTS.body4,
+              color: COLORS.darkGray,
+              textTransform: 'capitalize',
+            }}>
+            Designation - {item.user_role}
+          </Text>
+        </View>
       </View>
     );
     return (
       <View
         style={{
           marginBottom: SIZES.padding,
-          marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
+          marginHorizontal: SIZES.radius,
+          // padding: 20,
+          // borderRadius: 3,
+          // backgroundColor: COLORS.white,
+          // ...styles.shadow,
         }}>
         {/* <Text style={{...FONTS.h2, color: COLORS.darkGray}}>List</Text> */}
         <FlatList
@@ -271,30 +269,41 @@ const ProjectTeam = ({route}) => {
             <View
               style={{
                 position: 'absolute',
-                left: SIZES.padding,
                 width: '90%',
                 padding: SIZES.padding,
-                borderRadius: SIZES.radius,
+                borderRadius: 5,
                 backgroundColor: COLORS.white,
               }}>
               <View style={{}}>
                 {/* header */}
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 10,
+                  }}>
+                  <Text style={{fontSize: 25, color: COLORS.darkGray}}>
                     Project Team
                   </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setAddProjectTeamModal(false)}
-                  />
+                  <ImageBackground
+                    style={{
+                      backgroundColor: COLORS.white,
+                      padding: 2,
+                      elevation: 20,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => setAddProjectTeamModal(false)}>
+                      <Image
+                        source={icons.cross}
+                        style={{
+                          height: 25,
+                          width: 25,
+                          tintColor: COLORS.rose_600,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </ImageBackground>
                 </View>
                 <ScrollView>
                   <CustomDropdown
@@ -310,7 +319,7 @@ const ProjectTeam = ({route}) => {
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
-                    maxHeight={150}
+                    maxHeight={100}
                     zIndex={2000}
                     zIndexInverse={2000}
                     onChangeValue={value => {
@@ -332,7 +341,7 @@ const ProjectTeam = ({route}) => {
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
-                    maxHeight={100}
+                    maxHeight={80}
                     zIndex={1000}
                     zIndexInverse={3000}
                     closeAfterSelecting={true}
@@ -341,9 +350,9 @@ const ProjectTeam = ({route}) => {
                   <TextButton
                     label="Submit"
                     buttonContainerStyle={{
-                      height: 50,
+                      height: 45,
                       alignItems: 'center',
-                      marginTop: SIZES.padding * 2,
+                      marginTop: SIZES.padding * 1.5,
                       borderRadius: SIZES.radius,
                     }}
                     onPress={saveProjectTeamSubmit}
@@ -368,7 +377,7 @@ const ProjectTeam = ({route}) => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
