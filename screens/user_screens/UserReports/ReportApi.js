@@ -131,7 +131,7 @@ const get_stock_data = async () => {
 
 const get_manpower_report = async (project_id, user_id, curr_date) => {
     try {
-        const res =await fetch(`${process.env.API_URL}manpower-report/${project_id}/${project_id}/${curr_date}/`)
+        const res =await fetch(`${process.env.API_URL}manpower-report/${project_id}/${user_id}/${curr_date}/`)
         const data = await res.json();
         return data;
     } catch (error) {

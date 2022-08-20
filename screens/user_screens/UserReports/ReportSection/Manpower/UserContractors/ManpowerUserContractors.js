@@ -729,6 +729,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
 
   //create contractor member modal
   function createContractorMemberModal() {
+    console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 733 ~ createContractorMemberModal ~ get_manpower_report", manpowerReportData)
     return (
       <Modal
         animationType="slide"
@@ -1148,7 +1149,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
   // }
 
   const sub_body_section = (item, index) => {
-    
    return <View
       style={{
         flex: 1,
