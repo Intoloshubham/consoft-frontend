@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Image,
   Modal,
-  TouchableWithoutFeedback,
   ScrollView,
   ImageBackground,
   KeyboardAvoidingView,
@@ -52,6 +51,7 @@ const Contractors = ({route}) => {
   // get contractors
   const fetchContractors = async () => {
     let data = await getContractors();
+    // console.log(data)
     setContractors(data);
   };
 
@@ -186,7 +186,7 @@ const Contractors = ({route}) => {
         transparent={true}
         visible={showContractorsModal}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -197,25 +197,33 @@ const Contractors = ({route}) => {
             style={{
               width: '90%',
               padding: SIZES.padding,
-              borderRadius: SIZES.base,
+              borderRadius: 5,
               backgroundColor: COLORS.white,
             }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 10,
+              }}>
+              <Text style={{fontSize: 25, color: COLORS.darkGray}}>
                 Contractors
               </Text>
-              <IconButton
-                containerStyle={{
-                  boborderWidth: 2,
-                  borderRadius: 10,
-                  borderColor: COLORS.gray2,
-                }}
-                icon={icons.cross}
-                iconStyle={{
-                  tintColor: COLORS.gray,
-                }}
-                onPress={() => setShowContractorsModal(false)}
-              />
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
+                }}>
+                <TouchableOpacity
+                  onPress={() => setShowContractorsModal(false)}>
+                  <Image
+                    source={icons.cross}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
             <ScrollView>
               <FormInput
@@ -322,7 +330,7 @@ const Contractors = ({route}) => {
           marginBottom: SIZES.padding,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 5,
           backgroundColor: COLORS.white2,
           ...styles.shadow,
         }}>
@@ -339,7 +347,7 @@ const Contractors = ({route}) => {
                 style={{
                   width: '100%',
                   height: 1,
-                  backgroundColor: COLORS.lightGray1,
+                  backgroundColor: COLORS.gray2,
                   marginVertical: 5,
                 }}></View>
             );

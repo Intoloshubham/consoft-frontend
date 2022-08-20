@@ -109,7 +109,7 @@ const CompanyTeam = () => {
       email: email,
       mobile: mobile,
       company_id: company_data._id,
-      project_id: projectValue,
+      // project_id: projectValue,
     };
     let response = await postCompanyTeam(formData);
     if (response.status === 200) {
@@ -140,7 +140,7 @@ const CompanyTeam = () => {
     return (
       <Modal animationType="slide" transparent={true} visible={addTeamModal}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -152,7 +152,7 @@ const CompanyTeam = () => {
               position: 'absolute',
               backgroundColor: COLORS.white,
               padding: SIZES.padding,
-              borderRadius: SIZES.radius,
+              borderRadius: 5,
               width: '90%',
             }}>
             <View
@@ -160,20 +160,21 @@ const CompanyTeam = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                marginBottom: 10,
               }}>
-              <Text style={{fontSize: 20, color: COLORS.darkGray}}>
+              <Text style={{fontSize: 25, color: COLORS.darkGray}}>
                 New Team
               </Text>
               <ImageBackground
                 style={{
-                  backgroundColor: COLORS.darkGray,
-                  padding: 3,
-                  borderRadius: 3,
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
                 }}>
                 <TouchableOpacity onPress={() => setAddTeamModal(false)}>
                   <Image
                     source={icons.cross}
-                    style={{height: 12, width: 12, tintColor: COLORS.white}}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
                   />
                 </TouchableOpacity>
               </ImageBackground>
@@ -286,7 +287,7 @@ const CompanyTeam = () => {
                   </View>
                 }
               />
-              <CustomDropdown
+              {/* <CustomDropdown
                 placeholder="Assign to projects"
                 open={openProject}
                 value={projectValue}
@@ -300,7 +301,7 @@ const CompanyTeam = () => {
                 zIndex={3000}
                 maxHeight={150}
                 onOpen={onProjectOpen}
-              />
+              /> */}
               <TextButton
                 label="Save"
                 disabled={isEnableSubmit() ? false : true}

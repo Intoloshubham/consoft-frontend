@@ -20,8 +20,12 @@ import {
 } from '../../../controller/LeavesController';
 import {CustomToast} from '../../../Components';
 import {getUsers} from '../../../controller/UserRoleController';
+import {useSelector} from 'react-redux';
 
 const Profile = () => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+
   const [selectedStartDate, setSelectedStartDate] = React.useState(null);
   const [selectedEndDate, setSelectedEndDate] = React.useState(null);
   const [leaves, setLeaves] = React.useState([]);
@@ -67,8 +71,10 @@ const Profile = () => {
   };
 
   const getusers = async () => {
-    let response = await getUsers();
-    setUsers(response);
+    let response = await getUsers(company_id);
+    if (response.status === 200) {
+      setUsers(response.data);
+    }
   };
 
   const [userId, setUserId] = React.useState('');
@@ -406,7 +412,7 @@ const Profile = () => {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <View>
       {renderUserLeavesList()}
       {renderShowUserDetails()}
       {renderfilterModal()}
@@ -417,7 +423,7 @@ const Profile = () => {
         title="Approved"
         message="Approved Successfully..."
       />
-    </ScrollView>
+    </View>
   );
 };
 

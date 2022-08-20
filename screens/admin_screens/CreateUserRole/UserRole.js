@@ -77,7 +77,7 @@ const UserRole = () => {
     return (
       <Modal animationType="slide" transparent={true} visible={createUserModal}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -88,7 +88,7 @@ const UserRole = () => {
             style={{
               width: '90%',
               padding: SIZES.padding,
-              borderRadius: SIZES.base,
+              borderRadius: 5,
               backgroundColor: COLORS.white,
             }}>
             <View
@@ -96,18 +96,21 @@ const UserRole = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                marginBottom: 10,
               }}>
-              <Text style={{fontSize: 20, color: COLORS.darkGray}}></Text>
+              <Text style={{fontSize: 25, color: COLORS.darkGray}}>
+                User Role
+              </Text>
               <ImageBackground
                 style={{
-                  backgroundColor: COLORS.darkGray,
-                  padding: 3,
-                  borderRadius: 3,
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
                 }}>
                 <TouchableOpacity onPress={() => setCreateUserModal(false)}>
                   <Image
                     source={icons.cross}
-                    style={{height: 12, width: 12, tintColor: COLORS.white}}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
                   />
                 </TouchableOpacity>
               </ImageBackground>

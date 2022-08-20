@@ -264,7 +264,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
               padding: SIZES.padding,
               borderRadius: SIZES.base,
               backgroundColor: COLORS.white,
-              maxHeight: 400,
+              maxHeight: 500,
             }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
@@ -283,25 +283,25 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 onPress={onClose}
               />
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <CustomDropdown
-                placeholder="Select"
-                open={openUserRole}
-                value={userRoleValue}
-                items={userRoles}
-                setOpen={setOpenUserRole}
-                setValue={setUserRoleValue}
-                setItems={setUserRoles}
-                listParentLabelStyle={{
-                  color: COLORS.white,
-                }}
-                onChangeValue={value => getUserByRoleId(value)}
-                // onSelectItem={value => console.log(value)}
-                onOpen={onRoleOpen}
-                zIndex={2000}
-                zIndexInverse={1000}
-                // maxHeight={150}
-              />
+            <CustomDropdown
+              placeholder="Select"
+              open={openUserRole}
+              value={userRoleValue}
+              items={userRoles}
+              setOpen={setOpenUserRole}
+              setValue={setUserRoleValue}
+              setItems={setUserRoles}
+              listParentLabelStyle={{
+                color: COLORS.white,
+              }}
+              onChangeValue={value => getUserByRoleId(value)}
+              // onSelectItem={value => console.log(value)}
+              onOpen={onRoleOpen}
+              zIndex={2000}
+              zIndexInverse={1000}
+              maxHeight={150}
+            />
+            <View style={{marginTop: 30, marginBottom: 25}}>
               <CustomDropdown
                 placeholder="Select"
                 open={openUsers}
@@ -317,8 +317,12 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 zIndex={1000}
                 zIndexInverse={2000}
                 onOpen={onUserOpen}
+                maxHeight={150}
               />
-
+            </View>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{marginVertical: 5}}>
               <View
                 style={{
                   // flexDirection: 'row',
@@ -391,7 +395,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 ))}
                 {/* </ScrollView> */}
               </View>
-              <View style={{marginTop: SIZES.radius}}>{renderStartDate()}</View>
+
               {/* <Text
               style={{
                 marginTop: SIZES.radius,
@@ -439,10 +443,11 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 </TouchableOpacity>
               </View> */}
             </ScrollView>
+            <View style={{marginTop: SIZES.radius}}>{renderStartDate()}</View>
             <TextButton
               label="Submit"
               buttonContainerStyle={{
-                height: 50,
+                height: 45,
                 alignItems: 'center',
                 marginTop: SIZES.padding * 1.5,
                 borderRadius: SIZES.radius,

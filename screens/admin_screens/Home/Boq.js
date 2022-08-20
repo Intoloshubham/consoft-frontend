@@ -385,7 +385,7 @@ const Boq = ({route}) => {
         </Text>
         <Text
           style={{
-            flex: 2.2,
+            flex: 2,
             ...FONTS.h3,
             color: COLORS.darkGray,
           }}>
@@ -404,7 +404,7 @@ const Boq = ({route}) => {
         <Text
           style={{
             ...FONTS.h3,
-            flex: 0.8,
+            flex: 1,
             color: COLORS.darkGray,
             textAlign: 'right',
           }}>
@@ -437,11 +437,11 @@ const Boq = ({route}) => {
     return (
       <View
         style={{
-          marginHorizontal: SIZES.padding,
-          padding: 15,
-          borderRadius: 3,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
+          marginHorizontal: SIZES.radius,
+          padding: 5,
+          // borderRadius: 3,
+          // backgroundColor: COLORS.white,
+          // ...styles.shadow,
         }}>
         <FlatList
           data={boqItems}
@@ -478,7 +478,7 @@ const Boq = ({route}) => {
                 </Text>
                 <Text
                   style={{
-                    flex: 2.2,
+                    flex: 2,
                     ...FONTS.h3,
                     color: COLORS.black,
                     // fontWeight: 'bold',
@@ -498,7 +498,7 @@ const Boq = ({route}) => {
                 <Text
                   style={{
                     ...FONTS.h3,
-                    flex: 0.8,
+                    flex: 1,
                     color: COLORS.black,
                     textAlign: 'right',
                     // fontWeight: 'bold',
@@ -513,7 +513,7 @@ const Boq = ({route}) => {
                     textAlign: 'right',
                     // fontWeight: 'bold',
                   }}>
-                  Update{'\n'}/Delete
+                  Edit{'\n'}/Delete
                 </Text>
               </View>
               <View
@@ -537,7 +537,7 @@ const Boq = ({route}) => {
         transparent={true}
         visible={addBoqNewItemModal}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -548,7 +548,7 @@ const Boq = ({route}) => {
             style={{
               width: '92%',
               padding: SIZES.padding,
-              borderRadius: SIZES.base,
+              borderRadius: 5,
               backgroundColor: COLORS.white,
             }}>
             <View
@@ -556,28 +556,30 @@ const Boq = ({route}) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                marginBottom: 10,
               }}>
               <Text
                 style={{
-                  ...FONTS.h3,
-                  fontSize: 20,
+                  fontSize: 25,
+                  color: COLORS.darkGray,
                 }}>
                 Add items
               </Text>
-              <IconButton
-                containerStyle={{
-                  boborderWidth: 2,
-                  borderRadius: 10,
-                  borderColor: COLORS.gray2,
-                }}
-                icon={icons.cross}
-                iconStyle={{
-                  tintColor: COLORS.gray,
-                }}
-                onPress={() => setAddBoqNewItemModal(false)}
-              />
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
+                }}>
+                <TouchableOpacity onPress={() => setAddBoqNewItemModal(false)}>
+                  <Image
+                    source={icons.cross}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
-            <View style={{marginTop: SIZES.radius}}>
+            <View style={{}}>
               <FormInput
                 label="Item Name"
                 keyboardType="default"
@@ -618,7 +620,7 @@ const Boq = ({route}) => {
                 listParentLabelStyle={{
                   color: COLORS.white,
                 }}
-                maxHeight={150}
+                maxHeight={120}
               />
               <TextButton
                 label="Submit"
@@ -642,7 +644,7 @@ const Boq = ({route}) => {
     return (
       <Modal animationType="slide" transparent={true} visible={addBoqModal}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -653,7 +655,7 @@ const Boq = ({route}) => {
             style={{
               width: '90%',
               padding: SIZES.padding,
-              borderRadius: SIZES.base,
+              borderRadius: 5,
               backgroundColor: COLORS.white,
             }}>
             <View
@@ -661,23 +663,23 @@ const Boq = ({route}) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                marginBottom: 20,
               }}>
               <Text
                 style={{
-                  ...FONTS.h3,
-                  fontSize: 20,
+                  fontSize: 25,
                 }}>
                 BOQ
               </Text>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <TouchableOpacity
                   onPress={addItemModal}
                   style={{
                     backgroundColor: COLORS.lightblue_700,
                     paddingHorizontal: 4,
                     borderRadius: 3,
-                    height: 20,
-                    right: 5,
+                    height: 25,
+                    right: 10,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
@@ -690,24 +692,26 @@ const Boq = ({route}) => {
                     Add item
                   </Text>
                 </TouchableOpacity>
-                <IconButton
-                  containerStyle={{
-                    boborderWidth: 2,
-                    borderRadius: 10,
-                    borderColor: COLORS.gray2,
-                  }}
-                  icon={icons.cross}
-                  iconStyle={{
-                    tintColor: COLORS.gray,
-                  }}
-                  onPress={() => setAddBoqModal(false)}
-                />
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity onPress={() => setAddBoqModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
               </View>
             </View>
-            <View
-              style={{
-                marginTop: SIZES.padding,
-              }}>
+            <View style={{}}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -750,6 +754,7 @@ const Boq = ({route}) => {
                     onSelectItem={value => OnSelectHandler(value.value)}
                     autoScroll={false}
                     onOpen={onBoqListOpen}
+                    maxHeight={120}
                     // searchable={true}
                     // searchPlaceholder="Search..."
                     // searchContainerStyle={{
@@ -810,7 +815,7 @@ const Boq = ({route}) => {
                 label="Submit"
                 buttonContainerStyle={{
                   height: 45,
-                  marginTop: SIZES.padding * 1.5,
+                  marginTop: SIZES.padding,
                   alignItems: 'center',
                   borderRadius: SIZES.radius,
                   backgroundColor: COLORS.lightblue_700,
@@ -836,7 +841,7 @@ const Boq = ({route}) => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
