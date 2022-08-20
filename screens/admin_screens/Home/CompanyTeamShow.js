@@ -173,7 +173,7 @@ const ProjectCompanyShow = () => {
                 <TouchableOpacity onPress={() => setAddTeamModal(false)}>
                   <Image
                     source={icons.cross}
-                    style={{height: 12, width: 12, tintColor: COLORS.white}}
+                    style={{height: 20, width: 20, tintColor: COLORS.white}}
                   />
                 </TouchableOpacity>
               </ImageBackground>

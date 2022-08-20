@@ -624,7 +624,7 @@ const Boq = ({route}) => {
                 label="Submit"
                 buttonContainerStyle={{
                   height: 45,
-                  marginTop: SIZES.padding * 1.5,
+                  marginTop: SIZES.padding * 2.5,
                   alignItems: 'center',
                   borderRadius: SIZES.radius,
                   backgroundColor: COLORS.lightblue_700,

@@ -73,7 +73,8 @@ const ProjectTeam = ({route}) => {
   // fetch project team
   const fetchProjectTeam = async () => {
     const team = await getProjectTeam(project_id);
-    if (team.status === STATUS.RES_SUCCESS) {
+    // console.log(team)
+    if (team.status === 200) {
       setProjectTeam(team.data);
     }
   };
