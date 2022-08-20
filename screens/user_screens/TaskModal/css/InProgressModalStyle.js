@@ -4,7 +4,8 @@ import { FONTS, icons, SIZES, COLORS } from '../../../../constants'
 export default StyleSheet.create({
     modal_container: {    
         flex: 1,      
-        backgroundColor: COLORS.blue,        
+        // backgroundColor: COLORS.blue,  
+        backgroundColor:"white"      
    
     },
     circle: {
@@ -42,9 +43,9 @@ export default StyleSheet.create({
         textAlign: "center"
     },
     act_tsk_stat_view: {
-        backgroundColor: "#0000",
-        margin: 5,
-        bottom: 25
+         
+        backgroundColor: COLORS.lightblue_500,
+
     },
 
     act_tsk_list_view: {
