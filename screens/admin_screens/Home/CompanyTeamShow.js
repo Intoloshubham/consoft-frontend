@@ -25,7 +25,7 @@ import {postCompanyTeam} from '../../../controller/CompanyController';
 import {getUserRole, getUsers} from '../../../controller/UserRoleController';
 import {getProjects} from '../../../controller/ProjectController';
 
-const ProjectCompanyShow = () => {
+const CompanyTeamShow = () => {
   const [addTeamModal, setAddTeamModal] = React.useState(false);
 
   const company_data = useSelector(state => state.company);
@@ -109,7 +109,7 @@ const ProjectCompanyShow = () => {
       email: email,
       mobile: mobile,
       company_id: company_data._id,
-      project_id: projectValue,
+      // project_id: projectValue,
     };
     let response = await postCompanyTeam(formData);
     if (response.status === 200) {
@@ -160,8 +160,9 @@ const ProjectCompanyShow = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                marginBottom: 10,
               }}>
-              <Text style={{fontSize: 20, color: COLORS.darkGray}}>
+              <Text style={{fontSize: 25, color: COLORS.darkGray}}>
                 New Team
               </Text>
               <ImageBackground
@@ -286,7 +287,7 @@ const ProjectCompanyShow = () => {
                   </View>
                 }
               />
-              <CustomDropdown
+              {/* <CustomDropdown
                 placeholder="Assign to projects"
                 open={openProject}
                 value={projectValue}
@@ -300,14 +301,18 @@ const ProjectCompanyShow = () => {
                 zIndex={3000}
                 maxHeight={150}
                 onOpen={onProjectOpen}
-              />
+              /> */}
               <TextButton
                 label="Save"
+                disabled={isEnableSubmit() ? false : true}
                 buttonContainerStyle={{
                   height: 45,
                   alignItems: 'center',
                   marginTop: SIZES.padding,
                   borderRadius: SIZES.base,
+                  backgroundColor: isEnableSubmit()
+                    ? COLORS.lightblue_700
+                    : COLORS.transparentPrimary,
                 }}
                 onPress={postTeam}
               />
@@ -355,16 +360,16 @@ const ProjectCompanyShow = () => {
       <View
         style={{
           marginTop: SIZES.radius,
-          marginHorizontal: SIZES.radius,
-          // backgroundColor: COLORS.lightblue_50,
-          // padding: 20,
-          // ...styles.shadow,
+          marginHorizontal: SIZES.padding,
+          backgroundColor: COLORS.lightblue_50,
+          padding: 20,
+          ...styles.shadow,
         }}>
         <FlatList
           data={companyTeam}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
-          maxHeight={520}
+          maxHeight={450}
           scrollEnabled={true}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
@@ -395,7 +400,7 @@ const ProjectCompanyShow = () => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.radius,
+          marginHorizontal: SIZES.padding,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
@@ -428,4 +433,4 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 });
-export default ProjectCompanyShow;
+export default CompanyTeamShow;

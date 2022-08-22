@@ -1,18 +1,7 @@
 import React, {useState} from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Modal,
-  ImageBackground,
-  Image,
-} from 'react-native';
+import {Alert, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Agenda} from 'react-native-calendars';
-import {COLORS, icons, images, FONTS, SIZES} from '../../../constants';
+import {COLORS} from '../../../constants';
 
 const Tasks = () => {
   const [appointments, setAppointments] = useState({
@@ -24,9 +13,10 @@ const Tasks = () => {
         type: 'Follow Up',
       },
     ],
+
     '2022-08-23': [
       {
-        name: 'Shubham Sahu',
+        name: 'Aman Tiwari',
         start: '10:00 AM',
         end: '11:00 AM',
         type: 'Accute',
@@ -40,7 +30,7 @@ const Tasks = () => {
         style={[styles.item, {height: item.height}]}
         onPress={() => Alert.alert(item.name)}>
         <Text style={styles.timing}>
-          {item.start} - {item.end}
+          {item.start} {' - '} {item.end}
         </Text>
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.type}>{item.type}</Text>
@@ -49,7 +39,7 @@ const Tasks = () => {
   };
 
   return (
-    <View style={{flex: 1, marginBottom: 100}}>
+    <View style={{flex: 1, margin: 20}}>
       <Agenda
         items={appointments}
         renderItem={item => {
@@ -66,6 +56,8 @@ const Tasks = () => {
           agendaKnobColor: '#03A9F4',
         }}
         markingType={'multi-dot'}
+        pastScrollRange={7}
+        futureScrollRange={16}
       />
     </View>
   );
@@ -79,19 +71,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   item: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.darkGray,
     flex: 1,
     borderRadius: 5,
-    padding: 10,
+    padding: 15,
     marginRight: 10,
-    marginTop: 17,
+    marginTop: 25,
   },
   name: {
+    color: 'white',
     fontSize: 18,
     fontWeight: '600',
   },
   timing: {
-    color: COLORS.darkGray,
+    color: COLORS.white,
   },
   type: {
     color: '#03A9F4',
