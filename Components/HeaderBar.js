@@ -8,8 +8,8 @@ const HeaderBar = ({right, title}) => {
   return (
     <View
       style={{
-        paddingHorizontal: SIZES.radius,
         flexDirection: 'row',
+        paddingHorizontal: SIZES.radius,
         paddingVertical: SIZES.padding,
       }}>
       <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
