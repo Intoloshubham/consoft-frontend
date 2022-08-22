@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,9 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  LogBox,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {ProfileValue, LineDivider} from '../../../Components';
 import {useSelector, useDispatch} from 'react-redux';
@@ -20,16 +18,12 @@ const Account = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = React.useState(true);
 
   const logout = () => {
     dispatch(companyLogout());
     navigation.navigate('Login');
   };
-
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
@@ -127,7 +121,7 @@ const Account = () => {
         }}>
         <ProfileValue
           icon={icons.project_type}
-          value="Project Categories & Types"
+          value="Project Category & Types"
           image={icons.right_arr}
           onPress={() => navigation.navigate('CategoryandType')}
         />
@@ -153,7 +147,7 @@ const Account = () => {
           onPress={toggleExpanded}
         />
         <Collapsible collapsed={collapsed} duration={300}>
-          <View style={{marginLeft: SIZES.padding * 1.8}}>
+          <View style={{marginLeft: SIZES.padding * 1.5}}>
             <ProfileValue
               icon={icons.itemss}
               value="Items"
@@ -174,11 +168,8 @@ const Account = () => {
               image={icons.right_arr}
               onPress={() => navigation.navigate('ManageStock')}
             />
-          </View>
-        </Collapsible>
-        <LineDivider />
-        <Collapsible collapsed={collapsed} duration={300}>
-          <View style={{marginLeft: SIZES.padding * 1.8}}>
+            <LineDivider />
+
             <ProfileValue
               icon={icons.itemss}
               value="Checklist"

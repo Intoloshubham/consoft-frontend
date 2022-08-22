@@ -23,7 +23,7 @@ import {
 import {getUserRole} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
 
-const AssignedWorks = () => {
+const AssignedWorks = ({data,AssignWorkfunction}) => {
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
   // console.log(companyData._id)
@@ -34,13 +34,13 @@ const AssignedWorks = () => {
   const [items, setItems] = React.useState([]);
 
   //get assign works
-  const fetchAssignWorks = async () => {
-    const response = await getAssignWorks(company_id);
-    // console.log(response)
-    if (response.status === 200) {
-      setAssignWorkData(response.data);
-    }
-  };
+  // const fetchAssignWorks = async () => {
+  //   const response = await getAssignWorks(company_id);
+  //   // console.log(response)
+  //   if (response.status === 200) {
+  //     setAssignWorkData(response.data);
+  //   }
+  // };
 
   //get user role
   const fetchUserRole = async () => {
@@ -61,7 +61,8 @@ const AssignedWorks = () => {
   const fetchAssignWorkDelete = async () => {
     const response = await deleteAssignWorks(workId);
     if (response.status === 200) {
-      fetchAssignWorks();
+      // fetchAssignWorks();
+      AssignWorkfunction()
       setDeleteConfirm(false);
     }
   };
@@ -72,9 +73,9 @@ const AssignedWorks = () => {
   //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   // }, []);
 
-  React.useMemo(() => {
-    fetchAssignWorks();
-  }, []);
+  // React.useMemo(() => {
+  //   fetchAssignWorks();
+  // }, []);
 
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {
@@ -357,7 +358,7 @@ const AssignedWorks = () => {
 
     return (
       <SwipeListView
-        data={assignWorkData}
+        data={data}
         keyExtractor={item => `${item._id}`}
         contentContainerStyle={{
           marginTop: SIZES.radius,

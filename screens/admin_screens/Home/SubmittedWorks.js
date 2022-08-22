@@ -18,7 +18,7 @@ import {getSubmitWorks} from '../../../controller/AssignWorkController';
 import {verifySubmitWorks} from '../../../controller/VerifyController';
 import {revertSubmitWorks} from '../../../controller/RevertController';
 
-const SubmittedWorks = () => {
+const SubmittedWorks = ({data, Submitfunction}) => {
   //COMPANY DATA
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
@@ -29,18 +29,19 @@ const SubmittedWorks = () => {
 
   //=========================== Apis ==========================================
 
-  const fetchSubmitWork = async () => {
-    const response = await getSubmitWorks(company_id);
-    if (response.status === 200) {
-      setSubmitWork(response.data);
-    }
-  };
+  // const fetchSubmitWork = async () => {
+  //   const response = await getSubmitWorks(company_id);
+  //   if (response.status === 200) {
+  //     setSubmitWork(response.data);
+  //   }
+  // };
 
   // verify works
   const verifyHandler = async work_Id => {
     let data = await verifySubmitWorks(work_Id);
     if (data.status === 200) {
-      fetchSubmitWork();
+      // fetchSubmitWork();
+      Submitfunction();
     }
   };
 
@@ -52,7 +53,8 @@ const SubmittedWorks = () => {
     const formData = {revert_msg: revertMsg};
     let data = await revertSubmitWorks(revertId, formData);
     if (data.status === 200) {
-      fetchSubmitWork();
+      // fetchSubmitWork();
+      Submitfunction()
       setTimeout(() => {
         setRevertModal(false);
       }, 500);
@@ -64,10 +66,10 @@ const SubmittedWorks = () => {
   //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   // }, []);
 
-  React.useMemo(() => {
-    fetchSubmitWork();
-    // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
+  // React.useMemo(() => {
+  //   fetchSubmitWork();
+  //   // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // }, []);
 
   function renderRevertModal() {
     return (
@@ -320,7 +322,7 @@ const SubmittedWorks = () => {
     return (
       <FlatList
         contentContainerStyle={{}}
-        data={submitWork}
+        data={data}
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}

@@ -194,7 +194,7 @@ const Profile = () => {
             data={leaves}
             keyExtractor={item => `${item._id}`}
             renderItem={renderItem}
-            maxHeight={310}
+            maxHeight={160}
             scrollEnabled={true}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => {
