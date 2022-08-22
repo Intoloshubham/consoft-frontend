@@ -129,7 +129,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                     horizontal={true}
                     contentContainerStyle={{ width: '100%', height: '100%' }}>
                     <FlatList
-                        data={ProjectTeamName ? ProjectTeamName : null}
+                        data={ProjectTeamName ? ProjectTeamName : alert('Currently no team members are there!!')}
                         horizontal={false}
                         scrollEnabled={true}
                         nestedScrollEnabled={true}
