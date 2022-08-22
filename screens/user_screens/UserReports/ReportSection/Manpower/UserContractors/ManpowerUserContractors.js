@@ -205,15 +205,20 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
     let manpowerCategories = [];
     let members = [];
 
-    let temp = getNewCategory.map((ele, key) => {
+     getNewCategory.map((ele, key) => {
+      // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 209 ~ getNewCategory.map ~ ele", ele)
       addFieldInput.map((sub_ele) => {
+      // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 210 ~ addFieldInput.map ~ sub_ele", sub_ele)
+        
         if (ele._id === sub_ele.manpower_category_id) {
+          // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 211 ~ addFieldInput.map ~ sub_ele", sub_ele)
           if (sub_ele.manpower_member > 0) {
             manpowerCategories.push({ manpower_category_id: ele._id, members: [{ manpower_sub_category_id: sub_ele._id, manpower_member: sub_ele.manpower_member }] });
           }
         }
       })
     })
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 213 ~ addFieldInput.map ~ manpowerCategories", manpowerCategories)
 
     let result = manpowerCategories.reduce((acc, ele) => {
       let filtered = acc.filter(el => el.manpower_category_id == ele.manpower_category_id)
@@ -236,6 +241,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
   //for inserting manpower data
   const InsertManpowerReport = async () => {
     const temp_data = postData();
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 239 ~ InsertManpowerReport ~ temp_data", temp_data)
     let data = {
       company_id: companydata.company_id,
       project_id: Main_drp_pro_value,
@@ -243,13 +249,12 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
       contractor_id: contractorId,
       manpowerCategories: temp_data
 
-
-
     }
-    console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 249 ~ InsertManpowerReport ~ data", data)
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 247 ~ InsertManpowerReport ~ data", data)
 
 
     let res = await insert_manpower_report(data, CONST_FIELD);
+
 
     if (res.status == 200) {
       setTimeout(() => {
@@ -276,6 +281,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
     const res = await insert_new_sub_category(data);
     if (isMount && res.status == 200) {
       GetNewSubCategories();
+      GetNewCategories();
       setSubmitToast(true)
       setSaveNewSubCategoryStatus(true);
       setTimeout(() => {
@@ -729,6 +735,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
 
   //create contractor member modal
   function createContractorMemberModal() {
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 733 ~ createContractorMemberModal ~ get_manpower_report", manpowerReportData)
     return (
       <Modal
         animationType="slide"
@@ -753,6 +760,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
                 position: 'absolute',
                 left: 0,
                 top: 100,
+                right: 0,
                 width: '100%',
                 height: '100%',
                 padding: SIZES.padding,
@@ -760,254 +768,264 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
                 borderTopLeftRadius: SIZES.radius,
                 backgroundColor: COLORS.white,
               }}>
-              <View style={{}}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ flex: 1, ...FONTS.h2, color: COLORS.darkGray }}>
-                    Add Category and Members
-                  </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ flex: 1, ...FONTS.h2, color: COLORS.darkGray }}>
+                  Add Category and Members
+                </Text>
+                <IconButton
+                  containerStyle={{
+                    boborderWidth: 2,
+                    borderRadius: 10,
+                    borderColor: COLORS.gray2,
+                  }}
+                  icon={icons.cross}
+                  iconStyle={{
+                    tintColor: COLORS.gray,
+                  }}
+                  onPress={() => {
+                    setAddConMemberReportModal(false);
+                    setDisplayConDetails(false);
+                    // addFieldInput ? addFieldInput.splice(0, addFieldInput.length) : null;
+                  }}
+                />
+              </View>
+
+              <KeyboardAvoidingView
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  marginTop: SIZES.padding,
+                  // backgroundC
+                  padding: 5,
+                }}>
+                <View style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingRight: 88
+                }}>
+                  <TextButton
+                    label="Add Category"
+                    buttonContainerStyle={{
+                      height: 33,
+                      alignItems: 'center',
+                      width: 110,
+                      paddingHorizontal: 0,
+                      marginTop: SIZES.padding,
+                      borderRadius: SIZES.radius * 0.5,
+                      backgroundColor: COLORS.lightblue_700
                     }}
                     onPress={() => {
-                      setAddConMemberReportModal(false);
-                      setDisplayConDetails(false);
-                      // addFieldInput ? addFieldInput.splice(0, addFieldInput.length) : null;
+                      setAddCategoryModal(true)
+                    }
+                    }
+                  />
+                  <TextButton
+                    label="Add Sub Category"
+                    buttonContainerStyle={{
+                      height: 33,
+                      alignItems: 'center',
+                      width: 140,
+                      paddingHorizontal: 5,
+                      marginTop: SIZES.padding,
+                      borderRadius: SIZES.radius * 0.5,
+                      backgroundColor: COLORS.lightblue_700
                     }}
+                    onPress={() => {
+                      // filterCategoryByContId();
+                      setAddSubCatetoryModal(true)
+                    }
+                    }
                   />
                 </View>
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{
-                    paddingBottom: 250,
+                <View style={{ marginBottom: 15, width: "100%" }}>
+                  <Dropdown
+                    style={[
+                      cont_Project_list_drop,
+                      proListIsFocus &&
+                      {
+                        borderBottomColor: COLORS.lightGray1,
+                        borderTopColor: COLORS.lightGray1,
+                        width: 300,
+                        justifyContent: "center",
+
+                      },
+                    ]}
+                    placeholderStyle={{ fontSize: 12, color: COLORS.darkGray, }
+                    }
+                    selectedTextStyle={{ color: COLORS.gray, fontSize: 15 }
+                    }
+
+                    containerStyle={{ width: 320, borderRadius: 5, justifyContent: "center" }}
+                    inputSearchStyle={{
+                      color: COLORS.gray, height: 35, padding: -2,
+                      borderRadius: 5, fontSize: 13
+
+                    }}
+                    iconStyle={{
+                      height: 28
+                    }}
+                    // data={getNewCategory ? getNewCategory : null}
+                    data={filterNewCategory ? filterNewCategory : null}
+                    search
+                    maxHeight={200}
+                    labelField="manpower_category"
+                    valueField="_id"
+                    placeholder={'Select Category'}
+                    searchPlaceholder="Search..."
+                    value={"_id"}
+                    onChange={item => {
+                      GetNewSubCategories(item._id);
+                      setManpowerMainCategoryId(item._id);
+                      setDisplayConDetails(true);
+
+
+                    }}
+
+                  />
+                </View>
+                <View style={{
+                  height: "100%",
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "flex-start"
+                }}>
+
+                  {add_category_modal()}
+                  {add_sub_category_modal()}
+
+                  <ScrollView style={{
+                    // backgroundColor: "orange",
+                    maxHeight: 370,
+                    flexWrap: "wrap",
+                    alignSelf: "center",
+
                   }}>
-                  <View
-                    style={{
-                      flex: 1,
-                      marginTop: SIZES.padding,
-                      paddingVertical: 5
-
-                    }}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", paddingRight: 88 }}>
-                      <TextButton
-                        label="Add Category"
-                        buttonContainerStyle={{
-                          height: 33,
-                          alignItems: 'center',
-                          width: 110,
-                          paddingHorizontal: 0,
-                          marginTop: SIZES.padding,
-                          borderRadius: SIZES.radius * 0.5,
-                          backgroundColor: COLORS.lightblue_700
-                        }}
-                        onPress={() => {
-                          setAddCategoryModal(true)
-                        }
-                        }
-                      />
-                      <TextButton
-                        label="Add Sub Category"
-                        buttonContainerStyle={{
-                          height: 33,
-                          alignItems: 'center',
-                          width: 140,
-                          paddingHorizontal: 5,
-                          marginTop: SIZES.padding,
-                          borderRadius: SIZES.radius * 0.5,
-                          backgroundColor: COLORS.lightblue_700
-                        }}
-                        onPress={() => {
-                          // filterCategoryByContId();
-                          setAddSubCatetoryModal(true)
-                        }
-                        }
-                      />
-                    </View>
-
-
-                    <View style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      flexWrap: "wrap",
-                      alignItems: "center"
-                    }}>
-                      <View>
-                        <Dropdown
-                          style={[
-                            cont_Project_list_drop,
-                            proListIsFocus &&
-                            {
-                              borderBottomColor: COLORS.lightGray1,
-                              borderTopColor: COLORS.lightGray1,
-                              width: 355,
-                              justifyContent: "center",
-
-                            },
-                          ]}
-                          placeholderStyle={{ fontSize: 16, color: COLORS.darkGray, }
-                          }
-                          selectedTextStyle={{ color: COLORS.gray }
-                          }
-
-                          containerStyle={{ width: 354, borderRadius: 5, justifyContent: "center" }}
-                          inputSearchStyle={{
-                            color: COLORS.gray, height: 40, borderRadius: 5,
-                          }}
-                          iconStyle={{
-                            height: 28
-                          }}
-                          // data={getNewCategory ? getNewCategory : null}
-                          data={filterNewCategory ? filterNewCategory : null}
-                          search
-                          maxHeight={200}
-                          labelField="manpower_category"
-                          valueField="_id"
-                          placeholder={'Select Category'}
-                          searchPlaceholder="Search..."
-                          value={"_id"}
-                          onChange={item => {
-                            GetNewSubCategories(item._id);
-                            setManpowerMainCategoryId(item._id);
-                            setDisplayConDetails(true);
-
-
-                          }}
-
-                        />
-                      </View>
-
-                      {add_category_modal()}
-                      {add_sub_category_modal()}
-
-                      <View>
-                        {
-                          addFieldInput ? addFieldInput.map((memberInput, index) => {
-                            return (manpowerMainCategoryId == memberInput.manpower_category_id && displayConDetails ?
-                              <ScrollView key={index}>
-                                <View key={index} style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-                                  <FormInput
-                                    placeholder="Name"
-                                    containerStyle={{ width: 200, left: 0 }}
-                                    onChange={text => {
-                                      __memberName(text, index);
-                                      utils.validateText(text, setMemberErrorMsg);
-                                      setMemberName(text);
-                                    }}
-                                    value={memberInput.manpower_sub_category}
-                                    errorMsg={memberErrorMsg}
-                                    appendComponent={
-                                      <View style={{ justifyContent: 'center' }}>
-                                        <Image
-                                          source={
-                                            membername == '' || (membername != '' && memberErrorMsg == '')
-                                              ? icons.correct
-                                              : icons.cancel
-                                          }
-                                          style={{
-                                            height: 20,
-                                            width: 20,
-                                            tintColor:
-                                              membername == ''
-                                                ? COLORS.gray
-                                                : membername != '' && memberErrorMsg == ''
-                                                  ? COLORS.green
-                                                  : COLORS.red,
-                                          }}
-                                        />
-                                      </View>
-                                    }
-                                  />
-                                  <FormInput
-                                    placeholder="Count"
-                                    containerStyle={{ width: 102 }}
-                                    inputStyle={{ height: 40, width: 30, marginLeft: -12 }}
-                                    keyboardType="numeric"
-                                    onChange={text => {
-                                      __memberCount(text, index);
-                                      utils.validateNumber(text, setMemberCountErrorMsg)
-                                      setMemberCount(text);
-                                    }}
-                                    value={memberInput.manpower_member}
-                                    errorMsg={memberCountErrorMsg}
-                                    appendComponent={
-                                      <View style={{ justifyContent: 'center' }}>
-                                        <Image
-                                          source={
-                                            memberCount == '' || (memberCount != '' && memberCountErrorMsg == '')
-                                              ? icons.correct
-                                              : icons.cancel
-                                          }
-                                          style={{
-                                            height: 20,
-                                            width: 20,
-                                            tintColor:
-                                              memberCount == ''
-                                                ? COLORS.gray
-                                                : memberCount != '' && memberCountErrorMsg == ''
-                                                  ? COLORS.green
-                                                  : COLORS.red,
-                                          }}
-                                        />
-                                      </View>
-                                    }
-                                  />
-                                  <View style={{ paddingTop: 35 }}>
-                                    <TouchableOpacity
-                                      style={{ alignSelf: "center" }}
-                                      onPress={() => deleteMemberHandler(index)}>
-                                      <Image
-                                        source={icons.delete_icon}
-                                        style={{
-                                          width: 20,
-                                          height: 20,
-                                          tintColor: COLORS.red,
-                                        }}
-                                      />
-                                    </TouchableOpacity>
+                    {
+                      addFieldInput ? addFieldInput.map((memberInput, index) => {
+                        return (manpowerMainCategoryId == memberInput.manpower_category_id && displayConDetails ?
+                          <View
+                            style={{
+                              flex: 1,
+                              alignSelf: "center",
+                              justifyContent: "space-between"
+                            }}
+                            key={index}>
+                            <View key={index} style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                              <FormInput
+                                placeholder="Name"
+                                containerStyle={{ width: 200, left: 0 }}
+                                onChange={text => {
+                                  __memberName(text, index);
+                                  utils.validateText(text, setMemberErrorMsg);
+                                  setMemberName(text);
+                                }}
+                                value={memberInput.manpower_sub_category}
+                                errorMsg={memberErrorMsg}
+                                appendComponent={
+                                  <View style={{ justifyContent: 'center' }}>
+                                    <Image
+                                      source={
+                                        membername == '' || (membername != '' && memberErrorMsg == '')
+                                          ? icons.correct
+                                          : icons.cancel
+                                      }
+                                      style={{
+                                        height: 20,
+                                        width: 20,
+                                        tintColor:
+                                          membername == ''
+                                            ? COLORS.gray
+                                            : membername != '' && memberErrorMsg == ''
+                                              ? COLORS.green
+                                              : COLORS.red,
+                                      }}
+                                    />
                                   </View>
-                                </View>
-                              </ScrollView> : null
-                            )
-                          }
-                          ) : null
+                                }
+                              />
+                              <FormInput
+                                placeholder="Count"
+                                containerStyle={{ width: 102 }}
+                                inputStyle={{ height: 40, width: 30, marginLeft: -12 }}
+                                keyboardType="numeric"
+                                onChange={text => {
+                                  __memberCount(text, index);
+                                  utils.validateNumber(text, setMemberCountErrorMsg)
+                                  setMemberCount(text);
+                                }}
+                                value={memberInput.manpower_member}
+                                errorMsg={memberCountErrorMsg}
+                                appendComponent={
+                                  <View style={{ justifyContent: 'center' }}>
+                                    <Image
+                                      source={
+                                        memberCount == '' || (memberCount != '' && memberCountErrorMsg == '')
+                                          ? icons.correct
+                                          : icons.cancel
+                                      }
+                                      style={{
+                                        height: 20,
+                                        width: 20,
+                                        tintColor:
+                                          memberCount == ''
+                                            ? COLORS.gray
+                                            : memberCount != '' && memberCountErrorMsg == ''
+                                              ? COLORS.green
+                                              : COLORS.red,
+                                      }}
+                                    />
+                                  </View>
+                                }
+                              />
+                              <View style={{ paddingTop: 35 }}>
+                                <TouchableOpacity
+                                  style={{ alignSelf: "center" }}
+                                  onPress={() => deleteMemberHandler(index)}>
+                                  <Image
+                                    source={icons.delete_icon}
+                                    style={{
+                                      width: 20,
+                                      height: 20,
+                                      tintColor: COLORS.red,
+                                    }}
+                                  />
+                                </TouchableOpacity>
+                              </View>
+                            </View>
+                          </View> : null
+                        )
+                      }
+                      ) : null
+                    }
+                  </ScrollView>
+                  <View style={{ width: "100%", top: 12 }}>
+                    {displayConDetails ?
+                      <TextButton
+                        label="Submit"
+                        // disabled={isEnableMemberSubmit() ? false : true}
+                        buttonContainerStyle={{
+                          height: 55,
+
+                          width: '100%',
+                          alignItems: "center",
+
+
+                          alignItems: 'center',
+                          borderRadius: SIZES.radius,
+                          backgroundColor: COLORS.lightblue_700
+
+                        }}
+                        onPress={() => {
+                          InsertManpowerReport()
                         }
-                      </View>
-                      {displayConDetails ?
-                        <TextButton
-                          label="Submit"
-                          // disabled={isEnableMemberSubmit() ? false : true}
-                          buttonContainerStyle={{
-                            height: 55,
-                            position: "absolute",
-                            width: '100%',
-
-                            top: 320,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-
-                            alignItems: 'center',
-                            borderRadius: SIZES.radius,
-                            backgroundColor: COLORS.lightblue_700
-
-                          }}
-                          onPress={() => {
-                            InsertManpowerReport()
-                          }
-                          }
-                        /> : null}
-                    </View>
-
-
+                        }
+                      /> : null}
                   </View>
-                </ScrollView>
-              </View>
+                </View>
+
+
+              </KeyboardAvoidingView>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -1148,13 +1166,15 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
   // }
 
   const sub_body_section = (item, index) => {
-    
-   return <View
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 1250 ~ ManpowerUserContractors ~ getNewCategory", getNewCategory)
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 1251 ~ ManpowerUserContractors ~ manpowerreprot", manpowerReportData)
+
+    return <View
       style={{
         flex: 1,
         flexDirection: "row",
         width: SIZES.width * 0.7,
-        maxHeight: 310,
+        maxHeight: 300,
         alignSelf: "center",
         paddingLeft: SIZES.base,
         position: "relative",
@@ -1168,71 +1188,87 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
             {
               getNewCategory ? getNewCategory.map((list, index1) => {
                 if (list.contractor_id == item._id) {
-                  return (<View key={index1}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-around", width: 280 }}>
-                      <View style={{ backgroundColor: COLORS.lightGray1, width: 1, position: "absolute", left: -3, top: 0, right: 0, bottom: 0 }}>
-                      </View>
-                      <View style={{ width: 50, paddingLeft: 8 }}>
-                        <Text style={{ color: COLORS.black, ...FONTS.h5, textAlign: "center" }}>{index1 + 1}</Text>
-                      </View>
-                      <View style={{ width: 250 }}>
-                        <Text style={{ color: COLORS.blue, ...FONTS.h5, textAlign: "left" }}>{list.manpower_category}</Text>
-                      </View>
-                    </View>
+                  return (<View key={index1}> 
                     <View>
                       {
                         manpowerReportData.map((main_list, index2) => {
                           if (item._id === main_list.contractor_id) {
                             return (
                               <View key={index2} style={{}}>
+                                {/* <View style={{ flexDirection: "row", justifyContent: "space-around", width: 280 }}>
+                                    <View style={{ backgroundColor: COLORS.lightGray1, width: 1, position: "absolute", left: -3, top: 0, right: 0, bottom: 0 }}>
+                                    </View>
+                                    <View style={{ width: 50, paddingLeft: 8 }}>
+                                      <Text style={{ color: COLORS.black, ...FONTS.h5, textAlign: "center" }}>{index1 + 1}</Text>
+                                    </View>
+                                    <View style={{ width: 250 }}>
+                                      <Text style={{ color: COLORS.blue, ...FONTS.h5, textAlign: "left" }}>{list.manpower_category}</Text>
+                                    </View>
+                                  </View> */}
                                 {
-                                  main_list.manpowerCategories.map((sub_main_list, index3) => {
-                                    if (list._id === sub_main_list.manpower_category_id) {
-                                      {
-                                        return addFieldInput ? addFieldInput.map((sub_list, index4) => {
-                                          if (sub_main_list.manpower_sub_category_id == sub_list._id) {
-                                            return (
-                                              <View key={index4} style={{}}>
-                                                <View>
-                                                  <View style={{ flexDirection: "row", position: "relative", alignItems: "center", justifyContent: "space-between" }}>
-                                                    <View style={{ flexDirection: "row", justifyContent: "space-around", left: 35 }}>
-                                                      <View style={{ backgroundColor: COLORS.lightGray1, width: 1, position: "absolute", left: -37, top: 0, right: 0, bottom: 0 }}>
-                                                      </View>
-                                                      <View style={{}}>
-                                                        <Text style={{ color: COLORS.black, ...FONTS.h5, textAlign: "left" }}>{sub_list.manpower_sub_category}</Text>
-                                                      </View>
-                                                      <View style={{ backgroundColor: COLORS.lightGray1, width: 1, position: "absolute", left: 100, top: 0, right: 0, bottom: 0 }}>
-                                                      </View>
-                                                    </View>
+                                  main_list.manpowerCategories.map((sub_main_list, index3) => { 
 
-                                                    {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", top: 4 }}> */}
-                                                    <View style={{ position: "absolute", left: 160 }}>
-                                                      <TextInput
-                                                        style={{ width: 50, borderWidth: 1, borderColor: COLORS.gray, height: 16, padding: 0, color: COLORS.black }}
-                                                        onChangeText={text => {
-                                                          __memberCount(text, index);
-                                                          utils.validateNumber(text, setMemberCountErrorMsg)
-                                                          setMemberCount(text);
-                                                        }}
-                                                        value={sub_main_list.manpower_member.toString()}
-                                                        placeholder={"Count"}
-                                                        keyboardType="numeric"
-                                                      />
-                                                    </View>
-                                                    {/* </View> */}
-                                                  </View>
-                                                </View>
+                                    return sub_main_list.manpower_category_id.map((sub_main_list1, index4) => {
+                                      {/* console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 1204 ~ main_list.manpowerCategories.map ~ sub_main_list", sub_main_list1) */}
+                                      if (sub_main_list1 == list._id) {
+                                        {/* console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 1205 ~ main_list.manpowerCategories.map ~ manpower_category", list.manpower_category) */}
+                                        return (
+                                          <View key={index4}>
+                                            <View style={{ flexDirection: "row", justifyContent: "space-around", width: 280 }}>
+                                              <View style={{ backgroundColor: COLORS.lightGray1, width: 1, position: "absolute", left: -3, top: 0, right: 0, bottom: 0 }}>
                                               </View>
-                                            )
-                                          }
-                                        }) : null
+                                              <View style={{ width: 50, paddingLeft: 8 }}>
+                                                <Text style={{ color: COLORS.black, ...FONTS.h5, textAlign: "center" }}>{index1 + 1}</Text>
+                                              </View>
+                                              <View style={{ width: 250 }}>
+                                                <Text style={{ color: COLORS.blue, ...FONTS.h5, textAlign: "left" }}>{list.manpower_category}</Text>
+                                              </View>
+                                            </View>
+                                            {
+                                              addFieldInput ? addFieldInput.map((sub_list, index5) => {
+                                                return sub_main_list.members.map((sub_member_list, index6) => {
+                                                  {/* console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 1224 ~ returnsub_main_list1.members.map ~ sub_member_list", sub_member_list) */ }
+                                                      {/* console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 1227 ~ returnsub_main_list.members.map ~ sub_main_list1.manpower_sub_category_id", sub_main_list1) */}
+                                                  if (sub_main_list1 == sub_member_list.manpower_category_id) {
+                                                    if (sub_list._id === sub_member_list.manpower_sub_category_id) {
+                                                      return (
+                                                        <View key={index6} style={{}}>
+                                                          <View>
+                                                            <View style={{ flexDirection: "row", position: "relative", alignItems: "center", justifyContent: "space-between" }}>
+                                                              <View style={{ flexDirection: "row", justifyContent: "space-around", left: 35 }}>
+                                                                <View style={{ backgroundColor: COLORS.lightGray1, width: 1, position: "absolute", left: -37, top: 0, right: 0, bottom: 0 }}>
+                                                                </View>
+                                                                <View style={{}}>
+                                                                  <Text style={{ color: COLORS.black, ...FONTS.h5, textAlign: "left" }}>{sub_list.manpower_sub_category}</Text>
+                                                                </View>
+                                                                <View style={{ backgroundColor: COLORS.lightGray1, width: 1, position: "absolute", left: 100, top: 0, right: 0, bottom: 0 }}>
+                                                                </View>
+                                                              </View>
+
+                                                              <View style={{ position: "absolute", left: 160 }}>
+
+                                                                <Text style={{ color: COLORS.black, ...FONTS.h5, textAlign: "left" }}>{sub_member_list.manpower_member}</Text>
+                                                              </View>
+                                                            </View>
+                                                          </View>
+                                                        </View>
+                                                      )
+                                                    }
+                                                  }
+                                                })
+                                              }) : null
+                                            }
+                                          </View>
+                                        )
                                       }
-                                    }
+                                    })
                                   })
                                 }
                               </View>)
+                            {/* } */ }
                           }
-                        })
+                        }
+                        )
 
                       }
                     </View>
@@ -1246,7 +1282,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
       }
     </View>
   }
-    
+
+
+
 
   const _body = (item, index) => {
     return (
@@ -1260,11 +1298,11 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
           paddingLeft: SIZES.base,
           position: "relative",
           paddingBottom: 10,
-          backgroundColor:COLORS.lightGray1
+          backgroundColor: COLORS.lightGray1
         }}
         key={index}
       >
-     
+
         {
           sub_body_section(item, index)
         }
@@ -1429,7 +1467,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
               horizontal={true}
               contentContainerStyle={{ borderWidth: 1, width: '100%', height: '100%' }}>
               <FlatList
-                data={Report_list ? Report_list : null}
+                data={Report_list ? Report_list : alert('Currently there are no contractors!!')}
                 scrollEnabled={true}
                 horizontal={false}
                 showsVerticalScrollIndicator={false}

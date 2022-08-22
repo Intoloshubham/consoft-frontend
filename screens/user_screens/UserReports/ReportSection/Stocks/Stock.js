@@ -52,9 +52,11 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
 
     //Insertion modal
     const [stockReportModal, setStockReportModal] = useState(false);
+    const [addNewMaterial, setAddNewMaterial] = useState(false)
     const userCompanyData = useSelector(state => state.user);
     const [stockItemData, setStockItemData] = useState([])
 
+    const [materialItemName, setMaterialItemName] = useState('')
     const [getStockData, setGetStockData] = useState([])
 
 
@@ -194,103 +196,103 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
         return (
             <View style={container}>
                 <ScrollView style={inputsContainer}>
-                {stockEntry ? stockEntry.map((input, key) => {
+                    {stockEntry ? stockEntry.map((input, key) => {
 
-                    return (
-                        <View style={inputContainer} key={key}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    paddingHorizontal: 5
-                                }}
-                                key={key}
+                        return (
+                            <View style={inputContainer} key={key}>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        paddingHorizontal: 5
+                                    }}
+                                    key={key}
                                 // key="{(key+1)}"
-                            >
-                                <Dropdown
-                                    style={[
-                                        styles.dropdown,
-                                        // cont_Project_list_drop,
-                                        isFocus && { borderColor: 'blue' },
-                                    ]}
-                                    selectedTextStyle={{ color: COLORS.gray, }
-                                    }
-                                    placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
-                                    inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
-                                    data={stockItemData}
-                                    search
-                                    maxHeight={300}
-                                    labelField="item_name"
-                                    valueField="_id"
-                                    placeholder={!isFocus ? 'Select' : '...'}
-                                    searchPlaceholder="Search..."
-                                    value={input.item_id}
-                                    onChange={item => {
-                                        setSelectKey(input.key);
-                                        inputSelectItem(item, key);
-                                    }}
-                                />
-                                <TextInput
-                                    style={inputfromtwo}
-                                    selectTextOnFocus={false}
-                                    placeholder={'unit name'}
-                                    // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
-                                    value={key == selectKey ? input.unit_name : input.unit_name}
-                                    onChangeText={text => { inputUnitName(text, key) }}
-                                />
-                            </View>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-around',
-                                    alignItems: 'center',
-                                }}>
-                                <TextInput
-                                    style={[inputfromone, { width: "27%" }]}
-                                    placeholder="Qty"
-                                    keyboardType="numeric"
-                                    placeholderTextColor={COLORS.gray}
-                                    value={input.qty}                                  
-                                    onChangeText={text => {
-                                        inputQuantity(text, key);
-                                    }}
-                                />
-                                <TextInput
-                                    style={[inputfromone, { width: "28%" }]}
-                                    placeholder="Vehicle no"
-                                    placeholderTextColor={COLORS.gray}
-                                    value={input.vehicle_no}
-                                    onChangeText={text => {
-                                        inputVehicleNo(text, key);
-                                    }}
-                                />
-                                <TextInput
-                                    style={[inputfromone, { width: "40%" }]}
-                                    placeholder="Location"
-                                    placeholderTextColor={COLORS.gray}
-                                    value={input.location}
-                                    onChangeText={text => {
-                                        inputLocation(text, key);
-                                    }}
-                                />
-                            </View>
-                            <View style={{ alignSelf: "flex-end" }}>
-                                <TouchableOpacity
-                                    style={{ marginLeft: 310}}
-                                    onPress={() => deleteStockHandler(key)}>
-                                    <Image
-                                        source={icons.delete_icon}
-                                        style={{
-                                            width: 20,
-                                            height: 20,
-                                            tintColor: COLORS.red,
+                                >
+                                    <Dropdown
+                                        style={[
+                                            styles.dropdown,
+                                            // cont_Project_list_drop,
+                                            isFocus && { borderColor: 'blue' },
+                                        ]}
+                                        selectedTextStyle={{ color: COLORS.gray, }
+                                        }
+                                        placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
+                                        inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
+                                        data={stockItemData}
+                                        search
+                                        maxHeight={300}
+                                        labelField="item_name"
+                                        valueField="_id"
+                                        placeholder={!isFocus ? 'Select' : '...'}
+                                        searchPlaceholder="Search..."
+                                        value={input.item_id}
+                                        onChange={item => {
+                                            setSelectKey(input.key);
+                                            inputSelectItem(item, key);
                                         }}
                                     />
-                                </TouchableOpacity>
+                                    <TextInput
+                                        style={inputfromtwo}
+                                        selectTextOnFocus={false}
+                                        placeholder={'unit name'}
+                                        // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
+                                        value={key == selectKey ? input.unit_name : input.unit_name}
+                                        onChangeText={text => { inputUnitName(text, key) }}
+                                    />
+                                </View>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        alignItems: 'center',
+                                    }}>
+                                    <TextInput
+                                        style={[inputfromone, { width: "27%" }]}
+                                        placeholder="Qty"
+                                        keyboardType="numeric"
+                                        placeholderTextColor={COLORS.gray}
+                                        value={input.qty}
+                                        onChangeText={text => {
+                                            inputQuantity(text, key);
+                                        }}
+                                    />
+                                    <TextInput
+                                        style={[inputfromone, { width: "28%" }]}
+                                        placeholder="Vehicle no"
+                                        placeholderTextColor={COLORS.gray}
+                                        value={input.vehicle_no}
+                                        onChangeText={text => {
+                                            inputVehicleNo(text, key);
+                                        }}
+                                    />
+                                    <TextInput
+                                        style={[inputfromone, { width: "40%" }]}
+                                        placeholder="Location"
+                                        placeholderTextColor={COLORS.gray}
+                                        value={input.location}
+                                        onChangeText={text => {
+                                            inputLocation(text, key);
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ alignSelf: "flex-end" }}>
+                                    <TouchableOpacity
+                                        style={{ marginLeft: 310 }}
+                                        onPress={() => deleteStockHandler(key)}>
+                                        <Image
+                                            source={icons.delete_icon}
+                                            style={{
+                                                width: 20,
+                                                height: 20,
+                                                tintColor: COLORS.red,
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                    )
-                }) : null}
+                        )
+                    }) : null}
                 </ScrollView>
             </View>
         )
@@ -303,7 +305,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
             <Modal visible={stockReportModal} transparent={false} animationType="slide">
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    style={{ flex: 1,backgroundColor:COLORS.transparentBlack1 }}
+                    style={{ flex: 1, backgroundColor: COLORS.transparentBlack1 }}
                 >
                     <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
                         <View
@@ -346,7 +348,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                             alignItems: 'center',
                                             paddingVertical: 1
                                         }}>
-                                        <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add Material Item</Text>
+                                        <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add Existing Material</Text>
                                         <MaterialIcons
                                             name="add-box"
                                             size={20}
@@ -354,24 +356,91 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                         />
                                     </View>
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{
+                                        borderWidth: 1, borderRadius: 2, paddingVertical: 1, marginVertical: 3,
+                                        paddingHorizontal: 4
+                                    }}
+                                    onPress={() => {
+                                        setAddNewMaterial(true);
+                                    }}>
+                                    <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add New Material</Text>
+                                </TouchableOpacity>
                             </View>
-                            <View style={{flex:1}}>
+                            <View style={{ flex: 1 }}>
                                 {add_stock_input()}
                             </View>
-                            <ScrollView scrollEnabled={false} nestedScrollEnabled={false} style={{ marginTop: 10 }}>
                                 <Button
                                     title="submit"
                                     onPress={() => {
                                         postStockDataItems();
                                     }}
                                 />
-                            </ScrollView>
                         </View>
                     </View>
                 </KeyboardAvoidingView>
             </Modal>
         )
     }
+      
+    const add_new_material_modal = () => {
+        return (
+          <View>
+            <Modal transparent={false} visible={addNewMaterial} animationType="slide">
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: '#000000aa',
+                }}>
+                <View
+                  style={{
+                    backgroundColor: '#fff',
+                    marginTop: 80,
+                    padding: 20,
+                    borderRadius: 20,
+                    margin: 10,
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add New Material</Text>
+                    <Pressable onPress={()=>setAddNewMaterial(false)}>
+                      <AntDesign name="close" size={30} color={COLORS.black} />
+                    </Pressable>
+                  </View>
+                  <View style={{ marginTop: 20 }}>
+                    <FormInput
+                      label="Name"
+                      onChange={text => {
+                        setMaterialItemName(text)
+                      }}
+                    />                   
+                  </View>
+                  <View>
+                    <TextButton
+                      label="save"
+                      buttonContainerStyle={{
+                        height: 45,
+                        borderRadius: SIZES.radius,
+                        marginTop: SIZES.padding,
+                      }}
+                      onPress={() => {
+                        // saveNewMaterial();
+                      }}
+                    />
+                  </View>
+                  {/* <Toast config={showToastItem} /> */}
+                </View>
+              </View>
+            </Modal>
+          </View>
+        )
+      }
+    
+   
 
     const add_stock_icon_button = () => {
         return (
@@ -740,6 +809,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
 
                     </View> : null
                 }
+                {add_new_material_modal()}
                 {add_stock_data_modal()}
             </View>
 

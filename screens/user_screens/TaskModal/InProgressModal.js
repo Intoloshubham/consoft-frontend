@@ -9,6 +9,8 @@ import {
   Image,
   Animated,
   TextInput,
+  ScrollView,
+  Pressable, TouchableWithoutFeedback
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import {
@@ -21,194 +23,158 @@ import {
 } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo';
 import styles from './css/InProgressModalStyle';
+import { IconButton } from '../../../Components'
 
 Entypo.loadFont();
 
 function InProgressModal({ inProgressModal, setinProgressModal }) {
-  const [count, setCount] = React.useState(0);
-  const [Num, setNum] = React.useState(0);
-  const [dumybardata, setdumybardata] = React.useState(dummyData.barData);
-  const [ShowCounterid, setShowCounterid] = useState(null);
-  const ShowCounteridRef = React.useRef();
-  const [Data, setData] = useState(null);
-  const GetPercentIdRef = React.useRef();
 
-  const __handle_increase_counter = (item, id) => {
-    // setShowCounterid(id)
-    ShowCounteridRef.current = id;
-    console.log('showcounterref=' + ShowCounteridRef.current + '' + 'id=' + id);
-    if (id == ShowCounteridRef.current) {
-      if (count < 100) {
-        setCount(count => count + 5);
-      }
-    } else {
-      setCount(5);
+  const [counterData, setCounterData] = React.useState(dummyData.barData);
+
+  const [inputs, setInputs] = useState(counterData);
+
+  const __handle_increase_counter = (item, index1) => {
+    const _inputs = [...inputs];
+    if (_inputs[index1].count < 100) {
+      _inputs[index1].count = _inputs[index1].count + 5;
+      _inputs[index1].key = index1;
+      // console.log("🚀 ~ file: InProgressModal.js ~ line 39 ~ InProgressModal ~ _inputs", _inputs)
+      setInputs(_inputs);
     }
   };
 
-  const __handle_decrease_counter = (item, id) => {
-    // setShowCounterid(id)
-    ShowCounteridRef.current = id;
-    if (id == ShowCounteridRef.current) {
-      if (count > 0) {
-        setCount(count => count - 5);
-      }
-    } else {
-      setCount(5);
+  const __handle_decrease_counter = (item, index1) => {
+    const _inputs = [...inputs];
+    if (_inputs[index1].count > 0) {
+      _inputs[index1].count = _inputs[index1].count - 5;
+      _inputs[index1].key = index1;
+      // console.log("🚀 ~ file: InProgressModal.js ~ line 39 ~ InProgressModal ~ _inputs", _inputs)
+      setInputs(_inputs);
     }
   };
 
-  const Text_Counter = (item, id) => {
+
+
+
+
+  function CountingComponent() {
     return (
-      <TextInput
-        placeholder="%"
-        style={{
-          width: 60,
-          height: 40,
-          fontSize: 15,
-          top: 5,
-          color: COLORS.black,
-        }}
-        editable={false}
-        value={String(`${count}%`)}
+      <View style={{ margin: 10 }}>
+        {
+          inputs.map((item, index) => {
+            return (
+              <View key={index}
+                style={{
+                  marginTop: 15,
+                  backgroundColor: COLORS.lightblue_200,
+                  height: 150,
+                  borderRadius: 5,
+                  elevation: 10
 
-      // onChange={(e) => __handleonchange(e)}
-      ></TextInput>
-    );
-  };
-  const Text_Counter2 = (item, id) => {
-    return (
-      <TextInput
-        placeholder=" "
-        style={{
-          width: 60,
-          height: 40,
-          fontSize: 15,
-          top: 5,
-          color: COLORS.black,
-        }}
-        editable={false}
-        value={String(`${0}%`)}></TextInput>
-    );
-  };
+                }}>
+                <View style={{ backgroundColor: COLORS.lightblue_300, width: `${item.count}%`, borderBottomWidth: 10, borderColor:COLORS.green }}>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                  <Text style={{ color: 'black' }}>{item.code}</Text>
+                  <Text style={{ color: 'black' }}>{item.date}</Text>
+                </View>
+                <View style={{ backgroundColor: COLORS.lightblue_500, height: 80, marginHorizontal: 10, marginTop: 5, padding: 10, borderRadius: 5 }}>
+                  <Text style={{ color: 'black' }}>filling</Text>
+                </View>
+                <View style={{ marginTop: 5, marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity
+                      onPress={() => __handle_decrease_counter(item, index)}
+                    >
+                      <Entypo
+                        name="minus"
+                        size={25}
+                        color={COLORS.black}
+                      />
+                    </TouchableOpacity>
+                    <View>
+                      <TextInput
+                        style={styles.inputfromone}
+                        editable={false}
+                        // value={item.count[index1]}
+                        value={String(`${item.count}%`)}
+                        // onChangeText={(text)=>__handle_increase_counter(text,index1)}
+                        placeholderTextColor={COLORS.lightGray1}
+                        keyboardType="numeric"
+                        placeholder={'counter'}
+                      />
+                    </View>
+                    <TouchableOpacity
 
-  const __getPercent = (item, id) => {
-    const new_data = dumybardata.findIndex(i => i.label === item.label);
-    GetPercentIdRef.current = new_data;
-    // GetPercentIdRef
-    // console.log(new_data);
-    // console.log(GetPercentIdRef.current);
-    if (GetPercentIdRef.current == id) {
-      console.log(count);
-      setCount(0);
-    } else {
-      return null;
-    }
-  };
-
-  const CountingComponent = () => {
-    return dumybardata.map((item, index1) => {
-      return (
-        // Container
-        <View
-          style={{
-            flexDirection:"row",
-            justifyContent:"space-between",
-          }}
-          key={index1}
-        >
-        {/* PARENT VIEW FOR SNO AND DATE PLUS CODE  */}
-          <View 
-          style={{
-            flexDirection:"row",
-            justifyContent:"space-between",
-            marginHorizontal:SIZES.padding
-            }}>
-            <View>
-              <Text>{item.label}</Text>
-            </View>
-            <View>
-              <Text>{item.date}</Text>
-            </View>
-            <View>
-              <Text>{item.code}</Text>
-            </View>
-          </View>
-          {/* INC AND DEC BUTTON PARENT VIEW START */}
-          <View>
-            <TouchableOpacity
-              
-            >              
-            </TouchableOpacity>
-            <TouchableOpacity
-            
-            >              
-            </TouchableOpacity>
-          </View>
-
-
-        </View>
-      );
-    })
+                      onPress={() => __handle_increase_counter(item, index)}
+                    >
+                      <Entypo
+                        name="plus"
+                        size={25}
+                        color={COLORS.black}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <TouchableOpacity style={{ backgroundColor: COLORS.darkGray, borderRadius: 5, paddingHorizontal: 5, paddingVertical: 1 }}>
+                    <Text style={{ color: 'white', ...FONTS.h5 }}>Submit</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )
+          })
+        }
+      </View>
+    )
   };
 
 
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={inProgressModal}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setinProgressModal(!inProgressModal);
-          clearInterval(countInterval);
+    <Modal
+      animationType='slide'
+      transparent={true}
+      visible={inProgressModal}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          backgroundColor: COLORS.transparentBlack8,
         }}>
-        <View style={styles.modal_container}>
-          {/* main view start  */}
-          <View style={{}}>
-
-            <View
-              style={[styles.act_tsk_stat_view,
-              {
-                flexDirection: "row",
-                justifyContent: "space-between",
-                paddingHorizontal: 15,
-                borderWidth: 1,
-                elevation: 1,
-                paddingVertical: SIZES.h5,
-                borderColor: COLORS.transparentBlack2,
-                margin: SIZES.radius * 0.2,
-                borderRadius: SIZES.radius * 0.4
-              }]}>
-              <View>
-                <Text
-                  style={[
-                    styles.act_tsk_stat,
-                    { color: COLORS.white2, ...FONTS.body2, textAlign: 'center' },
-                  ]}>
-                  Active Task Statistic
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={{
-                  paddingHorizontal: SIZES.radius
-                }}
-                onPress={() => setinProgressModal(!inProgressModal)}>
-                <Entypo name="cross" color={'black'} size={25} />
-              </TouchableOpacity>
-            </View>
+        <View
+          style={{
+            backgroundColor: COLORS.white2,
+            // position: 'absolute',
+            width: '100%',
+            height: '90%',
+            // padding: SIZES.radius,
+            paddingHorizontal: SIZES.base,
+            paddingTop: SIZES.radius,
+            paddingBottom: SIZES.padding,
+            borderTopRightRadius: SIZES.base,
+            borderTopLeftRadius: SIZES.base,
+            backgroundColor: COLORS.white,
+          }}>
+          <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center' ,marginBottom:15}}>
+          <Text style={{color:'black',...FONTS.h2}}>Active Tasks Statistics</Text>
+            <IconButton
+              containerStyle={{
+                boborderWidth: 2,
+                borderRadius: 10,
+                borderColor: COLORS.gray2,
+              }}
+              icon={icons.cross}
+              iconStyle={{
+                tintColor: COLORS.gray,
+              }}
+              onPress={() => setinProgressModal(false)}
+            />
           </View>
-          {/* main view close */}
-          <View
-            style={{
-            }}>
-            <CountingComponent />
-          </View>
+          <ScrollView nestedScrollEnabled={true}>
+            {CountingComponent()}
+          </ScrollView>
         </View>
-      </Modal>
-    </>
+      </View>
+    </Modal>
   );
 }
 export default InProgressModal;
