@@ -9,7 +9,7 @@ import {
   Profile,
   Demo,
   Demo1,
-  Demo2,
+  MyProfile,
   UserReports,
 } from '../screens/user_screens';
 
@@ -156,7 +156,7 @@ const UserTabs = ({navigation, route}) => {
       />
       <Tab.Screen
         name="My Profile"
-        component={Demo2}
+        component={MyProfile}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -173,7 +173,7 @@ const UserTabs = ({navigation, route}) => {
                   color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Demo2
+                My Profile
               </Text>
             </View>
           ),
