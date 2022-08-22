@@ -8,22 +8,22 @@ import RevertWorks from '../VerifyAndRevertWork.js/RevertWorks';
 
 const Tab = createMaterialTopTabNavigator();
 
-const VerifyAndRevertWork = ({company_id}) => {
-  const [verifyAndRevert, setVerifyAndRevert] = React.useState([]);
-  const [verify, setVerify] = React.useState([]);
-  const [revert, setRevert] = React.useState([]);
+const VerifyAndRevertWork = ({verify, revert}) => {
+  // const [verifyAndRevert, setVerifyAndRevert] = React.useState([]);
+  // const [verify, setVerify] = React.useState([]);
+  // const [revert, setRevert] = React.useState([]);
 
   // ============================== Apis ==============================
-  const fetchVerifyAndRevertWork = async () => {
-    const response = await getVerifyAndRevertWorks(company_id);
-    setVerifyAndRevert(response.data);
+  // const fetchVerifyAndRevertWork = async () => {
+  //   const response = await getVerifyAndRevertWorks(company_id);
+  //   setVerifyAndRevert(response.data);
 
-    //filter revert & verify
-    const verify_data = response.data.filter(el => el.verify === true);
-    setVerify(verify_data);
-    const revert_data = response.data.filter(el => el.revert_status === true);
-    setRevert(revert_data);
-  };
+  //   //filter revert & verify
+  //   const verify_data = response.data.filter(el => el.verify === true);
+  //   setVerify(verify_data);
+  //   const revert_data = response.data.filter(el => el.revert_status === true);
+  //   setRevert(revert_data);
+  // };
 
   // const filterData = () => {
   //   const verify_data = verifyAndRevert.filter(el => el.verify === true);
@@ -37,9 +37,9 @@ const VerifyAndRevertWork = ({company_id}) => {
   //   fetchVerifyAndRevertWork();
   // }, []);
 
-  React.useMemo(() => {
-    fetchVerifyAndRevertWork();
-  }, []);
+  // React.useMemo(() => {
+  //   fetchVerifyAndRevertWork();
+  // }, []);
 
   return (
     <View

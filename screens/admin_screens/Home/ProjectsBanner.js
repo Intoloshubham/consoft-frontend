@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   Modal,
   TouchableWithoutFeedback,
   LogBox,
+  ImageBackground,
 } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {
@@ -20,11 +21,10 @@ import {
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import utils from '../../../utils';
-import { COLORS, SIZES, FONTS, icons, STATUS } from '../../../constants';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import {COLORS, SIZES, FONTS, icons, STATUS} from '../../../constants';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   getProjects,
   saveProject,
@@ -34,11 +34,12 @@ import {
   getProjectCategory,
 } from '../../../controller/ProjectController';
 import Tooltip from 'react-native-walkthrough-tooltip';
+import {useSelector} from 'react-redux';
 
-
-const ProjectsBanner = ({company_id}) => {
+const ProjectsBanner = () => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
   const [showTip, setTip] = React.useState(false);
-
 
   const navigation = useNavigation();
   const [collapsed, setCollapsed] = React.useState(true);
@@ -70,10 +71,10 @@ const ProjectsBanner = ({company_id}) => {
   const [openUnit, setOpenUnit] = React.useState(false);
   const [unitValue, setUnitValue] = React.useState([]);
   const [projectUnit, setProjectUnit] = React.useState([
-    { label: 'Hect', value: '1' },
-    { label: 'Acre', value: '2' },
-    { label: 'Sqm', value: '3' },
-    { label: 'Sqf', value: '4' },
+    {label: 'Hect', value: '1'},
+    {label: 'Acre', value: '2'},
+    {label: 'Sqm', value: '3'},
+    {label: 'Sqf', value: '4'},
   ]);
 
   const [projectId, setProjectId] = React.useState('');
@@ -90,6 +91,7 @@ const ProjectsBanner = ({company_id}) => {
   const onCategoryOpen = React.useCallback(() => {
     setOpenType(false);
     setOpenUnit(false);
+    fetchProjectCategory();
   }, []);
 
   const onTypeOpen = React.useCallback(() => {
@@ -121,8 +123,6 @@ const ProjectsBanner = ({company_id}) => {
 
   useEffect(() => {
     fetchProjects();
-    fetchProjectCategory();
-    // fetchProjectsTypes();
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
@@ -141,8 +141,8 @@ const ProjectsBanner = ({company_id}) => {
   const fetchProjectCategory = async () => {
     const response = await getProjectCategory(company_id);
     if (response.status === 200) {
-      let proCatFromApi = response.data.map(item => {
-        return { label: item.category_name, value: item._id };
+      const proCatFromApi = response.data.map(item => {
+        return {label: item.category_name, value: item._id};
       });
       setProjectCategory(proCatFromApi);
     }
@@ -152,8 +152,8 @@ const ProjectsBanner = ({company_id}) => {
   const fetchProjectsTypes = async category_id => {
     const response = await getProjectType(category_id);
     if (response.status === 200) {
-      let proTypeFromApi = response.data.map(item => {
-        return { label: item.project_type, value: item._id };
+      const proTypeFromApi = response.data.map(item => {
+        return {label: item.project_type, value: item._id};
       });
       setProjectType(proTypeFromApi);
     }
@@ -163,7 +163,7 @@ const ProjectsBanner = ({company_id}) => {
   const saveProjectSubmit = async () => {
     const projectData = getProjectData();
     const res = await saveProject(projectData);
-    if (res.status === STATUS.RES_SUCCESS) {
+    if (res.status === 200) {
       setSubmitToast(true);
       fetchProjects();
       setCreateProjectModal(false);
@@ -195,7 +195,7 @@ const ProjectsBanner = ({company_id}) => {
   const updateProjectSubmit = async () => {
     const projectData = getProjectData();
     const res = await updateProject(projectId, projectData);
-    if (res.status === STATUS.RES_SUCCESS) {
+    if (res.status === 200) {
       fetchProjects();
       setUpdateToast(true);
       setUpdateProjectModal(false);
@@ -253,9 +253,9 @@ const ProjectsBanner = ({company_id}) => {
 
   //RENDER PROJECTS
   function renderProjects() {
-    const renderItem = ({ item, index }) => (
+    const renderItem = ({item, index}) => (
       <TouchableOpacity
-        style={{ marginVertical: SIZES.base }}
+        style={{marginVertical: SIZES.base}}
         onPress={() => {
           navigation.navigate('ProjectsDetails', {
             name: item.project_name,
@@ -276,8 +276,8 @@ const ProjectsBanner = ({company_id}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ ...FONTS.h3, color: COLORS.black }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{...FONTS.h3, color: COLORS.black}}>
                 {index + 1}.
               </Text>
               <Text
@@ -396,19 +396,25 @@ const ProjectsBanner = ({company_id}) => {
                 borderTopLeftRadius: SIZES.base,
                 backgroundColor: COLORS.white,
               }}>
-              <View style={{ alignItems: 'flex-end' }}>
-                <IconButton
-                  containerStyle={{
-                    boborderWidth: 2,
-                    borderRadius: 10,
-                    borderColor: COLORS.gray2,
-                  }}
-                  icon={icons.cross}
-                  iconStyle={{
-                    tintColor: COLORS.gray,
-                  }}
-                  onPress={() => setCreateProjectModal(false)}
-                />
+              <View style={{alignItems: 'flex-end', marginBottom: 10}}>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => setCreateProjectModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
                 <FormInput
@@ -422,11 +428,11 @@ const ProjectsBanner = ({company_id}) => {
                   }}
                   errorMsg={projectError}
                   appendComponent={
-                    <View style={{ justifyContent: 'center' }}>
+                    <View style={{justifyContent: 'center'}}>
                       <Image
                         source={
                           projectname == '' ||
-                            (projectname != '' && projectError == '')
+                          (projectname != '' && projectError == '')
                             ? icons.correct
                             : icons.cancel
                         }
@@ -437,8 +443,8 @@ const ProjectsBanner = ({company_id}) => {
                             projectname == ''
                               ? COLORS.gray
                               : projectname != '' && projectError == ''
-                                ? COLORS.green
-                                : COLORS.red,
+                              ? COLORS.green
+                              : COLORS.red,
                         }}
                       />
                     </View>
@@ -455,11 +461,11 @@ const ProjectsBanner = ({company_id}) => {
                   }}
                   errorMsg={projectLocationError}
                   appendComponent={
-                    <View style={{ justifyContent: 'center' }}>
+                    <View style={{justifyContent: 'center'}}>
                       <Image
                         source={
                           projectlocation == '' ||
-                            (projectlocation != '' && projectLocationError == '')
+                          (projectlocation != '' && projectLocationError == '')
                             ? icons.correct
                             : icons.cancel
                         }
@@ -471,8 +477,8 @@ const ProjectsBanner = ({company_id}) => {
                               ? COLORS.gray
                               : projectlocation != '' &&
                                 projectLocationError == ''
-                                ? COLORS.green
-                                : COLORS.red,
+                              ? COLORS.green
+                              : COLORS.red,
                         }}
                       />
                     </View>
@@ -577,7 +583,7 @@ const ProjectsBanner = ({company_id}) => {
                     label="Land area"
                     keyboardType="numeric"
                     autoCompleteType="cc-number"
-                    containerStyle={{ width: '60%' }}
+                    containerStyle={{width: '60%'}}
                     // value={projectplotarea.toString()}
                     onChange={value => {
                       utils.validateNumber(value, setProjectPlotAreaError);
@@ -651,7 +657,7 @@ const ProjectsBanner = ({company_id}) => {
                 backgroundColor: COLORS.white2,
                 position: 'absolute',
                 width: '100%',
-                height: '65%',
+                height: '70%',
                 // padding: SIZES.radius,
                 paddingHorizontal: SIZES.padding,
                 paddingTop: SIZES.radius,
@@ -660,187 +666,240 @@ const ProjectsBanner = ({company_id}) => {
                 borderTopLeftRadius: SIZES.base,
                 backgroundColor: COLORS.white,
               }}>
-              <View style={{ alignItems: 'flex-end' }}>
-                <IconButton
-                  containerStyle={{
-                    boborderWidth: 2,
-                    borderRadius: 10,
-                    borderColor: COLORS.gray2,
-                  }}
-                  icon={icons.cross}
-                  iconStyle={{
-                    tintColor: COLORS.gray,
-                  }}
-                  onPress={() => setUpdateProjectModal(false)}
-                />
+              <View style={{alignItems: 'flex-end', marginBottom: 10}}>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => setUpdateProjectModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <KeyboardAwareScrollView
-                  keyboardDismissMode="on-drag"
-                  contentContainerStyle={{
+                <FormInput
+                  label="Name"
+                  keyboardType="default"
+                  autoCompleteType="username"
+                  value={projectname}
+                  onChange={value => {
+                    utils.validateText(value, setProjectError);
+                    setProjectName(value);
+                  }}
+                  errorMsg={projectError}
+                  appendComponent={
+                    <View style={{justifyContent: 'center'}}>
+                      <Image
+                        source={
+                          projectname == '' ||
+                          (projectname != '' && projectError == '')
+                            ? icons.correct
+                            : icons.cancel
+                        }
+                        style={{
+                          height: 20,
+                          width: 20,
+                          tintColor:
+                            projectname == ''
+                              ? COLORS.gray
+                              : projectname != '' && projectError == ''
+                              ? COLORS.green
+                              : COLORS.red,
+                        }}
+                      />
+                    </View>
+                  }
+                />
+                <FormInput
+                  label="Location"
+                  keyboardType="default"
+                  autoCompleteType="username"
+                  value={projectlocation}
+                  onChange={value => {
+                    utils.validateText(value, setProjectLocationError);
+                    setProjectLocation(value);
+                  }}
+                  errorMsg={projectLocationError}
+                  appendComponent={
+                    <View style={{justifyContent: 'center'}}>
+                      <Image
+                        source={
+                          projectlocation == '' ||
+                          (projectlocation != '' && projectLocationError == '')
+                            ? icons.correct
+                            : icons.cancel
+                        }
+                        style={{
+                          height: 20,
+                          width: 20,
+                          tintColor:
+                            projectlocation == ''
+                              ? COLORS.gray
+                              : projectlocation != '' &&
+                                projectLocationError == ''
+                              ? COLORS.green
+                              : COLORS.red,
+                        }}
+                      />
+                    </View>
+                  }
+                />
+
+                <View
+                  style={{
+                    // flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <View
+                    style={{
+                      width: '90%',
+                    }}>
+                    <CustomDropdown
+                      placeholder="Select category"
+                      open={openCategory}
+                      value={categoryValue}
+                      items={projectCategory}
+                      setOpen={setOpenCategory}
+                      setValue={setCategoryValue}
+                      setItems={setProjectCategory}
+                      multiple={false}
+                      listParentLabelStyle={{
+                        color: COLORS.white,
+                      }}
+                      maxHeight={150}
+                      zIndex={3000}
+                      zIndexInverse={1000}
+                      onOpen={onCategoryOpen}
+                      onChangeValue={value => fetchProjectsTypes(value)}
+                    />
+                  </View>
+                  <View style={{marginTop: 15}}>
+                    <Tooltip
+                      isVisible={showTip}
+                      content={
+                        <View style={{padding: 5}}>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              color: COLORS.lightblue_600,
+                              fontWeight: 'bold',
+                            }}>
+                            Help
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              color: COLORS.darkGray,
+                              textAlign: 'left',
+                            }}>
+                            Before creating the new projects, Click on the
+                            account tab and create the project categories and
+                            it's types, it's compulsory for creating a new
+                            project.
+                          </Text>
+                        </View>
+                      }
+                      onClose={() => setTip(false)}
+                      placement="bottom">
+                      <TouchableOpacity style={{}} onPress={() => setTip(true)}>
+                        <Image
+                          source={icons.help1}
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor: COLORS.lightblue_600,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </Tooltip>
+                  </View>
+                </View>
+
+                <CustomDropdown
+                  placeholder="Select types"
+                  open={openType}
+                  value={typeValue}
+                  items={projectType}
+                  setOpen={setOpenType}
+                  setValue={setTypeValue}
+                  setItems={setProjectType}
+                  listParentLabelStyle={{
+                    color: COLORS.white,
+                  }}
+                  maxHeight={150}
+                  zIndex={2000}
+                  zIndexInverse={2000}
+                  onOpen={onTypeOpen}
+                />
+                <View
+                  style={{
                     flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}>
                   <FormInput
-                    label="Name"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    value={projectname}
+                    label="Land area"
+                    keyboardType="numeric"
+                    autoCompleteType="cc-number"
+                    containerStyle={{width: '60%'}}
+                    value={projectplotarea.toString()}
                     onChange={value => {
-                      utils.validateText(value, setProjectError);
-                      setProjectName(value);
+                      utils.validateNumber(value, setProjectPlotAreaError);
+                      setProjectPlotArea(value);
                     }}
-                    errorMsg={projectError}
-                    appendComponent={
-                      <View style={{ justifyContent: 'center' }}>
-                        <Image
-                          source={
-                            projectname == '' ||
-                              (projectname != '' && projectError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              projectname == ''
-                                ? COLORS.gray
-                                : projectname != '' && projectError == ''
-                                  ? COLORS.green
-                                  : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-                  <FormInput
-                    label="Location"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    value={projectlocation}
-                    onChange={value => {
-                      utils.validateText(value, setProjectLocationError);
-                      setProjectLocation(value);
-                    }}
-                    errorMsg={projectLocationError}
-                    appendComponent={
-                      <View style={{ justifyContent: 'center' }}>
-                        <Image
-                          source={
-                            projectlocation == '' ||
-                              (projectlocation != '' &&
-                                projectLocationError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              projectlocation == ''
-                                ? COLORS.gray
-                                : projectlocation != '' &&
-                                  projectLocationError == ''
-                                  ? COLORS.green
-                                  : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-
-                  <CustomDropdown
-                    placeholder="Select category"
-                    open={openCategory}
-                    value={categoryValue}
-                    items={projectCategory}
-                    setOpen={setOpenCategory}
-                    setValue={setCategoryValue}
-                    setItems={setProjectCategory}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                    maxHeight={150}
-                    zIndex={3000}
-                    zIndexInverse={1000}
-                    onOpen={onCategoryOpen}
-                    onChangeValue={value => fetchProjectsTypes(value)}
-                  />
-
-                  <CustomDropdown
-                    placeholder="Select types"
-                    open={openType}
-                    value={typeValue}
-                    items={projectType}
-                    setOpen={setOpenType}
-                    setValue={setTypeValue}
-                    setItems={setProjectType}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                    maxHeight={150}
-                    zIndex={2000}
-                    zIndexInverse={2000}
-                    onOpen={onTypeOpen}
+                    errorMsg={projectPlotAreaError}
                   />
                   <View
                     style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      marginTop: 13,
+                      marginLeft: SIZES.radius,
+                      width: '35%',
                     }}>
-                    <FormInput
-                      label="Land area"
-                      keyboardType="numeric"
-                      autoCompleteType="cc-number"
-                      containerStyle={{ width: '60%' }}
-                      value={projectplotarea.toString()}
-                      onChange={value => {
-                        utils.validateNumber(value, setProjectPlotAreaError);
-                        setProjectPlotArea(value);
+                    <CustomDropdown
+                      placeholder="Unit"
+                      open={openUnit}
+                      value={unitValue}
+                      items={projectUnit}
+                      setOpen={setOpenUnit}
+                      setValue={setUnitValue}
+                      setItems={setProjectUnit}
+                      listParentLabelStyle={{
+                        color: COLORS.white,
                       }}
-                      errorMsg={projectPlotAreaError}
+                      maxHeight={100}
+                      zIndex={1000}
+                      zIndexInverse={3000}
+                      onOpen={onUnitOpen}
                     />
-                    <View
-                      style={{
-                        marginTop: 13,
-                        marginLeft: SIZES.radius,
-                        width: '35%',
-                      }}>
-                      <CustomDropdown
-                        placeholder="Unit"
-                        open={openUnit}
-                        value={unitValue}
-                        items={projectUnit}
-                        setOpen={setOpenUnit}
-                        setValue={setUnitValue}
-                        setItems={setProjectUnit}
-                        listParentLabelStyle={{
-                          color: COLORS.white,
-                        }}
-                        maxHeight={100}
-                        zIndex={1000}
-                        zIndexInverse={3000}
-                        onOpen={onUnitOpen}
-                      />
-                    </View>
                   </View>
-                  <TextButton
-                    label="Update"
-                    disabled={isEnableSubmit() ? false : true}
-                    buttonContainerStyle={{
-                      height: 45,
-                      alignItems: 'center',
-                      marginTop: SIZES.padding,
-                      marginBottom: SIZES.padding,
-                      borderRadius: SIZES.base,
-                      backgroundColor: isEnableSubmit()
-                        ? COLORS.lightblue_700
-                        : COLORS.transparentPrimary,
-                    }}
-                    onPress={() => updateProjectSubmit()}
-                  />
-                </KeyboardAwareScrollView>
+                </View>
+                <TextButton
+                  label="Update"
+                  disabled={isEnableSubmit() ? false : true}
+                  buttonContainerStyle={{
+                    height: 45,
+                    alignItems: 'center',
+                    marginTop: SIZES.padding,
+                    marginBottom: SIZES.padding,
+                    borderRadius: SIZES.base,
+                    backgroundColor: isEnableSubmit()
+                      ? COLORS.lightblue_700
+                      : COLORS.transparentPrimary,
+                  }}
+                  onPress={() => updateProjectSubmit()}
+                />
               </ScrollView>
             </View>
           </View>
@@ -870,7 +929,7 @@ const ProjectsBanner = ({company_id}) => {
                 paddingVertical: SIZES.radius,
                 borderRadius: 3,
               }}>
-              <ScrollView>
+              <View>
                 <TextButton
                   label="Update"
                   disabled={false}
@@ -883,6 +942,8 @@ const ProjectsBanner = ({company_id}) => {
                   }}
                   onPress={() => {
                     setUpdateProjectModal(true);
+                    fetchProjectCategory();
+                    // fetchProjectsTypes();
                   }}
                 />
                 <View
@@ -906,7 +967,7 @@ const ProjectsBanner = ({company_id}) => {
                     setDeleteConfirm(true);
                   }}
                 />
-              </ScrollView>
+              </View>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -931,8 +992,8 @@ const ProjectsBanner = ({company_id}) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <Text style={{ ...FONTS.h2, color: COLORS.white }}>Projects</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={{...FONTS.h2, color: COLORS.white}}>Projects</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity
             style={{
               right: 10,
@@ -942,9 +1003,7 @@ const ProjectsBanner = ({company_id}) => {
               paddingVertical: 1,
               borderRadius: 3,
             }}
-            onPress={() => {
-              createProject();
-            }}>
+            onPress={() => createProject()}>
             <Text style={{...FONTS.h4, color: COLORS.black}}>Create New</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleExpanded}>

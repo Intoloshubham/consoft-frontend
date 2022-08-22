@@ -38,7 +38,6 @@ const MyProfile = () => {
   const [leavesday, setLeavesDay] = useState([]);
   const [haliddayates, setHalidayDates] = useState([]);
 
-
   // const [removedate, setRemoveDate] = useState(false)
   const [pushdate, setPushDate] = useState([]);
 
@@ -70,7 +69,6 @@ const MyProfile = () => {
         console.log(error);
       });
   }, [user_id]);
-
 
   const dateClickHandler = (date, i) => {
     //  const newDate= removedate?[...leavesdate, date]:leavesdate.pop(date);
@@ -116,7 +114,7 @@ const MyProfile = () => {
   // get data api leaves apply for user
 
   const showleavesdata = async () => {
-    const resp = await fetch(process.env.API_URL+'attendance/' + user_id);
+    const resp = await fetch(process.env.API_URL + 'attendance/' + user_id);
     const leavesDate = await resp.json();
     // console.log(leavesDate);
     setShowLeaves(leavesDate);
@@ -137,8 +135,7 @@ const MyProfile = () => {
 
   useMemo(() => {
     if (monthshow.months) {
-
-      monthshow.months.map((month,index) => {
+      monthshow.months.map((month, index) => {
         setLeavesDay(month);
       });
     }
@@ -169,8 +166,6 @@ const MyProfile = () => {
   // };
 
   var dt = new Date();
-
-  
 
   var dt = new Date();
 
@@ -255,10 +250,8 @@ const MyProfile = () => {
             }}>
             <Text style={{fontSize: 15, fontWeight: 'bold'}}>Leaves Date</Text>
             <TextButton
-  
-            label="Apply for leaves"
-  
-            buttonContainerStyle={{
+              label="Apply for leaves"
+              buttonContainerStyle={{
                 paddingHorizontal: SIZES.base,
                 borderRadius: 5,
               }}
@@ -267,51 +260,43 @@ const MyProfile = () => {
             />
           </View>
           <View style={{marginTop: 5}}>
-
-          {leavesday.leavedays !== undefined
-            ? leavesday.leavedays.map((Ldays, index) => {
-                // {console.log(Ldays)}
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                      {Ldays.leave_date}
-
-                    </Text> 
-
-
-                    <TouchableOpacity>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 'bold',
-                          backgroundColor: 'orange',
-                          marginTop: 2,
-                          padding: 2,
-                          margin:2
-                        }}>
-                        Pending
+            {leavesday.leavedays !== undefined
+              ? leavesday.leavedays.map((Ldays, index) => {
+                  // {console.log(Ldays)}
+                  return (
+                    <View
+                      key={index}
+                      style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                        {Ldays.leave_date}
                       </Text>
 
-                    </TouchableOpacity> 
-                      </View>
-                      
-                     
-                     
-                   
+                      <TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            backgroundColor: 'orange',
+                            marginTop: 2,
+                            padding: 2,
+                            margin: 2,
+                          }}>
+                          Pending
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   );
                 })
               : null}
-        </View>
+          </View>
           {/* leacves modal start  */}
         </View>
-  
-      <Modal transparent={false} visible={leavesmodal} animationType="slide">
+
+        <Modal transparent={false} visible={leavesmodal} animationType="slide">
           <View
             style={{
               flex: 1,
@@ -389,84 +374,81 @@ const MyProfile = () => {
                         ))}
                       </View>
 
-                    {Object.values(calendarRows).map((cols, index) => {
-                      // {console.log(cols)}
-                      return (
-                        <View
-                          key={index}
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginBottom: 10,
-                            // backgroundColor:"red"
-                          }}>
-                          {cols.map((col, i) =>
-                            col.date === todayFormatted ? (
-                              <TouchableOpacity
-                                key={i}
-                                style={[
-                                  todayFormatted
-                                    ? {
-                                        backgroundColor: 'green',
-                                        borderRadius: 50,
-                                        paddingHorizontal: 10,
-                                        marginLeft: -5,
-                                      }
-                                    : null,
-                                ]}
-                                onPress={() => {
-                                  dateClickHandler(col.date, i);
-                                }}>
-                                <Title style={{color: '#fff'}}>
-                                  {col.value}
-                                </Title>
-                              </TouchableOpacity>
-                            ) : (
-                              <TouchableOpacity
-                                key={i}
-                                className={col.classes}
-                                onPress={() => {
-
-                                  dateClickHandler(col.date, i);
-                                }}>
-                                <Title
+                      {Object.values(calendarRows).map((cols, index) => {
+                        // {console.log(cols)}
+                        return (
+                          <View
+                            key={index}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginBottom: 10,
+                              // backgroundColor:"red"
+                            }}>
+                            {cols.map((col, i) =>
+                              col.date === todayFormatted ? (
+                                <TouchableOpacity
+                                  key={i}
                                   style={[
-                                    col.classes == 'in-prev-month'
-                                      ? {opacity: 0.5}
-                                      : col.classes == 'in-next-month'
-                                      ? {opacity: 0.5}
-                                      : i == 6
+                                    todayFormatted
                                       ? {
-                                          backgroundColor: 'orange',
+                                          backgroundColor: 'green',
                                           borderRadius: 50,
-                                          paddingHorizontal: 5,
+                                          paddingHorizontal: 10,
                                           marginLeft: -5,
                                         }
-
-                                      : col.date == leavesdate[i]
-
-                                      ? {
-                                          backgroundColor: 'red',
-                                          borderRadius: 50,
-                                          paddingHorizontal: 5,
-                                          marginLeft: -5,
-                                          color: '#fff',
-                                        }
-                                      : {
-                                          backgroundColor: COLORS.gray3,
-                                          borderRadius: 50,
-                                          paddingHorizontal: 5,
-                                          marginLeft: -5,
-                                        },
-                                  ]}>
-                                  {col.value}
-                                </Title>
-                              </TouchableOpacity>
-                            ),
-                          )}
-                        </View>
-                      );
-                    })}
+                                      : null,
+                                  ]}
+                                  onPress={() => {
+                                    dateClickHandler(col.date, i);
+                                  }}>
+                                  <Title style={{color: '#fff'}}>
+                                    {col.value}
+                                  </Title>
+                                </TouchableOpacity>
+                              ) : (
+                                <TouchableOpacity
+                                  key={i}
+                                  className={col.classes}
+                                  onPress={() => {
+                                    dateClickHandler(col.date, i);
+                                  }}>
+                                  <Title
+                                    style={[
+                                      col.classes == 'in-prev-month'
+                                        ? {opacity: 0.5}
+                                        : col.classes == 'in-next-month'
+                                        ? {opacity: 0.5}
+                                        : i == 6
+                                        ? {
+                                            backgroundColor: 'orange',
+                                            borderRadius: 50,
+                                            paddingHorizontal: 5,
+                                            marginLeft: -5,
+                                          }
+                                        : col.date == leavesdate[i]
+                                        ? {
+                                            backgroundColor: 'red',
+                                            borderRadius: 50,
+                                            paddingHorizontal: 5,
+                                            marginLeft: -5,
+                                            color: '#fff',
+                                          }
+                                        : {
+                                            backgroundColor: COLORS.gray3,
+                                            borderRadius: 50,
+                                            paddingHorizontal: 5,
+                                            marginLeft: -5,
+                                          },
+                                    ]}>
+                                    {col.value}
+                                  </Title>
+                                </TouchableOpacity>
+                              ),
+                            )}
+                          </View>
+                        );
+                      })}
 
                       <View
                         style={{
@@ -563,115 +545,117 @@ const MyProfile = () => {
                 ))}
               </View>
 
-            {Object.values(calendarRows).map((cols, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 5,
-                    marginBottom: 5,
-                    // backgroundColor:"red"
-                  }}>
-                  {cols.map((col, i) =>
-                    col.date === todayFormatted ? (
-                      <TouchableOpacity
-                        key={i}
-                        style={[
-                          todayFormatted
-                            ? {
-                                backgroundColor: 'green',
-                                borderRadius: 50,
-                                paddingHorizontal: 10,
-                                marginLeft: -5,
-                              }
-                            : null,
-                        ]}
-                        // style={{color:"red"}}
-                      >
-                        <Popable
-                          animationType="spring"
-                          content={
-                            <View
-                              style={{
-                                padding: 10,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: COLORS.gray3,
-                                // elevation:10,
-                                // height:100,
-                                // width:100
-                              }}>
-                              <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                                In-{finalTime}Out
-                              </Text>
-                            </View>
-                          }>
-                          <Title style={{color: '#fff'}}>{col.value}</Title>
-                        </Popable>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity key={col.date} className={col.classes}>
-                        <Popable
-                          action="hover"
-                          content={
-                            <View
-                              style={{
-                                padding: 10,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: COLORS.gray3,
-                                // height:100,
-                                width: 100,
-                              }}>
-                              <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                                In-{finalTime}Out
-                              </Text>
-                            </View>
-                          }>
-                          <Title
-                            style={[
-                              col.classes == 'in-prev-month'
-                                ? {opacity: 0.5}
-                                : col.classes == 'in-next-month'
-                                ? {opacity: 0.5}
-                                : i == 6
-                                ? {
-                                    backgroundColor: 'orange',
-                                    borderRadius: 50,
-                                    paddingHorizontal: 5, //10
-                                    marginLeft: -5,
-                                  }
+              {Object.values(calendarRows).map((cols, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginTop: 5,
+                      marginBottom: 5,
+                      // backgroundColor:"red"
+                    }}>
+                    {cols.map((col, i) =>
+                      col.date === todayFormatted ? (
+                        <TouchableOpacity
+                          key={i}
+                          style={[
+                            todayFormatted
+                              ? {
+                                  backgroundColor: 'green',
+                                  borderRadius: 50,
+                                  paddingHorizontal: 10,
+                                  marginLeft: -5,
+                                }
+                              : null,
+                          ]}
+                          // style={{color:"red"}}
+                        >
+                          <Popable
+                            animationType="spring"
+                            content={
+                              <View
+                                style={{
+                                  padding: 10,
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  backgroundColor: COLORS.gray3,
+                                  // elevation:10,
+                                  // height:100,
+                                  // width:100
+                                }}>
+                                <Text
+                                  style={{fontSize: 15, fontWeight: 'bold'}}>
+                                  In-{finalTime}Out
+                                </Text>
+                              </View>
+                            }>
+                            <Title style={{color: '#fff'}}>{col.value}</Title>
+                          </Popable>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          key={col.date}
+                          className={col.classes}>
+                          <Popable
+                            action="hover"
+                            content={
+                              <View
+                                style={{
+                                  padding: 10,
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  backgroundColor: COLORS.gray3,
+                                  // height:100,
+                                  width: 100,
+                                }}>
+                                <Text
+                                  style={{fontSize: 15, fontWeight: 'bold'}}>
+                                  In-{finalTime}Out
+                                </Text>
+                              </View>
+                            }>
+                            <Title
+                              style={[
+                                col.classes == 'in-prev-month'
+                                  ? {opacity: 0.5}
+                                  : col.classes == 'in-next-month'
+                                  ? {opacity: 0.5}
+                                  : i == 6
+                                  ? {
+                                      backgroundColor: 'orange',
+                                      borderRadius: 50,
+                                      paddingHorizontal: 5, //10
+                                      marginLeft: -5,
+                                    }
+                                  : col.date == [leavesday.leave_date]
+                                  ? {
+                                      backgroundColor: 'blue',
+                                      color: '#fff',
+                                      borderRadius: 50,
+                                      paddingHorizontal: 10,
+                                      marginLeft: -5,
+                                    }
+                                  : {
+                                      // textAlign:"center",
+                                      backgroundColor: COLORS.gray3,
+                                      borderRadius: 50,
+                                      paddingHorizontal: 5,
+                                      marginLeft: -5,
+                                    },
+                              ]}>
+                              {col.value}
+                            </Title>
+                          </Popable>
+                        </TouchableOpacity>
+                      ),
+                    )}
+                  </View>
+                );
+              })}
 
-                                :   col.date == [leavesday.leave_date]
-
-                                ? {
-                                    backgroundColor: 'blue',
-                                    color: '#fff',
-                                    borderRadius: 50,
-                                    paddingHorizontal: 10,
-                                    marginLeft: -5,
-                                  }
-                                : {
-                                    // textAlign:"center",
-                                    backgroundColor: COLORS.gray3,
-                                    borderRadius: 50,
-                                    paddingHorizontal: 5,
-                                    marginLeft: -5,
-                                  },
-                            ]}>
-                            {col.value}
-                          </Title>
-                        </Popable>
-                      </TouchableOpacity>
-                    ),
-                  )}
-                </View>
-              );
-            })}
-
-            {/* <View
+              {/* <View
               style={{
                 marginTop: 20,
                 flexDirection: 'row',
@@ -685,10 +669,9 @@ const MyProfile = () => {
                 T days:{30}
               </Text>
             </View> */}
-
-          </Card.Content>
-        </Card>
-      </View>
+            </Card.Content>
+          </Card>
+        </View>
       </ScrollView>
     </View>
   );
@@ -697,4 +680,3 @@ const MyProfile = () => {
 export default MyProfile;
 
 const styles = StyleSheet.create({});
-

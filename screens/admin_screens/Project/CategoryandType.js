@@ -537,9 +537,9 @@ const CategoryandType = () => {
                       textAlign: 'left',
                     }}>
                     Project Types like Residential - bungalows, duplexes,
-                    high-rise apartments, mid-rise apartments, Commercial -
-                    offices, malls & multiplexes, Industrial - warehouses,
-                    factories, Institutional - schools, colleges, Mixed-use -
+                    high-rise & mid-rise apartments. {'\n'}Commercial -
+                    offices, malls & multiplexes. {'\n'}Industrial - warehouses,
+                    factories. {'\n'}Institutional - schools, colleges.{'\n'}Mixed-use -
                     nursing homes, restaurants, etc.
                   </Text>
                 </View>

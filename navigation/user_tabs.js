@@ -8,7 +8,6 @@ import {
   UserDashboard,
   Profile,
   Demo,
-  Demo1,
   MyProfile,
   UserReports,
 } from '../screens/user_screens';
