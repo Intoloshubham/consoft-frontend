@@ -1,5 +1,14 @@
 import React from 'react';
-import {View, ScrollView, SafeAreaView, RefreshControl} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  RefreshControl,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
 import ProjectReports from './ProjectReports';
@@ -9,12 +18,13 @@ import {useSelector} from 'react-redux';
 import {getSubmitWorks} from '../../../controller/AssignWorkController';
 import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
 import {getAssignWorks} from '../../../controller/AssignWorkController';
+import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const Home = () => {
+const Home = ({navigation}) => {
   const companyData = useSelector(state => state.company);
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -77,17 +87,46 @@ const Home = () => {
             flex: 1,
             marginBottom: 100,
           }}>
-          {/* <View
-            style={{paddingHorizontal: SIZES.padding, marginTop: SIZES.radius}}>
-            <Text
-              style={{
-                textTransform: 'capitalize',
-                ...FONTS.h2,
-                color: COLORS.darkGray,
-              }}>
-              {companyData.company_name}
-            </Text>
-          </View> */}
+          <View
+            style={{
+              marginHorizontal: SIZES.padding,
+              marginTop: SIZES.radius,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                Welcome...
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h2,
+                  textTransform: 'capitalize',
+                  color: COLORS.lightblue_700,
+                  fontWeight: 'bold',
+                }}>
+                {companyData.company_name}
+              </Text>
+            </View>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.lightblue_900,
+                  padding: 2,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={images.civil_eng}
+                  style={{
+                    height: 40,
+                    width: 40,
+                    borderRadius: 5,
+                  }}
+                />
+              </ImageBackground>
+            </TouchableOpacity> */}
+          </View>
           <ProjectsBanner company_id={companyData._id} />
           <SubmittedWorks data={submitWork} Submitfunction={fetchSubmitWork} />
           <ProjectReports />

@@ -3,7 +3,6 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS, FONTS, SIZES, icons, images} from '../constants';
-
 import {
   Home,
   Account,
@@ -11,6 +10,7 @@ import {
   ReportsDisplay,
   Tasks,
 } from '../screens/admin_screens';
+import {useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,6 +37,8 @@ const TabBarCustomButton = ({children, onPress}) => {
   );
 };
 const Tabs = () => {
+  const companyData = useSelector(state => state.company);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -47,13 +49,10 @@ const Tabs = () => {
           bottom: 0,
           left: 0,
           right: 0,
-          elevation: 0,
+          elevation: 10,
           backgroundColor: COLORS.white,
           borderTopColor: 'transparent',
           height: 100,
-        },
-        headerStyle: {
-          // height: 60,
         },
         headerTitleAlign: 'left',
         headerRight: () => (
@@ -72,9 +71,10 @@ const Tabs = () => {
         ),
       }}>
       <Tab.Screen
-        name="Dashboard"
+        name={'Dashboard'}
         component={Home}
         options={{
+          // headerShown:false,
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image

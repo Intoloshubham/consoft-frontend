@@ -974,10 +974,11 @@ const ProjectsBanner = () => {
       </Modal>
     );
   }
+  
   return (
     <View
       style={{
-        marginTop: SIZES.padding,
+        marginTop: SIZES.radius,
         marginHorizontal: SIZES.padding,
         paddingVertical: SIZES.radius,
         paddingHorizontal: SIZES.padding,
