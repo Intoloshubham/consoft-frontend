@@ -42,8 +42,6 @@ const UserReports = ({ route }) => {
 
   //for saving projects
   const [selectedIdProjects, setSelectedIdProjects] = useState([])
-
-
   const [userid, setUserid] = useState(null)
   const userData = useSelector(state => state.user);
 
@@ -58,19 +56,20 @@ const UserReports = ({ route }) => {
 
   //   // console.log("seconde.....................")
 
- 
+
   // }, [getUserId])
 
   useMemo(() => {
-    console.log("first...........")
+    console.log("userbyproject...........")
     console.log(userData._id)
     if (userData._id) {
-      const sendUserId =async () => {
-       let data= await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
-       let resp=await data.json();
-       console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
-       setSelectedIdProjects(resp);
-     
+      const sendUserId = async () => {
+        let data = await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
+        //  console.log("🚀 ~ file: UserReports.js ~ line 70 ~ sendUserId ~ data", data)
+        let resp = await data.json();
+        console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
+        setSelectedIdProjects(resp);
+
       }
       sendUserId();
     }
@@ -116,9 +115,9 @@ const UserReports = ({ route }) => {
       const data = Get_Project_Team_Data(value)
       data.then(res => res.json())
         .then(result => {
-          // console.log("result")
-          // console.log(result)
-          setProjectTeamList(result)
+          console.log("result")
+          console.log(result)
+          setProjectTeamList(result.data)
         })
     } else {
       return
@@ -135,7 +134,7 @@ const UserReports = ({ route }) => {
       style={{ flex: 1, margin: SIZES.base, position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}
     >
       <Dropdown
-        style={[
+        style={[ 
           Project_list_drop,
           proListIsFocus && {
             borderColor: COLORS.lightblue_600,
@@ -174,7 +173,7 @@ const UserReports = ({ route }) => {
         }}
 
       />
-      <ScrollView contentContainerStyle={{ height: SIZES.height }} horizontal={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ height: SIZES.height }} nestedScrollEnabled={false} scrollEnabled={true} horizontal={false}>
         <View
           style={{
             flex: 1,
@@ -187,7 +186,7 @@ const UserReports = ({ route }) => {
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           {value ? <View >
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} />
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value}  />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}

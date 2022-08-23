@@ -45,7 +45,7 @@ const ProjectsDetails = ({route}) => {
             : item.id == 3
             ? navigation.navigate('Contractors', {project_id})
             : item.id == 4
-            ? navigation.navigate('StocksAndInventry')
+            ? navigation.navigate('StocksAndInventry',{project_id})
             : item.id == 5
             ? navigation.navigate('ToolsAndMachinery', {project_id})
             : item.id == 6

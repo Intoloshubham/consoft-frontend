@@ -10,6 +10,10 @@ import {
   StyleSheet,
   Switch,
   Linking,
+  TextInput,
+  TouchableWithoutFeedback,
+  Button,
+  Keyboard,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
@@ -59,7 +63,6 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
-    console.log(res);
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('UserDashboard');
@@ -219,6 +222,88 @@ const Login = ({navigation}) => {
             }}
             onPress={userOnSubmit}
           />
+        </View>
+        <View
+          style={{
+            marginTop: 30,
+            marginHorizontal: SIZES.padding * 4,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 6,
+              borderRadius: 5,
+            }}
+            onPress={() => {
+              Linking.openURL(
+                'mailto:ssdoffice44@gmail.com?subject=Subject&body=description',
+              );
+            }}>
+            <Image
+              source={icons.mail}
+              resizeMode="contain"
+              style={{
+                height: 12,
+                width: 12,
+                tintColor: COLORS.black,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 6,
+              borderRadius: 5,
+            }}
+            onPress={makeCall}>
+            <Image
+              source={icons.call}
+              resizeMode="contain"
+              style={{
+                height: 12,
+                width: 12,
+                tintColor: COLORS.black,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 6,
+              borderRadius: 5,
+            }}
+            onPress={() => {
+              Linking.openURL('https://wa.me/8109093551');
+            }}>
+            <Image
+              source={icons.whatsapp}
+              resizeMode="contain"
+              style={{
+                height: 12,
+                width: 12,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 6,
+              borderRadius: 5,
+            }}
+            onPress={() => Linking.openURL('http://www.intoloindia.com/')}>
+            <Image
+              source={icons.website}
+              resizeMode="contain"
+              style={{
+                height: 12,
+                width: 12,
+                tintColor: COLORS.black,
+              }}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -487,33 +572,54 @@ const Login = ({navigation}) => {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? SIZES.padding : SIZES.height}
+    <LinearGradient
+      colors={[COLORS.lightblue_100, COLORS.lightblue_300]}
       style={{flex: 1}}>
-      <LinearGradient
-        colors={[COLORS.lightblue_100, COLORS.lightblue_300]}
-        style={{flex: 1}}>
-        {renderHeaderLogo()}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <KeyboardAwareScrollView
-            keyboardDismissMode="on-drag"
-            contentContainerStyle={{
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View
+            style={{
               flex: 1,
+              justifyContent: 'space-around',
             }}>
-            {renderHeaderImage()}
-            {renderToggleButton()}
-            {switchValue ? renderCompanyForm() : renderUserForm()}
-          </KeyboardAwareScrollView>
-        </ScrollView>
-      </LinearGradient>
-      <CustomToast
-        isVisible={submitToast}
-        onClose={() => setSubmitToast(false)}
-        color={COLORS.green}
-        title="Login"
-        message="Login Successfully..."
-      />
-    </KeyboardAvoidingView>
+            <View
+              style={{
+                marginBottom: 48,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={images.consoft_PNG}
+                resizeMode="contain"
+                style={{
+                  height: 100,
+                }}
+              />
+              <View
+                style={{
+                  marginTop: SIZES.radius,
+                  height: 30,
+                  justifyContent: 'center',
+                }}>
+                <Image
+                  source={images.build_f}
+                  resizeMode="contain"
+                  style={{
+                    width: 180,
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{}}>
+              {renderToggleButton()}
+              {switchValue ? renderCompanyForm() : renderUserForm()}
+            </View>
+            <View style={{marginBottom: 80}}></View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 };
 
@@ -531,6 +637,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+  },
+  container: {
+    flex: 1,
+  },
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: 'space-around',
+  },
+  header: {
+    fontSize: 36,
+    marginBottom: 48,
+  },
+  textInput: {
+    height: 40,
+    borderColor: '#000000',
+    borderBottomWidth: 1,
+    marginBottom: 36,
+  },
+  btnContainer: {
+    backgroundColor: 'white',
+    marginTop: 12,
   },
 });
 

@@ -16,8 +16,12 @@ import {
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
 import {SIZES, COLORS, icons, Images, FONTS} from '../../../../constants';
-
-const url = 'http://192.168.1.99:8000/api/unit';
+import {
+  getUnits,
+  postUnits,
+  unitDelete,
+  updateUnit,
+} from '../../../../controller/UnitController';
 
 const Unit = () => {
   const [unitname, setUintname] = useState('');
@@ -36,36 +40,22 @@ const Unit = () => {
     //  console.log(name)
   };
 
-  const Update = () => {
-    const data1 = {
+  const Update = async () => {
+    const updateunitdata = {
       unit_name: unitname,
     };
-    fetch('http://192.168.1.99:8000/api/unit/' + `${unitid}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data1),
-    })
-      .then(response => response.json())
-      .then(data => {
-        fetchData();
-        console.log('Success:', data, alert('unit update'));
-        //  unitname == ''
-        //     // ? alert('plz fill unitname')
-        //     // : data.message == 'This unit is already exist'
-        //     // ? alert('This unit is already exist')
-        //     : alert('unit successfull update ');
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+
+    let data = await updateUnit(unitid, updateunitdata);
+    setUintname('');
+    fetchData();
+    alert('unit successfull update ');
+    unitname == '';
+
+    setShowBox(false);
   };
 
   const fetchData = async () => {
-    const resp = await fetch('http://192.168.1.99:8000/api/unit/');
-    const data = await resp.json();
-    //  console.log(data);
+    const data = await getUnits();
     setdata(data);
   };
   // get data api list
@@ -76,43 +66,29 @@ const Unit = () => {
 
   // console.log(data);
 
-  function submit(e) {
-    const data = {
+  const submit = async e => {
+    const unitdata = {
       unit_name: unitname,
     };
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        setUintname('');
-        fetchData();
-        console.log('Success:', data.message);
-        {
-          unitname == ''
-            ? alert('plz fill unitname')
-            : data.message == 'This unit is already exist'
-            ? alert('This unit is already exist')
-            : alert(' create ');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  }
+    let data = await postUnits(unitdata);
+    if (data.status === 200) {
+      setUintname('');
+      fetchData();
+    }
+    {
+      unitname == ''
+        ? alert('plz fill unitname')
+        : data.message == 'This unit is already exist'
+        ? alert('This unit is already exist')
+        : alert(' create ');
+    }
+    setModal(false);
+  };
 
   //  delete unit api
-  const DeleteUnit = async id => {
-    console.log(id);
-    let result = await fetch(`http://192.168.1.99:8000/api/unit/${id}`, {
-      method: 'DELETE',
-    });
-    result = await result.json();
-    console.log(result, alert('this unit deleted '));
+  const DeleteUnit = async unitid => {
+    let data = await unitDelete(unitid);
+    alert('this unit  deleted ');
     fetchData();
   };
 
@@ -124,12 +100,10 @@ const Unit = () => {
             <Text style={styles.title}>{item.unit_name}</Text>
             <View
               style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-              <View style={{flexDirection:"row"}}>
+              <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
-                  onPress={() =>
-                    updateunit(item._id, item.unit_name)
-                  }>
-                    <Image
+                  onPress={() => updateunit(item._id, item.unit_name)}>
+                  <Image
                     source={icons.edit}
                     style={{
                       width: 18,
@@ -138,10 +112,9 @@ const Unit = () => {
                       tintColor: COLORS.lightblue_900,
                     }}
                   />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => DeleteUnit(item._id)}>
-                    <Image
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => DeleteUnit(item._id)}>
+                  <Image
                     source={icons.delete_icon}
                     style={{
                       width: 18,
@@ -150,7 +123,7 @@ const Unit = () => {
                       tintColor: COLORS.red,
                     }}
                   />
-                  </TouchableOpacity>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -336,7 +309,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    textTransform:"capitalize"
+    textTransform: 'capitalize',
   },
   input: {
     backgroundColor: 'white',

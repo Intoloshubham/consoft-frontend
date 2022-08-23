@@ -1,9 +1,16 @@
 import React from 'react';
-import {View, Image} from 'react-native';
-import AuthLayout from '../Authentication/AuthLayout';
+import {
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Image,
+  Text,
+} from 'react-native';
 import utils from '../../utils';
 import {FormInput, TextButton, HeaderBar, CustomToast} from '../../Components';
-import {COLORS, images, SIZES, icons} from '../../constants';
+import {COLORS, images, SIZES, icons, FONTS} from '../../constants';
 import {useSelector, useDispatch} from 'react-redux';
 import {verifyProductKey} from '../../services/companyAuthApi';
 
@@ -35,66 +42,93 @@ const VerifyProductKey = ({navigation}) => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.white,
-      }}>
+    <View style={{flex: 1}}>
       <HeaderBar right={true} title="Verify Product Key" />
-      <AuthLayout
-        title="Verify Your Product Key"
-        subtitle="Product key has been sent to your email"
-        image={images.product_key}>
-        <View
-          style={{
-            marginTop: SIZES.padding * 2,
-            marginHorizontal: SIZES.padding,
-          }}>
-          <FormInput
-            // label="Email"
-            placeholder="Product key"
-            keyboardType="email-address"
-            autoCompleteType="email"
-            onChange={value => {
-              utils.validateText(value, setProductKeyError);
-              setProductKey(value);
-            }}
-            errorMsg={productKeyError}
-            appendComponent={
-              <View style={{justifyContent: 'center'}}>
-                <Image
-                  source={
-                    productKey == '' ||
-                    (productKey != '' && productKeyError == '')
-                      ? icons.correct
-                      : icons.cancel
-                  }
-                  style={{
-                    height: 20,
-                    width: 20,
-                    tintColor:
-                      productKey == ''
-                        ? COLORS.gray
-                        : productKey != '' && productKeyError == ''
-                        ? COLORS.green
-                        : COLORS.red,
-                  }}
-                />
-              </View>
-            }
-          />
-          <TextButton
-            label="Submit & Continue"
-            buttonContainerStyle={{
-              height: 45,
-              alignItems: 'center',
-              marginTop: SIZES.padding,
-              borderRadius: SIZES.base,
-            }}
-            onPress={OnSubmit}
-          />
-        </View>
-      </AuthLayout>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View
+            style={{
+              padding: SIZES.padding,
+              flex: 1,
+              justifyContent: 'space-around',
+            }}>
+            <View style={{marginBottom: 40, alignItems: 'center'}}>
+              <Image
+                source={images.product_key}
+                resizeMode="contain"
+                style={{
+                  height: 100,
+                  width: 200,
+                }}
+              />
+              <Text
+                style={{
+                  textAlign: 'center',
+                  ...FONTS.h2,
+                }}>
+                Verify Your Product Key
+              </Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  color: COLORS.darkGray,
+                  marginTop: SIZES.base,
+                  ...FONTS.body3,
+                }}>
+                Product key has been sent to your email
+              </Text>
+            </View>
+            <View>
+              <FormInput
+                // label="Email"
+                placeholder="Product key"
+                keyboardType="email-address"
+                autoCompleteType="email"
+                onChange={value => {
+                  utils.validateText(value, setProductKeyError);
+                  setProductKey(value);
+                }}
+                errorMsg={productKeyError}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        productKey == '' ||
+                        (productKey != '' && productKeyError == '')
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          productKey == ''
+                            ? COLORS.gray
+                            : productKey != '' && productKeyError == ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <TextButton
+                label="Submit & Continue"
+                buttonContainerStyle={{
+                  height: 45,
+                  alignItems: 'center',
+                  marginTop: SIZES.padding,
+                  borderRadius: SIZES.base,
+                }}
+                onPress={OnSubmit}
+              />
+            </View>
+            <View style={{marginBottom: 130}}></View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
       <CustomToast
         isVisible={submitToast}
         onClose={() => setSubmitToast(false)}

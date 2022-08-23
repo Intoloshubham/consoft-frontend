@@ -12,6 +12,7 @@ import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../.
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Get_Contractor_Data, Get_user_role } from '../../../ReportApi.js'
 import styles from '../../../ReportStyle.js'
+import { useSelector } from 'react-redux';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 const ManPowerProjectTeam = ({ projectTeamList }) => {
@@ -22,32 +23,41 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
     //for projectteam collapse
     const [proTeamTabCollapse, setProTeamTabCollapse] = useState(false)
     //for getting project name
-    const [ProjectTeamName, setProjectTeamName] = useState([])
+    const [ProjectTeamName, setProjectTeamName] = useState('')
     //getting userrole name
     const [UserRole, setUserRole] = useState('')
 
     // setting setMergeRolePro
     const [mergeRolePro, setMergeRolePro] = useState('')
-    //getting project team names with designation
-    useMemo(() => {
+
+
+    const companydata = useSelector(state => state.user);
+
+    function projectTeamName() {
         if (projectTeamList) {
             projectTeamList.map(ele => {
                 let project_teams = ele.project_team
+                // console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 40 ~ useMemo ~ project_teams", project_teams)
 
                 setProjectTeamName(project_teams)
-                // console.log(project_teams)
             })
         }
-    }, [projectTeamList])
+    }
+
+    //getting project team names with designation
+    useMemo(() => {
+        projectTeamName();
+    }, [projectTeamList, companydata.company_id])
+    // console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 38 ~ useMemo ~ setProjectTeamName", ProjectTeamName)
 
     //getting role 
-    useEffect(() => {
-        const data = Get_user_role()
-        data.then(res => res.json())
-            .then(result => {
-                setUserRole(result)
-            })
-    }, [])
+    // useEffect(() => {
+    //     const data = Get_user_role()
+    //     data.then(res => res.json())
+    //         .then(result => {
+    //             setUserRole(result)
+    //         })
+    // }, [])
 
     // useMemo(() => {
     //     if (UserRole && ProjectTeamName) {
@@ -62,6 +72,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
     //   console.log("array..................")
     //project team list collapse 
     const _project_team = (item, index) => {
+        // console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 70 ~ ManPowerProjectTeam ~ item", item)
         // console.log("item..4.............")
         // console.log(item);
         LayoutAnimation.easeInEaseOut();
@@ -118,7 +129,7 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                     horizontal={true}
                     contentContainerStyle={{ width: '100%', height: '100%' }}>
                     <FlatList
-                        data={ProjectTeamName}
+                        data={ProjectTeamName ? ProjectTeamName : alert('Currently no team members are there!!')}
                         horizontal={false}
                         scrollEnabled={true}
                         nestedScrollEnabled={true}
@@ -126,7 +137,6 @@ const ManPowerProjectTeam = ({ projectTeamList }) => {
                         renderItem={({ item, index }) => _project_team(item, index)}
                         keyExtractor={(item, index) => index.toString()}
                     />
-
                 </ScrollView>
 
                 )

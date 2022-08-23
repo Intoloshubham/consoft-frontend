@@ -20,8 +20,13 @@ import {
 } from '../../../controller/LeavesController';
 import {CustomToast} from '../../../Components';
 import {getUsers} from '../../../controller/UserRoleController';
+import {useSelector} from 'react-redux';
+import {Agenda} from 'react-native-calendars';
 
 const Profile = () => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+
   const [selectedStartDate, setSelectedStartDate] = React.useState(null);
   const [selectedEndDate, setSelectedEndDate] = React.useState(null);
   const [leaves, setLeaves] = React.useState([]);
@@ -67,8 +72,10 @@ const Profile = () => {
   };
 
   const getusers = async () => {
-    let response = await getUsers();
-    setUsers(response);
+    let response = await getUsers(company_id);
+    if (response.status === 200) {
+      setUsers(response.data);
+    }
   };
 
   const [userId, setUserId] = React.useState('');
@@ -80,6 +87,27 @@ const Profile = () => {
   React.useEffect(() => {
     userLeaves();
   }, []);
+
+  // calender
+  const [appointments, setAppointments] = React.useState({
+    '2022-08-24': [
+      {
+        name: 'Rohit Namdeo',
+        start: '10:00 AM',
+        end: '10:30 AM',
+        type: 'Follow Up',
+      },
+    ],
+
+    '2022-08-23': [
+      {
+        name: 'Aman Tiwari',
+        start: '10:00 AM',
+        end: '11:00 AM',
+        type: 'Accute',
+      },
+    ],
+  });
 
   function renderUserLeavesList() {
     const renderItem = ({item}) => (
@@ -188,7 +216,7 @@ const Profile = () => {
             data={leaves}
             keyExtractor={item => `${item._id}`}
             renderItem={renderItem}
-            maxHeight={310}
+            maxHeight={160}
             scrollEnabled={true}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => {
@@ -273,6 +301,45 @@ const Profile = () => {
           selectYearTitle={'Select Year'}
         />
       </View>
+    );
+  }
+
+  function renderCalender1() {
+    const renderItem = item => {
+      return (
+        <TouchableOpacity
+          style={[styles.item, {height: item.height}]}
+          onPress={() => Alert.alert(item.name)}>
+          <Text style={styles.timing}>
+            {item.start} {' - '} {item.end}
+          </Text>
+          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.type}>{item.type}</Text>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      // <View style={{flex:1,margin:10}}>
+        <Agenda
+          items={appointments}
+          renderItem={item => {
+            return renderItem(item);
+          }}
+          onDayPress={day => {
+            console.log(day);
+          }}
+          showClosingKnob={true}
+          style={{}}
+          theme={{
+            agendaDayTextColor: '#03A9F4',
+            agendaDayNumColor: 'black',
+            agendaKnobColor: '#03A9F4',
+          }}
+          markingType={'multi-dot'}
+          pastScrollRange={7}
+          futureScrollRange={16}
+        />
+      // </View>
     );
   }
 
@@ -406,10 +473,12 @@ const Profile = () => {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <View>
       {renderUserLeavesList()}
       {renderShowUserDetails()}
       {renderfilterModal()}
+      {renderCalender1()}
+
       <CustomToast
         isVisible={submitToast}
         onClose={() => setSubmitToast(false)}
@@ -417,7 +486,7 @@ const Profile = () => {
         title="Approved"
         message="Approved Successfully..."
       />
-    </ScrollView>
+    </View>
   );
 };
 
@@ -431,6 +500,40 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+  },
+  addbutton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  item: {
+    backgroundColor: COLORS.darkGray,
+    flex: 1,
+    borderRadius: 5,
+    padding: 15,
+    marginRight: 10,
+    marginTop: 25,
+  },
+  name: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  timing: {
+    color: COLORS.white,
+  },
+  type: {
+    color: '#03A9F4',
+  },
+  emptyDate: {
+    height: 15,
+    flex: 1,
+    paddingTop: 30,
+  },
+  modalContent: {
+    flex: 1,
+    marginTop: 20,
+    alignItems: 'center',
   },
 });
 export default Profile;

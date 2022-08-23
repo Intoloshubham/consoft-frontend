@@ -8,11 +8,11 @@ import {
   Modal,
   Pressable,
   Button,
-  TextInput,  
+  TextInput,
   TouchableOpacity
 
 } from 'react-native';
-import { Title,  Divider } from 'react-native-paper';
+import { Title, Divider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -115,7 +115,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   ]);
 
 
- 
+
 
 
 
@@ -229,7 +229,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         } else {
           console.log("data not found!")
         }
- 
+
       }
     }
 
@@ -740,20 +740,20 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               </Text>
             </SubQualityTypeRadioButton>
           )) : null}
-        <View>
-          <TouchableOpacity
-            style={{ alignSelf: "flex-end" }}
-            onPress={() => delete_inside_Handler(key, index1)}>
-            <Image
-              source={icons.delete_icon}
-              style={{
-                width: 20,
-                height: 20,
-                tintColor: COLORS.green,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
+          <View>
+            <TouchableOpacity
+              style={{ alignSelf: "flex-end" }}
+              onPress={() => delete_inside_Handler(key, index1)}>
+              <Image
+                source={icons.delete_icon}
+                style={{
+                  width: 20,
+                  height: 20,
+                  tintColor: COLORS.green,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
 
       </View>
@@ -1273,7 +1273,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                 // padding: 5,
                 elevation: 1
               }}
-              >
+            >
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
                 <View style={{}}>
                   <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
@@ -1617,7 +1617,6 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                             </View>
                             <View style={{ top: 10, position: "relative", left: 170 }}>
                               {
-
                                 getRepPostData ? list.quantityWorkItems.subquantityitems.map((res, index2) =>
                                 (
                                   <View
@@ -1759,7 +1758,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               </ScrollView>
             </View>
           </View>
-          : null
+          :null
         }
         {/* <View style={{ top: 22, left: -40, borderWidth: 1, borderColor: COLORS.lightblue_300, paddingHorizontal: 60 }}><Text>Nothing to display!!</Text></View> */}
       </View>
