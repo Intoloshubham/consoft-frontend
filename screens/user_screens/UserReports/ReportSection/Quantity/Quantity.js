@@ -22,7 +22,7 @@ import {
 import { Card, Title, DataTable, Divider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';

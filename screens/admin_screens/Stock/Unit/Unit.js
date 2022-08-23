@@ -18,7 +18,7 @@ import {FormInput, HeaderBar, TextButton} from '../../../../Components';
 import {SIZES, COLORS, icons, Images, FONTS} from '../../../../constants';
 import { getUnits,postunits,unitdalete,updateunitname} from '../../../../controller/unitController';
 
-const url = 'http://192.168.1.99:8000/api/unit';
+// const url = 'http://192.168.1.99:8000/api/unit';
 
 const Unit = () => {
   const [unitname, setUintname] = useState('');
