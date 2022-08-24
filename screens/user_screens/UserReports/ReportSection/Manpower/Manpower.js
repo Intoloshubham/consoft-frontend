@@ -88,7 +88,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value}) => {
             {TabCollapse ? <View style={{ justifyContent: "space-evenly" }}>
                 <View>
                     {/* project team start */} 
-                    <ManPowerProjectTeam projectTeamList={projectTeamList} />
+                    <ManPowerProjectTeam projectTeamList={projectTeamList} Main_drp_pro_value={Main_drp_pro_value} />
                     {/* Project Team close */}
                 </View>
                 <View>
