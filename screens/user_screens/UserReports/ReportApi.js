@@ -94,7 +94,7 @@ const insert_new_sub_category = (new_subCateg_post) => {
     }
 }
 
-const get_new_category = (company_id,project_id) => {
+const get_new_category = (company_id, project_id) => {
     try {
         const res = fetch(`${process.env.API_URL}manpower-category/${company_id}/${project_id}/`)
         return res;
@@ -102,7 +102,7 @@ const get_new_category = (company_id,project_id) => {
         console.log(error)
     }
 }
-const filter_new_category_by_cont_Id = (company_id,project_id,contractor_id) => {
+const filter_new_category_by_cont_Id = (company_id, project_id, contractor_id) => {
     try {
         const res = fetch(`${process.env.API_URL}manpower-category/${company_id}/${project_id}/${contractor_id}/`)
         return res;
@@ -131,7 +131,7 @@ const get_stock_data = async () => {
 
 const get_manpower_report = async (project_id, user_id, curr_date) => {
     try {
-        const res =await fetch(`${process.env.API_URL}manpower-report/${project_id}/${user_id}/${curr_date}/`)
+        const res = await fetch(`${process.env.API_URL}manpower-report/${project_id}/${user_id}/${curr_date}/`)
         const data = await res.json();
         return data;
     } catch (error) {
@@ -239,11 +239,25 @@ const get_stock_item_name = async () => {
     }
 }
 
+
+const get_works_in_progress =async (Id) => {
+
+    try {
+        const res = await fetch(`${process.env.API_URL}user-assign-works/${Id}`);    
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+
+
+}
+
 export {
     Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data,
     delete_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type, get_new_sub_category,
     get_stock_item_name, insert_stock_data, get_stock_data, insert_new_category, get_new_category, insert_new_sub_category,
-    insert_manpower_report, get_manpower_report, delete_manpower_data,filter_new_category_by_cont_Id
+    insert_manpower_report, get_manpower_report, delete_manpower_data, filter_new_category_by_cont_Id,get_works_in_progress
 }
 
 
