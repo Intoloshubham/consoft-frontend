@@ -196,5 +196,5 @@ export default {
   staff,
   boq,
   add_qty_item,
-  add_qty_item1
+  add_qty_item1,delete_withbg
 };

@@ -5,10 +5,10 @@ const myProfile = {
 };
 
 const reports = [
-  {id: 1, name: 'Quality'},
-  {id: 2, name: 'Quantity'},
-  {id: 3, name: 'Stock keeper'},
-  {id: 4, name: 'Other'},
+  { id: 1, name: 'Quality' },
+  { id: 2, name: 'Quantity' },
+  { id: 3, name: 'Stock keeper' },
+  { id: 4, name: 'Other' },
 ];
 
 const categories = [
@@ -58,40 +58,40 @@ const Active_tasks = [
 
 const barData = [
   {
-    label: 0,
-    value: 100,
+    work: '',
     date: '10/05/2021',
     code: '1050',
+    count: 0
   },
   {
-    label: 1,
-    value: 10,
+    work: '',
     date: '11/05/2021',
     code: '1051',
+    count: 0
   },
   {
-    label: 2,
-    value: 40,
+    work: '',
     date: '12/05/2021',
     code: '1052',
+    count: 0 
   },
   {
-    label: 3,
-    value: 50,
+    work: '',
     date: '13/05/2021',
     code: '1053',
+    count: 0 
   },
   {
-    label: 4,
-    value: 60,
+    work: '',
     date: '14/05/2021',
     code: '1055',
+    count: 0
   },
   {
-    label: 5,
-    value: 75,
+    work: '',
     date: '14/05/2021',
     code: '1056',
+    count: 0
   },
 ];
 

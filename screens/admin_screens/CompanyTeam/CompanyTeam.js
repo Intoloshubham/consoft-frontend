@@ -118,7 +118,7 @@ const CompanyTeam = () => {
     projects();
   };
 
-  React.useState(() => {
+  React.useEffect(() => {
     getCompanyTeam();
   }, []);
 

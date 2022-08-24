@@ -52,7 +52,6 @@ const ProjectCompanyShow = () => {
 
   const getCompanyTeam = async () => {
     let response = await getUsers();
-    console.log(response);
     setComTeamDetails(response);
   };
 

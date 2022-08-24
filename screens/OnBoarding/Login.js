@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -58,9 +58,8 @@ const Login = ({navigation}) => {
       mobile: userMobileNo,
       password: userPassword,
     };
-    console.log(process.env.API_URL+'login')
     const res = await dispatch(userLogin(UserData));
-    // console.log(res);
+    console.log(res);
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('UserDashboard');

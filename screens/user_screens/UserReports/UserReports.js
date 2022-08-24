@@ -23,7 +23,10 @@ import { useDispatch, useSelector } from 'react-redux';
 const UserReports = ({ route }) => {
 
   LogBox.ignoreLogs(["EventEmitter.removeListener"]);
-  LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
 
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, Project_list_drop } = styles
@@ -39,8 +42,6 @@ const UserReports = ({ route }) => {
 
   //for saving projects
   const [selectedIdProjects, setSelectedIdProjects] = useState([])
-
-
   const [userid, setUserid] = useState(null)
   const userData = useSelector(state => state.user);
 
@@ -59,17 +60,16 @@ const UserReports = ({ route }) => {
   // }, [getUserId])
 
   useMemo(() => {
-    // console.log("first...........")
-    // console.log(userData._id)
+    console.log("userbyproject...........")
+    console.log(userData._id)
     if (userData._id) {
-      const sendUserId = () => {
-        fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
-          .then((response) => response.json())
-          .then(data => {
-            // console.log("data........")
-            // console.log(data)
-            setSelectedIdProjects(data);
-          })
+      const sendUserId = async () => {
+        let data = await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
+        //  console.log("🚀 ~ file: UserReports.js ~ line 70 ~ sendUserId ~ data", data)
+        let resp = await data.json();
+        console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
+        setSelectedIdProjects(resp);
+
       }
       sendUserId();
     }
@@ -115,15 +115,15 @@ const UserReports = ({ route }) => {
       const data = Get_Project_Team_Data(value)
       data.then(res => res.json())
         .then(result => {
-          // console.log("result")
-          // console.log(result)
-          setProjectTeamList(result)
+          console.log("result")
+          console.log(result)
+          setProjectTeamList(result.data)
         })
     } else {
       return
     }
   }, [value])
-// console.log(projectTeamList)
+  // console.log(projectTeamList)
 
 
 
@@ -134,7 +134,7 @@ const UserReports = ({ route }) => {
       style={{ flex: 1, margin: SIZES.base, position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}
     >
       <Dropdown
-        style={[
+        style={[ 
           Project_list_drop,
           proListIsFocus && {
             borderColor: COLORS.lightblue_600,
@@ -173,7 +173,7 @@ const UserReports = ({ route }) => {
         }}
 
       />
-      <ScrollView contentContainerStyle={{ height: SIZES.height }} horizontal={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ height: SIZES.height }} nestedScrollEnabled={false} scrollEnabled={true} horizontal={false}>
         <View
           style={{
             flex: 1,
@@ -184,27 +184,26 @@ const UserReports = ({ route }) => {
           }}>
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
-          <View >
+          {value ? <View >
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} />
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value}  />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
-              <Stock />
+              <Stock project_id={value} Main_drp_pro_value={value} />
             </View>
-            <View style={{ marginVertical: 5 }}  Main_drp_pro_value={value}>
+            <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>
               {/* Quantity */}
-              <Quantity project_id={value} Main_drp_pro_value={value}/>
+              <Quantity project_id={value} Main_drp_pro_value={value} />
             </View>
-            <View style={{ marginVertical: 5 }}>
-              {/* Quality */}
+            {/* <View style={{ marginVertical: 5 }}>
               <Quality />
-            </View>
+            </View> */}
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}
               <TAndP />
             </View>
-          </View>
+          </View> : null}
         </View>
       </ScrollView>
     </View>

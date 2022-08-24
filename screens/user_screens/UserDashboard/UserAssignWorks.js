@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  RefreshControl,
+  RefreshControl, ScrollView
 } from 'react-native';
 import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { AccordionList } from 'accordion-collapse-react-native';
@@ -38,11 +38,11 @@ const UserAssignWorks = () => {
         setAssignWorks(ele.assign_works);
       });
     }
-  }, [userData]);
+  }, []);
 
   useEffect(() => {
     fetchAssignWorks();
-  }, [fetchAssignWorks]);
+  }, []);
 
   // submit comment
   const submitComment = async work_id => {
@@ -224,18 +224,21 @@ const UserAssignWorks = () => {
         )
       })
      } */}
-
-      <AccordionList
-        list={assignWorks}
-        header={renderHeader}
-        body={renderBody}
-        isExpanded={false}
-        keyExtractor={item => `${item._id}`}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={true}
-        nestedScrollEnabled={true}
-        maxHeight={300}
-      />
+      <ScrollView
+        horizontal={true}
+        contentContainerStyle={{ width: '100%', height: '100%' }}>
+        <AccordionList
+          list={assignWorks}
+          header={renderHeader}
+          body={renderBody}
+          isExpanded={false}
+          keyExtractor={item => `${item._id}`}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={true}
+          nestedScrollEnabled={true}
+          maxHeight={300}
+        />
+      </ScrollView>
     </View>
   );
 };
