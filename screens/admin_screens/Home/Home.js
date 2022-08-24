@@ -97,17 +97,19 @@ const Home = ({navigation}) => {
               alignItems: 'center',
             }}>
             <View>
-              <Text
-                style={{
-                  ...FONTS.h2,
-                  textTransform: 'capitalize',
-                  color: COLORS.lightblue_700,
-                  fontWeight: 'bold',
-                }}>
-                {companyData.company_name}
-              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+                <Text
+                  style={{
+                    ...FONTS.h2,
+                    textTransform: 'capitalize',
+                    color: COLORS.lightblue_700,
+                    fontWeight: 'bold',
+                  }}>
+                  {companyData.company_name}
+                </Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+            <TouchableOpacity>
               <Image
                 source={images.consoft_PNG}
                 style={{
