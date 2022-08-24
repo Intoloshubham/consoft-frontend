@@ -74,24 +74,24 @@ const Tabs = () => {
         name={'Dashboard'}
         component={Home}
         options={{
-          headerShown:false,
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
                 source={icons.dashboard}
                 resizeMode="contain"
                 style={{
-                  height: 18,
-                  width: 18,
-                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
+                  height: focused ? 20 : 18,
+                  width: focused ? 20 : 18,
+                  tintColor: focused ? COLORS.rose_600 : COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.yellow_700 : COLORS.black,
+                  color: focused ? COLORS.rose_600 : COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Dashboard
+                Home
               </Text>
             </View>
           ),
@@ -106,14 +106,14 @@ const Tabs = () => {
               <Image
                 source={icons.tasks}
                 style={{
-                  height: 18,
-                  width: 18,
-                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
+                  height: focused ? 20 : 18,
+                  width: focused ? 20 : 18,
+                  tintColor: focused ? COLORS.rose_600 : COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.yellow_700 : COLORS.black,
+                  color: focused ? COLORS.rose_600 : COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Tasks
@@ -149,14 +149,14 @@ const Tabs = () => {
               <Image
                 source={icons.date}
                 style={{
-                  height: 18,
-                  width: 18,
-                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
+                  height: focused ? 20 : 18,
+                  width: focused ? 20 : 18,
+                  tintColor: focused ? COLORS.rose_600 : COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.yellow_700 : COLORS.black,
+                  color: focused ? COLORS.rose_600 : COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Calender
@@ -174,14 +174,14 @@ const Tabs = () => {
               <Image
                 source={icons.account}
                 style={{
-                  height: 18,
-                  width: 18,
-                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
+                  height: focused ? 20 : 18,
+                  width: focused ? 20 : 18,
+                  tintColor: focused ? COLORS.rose_600 : COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.yellow_700 : COLORS.black,
+                  color: focused ? COLORS.rose_600 : COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Account

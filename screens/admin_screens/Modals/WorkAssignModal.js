@@ -74,6 +74,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onRoleOpen = React.useCallback(() => {
     setOpenUsers(false);
+    getUserRoles();
   }, []);
 
   const onUserOpen = React.useCallback(() => {
@@ -127,9 +128,9 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     }, 1500);
   };
 
-  React.useEffect(() => {
-    getUserRoles();
-  }, []);
+  // React.useEffect(() => {
+  //   getUserRoles();
+  // }, []);
 
   // DOCUMENT PICKER
   // const [fileData, setFileData] = React.useState([]);

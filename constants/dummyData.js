@@ -148,7 +148,6 @@ const Cost = {
   price: 15.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/hamburger.png'),
 };
 
 const Timeline = {
@@ -159,7 +158,6 @@ const Timeline = {
   price: 10.99,
   calories: 78,
   isFavourite: false,
-  image: require('../assets/dummyData/hot_tacos.png'),
 };
 
 const Stock = {
@@ -170,7 +168,6 @@ const Stock = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/veg_biryani.png'),
 };
 
 const Manpower = {
@@ -181,7 +178,6 @@ const Manpower = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/wrap_sandwich.png'),
 };
 
 const Quality = {
@@ -192,7 +188,6 @@ const Quality = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/wrap_sandwich.png'),
 };
 
 const Safety = {
@@ -203,7 +198,6 @@ const Safety = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/wrap_sandwich.png'),
 };
 
 const Technical = {
@@ -214,7 +208,6 @@ const Technical = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/wrap_sandwich.png'),
 };
 
 const menu = [
