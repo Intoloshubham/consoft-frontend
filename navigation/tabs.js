@@ -6,7 +6,7 @@ import {COLORS, FONTS, SIZES, icons, images} from '../constants';
 import {
   Home,
   Account,
-  Profile,
+  Calender,
   ReportsDisplay,
   Tasks,
 } from '../screens/admin_screens';
@@ -74,7 +74,7 @@ const Tabs = () => {
         name={'Dashboard'}
         component={Home}
         options={{
-          // headerShown:false,
+          headerShown:false,
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
@@ -141,13 +141,13 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Calender"
+        component={Calender}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
-                source={icons.profile}
+                source={icons.date}
                 style={{
                   height: 18,
                   width: 18,
@@ -159,7 +159,7 @@ const Tabs = () => {
                   color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Profile
+                Calender
               </Text>
             </View>
           ),

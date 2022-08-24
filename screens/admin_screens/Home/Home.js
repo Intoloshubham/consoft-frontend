@@ -81,7 +81,8 @@ const Home = ({navigation}) => {
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        }
+        showsVerticalScrollIndicator={false}>
         <View
           style={{
             flex: 1,
@@ -90,15 +91,12 @@ const Home = ({navigation}) => {
           <View
             style={{
               marginHorizontal: SIZES.padding,
-              marginTop: SIZES.radius,
+              marginVertical: SIZES.radius,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
             <View>
-              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
-                Welcome...
-              </Text>
               <Text
                 style={{
                   ...FONTS.h2,
@@ -109,23 +107,16 @@ const Home = ({navigation}) => {
                 {companyData.company_name}
               </Text>
             </View>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-              <ImageBackground
+            <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+              <Image
+                source={images.consoft_PNG}
                 style={{
-                  backgroundColor: COLORS.lightblue_900,
-                  padding: 2,
+                  height: 40,
+                  width: 80,
                   borderRadius: 5,
-                }}>
-                <Image
-                  source={images.civil_eng}
-                  style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 5,
-                  }}
-                />
-              </ImageBackground>
-            </TouchableOpacity> */}
+                }}
+              />
+            </TouchableOpacity>
           </View>
           <ProjectsBanner company_id={companyData._id} />
           <SubmittedWorks data={submitWork} Submitfunction={fetchSubmitWork} />

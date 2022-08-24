@@ -3,8 +3,8 @@ import {View, Text} from 'react-native';
 
 const ReportDisplay = () => {
   return (
-    <View>
-      <Text>Report</Text>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>ReportDisplay</Text>
     </View>
   );
 };

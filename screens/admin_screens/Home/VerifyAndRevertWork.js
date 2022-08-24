@@ -64,7 +64,7 @@ const VerifyAndRevertWork = ({verify, revert}) => {
         <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
           All work tasks
         </Text>
-        <TouchableOpacity onPress={() => alert('filter')}>
+        {/* <TouchableOpacity onPress={() => alert('filter')}>
           <Image
             source={icons.filter}
             style={{
@@ -73,7 +73,7 @@ const VerifyAndRevertWork = ({verify, revert}) => {
               tintColor: COLORS.darkGray,
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <Tab.Navigator
         style={{height: 350}}
@@ -82,11 +82,11 @@ const VerifyAndRevertWork = ({verify, revert}) => {
           tabBarLabelStyle: {...FONTS.h3},
         }}>
         <Tab.Screen
-          name="Verify"
+          name="Verified"
           children={() => <VerifyWorks VerifyData={verify} />}
         />
         <Tab.Screen
-          name="Revert"
+          name="Reverted"
           children={() => <RevertWorks RevertData={revert} />}
         />
       </Tab.Navigator>

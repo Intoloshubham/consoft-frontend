@@ -394,10 +394,10 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
           paddingHorizontal: SIZES.padding,
           paddingTop: SIZES.radius,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
+        <Text style={{...FONTS.h2, color: COLORS.darkGray,marginBottom:5}}>
           Assigned works
         </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setFilterRoleModal(true)}>
             <Image
               source={icons.filter}
@@ -408,7 +408,7 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
               }}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
       {renderSwipeList()}
       {renderRoleFilterModal()}

@@ -21,7 +21,7 @@ import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
 import Tasks from './Tasks/Tasks';
-import Profile from './Profile/Profile';
+import Calender from './Calender/Calender';
 import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
 import Quantitywork from './Stock/Tools/Quantitywork';
@@ -55,7 +55,7 @@ export {
   ManageStock,
   Unit,
   Tasks,
-  Profile,
+  Calender,
   Suppliers,
   SubmittedWorks,
   Optiontype,
