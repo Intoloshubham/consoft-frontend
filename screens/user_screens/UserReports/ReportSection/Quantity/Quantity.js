@@ -122,9 +122,9 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const addKeyref = useRef(0);
 
 
-  const companydata = useSelector(state => state.user);
-  console.log("🚀 ~ file: Quantity.js ~ line 153 ~ Quantity ~ companydata", companydata)
-  // console.log(companydata)
+  const userData = useSelector(state => state.user);
+  // console.log("🚀 ~ file: Quantity.js ~ line 153 ~ Quantity ~ userData", userData)
+  // console.log(userData)
 
   const current_dat = moment().format("YYYY%2FMM%2FDD")
   // console.log(current_dat)
@@ -148,9 +148,10 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     const report_post_data = {
       company_id: companyIdData,
       project_id: project_id,
-      user_id: companydata._id,
+      user_id: userData._id,
       inputs
     }
+    // console.log("🚀 ~ file: Quantity.js ~ line 154 ~ insertQtyPostData ~ report_post_data", report_post_data)
     if (report_post_data) {
       const data = Insert_report_data(report_post_data, CONST_FIELD)
       data.then((res) => res.json())
@@ -161,6 +162,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           setPostQtyData(resp)
           if (resp.status == '200') {
             setSubmitToast(true)
+            // getRreportData()
             setTimeout(() => {
               setReportmodal(false);
             }, 1500);
@@ -206,7 +208,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   }
 
-  console.log("🚀 ~ file: Quantity.js ~ line 153 ~ getQualityType ~ qualityType", qualityType)
+  // console.log("🚀 ~ file: Quantity.js ~ line 153 ~ getQualityType ~ qualityType", qualityType)
 
 
 
@@ -220,23 +222,25 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   useEffect(() => {
 
-    async function getRreportData() {
+    async function getReportData() {
       if (Main_drp_pro_value || postQtyData || updateStatus) {
         // You can await here
-        const data = await Get_report_data(companydata._id, Main_drp_pro_value, current_dat)
+        const data = await Get_report_data(Main_drp_pro_value, userData._id,  current_dat)
+        console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", data)
         if (data.status == 200) {
           setGetRepPostData(data);
         } else {
           console.log("data not found!")
         }
-
+        
       }
     }
-
-    getRreportData();
+    
+    getReportData();
     getQualityType();
   }, [postQtyData, Main_drp_pro_value, updateStatus])
-
+  
+  // console.log("🚀 ~ file: Quantity.js ~ line 230 ~ getRreportData ~ getRepPostData", getRepPostData)
 
 
 
@@ -314,7 +318,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const addHandler = async () => {
 
     // if (Main_drp_pro_value) {
-    const result1 = await check_quantity_item_exist(Main_drp_pro_value, companydata._id);
+    const result1 = await check_quantity_item_exist(Main_drp_pro_value, userData._id);
     console.log("🚀 ~ file: Quantity.js ~ line 364 ~ addHandler ~ result1", result1)
 
     if (result1.status != 401) {
@@ -344,7 +348,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
 
-
+ 
   const deleteHandler = key => {
     // const _inputs = inputs.filter((input, index) => index != key);
     const _inputs = [...inputs]
@@ -464,7 +468,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
   const fetchData = async () => {
     const resp = await fetch(`${process.env.API_URL}unit`);
-    console.log("🚀 ~ file: Quantity.js ~ line 513 ~ fetchData ~ resp", resp)
+    // console.log("🚀 ~ file: Quantity.js ~ line 513 ~ fetchData ~ resp", resp)
     const data = await resp.json();
     setdata(data);
   };
@@ -479,7 +483,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
     const quantityworkitem = {
       item_name: quantityitem,
       unit_id: value,
-      company_id: companydata.company_id,
+      company_id: userData.company_id,
     };
     try {
       fetch(`${process.env.API_URL}quantity-report-item`, {
@@ -490,7 +494,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         },
         body: JSON.stringify(quantityworkitem),
       })
-        .then(response => response.json())
+        .then(response => response.json()) 
         .then(data => {
 
           if (data.status == 200) {
@@ -513,7 +517,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   const reportdataitem = async () => {
     try {
       const resp = await fetch(
-        `${process.env.API_URL}quantity-report-item/` + `${companydata.company_id}`,
+        `${process.env.API_URL}quantity-report-item/` + `${userData.company_id}`,
       );
       const quantitydata = await resp.json();
       console.log("🚀 ~ file: Quantity.js ~ line 638 ~ reportdataitem ~ quantitydata", quantitydata)
@@ -527,7 +531,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   };
   useMemo(() => {
     reportdataitem();
-  }, [companydata.company_id]);
+  }, [userData.company_id]);
 
   const QualityTypeRadioButton = ({ onPress, selected, children, type, mainKey }) => {
 
