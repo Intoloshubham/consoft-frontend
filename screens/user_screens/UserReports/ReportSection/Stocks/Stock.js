@@ -303,8 +303,8 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
         return (
 
             <Modal visible={stockReportModal} transparent={false} animationType="slide">
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                <View
+                    // behavior={Platform.OS === "ios" ? "padding" : "height"}
                     style={{ flex: 1, backgroundColor: COLORS.transparentBlack1 }}
                 >
                     <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
@@ -378,7 +378,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                 />
                         </View>
                     </View>
-                </KeyboardAvoidingView>
+                </View>
             </Modal>
         )
     }
