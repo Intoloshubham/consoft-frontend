@@ -158,8 +158,9 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         .then((resp) => {
           // console.log("resp report data")
           // console.log(resp)
-
+         
           setPostQtyData(resp)
+          getReportData();
           if (resp.status == '200') {
             setSubmitToast(true)
             // getRreportData()
@@ -219,23 +220,21 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   //   , [Main_drp_pro_value])
 
 
-
-  useEffect(() => {
-
-    async function getReportData() {
-      if (Main_drp_pro_value || postQtyData || updateStatus) {
-        // You can await here
-        const data = await Get_report_data(Main_drp_pro_value, userData._id,  current_dat)
-        console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", data)
-        if (data.status == 200) {
-          setGetRepPostData(data);
-        } else {
-          console.log("data not found!")
-        }
-        
+  async function getReportData() {
+    if (Main_drp_pro_value || postQtyData || updateStatus) {
+      // You can await here
+      const data = await Get_report_data(Main_drp_pro_value, userData._id,  current_dat)
+      console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", data)
+      if (data.status == 200) {
+        setGetRepPostData(data);
+      } else {
+        console.log("data not found!")
       }
+      
     }
-    
+  }
+
+  useEffect(() => {    
     getReportData();
     getQualityType();
   }, [postQtyData, Main_drp_pro_value, updateStatus])

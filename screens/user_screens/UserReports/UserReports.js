@@ -19,6 +19,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Get_Project_Team_Data } from '../UserReports/ReportApi.js'
 import { getToken, getUserId } from '../../../services/asyncStorageService';
 import Config from '../../../config'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch, useSelector } from 'react-redux';
 const UserReports = ({ route }) => {
 
@@ -134,7 +135,7 @@ const UserReports = ({ route }) => {
       style={{ flex: 1, margin: SIZES.base, position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}
     >
       <Dropdown
-        style={[ 
+        style={[
           Project_list_drop,
           proListIsFocus && {
             borderColor: COLORS.lightblue_600,
@@ -173,7 +174,14 @@ const UserReports = ({ route }) => {
         }}
 
       />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ height: SIZES.height }} nestedScrollEnabled={false} scrollEnabled={true} horizontal={false}>
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ height: SIZES.height }}
+        nestedScrollEnabled={true}
+        keyboardShouldPersistTaps='handled'
+        scrollEnabled={true}
+        horizontal={false}>
         <View
           style={{
             flex: 1,
@@ -186,7 +194,7 @@ const UserReports = ({ route }) => {
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           {value ? <View >
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value}  />
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
@@ -205,7 +213,7 @@ const UserReports = ({ route }) => {
             </View>
           </View> : null}
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   )
 }
