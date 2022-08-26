@@ -35,7 +35,7 @@ import {
 } from '../../../index.js';
 import { Get_Contractor_Data } from '../../ReportApi.js';
 
-const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value}) => {
+const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value,loading}) => {
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -88,12 +88,12 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value}) => {
             {TabCollapse ? <View style={{ justifyContent: "space-evenly" }}>
                 <View>
                     {/* project team start */} 
-                    <ManPowerProjectTeam projectTeamList={projectTeamList} Main_drp_pro_value={Main_drp_pro_value} />
+                    <ManPowerProjectTeam projectTeamList={projectTeamList} Main_drp_pro_value={Main_drp_pro_value} loading={loading} />
                     {/* Project Team close */}
                 </View>
                 <View>
                     {/* Contractors start */}
-                    <ManpowerUserContractors ProList={ProList} Main_drp_pro_value={Main_drp_pro_value}  />
+                    <ManpowerUserContractors ProList={ProList} Main_drp_pro_value={Main_drp_pro_value} loading={loading} />
                     {/* Contractors close */}
                 </View>
 

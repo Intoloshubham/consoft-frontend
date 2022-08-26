@@ -157,7 +157,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       data.then((res) => res.json())
         .then((resp) => {
           // console.log("resp report data")
-          // console.log(resp)
+          console.log(resp)
          
           setPostQtyData(resp)
           getReportData();

@@ -48,6 +48,7 @@ const UserDashboard = () => {
 
   return (
     <ScrollView
+    
       refreshControl={
         <RefreshControl
           progressBackgroundColor="white"
@@ -55,7 +56,8 @@ const UserDashboard = () => {
           refreshing={loading}
           onRefresh={loadMore}
         />
-      }>
+      }
+      >
       <UserAssignWorks />
       <View
         style={{
@@ -63,10 +65,10 @@ const UserDashboard = () => {
           paddingHorizontal: SIZES.radius,
           paddingVertical: SIZES.radius,
           borderRadius: SIZES.base,
-          backgroundColor: COLORS.lightblue_500,
-          ...styles.shadow,
+          // backgroundColor: COLORS.lightblue_500,
+          // ...styles.shadow,
         }}>
-        <TouchableOpacity 
+        {/* <TouchableOpacity 
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -83,15 +85,15 @@ const UserDashboard = () => {
             </Text>
           </View>
           <Text style={{...FONTS.h3, color: COLORS.darkGray}}>2</Text>
-        </TouchableOpacity>
-        {inProgressModalnum && (
+        </TouchableOpacity> */}
+        {/* {inProgressModalnum && (
           <InProgressModal
             inProgressModal={inProgressModal}
             setinProgressModal={setinProgressModal}
           />
-        )}
+        )} */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             marginTop: SIZES.base,
             flexDirection: 'row',
@@ -109,7 +111,7 @@ const UserDashboard = () => {
             </Text>
           </View>
           <Text style={{...FONTS.h3, color: COLORS.darkGray}}>3</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {doneModalnum && (
           <DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />
         )}
