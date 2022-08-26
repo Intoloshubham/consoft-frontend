@@ -24,7 +24,7 @@ import {
 } from '../../../../../../Components'
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
-const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
+const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) => {
     // console.log("ManpowerProjectTeam")
     //css
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, cont_Project_list_drop } = styles
@@ -87,6 +87,8 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
     // fetch project team
     const fetchProjectTeam = async () => {
         const team = await Get_Project_Team_Data(Main_drp_pro_value);
+        // console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 90 ~ fetchProjectTeam ~ team", team)
+        
         const temp = await team.json();
         if (temp.status == 200) {
             setProjectTeamName(temp.data);
@@ -96,7 +98,7 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
 
     useEffect(() => {
         fetchProjectTeam();
-    }, [Main_drp_pro_value]);
+    }, [Main_drp_pro_value,loading]);
 
 
 
@@ -149,32 +151,32 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
     }
 
     //   adding project team button
-    const add_project_team = () => {
-        return (
-            <TouchableOpacity
-                style={{
-                    borderRadius: SIZES.radius * 0.2,
-                    justifyContent: "center",
-                    flexDirection: "row",
-                    paddingHorizontal: 2,
+    // const add_project_team = () => {
+    //     return (
+    //         <TouchableOpacity
+    //             style={{
+    //                 borderRadius: SIZES.radius * 0.2,
+    //                 justifyContent: "center",
+    //                 flexDirection: "row",
+    //                 paddingHorizontal: 2,
 
-                }}
-                onPress={() => {
-                    LayoutAnimation.easeInEaseOut();
-                    addProjectTeam();
-                }}>
-                <View style={{
-                    alignSelf: "center"
-                }}>
-                    <Ionicons
-                        name='person-add'
-                        size={20}
-                        color={COLORS.lightblue_400}
-                    />
-                </View>
-            </TouchableOpacity>
-        )
-    }
+    //             }}
+    //             onPress={() => {
+    //                 LayoutAnimation.easeInEaseOut();
+    //                 addProjectTeam();
+    //             }}>
+    //             <View style={{
+    //                 alignSelf: "center"
+    //             }}>
+    //                 <Ionicons
+    //                     name='person-add'
+    //                     size={20}
+    //                     color={COLORS.lightblue_400}
+    //                 />
+    //             </View>
+    //         </TouchableOpacity>
+    //     )
+    // }
 
 
     // adding project team modal
@@ -346,15 +348,15 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
                     flexDirection: "row",
                     right: SIZES.base,
 
-                    top: -24
+                    // top: -24
                 }}
             >
                 {/* button section adding contractor */}
-                {proTeamTabCollapse ? add_project_team() : null}
+                {/* {proTeamTabCollapse ? add_project_team() : null} */}
             </View>
-            {renderProjectTeamModal()}
+            {/* {renderProjectTeamModal()} */}
             {proTeamTabCollapse &&
-                (<View style={{ marginTop: -25, paddingVertical: 10, marginBottom: -10 }}>
+                (<View style={{ marginTop: -10, paddingVertical: 10, marginBottom: -10 }}>
                     <ScrollView
                         horizontal={true}
                         contentContainerStyle={{ width: '100%', height: '100%' }}>

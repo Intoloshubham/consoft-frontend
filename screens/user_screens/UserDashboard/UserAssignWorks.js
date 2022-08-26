@@ -11,6 +11,8 @@ import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
 import { Divider } from '@ui-kitten/components';
+import styles from '../TaskModal/css/InProgressModalStyle.js';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { useSelector, useDispatch } from 'react-redux';
 import Config from '../../../config';
 import {
@@ -24,7 +26,7 @@ const UserAssignWorks = () => {
   const [assignWorks, setAssignWorks] = React.useState([]);
   const [textMsg, setTextMsg] = React.useState('');
   const [userDataId, setUserDataId] = useState('')
-
+  const [getTaskInProgress, setGetTaskInProgress] = useState(assignWorks);
 
   const userData = useSelector(state => state.user);
   // console.log(userData._id)
@@ -36,6 +38,7 @@ const UserAssignWorks = () => {
     if (data) {
       data.map(ele => {
         setAssignWorks(ele.assign_works);
+        setGetTaskInProgress(ele.assign_works);
       });
     }
   }, []);
@@ -57,6 +60,25 @@ const UserAssignWorks = () => {
     }
   };
 
+  const __handle_increase_counter = (item, index1) => {
+    const _inputs = [...getTaskInProgress];
+    if (_inputs[index1].work_percent < 100) {
+      _inputs[index1].work_percent = _inputs[index1].work_percent + 5;
+      _inputs[index1].key = index1;
+      setGetTaskInProgress(_inputs);
+    }
+  };
+
+  const __handle_decrease_counter = (item, index1) => {
+    const _inputs = [...getTaskInProgress];
+    if (_inputs[index1].work_percent > 0) {
+      _inputs[index1].work_percent = _inputs[index1].work_percent - 5;
+      _inputs[index1].key = index1;
+      setGetTaskInProgress(_inputs);
+    }
+  };
+
+
   const WorkDetails = ({ item, message, color, index }) => {
     return (
       <View
@@ -68,12 +90,19 @@ const UserAssignWorks = () => {
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
         }}>
+            <View style={{
+              backgroundColor: COLORS.white,
+              width: `${item.work_percent}%`,
+              borderBottomWidth: 10, borderColor: COLORS.green
+            }}>
+            </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
+
           <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
             <Text
               style={{
@@ -106,29 +135,34 @@ const UserAssignWorks = () => {
 
   const renderHeader = (item, index) => {
     return (
-      <View>
-        {item.work_status == true &&
-          item.verify == false &&
-          item.revert_status == false ? (
-          <WorkDetails
-            item={item}
-            message={'Pending from the admin side'}
-            color={COLORS.yellow_400}
-          />
-        ) : item.work_status == false &&
-          item.verify == false &&
-          item.revert_status == true ? (
-          <WorkDetails item={item} message={'Revert'} color={COLORS.rose_600} />
-        ) : item.work_status == false &&
-          item.verify == false &&
-          item.revert_status == false ? (
-          <WorkDetails item={item} message={''} color={COLORS.black} />
-        ) : null}
-      </View>
+      <>
+        <View>
+          {item.work_status == true &&
+            item.verify == false &&
+            item.revert_status == false ? (
+            <WorkDetails
+              item={item}
+              message={'Pending from the admin side'}
+              color={COLORS.yellow_400}
+            />
+          ) : item.work_status == false &&
+            item.verify == false &&
+            item.revert_status == true ? (
+            <WorkDetails item={item} message={'Revert'} color={COLORS.rose_600} />
+          ) : item.work_status == false &&
+            item.verify == false &&
+            item.revert_status == false ? (
+            <WorkDetails item={item} message={''} color={COLORS.black} />
+          ) : null}
+
+        </View>
+      </>
     );
   };
 
-  const renderBody = item => {
+  const renderBody = (item, index) => {
+    // console.log("🚀 ~ file: UserAssignWorks.js ~ line 134 ~ renderBody ~ item", item.work_percent)
+
     return (
       <View
         style={{
@@ -139,6 +173,12 @@ const UserAssignWorks = () => {
         }}
         key={item.key}>
         <View style={{}}>
+          {/* <View style={{
+            backgroundColor: COLORS.white,
+            width: `${item.work_percent}%`,
+            borderBottomWidth: 10, borderColor: COLORS.green
+          }}>
+          </View> */}
           <View
             style={{
               flexDirection: 'row',
@@ -170,25 +210,63 @@ const UserAssignWorks = () => {
                 value={textMsg}
               />
             </View>
-            <TouchableOpacity
-              style={{
-                alignItems: 'flex-end',
-                marginTop: SIZES.base,
-              }}
-              onPress={() => submitComment(item._id)}>
-              {item.work_status == false || item.revert_status == true ? (
-                <Text
-                  style={{
-                    color: COLORS.white,
-                    backgroundColor: COLORS.lightblue_500,
-                    paddingHorizontal: 10,
-                    paddingVertical: 3,
-                    borderRadius: 3,
-                  }}>
-                  Send
-                </Text>
-              ) : null}
-            </TouchableOpacity>
+            <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
+              {/* <TouchableOpacity style={{}}> */}
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                  onPress={() => __handle_decrease_counter(item, index)}
+                >
+                  <Entypo
+                    name="minus"
+                    size={25}
+                    color={COLORS.white}
+                  />
+                </TouchableOpacity>
+                <View>
+                  <TextInput
+                    style={styles.inputfromone}
+                    editable={false}
+                    // value={item.count[index1]}
+                    value={String(`${item.work_percent}%`)}
+                    onChangeText={(text) => __handle_increase_counter(text, index)}
+                    placeholderTextColor={COLORS.lightGray1}
+                    keyboardType="numeric"
+                    placeholder={'counter'}
+                  />
+                </View>
+                <TouchableOpacity
+
+                  onPress={() => __handle_increase_counter(item, index)}
+                >
+                  <Entypo
+                    name="plus"
+                    size={25}
+                    color={COLORS.white}
+                  />
+                </TouchableOpacity>
+              </View>
+              {/* </TouchableOpacity> */}
+              <TouchableOpacity
+                style={{
+                  alignItems: 'flex-end',
+                  marginTop: SIZES.base,
+                  backgroundColor: "red"
+                }}
+                onPress={() => submitComment(item._id)}>
+                {item.work_status == false || item.revert_status == true ? (
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      backgroundColor: COLORS.lightblue_500,
+                      paddingHorizontal: 10,
+                      paddingVertical: 3,
+                      borderRadius: 3,
+                    }}>
+                    Send
+                  </Text>
+                ) : null}
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -228,7 +306,7 @@ const UserAssignWorks = () => {
         horizontal={true}
         contentContainerStyle={{ width: '100%', height: '100%' }}>
         <AccordionList
-          list={assignWorks}
+          list={getTaskInProgress ? getTaskInProgress : null}
           header={renderHeader}
           body={renderBody}
           isExpanded={false}
@@ -242,7 +320,7 @@ const UserAssignWorks = () => {
     </View>
   );
 };
-const styles = StyleSheet.create({
+const styles1 = StyleSheet.create({
   shadow: {
     shadowColor: '#000',
     shadowOffset: {
