@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Image,
   Modal,
-  TouchableWithoutFeedback,
   ScrollView,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {
   HeaderBar,
@@ -24,9 +25,12 @@ import {
   getContractors,
   postContractors,
   deleteContractors,
-} from '../../../controller/contractorController';
+} from '../../../controller/ContractorController';
+import {useSelector} from 'react-redux';
 
 const Contractors = ({route}) => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
   const {project_id} = route.params; //
   const [showContractorsModal, setShowContractorsModal] = React.useState(false);
   const [contractors, setContractors] = React.useState([]);
@@ -47,6 +51,7 @@ const Contractors = ({route}) => {
   // get contractors
   const fetchContractors = async () => {
     let data = await getContractors();
+    // console.log(data)
     setContractors(data);
   };
 
@@ -56,6 +61,7 @@ const Contractors = ({route}) => {
       project_id: project_id,
       contractor_name: name,
       phone_no: mobileNo,
+      company_id: company_id,
     };
     let data = await postContractors(formData);
     if (data.status === 200) {
@@ -179,118 +185,120 @@ const Contractors = ({route}) => {
         animationType="slide"
         transparent={true}
         visible={showContractorsModal}>
-        <TouchableWithoutFeedback>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
           <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              width: '90%',
+              padding: SIZES.padding,
+              borderRadius: 5,
+              backgroundColor: COLORS.white,
             }}>
             <View
               style={{
-                position: 'absolute',
-                left: SIZES.padding,
-                width: '90%',
-                padding: SIZES.padding,
-                borderRadius: SIZES.radius,
-                backgroundColor: COLORS.white,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 10,
               }}>
-              <View style={{}}>
-                {/* header */}
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
-                    Contractors
-                  </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setShowContractorsModal(false)}
+              <Text style={{fontSize: 25, color: COLORS.darkGray}}>
+                Contractors
+              </Text>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
+                }}>
+                <TouchableOpacity
+                  onPress={() => setShowContractorsModal(false)}>
+                  <Image
+                    source={icons.cross}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
                   />
-                </View>
-                <ScrollView>
-                  <FormInput
-                    label="Name"
-                    keyboardType="default"
-                    autoCompleteType="username"
-                    onChange={value => {
-                      setName(value);
-                    }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            name == '' || (name != '' && nameError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              name == ''
-                                ? COLORS.gray
-                                : name != '' && nameError == ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-
-                  <FormInput
-                    label="Mobile No."
-                    keyboardType="numeric"
-                    onChange={value => {
-                      setMobileNo(value);
-                    }}
-                    errorMsg={mobileNoError}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            mobileNo == '' ||
-                            (mobileNo != '' && mobileNoError == '')
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              mobileNo == ''
-                                ? COLORS.gray
-                                : mobileNo != '' && mobileNoError == ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-                  <TextButton
-                    label="Submit"
-                    buttonContainerStyle={{
-                      height: 50,
-                      alignItems: 'center',
-                      marginTop: SIZES.padding,
-                      borderRadius: SIZES.radius,
-                    }}
-                    onPress={() => SubmitContractors()}
-                  />
-                </ScrollView>
-              </View>
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
+            <ScrollView>
+              <FormInput
+                label="Name"
+                keyboardType="default"
+                autoCompleteType="username"
+                onChange={value => {
+                  setName(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        name == '' || (name != '' && nameError == '')
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          name == ''
+                            ? COLORS.gray
+                            : name != '' && nameError == ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+
+              <FormInput
+                label="Mobile No."
+                keyboardType="numeric"
+                onChange={value => {
+                  setMobileNo(value);
+                }}
+                errorMsg={mobileNoError}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        mobileNo == '' ||
+                        (mobileNo != '' && mobileNoError == '')
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          mobileNo == ''
+                            ? COLORS.gray
+                            : mobileNo != '' && mobileNoError == ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+            </ScrollView>
+            <TextButton
+              label="Submit"
+              buttonContainerStyle={{
+                height: 50,
+                alignItems: 'center',
+                marginTop: SIZES.padding,
+                borderRadius: SIZES.radius,
+              }}
+              onPress={() => SubmitContractors()}
+            />
           </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }
@@ -322,7 +330,7 @@ const Contractors = ({route}) => {
           marginBottom: SIZES.padding,
           marginHorizontal: SIZES.padding,
           padding: 20,
-          borderRadius: SIZES.radius,
+          borderRadius: 5,
           backgroundColor: COLORS.white2,
           ...styles.shadow,
         }}>
@@ -339,7 +347,7 @@ const Contractors = ({route}) => {
                 style={{
                   width: '100%',
                   height: 1,
-                  backgroundColor: COLORS.lightGray1,
+                  backgroundColor: COLORS.gray2,
                   marginVertical: 5,
                 }}></View>
             );

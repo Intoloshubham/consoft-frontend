@@ -47,16 +47,16 @@ const DeleteConfirmationToast = ({
                   padding: 20,
                   alignItems: 'center',
                 }}>
-                <Image source={icon} style={{height: 60, width: 60}} />
+                <Image source={icon} style={{height: 50, width: 50}} />
                 <Text
                   style={{
                     ...FONTS.h2,
                     color: COLORS.darkGray,
-                    marginTop: 20,
+                    marginTop: 30,
                   }}>
                   {title}
                 </Text>
-                <Text style={{...FONTS.h3, marginTop: 5}}>{message}</Text>
+                <Text style={{...FONTS.h3, marginTop: 2}}>{message}</Text>
                 <View
                   style={{
                     marginTop: 20,
@@ -67,7 +67,7 @@ const DeleteConfirmationToast = ({
                       right: 15,
                       backgroundColor: COLORS.gray,
                       paddingHorizontal: 15,
-                      paddingVertical: 8,
+                      paddingVertical: 5,
                     }}
                     onPress={onClose}>
                     <Text style={{...FONTS.h3, color: COLORS.white}}>No</Text>
@@ -77,7 +77,7 @@ const DeleteConfirmationToast = ({
                       left: 15,
                       backgroundColor: color,
                       paddingHorizontal: 15,
-                      paddingVertical: 8,
+                      paddingVertical: 5,
                     }}
                     onPress={onClickYes}>
                     <Text style={{...FONTS.h3, color: COLORS.white}}>Yes</Text>

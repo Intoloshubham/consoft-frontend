@@ -3,11 +3,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Modal,
   Pressable,
   TextInput,
-  Alert,
   TouchableOpacity,
   FlatList,
   Image
@@ -16,17 +14,18 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Card, Title} from 'react-native-paper';
 import {
   FormInput,
-  CustomDropdown,
   TextButton,
   HeaderBar,
 } from '../../../../Components';
 import {FONTS, SIZES, COLORS, icons} from '../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
-import AntDesign  from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome  from 'react-native-vector-icons/FontAwesome';
+import { saveStockitem } from '../../../../controller/MangeStockController';
+import { getCompanyId } from '../../../../services/asyncStorageService';
 
 
 const url = 'http://192.168.1.99:8000/api/stock-entry';
+
+
 
 const ManageStock = () => {
   const [modalstock, setmodalstock] = useState(false);
@@ -57,6 +56,21 @@ const ManageStock = () => {
   const [voucherId, setvoucherId] = React.useState('');
   const [test, settest] = React.useState(false)
 
+
+  //get company id 
+  const [company_id, setCompany_id] = useState('')
+ 
+  const _companyId =async () => {
+   
+    const _id = await getCompanyId();
+    setCompany_id(_id);
+  }
+  console.log(company_id);
+  //setting token
+  React.useEffect(() => {
+    (async () => await _companyId())();
+  }, [])
+
 const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
     // Alert.alert(id,location);
     settest(true);
@@ -75,7 +89,8 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
           item_id: value,
           qty: qty,
           location: location,
-          vehicle_no: vehicle
+          vehicle_no: vehicle,
+          company_id:company_id
         }
           fetch('http://192.168.1.99:8000/api/stock-entry/'+ voucherId, {
           method: 'PUT',
@@ -107,48 +122,30 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
     }
   };
 
-  // const listData = async () => {
-  //   const resp = await fetch('http://192.168.1.99:8000/api/item');
-  //   const data = await resp.json();
-  //   //  console.log(data);
-  //   setdatalist(data);
-  // };
-
-
-  // useEffect(() => {
-  //   listData();
-  // }, []);
-
-
   useEffect(() => {
     itemData();
   }, []);
 
   // post stock item
-  const saveStock = () => {
+  const saveStock = async () => {
     // console.log(value, qty, location, vehicle);
-    const data = {
+    const voucheritem = {
       item_id: value,
       qty: qty,
       location: location,
       vehicle_no: vehicle,
+      company_id:company_id
     };
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
+    let data = await saveStockitem(voucheritem)
+    console.log(data)
+    if(data.status===200){
         setValue('');
         setqty('');
         setlocation('');
         setvehicle('');
         setunitname('');
          voucherItem();
-        console.log('Success:', data);
+    }
         {
           value === '' ||
           unitname === '' ||
@@ -158,10 +155,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
             ? alert('all field required')
             : alert('Created Succcessfully');
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+      
   };
 
       //  show voucher list api 
@@ -316,7 +310,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                         flex: 1,
                         backgroundColor: '#fff',
                         marginTop: 50,
-                        padding: 30,
+                        padding: 20,
                         borderTopRightRadius: 30,
                         borderTopLeftRadius: 30,
                       }}>
@@ -624,23 +618,6 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
                               }}
                             />
                             <View style={{justifyContent: 'space-between'}}>
-                              {/* <TextInput
-                                style={styles.input}
-                                editable={false}
-                                selectTextOnFocus={false}
-                                placeholder={unitname}
-                                value={unitname}
-                               
-                              /> */}
-                               {/* <FormInput
-                                value={unitname}
-                                placeholder={unitname}
-                                onChange={value => {
-                                  setunitname(value);
-                                }}
-                                editable={false}
-                                selectTextOnFocus={false}
-                              /> */}
                               <FormInput
                                 value={qty.toString()}
                                 label="Quantity"
@@ -695,6 +672,7 @@ const styles = StyleSheet.create({
   },
   card2: {
     borderWidth: 1,
+    marginTop:20
   },
   container: {
     backgroundColor: 'white',

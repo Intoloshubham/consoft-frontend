@@ -26,8 +26,6 @@ import {
 } from 'date-fns';
 import {COLORS, FONTS, SIZES} from '../../../../constants';
 import {HeaderBar} from '../../../../Components';
-import tw from 'twrnc';
-import {tr} from 'date-fns/locale';
 
 const weekdays = [
   {

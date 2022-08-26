@@ -8,16 +8,10 @@ import {
   Modal,
   TouchableWithoutFeedback,
   FlatList,
-  LogBox,
 } from 'react-native';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
 
 const ProjectReports = () => {
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-
-  const [reportFilterModal, setReportFilterModal] = React.useState(false);
   const filtertypes = [
     {id: 1, name: 'Cost & Timeline', filtertype: 1},
     {id: 2, name: 'Stock & Manpower', filtertype: 2},
@@ -25,41 +19,10 @@ const ProjectReports = () => {
     {id: 4, name: 'Technical', filtertype: 4},
   ];
 
-  const repData = [
-    {
-      id: 1,
-      name: 'Dream Homes',
-      cost: '12/100',
-      startdate: '10/05/22',
-      h_name: 'cost',
-      category_id: 1,
-    },
-    {
-      id: 2,
-      name: 'Shawn elizey',
-      cost: '40/100',
-      startdate: '3/01/22',
-      h_name: 'timeline',
-      category_id: 2,
-    },
-    {
-      id: 3,
-      name: 'JP contruction',
-      cost: '60/100',
-      startdate: '10/09/21',
-      h_name: 'timeline',
-      category_id: 3,
-    },
-    {
-      id: 4,
-      name: 'CDS builders',
-      cost: '45/100',
-      // startdate: '15/05/22',
-      h_name: 'stock',
-      category_id: 4,
-    },
-  ];
+  const [reportFilterModal, setReportFilterModal] = React.useState(false);
+  const [filter, setFilter] = React.useState(filtertypes);
 
+  const repData = [];
   const filterDataHandler = (id, i) => {
     let filt = repData?.filter(a => a.category_id == id);
     setNewData(filt);
@@ -145,44 +108,45 @@ const ProjectReports = () => {
         maxHeight={250}
         nestedScrollEnabled={true}
         ListHeaderComponent={
-          <View
-            style={{
-              flexDirection: 'row',
-              marginBottom: SIZES.base,
-            }}>
-            <Text
-              style={{
-                flex: 1,
-                ...FONTS.h3,
-                color: COLORS.darkGray,
-                fontWeight: 'bold',
-              }}>
-              Projects
-            </Text>
+          <></>
+          // <View
+          //   style={{
+          //     flexDirection: 'row',
+          //     marginBottom: SIZES.base,
+          //   }}>
+          //   <Text
+          //     style={{
+          //       flex: 1,
+          //       ...FONTS.h3,
+          //       color: COLORS.darkGray,
+          //       fontWeight: 'bold',
+          //     }}>
+          //     Projects
+          //   </Text>
 
-            <Text
-              style={{
-                ...FONTS.h3,
-                flex: 1,
-                color: COLORS.darkGray,
-                textAlign: 'right',
-                fontWeight: 'bold',
-              }}>
-              {nullIndex == '' ? 'Cost' : heading1}
-              {/* {heading1} */}
-            </Text>
-            <Text
-              style={{
-                ...FONTS.h3,
-                flex: 1,
-                color: COLORS.darkGray,
-                textAlign: 'right',
-                fontWeight: 'bold',
-              }}>
-              {nullIndex == '' ? 'Timeline' : heading2}
-              {/* {heading2} */}
-            </Text>
-          </View>
+          //   <Text
+          //     style={{
+          //       ...FONTS.h3,
+          //       flex: 1,
+          //       color: COLORS.darkGray,
+          //       textAlign: 'right',
+          //       fontWeight: 'bold',
+          //     }}>
+          //     {nullIndex == '' ? 'Cost' : heading1}
+          //     {/* {heading1} */}
+          //   </Text>
+          //   <Text
+          //     style={{
+          //       ...FONTS.h3,
+          //       flex: 1,
+          //       color: COLORS.darkGray,
+          //       textAlign: 'right',
+          //       fontWeight: 'bold',
+          //     }}>
+          //     {nullIndex == '' ? 'Timeline' : heading2}
+          //     {/* {heading2} */}
+          //   </Text>
+          // </View>
         }
         ItemSeparatorComponent={() => {
           return (
@@ -203,8 +167,12 @@ const ProjectReports = () => {
       setNullIndex(index);
       return (
         <TouchableOpacity
-          onPress={() => filterDataHandler(item.filtertype, index)}>
-          <Text style={{...FONTS.h3, color: COLORS.lightblue_50}}>
+          onPress={() => filterDataHandler(item.filtertype, index)}
+          style={{flexDirection: 'row'}}>
+          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+            {index + 1}.
+          </Text>
+          <Text style={{...FONTS.h3, color: COLORS.darkGray, left: 8}}>
             {item.name}
           </Text>
         </TouchableOpacity>
@@ -212,73 +180,39 @@ const ProjectReports = () => {
     };
     return (
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         visible={reportFilterModal}>
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setReportFilterModal(false)}>
           <View
             style={{
               flex: 1,
-              justifyContent: 'flex-end',
-              backgroundColor: COLORS.transparentBlack1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: COLORS.transparentBlack5,
             }}>
             <View
               style={{
-                backgroundColor: COLORS.darkBlue,
-                position: 'absolute',
-                width: '100%',
-                height: '40%',
-                // padding: SIZES.radius,
-                paddingHorizontal: SIZES.padding,
-                paddingTop: SIZES.padding,
-                paddingBottom: SIZES.padding,
-                borderTopRightRadius: SIZES.base,
-                borderTopLeftRadius: SIZES.base,
+                backgroundColor: COLORS.white,
+                width: '60%',
+                // height: '50%',
+                borderRadius: 5,
               }}>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text
-                  style={{...FONTS.h3, fontSize: 20, color: COLORS.darkGray2}}>
-                  Project Report
-                </Text>
-                <TouchableOpacity onPress={() => setReportFilterModal(false)}>
-                  <Image
-                    source={icons.cross}
-                    resizeMode="contain"
-                    style={{
-                      height: 20,
-                      width: 20,
-                      tintColor: COLORS.darkGray2,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
               <FlatList
-                contentContainerStyle={{
-                  marginTop: SIZES.padding,
-                  paddingHorizontal: SIZES.radius,
-                }}
-                data={filtertypes}
+                contentContainerStyle={{padding: 20}}
+                data={filter}
                 keyExtractor={item => `${item.id}`}
                 renderItem={renderItem}
-                scrollEnabled={true}
-                showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={() => {
                   return (
                     <View
                       style={{
-                        borderBottomWidth: 0.3,
-                        borderColor: COLORS.lightGray2,
-                        marginVertical: SIZES.radius,
+                        marginVertical: 10,
+                        borderBottomWidth: 1,
+                        borderBottomColor: COLORS.darkGray2,
                       }}></View>
                   );
                 }}
-                ListFooterComponent={
-                  <View
-                    style={{
-                      marginBottom: SIZES.padding,
-                    }}></View>
-                }
               />
             </View>
           </View>
@@ -307,7 +241,7 @@ const ProjectReports = () => {
             ...FONTS.h2,
             color: COLORS.darkGray,
           }}>
-          Report
+          Project at a glance
         </Text>
         <TouchableOpacity onPress={() => setReportFilterModal(true)}>
           <Image

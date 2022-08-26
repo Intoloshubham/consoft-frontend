@@ -21,16 +21,16 @@ import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
 import Tasks from './Tasks/Tasks';
-import Profile from './Profile/Profile';
+import Calender from './Calender/Calender';
 import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
 import Quantitywork from './Stock/Tools/Quantitywork';
 import ToolsAndMachinery1 from './Stock/Tools/ToolAndMachinery1';
 import VerifyAndRevertWork from './Home/VerifyAndRevertWork';
 import Boq from './Home/Boq';
-
 import VerifyWorks from './VerifyAndRevertWork.js/VerifyWorks';
 import RevertWorks from './VerifyAndRevertWork.js/RevertWorks';
+import UserRole from './CreateUserRole/UserRole';
 
 export {
   Account,
@@ -55,7 +55,7 @@ export {
   ManageStock,
   Unit,
   Tasks,
-  Profile,
+  Calender,
   Suppliers,
   SubmittedWorks,
   Optiontype,
@@ -63,7 +63,7 @@ export {
   ToolsAndMachinery1,
   VerifyAndRevertWork,
   Boq,
-
   VerifyWorks,
   RevertWorks,
+  UserRole
 };
