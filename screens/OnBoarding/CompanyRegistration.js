@@ -88,7 +88,7 @@ const CompanyRegistration = ({navigation}) => {
             </View>
             <View>
               <FormInput
-                label="Name"
+                label="Company Name"
                 keyboardType="default"
                 autoCompleteType="name"
                 onChange={value => {

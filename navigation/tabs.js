@@ -18,21 +18,28 @@ const TabBarCustomButton = ({children, onPress}) => {
   return (
     <TouchableOpacity
       style={{
-        top: -15,
+        top: -12,
         justifyContent: 'center',
         alignItems: 'center',
         ...styles.shadow,
       }}
       onPress={onPress}>
       <LinearGradient
-        colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
+        colors={[COLORS.success_400, COLORS.success_800]}
         style={{
-          width: 60,
-          height: 60,
+          width: 45,
+          height: 45,
           borderRadius: 35,
         }}>
         {children}
       </LinearGradient>
+      <Text
+        style={{
+          color: COLORS.black,
+          ...FONTS.body5,
+        }}>
+        Show Report
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -83,12 +90,12 @@ const Tabs = () => {
                 style={{
                   height: focused ? 20 : 18,
                   width: focused ? 20 : 18,
-                  tintColor: focused ? COLORS.rose_600 : COLORS.black,
+                  tintColor: COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.rose_600 : COLORS.black,
+                  color: COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Home
@@ -108,12 +115,12 @@ const Tabs = () => {
                 style={{
                   height: focused ? 20 : 18,
                   width: focused ? 20 : 18,
-                  tintColor: focused ? COLORS.rose_600 : COLORS.black,
+                  tintColor: COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.rose_600 : COLORS.black,
+                  color: COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Tasks
@@ -131,8 +138,8 @@ const Tabs = () => {
               source={icons.report}
               resizeMode="contain"
               style={{
-                height: 25,
-                width: 25,
+                height: focused ? 22 : 20,
+                width: focused ? 22 : 20,
                 tintColor: COLORS.white,
               }}
             />
@@ -151,12 +158,12 @@ const Tabs = () => {
                 style={{
                   height: focused ? 20 : 18,
                   width: focused ? 20 : 18,
-                  tintColor: focused ? COLORS.rose_600 : COLORS.black,
+                  tintColor: COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.rose_600 : COLORS.black,
+                  color: COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Calender
@@ -176,12 +183,12 @@ const Tabs = () => {
                 style={{
                   height: focused ? 20 : 18,
                   width: focused ? 20 : 18,
-                  tintColor: focused ? COLORS.rose_600 : COLORS.black,
+                  tintColor: COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.rose_600 : COLORS.black,
+                  color: COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Account

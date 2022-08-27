@@ -22,6 +22,7 @@ const ProjectsDetails = ({route}) => {
     {id: 5, img: icons.machine, name: 'Tools & Machinery'},
     {id: 6, img: icons.time_seh, name: 'Sehedule & Timeline'},
     {id: 7, img: icons.boq, name: 'BOQ'},
+    {id: 8, img: icons.report1, name: 'Report Settings'},
   ];
 
   //get name of project from project banner screen using params
@@ -45,13 +46,15 @@ const ProjectsDetails = ({route}) => {
             : item.id == 3
             ? navigation.navigate('Contractors', {project_id})
             : item.id == 4
-            ? navigation.navigate('StocksAndInventry',{project_id})
+            ? navigation.navigate('StocksAndInventry', {project_id})
             : item.id == 5
             ? navigation.navigate('ToolsAndMachinery', {project_id})
             : item.id == 6
             ? navigation.navigate('ProjectSeheduleTime')
             : item.id == 7
             ? navigation.navigate('Boq', {project_id})
+            : item.id == 8
+            ? navigation.navigate('ReportSettings', {project_id})
             : null;
         }}>
         <Image

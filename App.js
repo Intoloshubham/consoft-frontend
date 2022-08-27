@@ -29,7 +29,7 @@ import {
   ToolsAndMachinery1,
   Boq,
   VerifyAndRevertWork,
-  UserRole,
+  UserRole,ReportSettings
 } from './screens/admin_screens';
 import {Profile, Demo, Demo1, MyProfile} from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -81,6 +81,7 @@ const App = () => {
           <Stack.Screen name="Account" component={Account} />
           <Stack.Screen name="Suppliers" component={Suppliers} />
           <Stack.Screen name="UserRole" component={UserRole} />
+          <Stack.Screen name="ReportSettings" component={ReportSettings} />
           <Stack.Screen name="Boq" component={Boq} />
           <Stack.Screen name="CategoryandType" component={CategoryandType} />
           <Stack.Screen name="Items" component={Items} />

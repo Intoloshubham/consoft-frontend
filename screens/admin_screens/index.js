@@ -31,6 +31,7 @@ import Boq from './Home/Boq';
 import VerifyWorks from './VerifyAndRevertWork.js/VerifyWorks';
 import RevertWorks from './VerifyAndRevertWork.js/RevertWorks';
 import UserRole from './CreateUserRole/UserRole';
+import ReportSettings from './Home/ReportSettings';
 
 export {
   Account,
@@ -65,5 +66,6 @@ export {
   Boq,
   VerifyWorks,
   RevertWorks,
-  UserRole
+  UserRole,
+  ReportSettings,
 };
