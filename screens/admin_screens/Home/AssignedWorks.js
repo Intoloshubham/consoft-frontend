@@ -294,7 +294,7 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
                         }}>
                         exp completion date: {ele.exp_completion_date}
                       </Text>
-                      <TouchableOpacity onPress={() => console.log('revert')}>
+                      {/* <TouchableOpacity onPress={() => console.log('revert')}>
                         <ImageBackground
                           style={{
                             backgroundColor: COLORS.warning_200,
@@ -311,7 +311,7 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
                             }}
                           />
                         </ImageBackground>
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                     </View>
                   </View>
                 </Swipeable>

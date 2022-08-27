@@ -719,7 +719,7 @@ const CategoryandType = () => {
             />
             <View style={{marginTop: 30}}>
               <FormInput
-                label="Name"
+                label="Type Name"
                 keyboardType="default"
                 autoCompleteType="username"
                 value={typeName}
