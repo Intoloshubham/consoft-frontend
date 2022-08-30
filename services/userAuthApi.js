@@ -55,6 +55,9 @@ const initialState = {
   token: "",
   _id: "",
   company_id: "",
+  name: '',
+  mobile: '',
+  email: '',
   status:STATUSES.IDLE,
 }
 
@@ -66,6 +69,9 @@ export const userSlice = createSlice({
       state.token = action.payload.access_token,
       state._id = action.payload._id,
       state.company_id = action.payload.company_id,
+      state.name = action.payload.name,
+      state.mobile = action.payload.mobile,
+      state.email = action.payload.email,
       state.status = STATUSES.IDLE
     },
     
@@ -73,6 +79,9 @@ export const userSlice = createSlice({
       state.token = null,
       state._id = null,
       state.company_id = null,
+      state.name = null;
+      state.mobile = null;
+      state.email = null;
       state.status = STATUSES.LOGOUT
       removeToken('token')
       removeUserId('user_id')
@@ -95,6 +104,9 @@ export const userSlice = createSlice({
                 state.token = action.payload.access_token;
                 state._id = action.payload._id;
                 state.company_id = action.payload.company_id;
+                state.name = action.payload.name;
+                state.mobile = action.payload.mobile;
+                state.email = action.payload.email;
                 setUserId(action.payload._id);
                 storeToken(action.payload.access_token);
               }  
@@ -105,6 +117,9 @@ export const userSlice = createSlice({
                 state.token = action.payload.access_token;
                 state._id = action.payload.company_id;
                 state.company_id = action.payload.company_id;
+                state.name = action.payload.name;
+                state.mobile = action.payload.mobile;
+                state.email = action.payload.email;
                 setUserId(action.payload._id);
                 storeToken(action.payload.access_token);
               }
