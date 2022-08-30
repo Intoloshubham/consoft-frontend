@@ -25,7 +25,18 @@ import {useSelector} from 'react-redux';
 import {getUserRole} from '../../../controller/UserRoleController';
 
 const UserRole = () => {
-  const companyData = useSelector(state => state.company);
+  // const companyData = useSelector(state => state.company);
+  // const company_id = companyData._id;
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
   const company_id = companyData._id;
 
   // CUSTOM TOAST OF CRUD OPERATIONS

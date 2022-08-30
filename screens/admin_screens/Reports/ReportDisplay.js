@@ -21,7 +21,16 @@ import {
 } from '../../../controller/ReportController';
 
 const ReportDisplay = () => {
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
   const company_id = companyData._id;
 
   // projects

@@ -24,16 +24,17 @@ const wait = timeout => {
 };
 
 const Home = ({navigation}) => {
+
   const companyDetail = useSelector(state => state.company);
   const userData = useSelector(state => state.user);
   var companyData;
   if (companyDetail._id) {
     companyData = useSelector(state => state.company);
-  }
+  } 
   if (userData._id) {
     companyData = useSelector(state => state.user);
   }
-  console.log(companyData)
+
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
