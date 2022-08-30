@@ -51,10 +51,6 @@ const Login = ({navigation}) => {
     }
   };
 
-  const [userId, setUserId] = React.useState('');
-  const [companyId, setCompanyId] = React.useState('');
-  const [token, setToken] = React.useState('');
-
   const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
