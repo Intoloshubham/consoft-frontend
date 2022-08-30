@@ -33,7 +33,7 @@ const Home = ({navigation}) => {
   if (userData._id) {
     companyData = useSelector(state => state.user);
   }
-
+  console.log(companyData)
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);

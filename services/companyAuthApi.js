@@ -82,7 +82,7 @@ export const STATUSES = Object.freeze({
 const initialState = {
   token: '',
   _id: '',
-  company_name: '',
+  name: '',
   mobile: '',
   email: '',
   status: STATUSES.IDLE,
@@ -95,7 +95,7 @@ export const companySlice = createSlice({
     setCompanyToken: (state, action) => {
       (state.token = action.payload.access_token),
         (state._id = action.payload._id),
-        (state.company_name = action.payload.company_name),
+        (state.name = action.payload.company_name),
         (state.mobile = action.payload.mobile),
         (state.email = action.payload.email),
         (state.status = STATUSES.IDLE);
@@ -104,7 +104,7 @@ export const companySlice = createSlice({
     companyLogout: (state, action) => {
       (state.token = null),
         (state._id = null),
-        (state.company_name = null),
+        (state.name = null),
         (state.mobile = null),
         (state.email = null),
         (state.status = STATUSES.LOGOUT);
@@ -124,7 +124,7 @@ export const companySlice = createSlice({
         if (action.payload.status === 200) {
           state.status = STATUSES.IDLE;
           state._id = action.payload._id;
-          state.company_name = action.payload.company_name;
+          state.name = action.payload.company_name;
           state.mobile = action.payload.mobile;
           state.email = action.payload.email;
         }
@@ -153,7 +153,7 @@ export const companySlice = createSlice({
           state.status = STATUSES.IDLE;
           state.token = action.payload.access_token;
           state._id = action.payload._id;
-          state.company_name = action.payload.company_name;
+          state.name = action.payload.company_name;
           state.mobile = action.payload.mobile;
           state.email = action.payload.email;
           setCompanyId(action.payload._id);
