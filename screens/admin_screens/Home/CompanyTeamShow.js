@@ -10,6 +10,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Switch,
 } from 'react-native';
 import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 import {
@@ -22,7 +23,11 @@ import {HeaderBar} from '../../../Components';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
 import {postCompanyTeam} from '../../../controller/CompanyController';
-import {getUserRole, getUsers} from '../../../controller/UserRoleController';
+import {
+  getPrivileges,
+  getUserRole,
+  getUsers,
+} from '../../../controller/UserRoleController';
 import {getProjects} from '../../../controller/ProjectController';
 
 const CompanyTeamShow = () => {
@@ -41,8 +46,14 @@ const CompanyTeamShow = () => {
   const [role, setRole] = React.useState([]);
   //projects
   const [openProject, setOpenProject] = React.useState(false);
-  const [projectValue, setProjectValue] = React.useState([]);
+  const [projectValue, setProjectValue] = React.useState('');
   const [project, setProject] = React.useState([]);
+
+  //privileges
+  const [openPrivilege, setOpenPrivilege] = React.useState(false);
+  const [privilegeValue, setPrivilegeValue] = React.useState([]);
+  const [privilege, setPrivilege] = React.useState([]);
+
   //
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -66,12 +77,26 @@ const CompanyTeamShow = () => {
   // ================================================
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onRoleOpen = React.useCallback(() => {
+    userRole();
     setOpenProject(false);
+    setOpenPrivilege(false);
   }, []);
 
   const onProjectOpen = React.useCallback(() => {
+    projects();
+    setOpenRole(false);
+    setOpenPrivilege(false);
+  }, []);
+
+  const onPrivilegesOpen = React.useCallback(() => {
+    fetchPrivilege();
+    setOpenProject(false);
     setOpenRole(false);
   }, []);
+
+  // switch
+  const [isEnabled, setIsEnabled] = React.useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   // ================================ Apis ====================================
 
@@ -79,6 +104,16 @@ const CompanyTeamShow = () => {
     let response = await getUsers(company_id);
     if (response.status === 200) {
       setCompanyTeam(response.data);
+    }
+  };
+
+  const fetchPrivilege = async () => {
+    let response = await getPrivileges();
+    if (response.status === 200) {
+      let privilesFromApi = response.data.map(one => {
+        return {label: one.privilege, value: one._id};
+      });
+      setPrivilege(privilesFromApi);
     }
   };
 
@@ -109,13 +144,21 @@ const CompanyTeamShow = () => {
       email: email,
       mobile: mobile,
       company_id: company_data._id,
-      // project_id: projectValue,
+      assign_project: isEnabled,
+      project_id: projectValue,
+      user_privilege: privilegeValue,
     };
+
     let response = await postCompanyTeam(formData);
     if (response.status === 200) {
       setAddTeamModal(false);
       setSubmitToast(true);
       getCompanyTeam();
+      setRoleValue('');
+      setPrivilegeValue('');
+      setName('');
+      setEmail('');
+      setMobile('');
     } else {
       alert(response.message);
     }
@@ -124,11 +167,9 @@ const CompanyTeamShow = () => {
     }, 2000);
   };
 
-  const openModal = () => {
-    setAddTeamModal(true);
-    userRole();
-    projects();
-  };
+  // const openModal = () => {
+  //   setAddTeamModal(true);
+  // };
 
   React.useEffect(() => {
     getCompanyTeam();
@@ -180,21 +221,47 @@ const CompanyTeamShow = () => {
               </ImageBackground>
             </View>
             <View>
-              <CustomDropdown
-                placeholder="Select role"
-                open={openRole}
-                value={roleValue}
-                items={role}
-                setOpen={setOpenRole}
-                setValue={setRoleValue}
-                setItems={setRole}
-                listParentLabelStyle={{
-                  color: COLORS.white,
-                }}
-                zIndex={4000}
-                maxHeight={150}
-                onOpen={onRoleOpen}
-              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <View style={{width: '50%'}}>
+                  <CustomDropdown
+                    placeholder="Select role"
+                    open={openRole}
+                    value={roleValue}
+                    items={role}
+                    setOpen={setOpenRole}
+                    setValue={setRoleValue}
+                    setItems={setRole}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    zIndex={4000}
+                    maxHeight={150}
+                    onOpen={onRoleOpen}
+                  />
+                </View>
+                <View style={{width: '45%'}}>
+                  <CustomDropdown
+                    placeholder="Select"
+                    open={openPrivilege}
+                    value={privilegeValue}
+                    items={privilege}
+                    setOpen={setOpenPrivilege}
+                    setValue={setPrivilegeValue}
+                    setItems={setPrivilege}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    zIndex={4000}
+                    maxHeight={150}
+                    onOpen={onPrivilegesOpen}
+                  />
+                </View>
+              </View>
               <FormInput
                 label="Name"
                 keyboardType="default"
@@ -287,21 +354,50 @@ const CompanyTeamShow = () => {
                   </View>
                 }
               />
-              {/* <CustomDropdown
-                placeholder="Assign to projects"
-                open={openProject}
-                value={projectValue}
-                items={project}
-                setOpen={setOpenProject}
-                setValue={setProjectValue}
-                setItems={setProject}
-                listParentLabelStyle={{
-                  color: COLORS.white,
-                }}
-                zIndex={3000}
-                maxHeight={150}
-                onOpen={onProjectOpen}
-              /> */}
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <View style={{alignItems: 'flex-start'}}>
+                  <Text style={{color: COLORS.darkGray, ...FONTS.body4}}>
+                    {/* Assign to */}
+                  </Text>
+                  <Switch
+                    trackColor={{
+                      false: COLORS.darkGray,
+                      true: COLORS.darkGray,
+                    }}
+                    thumbColor={isEnabled ? COLORS.red_300 : COLORS.lightGray1}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                  />
+                </View>
+
+                {isEnabled == true && (
+                  <View style={{width: '80%'}}>
+                    <CustomDropdown
+                      placeholder="Assign on project"
+                      open={openProject}
+                      value={projectValue}
+                      items={project}
+                      setOpen={setOpenProject}
+                      setValue={setProjectValue}
+                      setItems={setProject}
+                      listParentLabelStyle={{
+                        color: COLORS.white,
+                      }}
+                      zIndex={3000}
+                      maxHeight={150}
+                      onOpen={onProjectOpen}
+                    />
+                  </View>
+                )}
+              </View>
+
               <TextButton
                 label="Save"
                 disabled={isEnableSubmit() ? false : true}
@@ -357,34 +453,27 @@ const CompanyTeamShow = () => {
     );
 
     return (
-      <View
-        style={{
-          marginTop: SIZES.radius,
+      <FlatList
+        contentContainerStyle={{
           marginHorizontal: SIZES.padding,
-          backgroundColor: COLORS.lightblue_50,
-          padding: 20,
-          ...styles.shadow,
-        }}>
-        <FlatList
-          data={companyTeam}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          maxHeight={450}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.gray2,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-        />
-      </View>
+          paddingBottom: 50,
+        }}
+        data={companyTeam}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.gray2,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
+      />
     );
   }
 
@@ -400,13 +489,13 @@ const CompanyTeamShow = () => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
           ...styles.shadow,
         }}
-        onPress={openModal}
+        onPress={() => setAddTeamModal(true)}
       />
       {renderAddTeamModal()}
       {renderCompanyTeam()}

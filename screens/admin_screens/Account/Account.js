@@ -227,7 +227,7 @@ const Account = () => {
       }}>
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: SIZES.padding,
+          paddingHorizontal: SIZES.radius,
           paddingBottom: 150,
         }}>
         {renderProfileCard()}
@@ -252,10 +252,11 @@ const styles = StyleSheet.create({
   profileSectionContainer: {
     marginTop: SIZES.padding,
     paddingHorizontal: SIZES.radius,
-    borderWidth: 1,
-    borderRadius: SIZES.base,
-    borderColor: COLORS.gray2,
+    // borderWidth: 1,
+    // borderRadius: SIZES.base,
+    // borderColor: COLORS.gray2,
   },
+
   profileSectionContainer1: {
     marginTop: SIZES.padding,
     paddingHorizontal: SIZES.radius,

@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   RefreshControl,
   Image,
-  ImageBackground,
   TouchableOpacity,
 } from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
@@ -18,7 +17,7 @@ import {useSelector} from 'react-redux';
 import {getSubmitWorks} from '../../../controller/AssignWorkController';
 import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
 import {getAssignWorks} from '../../../controller/AssignWorkController';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {SIZES, COLORS, FONTS, images} from '../../../constants';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));

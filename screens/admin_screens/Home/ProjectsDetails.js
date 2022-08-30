@@ -35,8 +35,6 @@ const ProjectsDetails = ({route}) => {
       <TouchableOpacity
         style={{
           flexDirection: 'row',
-          paddingVertical: SIZES.base,
-          alignItems: 'center',
         }}
         onPress={() => {
           item.id == 1
@@ -93,46 +91,39 @@ const ProjectsDetails = ({route}) => {
       </TouchableOpacity>
     );
     return (
-      <View
-        style={{
+      <FlatList
+        contentContainerStyle={{
           marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-        }}>
-        <FlatList
-          data={projects}
-          keyExtractor={item => `${item.id}`}
-          renderItem={renderItem}
-          maxHeight={510}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.lightGray1,
-                  marginVertical: SIZES.radius,
-                }}></View>
-            );
-          }}
-        />
-      </View>
+          paddingBottom: 50,
+        }}
+        data={projects}
+        keyExtractor={item => `${item.id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 18,
+              }}></View>
+          );
+        }}
+      />
     );
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
+    <View style={{flex: 1, backgroundColor: COLORS.white}}>
       <HeaderBar right={true} title={name} />
       <TextButton
         label="Assign Work"
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,

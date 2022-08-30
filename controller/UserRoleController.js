@@ -61,4 +61,19 @@ const postUserRole = async formData => {
   }
 };
 
-export {getUserRole, roleByUser, getUsers, postUserRole};
+const getPrivileges = async () => {
+  try {
+    const res = await fetch(Config.API_URL + 'privilege', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {getUserRole, roleByUser, getUsers, postUserRole, getPrivileges};
