@@ -42,6 +42,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setUserId, removeUserId, storeToken, removeToken } from './asyncStorageService';
 import Config from '../config'
+import { constants } from "../constants";
 
 export const STATUSES = Object.freeze({
   IDLE: 'idle',
@@ -85,14 +86,31 @@ export const userSlice = createSlice({
             state.status = STATUSES.LOADING;
         })
         .addCase(userLogin.fulfilled,(state, action) => {
-            if (action.payload.status === 200) {
-              state.status = STATUSES.IDLE;
-              state.token = action.payload.access_token;
-              state._id = action.payload._id;
-              state.company_id = action.payload.company_id;
-              setUserId(action.payload._id);
-              storeToken(action.payload.access_token);
-            }  
+          // console.log(action.payload)
+
+            if (action.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
+              
+              if (action.payload.status === 200) {
+                state.status = STATUSES.IDLE;
+                state.token = action.payload.access_token;
+                state._id = action.payload._id;
+                state.company_id = action.payload.company_id;
+                setUserId(action.payload._id);
+                storeToken(action.payload.access_token);
+              }  
+            }else{
+              //admin section
+              if (action.payload.status === 200) {
+                state.status = STATUSES.IDLE;
+                state.token = action.payload.access_token;
+                state._id = action.payload.company_id;
+                state.company_id = action.payload.company_id;
+                setUserId(action.payload._id);
+                storeToken(action.payload.access_token);
+              }
+
+            }
+
         })
         .addCase(userLogin.rejected, (state, action) => {
             state.status = STATUSES.ERROR;

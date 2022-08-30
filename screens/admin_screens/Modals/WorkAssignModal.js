@@ -26,7 +26,18 @@ import {getUserRole, roleByUser} from '../../../controller/UserRoleController';
 import {postAssignWork} from '../../../controller/AssignWorkController';
 
 const WorkAssignModal = ({projectId, isVisible, onClose}) => {
-  const companyData = useSelector(state => state.company);
+  // const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
+  const company_id = companyData._id;
 
   //ADD DYNAMICALLY INPUT FEILD
   const [work, setWork] = React.useState([{key: '', value: ''}]);
@@ -84,7 +95,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   //=================================== Apis ===================================
 
   const getUserRoles = async () => {
-    let response = await getUserRole(companyData._id);
+    let response = await getUserRole(company_id);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map((one, i) => {
         return {label: one.user_role, value: one._id};
@@ -110,7 +121,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       work: newWork,
       exp_completion_date: formatedDate,
       exp_completion_time: formatedTime,
-      company_id: companyData._id,
+      company_id: company_id,
       project_id: projectId,
     };
     let response = await postAssignWork(formData);

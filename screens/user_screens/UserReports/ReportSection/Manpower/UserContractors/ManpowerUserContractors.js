@@ -28,7 +28,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
 import moment from 'moment';
-const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
+const ManpowerUserContractors = ({ ProList, Main_drp_pro_value,loading }) => {
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -179,7 +179,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
   //getting contractor data functions
   useMemo(() => {
     getContractorName();
-  }, [postContData, Main_drp_pro_value, deleteConStatus])
+  }, [postContData, Main_drp_pro_value, deleteConStatus,loading])
 
   // for new category
   const SaveNewCategory = async () => {
@@ -327,7 +327,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
       GetManpowerData();
     }
     return () => { isMount = false }
-  }, [manpowerPostStatus, Main_drp_pro_value, conTeamTabCollapse])
+  }, [manpowerPostStatus, Main_drp_pro_value, conTeamTabCollapse,loading])
 
 
   const filterCategoryByContId = async (cont_id) => {
@@ -366,7 +366,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
       GetNewSubCategories();
     }
     return () => { isMount = false }
-  }, [companydata.company_id, saveNewSubCategoryStatus])
+  }, [companydata.company_id, saveNewSubCategoryStatus,loading])
 
   useMemo(() => {
     let isMount = true;
@@ -374,7 +374,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
       GetNewCategories();
     }
     return () => { isMount = false }
-  }, [companydata.company_id, saveNewCategoryStatus])
+  }, [companydata.company_id, saveNewCategoryStatus,loading])
 
 
 
@@ -613,7 +613,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
               </View>
               <View style={{ marginTop: 20 }}>
                 <FormInput
-                  label="Name"
+                  label="Category Name"
                   onChange={text => {
                     setCategName(text);
                   }}
@@ -666,7 +666,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
                   alignItems: 'center',
                   // borderBottomWidth: 1,
                 }}>
-                <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add New Sub-Category</Text>
+                <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add Labours </Text>
                 <Pressable onPress={() => setAddSubCatetoryModal(false)}>
                   <AntDesign name="close" size={30} color={COLORS.black} />
                 </Pressable>
@@ -838,7 +838,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value }) => {
                     }
                   />
                   <TextButton
-                    label="Add Sub Category"
+                    label="Add Labours"
                     buttonContainerStyle={{
                       height: 33,
                       alignItems: 'center',

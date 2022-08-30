@@ -24,7 +24,7 @@ import {
 } from '../../../../../../Components'
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
-const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
+const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) => {
     // console.log("ManpowerProjectTeam")
     //css
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, cont_Project_list_drop } = styles
@@ -32,61 +32,73 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
     const [proTeamTabCollapse, setProTeamTabCollapse] = useState(false)
     //for getting project name
     const [ProjectTeamName, setProjectTeamName] = useState('')
+
+    //save project team empty status
+    const [saveProjectTeamEmptyStatus, setSaveProjectTeamEmptyStatus] = useState(false);
+
     //getting userrole name
     const [userRole, setUserRole] = useState([])
     const [userNameByRole, setUserNameByRole] = useState([]);
     // setting setMergeRolePro
     const [mergeRolePro, setMergeRolePro] = useState('')
-    
+
+    //getting project user id 
+    const [projectUserId, setProjectUserId] = useState();
+
     const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
     const userData = useSelector(state => state.user);
-    
+
     // CUSTOM TOAST OF CRUD OPERATIONS
     const [submitToast, setSubmitToast] = React.useState(false);
     const [updateToast, setUpdateToast] = React.useState(false);
     const [deleteToast, setDeleteToast] = React.useState(false);
-    
-    const [deleteConfirm, setDeleteConfirm] = React.useState(false);
-    
 
-    
+    const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+
+
+
     const saveProjectTeamMemberSubmit = async () => {
         // post data
         const teamData = {
             project_id: Main_drp_pro_value,
-            user_id: [userData._id],
+            user_id: [projectUserId],
             company_id: userData.company_id
         };
-        const res = await Insert_project_team_data(teamData);
-        console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 61 ~ saveProjectTeamMemberSubmit ~ res", res)
-        if (res.status === 200) {
-            setAddProjectTeamModal(false);
-            setSubmitToast(true);
-            fetchProjectTeam();
-        } else {
-            alert(res.message);
+
+        if (saveProjectTeamEmptyStatus) {
+            const res = await Insert_project_team_data(teamData);
+            console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 70 ~ saveProjectTeamMemberSubmit ~ res", res)
+            if (res.status === 200) {
+                setAddProjectTeamModal(false);
+                setSaveProjectTeamEmptyStatus(false);
+                setSubmitToast(true);
+                fetchProjectTeam();
+            } else {
+                alert(res.message);
+            }
+            setTimeout(() => {
+                setSubmitToast(false);
+            }, 2000);
+        }else{
+            alert("Please Select first role and assign to Specific user!")
         }
-        setTimeout(() => {
-            setSubmitToast(false);
-        }, 2000);
     }
-    
-    console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 76 ~ fetchProjectTeam ~ Main_drp_pro_value", Main_drp_pro_value)
+
     // fetch project team
     const fetchProjectTeam = async () => {
         const team = await Get_Project_Team_Data(Main_drp_pro_value);
-        const temp=await team.json();
-        console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 76 ~ fetchProjectTeam ~ team", temp.data)
-        if (temp.status==200) {
-            setProjectTeamName(temp.data);     
+        // console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 90 ~ fetchProjectTeam ~ team", team)
+        
+        const temp = await team.json();
+        if (temp.status == 200) {
+            setProjectTeamName(temp.data);
         }
     };
-    
-    console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 35 ~ ManPowerProjectTeam ~ ProjectTeamName", ProjectTeamName)
-     
+
+
     useEffect(() => {
         fetchProjectTeam();
-    }, [Main_drp_pro_value]);
+    }, [Main_drp_pro_value,loading]);
 
 
 
@@ -139,32 +151,32 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
     }
 
     //   adding project team button
-    const add_project_team = () => {
-        return (
-            <TouchableOpacity
-                style={{
-                    borderRadius: SIZES.radius * 0.2,
-                    justifyContent: "center",
-                    flexDirection: "row",
-                    paddingHorizontal: 2,
+    // const add_project_team = () => {
+    //     return (
+    //         <TouchableOpacity
+    //             style={{
+    //                 borderRadius: SIZES.radius * 0.2,
+    //                 justifyContent: "center",
+    //                 flexDirection: "row",
+    //                 paddingHorizontal: 2,
 
-                }}
-                onPress={() => {
-                    LayoutAnimation.easeInEaseOut();
-                    addProjectTeam();
-                }}>
-                <View style={{
-                    alignSelf: "center"
-                }}>
-                    <Ionicons
-                        name='person-add'
-                        size={20}
-                        color={COLORS.lightblue_400}
-                    />
-                </View>
-            </TouchableOpacity>
-        )
-    }
+    //             }}
+    //             onPress={() => {
+    //                 LayoutAnimation.easeInEaseOut();
+    //                 addProjectTeam();
+    //             }}>
+    //             <View style={{
+    //                 alignSelf: "center"
+    //             }}>
+    //                 <Ionicons
+    //                     name='person-add'
+    //                     size={20}
+    //                     color={COLORS.lightblue_400}
+    //                 />
+    //             </View>
+    //         </TouchableOpacity>
+    //     )
+    // }
 
 
     // adding project team modal
@@ -279,6 +291,8 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
                                             searchPlaceholder="Search..."
                                             value={"value"}
                                             onChange={item => {
+                                                setProjectUserId(item.value);
+                                                setSaveProjectTeamEmptyStatus(true);
                                                 // getRolebyUser(item.value)
                                             }} />
                                     </View>
@@ -334,15 +348,15 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value }) => {
                     flexDirection: "row",
                     right: SIZES.base,
 
-                    top: -24
+                    // top: -24
                 }}
             >
                 {/* button section adding contractor */}
-                {proTeamTabCollapse ? add_project_team() : null}
+                {/* {proTeamTabCollapse ? add_project_team() : null} */}
             </View>
-            {renderProjectTeamModal()}
+            {/* {renderProjectTeamModal()} */}
             {proTeamTabCollapse &&
-                (<View style={{ marginTop: -25, paddingVertical: 10, marginBottom: -10 }}>
+                (<View style={{ marginTop: -10, paddingVertical: 10, marginBottom: -10 }}>
                     <ScrollView
                         horizontal={true}
                         contentContainerStyle={{ width: '100%', height: '100%' }}>

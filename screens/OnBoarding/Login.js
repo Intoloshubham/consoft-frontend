@@ -44,23 +44,18 @@ const Login = ({navigation}) => {
     }
   };
 
-  const [userId, setUserId] = React.useState('');
-  const [companyId, setCompanyId] = React.useState('');
-  const [token, setToken] = React.useState('');
-
   const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
-    console.log(res);
     if (res.payload.status === 200) {
       setSubmitToast(true);
-      if (res.payload.user_privelege === constants.USER_PRIVILEGES.AD_1) {
-        navigation.navigate('Home');
-      } else {
+      if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
         navigation.navigate('UserDashboard');
+      } else {
+        navigation.navigate('Home');
       }
     } else {
       alert(res.payload.message);

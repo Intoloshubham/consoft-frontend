@@ -24,7 +24,15 @@ const wait = timeout => {
 };
 
 const Home = ({navigation}) => {
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -62,6 +70,7 @@ const Home = ({navigation}) => {
   //===========================
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const fetchAssignWorks = async () => {
+    // console.log(companyData._id)
     const response = await getAssignWorks(companyData._id);
     // console.log(response)
     if (response.status === 200) {
@@ -119,7 +128,7 @@ const Home = ({navigation}) => {
               />
             </TouchableOpacity>
           </View>
-          <ProjectsBanner company_id={companyData._id} />
+          <ProjectsBanner company={companyData._id} />
           <SubmittedWorks data={submitWork} Submitfunction={fetchSubmitWork} />
           <ProjectReports />
           <AssignedWorks

@@ -20,7 +20,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useSelector } from 'react-redux';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
-const Stock = ({ project_id, Main_drp_pro_value }) => {
+const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
     const {
         header,
         con_body,
@@ -88,7 +88,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
 
     useMemo(() => {
         getStockDataItems();
-    }, [userCompanyData.company_id])
+    }, [userCompanyData.company_id,loading])
 
 
 
@@ -111,7 +111,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
         let isMount = true;
         GetStockData();
         return () => { isMount = false }
-    }, [userCompanyData.company_id])
+    }, [userCompanyData.company_id,loading])
     // console.log("🚀 ~ file: Stock.js ~ line 95 ~ GetStockData ~ getStockData", getStockData)
 
 
@@ -303,8 +303,8 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
         return (
 
             <Modal visible={stockReportModal} transparent={false} animationType="slide">
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                <View
+                    // behavior={Platform.OS === "ios" ? "padding" : "height"}
                     style={{ flex: 1, backgroundColor: COLORS.transparentBlack1 }}
                 >
                     <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
@@ -378,7 +378,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                 />
                         </View>
                     </View>
-                </KeyboardAvoidingView>
+                </View>
             </Modal>
         )
     }

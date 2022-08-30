@@ -31,11 +31,19 @@ import {
 import {getProjects} from '../../../controller/ProjectController';
 
 const CompanyTeamShow = () => {
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
+  const company_id = companyData._id;
+
   const [addTeamModal, setAddTeamModal] = React.useState(false);
-
-  const company_data = useSelector(state => state.company);
-  const company_id = company_data._id;
-
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
 
@@ -143,7 +151,7 @@ const CompanyTeamShow = () => {
       name: name,
       email: email,
       mobile: mobile,
-      company_id: company_data._id,
+      company_id: company_id,
       assign_project: isEnabled,
       project_id: projectValue,
       user_privilege: privilegeValue,
