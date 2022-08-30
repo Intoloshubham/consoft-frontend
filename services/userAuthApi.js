@@ -55,6 +55,7 @@ const initialState = {
   token: "",
   _id: "",
   company_id: "",
+  company_name: "",
   name: '',
   mobile: '',
   email: '',
@@ -69,6 +70,7 @@ export const userSlice = createSlice({
       state.token = action.payload.access_token,
       state._id = action.payload._id,
       state.company_id = action.payload.company_id,
+      state.company_name = action.payload.company_name,
       state.name = action.payload.name,
       state.mobile = action.payload.mobile,
       state.email = action.payload.email,
@@ -79,6 +81,7 @@ export const userSlice = createSlice({
       state.token = null,
       state._id = null,
       state.company_id = null,
+      state.company_name = null,
       state.name = null;
       state.mobile = null;
       state.email = null;
@@ -95,7 +98,7 @@ export const userSlice = createSlice({
             state.status = STATUSES.LOADING;
         })
         .addCase(userLogin.fulfilled,(state, action) => {
-          // console.log(action.payload)
+          console.log(action.payload)
 
             if (action.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
               
@@ -104,6 +107,7 @@ export const userSlice = createSlice({
                 state.token = action.payload.access_token;
                 state._id = action.payload._id;
                 state.company_id = action.payload.company_id;
+                state.company_name = action.payload.company_name;
                 state.name = action.payload.name;
                 state.mobile = action.payload.mobile;
                 state.email = action.payload.email;
@@ -117,6 +121,7 @@ export const userSlice = createSlice({
                 state.token = action.payload.access_token;
                 state._id = action.payload.company_id;
                 state.company_id = action.payload.company_id;
+                state.company_name = action.payload.company_name;
                 state.name = action.payload.name;
                 state.mobile = action.payload.mobile;
                 state.email = action.payload.email;

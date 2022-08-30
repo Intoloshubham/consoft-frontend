@@ -25,16 +25,8 @@ const wait = timeout => {
 
 const Home = ({navigation}) => {
 
-  const companyDetail = useSelector(state => state.company);
-  const userData = useSelector(state => state.user);
-  var companyData;
-  if (companyDetail._id) {
-    companyData = useSelector(state => state.company);
-  } 
-  if (userData._id) {
-    companyData = useSelector(state => state.user);
-  }
-  console.log(companyData)
+  
+
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -43,6 +35,22 @@ const Home = ({navigation}) => {
     fetchSubmitWork();
     wait(1000).then(() => setRefreshing(false));
   }, []);
+
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    console.log("company")
+    companyData = companyDetail;
+  } else{
+    console.log("user")
+    companyData = userData;
+  }
+  
+  console.log(companyData)
+  
+
 
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {
@@ -56,6 +64,9 @@ const Home = ({navigation}) => {
   // const [verifyAndRevert, setVerifyAndRevert] = React.useState([]);
   const [verify, setVerify] = React.useState([]);
   const [revert, setRevert] = React.useState([]);
+
+  
+
 
   const fetchVerifyAndRevertWork = async () => {
     const response = await getVerifyAndRevertWorks(companyData._id);
@@ -114,7 +125,7 @@ const Home = ({navigation}) => {
                     color: COLORS.lightblue_700,
                     fontWeight: 'bold',
                   }}>
-                  {companyData.company_name}
+                  {/* {companyData.company_name} */}
                 </Text>
               </TouchableOpacity>
             </View>
