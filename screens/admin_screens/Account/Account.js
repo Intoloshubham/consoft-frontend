@@ -100,7 +100,7 @@ const Account = () => {
               ...FONTS.h2,
               textTransform: 'capitalize',
             }}>
-            {/* {companyData.company_name} */}
+            {companyData.company_name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             {companyData.email}

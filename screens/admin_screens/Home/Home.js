@@ -125,7 +125,7 @@ const Home = ({navigation}) => {
                     color: COLORS.lightblue_700,
                     fontWeight: 'bold',
                   }}>
-                  {/* {companyData.company_name} */}
+                  {companyData.company_name}
                 </Text>
               </TouchableOpacity>
             </View>
