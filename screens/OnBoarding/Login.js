@@ -21,7 +21,7 @@ import {
   SIZES,
   icons,
   images,
-  constantVariable,
+  constants,
 } from '../../constants';
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
@@ -61,15 +61,14 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
-    console.log(res)
+    
     if (res.payload.status === 200) {
       setSubmitToast(true);
-      if (
-        res.payload.user_privelege === constantVariable.USER_PRIVILEGES.ad_1
-      ) {
-        navigation.navigate('Home');
-      } else {
+
+      if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
         navigation.navigate('UserDashboard');
+      } else {
+        navigation.navigate('Home');
       }
     } else {
       alert(res.payload.message);
