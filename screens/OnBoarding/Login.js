@@ -15,14 +15,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import utils from '../../utils';
 import {FormInput, TextButton} from '../../Components';
-import {
-  FONTS,
-  COLORS,
-  SIZES,
-  icons,
-  images,
-  constantVariable,
-} from '../../constants';
+import {FONTS, COLORS, SIZES, icons, images, constants} from '../../constants';
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
 import {useDispatch} from 'react-redux';
@@ -61,12 +54,10 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
-    console.log(res)
+    console.log(res);
     if (res.payload.status === 200) {
       setSubmitToast(true);
-      if (
-        res.payload.user_privelege === constantVariable.USER_PRIVILEGES.ad_1
-      ) {
+      if (res.payload.user_privelege === constants.USER_PRIVILEGES.AD_1) {
         navigation.navigate('Home');
       } else {
         navigation.navigate('UserDashboard');
