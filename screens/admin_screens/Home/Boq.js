@@ -435,98 +435,91 @@ const Boq = ({route}) => {
     );
 
     return (
-      <View
-        style={{
-          marginHorizontal: SIZES.radius,
-          padding: 5,
-          // borderRadius: 3,
-          // backgroundColor: COLORS.white,
-          // ...styles.shadow,
-        }}>
-        <FlatList
-          data={boqItems}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          maxHeight={510}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
+      <FlatList
+        contentContainerStyle={{
+          marginHorizontal: SIZES.padding,
+          paddingBottom: 50,
+        }}
+        data={boqItems}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
+        ListHeaderComponent={
+          <View style={{marginBottom: 3}}>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <Text
                 style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.black,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-          ListHeaderComponent={
-            <View style={{marginBottom: 3}}>
-              <View
-                style={{
-                  flexDirection: 'row',
+                  ...FONTS.h3,
+                  flex: 0.5,
+                  color: COLORS.black,
+                  // fontWeight: 'bold',
                 }}>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 0.5,
-                    color: COLORS.black,
-                    // fontWeight: 'bold',
-                  }}>
-                  Sn.
-                </Text>
-                <Text
-                  style={{
-                    flex: 2,
-                    ...FONTS.h3,
-                    color: COLORS.black,
-                    // fontWeight: 'bold',
-                  }}>
-                  Name
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1.3,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                    // fontWeight: 'bold',
-                  }}>
-                  Quality
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                    // fontWeight: 'bold',
-                  }}>
-                  Unit
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1.2,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                    // fontWeight: 'bold',
-                  }}>
-                  Edit{'\n'}/Delete
-                </Text>
-              </View>
-              <View
+                Sn.
+              </Text>
+              <Text
                 style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.black,
-                  marginVertical: SIZES.base,
-                }}></View>
+                  flex: 2,
+                  ...FONTS.h3,
+                  color: COLORS.black,
+                  // fontWeight: 'bold',
+                }}>
+                Name
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 1.3,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                  // fontWeight: 'bold',
+                }}>
+                Quality
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 1,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                  // fontWeight: 'bold',
+                }}>
+                Unit
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 1.2,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                  // fontWeight: 'bold',
+                }}>
+                Edit{'\n'}/Delete
+              </Text>
             </View>
-          }
-        />
-      </View>
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: COLORS.black,
+                marginVertical: SIZES.base,
+              }}></View>
+          </View>
+        }
+      />
     );
   }
 
@@ -833,7 +826,7 @@ const Boq = ({route}) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Bill of Quantities" />
       <TextButton

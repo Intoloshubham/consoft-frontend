@@ -104,7 +104,6 @@ const Contractors = ({route}) => {
     <View
       style={{
         flexDirection: 'row',
-        paddingVertical: SIZES.base,
       }}>
       <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}.</Text>
       <View style={{flex: 1, marginLeft: SIZES.radius}}>
@@ -307,6 +306,7 @@ const Contractors = ({route}) => {
     <View
       style={{
         flex: 1,
+        backgroundColor: 'white',
       }}>
       <HeaderBar right={true} title="Contractors" />
       <TextButton
@@ -314,7 +314,7 @@ const Contractors = ({route}) => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
@@ -325,30 +325,24 @@ const Contractors = ({route}) => {
           setShowContractorsModal(true);
         }}
       />
-      <View
-        style={{
-          marginBottom: SIZES.padding,
-          marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 5,
-          backgroundColor: COLORS.white2,
-          ...styles.shadow,
-        }}>
+      <View>
         <FlatList
+          contentContainerStyle={{
+            marginHorizontal: SIZES.padding,
+            paddingBottom: 50,
+          }}
           data={contractors}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
-          maxHeight={510}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
-                  backgroundColor: COLORS.gray2,
-                  marginVertical: 5,
+                  backgroundColor: COLORS.lightGray1,
+                  marginVertical: 12,
                 }}></View>
             );
           }}

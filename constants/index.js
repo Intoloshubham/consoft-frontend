@@ -5,7 +5,7 @@ import icons from './icons';
 import dummyData from './dummyData';
 import reportdata from './reportdata';
 import STATUS from './status';
-
+import constantVariable from './constantVariable';
 
 export {
   constants,
@@ -18,4 +18,5 @@ export {
   dummyData,
   reportdata,
   STATUS,
+  constantVariable,
 };

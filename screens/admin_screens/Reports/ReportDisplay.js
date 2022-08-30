@@ -3,15 +3,11 @@ import {
   View,
   Text,
   FlatList,
-  ScrollView,
-  SafeAreaView,
   Image,
   ImageBackground,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   StyleSheet,
   Modal,
-  KeyboardAvoidingView,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
@@ -34,6 +30,7 @@ const ReportDisplay = () => {
   const [projectValue, setProjectValue] = React.useState([]);
   const [project, setProject] = React.useState([]);
   const onProjectOpen = React.useCallback(() => {
+    setOnSelect(false);
     fetchProject();
   }, []);
 
@@ -41,6 +38,7 @@ const ReportDisplay = () => {
   const [reportModal, setReportModal] = React.useState(false);
   const [reportData, setReportData] = React.useState('');
 
+  //report
   const [manpower, setManpower] = React.useState([]);
   const [quantity, setQuantity] = React.useState([]);
 
@@ -150,6 +148,9 @@ const ReportDisplay = () => {
               height: 25,
               tintColor: 'black',
             }}
+            // maxHeight={200}
+            // zIndex={1000}
+            zIndexInverse={1000}
           />
         </View>
         <TouchableOpacity
@@ -168,6 +169,7 @@ const ReportDisplay = () => {
     );
   }
 
+  // report user list
   function renderReport() {
     const renderItem = ({item}) => (
       <TouchableOpacity
@@ -244,6 +246,7 @@ const ReportDisplay = () => {
     );
   }
 
+  // report showing modal
   function renderReportModal() {
     const renderItem = ({item}) => (
       <View
@@ -294,7 +297,12 @@ const ReportDisplay = () => {
       </View>
     );
 
-    const footerComponent = () => <View>{renderQuantity()}</View>;
+    const footerComponent = () => (
+      <View>
+        {renderQuantity()}
+        {renderFooter()}
+      </View>
+    );
 
     return (
       <Modal animationType="slide" transparent={true} visible={reportModal}>
@@ -416,15 +424,6 @@ const ReportDisplay = () => {
                   ListFooterComponent={footerComponent}
                 />
               </View>
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  marginVertical: 10,
-                  borderColor: COLORS.gray2,
-                }}></View>
-              <View>
-                <Text> report Footer</Text>
-              </View>
             </View>
           </View>
         </View>
@@ -432,12 +431,13 @@ const ReportDisplay = () => {
     );
   }
 
+  // quantity report
   function renderQuantity() {
-    const renderItem = ({item, i}) => (
+    const renderItem = ({item, index}) => (
       <View>
         <View
           style={{
-            marginTop: i == 0 ? null : 5,
+            // marginTop: 5,
             flexDirection: 'row',
           }}>
           <Text
@@ -494,7 +494,15 @@ const ReportDisplay = () => {
             {item.quantityWorkItems.quality_type}
           </Text>
         </View>
-        <View style={{marginTop: 8}}>
+        {index == 0 ? (
+          <View
+            style={{
+              borderBottomWidth: 1,
+              marginVertical: index == 0 ? 10 : null,
+              borderColor: COLORS.darkGray2,
+            }}></View>
+        ) : null}
+        <View style={{}}>
           {item.quantityWorkItems.subquantityitems.map((ele, i) => {
             return (
               <View key={i}>
@@ -502,7 +510,7 @@ const ReportDisplay = () => {
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginBottom: SIZES.base,
+                      // marginBottom: SIZES.base,
                     }}>
                     <Text
                       style={{
@@ -567,13 +575,14 @@ const ReportDisplay = () => {
                   style={{
                     left: 100,
                     borderBottomWidth: 1,
-                    borderColor: COLORS.gray2,
+                    borderColor: COLORS.darkGray2,
                     width: '75%',
+                    marginVertical: 5,
                   }}></View>
                 <View
                   style={{
                     flexDirection: 'row',
-                    marginBottom: SIZES.base,
+                    // marginBottom: SIZES.base,
                   }}>
                   <Text
                     style={{
@@ -633,13 +642,6 @@ const ReportDisplay = () => {
                     {ele.sub_quality_type}
                   </Text>
                 </View>
-                {/* <View
-                  style={{
-                    left: 100,
-                    borderBottomWidth: 1,
-                    borderColor: COLORS.gray2,
-                    width: '75%',
-                  }}></View> */}
               </View>
             );
           })}
@@ -676,8 +678,8 @@ const ReportDisplay = () => {
                 style={{
                   width: '100%',
                   height: 1,
-                  backgroundColor: COLORS.gray2,
-                  marginVertical: SIZES.base,
+                  backgroundColor: COLORS.darkGray,
+                  marginVertical: 10,
                 }}></View>
             );
           }}
@@ -685,7 +687,7 @@ const ReportDisplay = () => {
             <View>
               <View
                 style={{
-                  marginTop: 10,
+                  marginTop: 15,
                   flexDirection: 'row',
                   marginBottom: SIZES.base,
                 }}>
@@ -694,7 +696,6 @@ const ReportDisplay = () => {
                     flex: 1,
                     ...FONTS.h3,
                     color: COLORS.black,
-                    // fsontWeight: 'bold',
                   }}>
                   Items
                 </Text>
@@ -704,7 +705,6 @@ const ReportDisplay = () => {
                     flex: 0.5,
                     color: COLORS.black,
                     textAlign: 'right',
-                    // fontWeight: 'bold',
                   }}>
                   L
                 </Text>
@@ -714,7 +714,6 @@ const ReportDisplay = () => {
                     flex: 0.5,
                     color: COLORS.black,
                     textAlign: 'right',
-                    // fontWeight: 'bold',
                   }}>
                   W
                 </Text>
@@ -724,7 +723,6 @@ const ReportDisplay = () => {
                     flex: 0.5,
                     color: COLORS.black,
                     textAlign: 'right',
-                    // fontWeight: 'bold',
                   }}>
                   H
                 </Text>
@@ -734,7 +732,6 @@ const ReportDisplay = () => {
                     flex: 1,
                     color: COLORS.black,
                     textAlign: 'right',
-                    // fontWeight: 'bold',
                   }}>
                   Total
                 </Text>
@@ -744,7 +741,6 @@ const ReportDisplay = () => {
                     flex: 1,
                     color: COLORS.black,
                     textAlign: 'right',
-                    // fontWeight: 'bold',
                   }}>
                   Remark
                 </Text>
@@ -752,7 +748,8 @@ const ReportDisplay = () => {
               <View
                 style={{
                   borderBottomWidth: 1,
-                  borderColor: COLORS.gray2,
+                  borderColor: COLORS.darkGray,
+                  marginBottom: 10,
                 }}></View>
             </View>
           }
@@ -761,11 +758,25 @@ const ReportDisplay = () => {
     );
   }
 
+  function renderFooter() {
+    return (
+      <View>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            marginVertical: 15,
+            borderColor: COLORS.gray2,
+          }}></View>
+        <Text>renderFooter</Text>
+      </View>
+    );
+  }
   return (
     <View style={{margin: SIZES.radius}}>
+      {}
       {renderProjectFilter()}
-      {onSelect == true && renderReport()}
       {renderReportModal()}
+      {onSelect == true && renderReport()}
     </View>
   );
 };
