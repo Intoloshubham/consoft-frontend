@@ -4,7 +4,7 @@ import {
   Text, FlatList,
   StyleSheet, Image,
   ScrollView, Modal,
-  Pressable, TextInput,
+  Pressable, TextInput, RefreshControl,
   TouchableOpacity, LogBox
 } from 'react-native'
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../constants'
@@ -46,6 +46,19 @@ const UserReports = ({ route }) => {
   const [userid, setUserid] = useState(null)
   const userData = useSelector(state => state.user);
 
+  // refresh
+  function delay(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+  const [loading, setLoading] = React.useState(false);
+
+  const loadMore = React.useCallback(async () => {
+    setLoading(true);
+
+    delay(2000).then(() => setLoading(false));
+  }, [loading]);
   // const Get_UserId_Data = async () => {
   //   const userid = await getUserId();
   //   const new_userid = userid;
@@ -62,19 +75,19 @@ const UserReports = ({ route }) => {
 
   useMemo(() => {
     console.log("userbyproject...........")
-    console.log(userData._id)
+    // console.log(userData._id)
     if (userData._id) {
       const sendUserId = async () => {
         let data = await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
         //  console.log("🚀 ~ file: UserReports.js ~ line 70 ~ sendUserId ~ data", data)
         let resp = await data.json();
-        console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
+        // console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
         setSelectedIdProjects(resp);
 
       }
       sendUserId();
     }
-  }, [])
+  }, [loading])
   // console.log("selectedIdProjects..........584")
   // console.log(selectedIdProjects)
 
@@ -105,7 +118,7 @@ const UserReports = ({ route }) => {
       setProList(ProData)
 
     }
-  }, [selectedIdProjects])
+  }, [selectedIdProjects,loading])
 
   // console.log("ProList..........121")
   // console.log(ProList) 
@@ -123,7 +136,7 @@ const UserReports = ({ route }) => {
     } else {
       return
     }
-  }, [value])
+  }, [value,loading])
   // console.log(projectTeamList)
 
 
@@ -175,6 +188,14 @@ const UserReports = ({ route }) => {
 
       />
       <KeyboardAwareScrollView
+        refreshControl={
+          <RefreshControl
+            progressBackgroundColor="white"
+            tintColor="red"
+            refreshing={loading}
+            onRefresh={loadMore}
+          />
+        }
         enableOnAndroid={true}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ height: SIZES.height }}
@@ -194,15 +215,15 @@ const UserReports = ({ route }) => {
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           {value ? <View >
             <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} />
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
-              <Stock project_id={value} Main_drp_pro_value={value} />
+              <Stock project_id={value} Main_drp_pro_value={value} loading={loading}/>
             </View>
             <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>
               {/* Quantity */}
-              <Quantity project_id={value} Main_drp_pro_value={value} />
+              <Quantity project_id={value} Main_drp_pro_value={value}  loading={loading}/>
             </View>
             {/* <View style={{ marginVertical: 5 }}>
               <Quality />

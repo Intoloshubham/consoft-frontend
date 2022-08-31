@@ -31,4 +31,21 @@ const submitWork = async (submit_data, work_id) => {
   }
 };
 
-export {getAssignWorks, submitWork};
+const submitComment = async (submit_data, work_id) => {
+  try {
+    const res = await fetch(Config.API_URL + 'user-work-comment/' + work_id, {
+      method: 'PUT',
+      body: JSON.stringify(submit_data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export {getAssignWorks, submitWork,submitComment};
