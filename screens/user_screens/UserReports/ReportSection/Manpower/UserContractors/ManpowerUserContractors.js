@@ -39,8 +39,8 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   const [postContData, setPostContData] = useState('')
 
   //using in dropdown
-  const [proListIsFocus, setProListIsFocus] = useState(false)
-  const [value, setValue] = useState(null);
+  // const [proListIsFocus, setProListIsFocus] = useState(false)
+  // const [value, setValue] = useState(null);
 
   const [active, setactive] = useState(null)
   const [Report_list, setReport_list] = useState('')
@@ -61,11 +61,11 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   const [addConMemberModal, setAddConMemberReportModal] = useState(false);
   const [addCatetoryModal, setAddCategoryModal] = useState(false)
 
-  const [addSubCategoryModal, setAddSubCatetoryModal] = useState(false)
+  // const [addSubCategoryModal, setAddSubCatetoryModal] = useState(false)
   const [manpowerCategoryId, setManpowerCategoryId] = useState('')
   const [manpowerMainCategoryId, setManpowerMainCategoryId] = useState('')
   const [categName, setCategName] = useState('')
-  const [subCategName, setSubCategName] = useState('')
+  // const [subCategName, setSubCategName] = useState('')
 
   const [membername, setMemberName] = useState('')
   const [memberCount, setMemberCount] = useState('')
@@ -79,7 +79,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   //for post status
-  const [saveNewSubCategoryStatus, setSaveNewSubCategoryStatus] = useState(false)
+  // const [saveNewSubCategoryStatus, setSaveNewSubCategoryStatus] = useState(false)
   const [saveNewCategoryStatus, setSaveNewCategoryStatus] = useState(false)
 
   const [displayConDetails, setDisplayConDetails] = useState(false)
@@ -97,7 +97,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   const [filterNewCategory, setFilterNewCategory] = useState([])
 
   const [addFieldInput, setAddFieldInput] = useState('')
-  const [getNewSubCategory, setGetNewSubCategory] = useState([])
+  // const [getNewSubCategory, setGetNewSubCategory] = useState([])
   
   const current_dat = moment().format("YYYY%2FMM%2FDD")
   const CONST_FIELD = {
@@ -119,7 +119,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       company_id: companydata.company_id,
       contractor_name: ContractorName,
       phone_no: ContractorPhone,
-      project_id: value
+      // project_id: value
     }
 
 
@@ -135,7 +135,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
         if (data.status == '200') {
           setContractorName('');
           setContractorPhone('');
-          GetNewSubCategories();
+          // GetNewSubCategories();
           setSubmitToast(true);
           setTimeout(() => {
             setConReportModal(false);
@@ -241,17 +241,17 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     return result;
   }
 
-  const emptySubCategoryData = () => {
+  // const emptySubCategoryData = () => {
 
-    // addFieldInput.map((sublist, index) => {
-    //   const _memberInputs = [...addFieldInput];
-    //   _memberInputs[index].manpower_sub_category='';
-    //   _memberInputs[index].manpower_member = ' ';
-    //   _memberInputs[index].key = index;
-    //   setAddFieldInput(_memberInputs);
-    // });
+  //   // addFieldInput.map((sublist, index) => {
+  //   //   const _memberInputs = [...addFieldInput];
+  //   //   _memberInputs[index].manpower_sub_category='';
+  //   //   _memberInputs[index].manpower_member = ' ';
+  //   //   _memberInputs[index].key = index;
+  //   //   setAddFieldInput(_memberInputs);
+  //   // });
 
-  }
+  // }
 
 
   //for inserting manpower data
@@ -289,26 +289,26 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
 
   //for new sub category
-  const SaveNewSubCategory = async () => {
-    let isMount = true;
-    const data = {
-      company_id: companydata.company_id,
-      manpower_sub_category: subCategName,
-      manpower_category_id: manpowerCategoryId
-    }
-    const res = await insert_new_sub_category(data);
-    if (isMount && res.status == 200) {
-      GetNewSubCategories();
-      GetNewCategories();
-      setSubmitToast(true)
-      setSaveNewSubCategoryStatus(true);
-      setTimeout(() => {
-        setAddSubCatetoryModal(false);
+  // const SaveNewSubCategory = async () => {
+  //   let isMount = true;
+  //   const data = {
+  //     company_id: companydata.company_id,
+  //     manpower_sub_category: subCategName,
+  //     manpower_category_id: manpowerCategoryId
+  //   }
+  //   const res = await insert_new_sub_category(data);
+  //   if (isMount && res.status == 200) {
+  //     // GetNewSubCategories();
+  //     GetNewCategories();
+  //     setSubmitToast(true)
+  //     // setSaveNewSubCategoryStatus(true);
+  //     // setTimeout(() => {
+  //     //   setAddSubCatetoryModal(false);
 
-      }, 800);
-    }
-    return () => { isMount = false }
-  }
+  //     // }, 800);
+  //   }
+  //   return () => { isMount = false }
+  // }
 
 
   async function GetManpowerData() {
@@ -349,27 +349,29 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 221 ~ GetNewCategories ~ get_temp.data", get_temp.data)
   }
 
-  const GetNewSubCategories = async () => {
-    const get_data = await get_new_sub_category(companydata.company_id);
-    const get_temp = await get_data.json();
-    get_temp.data.map((ele, key) => ({
-      ...ele, manpower_member: ''
-      // get_temp.data[key].manpower_member = '';
-    }))
-    // get_temp.data.map((ele, key) => {
-    //   get_temp.data[key].manpower_member = ''; 
-    // })
-    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 230 ~ get_temp.data.map ~  get_temp.subdata", get_temp.data)
-    setAddFieldInput(get_temp.data);
+  // const GetNewSubCategories = async () => {
+  //   const get_data = await get_new_sub_category(companydata.company_id);
+  //   const get_temp = await get_data.json();
+  //   get_temp.data.map((ele, key) => ({
+  //     ...ele, manpower_member: ''
+  //     // get_temp.data[key].manpower_member = '';
+  //   }))
+  //   // get_temp.data.map((ele, key) => {
+  //   //   get_temp.data[key].manpower_member = ''; 
+  //   // })
+  //   // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 230 ~ get_temp.data.map ~  get_temp.subdata", get_temp.data)
+  //   setAddFieldInput(get_temp.data);
 
-  }
-  useMemo(() => {
-    let isMount = true;
-    if (isMount) {
-      GetNewSubCategories();
-    }
-    return () => { isMount = false }
-  }, [companydata.company_id, saveNewSubCategoryStatus, loading])
+  // }
+
+
+  // useMemo(() => {
+  //   let isMount = true;
+  //   if (isMount) {
+  //     GetNewSubCategories();
+  //   }
+  //   return () => { isMount = false }
+  // }, [companydata.company_id, saveNewSubCategoryStatus, loading])
 
   useMemo(() => {
     let isMount = true;
@@ -435,7 +437,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
               />
             </View>
             <ScrollView scrollEnabled={false} nestedScrollEnabled={false}>
-              <Dropdown
+              {/* <Dropdown
                 style={[
                   cont_Project_list_drop,
                   proListIsFocus && {
@@ -473,7 +475,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                   setProListIsFocus(false);
                 }}
 
-              />
+              /> */}
 
               <FormInput
                 placeholder="Contractor Name"
@@ -643,113 +645,112 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     )
   }
 
-  function add_sub_category_modal() {
-    return (
-      <View>
-        <Modal transparent={false} visible={addSubCategoryModal} animationType="slide">
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: '#000000aa',
-              // justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                // flex: 1,
-                backgroundColor: '#fff',
-                marginTop: 80,
-                padding: 20,
-                borderRadius: 20,
-                margin: 10,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  // borderBottomWidth: 1,
-                }}>
-                <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add Labours </Text>
-                <Pressable onPress={() => setAddSubCatetoryModal(false)}>
-                  <AntDesign name="close" size={30} color={COLORS.black} />
-                </Pressable>
-              </View>
-              <View style={{ marginTop: 20, alignContent: 'space-around', paddingVertical: 15 }}>
-                <View>
-                  <Dropdown
-                    style={[
-                      cont_Project_list_drop,
-                      // proListIsFocus &&
-                      {
-                        // borderColor: COLORS.lightblue_600,
-                        borderBottomColor: COLORS.lightGray1,
-                        borderTopColor: COLORS.lightGray1,
-                        width: 355,
-                        justifyContent: "center",
-                        // marginLeft: -60
+  // function add_sub_category_modal() {
+  //   return (
+  //     <View>
+  //       <Modal transparent={false} visible={addSubCategoryModal} animationType="slide">
+  //         <View
+  //           style={{
+  //             flex: 1,
+  //             backgroundColor: '#000000aa',
+  //             // justifyContent: 'center',
+  //           }}>
+  //           <View
+  //             style={{
+  //               // flex: 1,
+  //               backgroundColor: '#fff',
+  //               marginTop: 80,
+  //               padding: 20,
+  //               borderRadius: 20,
+  //               margin: 10,
+  //             }}>
+  //             <View
+  //               style={{
+  //                 flexDirection: 'row',
+  //                 justifyContent: 'space-between',
+  //                 alignItems: 'center'                  
+  //               }}>
+  //               <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add Labours </Text>
+  //               <Pressable onPress={() => setAddSubCatetoryModal(false)}>
+  //                 <AntDesign name="close" size={30} color={COLORS.black} />
+  //               </Pressable>
+  //             </View>
+  //             <View style={{ marginTop: 20, alignContent: 'space-around', paddingVertical: 15 }}>
+  //               <View>
+  //                 <Dropdown
+  //                   style={[
+  //                     cont_Project_list_drop,
+  //                     // proListIsFocus &&
+  //                     {
+  //                       // borderColor: COLORS.lightblue_600,
+  //                       borderBottomColor: COLORS.lightGray1,
+  //                       borderTopColor: COLORS.lightGray1,
+  //                       width: 355,
+  //                       justifyContent: "center",
+  //                       // marginLeft: -60
 
-                      },
-                    ]}
-                    placeholderStyle={{ fontSize: 16, color: COLORS.darkGray, }
-                    }
-                    selectedTextStyle={{ color: COLORS.gray }
-                    }
+  //                     },
+  //                   ]}
+  //                   placeholderStyle={{ fontSize: 16, color: COLORS.darkGray, }
+  //                   }
+  //                   selectedTextStyle={{ color: COLORS.gray }
+  //                   }
 
-                    containerStyle={{ width: 354, borderRadius: 5, justifyContent: "center" }}
-                    inputSearchStyle={{
-                      color: COLORS.gray, height: 40, borderRadius: 5,
-                      //  padding: -5
-                    }}
-                    iconStyle={{
-                      height: 28
-                      // fontSize: 16, 
-                    }}
-                    data={filterNewCategory ? filterNewCategory : null}
-                    // data={memberCategory}
-                    search
-                    maxHeight={200}
-                    labelField="manpower_category"
-                    valueField="_id"
-                    placeholder={'Select Category'}
-                    searchPlaceholder="Search..."
-                    value={"_id"}
-                    onChange={item => {
-                      setManpowerCategoryId(item._id)
-                      // setValue(item.name);
-                    }}
+  //                   containerStyle={{ width: 354, borderRadius: 5, justifyContent: "center" }}
+  //                   inputSearchStyle={{
+  //                     color: COLORS.gray, height: 40, borderRadius: 5,
+  //                     //  padding: -5
+  //                   }}
+  //                   iconStyle={{
+  //                     height: 28
+  //                     // fontSize: 16, 
+  //                   }}
+  //                   data={filterNewCategory ? filterNewCategory : null}
+  //                   // data={memberCategory}
+  //                   search
+  //                   maxHeight={200}
+  //                   labelField="manpower_category"
+  //                   valueField="_id"
+  //                   placeholder={'Select Category'}
+  //                   searchPlaceholder="Search..."
+  //                   value={"_id"}
+  //                   onChange={item => {
+  //                     setManpowerCategoryId(item._id)
+  //                     // setValue(item.name);
+  //                   }}
 
-                  />
-                </View>
-                <View style={{ paddingTop: 22 }}>
-                  <FormInput
-                    label="Name"
-                    onChange={text => {
-                      setSubCategName(text)
-                    }}
-                  />
-                </View>
-              </View>
-              <View>
-                <TextButton
-                  label="save"
-                  buttonContainerStyle={{
-                    height: 45,
-                    borderRadius: SIZES.radius,
-                    marginTop: SIZES.padding,
-                  }}
-                  onPress={() => {
-                    // saveItems();
-                    SaveNewSubCategory();
-                  }}
-                />
-              </View>
-              {/* <Toast config={showToastItem} /> */}
-            </View>
-          </View>
-        </Modal>
-      </View>
-    )
-  }
+  //                 />
+  //               </View>
+  //               <View style={{ paddingTop: 22 }}>
+  //                 <FormInput
+  //                   label="Name"
+  //                   onChange={text => {
+  //                     setSubCategName(text)
+  //                   }}
+  //                 />
+  //               </View>
+  //             </View>
+  //             <View>
+  //               <TextButton
+  //                 label="save"
+  //                 buttonContainerStyle={{
+  //                   height: 45,
+  //                   borderRadius: SIZES.radius,
+  //                   marginTop: SIZES.padding,
+  //                 }}
+  //                 onPress={() => {
+  //                   // saveItems();
+  //                   SaveNewSubCategory();
+  //                 }}
+  //               />
+  //             </View>
+  //             {/* <Toast config={showToastItem} /> */}
+  //           </View>
+  //         </View>
+  //       </Modal>
+  //     </View>
+  //   )
+  // }
 
 
 
@@ -845,7 +846,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                       }
                     />
                   </View>
-                  <View>
+                  {/* <View>
                     <TextButton
                       label="Add Labours"
                       buttonContainerStyle={{
@@ -863,7 +864,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                       }
                       }
                     />
-                  </View>
+                  </View> */}
                 </View>
                 <View style={{ marginBottom: 15, width: "100%" }}>
                   <Dropdown
@@ -906,7 +907,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                     onChange={item => {
                       // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 904 ~ createContractorMemberModal ~ item", item)
 
-                      GetNewSubCategories(item._id);
+                      // GetNewSubCategories(item._id);
                       setManpowerMainCategoryId(item._id);
                       setDisplayConDetails(true);
                       setReportShowHide(true);
@@ -923,7 +924,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                 }}>
 
                   {add_category_modal()}
-                  {add_sub_category_modal()}
+                  {/* {add_sub_category_modal()} */}
 
                   <ScrollView style={{
                     // backgroundColor: "orange",
