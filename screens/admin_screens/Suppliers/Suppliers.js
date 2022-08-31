@@ -65,7 +65,7 @@ const Suppliers = () => {
   }
 
   // ============================== Apis ===================================
-
+//===
   const getSupplier = async () => {
     let response = await getSuppliers();
     if (response.status === 200) {
