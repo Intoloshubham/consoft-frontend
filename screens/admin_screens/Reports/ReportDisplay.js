@@ -27,8 +27,7 @@ const ReportDisplay = () => {
   var companyData;
   if (companyDetail._id) {
     companyData = useSelector(state => state.company);
-  }
-  if (userData._id) {
+  } else {
     companyData = useSelector(state => state.user);
   }
   const company_id = companyData._id;

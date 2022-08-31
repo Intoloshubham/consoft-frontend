@@ -202,7 +202,7 @@ const CompanyTeamShow = () => {
               backgroundColor: COLORS.white,
               padding: SIZES.padding,
               borderRadius: 5,
-              width: '90%',
+              width: '95%',
             }}>
             <View
               style={{

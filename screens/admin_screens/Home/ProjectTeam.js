@@ -167,7 +167,7 @@ const ProjectTeam = ({route}) => {
                 color: COLORS.lightblue_900,
                 textTransform: 'capitalize',
               }}>
-              Mr.{item.user_name}
+              {item.user_name}
             </Text>
             <View style={{flexDirection: 'row'}}>
               {/* <TouchableOpacity
@@ -263,12 +263,12 @@ const ProjectTeam = ({route}) => {
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              backgroundColor: COLORS.transparentBlack6,
             }}>
             <View
               style={{
                 position: 'absolute',
-                width: '90%',
+                width: '95%',
                 padding: SIZES.padding,
                 borderRadius: 5,
                 backgroundColor: COLORS.white,

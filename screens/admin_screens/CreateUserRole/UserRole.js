@@ -96,7 +96,7 @@ const UserRole = () => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,

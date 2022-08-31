@@ -550,7 +550,7 @@ const Boq = ({route}) => {
           }}>
           <View
             style={{
-              width: '92%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -657,7 +657,7 @@ const Boq = ({route}) => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,

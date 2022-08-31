@@ -11,6 +11,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ImageBackground,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
@@ -240,10 +241,10 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 <Image
                   source={icons.date}
                   style={{
-                    width: 20,
-                    height: 20,
-                    tintColor: COLORS.lightblue_900,
-                    right: 8,
+                    width: 25,
+                    height: 25,
+                    tintColor: COLORS.black,
+                    right: 10,
                   }}
                 />
               </TouchableOpacity>
@@ -251,9 +252,9 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 <Image
                   source={icons.time}
                   style={{
-                    width: 20,
-                    height: 20,
-                    tintColor: COLORS.lightblue_900,
+                    width: 25,
+                    height: 25,
+                    tintColor: COLORS.black,
                   }}
                 />
               </TouchableOpacity>
@@ -268,40 +269,47 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     <View>
       <Modal animationType="fade" transparent={true} visible={isVisible}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.transparentBlack7,
+            backgroundColor: COLORS.transparentBlack6,
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: SIZES.base,
               backgroundColor: COLORS.white,
               maxHeight: 500,
             }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <Text style={{fontSize: 25, color: COLORS.darkGray}}>
                 Assign Work
               </Text>
-              <IconButton
-                containerStyle={{
-                  boborderWidth: 2,
-                  borderRadius: 10,
-                  borderColor: COLORS.gray2,
-                }}
-                icon={icons.cross}
-                iconStyle={{
-                  tintColor: COLORS.gray,
-                }}
-                onPress={onClose}
-              />
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
+                }}>
+                <TouchableOpacity onPress={onClose}>
+                  <Image
+                    source={icons.cross}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
             <CustomDropdown
-              placeholder="Select"
+              placeholder="Select role"
               open={openUserRole}
               value={userRoleValue}
               items={userRoles}
@@ -320,7 +328,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
             />
             <View style={{marginTop: 30, marginBottom: 25}}>
               <CustomDropdown
-                placeholder="Select"
+                placeholder="Select user"
                 open={openUsers}
                 value={usersValue}
                 items={users}
@@ -342,11 +350,9 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
               style={{marginVertical: 5}}>
               <View
                 style={{
-                  // flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                {/* <ScrollView> */}
                 {work.map((input, key) => (
                   <View style={{}} key={key}>
                     <View style={{flexDirection: 'row'}}>
@@ -383,34 +389,45 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                         />
                       </View>
                       <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity
-                          style={{}}
-                          onPress={() => removeHandler(key)}>
+                        <TouchableOpacity onPress={() => removeHandler(key)}>
                           {key != 0 && (
-                            <Image
-                              source={icons.minus1}
+                            <ImageBackground
                               style={{
-                                height: 25,
-                                width: 25,
-                                right: 2,
-                              }}
-                            />
+                                backgroundColor: COLORS.rose_600,
+                                padding: 5,
+                                right: 5,
+                              }}>
+                              <Image
+                                source={icons.minus}
+                                style={{
+                                  height: 15,
+                                  width: 15,
+                                  tintColor: 'white',
+                                }}
+                              />
+                            </ImageBackground>
                           )}
                         </TouchableOpacity>
                         <TouchableOpacity onPress={addHandler}>
-                          <Image
-                            source={icons.plus1}
+                          <ImageBackground
                             style={{
-                              height: key == 0 ? 25 : 25,
-                              width: key == 0 ? 25 : 25,
-                            }}
-                          />
+                              backgroundColor: COLORS.success_600,
+                              padding: 5,
+                            }}>
+                            <Image
+                              source={icons.plus}
+                              style={{
+                                height: key == 0 ? 15 : 15,
+                                width: key == 0 ? 15 : 15,
+                                tintColor: 'white',
+                              }}
+                            />
+                          </ImageBackground>
                         </TouchableOpacity>
                       </View>
                     </View>
                   </View>
                 ))}
-                {/* </ScrollView> */}
               </View>
 
               {/* <Text

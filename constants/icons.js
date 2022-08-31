@@ -103,6 +103,8 @@ const user_role = require('../assets/icons/group.png');
 const add_qty_item = require('../assets/icons/add_qty_item.png');
 const add_qty_item1 = require('../assets/icons/add_qty_item1.png');
 const help1 = require('../assets/icons/question.png');
+const completion_date = require('../assets/icons/complete.png');
+const persent_progress = require('../assets/icons/persent_progress.png');
 
 export default {
   // final
@@ -202,4 +204,5 @@ export default {
   delete_withbg,
   user_role,
   help1,
+  completion_date,persent_progress
 };

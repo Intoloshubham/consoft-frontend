@@ -24,17 +24,6 @@ const wait = timeout => {
 };
 
 const Home = ({navigation}) => {
-
-  const companyDetail = useSelector(state => state.company);
-  const userData = useSelector(state => state.user);
-  var companyData;
-  if (companyDetail._id) {
-    companyData = useSelector(state => state.company);
-  } 
-  if (userData._id) {
-    companyData = useSelector(state => state.user);
-  }
-
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -44,6 +33,17 @@ const Home = ({navigation}) => {
     wait(1000).then(() => setRefreshing(false));
   }, []);
 
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+
+  console.log(companyData._id)
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(companyData._id);
@@ -71,7 +71,6 @@ const Home = ({navigation}) => {
   //===========================
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const fetchAssignWorks = async () => {
-    // console.log(companyData._id)
     const response = await getAssignWorks(companyData._id);
     // console.log(response)
     if (response.status === 200) {

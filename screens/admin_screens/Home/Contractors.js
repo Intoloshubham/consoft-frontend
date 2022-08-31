@@ -132,7 +132,7 @@ const Contractors = ({route}) => {
               color: COLORS.lightblue_900,
               textTransform: 'capitalize',
             }}>
-            Mr. {item.contractor_name}
+            {item.contractor_name}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -207,7 +207,7 @@ const Contractors = ({route}) => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
