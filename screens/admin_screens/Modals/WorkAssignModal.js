@@ -188,60 +188,65 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
 
   function renderStartDate() {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          borderRadius: SIZES.base,
-          backgroundColor: COLORS.gray3,
-          paddingHorizontal: SIZES.radius,
-          paddingVertical: SIZES.base,
-          // ...styles.shadow,
-        }}>
+      <View>
+        <Text style={{color: COLORS.darkGray, ...FONTS.body4}}>
+          Target date & Time
+        </Text>
         <View
           style={{
-            flex: 1,
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            borderRadius: SIZES.base,
+            backgroundColor: COLORS.gray3,
+            paddingHorizontal: SIZES.radius,
+            paddingVertical: SIZES.base,
+            // ...styles.shadow,
           }}>
-          <View style={{flexDirection: 'row'}}>
-            <Text
-              style={{
-                ...FONTS.body4,
-                color: COLORS.darkGray,
-              }}>
-              Date - {date.toLocaleDateString()}
-            </Text>
-            <Text
-              style={{
-                ...FONTS.body4,
-                color: COLORS.darkGray,
-                left: 10,
-              }}>
-              Time - {date.toLocaleTimeString()}
-            </Text>
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={showDatepicker}>
-              <Image
-                source={icons.date}
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <Text
                 style={{
-                  width: 20,
-                  height: 20,
-                  tintColor: COLORS.lightblue_900,
-                  right: 8,
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={showTimepicker}>
-              <Image
-                source={icons.time}
+                  ...FONTS.body4,
+                  color: COLORS.darkGray,
+                }}>
+                Date - {formatedDate}
+              </Text>
+              <Text
                 style={{
-                  width: 20,
-                  height: 20,
-                  tintColor: COLORS.lightblue_900,
-                }}
-              />
-            </TouchableOpacity>
+                  ...FONTS.body4,
+                  color: COLORS.darkGray,
+                  left: 10,
+                }}>
+                Time - {date.toLocaleTimeString()}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={showDatepicker}>
+                <Image
+                  source={icons.date}
+                  style={{
+                    width: 20,
+                    height: 20,
+                    tintColor: COLORS.lightblue_900,
+                    right: 8,
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={showTimepicker}>
+                <Image
+                  source={icons.time}
+                  style={{
+                    width: 20,
+                    height: 20,
+                    tintColor: COLORS.lightblue_900,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -444,7 +449,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 </TouchableOpacity>
               </View> */}
             </ScrollView>
-            <View style={{marginTop: SIZES.radius}}>{renderStartDate()}</View>
+            <View style={{}}>{renderStartDate()}</View>
             <TextButton
               label="Submit"
               buttonContainerStyle={{
