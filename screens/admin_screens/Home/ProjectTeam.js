@@ -31,9 +31,17 @@ import {getUserRole, roleByUser} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
 
 const ProjectTeam = ({route}) => {
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
   const company_id = companyData._id;
-  // console.log(companyData._id)
 
   const {project_id} = route.params; //
   const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
@@ -73,7 +81,7 @@ const ProjectTeam = ({route}) => {
   // fetch project team
   const fetchProjectTeam = async () => {
     const team = await getProjectTeam(project_id);
-    console.log(team);
+    // console.log(team);
     if (team.status === 200) {
       setProjectTeam(team.data);
     }
@@ -159,7 +167,7 @@ const ProjectTeam = ({route}) => {
                 color: COLORS.lightblue_900,
                 textTransform: 'capitalize',
               }}>
-              Mr.{item.user_name}
+              {item.user_name}
             </Text>
             <View style={{flexDirection: 'row'}}>
               {/* <TouchableOpacity
@@ -255,12 +263,12 @@ const ProjectTeam = ({route}) => {
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              backgroundColor: COLORS.transparentBlack6,
             }}>
             <View
               style={{
                 position: 'absolute',
-                width: '90%',
+                width: '95%',
                 padding: SIZES.padding,
                 borderRadius: 5,
                 backgroundColor: COLORS.white,

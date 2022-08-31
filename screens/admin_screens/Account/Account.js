@@ -19,7 +19,7 @@ const Account = () => {
   const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
   const [collapsed, setCollapsed] = React.useState(true);
-  
+
   const logout = () => {
     dispatch(companyLogout());
     navigation.navigate('Login');

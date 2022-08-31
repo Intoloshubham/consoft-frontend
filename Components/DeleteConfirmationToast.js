@@ -22,7 +22,7 @@ const DeleteConfirmationToast = ({
 }) => {
   return (
     <View>
-      <Modal animationType="fade" transparent={true} visible={isVisible}>
+      <Modal animationType="slide" transparent={true} visible={isVisible}>
         <TouchableWithoutFeedback onPress={onClose}>
           <View
             style={{
@@ -36,7 +36,7 @@ const DeleteConfirmationToast = ({
               style={{
                 position: 'absolute',
                 width: '90%',
-                backgroundColor: COLORS.lightblue_50,
+                backgroundColor: COLORS.white,
                 borderRadius: 5,
                 paddingHorizontal: SIZES.padding,
                 paddingVertical: 3,

@@ -93,6 +93,7 @@ const ProjectsDetails = ({route}) => {
     return (
       <FlatList
         contentContainerStyle={{
+          marginTop: 10,
           marginHorizontal: SIZES.padding,
           paddingBottom: 50,
         }}

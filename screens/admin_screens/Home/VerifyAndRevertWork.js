@@ -45,10 +45,9 @@ const VerifyAndRevertWork = ({verify, revert}) => {
     <View
       style={{
         marginTop: SIZES.padding,
-        marginHorizontal: SIZES.padding,
+        marginHorizontal: SIZES.radius,
         backgroundColor: COLORS.white,
-        paddingVertical: SIZES.radius,
-        paddingHorizontal: SIZES.radius,
+        padding: 15,
         borderRadius: 5,
         ...styles.shadow,
       }}>
@@ -57,9 +56,6 @@ const VerifyAndRevertWork = ({verify, revert}) => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          paddingHorizontal: SIZES.base,
-          // marginBottom: SIZES.base,
-          marginTop: SIZES.base,
         }}>
         <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
           All work tasks
@@ -80,7 +76,8 @@ const VerifyAndRevertWork = ({verify, revert}) => {
         initialRouteName="Verify"
         screenOptions={{
           tabBarLabelStyle: {...FONTS.h3},
-        }}>
+        }}
+        sceneContainerStyle={{backgroundColor: 'white'}}>
         <Tab.Screen
           name="Verified"
           children={() => <VerifyWorks VerifyData={verify} />}

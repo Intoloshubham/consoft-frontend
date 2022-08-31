@@ -187,7 +187,7 @@ const Profile = () => {
           marginBottom: 20,
           ...styles.shadow,
         }}>
-        <Text style={{...FONTS.h1, color: COLORS.darkGray}}>Leaves List</Text>
+        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Leaves List</Text>
 
         <View style={{marginTop: SIZES.radius}}>
           <FlatList

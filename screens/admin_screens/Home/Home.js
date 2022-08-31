@@ -24,9 +24,6 @@ const wait = timeout => {
 };
 
 const Home = ({navigation}) => {
-
-  
-
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -41,17 +38,12 @@ const Home = ({navigation}) => {
 
   var companyData;
   if (companyDetail._id) {
-    console.log("company")
     companyData = companyDetail;
-  } else{
-    console.log("user")
+  } else {
     companyData = userData;
   }
-  
-  console.log(companyData)
-  
 
-
+  console.log(companyData._id)
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(companyData._id);
@@ -64,9 +56,6 @@ const Home = ({navigation}) => {
   // const [verifyAndRevert, setVerifyAndRevert] = React.useState([]);
   const [verify, setVerify] = React.useState([]);
   const [revert, setRevert] = React.useState([]);
-
-  
-
 
   const fetchVerifyAndRevertWork = async () => {
     const response = await getVerifyAndRevertWorks(companyData._id);
@@ -82,7 +71,6 @@ const Home = ({navigation}) => {
   //===========================
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const fetchAssignWorks = async () => {
-    // console.log(companyData._id)
     const response = await getAssignWorks(companyData._id);
     // console.log(response)
     if (response.status === 200) {

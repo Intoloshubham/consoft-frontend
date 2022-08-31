@@ -49,7 +49,18 @@ const CategoryandType = () => {
   const [deleteConfirm1, setDeleteConfirm1] = React.useState(false);
 
   // COMPANY DATA
-  const companyData = useSelector(state => state.company);
+  // const companyData = useSelector(state => state.company);
+  // const company_id = companyData._id;
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
   const company_id = companyData._id;
   // console.log("object",company_id)
 
@@ -82,7 +93,7 @@ const CategoryandType = () => {
   const postCategory = async () => {
     const formData = {
       category_name: catName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await postProjectCategory(formData);
     if (response.status == 200) {
@@ -112,7 +123,7 @@ const CategoryandType = () => {
   const editCategory = async () => {
     const formData = {
       category_name: catName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await updateProjectCategory(id, formData);
 
@@ -159,7 +170,7 @@ const CategoryandType = () => {
     const formData = {
       category_id: value,
       project_type: typeName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await postProjectType(formData);
     if (response.status === 200) {
@@ -191,7 +202,7 @@ const CategoryandType = () => {
     const formData = {
       category_id: value,
       project_type: typeName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await updateProjectType(typeid, formData);
     if (response.status === 200) {
@@ -537,10 +548,10 @@ const CategoryandType = () => {
                       textAlign: 'left',
                     }}>
                     Project Types like Residential - bungalows, duplexes,
-                    high-rise & mid-rise apartments. {'\n'}Commercial -
-                    offices, malls & multiplexes. {'\n'}Industrial - warehouses,
-                    factories. {'\n'}Institutional - schools, colleges.{'\n'}Mixed-use -
-                    nursing homes, restaurants, etc.
+                    high-rise & mid-rise apartments. {'\n'}Commercial - offices,
+                    malls & multiplexes. {'\n'}Industrial - warehouses,
+                    factories. {'\n'}Institutional - schools, colleges.{'\n'}
+                    Mixed-use - nursing homes, restaurants, etc.
                   </Text>
                 </View>
               }
@@ -603,7 +614,7 @@ const CategoryandType = () => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -675,7 +686,7 @@ const CategoryandType = () => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,

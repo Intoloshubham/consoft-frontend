@@ -99,13 +99,12 @@ const ProjectReports = () => {
 
     return (
       <FlatList
-        contentContainerStyle={{}}
         data={newData}
         keyExtractor={item => `${item.id}`}
         renderItem={renderItem}
         scrollEnabled={true}
         showsVerticalScrollIndicator={false}
-        maxHeight={250}
+        maxHeight={300}
         nestedScrollEnabled={true}
         ListHeaderComponent={
           <></>
@@ -153,8 +152,8 @@ const ProjectReports = () => {
             <View
               style={{
                 height: 1,
-                backgroundColor: COLORS.gray3,
-                marginVertical: SIZES.base,
+                backgroundColor: COLORS.gray,
+                marginVertical: 12,
               }}></View>
           );
         }}
@@ -195,7 +194,6 @@ const ProjectReports = () => {
               style={{
                 backgroundColor: COLORS.white,
                 width: '60%',
-                // height: '50%',
                 borderRadius: 5,
               }}>
               <FlatList
@@ -207,9 +205,9 @@ const ProjectReports = () => {
                   return (
                     <View
                       style={{
-                        marginVertical: 10,
+                        marginVertical: 12,
                         borderBottomWidth: 1,
-                        borderBottomColor: COLORS.darkGray2,
+                        borderBottomColor: COLORS.gray,
                       }}></View>
                   );
                 }}
@@ -225,10 +223,10 @@ const ProjectReports = () => {
     <View
       style={{
         backgroundColor: COLORS.white,
-        marginHorizontal: SIZES.padding,
+        marginHorizontal: SIZES.radius,
         marginTop: SIZES.padding,
         borderRadius: 5,
-        padding: 20,
+        padding: 15,
         ...styles.shadow,
       }}>
       <View
@@ -248,16 +246,11 @@ const ProjectReports = () => {
           <Image
             source={icons.filter}
             resizeMode="contain"
-            style={{height: 15, width: 15, tintColor: COLORS.darkGray}}
+            style={{height: 20, width: 20, tintColor: COLORS.darkGray}}
           />
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          height: 1,
-          backgroundColor: COLORS.gray2,
-          marginVertical: SIZES.base,
-        }}></View>
+
       {renderFilterModal()}
       {renderReportData()}
     </View>
