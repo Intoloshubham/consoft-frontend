@@ -6,7 +6,6 @@ import dummyData from './dummyData';
 import reportdata from './reportdata';
 import STATUS from './status';
 
-
 export {
   constants,
   theme,

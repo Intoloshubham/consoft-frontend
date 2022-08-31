@@ -320,134 +320,128 @@ const Suppliers = () => {
     );
   }
 
-  const renderItem = ({item, index}) => {
-    return (
-      <View>
-        <Text
-          style={{
-            ...FONTS.h3,
-            textTransform: 'capitalize',
-            color: COLORS.lightblue_900,
-          }}>
-          {item.supplier_name}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            // justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={icons.call}
+  function renderSuppliers() {
+    const renderItem = ({item, index}) => {
+      return (
+        <View>
+          <Text
+            style={{
+              ...FONTS.h3,
+              textTransform: 'capitalize',
+              color: COLORS.lightblue_900,
+            }}>
+            {item.supplier_name}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              // justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Image
+                source={icons.call}
+                style={{
+                  height: 10,
+                  width: 10,
+                }}
+              />
+              <Text
+                style={{
+                  ...FONTS.h5,
+                  color: COLORS.darkGray,
+                  left: 5,
+                }}>
+                {item.supplier_mobile}
+              </Text>
+            </View>
+            <View
               style={{
-                height: 10,
-                width: 10,
-              }}
-            />
-            <Text
-              style={{
-                ...FONTS.h5,
-                color: COLORS.darkGray,
-                left: 5,
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginLeft: 30,
               }}>
-              {item.supplier_mobile}
-            </Text>
+              <Image
+                source={icons.mail}
+                style={{
+                  height: 10,
+                  width: 10,
+                }}
+              />
+              <Text style={{...FONTS.h5, color: COLORS.darkGray, left: 5}}>
+                {item.supplier_email}
+              </Text>
+            </View>
           </View>
           <View
             style={{
               flexDirection: 'row',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              marginLeft: 30,
             }}>
-            <Image
-              source={icons.mail}
-              style={{
-                height: 10,
-                width: 10,
-              }}
-            />
-            <Text style={{...FONTS.h5, color: COLORS.darkGray, left: 5}}>
-              {item.supplier_email}
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={icons.location}
-              style={{
-                height: 10,
-                width: 10,
-                tintColor: COLORS.darkGray,
-              }}
-            />
-            <Text
-              style={{
-                ...FONTS.h5,
-                color: COLORS.darkGray,
-                left: 5,
-                textTransform: 'capitalize',
-              }}>
-              {item.supplier_location}
-            </Text>
-          </View>
-          <TouchableOpacity onPress={() => getSupplierId(item._id)}>
-            <ImageBackground
-              style={{
-                backgroundColor: COLORS.warning_200,
-                padding: 3,
-                borderRadius: 2,
-              }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
-                source={icons.delete_icon}
+                source={icons.location}
                 style={{
-                  width: 12,
-                  height: 12,
-                  tintColor: COLORS.rose_600,
+                  height: 10,
+                  width: 10,
+                  tintColor: COLORS.darkGray,
                 }}
               />
-            </ImageBackground>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
-  function renderSuppliers() {
-    return (
-      <View
-        style={{
-          marginBottom: SIZES.padding,
-          marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-        }}>
-        <FlatList
-          data={suppliers}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          maxHeight={510}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
+              <Text
                 style={{
-                  height: 1,
-                  backgroundColor: COLORS.lightGray1,
-                  marginVertical: SIZES.radius,
-                }}></View>
-            );
-          }}
-        />
-      </View>
+                  ...FONTS.h5,
+                  color: COLORS.darkGray,
+                  left: 5,
+                  textTransform: 'capitalize',
+                }}>
+                {item.supplier_location}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => getSupplierId(item._id)}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.warning_200,
+                  padding: 3,
+                  borderRadius: 2,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    tintColor: COLORS.rose_600,
+                  }}
+                />
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    };
+
+    return (
+      <FlatList
+        contentContainerStyle={{
+          marginHorizontal: SIZES.padding,
+          paddingBottom: 50,
+        }}
+        data={suppliers}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
+      />
     );
   }
 
@@ -459,7 +453,7 @@ const Suppliers = () => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,

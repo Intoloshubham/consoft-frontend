@@ -3,7 +3,7 @@ import Config from '../config';
 const revertSubmitWorks = async (work_id, formData) => {
   try {
     const res = await fetch(
-      `${Config.API_URL}revert-submit-work/` + `${work_id}`,
+      `${Config.API_URL}change-work-completion-time/` + `${work_id}`,
       {
         method: 'put',
         headers: {

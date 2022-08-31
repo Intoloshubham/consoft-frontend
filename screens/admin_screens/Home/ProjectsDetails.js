@@ -22,6 +22,7 @@ const ProjectsDetails = ({route}) => {
     {id: 5, img: icons.machine, name: 'Tools & Machinery'},
     {id: 6, img: icons.time_seh, name: 'Sehedule & Timeline'},
     {id: 7, img: icons.boq, name: 'BOQ'},
+    {id: 8, img: icons.report1, name: 'Report Settings'},
   ];
 
   //get name of project from project banner screen using params
@@ -34,8 +35,6 @@ const ProjectsDetails = ({route}) => {
       <TouchableOpacity
         style={{
           flexDirection: 'row',
-          paddingVertical: SIZES.base,
-          alignItems: 'center',
         }}
         onPress={() => {
           item.id == 1
@@ -45,13 +44,15 @@ const ProjectsDetails = ({route}) => {
             : item.id == 3
             ? navigation.navigate('Contractors', {project_id})
             : item.id == 4
-            ? navigation.navigate('StocksAndInventry',{project_id})
+            ? navigation.navigate('StocksAndInventry', {project_id})
             : item.id == 5
             ? navigation.navigate('ToolsAndMachinery', {project_id})
             : item.id == 6
             ? navigation.navigate('ProjectSeheduleTime')
             : item.id == 7
             ? navigation.navigate('Boq', {project_id})
+            : item.id == 8
+            ? navigation.navigate('ReportSettings', {project_id})
             : null;
         }}>
         <Image
@@ -90,46 +91,39 @@ const ProjectsDetails = ({route}) => {
       </TouchableOpacity>
     );
     return (
-      <View
-        style={{
+      <FlatList
+        contentContainerStyle={{
           marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-        }}>
-        <FlatList
-          data={projects}
-          keyExtractor={item => `${item.id}`}
-          renderItem={renderItem}
-          maxHeight={510}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.lightGray1,
-                  marginVertical: SIZES.radius,
-                }}></View>
-            );
-          }}
-        />
-      </View>
+          paddingBottom: 50,
+        }}
+        data={projects}
+        keyExtractor={item => `${item.id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 18,
+              }}></View>
+          );
+        }}
+      />
     );
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.lightblue_50}}>
+    <View style={{flex: 1, backgroundColor: COLORS.white}}>
       <HeaderBar right={true} title={name} />
       <TextButton
         label="Assign Work"
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,

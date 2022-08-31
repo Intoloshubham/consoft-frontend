@@ -36,9 +36,10 @@ import {
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {useSelector} from 'react-redux';
 
-const ProjectsBanner = () => {
-  const companyData = useSelector(state => state.company);
-  const company_id = companyData._id;
+const ProjectsBanner = ({company}) => {
+  // const companyData = useSelector(state => state.company);
+  const company_id = company;
+
   const [showTip, setTip] = React.useState(false);
 
   const navigation = useNavigation();

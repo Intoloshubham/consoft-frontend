@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   RefreshControl,
   Image,
-  ImageBackground,
   TouchableOpacity,
 } from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
@@ -18,14 +17,15 @@ import {useSelector} from 'react-redux';
 import {getSubmitWorks} from '../../../controller/AssignWorkController';
 import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
 import {getAssignWorks} from '../../../controller/AssignWorkController';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {SIZES, COLORS, FONTS, images} from '../../../constants';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 const Home = ({navigation}) => {
-  const companyData = useSelector(state => state.company);
+
+  
 
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -35,6 +35,22 @@ const Home = ({navigation}) => {
     fetchSubmitWork();
     wait(1000).then(() => setRefreshing(false));
   }, []);
+
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    console.log("company")
+    companyData = companyDetail;
+  } else{
+    console.log("user")
+    companyData = userData;
+  }
+  
+  console.log(companyData)
+  
+
 
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {
@@ -48,6 +64,9 @@ const Home = ({navigation}) => {
   // const [verifyAndRevert, setVerifyAndRevert] = React.useState([]);
   const [verify, setVerify] = React.useState([]);
   const [revert, setRevert] = React.useState([]);
+
+  
+
 
   const fetchVerifyAndRevertWork = async () => {
     const response = await getVerifyAndRevertWorks(companyData._id);
@@ -63,6 +82,7 @@ const Home = ({navigation}) => {
   //===========================
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const fetchAssignWorks = async () => {
+    // console.log(companyData._id)
     const response = await getAssignWorks(companyData._id);
     // console.log(response)
     if (response.status === 200) {
@@ -120,7 +140,7 @@ const Home = ({navigation}) => {
               />
             </TouchableOpacity>
           </View>
-          <ProjectsBanner company_id={companyData._id} />
+          <ProjectsBanner company={companyData._id} />
           <SubmittedWorks data={submitWork} Submitfunction={fetchSubmitWork} />
           <ProjectReports />
           <AssignedWorks

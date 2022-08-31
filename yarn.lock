@@ -2167,8 +2167,10 @@
     "mime-types" "~2.1.34"
     "negotiator" "0.6.3"
 
-"accordion-collapse-react-native@^1.1.0":
-  "version" "1.1.0"
+"accordion-collapse-react-native@^1.1.1":
+  "integrity" "sha512-VHQkJIlcN112YCa8L16OtXHZL0RRmozYnC4sP0ONBwNcmeiqBpacafQXiekwZzXT7HVbJwdrKlcJA5241XbVdw=="
+  "resolved" "https://registry.npmjs.org/accordion-collapse-react-native/-/accordion-collapse-react-native-1.1.1.tgz"
+  "version" "1.1.1"
   dependencies:
     "lodash.get" "4.4.2"
 
@@ -7271,9 +7273,12 @@
 "react-native-popable@^0.4.3":
   "version" "0.4.3"
 
-"react-native-reanimated@^2.8.0":
-  "version" "2.8.0"
+"react-native-reanimated@*", "react-native-reanimated@^2.9.1":
+  "integrity" "sha512-309SIhDBwY4F1n6e5Mr5D1uPZm2ESIcmZsGXHUu8hpKX4oIOlZj2MilTk+kHhi05LjChoJkcpfkstotCJmPRPg=="
+  "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz"
+  "version" "2.9.1"
   dependencies:
+    "@babel/plugin-proposal-export-namespace-from" "^7.17.12"
     "@babel/plugin-transform-object-assign" "^7.16.7"
     "@babel/preset-typescript" "^7.16.7"
     "@types/invariant" "^2.2.35"
@@ -7345,7 +7350,7 @@
     "prop-types" "^15.6.1"
     "react-fast-compare" "^2.0.4"
 
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.69 || 1000.0.0", "react-native@>= 0.30.0", "react-native@>= 0.60.2", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.44", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.59", "react-native@>=0.61.5", "react-native@>=0.65.0", "react-native@0.68.1":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.69 || 1000.0.0", "react-native@^0.68.1", "react-native@>= 0.30.0", "react-native@>= 0.60.2", "react-native@>= 0.62", "react-native@>=0.23.1", "react-native@>=0.42.0", "react-native@>=0.44", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.59", "react-native@>=0.61.5", "react-native@>=0.65.0":
   "integrity" "sha512-5gfvslo5NO2Ece2k/q41eVOK3ca4u1QAOf+qM+auvOiUA4/QR5Yr0WfSGbRpUr2GaFgv7qP11F4+elCravg7uQ=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.68.1.tgz"
   "version" "0.68.1"
@@ -7483,6 +7488,16 @@
   "integrity" "sha512-k2d6ACCkiNYz222Fs/iNze30rRJ1iIicW7JuX/7/cozvih6YCkFZH+J6mAFDVgv0dRBaAyr4jDqC95R2y4IADg=="
   "resolved" "https://registry.npmjs.org/readline/-/readline-1.3.0.tgz"
   "version" "1.3.0"
+
+"reanimated-collapsible-helpers@^1.0.0":
+  "integrity" "sha512-oA5xBqNUHmSty8tqlPWVgL2l+y2FLMNwRW2PPGY51LK+Z+OlZpnJQ3WNab7SLh6rEKSIBVQb3g+x9eZS8ohX+g=="
+  "resolved" "https://registry.npmjs.org/reanimated-collapsible-helpers/-/reanimated-collapsible-helpers-1.0.0.tgz"
+  "version" "1.0.0"
+
+"reanimated@^0.0.1-alpha":
+  "integrity" "sha512-lKH4enmYDhBlhhvjveXRP/p9U2A2oTFnTnU5UmB8Doy2WNqAc7UFdYEe4HF3CWAT2+0DBH91tcIpGOfyNza13w=="
+  "resolved" "https://registry.npmjs.org/reanimated/-/reanimated-0.0.1-alpha.tgz"
+  "version" "0.0.1-alpha"
 
 "recast@^0.20.4":
   "integrity" "sha512-E5qICoPoNL4yU0H0NoBDntNB0Q5oMSNh9usFctYniLBluTthi3RsQVBXIJNbApOlvSwW/RGxIuokPcAc59J5fQ=="

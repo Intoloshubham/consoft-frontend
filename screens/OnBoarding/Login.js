@@ -5,29 +5,27 @@ import {
   TouchableOpacity,
   Image,
   KeyboardAvoidingView,
-  ScrollView,
   Platform,
   StyleSheet,
   Switch,
   Linking,
-  TextInput,
   TouchableWithoutFeedback,
-  Button,
   Keyboard,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
 import utils from '../../utils';
-import {FormInput, TextButton, CustomToast} from '../../Components';
-import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
+import {FormInput, TextButton} from '../../Components';
+import {
+  FONTS,
+  COLORS,
+  SIZES,
+  icons,
+  images,
+  constants,
+} from '../../constants';
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  getCompanyId,
-  getUserId,
-  getToken,
-} from '../../services/asyncStorageService';
+import {useDispatch} from 'react-redux';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
@@ -39,7 +37,7 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   const [showPass, setShowPass] = React.useState(false);
 
-  // CUSTOM TOAST OF CRUD OPERATIONS 
+  // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
@@ -53,21 +51,21 @@ const Login = ({navigation}) => {
     }
   };
 
-  const [userId, setUserId] = React.useState('');
-  const [companyId, setCompanyId] = React.useState('');
-  const [token, setToken] = React.useState('');
-
   const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
+    
     if (res.payload.status === 200) {
       setSubmitToast(true);
-      navigation.navigate('UserDashboard');
-      // setUserMobileNo('');
-      // setUserPassword('');
+
+      if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
+        navigation.navigate('UserDashboard');
+      } else {
+        navigation.navigate('Home');
+      }
     } else {
       alert(res.payload.message);
     }
@@ -85,8 +83,6 @@ const Login = ({navigation}) => {
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('Home');
-      // setCompanyMobileNo('');
-      // setCompanyPassword('');
     } else {
       alert(res.payload.message);
     }

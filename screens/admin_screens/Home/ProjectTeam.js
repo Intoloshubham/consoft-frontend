@@ -50,7 +50,7 @@ const ProjectTeam = ({route}) => {
 
   //roloe dropdown
   const [openRole, setOpenRole] = useState(false);
-  const [roleValue, setRoleValue] = useState('');
+  const [roleValue, setRoleValue] = useState([]);
   const [roleItems, setRoleItems] = useState([]);
 
   // users dropdown
@@ -73,6 +73,7 @@ const ProjectTeam = ({route}) => {
   // fetch project team
   const fetchProjectTeam = async () => {
     const team = await getProjectTeam(project_id);
+    console.log(team);
     if (team.status === 200) {
       setProjectTeam(team.data);
     }
@@ -81,7 +82,7 @@ const ProjectTeam = ({route}) => {
   const addProjectTeam = async () => {
     setAddProjectTeamModal(true);
     const res = await getUserRole(company_id);
-    if (res.status === STATUS.RES_SUCCESS) {
+    if (res.status === 200) {
       let roleFromApi = res.data.map(list => {
         return {label: list.user_role, value: list._id};
       });
@@ -91,7 +92,7 @@ const ProjectTeam = ({route}) => {
 
   const getRolebyUser = async role_id => {
     const res = await roleByUser(role_id);
-    if (res.status === STATUS.RES_SUCCESS) {
+    if (res.status === 200) {
       let usersFromApi = res.data.map(ele => {
         return {label: ele.name, value: ele._id};
       });
@@ -107,7 +108,7 @@ const ProjectTeam = ({route}) => {
       user_id: userValue,
     };
     const res = await saveProjectTeam(teamData);
-    if (res.status === STATUS.RES_SUCCESS) {
+    if (res.status === 200) {
       setAddProjectTeamModal(false);
       setSubmitToast(true);
       fetchProjectTeam();
@@ -218,37 +219,27 @@ const ProjectTeam = ({route}) => {
       </View>
     );
     return (
-      <View
-        style={{
-          marginBottom: SIZES.padding,
-          marginHorizontal: SIZES.radius,
-          // padding: 20,
-          // borderRadius: 3,
-          // backgroundColor: COLORS.white,
-          // ...styles.shadow,
-        }}>
-        {/* <Text style={{...FONTS.h2, color: COLORS.darkGray}}>List</Text> */}
-        <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius}}
-          data={projectTeam}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          scrollEnabled={true}
-          maxHeight={510}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.lightGray1,
-                  marginVertical: 5,
-                }}></View>
-            );
-          }}
-        />
-      </View>
+      <FlatList
+        contentContainerStyle={{
+          marginHorizontal: SIZES.padding,
+          paddingBottom: 50,
+        }}
+        data={projectTeam}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
+      />
     );
   }
 
@@ -370,6 +361,7 @@ const ProjectTeam = ({route}) => {
     <View
       style={{
         flex: 1,
+        backgroundColor: 'white',
       }}>
       <HeaderBar right={true} title="Project Team" />
       <TextButton
