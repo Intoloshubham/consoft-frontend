@@ -58,7 +58,7 @@ const UserDashboard = () => {
         />
       }
       >
-      <UserAssignWorks />
+      <UserAssignWorks loading={loading}/>
       <View
         style={{
           marginHorizontal: SIZES.radius,
