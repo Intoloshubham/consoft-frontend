@@ -21,22 +21,30 @@ import {
   deleteAssignWorks,
 } from '../../../controller/AssignWorkController';
 import {getUserRole} from '../../../controller/UserRoleController';
+import {useSelector} from 'react-redux';
 
-const AssignedWorks = () => {
+const AssignedWorks = ({data,AssignWorkfunction}) => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+  // console.log(companyData._id)
+
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const [filterRoleModal, setFilterRoleModal] = React.useState(false);
   const [items, setItems] = React.useState([]);
 
   //get assign works
-  const fetchAssignWorks = async () => {
-    const response = await getAssignWorks();
-    setAssignWorkData(response.data);
-  };
+  // const fetchAssignWorks = async () => {
+  //   const response = await getAssignWorks(company_id);
+  //   // console.log(response)
+  //   if (response.status === 200) {
+  //     setAssignWorkData(response.data);
+  //   }
+  // };
 
   //get user role
   const fetchUserRole = async () => {
-    const response = await getUserRole();
+    const response = await getUserRole(company_id);
     if (response.status === 200) {
       setItems(response.data);
     }
@@ -53,7 +61,8 @@ const AssignedWorks = () => {
   const fetchAssignWorkDelete = async () => {
     const response = await deleteAssignWorks(workId);
     if (response.status === 200) {
-      fetchAssignWorks();
+      // fetchAssignWorks();
+      AssignWorkfunction()
       setDeleteConfirm(false);
     }
   };
@@ -64,9 +73,9 @@ const AssignedWorks = () => {
   //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   // }, []);
 
-  React.useMemo(() => {
-    fetchAssignWorks();
-  }, []);
+  // React.useMemo(() => {
+  //   fetchAssignWorks();
+  // }, []);
 
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {
@@ -203,7 +212,7 @@ const AssignedWorks = () => {
       return (
         <View
           style={{
-            backgroundColor: COLORS.lightblue_800,
+            backgroundColor: COLORS.lightblue_600,
             ...styles.cartItemContainer,
           }}>
           <View
@@ -321,7 +330,7 @@ const AssignedWorks = () => {
             justifyContent: 'flex-end',
             alignItems: 'center',
             flexDirection: 'row',
-            backgroundColor: COLORS.lightblue_800,
+            backgroundColor: COLORS.lightblue_700,
             ...styles.cartItemContainer,
           }}>
           <IconButton
@@ -349,7 +358,7 @@ const AssignedWorks = () => {
 
     return (
       <SwipeListView
-        data={assignWorkData}
+        data={data}
         keyExtractor={item => `${item._id}`}
         contentContainerStyle={{
           marginTop: SIZES.radius,
@@ -374,7 +383,7 @@ const AssignedWorks = () => {
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
         borderRadius: 5,
-        backgroundColor: COLORS.lightblue_900,
+        backgroundColor: COLORS.white,
         ...styles.shadow,
       }}>
       <View
@@ -385,21 +394,21 @@ const AssignedWorks = () => {
           paddingHorizontal: SIZES.padding,
           paddingTop: SIZES.radius,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.lightGray1}}>
-          Assign Works
+        <Text style={{...FONTS.h2, color: COLORS.darkGray,marginBottom:5}}>
+          Assigned works
         </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setFilterRoleModal(true)}>
             <Image
               source={icons.filter}
               style={{
                 height: 15,
                 width: 15,
-                tintColor: COLORS.lightGray1,
+                tintColor: COLORS.darkGray,
               }}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
       {renderSwipeList()}
       {renderRoleFilterModal()}

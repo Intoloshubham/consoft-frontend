@@ -8,22 +8,22 @@ import RevertWorks from '../VerifyAndRevertWork.js/RevertWorks';
 
 const Tab = createMaterialTopTabNavigator();
 
-const VerifyAndRevertWork = ({company_id}) => {
-  const [verifyAndRevert, setVerifyAndRevert] = React.useState([]);
-  const [verify, setVerify] = React.useState([]);
-  const [revert, setRevert] = React.useState([]);
+const VerifyAndRevertWork = ({verify, revert}) => {
+  // const [verifyAndRevert, setVerifyAndRevert] = React.useState([]);
+  // const [verify, setVerify] = React.useState([]);
+  // const [revert, setRevert] = React.useState([]);
 
   // ============================== Apis ==============================
-  const fetchVerifyAndRevertWork = async () => {
-    const response = await getVerifyAndRevertWorks(company_id);
-    setVerifyAndRevert(response.data);
+  // const fetchVerifyAndRevertWork = async () => {
+  //   const response = await getVerifyAndRevertWorks(company_id);
+  //   setVerifyAndRevert(response.data);
 
-    //filter revert & verify
-    const verify_data = response.data.filter(el => el.verify === true);
-    setVerify(verify_data);
-    const revert_data = response.data.filter(el => el.revert_status === true);
-    setRevert(revert_data);
-  };
+  //   //filter revert & verify
+  //   const verify_data = response.data.filter(el => el.verify === true);
+  //   setVerify(verify_data);
+  //   const revert_data = response.data.filter(el => el.revert_status === true);
+  //   setRevert(revert_data);
+  // };
 
   // const filterData = () => {
   //   const verify_data = verifyAndRevert.filter(el => el.verify === true);
@@ -37,9 +37,9 @@ const VerifyAndRevertWork = ({company_id}) => {
   //   fetchVerifyAndRevertWork();
   // }, []);
 
-  React.useMemo(() => {
-    fetchVerifyAndRevertWork();
-  }, []);
+  // React.useMemo(() => {
+  //   fetchVerifyAndRevertWork();
+  // }, []);
 
   return (
     <View
@@ -62,9 +62,9 @@ const VerifyAndRevertWork = ({company_id}) => {
           marginTop: SIZES.base,
         }}>
         <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
-          All Work Tasks
+          All work tasks
         </Text>
-        <TouchableOpacity onPress={() => alert('filter')}>
+        {/* <TouchableOpacity onPress={() => alert('filter')}>
           <Image
             source={icons.filter}
             style={{
@@ -73,15 +73,20 @@ const VerifyAndRevertWork = ({company_id}) => {
               tintColor: COLORS.darkGray,
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-      <Tab.Navigator style={{height: 350}} initialRouteName="Verify">
+      <Tab.Navigator
+        style={{height: 350}}
+        initialRouteName="Verify"
+        screenOptions={{
+          tabBarLabelStyle: {...FONTS.h3},
+        }}>
         <Tab.Screen
-          name="Verify"
+          name="Verified"
           children={() => <VerifyWorks VerifyData={verify} />}
         />
         <Tab.Screen
-          name="Revert"
+          name="Reverted"
           children={() => <RevertWorks RevertData={revert} />}
         />
       </Tab.Navigator>

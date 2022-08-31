@@ -20,8 +20,13 @@ import {
 } from '../../../controller/LeavesController';
 import {CustomToast} from '../../../Components';
 import {getUsers} from '../../../controller/UserRoleController';
+import {useSelector} from 'react-redux';
+import {Agenda} from 'react-native-calendars';
 
 const Profile = () => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+
   const [selectedStartDate, setSelectedStartDate] = React.useState(null);
   const [selectedEndDate, setSelectedEndDate] = React.useState(null);
   const [leaves, setLeaves] = React.useState([]);
@@ -67,8 +72,10 @@ const Profile = () => {
   };
 
   const getusers = async () => {
-    let response = await getUsers();
-    setUsers(response);
+    let response = await getUsers(company_id);
+    if (response.status === 200) {
+      setUsers(response.data);
+    }
   };
 
   const [userId, setUserId] = React.useState('');
@@ -89,11 +96,11 @@ const Profile = () => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: 3,
+            marginBottom: 10,
           }}>
           <Text
             style={{
-              ...FONTS.h4,
+              ...FONTS.h3,
               color: COLORS.lightblue_700,
               textTransform: 'capitalize',
             }}>
@@ -106,14 +113,14 @@ const Profile = () => {
             }}>
             <TouchableOpacity
               style={{
-                right: 12,
+                right: 15,
                 backgroundColor: COLORS.green,
                 paddingHorizontal: 3,
-                paddingVertical: 0.5,
-                borderRadius: 1,
+                paddingVertical: 1,
+                borderRadius: 2,
               }}
               onPress={() => postLeaves(item._id)}>
-              <Text style={{color: 'white', fontSize: 10, textAlign: 'center'}}>
+              <Text style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
                 Approve
               </Text>
             </TouchableOpacity>
@@ -121,11 +128,11 @@ const Profile = () => {
               style={{
                 backgroundColor: COLORS.rose_600,
                 paddingHorizontal: 3,
-                paddingVertical: 0.5,
-                borderRadius: 1,
+                paddingVertical: 1,
+                borderRadius: 2,
               }}
               onPress={() => alert('Approved')}>
-              <Text style={{color: 'white', fontSize: 10, textAlign: 'center'}}>
+              <Text style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
                 Reject
               </Text>
             </TouchableOpacity>
@@ -144,13 +151,13 @@ const Profile = () => {
                   style={{
                     flexDirection: 'row',
                   }}>
-                  <Text style={{...FONTS.h5, color: COLORS.darkGray}}>
+                  <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
                     {index + 1}.{' '}
                   </Text>
-                  <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                  <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
                     Leave date -{' '}
                   </Text>
-                  <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                  <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
                     {el.leave_date}
                   </Text>
                 </View>
@@ -161,7 +168,7 @@ const Profile = () => {
                     setChecked({...checked, [el._id]: newValue});
                   }}
                   onChange={() => checkBoxHandler({leave_date_id: el._id})}
-                  style={{height: 20}}
+                  style={{height: 25}}
                 />
               </View>
             </View>
@@ -173,22 +180,21 @@ const Profile = () => {
     return (
       <View
         style={{
-          marginTop: SIZES.padding,
-          marginHorizontal: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
-          paddingVertical: SIZES.radius,
+          paddingHorizontal: SIZES.radius,
           backgroundColor: COLORS.white,
-          borderRadius: 3,
+          paddingVertical: SIZES.radius,
+          borderRadius: 5,
+          marginBottom: 20,
           ...styles.shadow,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Leaves List</Text>
+        <Text style={{...FONTS.h1, color: COLORS.darkGray}}>Leaves List</Text>
 
-        <View style={{marginTop: SIZES.base}}>
+        <View style={{marginTop: SIZES.radius}}>
           <FlatList
             data={leaves}
             keyExtractor={item => `${item._id}`}
             renderItem={renderItem}
-            maxHeight={310}
+            maxHeight={170}
             scrollEnabled={true}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => {
@@ -211,20 +217,15 @@ const Profile = () => {
   function renderCalender() {
     return (
       <View
-        style={
-          {
-            // marginBottom: 60,
-            // marginTop: 30,
-            // marginHorizontal: SIZES.radius,
-            // padding: 10,
-            // borderRadius: 5,
-            // backgroundColor: COLORS.white,
-            // ...styles.shadow,
-          }
-        }>
+        style={{
+          padding: SIZES.base,
+          borderRadius: 5,
+          backgroundColor: COLORS.white,
+          ...styles.shadow,
+        }}>
         <CalendarPicker
-          width={320}
-          height={320}
+          width={350}
+          height={350}
           showDayStragglers={true}
           startFromMonday={true}
           minDate={new Date(2000, 1, 1)}
@@ -253,10 +254,10 @@ const Profile = () => {
             fontSize: 18,
           }}
           yearTitleStyle={{
-            backgroundColor: COLORS.yellow_400,
+            backgroundColor: COLORS.darkGray,
             paddingHorizontal: 5,
             paddingVertical: 2,
-            color: 'black',
+            color: 'white',
             fontSize: 18,
           }}
           todayBackgroundColor={COLORS.rose_600}
@@ -276,140 +277,141 @@ const Profile = () => {
     );
   }
 
-  function renderCustomCalenderWithDetails() {
-    return (
-      <View
-        style={{
-          padding: 10,
-        }}>
-        <Text>renderCustomCalenderWithDetails</Text>
-      </View>
-    );
-  }
+  // function renderCustomCalenderWithDetails() {
+  //   return (
+  //     <View
+  //       style={{
+  //         padding: 10,
+  //       }}>
+  //       <Text>renderCustomCalenderWithDetails</Text>
+  //     </View>
+  //   );
+  // }
 
-  function renderfilterModal() {
-    return (
-      <Modal animationType="slide" transparent={true} visible={filterModal}>
-        <TouchableWithoutFeedback onPress={() => setFilterModal(false)}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
-            }}>
-            <View
-              style={{
-                width: '60%',
-                maxHeight: 300,
-                padding: SIZES.padding,
-                borderRadius: SIZES.base,
-                backgroundColor: COLORS.white,
-              }}>
-              <ScrollView showsVerticalScrollIndicator={true}>
-                {users.map((ele, i) => {
-                  return (
-                    <View key={i}>
-                      <TouchableOpacity
-                        key={i}
-                        onPress={() => OnUserSelecter(ele._id)}
-                        style={{alignItems: 'flex-start'}}>
-                        <Text
-                          style={{
-                            ...FONTS.h3,
-                            color: COLORS.darkGray,
-                            textTransform: 'capitalize',
-                          }}>
-                          {ele.name}
-                        </Text>
-                      </TouchableOpacity>
-                      <View
-                        style={{
-                          height: 1,
-                          backgroundColor: COLORS.gray2,
-                          marginVertical: 12,
-                        }}></View>
-                    </View>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    );
-  }
+  // function renderfilterModal() {
+  //   return (
+  //     <Modal animationType="slide" transparent={true} visible={filterModal}>
+  //       <TouchableWithoutFeedback onPress={() => setFilterModal(false)}>
+  //         <View
+  //           style={{
+  //             flex: 1,
+  //             alignItems: 'center',
+  //             justifyContent: 'center',
+  //             backgroundColor: COLORS.transparentBlack7,
+  //           }}>
+  //           <View
+  //             style={{
+  //               width: '60%',
+  //               maxHeight: 300,
+  //               padding: SIZES.padding,
+  //               borderRadius: SIZES.base,
+  //               backgroundColor: COLORS.white,
+  //             }}>
+  //             <ScrollView showsVerticalScrollIndicator={true}>
+  //               {users.map((ele, i) => {
+  //                 return (
+  //                   <View key={i}>
+  //                     <TouchableOpacity
+  //                       key={i}
+  //                       onPress={() => OnUserSelecter(ele._id)}
+  //                       style={{alignItems: 'flex-start'}}>
+  //                       <Text
+  //                         style={{
+  //                           ...FONTS.h3,
+  //                           color: COLORS.darkGray,
+  //                           textTransform: 'capitalize',
+  //                         }}>
+  //                         {ele.name}
+  //                       </Text>
+  //                     </TouchableOpacity>
+  //                     <View
+  //                       style={{
+  //                         height: 1,
+  //                         backgroundColor: COLORS.gray2,
+  //                         marginVertical: 12,
+  //                       }}></View>
+  //                   </View>
+  //                 );
+  //               })}
+  //             </ScrollView>
+  //           </View>
+  //         </View>
+  //       </TouchableWithoutFeedback>
+  //     </Modal>
+  //   );
+  // }
 
-  function renderShowUserDetails() {
-    return (
-      <View
-        style={{
-          marginHorizontal: SIZES.padding,
-          marginVertical: SIZES.padding,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-        }}>
-        <View
-          style={{
-            paddingHorizontal: SIZES.padding,
-            paddingVertical: SIZES.radius,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <Text></Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <TouchableOpacity onPress={() => setUserId('')} style={{right: 10}}>
-              <ImageBackground
-                style={{
-                  backgroundColor: COLORS.rose_600,
-                  borderRadius: 2,
-                  padding: 2,
-                }}>
-                <Text
-                  style={{
-                    color: COLORS.white,
-                    fontSize: 10,
-                  }}>
-                  Clear
-                </Text>
-              </ImageBackground>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setFilterModal(true), getusers();
-              }}>
-              <ImageBackground
-                style={{
-                  backgroundColor: COLORS.darkGray,
-                  padding: 3,
-                  borderRadius: 2,
-                }}>
-                <Image
-                  source={icons.filter}
-                  style={{height: 12, width: 12, tintColor: COLORS.white}}
-                />
-              </ImageBackground>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{marginBottom: 20}}>
-          {userId == '' ? renderCalender() : renderCustomCalenderWithDetails()}
-        </View>
-      </View>
-    );
-  }
+  // function renderShowUserDetails() {
+  //   return (
+  //     <View
+  //       style={{
+  //         marginHorizontal: SIZES.padding,
+  //         marginVertical: SIZES.padding,
+  //         backgroundColor: COLORS.white,
+  //         ...styles.shadow,
+  //       }}>
+  //       <View
+  //         style={{
+  //           paddingHorizontal: SIZES.padding,
+  //           paddingVertical: SIZES.radius,
+  //           flexDirection: 'row',
+  //           justifyContent: 'space-between',
+  //           alignItems: 'center',
+  //         }}>
+  //         <Text></Text>
+  //         <View
+  //           style={{
+  //             flexDirection: 'row',
+  //             justifyContent: 'space-between',
+  //             alignItems: 'center',
+  //           }}>
+  //           <TouchableOpacity onPress={() => setUserId('')} style={{right: 10}}>
+  //             <ImageBackground
+  //               style={{
+  //                 backgroundColor: COLORS.rose_600,
+  //                 borderRadius: 2,
+  //                 padding: 2,
+  //               }}>
+  //               <Text
+  //                 style={{
+  //                   color: COLORS.white,
+  //                   fontSize: 10,
+  //                 }}>
+  //                 Clear
+  //               </Text>
+  //             </ImageBackground>
+  //           </TouchableOpacity>
+  //           <TouchableOpacity
+  //             onPress={() => {
+  //               setFilterModal(true), getusers();
+  //             }}>
+  //             <ImageBackground
+  //               style={{
+  //                 backgroundColor: COLORS.darkGray,
+  //                 padding: 3,
+  //                 borderRadius: 2,
+  //               }}>
+  //               <Image
+  //                 source={icons.filter}
+  //                 style={{height: 12, width: 12, tintColor: COLORS.white}}
+  //               />
+  //             </ImageBackground>
+  //           </TouchableOpacity>
+  //         </View>
+  //       </View>
+  //       <View style={{marginBottom: 20}}>
+  //         {userId == '' ? renderCalender() : renderCustomCalenderWithDetails()}
+  //       </View>
+  //     </View>
+  //   );
+  // }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <View style={{margin: 15}}>
       {renderUserLeavesList()}
-      {renderShowUserDetails()}
-      {renderfilterModal()}
+      {/* {renderShowUserDetails()}
+      {renderfilterModal()} */}
+      {renderCalender()}
       <CustomToast
         isVisible={submitToast}
         onClose={() => setSubmitToast(false)}
@@ -417,7 +419,7 @@ const Profile = () => {
         title="Approved"
         message="Approved Successfully..."
       />
-    </ScrollView>
+    </View>
   );
 };
 
@@ -431,6 +433,40 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+  },
+  addbutton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  item: {
+    backgroundColor: COLORS.darkGray,
+    flex: 1,
+    borderRadius: 5,
+    padding: 15,
+    marginRight: 10,
+    marginTop: 25,
+  },
+  name: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  timing: {
+    color: COLORS.white,
+  },
+  type: {
+    color: '#03A9F4',
+  },
+  emptyDate: {
+    height: 15,
+    flex: 1,
+    paddingTop: 30,
+  },
+  modalContent: {
+    flex: 1,
+    marginTop: 20,
+    alignItems: 'center',
   },
 });
 export default Profile;
