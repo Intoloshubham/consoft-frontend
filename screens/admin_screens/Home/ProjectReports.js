@@ -242,7 +242,7 @@ const ProjectReports = () => {
           }}>
           Project at a glance
         </Text>
-        <TouchableOpacity onPress={() => setReportFilterModal(true)}>
+        <TouchableOpacity onPress={() => console.log('open filter modal')}>
           <Image
             source={icons.filter}
             resizeMode="contain"

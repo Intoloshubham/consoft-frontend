@@ -267,7 +267,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
 
   return (
     <View>
-      <Modal animationType="fade" transparent={true} visible={isVisible}>
+      <Modal animationType='slide' transparent={true} visible={isVisible}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{

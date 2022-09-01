@@ -507,7 +507,7 @@ const ToolsAndMachinery = ({route}) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Tools & Machinery" />
       <TextButton
