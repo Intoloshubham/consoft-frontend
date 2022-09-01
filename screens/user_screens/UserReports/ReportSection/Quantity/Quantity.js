@@ -1213,7 +1213,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
           flexDirection: 'row',
           paddingHorizontal: SIZES.base,
           paddingVertical: 3,
-          width: SIZES.width * 0.35,
+          width: SIZES.width * 0.53,
           alignItems: 'center',
           justifyContent: 'space-between',
           top: SIZES.base * 2,
@@ -1229,10 +1229,10 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
               setQuantity(!quant_ity)
             }}
             style={[FONTS.h3, { color: COLORS.darkGray }]}>
-            Quantity
+            Quantity Executed Today
           </Text>
         </View>
-        <View style={{ alignItems: 'center', alignSelf: 'center' }}>
+        <View style={{ alignItems: 'flex-end', alignSelf: 'center' }}>
           <TouchableOpacity onPress={() => {
             setQuantity(!quant_ity)
 
@@ -1255,7 +1255,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         {/* button section adding contractor */}
         {quant_ity ?
           <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }} >
-            <View style={{ backgroundColor: "blue" }}>
+            <View style={{ backgroundColor: "blue",paddingLeft:140 }}>
               {add_quantity_icon_button()}
             </View>
             <View
@@ -1336,7 +1336,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                         // borderColor: COLORS.lightblue_200, 
                       }}
                     >
-                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Thickness</Text>
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Th/ht</Text>
                     </View>
                     <View
                       style={{

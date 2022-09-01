@@ -67,7 +67,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value,loading}) => {
                     paddingHorizontal: SIZES.base,
                     paddingVertical: 3,
                     // marginBottom: -SIZES.base,
-                    width: SIZES.width * 0.35,
+                    width: SIZES.width * 0.53,
                     alignItems: "center",
                     justifyContent: "space-between",
                     top: SIZES.base * 2,
