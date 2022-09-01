@@ -131,7 +131,7 @@ const Profile = () => {
                 paddingVertical: 1,
                 borderRadius: 2,
               }}
-              onPress={() => alert('Approved')}>
+              onPress={() => alert('Reject')}>
               <Text style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
                 Reject
               </Text>
@@ -180,36 +180,32 @@ const Profile = () => {
     return (
       <View
         style={{
-          paddingHorizontal: SIZES.radius,
-          backgroundColor: COLORS.white,
-          paddingVertical: SIZES.radius,
+          padding: 15,
           borderRadius: 5,
-          marginBottom: 20,
+          backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
         <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Leaves List</Text>
 
-        <View style={{marginTop: SIZES.radius}}>
-          <FlatList
-            data={leaves}
-            keyExtractor={item => `${item._id}`}
-            renderItem={renderItem}
-            maxHeight={170}
-            scrollEnabled={true}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={() => {
-              return (
-                <View
-                  style={{
-                    width: '100%',
-                    height: 1,
-                    backgroundColor: COLORS.lightGray1,
-                    marginVertical: 10,
-                  }}></View>
-              );
-            }}
-          />
-        </View>
+        <FlatList
+          data={leaves}
+          contentContainerStyle={{marginTop: SIZES.radius}}
+          keyExtractor={item => `${item._id}`}
+          renderItem={renderItem}
+          maxHeight={200}
+          scrollEnabled={true}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => {
+            return (
+              <View
+                style={{
+                  height: 1,
+                  backgroundColor: COLORS.gray2,
+                  marginVertical: 12,
+                }}></View>
+            );
+          }}
+        />
       </View>
     );
   }
@@ -218,7 +214,8 @@ const Profile = () => {
     return (
       <View
         style={{
-          padding: SIZES.base,
+          marginTop: SIZES.padding,
+          padding: 15,
           borderRadius: 5,
           backgroundColor: COLORS.white,
           ...styles.shadow,
@@ -407,7 +404,8 @@ const Profile = () => {
   // }
 
   return (
-    <View style={{margin: 15}}>
+    <View
+      style={{marginVertical: SIZES.padding, marginHorizontal: SIZES.radius}}>
       {renderUserLeavesList()}
       {/* {renderShowUserDetails()}
       {renderfilterModal()} */}

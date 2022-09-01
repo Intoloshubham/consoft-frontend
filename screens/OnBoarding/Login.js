@@ -263,7 +263,7 @@ const Login = ({navigation}) => {
               borderRadius: 3,
             }}
             onPress={() => {
-              Linking.openURL('https://wa.me/8109093551');
+              Linking.openURL('https://wa.me/+91-8109093551');
             }}>
             <Image
               source={icons.whatsapp}
@@ -489,7 +489,7 @@ const Login = ({navigation}) => {
               borderRadius: 5,
             }}
             onPress={() => {
-              Linking.openURL('https://wa.me/8109093551');
+              Linking.openURL('https://wa.me/+91-8109093551');
             }}>
             <Image
               source={icons.whatsapp}
