@@ -51,4 +51,22 @@ const getQuantity = async report_id => {
   }
 };
 
-export {getReport, getManpower, getQuantity};
+const getProjectAtGlance = async company_id => {
+  try {
+    const res = await fetch(
+      Config.API_URL + 'projects-at-glance/' + company_id,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export {getReport, getManpower, getQuantity, getProjectAtGlance};

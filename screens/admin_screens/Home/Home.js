@@ -18,6 +18,7 @@ import {getSubmitWorks} from '../../../controller/AssignWorkController';
 import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
 import {getAssignWorks} from '../../../controller/AssignWorkController';
 import {SIZES, COLORS, FONTS, images} from '../../../constants';
+import {getProjectAtGlance} from '../../../controller/ReportController';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -30,6 +31,7 @@ const Home = ({navigation}) => {
     fetchAssignWorks();
     fetchVerifyAndRevertWork();
     fetchSubmitWork();
+    fetchProjectAtGlance();
     wait(1000).then(() => setRefreshing(false));
   }, []);
 
@@ -42,6 +44,8 @@ const Home = ({navigation}) => {
   } else {
     companyData = userData;
   }
+
+  // console.log(companyData._id)
 
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {
@@ -77,10 +81,21 @@ const Home = ({navigation}) => {
     }
   };
 
+  //=======================
+  const [reportData, setReportData] = React.useState([]);
+  const fetchProjectAtGlance = async () => {
+    const response = await getProjectAtGlance(companyData._id);
+    // console.log(response)
+    if (response.status === 200) {
+      setReportData(response.data);
+    }
+  };
+
   React.useEffect(() => {
     fetchSubmitWork();
     fetchVerifyAndRevertWork();
     fetchAssignWorks();
+    fetchProjectAtGlance();
   }, []);
 
   return (
@@ -129,7 +144,10 @@ const Home = ({navigation}) => {
           </View>
           <ProjectsBanner company={companyData._id} />
           <SubmittedWorks data={submitWork} Submitfunction={fetchSubmitWork} />
-          <ProjectReports />
+          <ProjectReports
+            data={reportData}
+            reportFunction={fetchProjectAtGlance}
+          />
           <AssignedWorks
             data={assignWorkData}
             AssignWorkfunction={fetchAssignWorks}
