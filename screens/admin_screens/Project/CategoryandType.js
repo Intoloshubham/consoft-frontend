@@ -320,11 +320,9 @@ const CategoryandType = () => {
     return (
       <View
         style={{
-          marginHorizontal: SIZES.radius,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.lightblue_50,
-          ...styles.shadow,
+          marginHorizontal: SIZES.padding,
+          backgroundColor: COLORS.white,
+          // padding: 15,
         }}>
         <View
           style={{
@@ -393,22 +391,21 @@ const CategoryandType = () => {
           </View>
         </View>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
           data={projectCategories}
+          contentContainerStyle={{marginTop: SIZES.base, paddingBottom: 25}}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={200}
+          maxHeight={250}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
                   backgroundColor: COLORS.gray2,
-                  // marginVertical: 5,
+                  marginVertical: 2,
                 }}></View>
             );
           }}
@@ -495,12 +492,9 @@ const CategoryandType = () => {
     return (
       <View
         style={{
-          marginVertical: SIZES.padding * 1.5,
-          marginHorizontal: SIZES.radius,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.lightblue_50,
-          ...styles.shadow,
+          marginTop: SIZES.padding * 1.5,
+          marginHorizontal: SIZES.padding,
+          backgroundColor: COLORS.white,
         }}>
         <View
           style={{
@@ -574,21 +568,21 @@ const CategoryandType = () => {
           </View>
         </View>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
+          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 25}}
           data={projectTypes}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={200}
+          maxHeight={250}
           ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
                   backgroundColor: COLORS.gray2,
+                  marginVertical: 2,
                 }}></View>
             );
           }}

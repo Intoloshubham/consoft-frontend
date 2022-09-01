@@ -35,9 +35,10 @@ const Account = () => {
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
-          paddingVertical: 20,
-          borderRadius: SIZES.radius,
+          // paddingHorizontal: SIZES.padding,
+          // paddingVertical: 20,
+          padding: 15,
+          borderRadius: SIZES.base,
           backgroundColor: COLORS.lightblue_800,
           alignItems: 'center',
         }}>
@@ -70,7 +71,7 @@ const Account = () => {
               style={{
                 width: 30,
                 height: 30,
-                marginBottom: -15,
+                marginBottom: -10,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 15,
@@ -80,8 +81,8 @@ const Account = () => {
                 source={icons.camera}
                 resizeMode="contain"
                 style={{
-                  width: 17,
-                  height: 17,
+                  width: 15,
+                  height: 15,
                 }}
               />
             </View>
@@ -135,7 +136,7 @@ const Account = () => {
         <LineDivider />
         <ProfileValue
           icon={icons.company_team}
-          value="Add Company Team"
+          value="Company Team"
           image={icons.right_arr}
           onPress={() => navigation.navigate('CompanyTeam')}
         />
