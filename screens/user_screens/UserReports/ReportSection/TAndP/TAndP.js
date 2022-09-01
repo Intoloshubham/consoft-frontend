@@ -25,7 +25,7 @@ const TAndP = () => {
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
                     paddingVertical: 3,
-                    width: SIZES.width * 0.35,
+                    width: SIZES.width * 0.53,
                     alignItems: "center",
                     justifyContent: "space-between",
                     top: SIZES.base * 2,
