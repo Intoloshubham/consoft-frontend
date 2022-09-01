@@ -62,7 +62,7 @@ const StocksAndInventry = ({route}) => {
 
   const stockItem = async () => {
     let response = await getItem();
-    console.log(response);
+    // console.log(response);
     let itemFromApi = response.map(one => {
       return {label: one.item_name, value: one._id};
     });
@@ -374,7 +374,7 @@ const StocksAndInventry = ({route}) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Stock Inventry" />
       <TextButton
