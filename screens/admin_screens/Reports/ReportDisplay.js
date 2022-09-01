@@ -781,7 +781,6 @@ const ReportDisplay = () => {
   }
   return (
     <View style={{margin: SIZES.radius}}>
-      {}
       {renderProjectFilter()}
       {renderReportModal()}
       {onSelect == true && renderReport()}

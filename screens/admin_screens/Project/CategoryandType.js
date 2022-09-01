@@ -320,8 +320,7 @@ const CategoryandType = () => {
     return (
       <View
         style={{
-          marginTop: SIZES.radius,
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           padding: 20,
           borderRadius: 3,
           backgroundColor: COLORS.lightblue_50,
@@ -497,7 +496,7 @@ const CategoryandType = () => {
       <View
         style={{
           marginVertical: SIZES.padding * 1.5,
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           padding: 20,
           borderRadius: 3,
           backgroundColor: COLORS.lightblue_50,
@@ -762,6 +761,7 @@ const CategoryandType = () => {
     <View
       style={{
         flex: 1,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Categories & Types" />
 
