@@ -20,7 +20,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useSelector } from 'react-redux';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
-const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
+const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
     const {
         header,
         con_body,
@@ -88,7 +88,7 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
 
     useMemo(() => {
         getStockDataItems();
-    }, [userCompanyData.company_id,loading])
+    }, [userCompanyData.company_id, loading])
 
 
 
@@ -111,7 +111,7 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
         let isMount = true;
         GetStockData();
         return () => { isMount = false }
-    }, [userCompanyData.company_id,loading])
+    }, [userCompanyData.company_id, loading])
     // console.log("🚀 ~ file: Stock.js ~ line 95 ~ GetStockData ~ getStockData", getStockData)
 
 
@@ -207,7 +207,7 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
                                         paddingHorizontal: 5
                                     }}
                                     key={key}
-                                // key="{(key+1)}"
+                                
                                 >
                                     <Dropdown
                                         style={[
@@ -276,9 +276,15 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ alignSelf: "flex-end" }}>
+                                <View style={{
+                                       
+                                       width:"100%",
+                                       alignItems:"flex-end"
+                                }}>
                                     <TouchableOpacity
-                                        style={{ marginLeft: 310 }}
+                                        style={{
+                                            
+                                        }}
                                         onPress={() => deleteStockHandler(key)}>
                                         <Image
                                             source={icons.delete_icon}
@@ -304,7 +310,6 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
 
             <Modal visible={stockReportModal} transparent={false} animationType="slide">
                 <View
-                    // behavior={Platform.OS === "ios" ? "padding" : "height"}
                     style={{ flex: 1, backgroundColor: COLORS.transparentBlack1 }}
                 >
                     <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
@@ -370,77 +375,77 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
                             <View style={{ flex: 1 }}>
                                 {add_stock_input()}
                             </View>
-                                <Button
-                                    title="submit"
-                                    onPress={() => {
-                                        postStockDataItems();
-                                    }}
-                                />
+                            <Button
+                                title="submit"
+                                onPress={() => {
+                                    postStockDataItems();
+                                }}
+                            />
                         </View>
                     </View>
                 </View>
             </Modal>
         )
     }
-      
+
     const add_new_material_modal = () => {
         return (
-          <View>
-            <Modal transparent={false} visible={addNewMaterial} animationType="slide">
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: '#000000aa',
-                }}>
-                <View
-                  style={{
-                    backgroundColor: '#fff',
-                    marginTop: 80,
-                    padding: 20,
-                    borderRadius: 20,
-                    margin: 10,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add New Material</Text>
-                    <Pressable onPress={()=>setAddNewMaterial(false)}>
-                      <AntDesign name="close" size={30} color={COLORS.black} />
-                    </Pressable>
-                  </View>
-                  <View style={{ marginTop: 20 }}>
-                    <FormInput
-                      label="Name"
-                      onChange={text => {
-                        setMaterialItemName(text)
-                      }}
-                    />                   
-                  </View>
-                  <View>
-                    <TextButton
-                      label="save"
-                      buttonContainerStyle={{
-                        height: 45,
-                        borderRadius: SIZES.radius,
-                        marginTop: SIZES.padding,
-                      }}
-                      onPress={() => {
-                        // saveNewMaterial();
-                      }}
-                    />
-                  </View>
-                  {/* <Toast config={showToastItem} /> */}
-                </View>
-              </View>
-            </Modal>
-          </View>
+            <View>
+                <Modal transparent={false} visible={addNewMaterial} animationType="slide">
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: '#000000aa',
+                        }}>
+                        <View
+                            style={{
+                                backgroundColor: '#fff',
+                                marginTop: 80,
+                                padding: 20,
+                                borderRadius: 20,
+                                margin: 10,
+                            }}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}>
+                                <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add New Material</Text>
+                                <Pressable onPress={() => setAddNewMaterial(false)}>
+                                    <AntDesign name="close" size={30} color={COLORS.black} />
+                                </Pressable>
+                            </View>
+                            <View style={{ marginTop: 20 }}>
+                                <FormInput
+                                    label="Name"
+                                    onChange={text => {
+                                        setMaterialItemName(text)
+                                    }}
+                                />
+                            </View>
+                            <View>
+                                <TextButton
+                                    label="save"
+                                    buttonContainerStyle={{
+                                        height: 45,
+                                        borderRadius: SIZES.radius,
+                                        marginTop: SIZES.padding,
+                                    }}
+                                    onPress={() => {
+                                        // saveNewMaterial();
+                                    }}
+                                />
+                            </View>
+                            {/* <Toast config={showToastItem} /> */}
+                        </View>
+                    </View>
+                </Modal>
+            </View>
         )
-      }
-    
-   
+    }
+
+
 
     const add_stock_icon_button = () => {
         return (
@@ -497,7 +502,7 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
                     paddingVertical: 3,
-                    width: SIZES.width * 0.35,
+                    width: SIZES.width * 0.53,
                     alignItems: "center",
                     justifyContent: "space-between",
                     top: SIZES.base * 2,
@@ -527,7 +532,7 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
             >
                 {stockCollapse ?
                     <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}>
-                        <View style={{ backgroundColor: "blue" }}>
+                        <View style={{ backgroundColor: "blue",paddingLeft:140 }}>
                             {add_stock_icon_button()}
                         </View>
                         <View
@@ -538,13 +543,9 @@ const Stock = ({ project_id, Main_drp_pro_value,loading }) => {
                                 alignSelf: "flex-start",
                                 position: "relative",
                                 top: 20,
-                                marginLeft: 17,
-                                // height: 200,
+                                marginLeft: 17,                                
                                 maxHeight: 200,
-                                paddingBottom: 6,
-                                // flex:2,
-                                // marginBottom: -20,
-                                // padding: 5,
+                                paddingBottom: 6,                       
                                 elevation: 1
                             }}
                         >

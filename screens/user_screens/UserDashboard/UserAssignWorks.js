@@ -271,7 +271,8 @@ const UserAssignWorks = ({ loading }) => {
               justifyContent: "space-between"
             }}>
             <Text style={{ ...FONTS.h5, color: COLORS.white }}>
-              Date: {item.exp_completion_date}
+              Assign Date: {item.exp_completion_date}
+              {/* Target Date */}
             </Text>
             <Text style={{ ...FONTS.h5, color: COLORS.white, left: -15 }}>
               Time: {item.exp_completion_time}
