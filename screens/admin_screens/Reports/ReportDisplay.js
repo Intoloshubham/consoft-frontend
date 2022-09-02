@@ -19,6 +19,7 @@ import {
   getReport,
   getQuantity,
 } from '../../../controller/ReportController';
+import CheckBox from '@react-native-community/checkbox';
 
 const ReportDisplay = () => {
   const companyDetail = useSelector(state => state.company);
@@ -50,6 +51,8 @@ const ReportDisplay = () => {
   const [manpower, setManpower] = React.useState([]);
   const [quantity, setQuantity] = React.useState([]);
 
+  //checkbox
+  const [checked, setChecked] = React.useState(false);
   // get projects
   const fetchProject = async () => {
     let response = await getProjects(company_id);
@@ -256,16 +259,23 @@ const ReportDisplay = () => {
 
   // report showing modal
   function renderReportModal() {
-    const renderItem = ({item}) => (
+    const renderItem = ({item, index}) => (
       <View
         style={{
           borderWidth: 1,
           borderColor: COLORS.gray2,
-          padding: 5,
-          borderRadius: 3,
+          padding: 10,
+          // borderRadius: 3,
           width: SIZES.width / 2.4,
         }}>
-        <Text style={{...FONTS.h3, color: 'black'}}>
+        <Text
+          style={{
+            ...FONTS.h3,
+            color: 'black',
+            textDecorationLine: 'underline',
+            textTransform: 'capitalize',
+            marginBottom: 3,
+          }}>
           {item.contractor_name}
         </Text>
         <View style={{}}>
@@ -274,9 +284,7 @@ const ReportDisplay = () => {
               <View
                 key={i}
                 style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                  {i + 1}.
-                </Text>
+                <Text style={{...FONTS.h4, color: COLORS.black}}>{i + 1}.</Text>
                 <View
                   style={{
                     left: 5,
@@ -354,12 +362,21 @@ const ReportDisplay = () => {
                 </TouchableOpacity>
               </ImageBackground>
             </View>
-
+            <Text
+              style={{
+                textAlign: 'center',
+                marginBottom: 8,
+                ...FONTS.h2,
+                color: COLORS.lightblue_900,
+                fontWeight: '500',
+                textDecorationLine: 'underline',
+              }}>
+              Daily Progress Report
+            </Text>
             <View
               style={{
                 borderWidth: 1,
                 borderColor: COLORS.darkGray2,
-                borderRadius: 3,
                 padding: 15,
               }}>
               <View
@@ -370,7 +387,8 @@ const ReportDisplay = () => {
                 }}>
                 <Text
                   style={{
-                    ...FONTS.h2,
+                    // ...FONTS.h2,
+                    fontSize: 25,
                     color: COLORS.black,
                     textTransform: 'capitalize',
                   }}>
@@ -382,18 +400,18 @@ const ReportDisplay = () => {
                     justifyContent: 'flex-start',
                   }}>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 13, color: COLORS.darkGray}}>
+                    <Text style={{fontSize: 14, color: COLORS.black}}>
                       Date{' - '}
                     </Text>
-                    <Text style={{fontSize: 12, color: COLORS.darkGray}}>
+                    <Text style={{fontSize: 13, color: COLORS.black}}>
                       {reportData.date}
                     </Text>
                   </View>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 13, color: COLORS.darkGray}}>
+                    <Text style={{fontSize: 14, color: COLORS.black}}>
                       Time{' - '}
                     </Text>
-                    <Text style={{fontSize: 12, color: COLORS.darkGray}}>
+                    <Text style={{fontSize: 13, color: COLORS.black}}>
                       {reportData.time}
                     </Text>
                   </View>
@@ -402,15 +420,18 @@ const ReportDisplay = () => {
               <View
                 style={{
                   borderBottomWidth: 1,
-                  marginVertical: 10,
+                  marginTop: 15,
+                  marginBottom: 5,
                   borderColor: COLORS.gray2,
                 }}></View>
               <View>
                 <Text
                   style={{
-                    ...FONTS.h3,
+                    fontSize: 18,
                     color: COLORS.black,
                     textAlign: 'center',
+                    textDecorationLine: 'underline',
+                    marginBottom: 5,
                   }}>
                   Manpower
                 </Text>
@@ -452,7 +473,7 @@ const ReportDisplay = () => {
             style={{
               flex: 1,
               ...FONTS.h3,
-              color: COLORS.darkGray,
+              color: COLORS.black,
             }}>
             {item.quantityWorkItems.item_name}
           </Text>
@@ -460,7 +481,7 @@ const ReportDisplay = () => {
             style={{
               ...FONTS.h3,
               flex: 0.5,
-              color: COLORS.darkGray,
+              color: COLORS.black,
               textAlign: 'right',
             }}>
             {item.quantityWorkItems.num_length}
@@ -469,7 +490,7 @@ const ReportDisplay = () => {
             style={{
               ...FONTS.h3,
               flex: 0.5,
-              color: COLORS.darkGray,
+              color: COLORS.black,
               textAlign: 'right',
             }}>
             {item.quantityWorkItems.num_width}
@@ -478,7 +499,7 @@ const ReportDisplay = () => {
             style={{
               ...FONTS.h3,
               flex: 0.5,
-              color: COLORS.darkGray,
+              color: COLORS.black,
               textAlign: 'right',
             }}>
             {item.quantityWorkItems.num_height}
@@ -487,7 +508,7 @@ const ReportDisplay = () => {
             style={{
               ...FONTS.h3,
               flex: 1,
-              color: COLORS.darkGray,
+              color: COLORS.black,
               textAlign: 'right',
             }}>
             {item.quantityWorkItems.num_total}
@@ -496,7 +517,7 @@ const ReportDisplay = () => {
             style={{
               ...FONTS.h3,
               flex: 1,
-              color: COLORS.darkGray,
+              color: COLORS.black,
               textAlign: 'right',
             }}>
             {item.quantityWorkItems.quality_type}
@@ -596,14 +617,14 @@ const ReportDisplay = () => {
                     style={{
                       flex: 1,
                       ...FONTS.h4,
-                      color: COLORS.darkGray,
+                      color: COLORS.black,
                       // fsontWeight: 'bold',
                     }}></Text>
                   <Text
                     style={{
                       ...FONTS.h4,
                       flex: 0.5,
-                      color: COLORS.darkGray,
+                      color: COLORS.black,
                       textAlign: 'right',
                       // fontWeight: 'bold',
                     }}>
@@ -613,7 +634,7 @@ const ReportDisplay = () => {
                     style={{
                       ...FONTS.h4,
                       flex: 0.5,
-                      color: COLORS.darkGray,
+                      color: COLORS.black,
                       textAlign: 'right',
                       // fontWeight: 'bold',
                     }}>
@@ -623,7 +644,7 @@ const ReportDisplay = () => {
                     style={{
                       ...FONTS.h4,
                       flex: 0.5,
-                      color: COLORS.darkGray,
+                      color: COLORS.black,
                       textAlign: 'right',
                       // fontWeight: 'bold',
                     }}>
@@ -633,7 +654,7 @@ const ReportDisplay = () => {
                     style={{
                       ...FONTS.h4,
                       flex: 1,
-                      color: COLORS.darkGray,
+                      color: COLORS.black,
                       textAlign: 'right',
                       // fontWeight: 'bold',
                     }}>
@@ -643,7 +664,7 @@ const ReportDisplay = () => {
                     style={{
                       ...FONTS.h3,
                       flex: 1,
-                      color: COLORS.darkGray,
+                      color: COLORS.black,
                       textAlign: 'right',
                       // fontWeight: 'bold',
                     }}>
@@ -662,20 +683,21 @@ const ReportDisplay = () => {
         <View
           style={{
             borderBottomWidth: 1,
-            marginVertical: 10,
+            marginTop: 15,
+            marginBottom: 5,
             borderColor: COLORS.gray2,
           }}></View>
         <Text
           style={{
-            ...FONTS.h3,
+            fontSize: 18,
             color: COLORS.black,
             textAlign: 'center',
+            textDecorationLine: 'underline',
+            marginBottom: 5,
           }}>
           Excluded Quantity
         </Text>
-        {/* <Text style={{...FONTS.h3, color: COLORS.black}}>Contractors</Text> */}
         <FlatList
-          // contentContainerStyle={{marginTop: 5}}
           data={quantity}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
@@ -684,7 +706,6 @@ const ReportDisplay = () => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
                   backgroundColor: COLORS.darkGray,
                   marginVertical: 10,
@@ -695,9 +716,9 @@ const ReportDisplay = () => {
             <View>
               <View
                 style={{
-                  marginTop: 15,
+                  marginTop: 10,
                   flexDirection: 'row',
-                  marginBottom: SIZES.base,
+                  marginBottom: 5,
                 }}>
                 <Text
                   style={{
@@ -772,13 +793,54 @@ const ReportDisplay = () => {
         <View
           style={{
             borderBottomWidth: 1,
-            marginVertical: 15,
+            marginTop: 15,
+            marginBottom: 10,
             borderColor: COLORS.gray2,
           }}></View>
-        <Text>renderFooter</Text>
+        {/* <Text
+          style={{
+            fontSize: 18,
+            color: COLORS.black,
+            textAlign: 'center',
+            textDecorationLine: 'underline',
+            marginBottom: 5,
+          }}>
+          Excluded Quantity
+        </Text> */}
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <CheckBox
+            // disabled={false}
+            value={checked}
+            onValueChange={newValue => {}}
+            onChange={() => console.log('object')}
+            style={{height: 25}}
+          />
+          <Text style={{...FONTS.h4, color: 'black'}}>Admin 1</Text>
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <CheckBox
+            // disabled={false}
+            value={checked}
+            onValueChange={newValue => {}}
+            onChange={() => console.log('object')}
+            style={{height: 25}}
+          />
+          <Text style={{...FONTS.h4, color: 'black'}}>Admin 2</Text>
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <CheckBox
+            // disabled={false}
+            value={checked}
+            onValueChange={newValue => {}}
+            onChange={() => console.log('object')}
+            style={{height: 25}}
+          />
+          <Text style={{...FONTS.h4, color: 'black'}}>Admin 3</Text>
+        </View>
       </View>
     );
   }
+
   return (
     <View style={{margin: SIZES.radius}}>
       {renderProjectFilter()}
