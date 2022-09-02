@@ -69,4 +69,26 @@ const getProjectAtGlance = async company_id => {
   }
 };
 
-export {getReport, getManpower, getQuantity, getProjectAtGlance};
+const postProjectReportPath = async formData => {
+  try {
+    const res = await fetch(Config.API_URL + 'project-report-path', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export {
+  getReport,
+  getManpower,
+  getQuantity,
+  getProjectAtGlance,
+  postProjectReportPath,
+};
