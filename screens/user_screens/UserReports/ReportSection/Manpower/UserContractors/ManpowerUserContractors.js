@@ -19,8 +19,9 @@ import { EditDeletebuttons, ManPowerProjectTeam } from '../../../../index.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
-  Get_Contractor_Data, insert_new_category, get_new_category, insert_new_sub_category, get_new_sub_category,
-  insert_manpower_report, get_manpower_report, delete_manpower_data, filter_new_category_by_cont_Id, edit_manpower_report_data
+  Get_Contractor_Data, insert_new_category, get_new_category, insert_new_sub_category,
+  get_new_sub_category, insert_manpower_report, get_manpower_report, delete_manpower_data,
+  filter_new_category_by_cont_Id, edit_manpower_report_data, update_manpower_report
 } from '../../../ReportApi.js'
 import utils from '../../../../../../utils';
 import styles from '../../../ReportStyle.js'
@@ -38,6 +39,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   //getting post data into state
   const [postContData, setPostContData] = useState('')
 
+  const [updateManpowerId, setUpdateManpowerId] = useState(null)
   //using in dropdown
   // const [proListIsFocus, setProListIsFocus] = useState(false)
   // const [value, setValue] = useState(null);
@@ -96,7 +98,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   const [getNewCategory, setGetNewCategory] = useState([])
   const [filterNewCategory, setFilterNewCategory] = useState([])
 
-  const [addFieldInput, setAddFieldInput] = useState('')
+  // const [editManpowerReport, setEditManpowerReport] = useState('')
+  const [editManpowerReport, setEditManpowerReport] = useState('')
+  // const [first, setfirst] = useState('')
   // const [getNewSubCategory, setGetNewSubCategory] = useState([])
 
   const current_dat = moment().format("YYYY%2FMM%2FDD")
@@ -151,15 +155,15 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
 
   const deleteContReportButton = async (id) => {
-    const res = await delete_manpower_data(id);
-    if (res.status == 200) {
-      setDeleteConStatus(true);
-      setDeleteToast(true);
-      getContractorName();
-      // setTimeout(() => {
-      //   setDeleteConfirm(false);
-      // }, 300);
-    }
+    // const res = await delete_manpower_data(id);
+    // if (res.status == 200) {
+    //   setDeleteConStatus(true);
+    //   setDeleteToast(true);
+    //   getContractorName();
+    //   // setTimeout(() => {
+    //   //   setDeleteConfirm(false);
+    //   // }, 300);
+    // }
   };
 
 
@@ -213,38 +217,38 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
 
   const editManpowerReportBtn = async (id) => {
-    setAddConMemberReportModal(true);
     setRemoveAddManpowerOnEdit(true);
-    const data = await edit_manpower_report_data(id, current_dat);
-    const temp = await data.json();
-    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 220 ~ editManpowerReportBtn ~ temp", temp)
-    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 155 ~ editManpowerReportBtn ~ filterNewCategory", filterNewCategory)
-    temp.data.map((ele) => {
-      filterNewCategory.map((sub_ele) => {
-        if (ele.contractor_id == sub_ele.contractor_id) {
-          setFilterNewCategory([...filterNewCategory, {
-            // company_id: companydata.company_id,
-             contractor_id: id, manpower_category: ele.manpower_category_name, 
-            manpower_member: ele.manpower_member, project_id: Main_drp_pro_value ,_id:ele.manpower_category_id    
-          }]);
-        }
-      })
-    })
 
+    if (id) {
+      const data = edit_manpower_report_data(id, current_dat);
+      data.then(res => res.json())
+        .then(result => {
+          // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 225 ~ editManpowerReportBtn ~ result", result.data._id)
+          setUpdateManpowerId(result.data._id);
+          setEditManpowerReport(result);
+          if (result.data != undefined && filterNewCategory) {
+            if (result.data.contractor_id === id) {
+              setFilterNewCategory([
+                ...result.data.manpowerCategories.map((ele) => {
+                  return {
+                    manpower_category: ele.manpower_category_name,
+                    manpower_member: ele.manpower_member.toString()
+                  }
+                })
+              ])
+            }
+          }
+          else {
+            setFilterNewCategory([]);
+            setAddConMemberReportModal(true);
+          }
+          // alert(id)
+          setAddConMemberReportModal(true);
+        })
 
-
+    }
   }
-  // const emptySubCategoryData = () => {
 
-  //   // addFieldInput.map((sublist, index) => {
-  //   //   const _memberInputs = [...addFieldInput];
-  //   //   _memberInputs[index].manpower_sub_category='';
-  //   //   _memberInputs[index].manpower_member = ' ';
-  //   //   _memberInputs[index].key = index;
-  //   //   setAddFieldInput(_memberInputs);
-  //   // });
-
-  // }
 
 
   //for inserting manpower data
@@ -272,6 +276,41 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   }
 
+  function postUpdateData() {
+    let manpowerCategories = [];
+    if (editManpowerReport.data != undefined) {
+      filterNewCategory.map((list, idx) => {
+        editManpowerReport.data.manpowerCategories.map((ele, key) => {
+          if (idx == key) {
+            manpowerCategories.push({ manpower_category_id: ele.manpower_category_id, manpower_member: list.manpower_member })
+          }
+        })
+      })
+      return manpowerCategories;
+    }
+  }
+
+
+  const updateManpowerReport = async () => {
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 286 ~ updateManpowerReport ~ update_id", filterNewCategory)
+    let temp_data = postUpdateData();
+
+    let data = {
+      manpowerCategories: temp_data
+    }
+    console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 294 ~ updateManpowerReport ~ data", data)
+    let res = await update_manpower_report(updateManpowerId, data);
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 296 ~ updateManpowerReport ~ res", res)
+
+    if (res.status == '200') {
+
+      setUpdateToast(true);
+      setTimeout(() => {
+        setAddConMemberReportModal(false);
+      }, 1500);
+    }
+  }
+
 
 
 
@@ -279,11 +318,11 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
 
   async function GetManpowerData() {
-    if (Main_drp_pro_value || manpowerPostStatus) {
+    if (Main_drp_pro_value || manpowerPostStatus || loading) {
       const data = await get_manpower_report(Main_drp_pro_value, companydata._id, current_dat)
       if (data.status == 200) {
         setManpowerReportData(data.data);
-        console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 263 ~ GetManpowerData ~ data.data", data.data)
+        // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 263 ~ GetManpowerData ~ data.data", data.data)
       } else {
         console.log("data not found!")
       }
@@ -301,14 +340,18 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   const filterCategoryByContId = async (cont_id) => {
 
-    setRemoveAddManpowerOnEdit(false);
+
+    if (cont_id) {
+      const get_data = await filter_new_category_by_cont_Id(companydata.company_id, Main_drp_pro_value, cont_id);
+      const get_temp = await get_data.json();
+      let temp = get_temp.data.map((ele, key) => ({
+        ...ele, manpower_member: ''
+      }))
+      setFilterNewCategory(temp)
+    }
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 396 ~ manpowerReportData", manpowerReportData)
+    // setRemoveAddManpowerOnEdit(true);
     setAddConMemberReportModal(true);
-    const get_data = await filter_new_category_by_cont_Id(companydata.company_id, Main_drp_pro_value, cont_id);
-    const get_temp = await get_data.json();
-    get_temp.data.map((ele, key) => ({
-      ...ele, manpower_member: ''
-    }))
-    setFilterNewCategory(get_temp.data)
   }
 
 
@@ -316,7 +359,10 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   const GetNewCategories = async () => {
     const get_data = await get_new_category(companydata.company_id, Main_drp_pro_value);
     const get_temp = await get_data.json();
-    setGetNewCategory(get_temp.data)
+    let temp = get_temp.data.map((ele, key) => ({
+      ...ele, manpower_member: ''
+    }))
+    setGetNewCategory(temp)
 
   }
 
@@ -494,7 +540,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
             </ScrollView>
             <TextButton
               label="Submit"
-
               // disabled={isEnableSubmit() ? false : true}
               buttonContainerStyle={{
                 height: 55,
@@ -521,13 +566,16 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   const __memberName = (text, index) => {
     const _memberInputs = [...filterNewCategory];
-    _memberInputs[index].manpower_sub_category = text;
+    _memberInputs[index].manpower_category = text;
     _memberInputs[index].key = index;
     setFilterNewCategory(_memberInputs);
+
+
   }
-  const __memberCount = (text, index) => {
+  const __memberCount = (manpower_memb, index) => {
+
     const _memberInputs = [...filterNewCategory];
-    _memberInputs[index].manpower_member = text;
+    _memberInputs[index].manpower_member = manpower_memb;
     _memberInputs[index].key = index;
     setFilterNewCategory(_memberInputs);
   }
@@ -616,6 +664,20 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
             filterNewCategory.map((memberInput, index) => {
 
+              {/* let temp = memberInput.manpower_category;
+              let manpower_memb = memberInput.manpower_member;
+             
+
+              removeAddManpowerOnEdit && editManpowerReport.data != undefined ? editManpowerReport.data.manpowerCategories.map((ele) => {
+                if (memberInput._id === ele.manpower_category_id) {
+                  temp = ele.manpower_category_name;
+                  manpower_memb = ele.manpower_member.toString();                  
+                }
+
+              }
+              ) : null */}
+
+
               return (
                 <View
                   style={{
@@ -631,6 +693,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                       marginHorizontal: SIZES.base * 0.5,
                       paddingBottom: SIZES.base
                     }}>
+
                     <FormInput
                       placeholder="Name"
                       containerStyle={{
@@ -643,6 +706,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                         setMemberName(text);
                       }}
                       value={memberInput.manpower_category}
+                      // value={temp}
                       errorMsg={memberErrorMsg}
                       appendComponent={
                         <View style={{ justifyContent: 'center' }}>
@@ -666,6 +730,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                         </View>
                       }
                     />
+
                     <FormInput
                       placeholder="Count"
                       containerStyle={{
@@ -679,6 +744,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                         utils.validateNumber(text, setMemberCountErrorMsg);
                         setMemberCount(text);
                       }}
+                      // value={manpower_memb}
                       value={memberInput.manpower_member}
                       errorMsg={memberCountErrorMsg}
                       appendComponent={
@@ -703,6 +769,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                         </View>
                       }
                     />
+
+
+
                     <View style={{
                       paddingTop: 35
                     }}>
@@ -725,7 +794,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                   </View>
                 </View>)
             })
-
           }
         </ScrollView>
       </KeyboardAvoidingView>
@@ -816,7 +884,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                     backgroundColor: COLORS.lightblue_700
                   }}
                   onPress={() => {
-                    // InsertManpowerReport()
+                    updateManpowerReport(updateManpowerId)
                   }
                   }
                 /> :
@@ -973,11 +1041,11 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   //contractor collapse button click code
   const toggleExpanded = (item, index) => {
 
-    // addFieldInput.map((sublist, index) => {
-    //   const _memberInputs = [...addFieldInput];
+    // editManpowerReport.map((sublist, index) => {
+    //   const _memberInputs = [...editManpowerReport];
     //   _memberInputs[index].manpower_member = ' ';
     //   _memberInputs[index].key = index;
-    //   setAddFieldInput(_memberInputs);
+    //   setEditManpowerReport(_memberInputs);
     // });
 
     setcon_item_id(item._id);
@@ -1044,7 +1112,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
           <View style={{ right: 65 }}>
             <Pressable
               onPress={() => {
-                setContractorId(item._id);                
+                setContractorId(item._id);
                 filterCategoryByContId(item._id);
               }}
             >
