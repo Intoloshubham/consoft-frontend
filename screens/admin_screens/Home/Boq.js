@@ -41,11 +41,11 @@ const Boq = ({route}) => {
 
   var companyData;
   if (companyDetail._id) {
-    companyData = useSelector(state => state.company);
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
   }
-  if (userData._id) {
-    companyData = useSelector(state => state.user);
-  }
+
   const company_id = companyData._id;
   const {project_id} = route.params;
 

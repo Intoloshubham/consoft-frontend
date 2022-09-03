@@ -5,11 +5,23 @@ import {HeaderBar, CustomDropdown} from '../../../Components';
 import {getUserRole, roleByUser} from '../../../controller/UserRoleController';
 import {getPrivileges} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
-import {postProjectReportPath} from '../../../controller/ReportController';
+import {
+  getProjectReportPath,
+  postProjectReportPath,
+} from '../../../controller/ReportController';
 
 const ReportSettings = ({route}) => {
   const companyDetail = useSelector(state => state.company);
-  const company_id = companyDetail._id;
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+
+  const company_id = companyData._id;
   const {project_id} = route.params; //
 
   //GETTING USER ROLES FROM API
@@ -61,6 +73,8 @@ const ReportSettings = ({route}) => {
   const [sendTo, setSendTo] = React.useState('');
   const [admin2, setAdmin2] = React.useState('');
   const [admin1, setAdmin1] = React.useState('');
+
+  const [reportPath, setReportPath] = React.useState([]);
 
   // started by -----------------
   const getUserRoles = async () => {
@@ -255,7 +269,28 @@ const ReportSettings = ({route}) => {
       admin_1: privilegeValue2,
     };
     const response = await postProjectReportPath(formData);
+    if (response.status === 200) {
+      setUserRoleValue('');
+      setUserRoleValue1('');
+      setUserRoleValue2('');
+      setUsersValue('');
+      setUsersValue1('');
+      setUsersValue2('');
+      setPrivilegeValue('');
+      setPrivilegeValue1('');
+      setPrivilegeValue2('');
+    }
   };
+
+  const fetchReportSettingPath = async () => {
+    const response = await getProjectReportPath(company_id, project_id);
+    console.log(response.data);
+    setReportPath(response.data);
+  };
+
+  React.useEffect(() => {
+    fetchReportSettingPath();
+  }, []);
 
   function renderReportPath() {
     return (
@@ -598,10 +633,115 @@ const ReportSettings = ({route}) => {
     );
   }
 
+  function renderPath() {
+    return (
+      <View style={{marginTop: SIZES.radius}}>
+        <Text
+          style={{
+            ...FONTS.h2,
+            color: COLORS.darkGray,
+            textAlign: 'center',
+            textDecorationLine: 'underline',
+          }}>
+          Report Path
+        </Text>
+        {reportPath.map((ele, i) => (
+          <View key={i} style={{flexDirection: 'row', marginTop: 5}}>
+            <View style={{flex: 1, alignItems: 'flex-end'}}>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                Started by {' :  '}
+              </Text>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                Verification 1 {' :  '}
+              </Text>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                Verification 2 {' :  '}
+              </Text>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                Send to {' :  '}
+              </Text>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                Admin 2 {' :  '}
+              </Text>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                Admin 1 {' :  '}
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'flex-start',
+              }}>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                }}>
+                {ele.started_by_name}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                }}>
+                {ele.verification_1_name}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                }}>
+                {ele.verification_2_name}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                }}>
+                {ele.admin_3_name}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                }}>
+                {ele.admin_2_name}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  color: COLORS.darkGray,
+                  textTransform: 'capitalize',
+                }}>
+                {ele.admin_1_name}
+              </Text>
+            </View>
+
+            {/* <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+              Started by : {ele.started_by_name} {'\n'}
+              Verification 1 : {ele.verification_1_name} {'\n'}
+              Verification 2 : {ele.verification_2_name} {'\n'}
+              Send to : {ele.admin_3_name} {'\n'}
+              Admin 2 : {ele.admin_2_name} {'\n'}
+              Admin 1 : {ele.admin_1_name} {'\n'}
+            </Text> */}
+          </View>
+        ))}
+      </View>
+    );
+  }
   return (
     <View>
       <HeaderBar right={true} title="Report Settings" />
-      <View style={{marginHorizontal: SIZES.radius}}>{renderReportPath()}</View>
+      <View style={{marginHorizontal: SIZES.radius}}>
+        {renderReportPath()}
+        {renderPath()}
+      </View>
     </View>
   );
 };
