@@ -52,6 +52,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   const [deleteConStatus, setDeleteConStatus] = useState(false)
   const [manpowerPostStatus, setManpowerPostStatus] = useState('')
+  const [manpowerUpdateStatus, setManpowerUpdateStatus] = useState('')
 
   const [manpowerReportData, setManpowerReportData] = useState('')
 
@@ -85,7 +86,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   const [saveNewCategoryStatus, setSaveNewCategoryStatus] = useState(false)
 
 
-  const [reportShowHide, setReportShowHide] = useState(false)
+  // const [reportShowHide, setReportShowHide] = useState(false)
 
   // add contractor name
   const [ContractorName, setContractorName] = useState('');
@@ -301,7 +302,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 294 ~ updateManpowerReport ~ data", data)
     let res = await update_manpower_report(updateManpowerId, data);
     // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 296 ~ updateManpowerReport ~ res", res)
-
+    setManpowerUpdateStatus(res)
     if (res.status == '200') {
 
       setUpdateToast(true);
@@ -318,7 +319,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
 
   async function GetManpowerData() {
-    if (Main_drp_pro_value || manpowerPostStatus || loading) {
+    if (Main_drp_pro_value || manpowerPostStatus || loading || manpowerUpdateStatus) {
       const data = await get_manpower_report(Main_drp_pro_value, companydata._id, current_dat)
       if (data.status == 200) {
         setManpowerReportData(data.data);
@@ -335,7 +336,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       GetManpowerData();
     }
     return () => { isMount = false }
-  }, [manpowerPostStatus, Main_drp_pro_value, conTeamTabCollapse, loading])
+  }, [manpowerPostStatus, Main_drp_pro_value, conTeamTabCollapse, loading,manpowerUpdateStatus])
 
 
   const filterCategoryByContId = async (cont_id) => {
