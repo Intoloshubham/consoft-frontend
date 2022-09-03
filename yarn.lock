@@ -7246,6 +7246,13 @@
 "react-native-linear-gradient@^2.5.6":
   "version" "2.5.6"
 
+"react-native-material-ripple@^0.9.1":
+  "integrity" "sha512-dHjARdKoGD3LXwPh2TkURabywM5BfdpKc/AHplJTfBMalhVZ2bc7iJoJmNhNnmT/TZ+B3szL6uV1mO7Pv8zNeA=="
+  "resolved" "https://registry.npmjs.org/react-native-material-ripple/-/react-native-material-ripple-0.9.1.tgz"
+  "version" "0.9.1"
+  dependencies:
+    "prop-types" "^15.5.10"
+
 "react-native-modal@^13.0.1", "react-native-modal@13.0.1":
   "integrity" "sha512-UB+mjmUtf+miaG/sDhOikRfBOv0gJdBU2ZE1HtFWp6UixW9jCk/bhGdHUgmZljbPpp0RaO/6YiMmQSSK3kkMaw=="
   "resolved" "https://registry.npmjs.org/react-native-modal/-/react-native-modal-13.0.1.tgz"
