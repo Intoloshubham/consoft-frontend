@@ -29,9 +29,6 @@ import {
 import {useSelector} from 'react-redux';
 
 const Contractors = ({route}) => {
-  // const companyData = useSelector(state => state.company);
-  // const company_id = companyData._id;
-
   const companyDetail = useSelector(state => state.company);
   const userData = useSelector(state => state.user);
 
@@ -41,7 +38,6 @@ const Contractors = ({route}) => {
   } else {
     companyData = userData;
   }
-
   const company_id = companyData._id;
 
   const {project_id} = route.params; //
@@ -64,7 +60,6 @@ const Contractors = ({route}) => {
   // get contractors
   const fetchContractors = async () => {
     let data = await getContractors();
-    // console.log(data)
     setContractors(data);
   };
 

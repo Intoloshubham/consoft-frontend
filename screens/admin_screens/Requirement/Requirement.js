@@ -1,11 +1,46 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 
-const Tasks = () => {
-  return <></>;
+const Requirement = () => {
+  const [isSelected1, setSelection1] = useState(false);
+
+  const checkAllHelper = value => {
+    if (value) {
+      setSelection1(true);
+    } else {
+      setSelection1(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.checkboxContainer}>
+        <CheckBox
+          value={isSelected1}
+          onValueChange={setSelection1}
+          style={styles.checkbox}
+        />
+        <Text style={styles.label}>CHOOSE</Text>
+      </View>
+    </View>
+  );
 };
-
-export default Tasks;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+  },
+  checkbox: {
+    alignSelf: 'center',
+  },
+  label: {
+    margin: 8,
+  },
+});
+export default Requirement;
 
 // import React, {useRef} from 'react';
 // import {

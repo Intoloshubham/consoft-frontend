@@ -22,7 +22,7 @@ const ReportSettings = ({route}) => {
   }
 
   const company_id = companyData._id;
-  const {project_id} = route.params; //
+  const {project_id} = route.params;
 
   //GETTING USER ROLES FROM API
   const [openUserRole, setOpenUserRole] = React.useState(false);
@@ -284,7 +284,7 @@ const ReportSettings = ({route}) => {
 
   const fetchReportSettingPath = async () => {
     const response = await getProjectReportPath(company_id, project_id);
-    console.log(response.data);
+    // console.log(response.data);
     setReportPath(response.data);
   };
 

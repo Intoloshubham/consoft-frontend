@@ -45,7 +45,7 @@ const Home = ({navigation}) => {
     companyData = userData;
   }
 
-  // console.log(companyData._id)
+  // console.log(companyData)
 
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {

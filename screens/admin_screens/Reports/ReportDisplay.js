@@ -20,6 +20,8 @@ import {
   getQuantity,
 } from '../../../controller/ReportController';
 import CheckBox from '@react-native-community/checkbox';
+import {getPrivileges} from '../../../controller/UserRoleController';
+import {getProjectReportPath} from '../../../controller/ReportController';
 
 const ReportDisplay = () => {
   const companyDetail = useSelector(state => state.company);
@@ -27,21 +29,19 @@ const ReportDisplay = () => {
 
   var companyData;
   if (companyDetail._id) {
-    companyData = useSelector(state => state.company);
+    companyData = companyDetail;
   } else {
-    companyData = useSelector(state => state.user);
+    companyData = userData;
   }
   const company_id = companyData._id;
+
+  // console.log(companyData);
 
   // projects
   const [onSelect, setOnSelect] = React.useState(false);
   const [openProject, setOpenProject] = React.useState(false);
   const [projectValue, setProjectValue] = React.useState([]);
   const [project, setProject] = React.useState([]);
-  const onProjectOpen = React.useCallback(() => {
-    setOnSelect(false);
-    fetchProject();
-  }, []);
 
   const [report, setReport] = React.useState([]);
   const [reportModal, setReportModal] = React.useState(false);
@@ -52,7 +52,25 @@ const ReportDisplay = () => {
   const [quantity, setQuantity] = React.useState([]);
 
   //checkbox
-  const [checked, setChecked] = React.useState(false);
+  const [isSelected1, setSelection1] = React.useState(false);
+  const [isSelected2, setSelection2] = React.useState(false);
+  const [isSelected3, setSelection3] = React.useState(false);
+
+  const checkAllHelper = value => {
+    if (value) {
+      setSelection1(true);
+      setSelection2(true);
+      setSelection3(true);
+    } else {
+      setSelection1(false);
+      setSelection2(false);
+      setSelection3(false);
+    }
+  };
+  // privilges
+
+  const [reportPath, setReportPath] = React.useState([]);
+
   // get projects
   const fetchProject = async () => {
     let response = await getProjects(company_id);
@@ -85,6 +103,18 @@ const ReportDisplay = () => {
       setQuantity(response.data);
     }
   };
+
+  // fetch privileges
+  const fetchReportPath = async project_id => {
+    const response = await getProjectReportPath(company_id, project_id);
+    // console.log(response);
+    setReportPath(response.data);
+  };
+
+  const onProjectOpen = React.useCallback(() => {
+    setOnSelect(false);
+    fetchProject();
+  }, []);
 
   // date
   const [date, setDate] = React.useState(new Date());
@@ -151,6 +181,7 @@ const ReportDisplay = () => {
             onSelectItem={value => {
               fetchReport(value.value);
               setOnSelect(true);
+              fetchReportPath(value.value);
             }}
             onOpen={onProjectOpen}
             autoScroll={false}
@@ -211,6 +242,7 @@ const ReportDisplay = () => {
           }}>
           {item.user_name}
         </Text>
+
         <View
           style={{
             flexDirection: 'column',
@@ -797,46 +829,55 @@ const ReportDisplay = () => {
             marginBottom: 10,
             borderColor: COLORS.gray2,
           }}></View>
-        {/* <Text
+        <Text
           style={{
-            fontSize: 18,
+            ...FONTS.h4,
             color: COLORS.black,
-            textAlign: 'center',
-            textDecorationLine: 'underline',
             marginBottom: 5,
           }}>
-          Excluded Quantity
-        </Text> */}
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox
-            // disabled={false}
-            value={checked}
-            onValueChange={newValue => {}}
-            onChange={() => console.log('object')}
-            style={{height: 25}}
-          />
+          Verify
+        </Text>
+        {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <CheckBox value={isSelected1} onValueChange={setSelection1} />
           <Text style={{...FONTS.h4, color: 'black'}}>Admin 1</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox
-            // disabled={false}
-            value={checked}
-            onValueChange={newValue => {}}
-            onChange={() => console.log('object')}
-            style={{height: 25}}
-          />
+          <CheckBox value={isSelected2} onValueChange={setSelection2} />
           <Text style={{...FONTS.h4, color: 'black'}}>Admin 2</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox
-            // disabled={false}
-            value={checked}
-            onValueChange={newValue => {}}
-            onChange={() => console.log('object')}
-            style={{height: 25}}
-          />
+          <CheckBox value={isSelected3} onValueChange={setSelection3} />
           <Text style={{...FONTS.h4, color: 'black'}}>Admin 3</Text>
-        </View>
+        </View> */}
+        {reportPath.map((ele, i) => {
+          // {
+          //   ele.admin_3 ==
+          // }
+          return (
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <CheckBox value={isSelected3} onValueChange={setSelection3} />
+                <Text style={{...FONTS.h4, color: 'black'}}>
+                  {ele.admin_1_name}
+                </Text>
+              </View>
+              <View
+                style={{flexDirection: 'row', alignItems: 'center', left: 10}}>
+                <CheckBox value={isSelected3} onValueChange={setSelection3} />
+                <Text style={{...FONTS.h4, color: 'black'}}>
+                  {ele.admin_2_name}
+                </Text>
+              </View>
+              <View
+                style={{flexDirection: 'row', alignItems: 'center', left: 20}}>
+                <CheckBox value={isSelected3} onValueChange={setSelection3} />
+                <Text style={{...FONTS.h4, color: 'black'}}>
+                  {ele.admin_3_name}
+                </Text>
+              </View>
+            </View>
+          );
+        })}
       </View>
     );
   }
