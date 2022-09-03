@@ -1,17 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-  Image,
-  ImageBackground,
-  Modal,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {View, Text, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
+import {COLORS, SIZES, FONTS} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
 import CalendarPicker from 'react-native-calendar-picker';
 import {
@@ -21,10 +10,17 @@ import {
 import {CustomToast} from '../../../Components';
 import {getUsers} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
-import {Agenda} from 'react-native-calendars';
 
 const Profile = () => {
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
   const company_id = companyData._id;
 
   const [selectedStartDate, setSelectedStartDate] = React.useState(null);
@@ -54,7 +50,7 @@ const Profile = () => {
   // ========================== Apis ==========================
 
   const userLeaves = async () => {
-    let response = await getUserLeaves();
+    let response = await getUserLeaves(company_id);
     if (response.status === 200) {
       setLeaves(response.data);
     }
