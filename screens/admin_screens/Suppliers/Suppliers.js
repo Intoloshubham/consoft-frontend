@@ -15,7 +15,6 @@ import {
   HeaderBar,
   FormInput,
   TextButton,
-  IconButton,
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
@@ -27,20 +26,32 @@ import {
   postSuppliers,
   deleteSuppliers,
 } from '../../../controller/SupplierController';
+import {useSelector} from 'react-redux';
 
 const Suppliers = () => {
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+  const company_id = companyData._id;
+
   const [suppliersModal, setSuppliersModal] = React.useState(false);
   const [suppliers, setSuppliers] = React.useState([]);
   // form states
   const [name, setName] = React.useState('');
   const [mobile, setMobile] = React.useState('');
-  const [email, setEmail] = React.useState('');
+  // const [email, setEmail] = React.useState('');
   const [location, setLocation] = React.useState('');
 
   // error states
   const [nameError, setNameError] = React.useState('');
   const [mobileError, setMobileError] = React.useState('');
-  const [emailError, setEmailError] = React.useState('');
+  // const [emailError, setEmailError] = React.useState('');
   const [locationError, setLocationError] = React.useState('');
 
   // CUSTOM TOAST OF CRUD OPERATIONS
@@ -57,17 +68,17 @@ const Suppliers = () => {
       nameError == '' &&
       mobile != '' &&
       mobileError == '' &&
-      email != '' &&
-      emailError == '' &&
+      // email != '' &&
+      // emailError == '' &&
       location != '' &&
       locationError == ''
     );
   }
 
   // ============================== Apis ===================================
-//===
+  //===
   const getSupplier = async () => {
-    let response = await getSuppliers();
+    let response = await getSuppliers(company_id);
     if (response.status === 200) {
       setSuppliers(response.data);
     } else {
@@ -79,8 +90,9 @@ const Suppliers = () => {
     const formData = {
       supplier_name: name,
       supplier_mobile: mobile,
-      supplier_email: email,
+      // supplier_email: email,
       supplier_location: location,
+      company_id: company_id,
     };
     let response = await postSuppliers(formData);
     if (response.status === 200) {
@@ -89,7 +101,7 @@ const Suppliers = () => {
       setSuppliersModal(false);
       setName('');
       setMobile('');
-      setEmail('');
+      // setEmail('');
       setLocation('');
     } else {
       alert(response.message);
@@ -235,7 +247,7 @@ const Suppliers = () => {
                       </View>
                     }
                   />
-                  <FormInput
+                  {/* <FormInput
                     label="Email"
                     keyboardType="email-address"
                     autoCompleteType="email"
@@ -265,9 +277,9 @@ const Suppliers = () => {
                         />
                       </View>
                     }
-                  />
+                  /> */}
                   <FormInput
-                    label="Location"
+                    label="Address"
                     keyboardType="default"
                     onChange={value => {
                       utils.validateText(value, setLocationError);
@@ -355,7 +367,7 @@ const Suppliers = () => {
                 {item.supplier_mobile}
               </Text>
             </View>
-            <View
+            {/* <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -371,7 +383,7 @@ const Suppliers = () => {
               <Text style={{...FONTS.h5, color: COLORS.darkGray, left: 5}}>
                 {item.supplier_email}
               </Text>
-            </View>
+            </View> */}
           </View>
           <View
             style={{

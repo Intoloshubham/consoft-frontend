@@ -36,10 +36,9 @@ const ProjectTeam = ({route}) => {
 
   var companyData;
   if (companyDetail._id) {
-    companyData = useSelector(state => state.company);
-  }
-  if (userData._id) {
-    companyData = useSelector(state => state.user);
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
   }
   const company_id = companyData._id;
 
