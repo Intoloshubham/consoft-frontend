@@ -473,7 +473,6 @@ const Suppliers = () => {
         onPress={() => {
           setName(''),
             setMobile(''),
-            setEmail(''),
             setLocation(''),
             setSuppliersModal(true);
         }}
