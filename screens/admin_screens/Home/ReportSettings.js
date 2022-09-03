@@ -284,7 +284,7 @@ const ReportSettings = ({route}) => {
 
   const fetchReportSettingPath = async () => {
     const response = await getProjectReportPath(company_id, project_id);
-    console.log(response.data);
+    // console.log(response.data);
     setReportPath(response.data);
   };
 
