@@ -313,11 +313,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   }
 
 
-
-
-
-
-
   async function GetManpowerData() {
     if (Main_drp_pro_value || manpowerPostStatus || loading || manpowerUpdateStatus) {
       const data = await get_manpower_report(Main_drp_pro_value, companydata._id, current_dat)
@@ -336,7 +331,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       GetManpowerData();
     }
     return () => { isMount = false }
-  }, [manpowerPostStatus, Main_drp_pro_value, conTeamTabCollapse, loading,manpowerUpdateStatus])
+  }, [manpowerPostStatus, Main_drp_pro_value, conTeamTabCollapse, loading, manpowerUpdateStatus])
 
 
   const filterCategoryByContId = async (cont_id) => {
@@ -812,6 +807,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
         <View
           style={{
             flex: 1,
+            // position:"relative",
             alignItems: 'center',
             backgroundColor: COLORS.transparentBlack7,
           }}>
@@ -819,10 +815,10 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
             style={{
               position: 'absolute',
               left: 0,
-              top: 140,
+              top: 85,
               right: 0,
               width: '100%',
-              height: '80%',
+              height: '90%',
               padding: SIZES.padding,
               borderTopRightRadius: SIZES.radius,
               borderTopLeftRadius: SIZES.radius,
@@ -868,10 +864,13 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                 }}
               />
             </View>
-            {ShowCategory()}
+            <View style={{ flex: 1 }}>
+              {ShowCategory()}
+            </View>
             <View
               style={{
-                alignItems: "center",
+                alignItems: "center",    
+                paddingBottom:12            
                 // height: "10%"                
               }}>
               {removeAddManpowerOnEdit ?
