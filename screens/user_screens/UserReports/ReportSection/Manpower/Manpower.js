@@ -34,8 +34,8 @@ import {
     ManpowerUserContractors,
 } from '../../../index.js';
 import { Get_Contractor_Data } from '../../ReportApi.js';
-import Ripple from 'react-native-material-ripple';
-import ReactBubblyEffectButton from "react-bubbly-effect-button";
+
+
 
 const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => {
 
@@ -64,13 +64,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
         <>
 
 
-            <Ripple
-                rippleColor={COLORS.lightblue_400}
-                rippleCentered={true}
-                rippleSequential={true}
-                rippleFades={true}
-                rippleDuration='700'
-                rippleSize='215'
+            <Pressable
                 onPress={() => setTabCollapse(!TabCollapse)}
                 style={{
                     flexDirection: "row",
@@ -103,7 +97,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                     </TouchableOpacity>
                 </View>
 
-            </Ripple>
+            </Pressable>
             {TabCollapse ? <View style={{ justifyContent: "space-evenly" }}>
                 <View>
                     {/* project team start */}
