@@ -11,6 +11,7 @@ import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
 import { Divider } from '@ui-kitten/components';
+import {CustomToast, DeleteConfirmationToast} from '../../../Components'
 import styles from '../TaskModal/css/InProgressModalStyle.js';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useSelector, useDispatch } from 'react-redux';
@@ -30,7 +31,12 @@ const UserAssignWorks = ({ loading }) => {
   const [userDataId, setUserDataId] = useState('');
   const [getTaskInProgress, setGetTaskInProgress] = useState('');
 
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
 
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [commentCollapse, setCommentCollapse] = useState(false);
 
   const userData = useSelector(state => state.user);
@@ -49,7 +55,7 @@ const UserAssignWorks = ({ loading }) => {
     }
   };
 
-  
+
 
   useMemo(() => {
     fetchAssignWorks();
@@ -89,12 +95,13 @@ const UserAssignWorks = ({ loading }) => {
 
     if (data.status === 200) {
       fetchAssignWorks();
+      setSubmitToast(true);
     }
 
   }
 
 
-  const __handle_increase_counter =  (item, index1) => {
+  const __handle_increase_counter = (item, index1) => {
 
     const _inputs = [...getTaskInProgress];
 
@@ -125,7 +132,7 @@ const UserAssignWorks = ({ loading }) => {
   // };
 
 
-  const __handle_decrease_counter =async (item, index1) => {
+  const __handle_decrease_counter = async (item, index1) => {
 
     const _inputs = [...getTaskInProgress];
     const data = await getAssignWorks(userData._id);
@@ -136,11 +143,11 @@ const UserAssignWorks = ({ loading }) => {
           if (_inputs[index1].work_percent > 0) {
             if (_inputs[index1].work_percent <= sub_ele.work_percent) {
               return false;
-            }            
+            }
             _inputs[index1].work_percent = _inputs[index1].work_percent - 5;
             _inputs[index1].key = index1;
             setGetTaskInProgress(_inputs);
-      
+
           }
 
         }
@@ -267,14 +274,18 @@ const UserAssignWorks = ({ loading }) => {
           </View> */}
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               justifyContent: "space-between"
             }}>
             <Text style={{ ...FONTS.h5, color: COLORS.white }}>
-              Assign Date: {item.exp_completion_date}
+              Targate Date: {item.exp_completion_date}
               {/* Target Date */}
             </Text>
-            <Text style={{ ...FONTS.h5, color: COLORS.white, left: -15 }}>
+            <Text style={{ ...FONTS.h5, color: COLORS.white }}>
+              Assign Date: {item.assign_date}
+              {/* Target Date */}
+            </Text>
+            <Text style={{ ...FONTS.h5, color: COLORS.white }}>
               Time: {item.exp_completion_time}
             </Text>
             <View>
@@ -460,6 +471,36 @@ const UserAssignWorks = ({ loading }) => {
           maxHeight={300}
         />
       </ScrollView>
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+      {/* <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => deleteContReportButton()}
+      /> */}
     </View>
   );
 };
