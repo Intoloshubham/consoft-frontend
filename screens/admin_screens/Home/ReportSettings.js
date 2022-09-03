@@ -22,7 +22,7 @@ const ReportSettings = ({route}) => {
   }
 
   const company_id = companyData._id;
-  const {project_id} = route.params; //
+  const {project_id} = route.params;
 
   //GETTING USER ROLES FROM API
   const [openUserRole, setOpenUserRole] = React.useState(false);

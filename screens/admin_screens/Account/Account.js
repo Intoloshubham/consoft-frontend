@@ -15,9 +15,18 @@ import {useSelector, useDispatch} from 'react-redux';
 import {companyLogout} from '../../../services/companyAuthApi';
 
 const Account = () => {
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const companyData = useSelector(state => state.company);
   const [collapsed, setCollapsed] = React.useState(true);
 
   const logout = () => {

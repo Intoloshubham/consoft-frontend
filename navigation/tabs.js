@@ -8,9 +8,8 @@ import {
   Account,
   Calender,
   ReportsDisplay,
-  Tasks,
+  Requirement,
 } from '../screens/admin_screens';
-import {useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,14 +37,12 @@ const TabBarCustomButton = ({children, onPress}) => {
           color: COLORS.black,
           ...FONTS.body5,
         }}>
-        Show Report
+        Report
       </Text>
     </TouchableOpacity>
   );
 };
 const Tabs = () => {
-  const companyData = useSelector(state => state.company);
-
   return (
     <Tab.Navigator
       screenOptions={{
@@ -105,8 +102,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Tasks"
-        component={Tasks}
+        name="Requirement"
+        component={Requirement}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -123,7 +120,7 @@ const Tabs = () => {
                   color: COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Tasks
+                Requirement
               </Text>
             </View>
           ),

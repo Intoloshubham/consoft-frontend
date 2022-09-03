@@ -1,11 +1,15 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const Tasks = () => {
-  return <></>;
+const Requirement = () => {
+  return (
+    <View>
+      <Text>Requirement</Text>
+    </View>
+  );
 };
 
-export default Tasks;
+export default Requirement;
 
 // import React, {useRef} from 'react';
 // import {
