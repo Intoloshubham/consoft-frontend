@@ -214,7 +214,7 @@ const UserReports = ({ route }) => {
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           {value ? <View >
-            <View style={{ marginVertical: 5 }}>
+            <View style={{ marginVertical: 5}}>
               <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }}>

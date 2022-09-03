@@ -8,7 +8,7 @@ import {
     FlatList,
     StyleSheet,
     Image,
-    ScrollView, 
+    ScrollView,
     Modal,
     Pressable,
     TextInput,
@@ -35,7 +35,9 @@ import {
 } from '../../../index.js';
 import { Get_Contractor_Data } from '../../ReportApi.js';
 
-const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value,loading}) => {
+
+
+const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => {
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -60,6 +62,8 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value,loading}) => {
 
     return (
         <>
+
+
             <Pressable
                 onPress={() => setTabCollapse(!TabCollapse)}
                 style={{
@@ -67,7 +71,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value,loading}) => {
                     paddingHorizontal: SIZES.base,
                     paddingVertical: 3,
                     // marginBottom: -SIZES.base,
-                    width: SIZES.width * 0.35,
+                    width: SIZES.width * 0.53,
                     alignItems: "center",
                     justifyContent: "space-between",
                     top: SIZES.base * 2,
@@ -77,17 +81,26 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value,loading}) => {
                     elevation: 1
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
+                {/* <Text>
+                    <ReactBubblyEffectButton
+                        text="Click here"
+                        style={[FONTS.h3, { color: COLORS.darkGray }]}
+                        color='#fff' bgColor={COLORS.lightblue_300}
+                        onClick={() => setTabCollapse(!TabCollapse)} />
+                </Text> */}
                     <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.darkGray }]}>Manpower</Text>
                 </View>
+
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <TouchableOpacity onPress={() => setTabCollapse(!TabCollapse)}>
                         <AntDesign name='caretdown' size={12} color={COLORS.gray} />
                     </TouchableOpacity>
                 </View>
+
             </Pressable>
             {TabCollapse ? <View style={{ justifyContent: "space-evenly" }}>
                 <View>
-                    {/* project team start */} 
+                    {/* project team start */}
                     <ManPowerProjectTeam projectTeamList={projectTeamList} Main_drp_pro_value={Main_drp_pro_value} loading={loading} />
                     {/* Project Team close */}
                 </View>

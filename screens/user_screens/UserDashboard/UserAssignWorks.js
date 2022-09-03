@@ -11,6 +11,7 @@ import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
 import { Divider } from '@ui-kitten/components';
+import {CustomToast, DeleteConfirmationToast} from '../../../Components'
 import styles from '../TaskModal/css/InProgressModalStyle.js';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,84 +19,175 @@ import Config from '../../../config';
 import {
   getAssignWorks,
   submitWork,
+  submitComment
 } from '../../../controller/UserAssignWorkController';
 
-const UserAssignWorks = () => {
-  const dispatch = useDispatch();
+const UserAssignWorks = ({ loading }) => {
+  // const dispatch = useDispatch();
   const [assignWorksData, setAssignWorksData] = React.useState([]);
-  const [assignWorks, setAssignWorks] = React.useState([]);
+  const [assignWork, setAssignWork] = React.useState('');
+
   const [textMsg, setTextMsg] = React.useState('');
-  const [userDataId, setUserDataId] = useState('')
-  const [getTaskInProgress, setGetTaskInProgress] = useState(assignWorks);
+  const [userDataId, setUserDataId] = useState('');
+  const [getTaskInProgress, setGetTaskInProgress] = useState('');
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+  const [commentCollapse, setCommentCollapse] = useState(false);
 
   const userData = useSelector(state => state.user);
   // console.log(userData._id)
-  const fetchAssignWorks = useCallback(async () => {
-    setUserDataId(userData._id)
+  const fetchAssignWorks = async () => {
+    setUserDataId(userData._id);
     const data = await getAssignWorks(userData._id);
-    // console.log("assign works data")
-    // console.log(data)
+
     if (data) {
-      data.map(ele => {
-        setAssignWorks(ele.assign_works);
+      data.map(async (ele, index) => {
+
+        setAssignWork(ele.assign_works);
         setGetTaskInProgress(ele.assign_works);
+
       });
     }
-  }, []);
+  };
 
-  useEffect(() => {
+
+
+  useMemo(() => {
     fetchAssignWorks();
-  }, []);
+  }, [loading, ' ']);
 
   // submit comment
-  const submitComment = async work_id => {
-    const submit_data = {
-      submit_work_text: textMsg,
-    };
+  const submitComments = async work_id => {
 
-    const data = await submitWork(submit_data, work_id);
+    const submit_data = {
+      comment: textMsg
+    };
+    // console.log("🚀 ~ file: UserAssignWorks.js ~ line 62 ~ submitComments ~ submit_data", submit_data)
+
+    const data = await submitComment(submit_data, work_id);
+
     if (data.status === 200) {
       setTextMsg('');
-      fetchAssignWorks();
+      // fetchAssignWorks();
     }
+
   };
+
+  const submitWorkPercent = async (item, index) => {
+
+
+    const submit_data = {
+      work_percent: item.work_percent
+    }
+
+    // console.log("🚀 ~ file: UserAssignWorks.js ~ line 79 ~ submitWorkPercent ~ item.work_percent", item.work_percent)
+    // const _inputs = [...getTaskInProgress];
+    // _inputs[index].work_percent
+    // setIsExpandId(_inputs[index].work_percent);
+
+
+    const data = await submitWork(submit_data, item._id);
+
+    if (data.status === 200) {
+      fetchAssignWorks();
+      setSubmitToast(true);
+    }
+
+  }
+
 
   const __handle_increase_counter = (item, index1) => {
+
     const _inputs = [...getTaskInProgress];
+
     if (_inputs[index1].work_percent < 100) {
+
       _inputs[index1].work_percent = _inputs[index1].work_percent + 5;
       _inputs[index1].key = index1;
+
       setGetTaskInProgress(_inputs);
     }
+
+
   };
 
-  const __handle_decrease_counter = (item, index1) => {
+  // const __handle_counter = (text, index1) => {
+
+  //   const _inputs = [...getTaskInProgress];
+  //   // console.log("🚀 ~ file: UserAssignWorks.js ~ line 104 ~ UserAssignWorks ~ _inputs", assignWork)
+
+
+  //   // if (_inputs[index1].work_percent < 100) {
+  //   // _inputs[index1].work_percent = item.work_percent + 5;
+  //   _inputs[index1].work_percent = text;
+  //   _inputs[index1].key = index1;
+  //   setGetTaskInProgress(_inputs);
+  //   // }
+
+  // };
+
+
+  const __handle_decrease_counter = async (item, index1) => {
+
     const _inputs = [...getTaskInProgress];
-    if (_inputs[index1].work_percent > 0) {
-      _inputs[index1].work_percent = _inputs[index1].work_percent - 5;
-      _inputs[index1].key = index1;
-      setGetTaskInProgress(_inputs);
-    }
+    const data = await getAssignWorks(userData._id);
+
+    data.map((ele) => {
+      ele.assign_works.map((sub_ele) => {
+        if (_inputs[index1].work_code === sub_ele.work_code) {
+          if (_inputs[index1].work_percent > 0) {
+            if (_inputs[index1].work_percent <= sub_ele.work_percent) {
+              return false;
+            }
+            _inputs[index1].work_percent = _inputs[index1].work_percent - 5;
+            _inputs[index1].key = index1;
+            setGetTaskInProgress(_inputs);
+
+          }
+
+        }
+      })
+    })
+
+    // setDecreaseCounter(_inputs[index1].work_percent);  
+
+    // if (_inputs[index1].work_percent > 0) {
+    //   _inputs[index1].work_percent = _inputs[index1].work_percent - 5;
+    //   // setDecreaseCounter(item.work_percent);
+    //   _inputs[index1].key = index1;
+    //   setGetTaskInProgress(_inputs);
+    // }
+
   };
+
+
 
 
   const WorkDetails = ({ item, message, color, index }) => {
+
     return (
       <View
         style={{
           marginTop: index == 0 ? null : SIZES.base,
           paddingHorizontal: SIZES.base,
+          elevation: 1,
           paddingVertical: 5,
           backgroundColor: COLORS.darkGray,
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
         }}>
-            <View style={{
-              backgroundColor: COLORS.white,
-              width: `${item.work_percent}%`,
-              borderBottomWidth: 10, borderColor: COLORS.green
-            }}>
-            </View>
+        <View style={{
+          backgroundColor: COLORS.white,
+          elevation: 15,
+          width: `${item.work_percent}%`,
+          borderBottomWidth: 10, borderColor: COLORS.green
+        }}>
+        </View>
         <View
           style={{
             flexDirection: 'row',
@@ -110,6 +202,7 @@ const UserAssignWorks = () => {
                 paddingHorizontal: 5,
                 backgroundColor: COLORS.white,
                 color: COLORS.black,
+                elevation: 10,
                 borderRadius: 1,
               }}>
               {item.work_code}
@@ -117,7 +210,7 @@ const UserAssignWorks = () => {
             <Text
               style={{
                 ...FONTS.h4,
-                color: COLORS.white,
+                color: COLORS.lightGray2,
                 left: 10,
               }}>
               {item.work}
@@ -161,7 +254,6 @@ const UserAssignWorks = () => {
   };
 
   const renderBody = (item, index) => {
-    // console.log("🚀 ~ file: UserAssignWorks.js ~ line 134 ~ renderBody ~ item", item.work_percent)
 
     return (
       <View
@@ -169,6 +261,7 @@ const UserAssignWorks = () => {
           backgroundColor: COLORS.darkGray,
           padding: SIZES.radius,
           borderBottomLeftRadius: 5,
+          elevation: 15,
           borderBottomRightRadius: 5,
         }}
         key={item.key}>
@@ -181,97 +274,153 @@ const UserAssignWorks = () => {
           </View> */}
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
+              justifyContent: "space-between"
             }}>
             <Text style={{ ...FONTS.h5, color: COLORS.white }}>
-              Date: {item.exp_completion_date}
+              Targate Date: {item.exp_completion_date}
+              {/* Target Date */}
             </Text>
-            <Text style={{ ...FONTS.h5, color: COLORS.white, left: 10 }}>
+            <Text style={{ ...FONTS.h5, color: COLORS.white }}>
+              Assign Date: {item.assign_date}
+              {/* Target Date */}
+            </Text>
+            <Text style={{ ...FONTS.h5, color: COLORS.white }}>
               Time: {item.exp_completion_time}
             </Text>
+            <View>
+              {item.comment_status == false && item.work_percent == 0 ?
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: COLORS.lightblue_600,
+                    paddingVertical: SIZES.base * 0.3,
+                    alignContent: "center",
+                    borderColor: COLORS.lightblue_500,
+                    elevation: 15,
+                    borderWidth: 1,
+                    borderRadius: 2,
+                    paddingHorizontal: SIZES.radius * 0.5
+                  }}
+                  onPress={() => {
+                    setCommentCollapse(!commentCollapse)
+                  }}
+                >
+                  <Text style={{ color: COLORS.white }}>Comment</Text>
+                </TouchableOpacity> : null}
+            </View>
           </View>
           <Divider
             style={{
-              backgroundColor: COLORS.lightGray1,
+              backgroundColor: COLORS.gray,
               marginVertical: SIZES.base,
             }}
           />
           <View style={{ flexdirection: 'row' }}>
-            <View style={{ backgroundColor: COLORS.white, borderRadius: 5 }}>
-              <TextInput
-                style={{
-                  paddingHorizontal: SIZES.radius,
-                  backgroundColor: COLORS.white,
-                }}
-                multiline={true}
-                placeholder="Comment section..."
-                placeholderTextColor={COLORS.gray}
-                onChangeText={text => setTextMsg(text)}
-                value={textMsg}
-              />
-            </View>
-            <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
-              {/* <TouchableOpacity style={{}}> */}
-              <View style={{ flexDirection: 'row' }}>
+            {item.comment_status === false && commentCollapse && item.work_percent == 0 ?
+              <View style={{ backgroundColor: COLORS.white, borderRadius: 5 }}>
+                <TextInput
+                  style={{
+                    paddingHorizontal: SIZES.radius,
+                    backgroundColor: COLORS.white,
+                  }}
+                  multiline={true}
+                  placeholder="Comment section..."
+                  placeholderTextColor={COLORS.gray}
+                  onChangeText={text => setTextMsg(text)}
+                  value={textMsg}
+                />
                 <TouchableOpacity
-                  onPress={() => __handle_decrease_counter(item, index)}
-                >
-                  <Entypo
-                    name="minus"
-                    size={25}
-                    color={COLORS.white}
-                  />
+                  style={{
+                    alignItems: 'flex-end',
+                    // marginTop: SIZES.base,
+                    // backgroundColor: "red",
+                    marginLeft: SIZES.body1 * 7.8,
+                    padding: 2
+                  }}
+                  onPress={() => submitComments(item._id)}>
+                  {item.work_status == false ? (
+                    <Text
+                      style={{
+                        color: COLORS.lightGray2,
+                        backgroundColor: COLORS.lightblue_900,
+                        paddingHorizontal: 10,
+                        paddingVertical: 3,
+                        elevation: 8,
+                        borderRadius: 3,
+                      }}>
+                      Submit
+                    </Text>
+                  ) : null}
                 </TouchableOpacity>
-                <View>
-                  <TextInput
-                    style={styles.inputfromone}
-                    editable={false}
-                    // value={item.count[index1]}
-                    value={String(`${item.work_percent}%`)}
-                    onChangeText={(text) => __handle_increase_counter(text, index)}
-                    placeholderTextColor={COLORS.lightGray1}
-                    keyboardType="numeric"
-                    placeholder={'counter'}
-                  />
+              </View> : null}
+            {item.work_status == false ?
+              <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    style={{ elevation: 20 }}
+                    onPress={() => {
+                      __handle_decrease_counter(item, index)
+                    }}
+                  >
+                    <Entypo
+                      name="minus"
+                      size={25}
+                      color={COLORS.white}
+                    />
+                  </TouchableOpacity>
+                  <View>
+                    <TextInput
+                      style={[styles.inputfromone, { elevation: 5 }]}
+                      editable={false}
+                      value={String(`${item.work_percent} %`)}
+                      onChangeText={(text) => __handle_counter(text, index)}
+                      placeholderTextColor={COLORS.lightGray1}
+                      keyboardType="numeric"
+                      placeholder={'counter'}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    style={{ elevation: 20 }}
+                    onPress={() => __handle_increase_counter(item, index)}
+                  >
+                    <Entypo
+                      name="plus"
+                      size={25}
+                      color={COLORS.white}
+                    />
+                  </TouchableOpacity>
                 </View>
                 <TouchableOpacity
-
-                  onPress={() => __handle_increase_counter(item, index)}
-                >
-                  <Entypo
-                    name="plus"
-                    size={25}
-                    color={COLORS.white}
-                  />
-                </TouchableOpacity>
-              </View>
-              {/* </TouchableOpacity> */}
-              <TouchableOpacity
-                style={{
-                  alignItems: 'flex-end',
-                  marginTop: SIZES.base,
-                  backgroundColor: "red"
-                }}
-                onPress={() => submitComment(item._id)}>
-                {item.work_status == false || item.revert_status == true ? (
+                  style={{
+                    alignItems: 'flex-end',
+                    marginTop: SIZES.base,
+                    backgroundColor: COLORS.red
+                  }}
+                  onPress={(text) => {
+                    submitWorkPercent(item, index)
+                  }}>
                   <Text
                     style={{
                       color: COLORS.white,
                       backgroundColor: COLORS.lightblue_500,
+                      elevation: 15,
+                      // borderWidth: 1,
+                      backgroundColor: COLORS.lightblue_600,
                       paddingHorizontal: 10,
                       paddingVertical: 3,
                       borderRadius: 3,
                     }}>
-                    Send
+                    Submit
                   </Text>
-                ) : null}
-              </TouchableOpacity>
-            </View>
+                </TouchableOpacity>
+              </View>
+              : null}
           </View>
         </View>
       </View>
     );
   };
+
   return (
     <View
       style={{
@@ -310,6 +459,11 @@ const UserAssignWorks = () => {
           header={renderHeader}
           body={renderBody}
           isExpanded={false}
+          // onToggle={(isExpanded) => {
+          //   setIsExpand(!isExpand);
+          //   // setIsExpandId(isExpanded);
+          //   // console.log("🚀 ~ file: UserAssignWorks.js ~ line 392 ~ UserAssignWorks ~ isExpanded", isExpanded)
+          // }}
           keyExtractor={item => `${item._id}`}
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
@@ -317,6 +471,36 @@ const UserAssignWorks = () => {
           maxHeight={300}
         />
       </ScrollView>
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
+      />
+      <CustomToast
+        isVisible={deleteToast}
+        onClose={() => setDeleteToast(false)}
+        color={COLORS.rose_600}
+        title="Delete"
+        message="Deleted Successfully..."
+      />
+      {/* <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => deleteContReportButton()}
+      /> */}
     </View>
   );
 };
