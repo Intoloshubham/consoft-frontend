@@ -65,6 +65,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
 
 
             <Pressable
+            
                 onPress={() => setTabCollapse(!TabCollapse)}
                 style={{
                     flexDirection: "row",

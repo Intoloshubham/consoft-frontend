@@ -1374,7 +1374,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                     </View>
                     <View
                       style={{
-                        marginLeft: 8,
+                        marginLeft: 10,
                         justifyContent: 'center',
                         width: 120,
                         // borderColor: COLORS.lightblue_200, 
@@ -1382,11 +1382,11 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                         // borderColor: COLORS.lightblue_200, 
                       }}
                     >
-                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Quality Test</Text>
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Quality</Text>
                     </View>
                     <View
                       style={{
-                        marginLeft: 8,
+                        marginLeft: 0,
                         paddingLeft: 15,
                         // borderLeftWidth: 2, 
                         //  borderRightWidth: 2,
@@ -1531,7 +1531,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {list.quantityWorkItems.num_total}
+                                  {list.quantityWorkItems.num_total.toFixed(2).replace(/\.0+$/, '')}
                                 </Text>
                               </View>
                               <View
@@ -1606,7 +1606,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                   // alignSelf: "center",
                                   width: 60,
                                   position: "absolute",
-                                  left: 905,
+                                  left: 885,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1702,7 +1702,8 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                                       }}
                                     >
                                       <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                        {res.sub_total}
+                                        {res.sub_total.toFixed(2).replace(/\.0+$/, '')                                          
+                                        }
                                       </Text>
                                     </View>
 

@@ -152,7 +152,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       })
 
   }
-  // console.log("first...................")
+  console.log("company...................", companydata.company_id)
+  console.log("project...................", Main_drp_pro_value)
+  console.log("contra...................", contractorId)
 
 
   const deleteContReportButton = async (id) => {
@@ -225,9 +227,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       data.then(res => res.json())
         .then(result => {
           // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 225 ~ editManpowerReportBtn ~ result", result.data._id)
-          setUpdateManpowerId(result.data._id);
           setEditManpowerReport(result);
           if (result.data != undefined && filterNewCategory) {
+            setUpdateManpowerId(result.data._id);
             if (result.data.contractor_id === id) {
               setFilterNewCategory([
                 ...result.data.manpowerCategories.map((ele) => {
@@ -240,7 +242,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
             }
           }
           else {
-            setFilterNewCategory([]);
+            setFilterNewCategory([])
             setAddConMemberReportModal(true);
           }
           // alert(id)
@@ -336,6 +338,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   const filterCategoryByContId = async (cont_id) => {
 
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 396 ~ cont_id", cont_id)
 
     if (cont_id) {
       const get_data = await filter_new_category_by_cont_Id(companydata.company_id, Main_drp_pro_value, cont_id);
@@ -345,7 +348,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       }))
       setFilterNewCategory(temp)
     }
-    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 396 ~ manpowerReportData", manpowerReportData)
     // setRemoveAddManpowerOnEdit(true);
     setAddConMemberReportModal(true);
   }
@@ -657,23 +659,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
         >
           {
-
             filterNewCategory.map((memberInput, index) => {
-
-              {/* let temp = memberInput.manpower_category;
-              let manpower_memb = memberInput.manpower_member;
-             
-
-              removeAddManpowerOnEdit && editManpowerReport.data != undefined ? editManpowerReport.data.manpowerCategories.map((ele) => {
-                if (memberInput._id === ele.manpower_category_id) {
-                  temp = ele.manpower_category_name;
-                  manpower_memb = ele.manpower_member.toString();                  
-                }
-
-              }
-              ) : null */}
-
-
               return (
                 <View
                   style={{
@@ -686,14 +672,14 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                       flex: 1,
                       flexDirection: "row",
                       justifyContent: "space-between",
-                      marginHorizontal: SIZES.base * 0.5,
+                      marginHorizontal: SIZES.base*2.5 ,
                       paddingBottom: SIZES.base
                     }}>
 
                     <FormInput
                       placeholder="Name"
                       containerStyle={{
-                        width: 200,
+                        width: 190,
 
                       }}
                       onChange={text => {
@@ -730,7 +716,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                     <FormInput
                       placeholder="Count"
                       containerStyle={{
-                        width: 102,
+                        width: 85,
 
                       }}
                       inputStyle={{ height: 40, width: 30, marginLeft: -12 }}
@@ -744,7 +730,13 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                       value={memberInput.manpower_member}
                       errorMsg={memberCountErrorMsg}
                       appendComponent={
-                        <View style={{ justifyContent: 'center' }}>
+                        <View style={{ 
+                          justifyContent: 'center' ,
+                          // backgroundColor:"red",
+                          marginLeft:-SIZES.padding,
+                          left:22
+                          
+                          }}>
                           <Image
                             source={
                               memberCount == '' || (memberCount != '' && memberCountErrorMsg == '')
@@ -756,7 +748,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                               width: 20,
                               tintColor:
                                 memberCount == ''
-                                  ? COLORS.gray
+                                  ? COLORS.gray                                  
                                   : memberCount != '' && memberCountErrorMsg == ''
                                     ? COLORS.green
                                     : COLORS.red,
@@ -766,13 +758,12 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                       }
                     />
 
-
-
                     <View style={{
-                      paddingTop: 35
+                      alignSelf:"flex-end",                      
+                      paddingBottom:SIZES.base*0.5   
                     }}>
                       <TouchableOpacity
-                        style={{ alignSelf: "center" }}
+                        style={{ alignSelf: "center"}}
                         onPress={() => {
                           deleteMemberHandler(index)
                         }
@@ -790,6 +781,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                   </View>
                 </View>)
             })
+
           }
         </ScrollView>
       </KeyboardAvoidingView>
@@ -806,8 +798,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
         visible={addConMemberModal}>
         <View
           style={{
-            flex: 1,
-            // position:"relative",
+            flex: 1,            
             alignItems: 'center',
             backgroundColor: COLORS.transparentBlack7,
           }}>
@@ -869,8 +860,8 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
             </View>
             <View
               style={{
-                alignItems: "center",    
-                paddingBottom:12            
+                alignItems: "center",
+                paddingBottom: 12
                 // height: "10%"                
               }}>
               {removeAddManpowerOnEdit ?
