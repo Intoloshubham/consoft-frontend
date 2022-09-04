@@ -31,7 +31,7 @@ import {
   VerifyAndRevertWork,
   UserRole,ReportSettings
 } from './screens/admin_screens';
-import {Profile, Demo, Demo1, MyProfile} from './screens/user_screens';
+import {Profile, UserEndVoucher, Demo1, MyProfile} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
@@ -96,7 +96,7 @@ const App = () => {
           />
           <Stack.Screen name="UserDashboard" component={UserTabs} />
           <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="Demo" component={Demo} />
+          <Stack.Screen name="UserEndVoucher" component={UserEndVoucher} />
           <Stack.Screen name="Demo1" component={Demo1} />
           <Stack.Screen name="MyProfile" component={MyProfile} />
         </Stack.Navigator>

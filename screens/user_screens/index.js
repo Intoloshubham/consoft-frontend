@@ -2,7 +2,7 @@ import UserDashboard from './UserDashboard/UserDashboard';
 //saurabh
 import UserAssignWorks from './UserDashboard/UserAssignWorks';
 import Profile from './Profile/Profile';
-import Demo from './Demo/Demo';
+import UserEndVoucher from './UserEndVoucher/UserEndVoucher';
 import Demo1 from './Demo1/Demo1';
 import MyProfile from './MyProfile/MyProfile';
 import UserReports from './UserReports/UserReports.js';
@@ -19,7 +19,7 @@ import ManpowerUserContractors from './UserReports/ReportSection/Manpower/UserCo
 export {
   UserDashboard,
   Profile,
-  Demo,
+  UserEndVoucher,
   Demo1,
   MyProfile,
   UserReports,
