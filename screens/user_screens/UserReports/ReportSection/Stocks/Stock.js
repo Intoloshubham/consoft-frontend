@@ -77,7 +77,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
     const getStockDataItems = async () => {
         try {
             const data = await get_stock_item_name();
-            console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
+            // console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
             setStockItemData(data);
         } catch (error) {
 

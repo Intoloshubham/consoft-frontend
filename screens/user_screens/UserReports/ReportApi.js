@@ -107,17 +107,16 @@ const insert_stock_data = (quality_post_data) => {
     }
 
 }
-const insert_TAndP_report = (data) => {
-
+const insert_TAndP_report = (resp_data,CONST_FIELD) => {
 
     try {
-        const res = fetch(`${process.env.API_URL}tools-machinery/`, {
+        const resp = fetch(`${process.env.API_URL}report/${CONST_FIELD.TANDP}/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(resp_data)
         })
-        // const data = await res.json();
-        return res;
+        // const data = awaresp.json();
+        return resp;
     } catch (error) {
         console.log(error);
     }
