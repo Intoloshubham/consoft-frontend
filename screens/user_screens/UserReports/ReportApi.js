@@ -196,6 +196,15 @@ const get_manpower_report = async (project_id, user_id, curr_date) => {
         console.log(error)
     }
 }
+const get_equipment_report = async (project_id, user_id, curr_date) => {
+    try {
+        const res = await fetch(`${process.env.API_URL}tools-machinery-report/${project_id}/${user_id}/${curr_date}/`)
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
@@ -210,6 +219,14 @@ const edit_report_data = (Id) => {
 const edit_manpower_report_data = (cont_id,curr_date) => {
     try {
         const res = fetch(`${process.env.API_URL}edit-manpower-report/${cont_id}/${curr_date}`)
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
+const edit_TAndP_report_data = (id) => {
+    try {
+        const res = fetch(`${process.env.API_URL}edit-tools-machinery-report/${id}`)
         return res;
     } catch (error) {
         console.log(error);
@@ -353,7 +370,7 @@ export {
     get_stock_item_name, insert_stock_data, get_stock_data, insert_new_category, get_new_category, insert_new_sub_category,
     insert_manpower_report, get_manpower_report, delete_manpower_data, filter_new_category_by_cont_Id, get_works_in_progress,
     Get_user_name_by_role,Insert_project_team_data,edit_manpower_report_data,update_manpower_report,get_equipment_item_name,
-    save_new_equipment_item, insert_TAndP_report
+    save_new_equipment_item, insert_TAndP_report,get_equipment_report,edit_TAndP_report_data
 }
 
 

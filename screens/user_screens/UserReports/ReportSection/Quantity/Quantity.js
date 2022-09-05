@@ -151,29 +151,28 @@ const Quantity = ({ project_id, Main_drp_pro_value,loading }) => {
       user_id: userData._id,
       inputs
     }
-    console.log("🚀 ~ file: Quantity.js ~ line 154 ~ insertQtyPostData ~ report_post_data", report_post_data)
-    // if (report_post_data) {
-    //   const data = Insert_report_data(report_post_data, CONST_FIELD)
-    //   data.then((res) => res.json())
-    //     .then((resp) => {
-    //       // console.log("resp report data")
-    //       console.log(resp)
+    
+    if (report_post_data) {
+      const data = Insert_report_data(report_post_data, CONST_FIELD)
+      data.then((res) => res.json())
+        .then((resp) => {
+          // console.log("resp report data")
+          
          
-    //       setPostQtyData(resp)
-    //       getReportData();
-    //       if (resp.status == '200') {
-    //         setSubmitToast(true)
-    //         // getRreportData()
-    //         setTimeout(() => {
-    //           setReportmodal(false);
-    //         }, 1500);
-    //         inputs.splice(0, inputs.length);
-
-    //       }
-    //     })
-    // } else {
-    //   alert("Not inserted")
-    // }
+          setPostQtyData(resp)
+          getReportData();
+          if (resp.status == '200') {
+            setSubmitToast(true)
+            // getRreportData()
+            setTimeout(() => {
+              setReportmodal(false);
+            }, 1500);
+            inputs.splice(0, inputs.length);
+          }
+        })
+    } else {
+      alert("Not inserted")
+    }
   }
 
   const updateQuantityData = async () => {
@@ -1265,7 +1264,6 @@ const Quantity = ({ project_id, Main_drp_pro_value,loading }) => {
               style={{
                 borderWidth: 1,
                 borderColor: "skyblue",
-
                 width: SIZES.width * 0.92,
                 alignSelf: "flex-start",
                 position: "relative",

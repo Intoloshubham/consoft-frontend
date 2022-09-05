@@ -13,10 +13,16 @@ import { Title, Divider } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-element-dropdown';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 import { FormInput, TextButton, CustomToast } from '../../../../../Components'
-import { get_equipment_item_name, save_new_equipment_item, insert_TAndP_report } from '../../ReportApi'
+import {
+    get_equipment_item_name, save_new_equipment_item,
+    get_equipment_report, insert_TAndP_report,edit_TAndP_report_data
+} from '../../ReportApi'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
@@ -32,7 +38,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const [addNewEquipment, setAddNewEquipment] = useState(false)
     const userCompanyData = useSelector(state => state.user);
     const [calenderKey, setCalenderKey] = useState('')
-
+    const current_dat = moment().format("YYYY%2FMM%2FDD")
 
     const CONST_FIELD = {
         MANPOWER: 'Manpower',
@@ -46,6 +52,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const [updateToast, setUpdateToast] = React.useState(false);
     const [deleteToast, setDeleteToast] = React.useState(false);
 
+    const [getEquipmentReport, setGetEquipmentReport] = useState('')
     const [equipItemName, setEquipItemName] = useState('')
     const [getequipItemName, setGetEquipItemName] = useState('');
     const [equipmentField, setEquipmentField] = useState([
@@ -56,14 +63,17 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
-        const formatedDate = `${currentDate.getFullYear()}/${currentDate.getMonth() + 1
-            }/${currentDate.getDate()}`;
+
+        const formatedDate = `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1
+            }/${selectedDate.getDate()}`;
+
         const _inputs = [...equipmentField];
         _inputs[calenderKey1].onDateChange = formatedDate;
         _inputs[calenderKey1].key = calenderKey1;
         setEquipmentField(_inputs);
         setDate(selectedDate);
     };
+
 
     const showMode = currentMode => {
         DateTimePickerAndroid.open({
@@ -92,8 +102,18 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         }
     }
 
+    const getEquipReport = async () => {
+        try {
+            const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
+            console.log("🚀 ~ file: TAndP.js ~ line 103 ~ getEquipReport ~ data", data)
+            setGetEquipmentReport(data);
+        } catch (error) {
+            console.log(error)
+        }
+    }
     useMemo(() => {
         getEquipmentItems();
+        getEquipReport();
     }, [userCompanyData.company_id, loading])
 
 
@@ -128,6 +148,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                 user_id: userCompanyData._id,
                 equipmentField: equipmentField
             }
+            // console.log("🚀 ~ file: TAndP.js ~ line 151 ~ insertTAndPReport ~ equipmentField", equipmentField)
 
 
             const resp = await insert_TAndP_report(data, CONST_FIELD);
@@ -146,6 +167,11 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         }
     }
 
+    const editTAndPReportBtn = async (id) => {
+        const data=await edit_TAndP_report_data(id);
+        const resp=await data.json();
+        // console.log("🚀 ~ file: TAndP.js ~ line 173 ~ editTAndPReportBtn ~ resp", resp)
+    }
 
     const add_tAndP_icon_button = () => {
         return (
@@ -505,14 +531,19 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                             <View style={{ flex: 1 }}>
                                 {add_equipment_input()}
                             </View>
-                            <Button
-                                title="submit"
-                                style={{
-
+                            <TextButton
+                                label="Submit"
+                                buttonContainerStyle={{
+                                    height: 55,
+                                    width: '100%',
+                                    alignItems: 'center',
+                                    borderRadius: SIZES.radius,
+                                    backgroundColor: COLORS.lightblue_700
                                 }}
                                 onPress={() => {
                                     insertTAndPReport();
-                                }}
+                                }
+                                }
                             />
                         </View>
                     </View>
@@ -521,6 +552,29 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         )
     }
 
+    const Edit_delete_button = ({ edit_size, del_size, __id }) => {
+        return (
+            <>
+                <View style={body_ed_de_view}>
+                    <View style={body_del_btn}>
+                        <TouchableOpacity
+                            onPress={() => editTAndPReportBtn(__id)}
+                        >
+                            {/* <Foundation name='page-edit' color={item.id == selectedEditId ? "#2aaeff" : null} size={24} /> */}
+                            <FontAwesome name='edit' color={COLORS.blue} size={edit_size} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={body_edit_btn}>
+                        <TouchableOpacity
+                        // onPress={() => deleteReportButton(__id)}
+                        >
+                            <MaterialCommunityIcons name='delete' color={COLORS.red} size={del_size} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </>
+        )
+    }
 
     return (
         <>
@@ -566,17 +620,207 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                 style={{
                                     borderWidth: 1,
                                     borderColor: "skyblue",
+
                                     width: SIZES.width * 0.92,
                                     alignSelf: "flex-start",
                                     position: "relative",
                                     top: 20,
                                     marginLeft: 17,
+                                    // height: 200,
                                     maxHeight: 200,
                                     paddingBottom: 6,
+                                    // flex:2,
+                                    // marginBottom: -20,
+                                    // padding: 5,
                                     elevation: 1
                                 }}
                             >
+                                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
+                                    <View style={{}}>
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
+                                            <View
+                                                style={{
+                                                    paddingHorizontal: 5,
+                                                    marginRight: 2,
+                                                    marginLeft: 16,
+                                                    // borderRightWidth: 2,
+                                                    justifyContent: 'center',
+                                                    width: 45,
+                                                    //  borderColor: COLORS.lightblue_200 
+                                                }}
+                                            >
+                                                <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>S.no</Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    marginLeft: 8,
+                                                    //  borderRightWidth: 2,
+                                                    justifyContent: 'center',
+                                                    width: 145,
+                                                    //  borderColor: COLORS.lightblue_200, 
+                                                }}
+                                            >
+                                                <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Equipment Name</Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    marginLeft: 8,
+                                                    justifyContent: 'center',
+                                                    width: 100,
+                                                    // borderColor: COLORS.lightblue_200, 
+                                                }}
+                                            >
+                                                <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Date</Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    marginLeft: 8,
+                                                    // borderLeftWidth: 2, 
+                                                    paddingLeft: 4,
+                                                    justifyContent: 'center',
+                                                    width: 70,
+                                                    // borderColor: COLORS.lightblue_200, 
+                                                }}
+                                            >
+                                                <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Quantity</Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    marginLeft: 0,
+                                                    paddingLeft: 15,
+                                                    justifyContent: 'center',
+                                                    width: 60,
+                                                }}
+                                            >
+                                                <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Action</Text>
+                                            </View>
+                                        </View>
+                                        <ScrollView nestedScrollEnabled={true}
+                                            contentContainerStyle={{
+                                                top: 10,
+                                                paddingBottom: 15
+                                            }}>
+                                            <>
+                                                {
+                                                    getEquipmentReport ? getEquipmentReport.data.map((list, index) => (
 
+                                                        <View
+                                                            style={{
+                                                                flexDirection: "column",
+                                                                alignContent: "space-between",
+                                                                paddingVertical: 20,
+                                                                top: -20
+                                                            }} key={index}>
+                                                            <View
+                                                                style={{
+                                                                    flexDirection: "row",
+                                                                    justifyContent: "space-evenly",
+                                                                    top: 10,
+                                                                    paddingVertical: 3,
+                                                                    left: -26,
+                                                                }} >
+                                                                <View
+                                                                    style={{
+                                                                        alignContent: "center",
+                                                                        alignSelf: "center",
+                                                                        width: 45,
+                                                                        position: "absolute",
+
+                                                                        left: 29,
+                                                                        // right: 10,
+                                                                        //  left:0,
+                                                                        top: 3,
+                                                                        //  bottom:0                             
+                                                                    }} >
+                                                                    <View>
+                                                                        <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                            {index + 1}
+                                                                        </Text>
+                                                                    </View>
+                                                                    <View style={{ position: "absolute", width: 1, left: 42, top: -10 }}>
+                                                                        <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                                                    </View>
+                                                                </View>
+                                                                <View style={{
+                                                                    alignContent: "center",
+                                                                    alignSelf: "center",
+                                                                    width: 145,
+                                                                    position: "absolute",
+                                                                    left: 85,
+                                                                    top: 3,
+                                                                    borderWidth: 1,
+                                                                    borderColor: COLORS.lightblue_200,
+                                                                    right: 10,
+                                                                }}>
+                                                                    <View>
+                                                                        <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                            {list.toolsAndMachineryReportItem.equipment_name}
+                                                                        </Text>
+                                                                    </View>
+                                                                    <View style={{ position: "absolute", width: 1, left: 145, top: -10 }}>
+                                                                        <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                                                    </View>
+                                                                </View>
+                                                                <View
+                                                                    style={{
+                                                                        alignContent: "center",
+                                                                        alignSelf: "center",
+                                                                        width: 100,
+                                                                        position: "absolute",
+                                                                        left: 239,
+                                                                        top: 3,
+                                                                        borderWidth: 1,
+                                                                        borderColor: COLORS.lightblue_200,
+                                                                        right: 10,
+                                                                    }}
+                                                                >
+                                                                    <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                        {new Date(list.toolsAndMachineryReportItem.onDateChange).toLocaleDateString()}
+                                                                    </Text>
+                                                                </View>
+                                                                <View
+                                                                    style={{
+                                                                        alignContent: "center",
+                                                                        alignSelf: "center",
+                                                                        width: 70,
+                                                                        position: "absolute",
+                                                                        left: 350,
+                                                                        top: 3,
+                                                                        borderWidth: 1,
+                                                                        borderColor: COLORS.lightblue_200,
+                                                                        // right: 10,
+                                                                    }}
+                                                                >
+                                                                    <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                                                        {list.toolsAndMachineryReportItem.qty}
+                                                                    </Text>
+                                                                </View>
+                                                                <View
+                                                                    style={{
+                                                                        width: 60,
+                                                                        position: "absolute",
+                                                                        left: 425,
+                                                                        top: 3,
+                                                                    }}
+                                                                >
+                                                                    <View style={{ justifyContent: "center", alignSelf: "center" }}>
+                                                                        <Edit_delete_button edit_size={18} del_size={22} __id={list.toolsAndMachineryReportItem._id} />
+                                                                    </View>
+                                                                </View>
+                                                            </View>
+                                                            <View style={{ position: "absolute", top: 23 }}>
+                                                                <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 3, marginHorizontal: 2, top: 5 }} />
+                                                            </View>
+                                                        </View>
+
+                                                    )) : null
+                                                }
+
+                                            </>
+
+                                        </ScrollView>
+                                    </View>
+                                </ScrollView>
                             </View>
                         </View>
                         : null
