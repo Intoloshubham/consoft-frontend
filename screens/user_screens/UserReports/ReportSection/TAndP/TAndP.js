@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { Dropdown } from 'react-native-element-dropdown';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 import { FormInput, TextButton, CustomToast } from '../../../../../Components'
-import { get_equipment_item_name, save_new_equipment_item,insert_TAndP_report } from '../../ReportApi'
+import { get_equipment_item_name, save_new_equipment_item, insert_TAndP_report } from '../../ReportApi'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
@@ -34,12 +34,18 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const [calenderKey, setCalenderKey] = useState('')
 
 
-
+    const CONST_FIELD = {
+        MANPOWER: 'Manpower',
+        STOCK: 'Stock',
+        QUANTITY: 'Quantity',
+        QUALITY: 'Quality',
+        TANDP: 'Tandp'
+    }
     // CUSTOM TOAST OF CRUD OPERATIONS
     const [submitToast, setSubmitToast] = React.useState(false);
     const [updateToast, setUpdateToast] = React.useState(false);
     const [deleteToast, setDeleteToast] = React.useState(false);
-    
+
     const [equipItemName, setEquipItemName] = useState('')
     const [getequipItemName, setGetEquipItemName] = useState('');
     const [equipmentField, setEquipmentField] = useState([
@@ -95,17 +101,18 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         try {
             const data = {
                 tools_machinery_name: equipItemName,
-                company_id:userCompanyData.company_id
+                company_id: userCompanyData.company_id
             }
-           
-            const resp =await save_new_equipment_item(data);
-            const temp=await resp.json();            
+
+            const resp = await save_new_equipment_item(data);
+            const temp = await resp.json();
             if (temp.status == '200') {
                 setSubmitToast(true)
                 getEquipmentItems();
                 setTimeout(() => {
                     setAddNewEquipment(false);
                 }, 1500);
+
             }
         } catch (error) {
             console.log(error)
@@ -114,20 +121,25 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
     const insertTAndPReport = async () => {
         try {
+
             const data = {
                 company_id: userCompanyData.company_id,
                 project_id: Main_drp_pro_value,
                 user_id: userCompanyData._id,
-                equipmentField
+                equipmentField: equipmentField
             }
 
-            const resp = insert_TAndP_report(data);
-            if (resp.status == '200') {
+
+            const resp = await insert_TAndP_report(data, CONST_FIELD);
+            const temp = await resp.json();
+
+            if (temp.status == '200') {
                 setSubmitToast(true)
                 // getEquipmentItems();
                 setTimeout(() => {
-                    setTAndP(false);
+                    setTandPModal(false);
                 }, 1500);
+                equipmentField.splice(0, equipmentField.length);
             }
         } catch (error) {
             console.log(error)
@@ -139,13 +151,13 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         return (
             <TouchableOpacity
                 style={{
-                    
+
                     borderRadius: SIZES.radius * 0.2,
                     justifyContent: "center",
                     flexDirection: "row",
                     paddingHorizontal: 2,
                 }}
-                onPress={() => {                    
+                onPress={() => {
                     setTandPModal(true);
                 }}>
                 <View style={{
@@ -313,7 +325,8 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             searchPlaceholder="Search..."
                                             value={input._id}
                                             onChange={text => {
-                                                inputEquipItemName(text, key);
+                                                // console.log("🚀 ~ file: TAndP.js ~ line 324 ~ {equipmentField?equipmentField.map ~ text", text)
+                                                inputEquipItemName(text._id, key);
                                             }}
                                         />
                                         <View style={{
@@ -428,15 +441,15 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                 <View
                     style={{ flex: 1, backgroundColor: COLORS.transparentBlack1 }}
                 >
-                    <View style={{ flex: 1, backgroundColor: '#000000aa'}}>
+                    <View style={{ flex: 1, backgroundColor: '#000000aa' }}>
                         <View
-                            style={{                                
-                                height:"90%",
-                                width:"100%",
+                            style={{
+                                height: "90%",
+                                width: "100%",
                                 backgroundColor: '#fff',
                                 marginTop: 90,
-                                borderTopLeftRadius:20,
-                                borderTopRightRadius:20,
+                                borderTopLeftRadius: 20,
+                                borderTopRightRadius: 20,
                                 padding: 22,
                             }}>
                             <View
@@ -446,7 +459,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                     justifyContent: 'space-between',
                                 }}>
                                 <Title>Add Equipments</Title>
-                                <Pressable onPress={() => {                                    
+                                <Pressable onPress={() => {
                                     setTandPModal(false);
                                 }}>
                                     <AntDesign name="close" size={30} color={COLORS.black} />
@@ -495,7 +508,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                             <Button
                                 title="submit"
                                 style={{
-                                    
+
                                 }}
                                 onPress={() => {
                                     insertTAndPReport();
@@ -545,9 +558,28 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
             >
                 {
                     tAndP ?
-                        <View style={{ backgroundColor: "blue", paddingLeft: 140 }}>
-                            {add_tAndP_icon_button()}
-                        </View> : null
+                        <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }} >
+                            <View style={{ backgroundColor: "blue", paddingLeft: 140 }}>
+                                {add_tAndP_icon_button()}
+                            </View>
+                            <View
+                                style={{
+                                    borderWidth: 1,
+                                    borderColor: "skyblue",
+                                    width: SIZES.width * 0.92,
+                                    alignSelf: "flex-start",
+                                    position: "relative",
+                                    top: 20,
+                                    marginLeft: 17,
+                                    maxHeight: 200,
+                                    paddingBottom: 6,
+                                    elevation: 1
+                                }}
+                            >
+
+                            </View>
+                        </View>
+                        : null
                 }
                 {add_TAndP_modal()}
                 {add_new_equipment_modal()}

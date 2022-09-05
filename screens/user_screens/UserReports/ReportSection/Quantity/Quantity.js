@@ -32,7 +32,7 @@ import {
 } from '../../../../../constants';
 import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
 
-const Quantity = ({ project_id, Main_drp_pro_value }) => {
+const Quantity = ({ project_id, Main_drp_pro_value,loading }) => {
   const {
     header,
     con_body,
@@ -151,29 +151,29 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
       user_id: userData._id,
       inputs
     }
-    // console.log("🚀 ~ file: Quantity.js ~ line 154 ~ insertQtyPostData ~ report_post_data", report_post_data)
-    if (report_post_data) {
-      const data = Insert_report_data(report_post_data, CONST_FIELD)
-      data.then((res) => res.json())
-        .then((resp) => {
-          // console.log("resp report data")
-          console.log(resp)
+    console.log("🚀 ~ file: Quantity.js ~ line 154 ~ insertQtyPostData ~ report_post_data", report_post_data)
+    // if (report_post_data) {
+    //   const data = Insert_report_data(report_post_data, CONST_FIELD)
+    //   data.then((res) => res.json())
+    //     .then((resp) => {
+    //       // console.log("resp report data")
+    //       console.log(resp)
          
-          setPostQtyData(resp)
-          getReportData();
-          if (resp.status == '200') {
-            setSubmitToast(true)
-            // getRreportData()
-            setTimeout(() => {
-              setReportmodal(false);
-            }, 1500);
-            inputs.splice(0, inputs.length);
+    //       setPostQtyData(resp)
+    //       getReportData();
+    //       if (resp.status == '200') {
+    //         setSubmitToast(true)
+    //         // getRreportData()
+    //         setTimeout(() => {
+    //           setReportmodal(false);
+    //         }, 1500);
+    //         inputs.splice(0, inputs.length);
 
-          }
-        })
-    } else {
-      alert("Not inserted")
-    }
+    //       }
+    //     })
+    // } else {
+    //   alert("Not inserted")
+    // }
   }
 
   const updateQuantityData = async () => {
@@ -221,10 +221,12 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
 
 
   async function getReportData() {
-    if (Main_drp_pro_value || postQtyData || updateStatus) {
+    if (Main_drp_pro_value || postQtyData || updateStatus||loading) {
       // You can await here
+      console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", Main_drp_pro_value)
+      console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", userData._id)
+      console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data",current_dat)
       const data = await Get_report_data(Main_drp_pro_value, userData._id,  current_dat)
-      console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", data)
       if (data.status == 200) {
         setGetRepPostData(data);
       } else {
@@ -237,7 +239,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
   useEffect(() => {    
     getReportData();
     getQualityType();
-  }, [postQtyData, Main_drp_pro_value, updateStatus])
+  }, [postQtyData, Main_drp_pro_value, updateStatus,loading])
   
   // console.log("🚀 ~ file: Quantity.js ~ line 230 ~ getRreportData ~ getRepPostData", getRepPostData)
 
@@ -519,7 +521,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
         `${process.env.API_URL}quantity-report-item/` + `${userData.company_id}`,
       );
       const quantitydata = await resp.json();
-      console.log("🚀 ~ file: Quantity.js ~ line 638 ~ reportdataitem ~ quantitydata", quantitydata)
+      // console.log("🚀 ~ file: Quantity.js ~ line 638 ~ reportdataitem ~ quantitydata", quantitydata)
 
       // console.log("quantitydata"); 
       // console.log(quantitydata); 
@@ -829,6 +831,7 @@ const Quantity = ({ project_id, Main_drp_pro_value }) => {
                   searchPlaceholder="Search..."
                   value={input.item_id}
                   onChange={item => {
+                    console.log("🚀 ~ file: Quantity.js ~ line 834 ~ {inputs?inputs.map ~ item", item)
                     setSelectKey(input.key);
                     // setItemData(item._id)
                     setCompanyIdData(item.company_id)
