@@ -77,7 +77,6 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
     const getStockDataItems = async () => {
         try {
             const data = await get_stock_item_name();
-            // console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
             setStockItemData(data);
         } catch (error) {
 
@@ -112,8 +111,6 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
         GetStockData();
         return () => { isMount = false }
     }, [userCompanyData.company_id, loading])
-    // console.log("🚀 ~ file: Stock.js ~ line 95 ~ GetStockData ~ getStockData", getStockData)
-
 
 
     const postStockDataItems = async () => {
@@ -199,15 +196,24 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                     {stockEntry ? stockEntry.map((input, key) => {
 
                         return (
-                            <View style={inputContainer} key={key}>
+                            <View style={[inputsContainer, {
+                                borderWidth:1,
+                                borderColor: COLORS.lightGray1,
+                                borderRadius: 2,
+                                elevation: 2,
+                                padding: 10,
+                                margin: 5
+                            }]} key={key}>
                                 <View
                                     style={{
                                         flexDirection: 'row',
                                         justifyContent: 'space-between',
-                                        paddingHorizontal: 5
+                                        paddingHorizontal: 5,
+
+
                                     }}
                                     key={key}
-                                
+
                                 >
                                     <Dropdown
                                         style={[
@@ -277,13 +283,16 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                     />
                                 </View>
                                 <View style={{
-                                       
-                                       width:"100%",
-                                       alignItems:"flex-end"
+
+                                    width: "100%",
+                                    alignItems: "flex-end"
                                 }}>
                                     <TouchableOpacity
                                         style={{
-                                            
+                                            elevation: 8,
+                                            // borderWidth: 1,
+
+                                            borderColor: COLORS.transparent
                                         }}
                                         onPress={() => deleteStockHandler(key)}>
                                         <Image
@@ -312,13 +321,15 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                 <View
                     style={{ flex: 1, backgroundColor: COLORS.transparentBlack1 }}
                 >
-                    <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
+                    <View style={{ flex: 1, backgroundColor: '#000000aa' }}>
                         <View
                             style={{
-                                flex: 1,
+                                height: "90%",
+                                width: "100%",
                                 backgroundColor: '#fff',
-                                marginTop: 50,
-                                borderRadius: 20,
+                                marginTop: 90,
+                                borderTopLeftRadius: 20,
+                                borderTopRightRadius: 20,
                                 padding: 22,
                             }}>
                             <View
@@ -342,7 +353,13 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                     marginTop: 10,
                                 }}>
                                 <TouchableOpacity
-                                    style={{ borderWidth: 1, borderRadius: 5, borderColor: COLORS.gray, paddingHorizontal: 2, marginVertical: 2 }}
+                                    style={{
+                                        paddingHorizontal: 2,
+                                        margin: 5,
+                                        borderRadius: 1,
+                                        elevation: 1,
+                                        borderColor: COLORS.transparent,
+                                    }}
                                     onPress={() => {
                                         addStockInputHandler();
                                     }}>
@@ -363,8 +380,11 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={{
-                                        borderWidth: 1, borderRadius: 2, paddingVertical: 1, marginVertical: 3,
-                                        paddingHorizontal: 4
+                                        paddingHorizontal: 4,
+                                        margin: 5,
+                                        borderRadius: 1,
+                                        elevation: 1,
+                                        borderColor: COLORS.transparent,
                                     }}
                                     onPress={() => {
                                         setAddNewMaterial(true);
@@ -375,11 +395,25 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                             <View style={{ flex: 1 }}>
                                 {add_stock_input()}
                             </View>
-                            <Button
+                            {/* <Button
                                 title="submit"
                                 onPress={() => {
                                     postStockDataItems();
                                 }}
+                            /> */}
+                            <TextButton
+                                label="Submit"
+                                buttonContainerStyle={{
+                                    height: 55,
+                                    width: '100%',
+                                    alignItems: 'center',
+                                    borderRadius: SIZES.radius,
+                                    backgroundColor: COLORS.lightblue_700
+                                }}
+                                onPress={() => {
+                                    postStockDataItems();
+                                }
+                                }
                             />
                         </View>
                     </View>
@@ -402,7 +436,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                 backgroundColor: '#fff',
                                 marginTop: 80,
                                 padding: 20,
-                                borderRadius: 20,
+                                borderRadius: 8,
                                 margin: 10,
                             }}>
                             <View
@@ -532,7 +566,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
             >
                 {stockCollapse ?
                     <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}>
-                        <View style={{ backgroundColor: "blue",paddingLeft:140 }}>
+                        <View style={{ backgroundColor: "blue", paddingLeft: 140 }}>
                             {add_stock_icon_button()}
                         </View>
                         <View
@@ -543,17 +577,31 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                 alignSelf: "flex-start",
                                 position: "relative",
                                 top: 20,
-                                marginLeft: 17,                                
+                                marginLeft: 17,
                                 maxHeight: 200,
-                                paddingBottom: 6,                       
+                                paddingBottom: 6,
                                 elevation: 1
                             }}
                         >
 
 
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle=
+                                {{
+                                    flexGrow: 1,
+                                    maxHeight: 500,
+                                    borderWidth: 2
+                                }} >
                                 <View style={{}}>
-                                    <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
+                                    <View style={{
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                        top: 5,
+                                        left: -12,
+                                        position: "relative"
+                                    }}>
                                         <View
                                             style={{
                                                 paddingHorizontal: 5,

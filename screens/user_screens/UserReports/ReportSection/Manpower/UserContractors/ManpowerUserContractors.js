@@ -226,7 +226,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       const data = edit_manpower_report_data(id, current_dat);
       data.then(res => res.json())
         .then(result => {
-          // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 225 ~ editManpowerReportBtn ~ result", result.data._id)
           setEditManpowerReport(result);
           if (result.data != undefined && filterNewCategory) {
             setUpdateManpowerId(result.data._id);
@@ -301,9 +300,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     let data = {
       manpowerCategories: temp_data
     }
-    console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 294 ~ updateManpowerReport ~ data", data)
     let res = await update_manpower_report(updateManpowerId, data);
-    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 296 ~ updateManpowerReport ~ res", res)
     setManpowerUpdateStatus(res)
     if (res.status == '200') {
 
@@ -646,145 +643,163 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   function ShowCategory() {
     return (
-      <KeyboardAvoidingView>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={
+          removeAddManpowerOnEdit || filterNewCategory.length > 0 ? {
             maxHeight: 370,
-            // flex: 1,
-            marginVertical: SIZES.padding,
-            borderWidth: 1,
-            borderColor: COLORS.lightblue_300
-          }}
+            marginVertical: SIZES.padding * 2,
+            borderRadius: 2,
+            elevation: 2,
+            borderColor: COLORS.lightblue_100,
+            paddingBottom: SIZES.base * 2,
+          } : null
+        }
 
-        >
-          {
-            filterNewCategory.map((memberInput, index) => {
-              return (
-                <View
+      >
+        {
+           filterNewCategory.length > 0 ? filterNewCategory.map((memberInput, index) => {
+
+            return (
+              <View
+                style={{
+                  alignItems: "stretch",
+                  margin: 1
+                }}
+                key={index}>
+                <View key={index}
                   style={{
-                    alignItems: "stretch",
-                    margin: 1
-                  }}
-                  key={index}>
-                  <View key={index}
-                    style={{
-                      flex: 1,
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginHorizontal: SIZES.base*2.5 ,
-                      paddingBottom: SIZES.base
-                    }}>
+                    flex: 1,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    marginHorizontal: SIZES.base,
+                    paddingBottom: SIZES.base
+                  }}>
 
-                    <FormInput
-                      placeholder="Name"
-                      containerStyle={{
-                        width: 190,
+                  <FormInput
+                    placeholder="Name"
+                    containerStyle={{
+                      width: 180,
 
-                      }}
-                      onChange={text => {
-                        __memberName(text, index);
-                        utils.validateText(text, setMemberErrorMsg);
-                        setMemberName(text);
-                      }}
-                      value={memberInput.manpower_category}
-                      // value={temp}
-                      errorMsg={memberErrorMsg}
-                      appendComponent={
-                        <View style={{ justifyContent: 'center' }}>
-                          <Image
-                            source={
-                              membername == '' || (membername != '' && memberErrorMsg == '')
-                                ? icons.correct
-                                : icons.cancel
-                            }
-                            style={{
-                              height: 20,
-                              width: 20,
-                              tintColor:
-                                membername == ''
-                                  ? COLORS.gray
-                                  : membername != '' && memberErrorMsg == ''
-                                    ? COLORS.green
-                                    : COLORS.red,
-                            }}
-                          />
-                        </View>
-                      }
-                    />
-
-                    <FormInput
-                      placeholder="Count"
-                      containerStyle={{
-                        width: 85,
-
-                      }}
-                      inputStyle={{ height: 40, width: 30, marginLeft: -12 }}
-                      keyboardType="numeric"
-                      onChange={text => {
-                        __memberCount(text, index);
-                        utils.validateNumber(text, setMemberCountErrorMsg);
-                        setMemberCount(text);
-                      }}
-                      // value={manpower_memb}
-                      value={memberInput.manpower_member}
-                      errorMsg={memberCountErrorMsg}
-                      appendComponent={
-                        <View style={{ 
-                          justifyContent: 'center' ,
-                          // backgroundColor:"red",
-                          marginLeft:-SIZES.padding,
-                          left:22
-                          
-                          }}>
-                          <Image
-                            source={
-                              memberCount == '' || (memberCount != '' && memberCountErrorMsg == '')
-                                ? icons.correct
-                                : icons.cancel
-                            }
-                            style={{
-                              height: 20,
-                              width: 20,
-                              tintColor:
-                                memberCount == ''
-                                  ? COLORS.gray                                  
-                                  : memberCount != '' && memberCountErrorMsg == ''
-                                    ? COLORS.green
-                                    : COLORS.red,
-                            }}
-                          />
-                        </View>
-                      }
-                    />
-
-                    <View style={{
-                      alignSelf:"flex-end",                      
-                      paddingBottom:SIZES.base*0.5   
-                    }}>
-                      <TouchableOpacity
-                        style={{ alignSelf: "center"}}
-                        onPress={() => {
-                          deleteMemberHandler(index)
-                        }
-                        }>
+                    }}
+                    onChange={text => {
+                      __memberName(text, index);
+                      utils.validateText(text, setMemberErrorMsg);
+                      setMemberName(text);
+                    }}
+                    value={memberInput.manpower_category}
+                    // value={temp}
+                    errorMsg={memberErrorMsg}
+                    appendComponent={
+                      <View style={{ justifyContent: 'center' }}>
                         <Image
-                          source={icons.delete_icon}
+                          source={
+                            membername == '' || (membername != '' && memberErrorMsg == '')
+                              ? icons.correct
+                              : icons.cancel
+                          }
                           style={{
-                            width: 20,
                             height: 20,
-                            tintColor: COLORS.red,
+                            width: 20,
+                            tintColor:
+                              membername == ''
+                                ? COLORS.gray
+                                : membername != '' && memberErrorMsg == ''
+                                  ? COLORS.green
+                                  : COLORS.red,
                           }}
                         />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>)
-            })
+                      </View>
+                    }
+                  />
 
-          }
-        </ScrollView>
-      </KeyboardAvoidingView>
+                  <FormInput
+                    placeholder="Count"
+                    containerStyle={{
+                      width: 85,
+
+                    }}
+                    inputStyle={{ height: 40, width: 30, marginLeft: -12 }}
+                    keyboardType="numeric"
+                    onChange={text => {
+                      __memberCount(text, index);
+                      utils.validateNumber(text, setMemberCountErrorMsg);
+                      setMemberCount(text);
+                    }}
+                    // value={manpower_memb}
+                    value={memberInput.manpower_member}
+                    errorMsg={memberCountErrorMsg}
+                    appendComponent={
+                      <View style={{
+                        justifyContent: 'center',
+                        // backgroundColor:"red",
+                        marginLeft: -SIZES.padding,
+                        left: 22
+
+                      }}>
+                        <Image
+                          source={
+                            memberCount == '' || (memberCount != '' && memberCountErrorMsg == '')
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              memberCount == ''
+                                ? COLORS.gray
+                                : memberCount != '' && memberCountErrorMsg == ''
+                                  ? COLORS.green
+                                  : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+
+                  <View style={{
+                    alignSelf: "flex-end",
+                    paddingBottom: SIZES.base * 0.8
+                  }}>
+                    <TouchableOpacity
+                      style={{
+                        alignSelf: "center",
+                        elevation: 8,
+                        // borderWidth: 1,
+                        borderColor: COLORS.transparent
+                      }}
+                      onPress={() => {
+                        deleteMemberHandler(index)
+                      }
+                      }>
+                      <Image
+                        source={icons.delete_icon}
+                        style={{
+                          width: 20,
+                          height: 20,
+                          tintColor: COLORS.red,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>)
+          })
+            : (
+              <View style={{
+                flex: 1,
+                alignSelf: "center",
+                marginVertical: SIZES.body1,
+              }}>
+                {/* {removeAddManpowerOnEdit ? <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Currently, no category to Update!!</Text> : null} */}
+                <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Currently, no category to show or update!!</Text>
+              </View>
+            )
+
+
+        }
+      </ScrollView>
     )
   }
 
@@ -798,7 +813,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
         visible={addConMemberModal}>
         <View
           style={{
-            flex: 1,            
+            flex: 1,
             alignItems: 'center',
             backgroundColor: COLORS.transparentBlack7,
           }}>
@@ -832,7 +847,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                 onPress={() => {
                   setRemoveAddManpowerOnEdit(false);
                   setAddConMemberReportModal(false);
-
                 }}
               />
             </View>
@@ -856,7 +870,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
               />
             </View>
             <View style={{ flex: 1 }}>
-              {ShowCategory()}
+              {
+                ShowCategory()
+              }
             </View>
             <View
               style={{
@@ -876,8 +892,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                   }}
                   onPress={() => {
                     updateManpowerReport(updateManpowerId)
-                  }
-                  }
+                  }}
                 /> :
                 <TextButton
                   label="Submit"
@@ -1016,8 +1031,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
           alignSelf: "center",
           paddingLeft: SIZES.base,
           position: "relative",
-          paddingBottom: 10,
-          backgroundColor: COLORS.lightGray1
+          // paddingBottom: 10,
+          elevation: 22,
+          backgroundColor: COLORS.transparent
         }}
         key={index}
       >
@@ -1081,7 +1097,8 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     return (
       <>
         <TouchableOpacity style={[header, {
-          width: SIZES.width * 0.679,
+          width: "100%",
+          // width: SIZES.width * 0.70,
           justifyContent: "space-between",
           alignSelf: "center"
         }]} key={item._id} onPress={() => {
@@ -1097,10 +1114,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
               {item.contractor_name}
             </Text>
           </View>
-          {/* <View style={{ marginLeft: 24 * 2, alignSelf: "center", top: -5 }}>
-          {schedular_section(item)}
-        </View> */}
-          <View style={{ right: 65 }}>
+          <View style={{ right: 68, top: 2 }}>
             <Pressable
               onPress={() => {
                 setContractorId(item._id);
@@ -1114,13 +1128,26 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
               />
             </Pressable>
           </View>
-          <View style={{ justifyContent: "space-between", alignSelf: "center", left: -60 }}>
-            <View>
+          <View style={{
+            justifyContent: "space-between",
+            alignSelf: "center",
+            alignItems: "center",
+            left: -65
+          }}>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <Editdeletebutton edit_size={15} del_size={18} __id={item._id} />
             </View>
           </View>
         </TouchableOpacity>
-        <View style={{ borderBottomWidth: 1, borderColor: COLORS.lightblue_300 }}>
+        <View style={{
+          borderBottomWidth: item._id == con_item_id ? 1 : 0,
+          borderColor: item._id == con_item_id ? COLORS.lightblue_300 : null
+        }}>
           {open && item._id == con_item_id ? _body(item, index) : null}
         </View>
       </>
@@ -1159,7 +1186,8 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
         style={{
           alignSelf: "flex-end",
           flexDirection: "row",
-          right: SIZES.base
+          right: SIZES.base,
+          bottom: SIZES.base * 0.5
           // top: 0
         }}
       >
@@ -1171,7 +1199,10 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       {conTeamTabCollapse ?
         (
           <View
-            style={{ marginBottom: -24, height: 270 }}
+            style={{
+              marginBottom: Report_list.length > 0 ? -24 : 0,
+              //  height: 270 
+            }}
           >
             <ScrollView
               horizontal={true}
@@ -1183,18 +1214,21 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
                   borderWidth: 1,
-                  paddingBottom: 235,
+                  // paddingBottom: 235,
+                  // paddingBottom: 235,
                   borderColor: COLORS.lightblue_300,
                   marginHorizontal: 42
                 }}
-                maxHeight={268}
+                // maxHeight={268}
+                maxHeight={200}
                 nestedScrollEnabled={true}
                 renderItem={({ item, index }) => _head(item, index)}
                 keyExtractor={(item, index) => index.toString()}
               />
             </ScrollView>
           </View>
-        ) : null
+        ) :
+        null
       }
       {/* create contractor model */}
       {renderCreateContractorModal()}
