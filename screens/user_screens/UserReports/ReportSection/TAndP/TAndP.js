@@ -107,13 +107,13 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const getEquipReport = async () => {
         try {
             const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
-            // console.log("🚀 ~ file: TAndP.js ~ line 103 ~ getEquipReport ~ data", data)
+            console.log("🚀 ~ file: TAndP.js ~ line 103 ~ getEquipReport ~ data", data)
             setGetEquipmentReport(data);
         } catch (error) {
             console.log(error)
         }
     }
-    useMemo(() => {
+    useMemo(() => { 
         getEquipmentItems();
         getEquipReport();
     }, [userCompanyData.company_id, loading])
@@ -741,7 +741,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             }}>
                                             <>
                                                 {
-                                                    getEquipmentReport ? getEquipmentReport.data.map((list, index) => (
+                                                    getEquipmentReport.length>0 ? getEquipmentReport.data.map((list, index) => (
 
                                                         <View
                                                             style={{
@@ -853,7 +853,10 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                         </View>
 
                                                     )) 
-                                                    : null
+                                                    : 
+                                                     <View>
+                                                        <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center" }]}>Currently, no report to show!</Text>
+                                                     </View>
                                                 }
 
                                             </>
