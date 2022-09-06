@@ -196,12 +196,21 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                     {stockEntry ? stockEntry.map((input, key) => {
 
                         return (
-                            <View style={inputContainer} key={key}>
+                            <View style={[inputsContainer, {
+                                borderWidth:1,
+                                borderColor: COLORS.lightGray1,
+                                borderRadius: 2,
+                                elevation: 2,
+                                padding: 10,
+                                margin: 5
+                            }]} key={key}>
                                 <View
                                     style={{
                                         flexDirection: 'row',
                                         justifyContent: 'space-between',
-                                        paddingHorizontal: 5
+                                        paddingHorizontal: 5,
+
+
                                     }}
                                     key={key}
 
@@ -280,7 +289,10 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                 }}>
                                     <TouchableOpacity
                                         style={{
+                                            elevation: 8,
+                                            // borderWidth: 1,
 
+                                            borderColor: COLORS.transparent
                                         }}
                                         onPress={() => deleteStockHandler(key)}>
                                         <Image
@@ -309,13 +321,15 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                 <View
                     style={{ flex: 1, backgroundColor: COLORS.transparentBlack1 }}
                 >
-                    <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
+                    <View style={{ flex: 1, backgroundColor: '#000000aa' }}>
                         <View
                             style={{
-                                flex: 1,
+                                height: "90%",
+                                width: "100%",
                                 backgroundColor: '#fff',
-                                marginTop: 50,
-                                borderRadius: 20,
+                                marginTop: 90,
+                                borderTopLeftRadius: 20,
+                                borderTopRightRadius: 20,
                                 padding: 22,
                             }}>
                             <View
@@ -339,7 +353,13 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                     marginTop: 10,
                                 }}>
                                 <TouchableOpacity
-                                    style={{ borderWidth: 1, borderRadius: 5, borderColor: COLORS.gray, paddingHorizontal: 2, marginVertical: 2 }}
+                                    style={{
+                                        paddingHorizontal: 2,
+                                        margin: 5,
+                                        borderRadius: 1,
+                                        elevation: 1,
+                                        borderColor: COLORS.transparent,
+                                    }}
                                     onPress={() => {
                                         addStockInputHandler();
                                     }}>
@@ -360,8 +380,11 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={{
-                                        borderWidth: 1, borderRadius: 2, paddingVertical: 1, marginVertical: 3,
-                                        paddingHorizontal: 4
+                                        paddingHorizontal: 4,
+                                        margin: 5,
+                                        borderRadius: 1,
+                                        elevation: 1,
+                                        borderColor: COLORS.transparent,
                                     }}
                                     onPress={() => {
                                         setAddNewMaterial(true);
@@ -413,7 +436,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                 backgroundColor: '#fff',
                                 marginTop: 80,
                                 padding: 20,
-                                borderRadius: 20,
+                                borderRadius: 8,
                                 margin: 10,
                             }}>
                             <View
