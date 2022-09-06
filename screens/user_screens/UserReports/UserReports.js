@@ -118,7 +118,7 @@ const UserReports = ({ route }) => {
       setProList(ProData)
 
     }
-  }, [selectedIdProjects,loading])
+  }, [selectedIdProjects, loading])
 
   // console.log("ProList..........121")
   // console.log(ProList) 
@@ -136,7 +136,7 @@ const UserReports = ({ route }) => {
     } else {
       return
     }
-  }, [value,loading])
+  }, [value, loading])
   // console.log(projectTeamList)
 
 
@@ -145,13 +145,22 @@ const UserReports = ({ route }) => {
   return (
     <View
       source={images.Graph_paper}
-      style={{ flex: 1, margin: SIZES.base, position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}
+      style={{
+        flex: 1,
+        margin: SIZES.base,
+        position: "absolute",
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0
+      }}
     >
       <Dropdown
         style={[
           Project_list_drop,
           proListIsFocus && {
-            borderColor: COLORS.lightblue_600,
+            borderColor: COLORS.lightblue_400,
+            
           },
         ]}
         placeholderStyle={{ ...FONTS.h3, color: COLORS.black, textTransform: 'capitalize' }
@@ -214,23 +223,23 @@ const UserReports = ({ route }) => {
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           {value ? <View >
-            <View style={{ marginVertical: 5}}>
+            <View style={{ marginVertical: 5 }}>
               <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
-              <Stock project_id={value} Main_drp_pro_value={value} loading={loading}/>
+              <Stock project_id={value} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>
               {/* Quantity */}
-              <Quantity project_id={value} Main_drp_pro_value={value}  loading={loading}/>
+              <Quantity project_id={value} Main_drp_pro_value={value} loading={loading} />
             </View>
             {/* <View style={{ marginVertical: 5 }}>
               <Quality />
             </View> */}
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}
-              <TAndP />
+              <TAndP Main_drp_pro_value={value} loading={loading}  />
             </View>
           </View> : null}
         </View>

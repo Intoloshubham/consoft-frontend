@@ -1,21 +1,21 @@
-import React, {useState, useRef} from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, { useState, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
-import {getUserId} from '../services/asyncStorageService.js';
-import {COLORS, FONTS, SIZES, icons, images} from '../constants';
+import { getUserId } from '../services/asyncStorageService.js';
+import { COLORS, FONTS, SIZES, icons, images } from '../constants';
 import {
   UserDashboard,
   Profile,
-  Demo,
+  UserEndVoucher,
   MyProfile,
   UserReports,
 } from '../screens/user_screens';
 
 const Tab = createBottomTabNavigator();
 
-const UserTabs = ({navigation, route}) => {
-  const TabBarCustomButton = ({children, onPress}) => {
+const UserTabs = ({ navigation, route }) => {
+  const TabBarCustomButton = ({ children, onPress }) => {
     return (
       <TouchableOpacity
         style={{
@@ -29,14 +29,23 @@ const UserTabs = ({navigation, route}) => {
           onPress();
         }}>
         <LinearGradient
-          colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
+          colors={[COLORS.lightblue_800, COLORS.lightblue_600]}
           style={{
-            width: 60,
-            height: 60,
+            width: 50,
+            elevation:15,
+            height: 50,
             borderRadius: 35,
           }}>
           {children}
         </LinearGradient>
+        <Text
+          style={{
+            color: COLORS.black,
+            ...FONTS.body5,
+            textAlign:"auto"
+          }}>
+          Show Report
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -60,8 +69,8 @@ const UserTabs = ({navigation, route}) => {
         headerStyle: {
           // height: 78,
         },
-        navigation: {navigation},
-        route: {route},
+        navigation: { navigation },
+        route: { route },
         headerTitleAlign: 'left',
         headerRight: () => (
           <View
@@ -73,7 +82,7 @@ const UserTabs = ({navigation, route}) => {
             <Image
               source={images.consoft_PNG}
               resizeMode="contain"
-              style={{height: '100%', width: 100}}
+              style={{ height: '100%', width: 100 }}
             />
           </View>
         ),
@@ -85,8 +94,8 @@ const UserTabs = ({navigation, route}) => {
         }}
         component={UserDashboard}
         options={{
-          tabBarIcon: ({focused}) => (
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 source={icons.dashboard}
                 resizeMode="contain"
@@ -109,11 +118,11 @@ const UserTabs = ({navigation, route}) => {
         }}
       />
       <Tab.Screen
-        name="Demo"
-        component={Demo}
+        name="Requirement"
+        component={UserEndVoucher}
         options={{
-          tabBarIcon: ({focused}) => (
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 source={icons.tasks}
                 style={{
@@ -127,7 +136,7 @@ const UserTabs = ({navigation, route}) => {
                   color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Demo
+                Requirement
               </Text>
             </View>
           ),
@@ -138,16 +147,18 @@ const UserTabs = ({navigation, route}) => {
         component={UserReports}
         // initialParams={{userId: useridRef}}
         options={{
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={icons.report}
-              resizeMode="contain"
-              style={{
-                height: 25,
-                width: 25,
-                tintColor: COLORS.white,
-              }}
-            />
+          tabBarIcon: ({ focused }) => (
+            <View>
+              <Image
+                source={icons.report}
+                resizeMode="contain"
+                style={{
+                  height: focused ? 22 : 20,
+                  width: focused ? 22 : 20,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </View>
           ),
           tabBarButton: props => <TabBarCustomButton {...props} />,
           // headerShown:false
@@ -157,8 +168,8 @@ const UserTabs = ({navigation, route}) => {
         name="My Profile"
         component={MyProfile}
         options={{
-          tabBarIcon: ({focused}) => (
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 source={icons.tracker}
                 style={{
@@ -182,8 +193,8 @@ const UserTabs = ({navigation, route}) => {
         name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: ({focused}) => (
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 source={icons.account}
                 style={{
