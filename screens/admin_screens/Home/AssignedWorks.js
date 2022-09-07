@@ -628,7 +628,7 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this work?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => fetchAssignWorkDelete()}

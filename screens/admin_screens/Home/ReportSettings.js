@@ -315,33 +315,33 @@ const ReportSettings = ({route}) => {
       project_id: project_id,
       started_by: usersValue,
       verification_1: usersValue1,
-      // verification_2: usersValue2,
-      // admin_3: privilegeUserValue,
       admin_1: privilegeUserValue1,
       admin_2: privilegeUserValue2,
     };
-    console.log('object', formData);
+    // console.log('object', formData);
     const response = await postProjectReportPath(formData);
 
-    console.log(response);
+    // console.log(response);
 
     if (response.status === 200) {
       alert('Successfull');
       setUserRoleValue('');
-      setUserRoleValue1('');
-      setUserRoleValue2('');
       setUsersValue('');
+      setUserRoleValue1('');
       setUsersValue1('');
-      setUsersValue2('');
-      setPrivilegeUserValue('');
+      setPrivilege1('');
+      setPrivilege2('');
       setPrivilegeUserValue1('');
       setPrivilegeUserValue2('');
+      // setUserRoleValue2('');
+      // setUsersValue2('');
+      // setPrivilegeUserValue('');
     }
   };
 
   const fetchReportSettingPath = async () => {
     const response = await getProjectReportPath(company_id, project_id);
-    console.log(response.data);
+    // console.log(response.data);
     setReportPath(response.data);
   };
 

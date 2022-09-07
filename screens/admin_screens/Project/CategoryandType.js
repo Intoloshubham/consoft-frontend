@@ -789,7 +789,7 @@ const CategoryandType = () => {
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this project category?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => {
@@ -800,7 +800,7 @@ const CategoryandType = () => {
         isVisible={deleteConfirm1}
         onClose={() => setDeleteConfirm1(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this project type?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => deleteType()}
