@@ -107,13 +107,13 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const getEquipReport = async () => {
         try {
             const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
-            // console.log("🚀 ~ file: TAndP.js ~ line 103 ~ getEquipReport ~ data", data)
+            console.log("🚀 ~ file: TAndP.js ~ line 103 ~ getEquipReport ~ data", data)
             setGetEquipmentReport(data);
         } catch (error) {
             console.log(error)
         }
     }
-    useMemo(() => {
+    useEffect(() => { 
         getEquipmentItems();
         getEquipReport();
     }, [userCompanyData.company_id, loading])
@@ -405,8 +405,8 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             }}>
                                             <View style={{
                                                 borderRadius: 2,
-                                                width: "45%",
-                                                marginHorizontal: 10,
+                                                width: "50%",
+                                                marginHorizontal: 8,
                                                 height: "40%",
                                                 alignItems: "center"
                                             }}>
@@ -496,7 +496,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                     borderBottomWidth: 1,
                                     justifyContent: 'space-between',
                                 }}>
-                                <Title>Add Equipments</Title>
+                                <Title>Equipment Report</Title>
                                 <Pressable onPress={() => {
                                     setTandPModal(false);
                                 }}>
@@ -528,7 +528,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             alignItems: 'center',
                                             paddingVertical: 1
                                         }}>
-                                        <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add Existing</Text>
+                                        <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add/Update Existing</Text>
                                         <MaterialIcons
                                             name="add-box"
                                             size={20}
@@ -547,7 +547,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                     onPress={() => {
                                         setAddNewEquipment(true)
                                     }}>
-                                    <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add Equipments</Text>
+                                    <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add New</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={{ flex: 1 }}>
@@ -741,7 +741,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             }}>
                                             <>
                                                 {
-                                                    getEquipmentReport ? getEquipmentReport.data.map((list, index) => (
+                                                    getEquipmentReport.data.length>0 ? getEquipmentReport.data.map((list, index) => (
 
                                                         <View
                                                             style={{
@@ -853,7 +853,10 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                         </View>
 
                                                     )) 
-                                                    : null
+                                                    : 
+                                                     <View>
+                                                        <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center" }]}>Currently, no report to show!</Text>
+                                                     </View>
                                                 }
 
                                             </>

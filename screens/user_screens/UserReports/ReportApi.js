@@ -283,9 +283,9 @@ const get_quality_type = async () => {
     }
 }
 
-const check_quantity_item_exist = async (project_id, user_id) => {
+const check_quantity_item_exist = async (project_id, user_id,current_date) => {
     try {
-        const res = await fetch(`${process.env.API_URL}quantity-item-exist/${project_id}/${user_id}`)
+        const res = await fetch(`${process.env.API_URL}quantity-item-exist/${project_id}/${user_id}/${current_date}`)
         const data = await res.json();
         return data;
     } catch (error) {

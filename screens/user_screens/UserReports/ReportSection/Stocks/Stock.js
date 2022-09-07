@@ -100,6 +100,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                     return ele.stockEntryData;
                 })
                 setGetStockData(temp_data);
+                // console.log("🚀 ~ file: Stock.js ~ line 103 ~ GetStockData ~ temp_data", temp_data)
             }
         } catch (error) {
             console.log(error)
@@ -197,7 +198,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
 
                         return (
                             <View style={[inputsContainer, {
-                                borderWidth:1,
+                                borderWidth: 1,
                                 borderColor: COLORS.lightGray1,
                                 borderRadius: 2,
                                 elevation: 2,
@@ -307,7 +308,10 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                 </View>
                             </View>
                         )
-                    }) : null}
+                    })
+                        :
+                        null
+                    }
                 </ScrollView>
             </View>
         )
@@ -682,7 +686,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
 
                                         <>
                                             {
-                                                getStockData ? getStockData.map((list, index) => (
+                                                getStockData.length > 0 ? getStockData.map((list, index) => (
                                                     <View
                                                         style={{
                                                             flexDirection: "column",
@@ -844,7 +848,11 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                                         </View>
                                                     </View>
 
-                                                )) : null
+                                                ))
+                                                    :
+                                                    <View>
+                                                        <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center" }]}>Currently, no report to show!</Text>
+                                                    </View>
                                             }
 
                                         </>
