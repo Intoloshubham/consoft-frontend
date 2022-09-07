@@ -12,7 +12,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {IconButton, DeleteConfirmationToast} from '../../../Components';
+import {DeleteConfirmationToast} from '../../../Components';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
 import {Swipeable} from 'react-native-gesture-handler';
 import {
@@ -22,6 +22,7 @@ import {
 import {getUserRole} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
 import {revertSubmitWorks} from '../../../controller/RevertController';
+import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 
 const AssignedWorks = ({data, AssignWorkfunction}) => {
   const companyData = useSelector(state => state.company);
@@ -113,17 +114,21 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
     showMode('time');
   };
 
-  const OnSubmit = async id => {
+  const [assignWorkId, setAssignWorkId] = React.useState('');
+  const getAssignWorkId = id => {
+    setAssignWorkId(id);
+  };
+
+  const OnSubmit = async () => {
     const formData = {
       exp_completion_date: formatedDate,
       exp_completion_time: formatedTime,
     };
-    let data = await revertSubmitWorks(id, formData);
+    // console.log(formData);
+    let data = await revertSubmitWorks(assignWorkId, formData);
     if (data.status === 200) {
       AssignWorkfunction();
-      setTimeout(() => {
-        setRevertModal(false);
-      }, 500);
+      setRevertModal(false);
     }
   };
 
@@ -384,7 +389,8 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
                       </Text>
                       <TouchableOpacity
                         onPress={() => {
-                          OnSubmit(ele._id), setRevertModal(true);
+                          getAssignWorkId(item._id);
+                          setRevertModal(true);
                         }}>
                         <ImageBackground
                           style={{
@@ -620,9 +626,9 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
         </Text>
         <></>
       </View>
-      {renderSwipeList()}
-      {renderRoleFilterModal()}
       {renderRevertModal()}
+      {renderRoleFilterModal()}
+      {renderSwipeList()}
 
       <DeleteConfirmationToast
         isVisible={deleteConfirm}

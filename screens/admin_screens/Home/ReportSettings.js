@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {SIZES, FONTS, COLORS} from '../../../constants';
 import {HeaderBar, CustomDropdown} from '../../../Components';
 import {
@@ -28,77 +28,17 @@ const ReportSettings = ({route}) => {
   const company_id = companyData._id;
   const {project_id} = route.params;
 
-  //GETTING USER ROLES FROM API
+  // STARTED BY
   const [openUserRole, setOpenUserRole] = React.useState(false);
   const [userRoleValue, setUserRoleValue] = React.useState([]);
   const [userRoles, setUserRoles] = React.useState([]);
 
-  //GETTING USER FROM APIS ON CHANGE OF USER ROLES
   const [openUsers, setOpenUsers] = React.useState(false);
   const [usersValue, setUsersValue] = React.useState([]);
   const [users, setUsers] = React.useState([]);
 
-  //GETTING USER ROLES FROM API
-  const [openUserRole1, setOpenUserRole1] = React.useState(false);
-  const [userRoleValue1, setUserRoleValue1] = React.useState([]);
-  const [userRoles1, setUserRoles1] = React.useState([]);
-
-  //GETTING USER FROM APIS ON CHANGE OF USER ROLES
-  const [openUsers1, setOpenUsers1] = React.useState(false);
-  const [usersValue1, setUsersValue1] = React.useState('');
-  const [users1, setUsers1] = React.useState([]);
-
-  //GETTING USER ROLES FROM API
-  const [openUserRole2, setOpenUserRole2] = React.useState(false);
-  const [userRoleValue2, setUserRoleValue2] = React.useState([]);
-  const [userRoles2, setUserRoles2] = React.useState([]);
-
-  //GETTING USER FROM APIS ON CHANGE OF USER ROLES
-  const [openUsers2, setOpenUsers2] = React.useState(false);
-  const [usersValue2, setUsersValue2] = React.useState('');
-  const [users2, setUsers2] = React.useState([]);
-
-  //privileges
-  const [openPrivilege, setOpenPrivilege] = React.useState(false);
-  const [privilegeValue, setPrivilegeValue] = React.useState([]);
-  const [privilege, setPrivilege] = React.useState([]);
-
-  const [openPrivilegeUser, setOpenPrivilegeUser] = React.useState(false);
-  const [privilegeUserValue, setPrivilegeUserValue] = React.useState('');
-  const [privilegeUser, setPrivilegeUser] = React.useState([]);
-
-  //privileges
-  const [openPrivilege1, setOpenPrivilege1] = React.useState(false);
-  const [privilegeValue1, setPrivilegeValue1] = React.useState([]);
-  const [privilege1, setPrivilege1] = React.useState([]);
-
-  const [openPrivilegeUser1, setOpenPrivilegeUser1] = React.useState(false);
-  const [privilegeUserValue1, setPrivilegeUserValue1] = React.useState('');
-  const [privilegeUser1, setPrivilegeUser1] = React.useState([]);
-
-  //privileges
-  const [openPrivilege2, setOpenPrivilege2] = React.useState(false);
-  const [privilegeValue2, setPrivilegeValue2] = React.useState([]);
-  const [privilege2, setPrivilege2] = React.useState([]);
-
-  const [openPrivilegeUser2, setOpenPrivilegeUser2] = React.useState(false);
-  const [privilegeUserValue2, setPrivilegeUserValue2] = React.useState('');
-  const [privilegeUser2, setPrivilegeUser2] = React.useState([]);
-
-  const [startedBy, setStartedBy] = React.useState('');
-  const [verification1, setVerification1] = React.useState('');
-  const [verification2, setVerification2] = React.useState('');
-
-  const [sendTo, setSendTo] = React.useState('');
-  const [admin2, setAdmin2] = React.useState('');
-  const [admin1, setAdmin1] = React.useState('');
-
-  const [reportPath, setReportPath] = React.useState([]);
-
-  // started by -----------------
   const getUserRoles = async () => {
     let response = await getUserRole(company_id);
-    // console.log(response);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map((one, i) => {
         return {label: one.user_role, value: one._id};
@@ -117,9 +57,38 @@ const ReportSettings = ({route}) => {
     }
   };
 
-  //---------------------------------------------------
+  // on open role
+  const onRoleOpen = React.useCallback(() => {
+    getUserRoles();
+    setOpenUsers(false);
+    setOpenUserRole1(false);
+    setOpenUsers1(false);
+    setOpenPrivilege1(false);
+    setOpenPrivilegeUser1(false);
+    setOpenPrivilege2(false);
+    setOpenPrivilegeUser2(false);
+  }, []);
 
-  // verification 1 -----------------
+  // on open user
+  const onUserOpen = React.useCallback(() => {
+    setOpenUserRole(false);
+    setOpenUserRole1(false);
+    setOpenUsers1(false);
+    setOpenPrivilege1(false);
+    setOpenPrivilegeUser1(false);
+    setOpenPrivilege2(false);
+    setOpenPrivilegeUser2(false);
+  }, []);
+
+  // VERIFICATION 1
+  const [openUserRole1, setOpenUserRole1] = React.useState(false);
+  const [userRoleValue1, setUserRoleValue1] = React.useState([]);
+  const [userRoles1, setUserRoles1] = React.useState([]);
+
+  const [openUsers1, setOpenUsers1] = React.useState(false);
+  const [usersValue1, setUsersValue1] = React.useState('');
+  const [users1, setUsers1] = React.useState([]);
+
   const getUserRolesV1 = async () => {
     let response = await getUserRole(company_id);
     if (response.status === 200) {
@@ -140,43 +109,38 @@ const ReportSettings = ({route}) => {
     }
   };
 
-  //---------------------------------------------------
+  // on open role
+  const onRoleOpen1 = React.useCallback(() => {
+    getUserRolesV1();
+    setOpenUsers(false);
+    setOpenUserRole(false);
+    setOpenUsers1(false);
+    setOpenPrivilege1(false);
+    setOpenPrivilegeUser1(false);
+    setOpenPrivilege2(false);
+    setOpenPrivilegeUser2(false);
+  }, []);
 
-  // verification 2 -----------------
-  const getUserRolesV2 = async () => {
-    let response = await getUserRole(company_id);
-    if (response.status === 200) {
-      let roleDataFromApi = response.data.map((one, i) => {
-        return {label: one.user_role, value: one._id};
-      });
-      setUserRoles2(roleDataFromApi);
-    }
-  };
+  // on open user
+  const onUserOpen1 = React.useCallback(() => {
+    setOpenUserRole(false);
+    setOpenUserRole1(false);
+    setOpenUsers(false);
+    setOpenPrivilege1(false);
+    setOpenPrivilegeUser1(false);
+    setOpenPrivilege2(false);
+    setOpenPrivilegeUser2(false);
+  }, []);
 
-  const getUserByRoleIdV2 = async role_id => {
-    let response = await roleByUser(company_id, role_id);
-    if (response.status === 200) {
-      let roleDataFromApi = response.data.map(ele => {
-        return {label: ele.name, value: ele._id};
-      });
-      setUsers2(roleDataFromApi);
-    }
-  };
+  // ADMIN 1
+  const [openPrivilege1, setOpenPrivilege1] = React.useState(false);
+  const [privilegeValue1, setPrivilegeValue1] = React.useState([]);
+  const [privilege1, setPrivilege1] = React.useState([]);
 
-  //---------------------------------------------------
+  const [openPrivilegeUser1, setOpenPrivilegeUser1] = React.useState(false);
+  const [privilegeUserValue1, setPrivilegeUserValue1] = React.useState('');
+  const [privilegeUser1, setPrivilegeUser1] = React.useState([]);
 
-  // send to ------------------------------
-  const fetchPrivilege = async () => {
-    let response = await getPrivileges();
-    if (response.status === 200) {
-      let privilesFromApi = response.data.map(one => {
-        return {label: one.privilege, value: one._id};
-      });
-      setPrivilege(privilesFromApi);
-    }
-  };
-  //-----------------------------------------
-  // send to ------------------------------
   const fetchPrivilege1 = async () => {
     let response = await getPrivileges();
     if (response.status === 200) {
@@ -186,8 +150,50 @@ const ReportSettings = ({route}) => {
       setPrivilege1(privilesFromApi);
     }
   };
-  //-----------------------------------------
-  // send to ------------------------------
+
+  const fetchUserByPrivileges1 = async privilege_id => {
+    let response = await getUserByPrivileges(company_id, privilege_id);
+    if (response.status === 200) {
+      let privilesFromApi = response.data.map(one => {
+        return {label: one.name, value: one._id};
+      });
+
+      setPrivilegeUser1(privilesFromApi);
+    }
+  };
+
+  // on open role
+  const onPrivilegesOpen = React.useCallback(() => {
+    fetchPrivilege1();
+    setOpenUserRole(false);
+    setOpenUserRole1(false);
+    setOpenUsers(false);
+    setOpenUsers1(false);
+    setOpenPrivilegeUser1(false);
+    setOpenPrivilege2(false);
+    setOpenPrivilegeUser2(false);
+  }, []);
+
+  // on open user
+  const onPrivilegesUserOpen = React.useCallback(() => {
+    setOpenUserRole(false);
+    setOpenUserRole1(false);
+    setOpenUsers(false);
+    setOpenUsers1(false);
+    setOpenPrivilege1(false);
+    setOpenPrivilege2(false);
+    setOpenPrivilegeUser2(false);
+  }, []);
+
+  // ADMIN 2
+  const [openPrivilege2, setOpenPrivilege2] = React.useState(false);
+  const [privilegeValue2, setPrivilegeValue2] = React.useState([]);
+  const [privilege2, setPrivilege2] = React.useState([]);
+
+  const [openPrivilegeUser2, setOpenPrivilegeUser2] = React.useState(false);
+  const [privilegeUserValue2, setPrivilegeUserValue2] = React.useState('');
+  const [privilegeUser2, setPrivilegeUser2] = React.useState([]);
+
   const fetchPrivilege2 = async () => {
     let response = await getPrivileges();
     if (response.status === 200) {
@@ -199,25 +205,6 @@ const ReportSettings = ({route}) => {
   };
   //-----------------------------------------
 
-  const fetchUserByPrivileges = async privilege_id => {
-    let response = await getUserByPrivileges(company_id, privilege_id);
-    if (response.status === 200) {
-      let privilesFromApi = response.data.map(one => {
-        return {label: one.name, value: one._id};
-      });
-      setPrivilegeUser(privilesFromApi);
-    }
-  };
-  const fetchUserByPrivileges1 = async privilege_id => {
-    let response = await getUserByPrivileges(company_id, privilege_id);
-    if (response.status === 200) {
-      let privilesFromApi = response.data.map(one => {
-        return {label: one.name, value: one._id};
-      });
-
-      setPrivilegeUser1(privilesFromApi);
-    }
-  };
   const fetchUserByPrivileges2 = async privilege_id => {
     let response = await getUserByPrivileges(company_id, privilege_id);
     if (response.status === 200) {
@@ -229,85 +216,36 @@ const ReportSettings = ({route}) => {
     }
   };
 
-  // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
-  const onRoleOpen = React.useCallback(() => {
-    getUserRoles();
-    setOpenUsers(false);
-    setOpenUsers1(false);
-    setOpenUsers2(false);
-    setOpenUserRole1(false);
-    setOpenUserRole2(false);
-    setOpenPrivilege(false);
-    setOpenPrivilege1(false);
-    setOpenPrivilege2(false);
-  }, []);
-
-  const onRoleOpen1 = React.useCallback(() => {
-    getUserRolesV1();
-    setOpenUserRole(false);
-    setOpenUsers(false);
-    setOpenUsers1(false);
-    setOpenUserRole2(false);
-    setOpenUsers2(false);
-    setOpenPrivilege(false);
-    setOpenPrivilege1(false);
-    setOpenPrivilege2(false);
-  }, []);
-
-  //----------------
-  const onRoleOpen2 = React.useCallback(() => {
-    getUserRolesV2();
-    setOpenUserRole(false);
-    setOpenUsers(false);
-    setOpenUserRole1(false);
-    setOpenUsers1(false);
-    setOpenUsers2(false);
-    setOpenPrivilege(false);
-    setOpenPrivilege1(false);
-    setOpenPrivilege2(false);
-  }, []);
-
-  const onUserOpen = React.useCallback(() => {
-    // setOpenUserRole(false);
-  }, []);
-
-  const onPrivilegesOpen = React.useCallback(() => {
-    fetchPrivilege();
-    setOpenUserRole(false);
-    setOpenUsers(false);
-    setOpenUserRole1(false);
-    setOpenUsers1(false);
-    setOpenUserRole2(false);
-    setOpenUsers2(false);
-    setOpenPrivilege1(false);
-    setOpenPrivilege2(false);
-  }, []);
-
   const onPrivilegesOpen1 = React.useCallback(() => {
-    fetchPrivilege1();
-    setOpenUserRole(false);
-    setOpenUsers(false);
-    setOpenUserRole1(false);
-    setOpenUsers1(false);
-    setOpenUserRole2(false);
-    setOpenUsers2(false);
-    setOpenPrivilege(false);
-    setOpenPrivilege2(false);
-  }, []);
-
-  const onPrivilegesOpen2 = React.useCallback(() => {
     fetchPrivilege2();
     setOpenUserRole(false);
-    setOpenUsers(false);
     setOpenUserRole1(false);
+    setOpenUsers(false);
     setOpenUsers1(false);
-    setOpenUserRole2(false);
-    setOpenUsers2(false);
+    setOpenPrivilegeUser1(false);
     setOpenPrivilege1(false);
-    setOpenPrivilege(false);
+    setOpenPrivilegeUser2(false);
   }, []);
 
-  const onOpenUserPrivilege = React.useCallback(() => {}, []);
+  // on open user
+  const onPrivilegesUserOpen1 = React.useCallback(() => {
+    setOpenUserRole(false);
+    setOpenUserRole1(false);
+    setOpenUsers(false);
+    setOpenUsers1(false);
+    setOpenPrivilege1(false);
+    setOpenPrivilege2(false);
+    setOpenPrivilegeUser1(false);
+  }, []);
+
+  // ====================================================================================
+
+  const [reportPath, setReportPath] = React.useState([]);
+
+  const fetchReportSettingPath = async () => {
+    const response = await getProjectReportPath(company_id, project_id);
+    setReportPath(response.data);
+  };
 
   const onSubmit = async () => {
     const formData = {
@@ -318,31 +256,19 @@ const ReportSettings = ({route}) => {
       admin_1: privilegeUserValue1,
       admin_2: privilegeUserValue2,
     };
-    // console.log('object', formData);
     const response = await postProjectReportPath(formData);
-
-    // console.log(response);
-
     if (response.status === 200) {
       alert('Successfull');
-      setUserRoleValue('');
+      fetchReportSettingPath();
       setUsersValue('');
-      setUserRoleValue1('');
       setUsersValue1('');
-      setPrivilege1('');
-      setPrivilege2('');
       setPrivilegeUserValue1('');
       setPrivilegeUserValue2('');
-      // setUserRoleValue2('');
-      // setUsersValue2('');
-      // setPrivilegeUserValue('');
+      setUserRoleValue('');
+      setUserRoleValue1('');
+      setPrivilegeValue1();
+      setPrivilegeValue2();
     }
-  };
-
-  const fetchReportSettingPath = async () => {
-    const response = await getProjectReportPath(company_id, project_id);
-    // console.log(response.data);
-    setReportPath(response.data);
   };
 
   React.useEffect(() => {
@@ -378,24 +304,7 @@ const ReportSettings = ({route}) => {
             }}>
             Verification 1 {' - '}
           </Text>
-          {/* <Text
-            style={{
-              ...FONTS.h3,
-              color: COLORS.darkGray,
-              marginBottom: 60,
-              textTransform: 'capitalize',
-            }}>
-            Verification 2 {' - '}
-          </Text> */}
-          {/* <Text
-            style={{
-              ...FONTS.h3,
-              color: COLORS.darkGray,
-              marginBottom: 60,
-              textTransform: 'capitalize',
-            }}>
-            Admin 3{' - '}
-          </Text> */}
+
           <Text
             style={{
               ...FONTS.h3,
@@ -443,7 +352,7 @@ const ReportSettings = ({route}) => {
               }}
               onSelectItem={value => getUserByRoleId(value.value)}
               onOpen={onRoleOpen}
-              zIndex={12000}
+              zIndex={8000}
               zIndexInverse={1000}
               maxHeight={150}
             />
@@ -464,12 +373,10 @@ const ReportSettings = ({route}) => {
               setOpen={setOpenUsers}
               setValue={setUsersValue}
               setItems={setUsers}
-              // categorySelectable={true}
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
-              onSelectItem={value => setStartedBy(value.label)}
-              zIndex={11000}
+              zIndex={7000}
               zIndexInverse={2000}
               onOpen={onUserOpen}
               maxHeight={150}
@@ -498,7 +405,7 @@ const ReportSettings = ({route}) => {
               }}
               onSelectItem={value => getUserByRoleIdV1(value.value)}
               onOpen={onRoleOpen1}
-              zIndex={10000}
+              zIndex={6000}
               zIndexInverse={3000}
               maxHeight={150}
             />
@@ -519,129 +426,16 @@ const ReportSettings = ({route}) => {
               setOpen={setOpenUsers1}
               setValue={setUsersValue1}
               setItems={setUsers1}
-              // categorySelectable={true}
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
-              onSelectItem={value => setVerification1(value.label)}
-              zIndex={9000}
+              zIndex={5000}
               zIndexInverse={4000}
-              onOpen={onUserOpen}
+              onOpen={onUserOpen1}
               maxHeight={150}
             />
           </View>
-          {/* <View style={{marginTop: 40}}>
-            <CustomDropdown
-              containerStyle={{
-                width: '70%',
-                marginTop: null,
-                minHeight: 30,
-                paddingHorizontal: SIZES.radius,
-                borderRadius: null,
-                backgroundColor: COLORS.lightGray1,
-              }}
-              dropdownContainerStyle={{width: '70%', marginTop: null}}
-              placeholder="Select user role"
-              open={openUserRole2}
-              value={userRoleValue2}
-              items={userRoles2}
-              setOpen={setOpenUserRole2}
-              setValue={setUserRoleValue2}
-              setItems={setUserRoles2}
-              listParentLabelStyle={{
-                color: COLORS.white,
-              }}
-              // onChangeValue={value => getUserByRoleId(value)}
-              onSelectItem={value => getUserByRoleIdV2(value.value)}
-              onOpen={onRoleOpen2}
-              zIndex={8000}
-              zIndexInverse={5000}
-              maxHeight={150}
-            />
-            <CustomDropdown
-              containerStyle={{
-                width: '70%',
-                marginTop: 30,
-                minHeight: 30,
-                paddingHorizontal: SIZES.radius,
-                borderRadius: null,
-                backgroundColor: COLORS.lightGray1,
-              }}
-              dropdownContainerStyle={{width: '70%', marginTop: 30}}
-              placeholder="Select user"
-              open={openUsers2}
-              value={usersValue2}
-              items={users2}
-              setOpen={setOpenUsers2}
-              setValue={setUsersValue2}
-              setItems={setUsers2}
-              // categorySelectable={true}
-              onSelectItem={value => setVerification2(value.label)}
-              listParentLabelStyle={{
-                color: COLORS.white,
-              }}
-              zIndex={7000}
-              zIndexInverse={6000}
-              onOpen={onUserOpen}
-              maxHeight={150}
-            />
-          </View> */}
-          {/* <View style={{marginTop: 40}}>
-            <CustomDropdown
-              containerStyle={{
-                width: '70%',
-                marginTop: null,
-                minHeight: 30,
-                paddingHorizontal: SIZES.radius,
-                borderRadius: null,
-                backgroundColor: COLORS.lightGray1,
-              }}
-              dropdownContainerStyle={{width: '70%', marginTop: null}}
-              placeholder="Select"
-              open={openPrivilege}
-              value={privilegeValue}
-              items={privilege}
-              setOpen={setOpenPrivilege}
-              setValue={setPrivilegeValue}
-              setItems={setPrivilege}
-              listParentLabelStyle={{
-                color: COLORS.white,
-              }}
-              onSelectItem={value => {
-                fetchUserByPrivileges(value.value);
-              }}
-              onOpen={onPrivilegesOpen}
-              zIndex={6000}
-              zIndexInverse={7000}
-              maxHeight={150}
-            />
-            <CustomDropdown
-              containerStyle={{
-                width: '70%',
-                marginTop: 30,
-                minHeight: 30,
-                paddingHorizontal: SIZES.radius,
-                borderRadius: null,
-                backgroundColor: COLORS.lightGray1,
-              }}
-              dropdownContainerStyle={{width: '70%', marginTop: 30}}
-              placeholder="Select"
-              open={openPrivilegeUser}
-              value={privilegeUserValue}
-              items={privilegeUser}
-              setOpen={setOpenPrivilegeUser}
-              setValue={setPrivilegeUserValue}
-              setItems={setPrivilegeUser}
-              listParentLabelStyle={{
-                color: COLORS.white,
-              }}
-              // onSelectItem={value => setSendTo(value.label)}
-              // onOpen={onPrivilegesOpen}
-              zIndex={5000}
-              zIndexInverse={8000}
-              maxHeight={150}
-            />
-          </View> */}
+
           <View style={{marginTop: 40}}>
             <CustomDropdown
               containerStyle={{
@@ -666,9 +460,9 @@ const ReportSettings = ({route}) => {
               onSelectItem={value => {
                 fetchUserByPrivileges1(value.value);
               }}
-              onOpen={onPrivilegesOpen1}
+              onOpen={onPrivilegesOpen}
               zIndex={4000}
-              zIndexInverse={9000}
+              zIndexInverse={5000}
               maxHeight={150}
             />
             <CustomDropdown
@@ -691,10 +485,9 @@ const ReportSettings = ({route}) => {
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
-              // onSelectItem={value => setAdmin2(value.label)}
-              // onOpen={onPrivilegesOpen}
+              onOpen={onPrivilegesUserOpen}
               zIndex={3000}
-              zIndexInverse={10000}
+              zIndexInverse={6000}
               maxHeight={150}
             />
           </View>
@@ -722,9 +515,9 @@ const ReportSettings = ({route}) => {
               onSelectItem={value => {
                 fetchUserByPrivileges2(value.value);
               }}
-              onOpen={onPrivilegesOpen2}
+              onOpen={onPrivilegesOpen1}
               zIndex={2000}
-              zIndexInverse={11000}
+              zIndexInverse={7000}
               maxHeight={150}
             />
             <CustomDropdown
@@ -747,10 +540,9 @@ const ReportSettings = ({route}) => {
               listParentLabelStyle={{
                 color: COLORS.white,
               }}
-              // onSelectItem={value => setAdmin1(value.label)}
-              // onOpen={onPrivilegesOpen}
+              onOpen={onPrivilegesUserOpen1}
               zIndex={1000}
-              zIndexInverse={12000}
+              zIndexInverse={8000}
               maxHeight={150}
             />
           </View>
@@ -792,12 +584,7 @@ const ReportSettings = ({route}) => {
               <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
                 Verification 1 {' :  '}
               </Text>
-              {/* <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
-                Verification 2 {' :  '}
-              </Text>
-              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
-                Send to {' :  '}
-              </Text> */}
+
               <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
                 Admin 1 {' :  '}
               </Text>
@@ -826,22 +613,7 @@ const ReportSettings = ({route}) => {
                 }}>
                 {ele.verification_1_name}
               </Text>
-              {/* <Text
-                style={{
-                  ...FONTS.h3,
-                  color: COLORS.darkGray,
-                  textTransform: 'capitalize',
-                }}>
-                {ele.verification_2_name}
-              </Text>
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  color: COLORS.darkGray,
-                  textTransform: 'capitalize',
-                }}>
-                {ele.admin_3_name}
-              </Text> */}
+
               <Text
                 style={{
                   ...FONTS.h3,
@@ -859,20 +631,12 @@ const ReportSettings = ({route}) => {
                 {ele.admin_2_name}
               </Text>
             </View>
-
-            {/* <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
-              Started by : {ele.started_by_name} {'\n'}
-              Verification 1 : {ele.verification_1_name} {'\n'}
-              Verification 2 : {ele.verification_2_name} {'\n'}
-              Send to : {ele.admin_3_name} {'\n'}
-              Admin 2 : {ele.admin_2_name} {'\n'}
-              Admin 1 : {ele.admin_1_name} {'\n'}
-            </Text> */}
           </View>
         ))}
       </View>
     );
   }
+
   return (
     <View>
       <HeaderBar right={true} title="Report Settings" />
