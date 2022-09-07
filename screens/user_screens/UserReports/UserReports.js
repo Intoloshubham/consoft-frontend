@@ -74,7 +74,7 @@ const UserReports = ({ route }) => {
   // }, [getUserId])
 
   useMemo(() => {
-    console.log("userbyproject...........")
+    // console.log("userbyproject...........")
     // console.log(userData._id)
     if (userData._id) {
       const sendUserId = async () => {
@@ -160,7 +160,7 @@ const UserReports = ({ route }) => {
           Project_list_drop,
           proListIsFocus && {
             borderColor: COLORS.lightblue_400,
-            
+
           },
         ]}
         placeholderStyle={{ ...FONTS.h3, color: COLORS.black, textTransform: 'capitalize' }
@@ -223,7 +223,19 @@ const UserReports = ({ route }) => {
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           {value ? <View >
-            <View style={{ marginVertical: 5 }}>
+            <View style={{
+              marginVertical: 5,
+              // shadow: {
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 4,
+                },
+                shadowOpacity: 0.3,
+                shadowRadius: 4.65,
+                elevation: 8,
+              // },
+            }}>
               <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }}>
@@ -239,7 +251,7 @@ const UserReports = ({ route }) => {
             </View> */}
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}
-              <TAndP Main_drp_pro_value={value} loading={loading}  />
+              <TAndP Main_drp_pro_value={value} loading={loading} />
             </View>
           </View> : null}
         </View>

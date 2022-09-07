@@ -1,8 +1,9 @@
 import Config from '../config';
 
-const getReport = async project_id => {
+const getReport = async (project_id,user_id)=> {
   try {
-    const res = await fetch(Config.API_URL + 'report/' + project_id, {
+    const res = await fetch(Config.API_URL + 'report/' + project_id + '/'+ user_id , {
+    // const res = await fetch(Config.API_URL + 'report/' + project_id , {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

@@ -291,8 +291,6 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                                     <TouchableOpacity
                                         style={{
                                             elevation: 8,
-                                            // borderWidth: 1,
-
                                             borderColor: COLORS.transparent
                                         }}
                                         onPress={() => deleteStockHandler(key)}>
