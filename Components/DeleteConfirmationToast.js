@@ -4,12 +4,11 @@ import {
   Text,
   Modal,
   Image,
-  ImageBackground,
   TouchableOpacity,
   TouchableWithoutFeedback,
   StyleSheet,
 } from 'react-native';
-import {FONTS, COLORS, images, icons, SIZES} from '../constants';
+import {FONTS, COLORS, SIZES, icons} from '../constants';
 
 const DeleteConfirmationToast = ({
   isVisible,
@@ -29,58 +28,65 @@ const DeleteConfirmationToast = ({
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              // marginHorizontal: SIZES.padding,
-              backgroundColor: COLORS.transparentBlack3,
+              backgroundColor: COLORS.transparentBlack5,
             }}>
             <View
               style={{
                 position: 'absolute',
-                width: '90%',
+                width: '85%',
                 backgroundColor: COLORS.white,
-                borderRadius: 5,
-                paddingHorizontal: SIZES.padding,
-                paddingVertical: 3,
                 ...styles.shadow,
               }}>
               <View
                 style={{
                   padding: 20,
-                  alignItems: 'center',
                 }}>
-                <Image source={icon} style={{height: 50, width: 50}} />
-                <Text
-                  style={{
-                    ...FONTS.h2,
-                    color: COLORS.darkGray,
-                    marginTop: 30,
-                  }}>
-                  {title}
-                </Text>
-                <Text style={{...FONTS.h3, marginTop: 2}}>{message}</Text>
                 <View
                   style={{
-                    marginTop: 20,
                     flexDirection: 'row',
+                    alignItems: 'center',
+                    marginBottom: SIZES.base,
+                  }}>
+                  <Image
+                    source={icons.delete_icon}
+                    style={{width: 20, height: 20, tintColor: COLORS.black}}
+                  />
+                  <Text style={{...FONTS.h2, color: COLORS.black, left: 12}}>
+                    Delete
+                  </Text>
+                </View>
+                <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                  {message}
+                </Text>
+                <View
+                  style={{
+                    marginTop: 15,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
                   }}>
                   <TouchableOpacity
                     style={{
-                      right: 15,
-                      backgroundColor: COLORS.gray,
-                      paddingHorizontal: 15,
-                      paddingVertical: 5,
+                      right: 20,
+                      paddingHorizontal: 5,
+                      paddingVertical: 3,
+                      borderRadius: 2,
+                      backgroundColor: COLORS.green,
                     }}
                     onPress={onClose}>
-                    <Text style={{...FONTS.h3, color: COLORS.white}}>No</Text>
+                    <Text style={{...FONTS.h3, color: COLORS.white}}>
+                      Cancel
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={{
-                      left: 15,
-                      backgroundColor: color,
-                      paddingHorizontal: 15,
-                      paddingVertical: 5,
+                      paddingHorizontal: 5,
+                      paddingVertical: 3,
+                      borderRadius: 2,
+                      backgroundColor: COLORS.red_600,
                     }}
                     onPress={onClickYes}>
-                    <Text style={{...FONTS.h3, color: COLORS.white}}>Yes</Text>
+                    <Text style={{...FONTS.h3, color: COLORS.white}}>Ok</Text>
                   </TouchableOpacity>
                 </View>
               </View>

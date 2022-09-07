@@ -1,15 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  Alert,
   Modal,
   StyleSheet,
   Text,
-  Pressable,
   View,
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-import {COLORS, SIZES, FONTS, icons, images} from '../constants';
+import {COLORS, SIZES, FONTS} from '../constants';
 
 const CustomToast = ({isVisible, onClose, color, title, message}) => {
   return (
@@ -20,7 +18,7 @@ const CustomToast = ({isVisible, onClose, color, title, message}) => {
             style={{
               flex: 1,
               alignItems: 'center',
-              marginHorizontal: SIZES.padding,
+              marginHorizontal: SIZES.padding * 2,
             }}>
             <View
               style={{

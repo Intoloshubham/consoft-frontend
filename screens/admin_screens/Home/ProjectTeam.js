@@ -415,7 +415,9 @@ const ProjectTeam = ({route}) => {
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={
+          'Do you really want to delete this project team member from this project?'
+        }
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => deleteTeamSubmit()}
