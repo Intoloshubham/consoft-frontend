@@ -15,7 +15,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import {useSelector} from 'react-redux';
 import {getProjects} from '../../../controller/ProjectController';
-import {SIZES, FONTS, COLORS, icons, images} from '../../../constants';
+import {SIZES, FONTS, COLORS, icons} from '../../../constants';
 import {
   getManpower,
   getReport,
@@ -23,10 +23,8 @@ import {
   verifyReport,
   revertReport,
 } from '../../../controller/ReportController';
-import {getSingleUser} from '../../../controller/UserRoleController';
 import {getProjectReportPath} from '../../../controller/ReportController';
 import {getUserId} from '../../../services/asyncStorageService';
-import {FormInput} from '../../../Components';
 
 const ReportDisplay = () => {
   const companyDetail = useSelector(state => state.company);
@@ -38,10 +36,9 @@ const ReportDisplay = () => {
   } else {
     companyData = userData;
   }
+
   const company_id = companyData._id;
-
   const [userId, setUserId] = React.useState('');
-
   const getUser_Id = async () => {
     const id = await getUserId();
     setUserId(id);
@@ -72,7 +69,6 @@ const ReportDisplay = () => {
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
 
-  // console.log('object', reportData.verify_1_status);
   // get projects
   const fetchProject = async () => {
     let response = await getProjects(company_id);
@@ -88,7 +84,6 @@ const ReportDisplay = () => {
   const fetchReport = async project_id => {
     setProjectId(project_id);
     let response = await getReport(project_id);
-    // console.log(response);
     setReport(response.data);
   };
 
@@ -130,7 +125,6 @@ const ReportDisplay = () => {
       revert_msg: revertMsg,
     };
     let response = await revertReport(projectId, reportId, userId, formData);
-    // console.log(response);
     if (response.status === 200) {
       alert('Reverted Successfully');
       setRevertMsg('');
@@ -154,6 +148,13 @@ const ReportDisplay = () => {
 
   // date section
   const [date, setDate] = React.useState(new Date());
+  const MyDateString =
+    date.getFullYear() +
+    '/' +
+    ('0' + date.getDate()).slice(-2) +
+    '/' +
+    ('0' + (date.getMonth() + 1)).slice(-2);
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
@@ -226,8 +227,6 @@ const ReportDisplay = () => {
               height: 25,
               tintColor: 'black',
             }}
-            // maxHeight={200}
-            // zIndex={1000}
             zIndexInverse={1000}
           />
         </View>
@@ -271,8 +270,6 @@ const ReportDisplay = () => {
             admin_2_status: item.admin_2_status,
             admin_1_revert_msg: item.admin_1_revert_msg,
             admin_2_revert_msg: item.admin_2_revert_msg,
-            // admin_1_revert: item.admin_1_revert,
-            // admin_2_revert: item.admin_2_revert,
           });
           fetchManpower(item._id);
           fetchQuantity(item._id);
@@ -312,6 +309,7 @@ const ReportDisplay = () => {
         </View>
       </TouchableOpacity>
     );
+
     return (
       <FlatList
         contentContainerStyle={{marginTop: 20}}
@@ -340,7 +338,6 @@ const ReportDisplay = () => {
           borderWidth: 1,
           borderColor: COLORS.gray2,
           padding: 10,
-          // borderRadius: 3,
           width: SIZES.width / 2.4,
         }}>
         <Text
@@ -458,11 +455,9 @@ const ReportDisplay = () => {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  // alignItems: 'center',
                 }}>
                 <Text
                   style={{
-                    // ...FONTS.h2,
                     fontSize: 25,
                     color: COLORS.black,
                     textTransform: 'capitalize',
@@ -542,7 +537,6 @@ const ReportDisplay = () => {
       <View>
         <View
           style={{
-            // marginTop: 5,
             flexDirection: 'row',
           }}>
           <Text
@@ -615,14 +609,12 @@ const ReportDisplay = () => {
                   <View
                     style={{
                       flexDirection: 'row',
-                      // marginBottom: SIZES.base,
                     }}>
                     <Text
                       style={{
                         flex: 1,
                         ...FONTS.h4,
                         color: COLORS.black,
-                        // fsontWeight: 'bold',
                       }}></Text>
                     <Text
                       style={{
@@ -630,7 +622,6 @@ const ReportDisplay = () => {
                         flex: 0.5,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
                       }}>
                       L
                     </Text>
@@ -640,7 +631,6 @@ const ReportDisplay = () => {
                         flex: 0.5,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
                       }}>
                       W
                     </Text>
@@ -650,7 +640,6 @@ const ReportDisplay = () => {
                         flex: 0.5,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
                       }}>
                       H
                     </Text>
@@ -660,7 +649,6 @@ const ReportDisplay = () => {
                         flex: 1,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
                       }}>
                       Total
                     </Text>
@@ -670,7 +658,6 @@ const ReportDisplay = () => {
                         flex: 1,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
                       }}>
                       Remark
                     </Text>
@@ -687,14 +674,12 @@ const ReportDisplay = () => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    // marginBottom: SIZES.base,
                   }}>
                   <Text
                     style={{
                       flex: 1,
                       ...FONTS.h4,
                       color: COLORS.black,
-                      // fsontWeight: 'bold',
                     }}></Text>
                   <Text
                     style={{
@@ -702,7 +687,6 @@ const ReportDisplay = () => {
                       flex: 0.5,
                       color: COLORS.black,
                       textAlign: 'right',
-                      // fontWeight: 'bold',
                     }}>
                     {ele.sub_length}
                   </Text>
@@ -712,7 +696,6 @@ const ReportDisplay = () => {
                       flex: 0.5,
                       color: COLORS.black,
                       textAlign: 'right',
-                      // fontWeight: 'bold',
                     }}>
                     {ele.sub_width}
                   </Text>
@@ -722,7 +705,6 @@ const ReportDisplay = () => {
                       flex: 0.5,
                       color: COLORS.black,
                       textAlign: 'right',
-                      // fontWeight: 'bold',
                     }}>
                     {ele.sub_height}
                   </Text>
@@ -732,7 +714,6 @@ const ReportDisplay = () => {
                       flex: 1,
                       color: COLORS.black,
                       textAlign: 'right',
-                      // fontWeight: 'bold',
                     }}>
                     {ele.sub_total}
                   </Text>
@@ -742,7 +723,6 @@ const ReportDisplay = () => {
                       flex: 1,
                       color: COLORS.black,
                       textAlign: 'right',
-                      // fontWeight: 'bold',
                     }}>
                     {ele.sub_quality_type}
                   </Text>
@@ -962,11 +942,9 @@ const ReportDisplay = () => {
                       <View
                         style={{
                           left: 20,
-                          // flexDirection: 'row',
                         }}>
                         <View
                           style={{
-                            // left: 20,
                             flexDirection: 'row',
                           }}>
                           <TouchableOpacity
