@@ -31,22 +31,18 @@ import {
 import {getProjects} from '../../../controller/ProjectController';
 
 const CompanyTeamShow = () => {
-  const [addTeamModal, setAddTeamModal] = React.useState(false);
-
-  // const company_data = useSelector(state => state.company);
-  // const company_id = company_data._id;
   const companyDetail = useSelector(state => state.company);
   const userData = useSelector(state => state.user);
 
   var companyData;
   if (companyDetail._id) {
-    companyData = useSelector(state => state.company);
-  }
-  if (userData._id) {
-    companyData = useSelector(state => state.user);
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
   }
   const company_id = companyData._id;
 
+  const [addTeamModal, setAddTeamModal] = React.useState(false);
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
 
@@ -113,6 +109,7 @@ const CompanyTeamShow = () => {
 
   const getCompanyTeam = async () => {
     let response = await getUsers(company_id);
+    console.log(response);
     if (response.status === 200) {
       setCompanyTeam(response.data);
     }
@@ -130,6 +127,7 @@ const CompanyTeamShow = () => {
 
   const userRole = async () => {
     let response = await getUserRole(company_id);
+    // console.log(response);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map(one => {
         return {label: one.user_role, value: one._id};
@@ -180,6 +178,32 @@ const CompanyTeamShow = () => {
 
   // const openModal = () => {
   //   setAddTeamModal(true);
+  // };
+
+  // const onEdit = (
+  //   user_id,
+  //   user_role,
+  //   user_privilege,
+  //   user_name,
+  //   user_email,
+  //   user_mobile,
+  // ) => {
+  //   userRole();
+  //   fetchPrivilege();
+  //   setAddTeamModal(true);
+
+  //   setRoleValue(user_role);
+  //   setPrivilegeValue(user_privilege);
+  //   setName(user_name);
+  //   setEmail(user_email);
+  //   setMobile(user_mobile);
+
+  //   console.log(user_id);
+  //   console.log(user_role);
+  //   console.log(user_privilege);
+  //   console.log(user_name);
+  //   console.log(user_email);
+  //   console.log(user_mobile);
   // };
 
   React.useEffect(() => {
@@ -277,6 +301,7 @@ const CompanyTeamShow = () => {
                 label="Name"
                 keyboardType="default"
                 autoCompleteType="username"
+                value={name}
                 onChange={value => {
                   utils.validateText(value, setNameError);
                   setName(value);
@@ -308,6 +333,7 @@ const CompanyTeamShow = () => {
                 label="Email"
                 keyboardType="email-address"
                 autoCompleteType="email"
+                value={email}
                 onChange={value => {
                   utils.validateEmail(value, setEmailError);
                   setEmail(value);
@@ -338,6 +364,7 @@ const CompanyTeamShow = () => {
               <FormInput
                 label="Mobile No."
                 keyboardType="numeric"
+                value={mobile}
                 onChange={value => {
                   utils.validateNumber(value, setMobileError);
                   setMobile(value);
@@ -433,26 +460,83 @@ const CompanyTeamShow = () => {
   function renderCompanyTeam() {
     const renderItem = ({item, index}) => (
       <View>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{...FONTS.h4}}>{index + 1}.</Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              left: 5,
-              color: COLORS.black,
-              textTransform: 'capitalize',
-            }}>
-            {item.name}
-          </Text>
-          <Text style={{left: 5}}>{'  -  '}</Text>
-          <Text
-            style={{
-              ...FONTS.h5,
-              left: 5,
-              color: COLORS.darkGray,
-            }}>
-            ({item.user_role})
-          </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{...FONTS.h4}}>{index + 1}.</Text>
+            <Text
+              style={{
+                ...FONTS.h3,
+                left: 5,
+                color: COLORS.black,
+                textTransform: 'capitalize',
+              }}>
+              {item.name}
+            </Text>
+            <Text style={{left: 5}}>{'  -  '}</Text>
+            <Text
+              style={{
+                ...FONTS.h5,
+                left: 5,
+                color: COLORS.darkGray,
+              }}>
+              ({item.user_role})
+            </Text>
+          </View>
+          {/* <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              onPress={() => {
+                onEdit(
+                  item._id,
+                  item.role_id,
+                  item.user_privilege,
+                  item.name,
+                  item.email,
+                  item.mobile,
+                );
+              }}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.green,
+                  padding: 3,
+                  borderRadius: 2,
+                  right: 12,
+                }}>
+                <Image
+                  source={icons.edit}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                alert('Delete');
+              }}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.rose_600,
+                  padding: 3,
+                  borderRadius: 2,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
+            </TouchableOpacity>
+          </View> */}
         </View>
         <Text style={{...FONTS.h4, left: 15, color: COLORS.darkGray}}>
           Mobile No. {item.mobile}
@@ -533,4 +617,5 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 });
+
 export default CompanyTeamShow;
