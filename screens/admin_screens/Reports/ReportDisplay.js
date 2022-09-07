@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
+  TextInput,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
@@ -18,10 +20,13 @@ import {
   getManpower,
   getReport,
   getQuantity,
+  verifyReport,
+  revertReport,
 } from '../../../controller/ReportController';
-import CheckBox from '@react-native-community/checkbox';
-import {getPrivileges} from '../../../controller/UserRoleController';
+import {getSingleUser} from '../../../controller/UserRoleController';
 import {getProjectReportPath} from '../../../controller/ReportController';
+import {getUserId} from '../../../services/asyncStorageService';
+import {FormInput} from '../../../Components';
 
 const ReportDisplay = () => {
   const companyDetail = useSelector(state => state.company);
@@ -35,7 +40,11 @@ const ReportDisplay = () => {
   }
   const company_id = companyData._id;
 
-  // console.log(companyData);
+  const [userId, setUserId] = React.useState('');
+  const getUser_Id = async () => {
+    const id = await getUserId();
+    setUserId(id);
+  };
 
   // projects
   const [onSelect, setOnSelect] = React.useState(false);
@@ -51,26 +60,18 @@ const ReportDisplay = () => {
   const [manpower, setManpower] = React.useState([]);
   const [quantity, setQuantity] = React.useState([]);
 
-  //checkbox
-  const [isSelected1, setSelection1] = React.useState(false);
-  const [isSelected2, setSelection2] = React.useState(false);
-  const [isSelected3, setSelection3] = React.useState(false);
-
-  const checkAllHelper = value => {
-    if (value) {
-      setSelection1(true);
-      setSelection2(true);
-      setSelection3(true);
-    } else {
-      setSelection1(false);
-      setSelection2(false);
-      setSelection3(false);
-    }
-  };
-  // privilges
-
+  //report path
   const [reportPath, setReportPath] = React.useState([]);
 
+  // for report verify
+  const [projectId, setProjectId] = React.useState('');
+  const [reportId, setReportId] = React.useState('');
+
+  //modal
+  const [revertModal, setRevertModal] = React.useState(false);
+  const [revertMsg, setRevertMsg] = React.useState('');
+
+  // console.log('object', reportData.verify_1_status);
   // get projects
   const fetchProject = async () => {
     let response = await getProjects(company_id);
@@ -84,19 +85,22 @@ const ReportDisplay = () => {
 
   // get report
   const fetchReport = async project_id => {
+    setProjectId(project_id);
     let response = await getReport(project_id);
+    // console.log(response);
     setReport(response.data);
   };
 
-  // fetch manpower on click
+  // fetch manpower report on click
   const fetchManpower = async report_id => {
+    setReportId(report_id);
     let response = await getManpower(report_id);
     if (response.status === 200) {
       setManpower(response.data);
     }
   };
 
-  // fetch quantity on click
+  // fetch quantity report on click
   const fetchQuantity = async report_id => {
     let response = await getQuantity(report_id);
     if (response.status === 200) {
@@ -104,19 +108,46 @@ const ReportDisplay = () => {
     }
   };
 
-  // fetch privileges
+  // fetch report path
   const fetchReportPath = async project_id => {
     const response = await getProjectReportPath(company_id, project_id);
-    // console.log(response);
     setReportPath(response.data);
   };
 
+  // fetch verify report
+  const fetchVerifyReport = async () => {
+    let response = await verifyReport(projectId, reportId, userId);
+    if (response.status === 200) {
+      alert('Verified');
+      fetchReport();
+    }
+  };
+
+  // fetch revert report
+  const submitRevertReport = async () => {
+    const formData = {
+      revert_msg: revertMsg,
+    };
+    let response = await revertReport(projectId, reportId, userId, formData);
+    // console.log(response);
+    if (response.status === 200) {
+      alert('Reverted Successfully');
+      setRevertMsg('');
+      setRevertModal(false);
+      fetchReport();
+    } else {
+      alert(response.message);
+    }
+  };
+
+  // open project dropdown
   const onProjectOpen = React.useCallback(() => {
     setOnSelect(false);
     fetchProject();
+    getUser_Id();
   }, []);
 
-  // date
+  // date section
   const [date, setDate] = React.useState(new Date());
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -228,8 +259,13 @@ const ReportDisplay = () => {
           setReportData({
             project_name: item.project_name,
             user_name: item.user_name,
+            user_id: item.user_id,
             date: item.report_date,
             time: item.report_time,
+            admin_1_status: item.admin_1_status,
+            admin_2_status: item.admin_2_status,
+            // admin_1_revert: item.admin_1_revert,
+            // admin_2_revert: item.admin_2_revert,
           });
           fetchManpower(item._id);
           fetchQuantity(item._id);
@@ -348,7 +384,7 @@ const ReportDisplay = () => {
     const footerComponent = () => (
       <View>
         {renderQuantity()}
-        {renderFooter()}
+        {userId && renderFooter()}
       </View>
     );
 
@@ -361,7 +397,7 @@ const ReportDisplay = () => {
           }}>
           <View
             style={{
-              top: 50,
+              top: 30,
               backgroundColor: COLORS.white,
               paddingHorizontal: SIZES.radius,
               paddingBottom: SIZES.radius,
@@ -472,12 +508,13 @@ const ReportDisplay = () => {
                 </Text>
 
                 <FlatList
-                  contentContainerStyle={{marginTop: 5}}
+                  contentContainerStyle={{marginTop: 5, maxHeight: 450}}
                   numColumns={2}
                   columnWrapperStyle={{justifyContent: 'space-between'}}
                   data={manpower}
                   keyExtractor={item => `${item._id}`}
                   renderItem={renderItem}
+                  scrollEnabled={true}
                   showsVerticalScrollIndicator={false}
                   ItemSeparatorComponent={() => {
                     return <View style={{margin: 5}}></View>;
@@ -835,46 +872,202 @@ const ReportDisplay = () => {
             color: COLORS.black,
             marginBottom: 5,
           }}>
-          Verify
+          Verify Report :
         </Text>
-        {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox value={isSelected1} onValueChange={setSelection1} />
-          <Text style={{...FONTS.h4, color: 'black'}}>Admin 1</Text>
-        </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox value={isSelected2} onValueChange={setSelection2} />
-          <Text style={{...FONTS.h4, color: 'black'}}>Admin 2</Text>
-        </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <CheckBox value={isSelected3} onValueChange={setSelection3} />
-          <Text style={{...FONTS.h4, color: 'black'}}>Admin 3</Text>
-        </View> */}
         {reportPath.map((ele, i) => {
-          // {
-          //   ele.admin_3 ==
-          // }
           return (
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <CheckBox value={isSelected3} onValueChange={setSelection3} />
-                <Text style={{...FONTS.h4, color: 'black'}}>
-                  {ele.admin_1_name}
-                </Text>
-              </View>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', left: 10}}>
-                <CheckBox value={isSelected3} onValueChange={setSelection3} />
-                <Text style={{...FONTS.h4, color: 'black'}}>
-                  {ele.admin_2_name}
-                </Text>
-              </View>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', left: 20}}>
-                <CheckBox value={isSelected3} onValueChange={setSelection3} />
-                <Text style={{...FONTS.h4, color: 'black'}}>
-                  {ele.admin_3_name}
-                </Text>
-              </View>
+            <View key={i}>
+              {ele.admin_1 === userId ? (
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      textTransform: 'capitalize',
+                      color: COLORS.black,
+                    }}>
+                    {ele.admin_1_name} :
+                  </Text>
+                  {reportData.admin_1_status === false ? (
+                    <View
+                      style={{
+                        left: 20,
+                        flexDirection: 'row',
+                      }}>
+                      <TouchableOpacity
+                        style={{
+                          paddingHorizontal: 5,
+                          paddingVertical: 1,
+                          backgroundColor: COLORS.success_600,
+                        }}
+                        onPress={() => fetchVerifyReport()}>
+                        <Text style={{color: 'white', ...FONTS.h4}}>
+                          Verify
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={{
+                          left: 15,
+                          paddingHorizontal: 5,
+                          paddingVertical: 1,
+                          backgroundColor: COLORS.rose_600,
+                        }}
+                        onPress={() => setRevertModal(true)}>
+                        <Text style={{color: 'white', ...FONTS.h4}}>
+                          Revert
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        left: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={{...FONTS.h3, color: COLORS.black}}>
+                        Verified
+                      </Text>
+                      <Image
+                        source={icons.verify}
+                        style={{
+                          left: 8,
+                          width: 16,
+                          height: 16,
+                          tintColor: 'green',
+                        }}
+                      />
+                    </View>
+                  )}
+                </View>
+              ) : ele.admin_2 === userId ? (
+                <View style={{flexDirection: 'row'}}>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      textTransform: 'capitalize',
+                      color: COLORS.black,
+                    }}>
+                    {ele.admin_2_name} :
+                  </Text>
+                  {reportData.admin_2_status === false ? (
+                    <View
+                      style={{
+                        left: 20,
+                        // flexDirection: 'row',
+                      }}>
+                      <View
+                        style={{
+                          // left: 20,
+                          flexDirection: 'row',
+                        }}>
+                        <TouchableOpacity
+                          style={{
+                            paddingHorizontal: 5,
+                            paddingVertical: 1,
+                            backgroundColor: COLORS.success_600,
+                          }}
+                          onPress={() => fetchVerifyReport()}>
+                          <Text style={{color: 'white', ...FONTS.h4}}>
+                            Verify
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={{
+                            left: 15,
+                            paddingHorizontal: 5,
+                            paddingVertical: 1,
+                            backgroundColor: COLORS.rose_600,
+                          }}
+                          onPress={() => setRevertModal(true)}>
+                          <Text style={{color: 'white', ...FONTS.h4}}>
+                            Revert
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        left: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={{...FONTS.h3, color: COLORS.black}}>
+                        Verified
+                      </Text>
+                      <Image
+                        source={icons.verify}
+                        style={{
+                          left: 8,
+                          width: 16,
+                          height: 16,
+                          tintColor: 'green',
+                        }}
+                      />
+                    </View>
+                  )}
+                </View>
+              ) : ele.verification_1 === userId ? (
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{...FONTS.h3, textTransform: 'capitalize'}}>
+                    {ele.verification_1_name} :
+                  </Text>
+                  {reportData.admin_2_status === false ? (
+                    <View
+                      style={{
+                        left: 20,
+                        flexDirection: 'row',
+                      }}>
+                      <TouchableOpacity
+                        style={{
+                          paddingHorizontal: 5,
+                          paddingVertical: 1,
+                          backgroundColor: COLORS.success_600,
+                        }}
+                        onPress={() => fetchVerifyReport()}>
+                        <Text style={{color: 'white', ...FONTS.h4}}>
+                          Verify
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={{
+                          left: 15,
+                          paddingHorizontal: 5,
+                          paddingVertical: 1,
+                          backgroundColor: COLORS.rose_600,
+                        }}
+                        onPress={() => setRevertModal(true)}>
+                        <Text style={{color: 'white', ...FONTS.h4}}>
+                          Revert
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        left: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={{...FONTS.h3, color: COLORS.black}}>
+                        Verified
+                      </Text>
+                      <Image
+                        source={icons.verify}
+                        style={{
+                          left: 8,
+                          width: 16,
+                          height: 16,
+                          tintColor: 'green',
+                        }}
+                      />
+                    </View>
+                  )}
+                </View>
+              ) : null}
             </View>
           );
         })}
@@ -882,9 +1075,100 @@ const ReportDisplay = () => {
     );
   }
 
+  function renderRevertModal() {
+    return (
+      <Modal animationType="slide" transparent={true} visible={revertModal}>
+        <TouchableWithoutFeedback onPress={() => setRevertModal(false)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                backgroundColor: COLORS.white,
+                paddingHorizontal: SIZES.padding,
+                paddingVertical: SIZES.radius,
+                width: '90%',
+                top: '30%',
+                borderRadius: 5,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
+                <Text style={{fontSize: 20, color: COLORS.darkGray}}>
+                  Revert message
+                </Text>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity onPress={() => setRevertModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.darkGray,
+                }}>
+                <TextInput
+                  placeholder="Write your message..."
+                  multiline={true}
+                  numberOfLines={3}
+                  onChangeText={value => {
+                    setRevertMsg(value);
+                  }}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={{
+                  marginTop: SIZES.padding,
+                  alignItems: 'center',
+                }}
+                onPress={() => submitRevertReport()}>
+                <Text
+                  style={{
+                    ...FONTS.h3,
+                    backgroundColor: COLORS.lightblue_800,
+                    paddingHorizontal: SIZES.radius,
+                    paddingVertical: 5,
+                    borderRadius: 3,
+                    color: COLORS.white,
+                  }}>
+                  Send
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
   return (
     <View style={{margin: SIZES.radius}}>
       {renderProjectFilter()}
+      {renderRevertModal()}
       {renderReportModal()}
       {onSelect == true && renderReport()}
     </View>

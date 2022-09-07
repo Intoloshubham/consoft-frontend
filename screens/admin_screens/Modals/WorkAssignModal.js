@@ -106,7 +106,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   };
 
   const getUserByRoleId = async role_id => {
-    let response = await roleByUser(role_id);
+    let response = await roleByUser(company_id, role_id);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map(ele => {
         return {label: ele.name, value: ele._id};
@@ -267,7 +267,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
 
   return (
     <View>
-      <Modal animationType='slide' transparent={true} visible={isVisible}>
+      <Modal animationType="slide" transparent={true} visible={isVisible}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{

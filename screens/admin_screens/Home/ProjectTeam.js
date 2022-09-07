@@ -16,8 +16,6 @@ import {
   HeaderBar,
   TextButton,
   CustomDropdown,
-  IconButton,
-  ConformationAlert,
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
@@ -44,6 +42,7 @@ const ProjectTeam = ({route}) => {
 
   const {project_id} = route.params; //
   const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
+
   const [projectTeam, setProjectTeam] = useState([]);
   const [teamDeleteConfirmation, setTeamDeleteConfirmation] = useState(false);
 
@@ -87,7 +86,6 @@ const ProjectTeam = ({route}) => {
   };
 
   const addProjectTeam = async () => {
-    setAddProjectTeamModal(true);
     const res = await getUserRole(company_id);
     if (res.status === 200) {
       let roleFromApi = res.data.map(list => {
@@ -98,7 +96,7 @@ const ProjectTeam = ({route}) => {
   };
 
   const getRolebyUser = async role_id => {
-    const res = await roleByUser(role_id);
+    const res = await roleByUser(company_id, role_id);
     if (res.status === 200) {
       let usersFromApi = res.data.map(ele => {
         return {label: ele.name, value: ele._id};
@@ -114,6 +112,8 @@ const ProjectTeam = ({route}) => {
       project_id: project_id,
       user_id: userValue,
     };
+
+    // console.log(teamData);
     const res = await saveProjectTeam(teamData);
     if (res.status === 200) {
       setAddProjectTeamModal(false);
@@ -170,27 +170,27 @@ const ProjectTeam = ({route}) => {
             </Text>
             <View style={{flexDirection: 'row'}}>
               {/* <TouchableOpacity
-                      onPress={() => {
-                        alert('edit name');
-                      }}>
-                      <ImageBackground
-                        style={{
-                          backgroundColor: COLORS.green,
-                          padding: 5,
-                          borderRadius: SIZES.base,
-                          right: 10,
-                        }}>
-                        <Image
-                          source={icons.edit}
-                          style={{
-                            width: 15,
-                            height: 15,
-                            // right: 15,
-                            tintColor: COLORS.white,
-                          }}
-                        />
-                      </ImageBackground>
-                    </TouchableOpacity> */}
+                onPress={() => {
+                  alert('edit name');
+                }}>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.green,
+                    padding: 3,
+                    borderRadius: 2,
+                    right: 10,
+                  }}>
+                  <Image
+                    source={icons.edit}
+                    style={{
+                      width: 12,
+                      height: 12,
+                      // right: 15,
+                      tintColor: COLORS.white,
+                    }}
+                  />
+                </ImageBackground>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 onPress={() => {
                   setUserId(item._id);
@@ -381,7 +381,10 @@ const ProjectTeam = ({route}) => {
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
         }}
-        onPress={() => addProjectTeam()}
+        onPress={() => {
+          setAddProjectTeamModal(true);
+          addProjectTeam();
+        }}
       />
       {renderTeamList()}
       {renderAddProjectTeamModal()}

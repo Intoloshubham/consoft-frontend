@@ -13,6 +13,7 @@ import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {ProfileValue, LineDivider} from '../../../Components';
 import {useSelector, useDispatch} from 'react-redux';
 import {companyLogout} from '../../../services/companyAuthApi';
+import {userLogout} from '../../../services/userAuthApi';
 
 const Account = () => {
   const companyDetail = useSelector(state => state.company);
@@ -25,12 +26,18 @@ const Account = () => {
     companyData = userData;
   }
 
+  // console.log(companyData);
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = React.useState(true);
 
   const logout = () => {
-    dispatch(companyLogout());
+    if (companyDetail._id) {
+      dispatch(companyLogout());
+    } else {
+      dispatch(userLogout());
+    }
     navigation.navigate('Login');
   };
 
