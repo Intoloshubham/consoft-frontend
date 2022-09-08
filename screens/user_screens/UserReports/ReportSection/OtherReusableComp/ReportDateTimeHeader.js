@@ -86,7 +86,7 @@ const ReportDateTimeHeader = () => {
                                 }}
                             />
                         </TouchableOpacity>
-                    </View>
+                    </View> 
                 </View>
             </View>
         )
@@ -104,6 +104,7 @@ const ReportDateTimeHeader = () => {
                 <View style={{ left: SIZES.base * 3, top: -SIZES.base * 0.1 }}>
                     {<EditDeletebuttons edit_size={18} del_size={20} />}
                 </View>
+
             </View>
         </>
     )

@@ -382,6 +382,18 @@ const get_works_in_progress = async (Id) => {
 
 
 }
+const get_completed_task = async (user_Id) => {
+
+    try {
+        const res = await fetch(`${process.env.API_URL}user-completed-works/${user_Id}`);
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+
+
+}
 
 export {
     Get_Project_Team_Data, Get_Contractor_Data, Get_user_role, Insert_report_data, Get_report_data, edit_report_data,
@@ -389,7 +401,7 @@ export {
     get_stock_item_name, insert_stock_data, get_stock_data, insert_new_category, get_new_category, insert_new_sub_category,
     insert_manpower_report, get_manpower_report, delete_manpower_data, filter_new_category_by_cont_Id, get_works_in_progress,
     Get_user_name_by_role, Insert_project_team_data, edit_manpower_report_data, update_manpower_report, get_equipment_item_name,
-    save_new_equipment_item, insert_TAndP_report, get_equipment_report, edit_TAndP_report_data, update_TAndP_report_data
+    save_new_equipment_item, insert_TAndP_report, get_equipment_report, edit_TAndP_report_data, update_TAndP_report_data,get_completed_task
 }
 
 

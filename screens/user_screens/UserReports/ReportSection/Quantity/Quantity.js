@@ -989,7 +989,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                     style={{
                       elevation: 8,
                       borderColor: COLORS.transparent,
-                       alignSelf: "flex-end"
+                      alignSelf: "flex-end"
                     }}
                     onPress={() => deleteHandler(key)}>
                     <Image
@@ -1266,9 +1266,17 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
           justifyContent: 'space-between',
           top: SIZES.base * 2,
           borderColor: COLORS.lightblue_200,
+          backgroundColor:COLORS.lightblue_600,
           borderWidth: 1,
-          borderRadius: 1,
-          elevation: 1,
+          borderRadius: 4,
+          elevation: 2,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 4,
+          },
+          shadowOpacity: 0.3,
+          shadowRadius: 4.65,
         }}>
         <View style={{ alignItems: 'center', alignSelf: 'center' }}>
           <Text
@@ -1276,7 +1284,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
               Main_drp_pro_value ? null : alert("Select Project First!")
               setQuantity(!quant_ity)
             }}
-            style={[FONTS.h3, { color: COLORS.darkGray }]}>
+            style={[FONTS.h3, { color: COLORS.white2 }]}>
             Quantity Executed Today
           </Text>
         </View>
@@ -1288,7 +1296,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
           }}>
-            <AntDesign name="caretdown" size={12} color={COLORS.gray} />
+            <AntDesign name="caretdown" size={12} color={COLORS.white2} />
           </TouchableOpacity>
         </View>
       </Pressable>
