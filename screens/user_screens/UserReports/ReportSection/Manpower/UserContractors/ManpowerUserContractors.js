@@ -658,7 +658,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
       >
         {
-           filterNewCategory.length > 0 ? filterNewCategory.map((memberInput, index) => {
+          filterNewCategory.length > 0 ? filterNewCategory.map((memberInput, index) => {
 
             return (
               <View
@@ -1167,18 +1167,19 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
           paddingHorizontal: 10,
           borderWidth: 1,
           width: SIZES.width * 0.72,
+          backgroundColor:COLORS.lightblue_500,
           alignSelf: "center",
           borderRadius: 4,
           borderColor: COLORS.lightblue_300,
         }}>
         <View>
-          <Text onPress={() => setConTeamTabCollapse(!conTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.darkGray }]}>Contractors</Text>
+          <Text onPress={() => setConTeamTabCollapse(!conTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.white2 }]}>Contractors</Text>
         </View>
         <View style={{ alignItems: "center", justifyContent: "center", marginLeft: SIZES.base * 0.5 }}>
           <TouchableOpacity onPress={() => {
             setConTeamTabCollapse(!conTeamTabCollapse)
           }}>
-            <AntDesign name='caretdown' size={12} color={COLORS.gray} />
+            <AntDesign name='caretdown' size={12} color={COLORS.white3} />
           </TouchableOpacity>
         </View>
       </Pressable>
@@ -1196,7 +1197,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       </View>
 
       {/* getting data from api and display on screen */}
-      {conTeamTabCollapse ?
+      {conTeamTabCollapse && Report_list.length > 0 ?
         (
           <View
             style={{
@@ -1228,7 +1229,13 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
             </ScrollView>
           </View>
         ) :
-        null
+        <View style={{
+          backgroundColor:COLORS.lightblue_100,
+          marginHorizontal:SIZES.h2*2,
+          marginBottom:conTeamTabCollapse? -24:0,
+          }}>
+        { conTeamTabCollapse?  <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center", marginHorizontal: SIZES.body1  }]}>No Contractors right now!</Text>:null}
+        </View>
       }
       {/* create contractor model */}
       {renderCreateContractorModal()}

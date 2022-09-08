@@ -9,7 +9,8 @@ import {
   RefreshControl,
   LogBox,
 } from 'react-native';
-import {icons, COLORS, SIZES, FONTS} from '../../../constants';
+import {icons, COLORS, SIZES, FONTS, images} from '../../../constants';
+import {useNavigation} from '@react-navigation/native';
 import {InProgressModal, DoneModal} from '../TaskModal';
 //saurabh
 import UserAssignWorks from './UserAssignWorks';
@@ -21,7 +22,7 @@ const UserDashboard = () => {
       setTimeout(resolve, timeout);
     });
   }
-
+  const navigation = useNavigation();
   const [loading, setLoading] = React.useState(false);
   const loadMore = React.useCallback(async () => {
     setLoading(true);
@@ -61,8 +62,10 @@ const UserDashboard = () => {
       <UserAssignWorks loading={loading}/>
       <View
         style={{
-          marginHorizontal: SIZES.radius,
-          paddingHorizontal: SIZES.radius,
+          flexDirection:"row",
+          justifyContent:"space-between",
+          marginHorizontal: SIZES.radius*0.5,
+          paddingHorizontal: SIZES.radius*0.5,
           paddingVertical: SIZES.radius,
           borderRadius: SIZES.base,
           // backgroundColor: COLORS.lightblue_500,
@@ -93,12 +96,14 @@ const UserDashboard = () => {
           />
         )} */}
 
-        {/* <TouchableOpacity
+        <TouchableOpacity
+        
           style={{
             marginTop: SIZES.base,
             flexDirection: 'row',
             justifyContent: 'space-between',
             backgroundColor: COLORS.white,
+            width:"45%",
             padding: 10,
             borderRadius: 5,
             ...styles.shadow,
@@ -106,14 +111,40 @@ const UserDashboard = () => {
           onPress={() => handleDoneTask()}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Image source={icons.done} style={{height: 25, width: 25}} />
-            <Text style={{...FONTS.h3, color: COLORS.darkGray, left: 10}}>
-              Completed
+            <Text style={{...FONTS.h4, color: COLORS.darkGray, left: 5}}>
+              Completed Tasks
             </Text>
           </View>
-          <Text style={{...FONTS.h3, color: COLORS.darkGray}}>3</Text>
-        </TouchableOpacity> */}
+         
+          {/* <Text style={{...FONTS.h3, color: COLORS.darkGray}}>3</Text> */}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            marginTop: SIZES.base,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: COLORS.white,
+            width:"45%",
+            padding: 10,
+            borderRadius: 5,
+            ...styles.shadow,
+          }}
+          onPress={() => {
+            // handleDoneTask()
+            navigation.navigate('ViewReport');
+
+            }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image source={icons.report} style={{height: 24, width: 24}} />
+            <Text style={{...FONTS.h4, color: COLORS.darkGray, left: 10}}>
+              View Reports
+            </Text>
+          </View>
+         
+          {/* <Text style={{...FONTS.h3, color: COLORS.darkGray}}>3</Text> */}
+        </TouchableOpacity>
         {doneModalnum && (
-          <DoneModal doneModal={doneModal} setdoneModal={setdoneModal} />
+          <DoneModal doneModal={doneModal} setdoneModal={setdoneModal} loading={loading}/>
         )}
       </View>
     </ScrollView>

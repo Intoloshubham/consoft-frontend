@@ -159,7 +159,6 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
         .then((resp) => {
           // console.log("resp report data")
 
-
           setPostQtyData(resp)
           getReportData();
           if (resp.status == '200') {
@@ -170,6 +169,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             }, 1500);
             inputs.splice(0, inputs.length);
           }
+
         })
     } else {
       alert("Not inserted")
@@ -223,10 +223,11 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   async function getReportData() {
     if (Main_drp_pro_value || postQtyData || updateStatus || loading) {
       // You can await here
-      console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", Main_drp_pro_value)
-      console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", userData._id)
-      console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", current_dat)
+      // console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", Main_drp_pro_value)
+      // console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", userData._id)
+      // console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", current_dat)
       const data = await Get_report_data(Main_drp_pro_value, userData._id, current_dat)
+      // console.log("🚀 ~ file: Quantity.js ~ line 230 ~ getReportData ~ data", data)
       if (data.status == 200) {
         setGetRepPostData(data);
       } else {
@@ -259,7 +260,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       setUpdateId(id);
       data.then(res => res.json())
         .then(result => {
-          console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result.data.quality_type)
+          // console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result.data.quality_type)
 
           if (result.data.subquantityitems.length == 0) {
             setInputs([...inputs, {
@@ -306,34 +307,44 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   }
 
 
+  const reportdataitem = async () => {
+    try {
+      const resp = await fetch(`${process.env.API_URL}quantity-report-item/` + `${userData.company_id}`);
+      const quantitydata = await resp.json();
+      setReportdata(quantitydata);
+    } catch (error) {
+      console.log(error, 'error');
+    }
+  };
+  useEffect(() => {
+    if (userData.company_id || saveItemsStatus || loading) {
+      reportdataitem();
+    }
+
+  }, [userData.company_id, saveItemsStatus, loading]);
 
 
 
 
 
-
-
-
-
-
-  const addHandler = async () => {
-
-    // if (Main_drp_pro_value) {
-    const result1 = await check_quantity_item_exist(Main_drp_pro_value, userData._id);
-    // console.log("🚀 ~ file: Quantity.js ~ line 364 ~ addHandler ~ result1", result1)
-
-    if (result1.status != 401) {
-      // console.log("🚀 ~ file: Quantity.js ~ line 422 ~ addHandler ~ length", result1.data.length)
+  const checkQuantityItemExist = async () => {
+    const result1 = await check_quantity_item_exist(Main_drp_pro_value, userData._id, current_dat);
+    if (result1.status != 401 && result1.data.length > 0) {
       let result = reportdata.data.filter(function ({ _id }) {
         return !this.has(_id);
       }, new Set(result1.data.map(({ item_id }) => item_id)));
       setItemData(result);
     } else {
+      reportdataitem();
       setItemData(reportdata.data)
     }
 
-    // }
-    console.log("🚀 ~ file: Quantity.js ~ line 337 ~ addHandler ~ itemData", itemData)
+  }
+
+
+  const addHandler = async () => {
+
+    checkQuantityItemExist();
 
     setInputs([...inputs, {
       item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '', quality_type: '',
@@ -365,6 +376,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const inputselect = (item, key) => {
     // console.log(item.unit_name)
     // setUnitKey(item.unit_name)
+
     const _inputselcet = [...inputs];
     _inputselcet[key].item_id = item._id;
     _inputselcet[key].unit_name = item.unit_name;
@@ -480,7 +492,6 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   }, []);
   //  console.log(companyIdData)
   const saveItems = () => {
-
     const quantityworkitem = {
       item_name: quantityitem,
       unit_id: value,
@@ -498,43 +509,26 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       })
         .then(response => response.json())
         .then(data => {
-
           setSaveItemsStatus(data);
+          // reportdataitem();
           if (data.status == 200) {
             setvalue('');
             setquantityitem('');
-            reportdataitem();
-            alert(data.message)
+            setSubmitToast(true);
             setTimeout(() => {
               setadditem(false);
             }, 1500);
           } else {
             alert(data.message)
           }
+          reportdataitem();
         });
     } catch (error) {
       console.log('Error:', error);
     }
   };
 
-  const reportdataitem = async () => {
-    try {
-      const resp = await fetch(`${process.env.API_URL}quantity-report-item/` + `${userData.company_id}`);
-      const quantitydata = await resp.json();
-      // console.log("🚀 ~ file: Quantity.js ~ line 638 ~ reportdataitem ~ quantitydata", quantitydata)
 
-      // console.log("quantitydata"); 
-      // console.log(quantitydata); 
-      setReportdata(quantitydata);
-    } catch (error) {
-      console.log(error, 'error');
-    }
-  };
-  useEffect(() => {
-    if (saveItemsStatus) {
-      reportdataitem();
-    }
-  }, [userData.company_id, saveItemsStatus, '']);
 
   const QualityTypeRadioButton = ({ onPress, selected, children, type, mainKey }) => {
 
@@ -600,8 +594,6 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
               color={COLORS.white}
             />
           </View>
-
-
         </View>
       </TouchableOpacity>
     )
@@ -639,7 +631,17 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
     return (
       <View
         key={index1}
-        style={{ borderWidth: 2, padding: 5, margin: 4, borderColor: "green" }}
+        style={{
+          padding: 10,
+          margin: 5,
+
+          borderWidth: 1,
+          borderColor: COLORS.lightblue_500,
+          borderRadius: 2,
+          elevation: 2,
+          // padding: 10,
+
+        }}
       >
         {/* <Text style={{ color: COLORS.black }}>{index1}</Text> */}
         <View
@@ -749,7 +751,11 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
           )) : null}
           <View>
             <TouchableOpacity
-              style={{ alignSelf: "flex-end" }}
+              style={{
+                elevation: 8,
+                borderColor: COLORS.transparent,
+                alignSelf: "flex-end"
+              }}
               onPress={() => delete_inside_Handler(key, index1)}>
               <Image
                 source={icons.delete_icon}
@@ -762,7 +768,6 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             </TouchableOpacity>
           </View>
         </View>
-
       </View>
     )
   }
@@ -803,7 +808,14 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
           return (
-            <View style={inputContainer} key={key}>
+            <View style={[inputContainer, {
+              borderWidth: 1,
+              borderColor: COLORS.lightGray1,
+              borderRadius: 2,
+              elevation: 2,
+              padding: 10,
+              margin: 5
+            }]} key={key}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -832,13 +844,13 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   placeholder={!isFocus ? 'Select' : '...'}
                   searchPlaceholder="Search..."
                   value={input.item_id}
+                  onFocus={() => {
+                    reportdataitem();
+                    checkQuantityItemExist();
+                  }}
                   onChange={item => {
-                    // console.log("🚀 ~ file: Quantity.js ~ line 834 ~ {inputs?inputs.map ~ item", item)
                     setSelectKey(input.key);
-                    // setItemData(item._id)
                     setCompanyIdData(item.company_id)
-                    // setUnitData(item.unit_name)
-                    // console.log(item)
                     inputselect(item, key);
                   }}
                 />
@@ -847,7 +859,6 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   // editable={false}
                   selectTextOnFocus={false}
                   placeholder={'unit'}
-
                   // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
                   value={key == selectKey ? input.unit_name : input.unit_name}
                   onChangeText={text => { inputunit(text, key) }}
@@ -858,7 +869,6 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                 <TouchableOpacity
                   key={key}
                   onPress={(e) => {
-
                     add_inside_handler(key, e)
                   }}>
                   <MaterialIcons
@@ -976,7 +986,11 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                 }
                 <View style={{ alignSelf: "flex-end" }}>
                   <TouchableOpacity
-                    style={{ alignSelf: "flex-end" }}
+                    style={{
+                      elevation: 8,
+                      borderColor: COLORS.transparent,
+                      alignSelf: "flex-end"
+                    }}
                     onPress={() => deleteHandler(key)}>
                     <Image
                       source={icons.delete_icon}
@@ -1115,7 +1129,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   }
                   }
                 />
-                }             
+              }
             </View>
           </View>
         </Modal>
@@ -1186,13 +1200,14 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
               </View>
               <View>
                 <TextButton
-                  label="save"
+                  label="Save Item"
                   buttonContainerStyle={{
                     height: 45,
                     borderRadius: SIZES.radius,
                     marginTop: SIZES.padding,
                   }}
                   onPress={() => {
+
                     saveItems();
                   }}
                 />
@@ -1251,9 +1266,17 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
           justifyContent: 'space-between',
           top: SIZES.base * 2,
           borderColor: COLORS.lightblue_200,
+          backgroundColor:COLORS.lightblue_600,
           borderWidth: 1,
-          borderRadius: 1,
-          elevation: 1,
+          borderRadius: 4,
+          elevation: 2,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 4,
+          },
+          shadowOpacity: 0.3,
+          shadowRadius: 4.65,
         }}>
         <View style={{ alignItems: 'center', alignSelf: 'center' }}>
           <Text
@@ -1261,9 +1284,9 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
               Main_drp_pro_value ? null : alert("Select Project First!")
               setQuantity(!quant_ity)
             }}
-            style={[FONTS.h3, { color: COLORS.darkGray }]}>
+            style={[FONTS.h3, { color: COLORS.white2 }]}>
             Quantity Executed Today
-          </Text> 
+          </Text>
         </View>
         <View style={{ alignItems: 'flex-end', alignSelf: 'center' }}>
           <TouchableOpacity onPress={() => {
@@ -1273,7 +1296,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
           }}>
-            <AntDesign name="caretdown" size={12} color={COLORS.gray} />
+            <AntDesign name="caretdown" size={12} color={COLORS.white2} />
           </TouchableOpacity>
         </View>
       </Pressable>
@@ -1440,7 +1463,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                     }}>
                     <>
                       {
-                        getRepPostData ? getRepPostData.data.map((list, index) => (
+                        getRepPostData.data.length > 0 ? getRepPostData.data.map((list, index) => (
                           <View
                             style={{
                               flexDirection: "column",
@@ -1784,7 +1807,11 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                             </View>
                           </View>
 
-                        )) : null
+                        ))
+                          :
+                          <View>
+                            <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "auto", marginHorizontal: SIZES.body1 * 4.7 }]}>Currently, no report to show!</Text>
+                          </View>
                       }
 
                     </>

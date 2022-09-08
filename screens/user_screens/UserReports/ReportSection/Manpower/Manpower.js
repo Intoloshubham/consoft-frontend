@@ -65,36 +65,36 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
 
 
             <Pressable
-            
+
                 onPress={() => setTabCollapse(!TabCollapse)}
                 style={{
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
                     paddingVertical: 3,
-                    // marginBottom: -SIZES.base,
                     width: SIZES.width * 0.53,
                     alignItems: "center",
                     justifyContent: "space-between",
+                    backgroundColor:COLORS.lightblue_600,
                     top: SIZES.base * 2,
                     borderColor: COLORS.lightblue_200,
                     borderWidth: 1,
-                    borderRadius: 1,
-                    elevation: 1
+                    borderRadius: 4,
+                    elevation: 2,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                        width: 0,
+                        height: 4,
+                    },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 4.65,
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                {/* <Text>
-                    <ReactBubblyEffectButton
-                        text="Click here"
-                        style={[FONTS.h3, { color: COLORS.darkGray }]}
-                        color='#fff' bgColor={COLORS.lightblue_300}
-                        onClick={() => setTabCollapse(!TabCollapse)} />
-                </Text> */}
-                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.darkGray }]}>Manpower</Text>
+                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.white }]}>Manpower</Text>
                 </View>
 
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <TouchableOpacity onPress={() => setTabCollapse(!TabCollapse)}>
-                        <AntDesign name='caretdown' size={12} color={COLORS.gray} />
+                        <AntDesign name='caretdown' size={12} color={COLORS.white2} />
                     </TouchableOpacity>
                 </View>
 
