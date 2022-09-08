@@ -734,7 +734,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                         justifyContent: 'center',
                         // backgroundColor:"red",
                         marginLeft: -SIZES.padding,
-                        left: 22
+                        // left: 22
 
                       }}>
                         <Image
