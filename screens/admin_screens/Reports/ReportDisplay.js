@@ -80,7 +80,7 @@ const ReportDisplay = () => {
     }
   };
 
-  const user_id = '';
+
   // get report
   const user_id ='';
   const fetchReport = async project_id => {
