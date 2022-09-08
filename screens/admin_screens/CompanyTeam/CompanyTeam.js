@@ -46,26 +46,27 @@ const CompanyTeamShow = () => {
   const [submitToast, setSubmitToast] = React.useState(false);
   const [companyTeam, setCompanyTeam] = React.useState([]);
 
-  // form states & dropdown role data fetch from api
+  // FORM STATES & DROPDOWN ROLE DATA FETCH FROM API
   const [openRole, setOpenRole] = React.useState(false);
   const [roleValue, setRoleValue] = React.useState([]);
   const [role, setRole] = React.useState([]);
-  //projects
+
+  //PROJECTS
   const [openProject, setOpenProject] = React.useState(false);
   const [projectValue, setProjectValue] = React.useState('');
   const [project, setProject] = React.useState([]);
 
-  //privileges
+  // PRIVILEGES
   const [openPrivilege, setOpenPrivilege] = React.useState(false);
   const [privilegeValue, setPrivilegeValue] = React.useState([]);
   const [privilege, setPrivilege] = React.useState([]);
 
-  //
+  // FORM STATES
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [mobile, setMobile] = React.useState('');
 
-  //error states
+  //ERROR STATES
   const [nameError, setNameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
   const [mobileError, setMobileError] = React.useState('');
@@ -80,8 +81,8 @@ const CompanyTeamShow = () => {
       emailError == ''
     );
   }
-
   // ================================================
+
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onRoleOpen = React.useCallback(() => {
     userRole();
@@ -101,12 +102,11 @@ const CompanyTeamShow = () => {
     setOpenRole(false);
   }, []);
 
-  // switch
+  // SWITCH FOR ASSIGN USER IN PROJECTS
   const [isEnabled, setIsEnabled] = React.useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   // ================================ Apis ====================================
-
   const getCompanyTeam = async () => {
     let response = await getUsers(company_id);
     if (response.status === 200) {
@@ -144,6 +144,7 @@ const CompanyTeamShow = () => {
     }
   };
 
+  // POST TEAM DATA
   const postTeam = async () => {
     const formData = {
       role_id: roleValue,
@@ -406,15 +407,12 @@ const CompanyTeamShow = () => {
 
               <TextButton
                 label="Save"
-                disabled={isEnableSubmit() ? false : true}
                 buttonContainerStyle={{
                   height: 45,
                   alignItems: 'center',
                   marginTop: SIZES.padding,
                   borderRadius: SIZES.base,
-                  backgroundColor: isEnableSubmit()
-                    ? COLORS.lightblue_700
-                    : COLORS.transparentPrimary,
+                  backgroundColor: COLORS.lightblue_700,
                 }}
                 onPress={postTeam}
               />
