@@ -618,7 +618,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     return (
         <>
             {/* T & P */}
-            <Pressable
+            <Pressable 
                 onPress={() => setTAndP(!tAndP)}
                 style={{
                     flexDirection: "row",

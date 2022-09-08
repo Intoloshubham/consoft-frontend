@@ -394,7 +394,7 @@ const UserAssignWorks = ({ loading }) => {
                   style={{
                     alignItems: 'flex-end',
                     marginTop: SIZES.base,
-                    backgroundColor: COLORS.red
+                    // backgroundColor: COLORS.red
                   }}
                   onPress={(text) => {
                     submitWorkPercent(item, index)
@@ -428,10 +428,11 @@ const UserAssignWorks = ({ loading }) => {
         marginVertical: SIZES.radius,
         paddingHorizontal: SIZES.radius,
         paddingTop: SIZES.base,
-        paddingBottom: SIZES.radius,
+        paddingBottom: SIZES.base,
         backgroundColor: COLORS.white,
         borderRadius: SIZES.base,
-        ...styles.shadow,
+        // borderWidth:1,
+        ...styles1.shadow,
       }}>
       <Text
         style={{
@@ -453,12 +454,22 @@ const UserAssignWorks = ({ loading }) => {
      } */}
       <ScrollView
         horizontal={true}
-        contentContainerStyle={{ width: '100%', height: '100%' }}>
+        contentContainerStyle={{ width: '100%', height: '100%',padding:5,paddingBottom:18 }}>
         <AccordionList
           list={getTaskInProgress ? getTaskInProgress : null}
           header={renderHeader}
           body={renderBody}
           isExpanded={false}
+          style={{
+            borderWidth:1,
+            borderColor:COLORS.lightblue_400,
+            padding:5,
+            // marginBottom:40,
+
+          }}
+          contentContainerStyle={{
+            bottom:14
+          }}
           // onToggle={(isExpanded) => {
           //   setIsExpand(!isExpand);
           //   // setIsExpandId(isExpanded);
@@ -468,7 +479,7 @@ const UserAssignWorks = ({ loading }) => {
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={400}
+          maxHeight={450}
         />
       </ScrollView>
       <CustomToast
