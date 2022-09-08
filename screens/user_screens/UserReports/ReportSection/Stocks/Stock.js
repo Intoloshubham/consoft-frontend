@@ -543,19 +543,27 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                     justifyContent: "space-between",
                     top: SIZES.base * 2,
                     borderColor: COLORS.lightblue_200,
+                    backgroundColor:COLORS.lightblue_600,
                     borderWidth: 1,
-                    borderRadius: 1,
-                    elevation: 1
+                    borderRadius: 4,
+                    elevation: 2,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                        width: 0,
+                        height: 4,
+                    },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 4.65,
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <Text onPress={() => {
                         Main_drp_pro_value ? null : alert("Select Project First!")
                         setStockCollapse(!stockCollapse)
-                    }} style={[FONTS.h3, { color: COLORS.darkGray }]}>Stock</Text>
+                    }} style={[FONTS.h3, { color: COLORS.white2 }]}>Stock</Text>
                 </View>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <TouchableOpacity onPress={() => setStockCollapse(!stockCollapse)}>
-                        <AntDesign name='caretdown' size={12} color={COLORS.gray} />
+                        <AntDesign name='caretdown' size={12} color={COLORS.white2} />
                     </TouchableOpacity>
                 </View>
             </Pressable>

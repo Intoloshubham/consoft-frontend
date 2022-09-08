@@ -113,7 +113,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
             console.log(error)
         }
     }
-    useEffect(() => { 
+    useEffect(() => {
         getEquipmentItems();
         getEquipReport();
     }, [userCompanyData.company_id, loading])
@@ -392,7 +392,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                 flexDirection: "row",
                                                 alignItems: "center",
                                                 // borderWidth: 1,
-                                                elevation:2,
+                                                elevation: 2,
                                                 borderRadius: 1,
                                                 borderColor: COLORS.lightblue_400,
                                                 paddingVertical: SIZES.base * 0.6,
@@ -414,12 +414,12 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                 <Text style={{ color: COLORS.black }} >{input.onDateChange ? input.onDateChange : 'Select Date'}</Text>
                                             </View>
                                             <View style={{
-                                                }}>
+                                            }}>
                                                 <Image
                                                     source={icons.date}
                                                     style={{
                                                         width: 24,
-                                                        height:24,
+                                                        height: 24,
                                                         tintColor: COLORS.lightblue_900,
                                                         right: 8,
                                                     }}
@@ -515,7 +515,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                         borderRadius: 1,
                                         borderColor: COLORS.transparentBlack1,
                                         paddingHorizontal: 3,
-                                        elevation:1,
+                                        elevation: 1,
                                         margin: 4
                                     }}
                                     onPress={() => {
@@ -541,8 +541,8 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                         paddingHorizontal: 4,
                                         margin: 5,
                                         borderRadius: 1,
-                                        elevation:1,                                                                                
-                                        borderColor:COLORS.transparent,
+                                        elevation: 1,
+                                        borderColor: COLORS.transparent,
                                     }}
                                     onPress={() => {
                                         setAddNewEquipment(true)
@@ -629,16 +629,24 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                     justifyContent: "space-between",
                     top: SIZES.base * 2,
                     borderColor: COLORS.lightblue_200,
+                    backgroundColor:COLORS.lightblue_600,
                     borderWidth: 1,
-                    borderRadius: 1,
-                    elevation: 1
+                    borderRadius: 4,
+                    elevation: 2,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                        width: 0,
+                        height: 4,
+                    },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 4.65,
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => setTAndP(!tAndP)} style={[FONTS.h3, { color: COLORS.darkGray }]}>T & P</Text>
+                    <Text onPress={() => setTAndP(!tAndP)} style={[FONTS.h3, { color: COLORS.white2 }]}>T & P</Text>
                 </View>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <TouchableOpacity onPress={() => setTAndP(!tAndP)}>
-                        <AntDesign name='caretdown' size={12} color={COLORS.gray} />
+                        <AntDesign name='caretdown' size={12} color={COLORS.white2} />
                     </TouchableOpacity>
                 </View>
             </Pressable>
@@ -741,7 +749,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             }}>
                                             <>
                                                 {
-                                                    getEquipmentReport.data.length>0 ? getEquipmentReport.data.map((list, index) => (
+                                                    getEquipmentReport.data.length > 0 ? getEquipmentReport.data.map((list, index) => (
 
                                                         <View
                                                             style={{
@@ -852,11 +860,11 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                             </View>
                                                         </View>
 
-                                                    )) 
-                                                    : 
-                                                     <View>
-                                                        <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center" }]}>Currently, no report to show!</Text>
-                                                     </View>
+                                                    ))
+                                                        :
+                                                        <View>
+                                                            <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center" }]}>Currently, no report to show!</Text>
+                                                        </View>
                                                 }
 
                                             </>

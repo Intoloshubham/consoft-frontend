@@ -224,17 +224,7 @@ const UserReports = ({ route }) => {
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
           {value ? <View >
             <View style={{
-              marginVertical: 5,
-              // shadow: {
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 4,
-                },
-                shadowOpacity: 0.3,
-                shadowRadius: 4.65,
-                elevation: 8,
-              // },
+              marginVertical: 5       
             }}>
               <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} loading={loading} />
             </View>
