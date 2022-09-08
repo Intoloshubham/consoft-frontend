@@ -658,7 +658,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
       >
         {
-           filterNewCategory.length > 0 ? filterNewCategory.map((memberInput, index) => {
+          filterNewCategory.length > 0 ? filterNewCategory.map((memberInput, index) => {
 
             return (
               <View
@@ -1196,7 +1196,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       </View>
 
       {/* getting data from api and display on screen */}
-      {conTeamTabCollapse ?
+      {conTeamTabCollapse && Report_list.length > 0 ?
         (
           <View
             style={{
@@ -1228,7 +1228,13 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
             </ScrollView>
           </View>
         ) :
-        null
+        <View style={{
+          backgroundColor:COLORS.lightblue_100,
+          marginHorizontal:SIZES.h2*2,
+          marginBottom:conTeamTabCollapse? -24:0,
+          }}>
+        { conTeamTabCollapse?  <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center", marginHorizontal: SIZES.body1  }]}>No Contractors right now!</Text>:null}
+        </View>
       }
       {/* create contractor model */}
       {renderCreateContractorModal()}

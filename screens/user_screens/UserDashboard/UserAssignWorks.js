@@ -468,7 +468,7 @@ const UserAssignWorks = ({ loading }) => {
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={300}
+          maxHeight={400}
         />
       </ScrollView>
       <CustomToast
