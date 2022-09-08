@@ -30,7 +30,18 @@ import {
 } from '../../../controller/ToolsAndMachineryController';
 
 const ToolsAndMachinery = ({route}) => {
-  const companyData = useSelector(state => state.company);
+  // const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+  const company_id = companyData._id;
+
   const {project_id} = route.params; //
   const [showTAndMModal, setShowTAndMModal] = React.useState(false);
   const [showEditTAndMModal, setShowEditTAndMModal] = React.useState(false);
@@ -61,7 +72,7 @@ const ToolsAndMachinery = ({route}) => {
     const formData = {
       tools_machinery_name: toolsName,
       qty: toolsQty,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let data = await postToolsAndMachinery(formData);
     if (data.status === 200) {
@@ -103,7 +114,7 @@ const ToolsAndMachinery = ({route}) => {
     const formData = {
       tools_machinery_name: toolsName,
       qty: toolsQty,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let data = await editToolsAndMachinery(formData, toolsId);
     if (data.status === 200) {
@@ -380,7 +391,7 @@ const ToolsAndMachinery = ({route}) => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -495,7 +506,7 @@ const ToolsAndMachinery = ({route}) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Tools & Machinery" />
       <TextButton

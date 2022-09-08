@@ -29,8 +29,17 @@ import {
 import {useSelector} from 'react-redux';
 
 const Contractors = ({route}) => {
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
   const company_id = companyData._id;
+
   const {project_id} = route.params; //
   const [showContractorsModal, setShowContractorsModal] = React.useState(false);
   const [contractors, setContractors] = React.useState([]);
@@ -51,7 +60,6 @@ const Contractors = ({route}) => {
   // get contractors
   const fetchContractors = async () => {
     let data = await getContractors();
-    // console.log(data)
     setContractors(data);
   };
 
@@ -119,7 +127,7 @@ const Contractors = ({route}) => {
               color: COLORS.lightblue_900,
               textTransform: 'capitalize',
             }}>
-            Mr. {item.contractor_name}
+            {item.contractor_name}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -194,7 +202,7 @@ const Contractors = ({route}) => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,

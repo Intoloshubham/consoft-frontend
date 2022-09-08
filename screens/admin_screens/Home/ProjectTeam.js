@@ -16,8 +16,6 @@ import {
   HeaderBar,
   TextButton,
   CustomDropdown,
-  IconButton,
-  ConformationAlert,
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
@@ -31,12 +29,20 @@ import {getUserRole, roleByUser} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
 
 const ProjectTeam = ({route}) => {
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
   const company_id = companyData._id;
-  // console.log(companyData._id)
 
   const {project_id} = route.params; //
   const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
+
   const [projectTeam, setProjectTeam] = useState([]);
   const [teamDeleteConfirmation, setTeamDeleteConfirmation] = useState(false);
 
@@ -73,14 +79,13 @@ const ProjectTeam = ({route}) => {
   // fetch project team
   const fetchProjectTeam = async () => {
     const team = await getProjectTeam(project_id);
-    console.log(team);
+    // console.log(team);
     if (team.status === 200) {
       setProjectTeam(team.data);
     }
   };
 
   const addProjectTeam = async () => {
-    setAddProjectTeamModal(true);
     const res = await getUserRole(company_id);
     if (res.status === 200) {
       let roleFromApi = res.data.map(list => {
@@ -91,7 +96,7 @@ const ProjectTeam = ({route}) => {
   };
 
   const getRolebyUser = async role_id => {
-    const res = await roleByUser(role_id);
+    const res = await roleByUser(company_id, role_id);
     if (res.status === 200) {
       let usersFromApi = res.data.map(ele => {
         return {label: ele.name, value: ele._id};
@@ -107,6 +112,8 @@ const ProjectTeam = ({route}) => {
       project_id: project_id,
       user_id: userValue,
     };
+
+    // console.log(teamData);
     const res = await saveProjectTeam(teamData);
     if (res.status === 200) {
       setAddProjectTeamModal(false);
@@ -159,31 +166,31 @@ const ProjectTeam = ({route}) => {
                 color: COLORS.lightblue_900,
                 textTransform: 'capitalize',
               }}>
-              Mr.{item.user_name}
+              {item.user_name}
             </Text>
             <View style={{flexDirection: 'row'}}>
               {/* <TouchableOpacity
-                      onPress={() => {
-                        alert('edit name');
-                      }}>
-                      <ImageBackground
-                        style={{
-                          backgroundColor: COLORS.green,
-                          padding: 5,
-                          borderRadius: SIZES.base,
-                          right: 10,
-                        }}>
-                        <Image
-                          source={icons.edit}
-                          style={{
-                            width: 15,
-                            height: 15,
-                            // right: 15,
-                            tintColor: COLORS.white,
-                          }}
-                        />
-                      </ImageBackground>
-                    </TouchableOpacity> */}
+                onPress={() => {
+                  alert('edit name');
+                }}>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.green,
+                    padding: 3,
+                    borderRadius: 2,
+                    right: 10,
+                  }}>
+                  <Image
+                    source={icons.edit}
+                    style={{
+                      width: 12,
+                      height: 12,
+                      // right: 15,
+                      tintColor: COLORS.white,
+                    }}
+                  />
+                </ImageBackground>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 onPress={() => {
                   setUserId(item._id);
@@ -255,12 +262,12 @@ const ProjectTeam = ({route}) => {
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              backgroundColor: COLORS.transparentBlack6,
             }}>
             <View
               style={{
                 position: 'absolute',
-                width: '90%',
+                width: '95%',
                 padding: SIZES.padding,
                 borderRadius: 5,
                 backgroundColor: COLORS.white,
@@ -374,7 +381,10 @@ const ProjectTeam = ({route}) => {
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
         }}
-        onPress={() => addProjectTeam()}
+        onPress={() => {
+          setAddProjectTeamModal(true);
+          addProjectTeam();
+        }}
       />
       {renderTeamList()}
       {renderAddProjectTeamModal()}
@@ -405,7 +415,9 @@ const ProjectTeam = ({route}) => {
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={
+          'Do you really want to delete this project team member from this project?'
+        }
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => deleteTeamSubmit()}

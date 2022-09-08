@@ -21,6 +21,8 @@ const Drop = ({
   onOpen,
   closeAfterSelecting,
   onSelectItem,
+  containerStyle,
+  dropdownContainerStyle,
 }) => {
   return (
     <View>
@@ -32,6 +34,7 @@ const Drop = ({
           backgroundColor: COLORS.gray3,
           minHeight: 40,
           paddingHorizontal: SIZES.padding,
+          ...containerStyle,
         }}
         maxHeight={maxHeight}
         dropDownContainerStyle={{
@@ -39,6 +42,7 @@ const Drop = ({
           backgroundColor: COLORS.lightblue_800,
           borderWidth: null,
           // marginBottom:20
+          ...dropdownContainerStyle,
         }}
         textStyle={{
           fontSize: 15,

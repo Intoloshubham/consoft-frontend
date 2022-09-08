@@ -20,7 +20,6 @@ import ReportsDisplay from './Reports/ReportDisplay';
 import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
-import Tasks from './Tasks/Tasks';
 import Calender from './Calender/Calender';
 import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
@@ -32,6 +31,7 @@ import VerifyWorks from './VerifyAndRevertWork.js/VerifyWorks';
 import RevertWorks from './VerifyAndRevertWork.js/RevertWorks';
 import UserRole from './CreateUserRole/UserRole';
 import ReportSettings from './Home/ReportSettings';
+import Requirement from './Requirement/Requirement';
 
 export {
   Account,
@@ -55,7 +55,6 @@ export {
   Items,
   ManageStock,
   Unit,
-  Tasks,
   Calender,
   Suppliers,
   SubmittedWorks,
@@ -68,4 +67,5 @@ export {
   RevertWorks,
   UserRole,
   ReportSettings,
+  Requirement,
 };

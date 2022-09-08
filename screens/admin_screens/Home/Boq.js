@@ -34,7 +34,18 @@ import {
 
 const Boq = ({route}) => {
   // get company id
-  const companyData = useSelector(state => state.company);
+  // const companyData = useSelector(state => state.company);
+  // const company_id = companyData._id;
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+
   const company_id = companyData._id;
   const {project_id} = route.params;
 
@@ -85,7 +96,7 @@ const Boq = ({route}) => {
   // post boq new list items
   const postBoqNewListItem = async () => {
     const formData = {
-      company_id: companyData._id,
+      company_id: company_id,
       item_name: boqItemName,
       unit_id: unitValue,
     };
@@ -139,7 +150,7 @@ const Boq = ({route}) => {
   // post boq items
   const postBoqItem = async () => {
     const formData = {
-      company_id: companyData._id,
+      company_id: company_id,
       project_id: project_id,
       item_id: itemsValue,
       unit_name: showUnitName,
@@ -187,7 +198,7 @@ const Boq = ({route}) => {
   // update boq items
   const updateBoq = async () => {
     const formData = {
-      company_id: companyData._id,
+      company_id: company_id,
       project_id: project_id,
       item_id: itemsValue,
       unit_name: showUnitName,
@@ -539,7 +550,7 @@ const Boq = ({route}) => {
           }}>
           <View
             style={{
-              width: '92%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -646,7 +657,7 @@ const Boq = ({route}) => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,

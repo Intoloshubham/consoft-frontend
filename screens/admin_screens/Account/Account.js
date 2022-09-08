@@ -13,15 +13,31 @@ import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {ProfileValue, LineDivider} from '../../../Components';
 import {useSelector, useDispatch} from 'react-redux';
 import {companyLogout} from '../../../services/companyAuthApi';
+import {userLogout} from '../../../services/userAuthApi';
 
 const Account = () => {
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+
+  // console.log(companyData);
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const companyData = useSelector(state => state.company);
   const [collapsed, setCollapsed] = React.useState(true);
-  
+
   const logout = () => {
-    dispatch(companyLogout());
+    if (companyDetail._id) {
+      dispatch(companyLogout());
+    } else {
+      dispatch(userLogout());
+    }
     navigation.navigate('Login');
   };
 
@@ -35,9 +51,10 @@ const Account = () => {
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
-          paddingVertical: 20,
-          borderRadius: SIZES.radius,
+          // paddingHorizontal: SIZES.padding,
+          // paddingVertical: 20,
+          padding: 15,
+          borderRadius: SIZES.base,
           backgroundColor: COLORS.lightblue_800,
           alignItems: 'center',
         }}>
@@ -70,7 +87,7 @@ const Account = () => {
               style={{
                 width: 30,
                 height: 30,
-                marginBottom: -15,
+                marginBottom: -10,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 15,
@@ -80,8 +97,8 @@ const Account = () => {
                 source={icons.camera}
                 resizeMode="contain"
                 style={{
-                  width: 17,
-                  height: 17,
+                  width: 15,
+                  height: 15,
                 }}
               />
             </View>
@@ -135,7 +152,7 @@ const Account = () => {
         <LineDivider />
         <ProfileValue
           icon={icons.company_team}
-          value="Add Company Team"
+          value="Company Team"
           image={icons.right_arr}
           onPress={() => navigation.navigate('CompanyTeam')}
         />

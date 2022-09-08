@@ -49,7 +49,18 @@ const CategoryandType = () => {
   const [deleteConfirm1, setDeleteConfirm1] = React.useState(false);
 
   // COMPANY DATA
-  const companyData = useSelector(state => state.company);
+  // const companyData = useSelector(state => state.company);
+  // const company_id = companyData._id;
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
   const company_id = companyData._id;
   // console.log("object",company_id)
 
@@ -82,7 +93,7 @@ const CategoryandType = () => {
   const postCategory = async () => {
     const formData = {
       category_name: catName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await postProjectCategory(formData);
     if (response.status == 200) {
@@ -112,7 +123,7 @@ const CategoryandType = () => {
   const editCategory = async () => {
     const formData = {
       category_name: catName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await updateProjectCategory(id, formData);
 
@@ -159,7 +170,7 @@ const CategoryandType = () => {
     const formData = {
       category_id: value,
       project_type: typeName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await postProjectType(formData);
     if (response.status === 200) {
@@ -191,7 +202,7 @@ const CategoryandType = () => {
     const formData = {
       category_id: value,
       project_type: typeName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await updateProjectType(typeid, formData);
     if (response.status === 200) {
@@ -309,12 +320,9 @@ const CategoryandType = () => {
     return (
       <View
         style={{
-          marginTop: SIZES.radius,
           marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.lightblue_50,
-          ...styles.shadow,
+          backgroundColor: COLORS.white,
+          // padding: 15,
         }}>
         <View
           style={{
@@ -383,22 +391,21 @@ const CategoryandType = () => {
           </View>
         </View>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
           data={projectCategories}
+          contentContainerStyle={{marginTop: SIZES.base, paddingBottom: 25}}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={200}
+          maxHeight={250}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
                   backgroundColor: COLORS.gray2,
-                  // marginVertical: 5,
+                  marginVertical: 2,
                 }}></View>
             );
           }}
@@ -485,12 +492,9 @@ const CategoryandType = () => {
     return (
       <View
         style={{
-          marginVertical: SIZES.padding * 1.5,
+          marginTop: SIZES.padding * 1.5,
           marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.lightblue_50,
-          ...styles.shadow,
+          backgroundColor: COLORS.white,
         }}>
         <View
           style={{
@@ -537,10 +541,10 @@ const CategoryandType = () => {
                       textAlign: 'left',
                     }}>
                     Project Types like Residential - bungalows, duplexes,
-                    high-rise & mid-rise apartments. {'\n'}Commercial -
-                    offices, malls & multiplexes. {'\n'}Industrial - warehouses,
-                    factories. {'\n'}Institutional - schools, colleges.{'\n'}Mixed-use -
-                    nursing homes, restaurants, etc.
+                    high-rise & mid-rise apartments. {'\n'}Commercial - offices,
+                    malls & multiplexes. {'\n'}Industrial - warehouses,
+                    factories. {'\n'}Institutional - schools, colleges.{'\n'}
+                    Mixed-use - nursing homes, restaurants, etc.
                   </Text>
                 </View>
               }
@@ -564,21 +568,21 @@ const CategoryandType = () => {
           </View>
         </View>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
+          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 25}}
           data={projectTypes}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={200}
+          maxHeight={250}
           ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
                   backgroundColor: COLORS.gray2,
+                  marginVertical: 2,
                 }}></View>
             );
           }}
@@ -603,7 +607,7 @@ const CategoryandType = () => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -675,7 +679,7 @@ const CategoryandType = () => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -751,6 +755,7 @@ const CategoryandType = () => {
     <View
       style={{
         flex: 1,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Categories & Types" />
 
@@ -784,7 +789,7 @@ const CategoryandType = () => {
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this project category?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => {
@@ -795,7 +800,7 @@ const CategoryandType = () => {
         isVisible={deleteConfirm1}
         onClose={() => setDeleteConfirm1(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this project type?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => deleteType()}

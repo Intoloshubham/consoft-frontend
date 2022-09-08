@@ -1625,10 +1625,10 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/clipboard/-/clipboard-1.5.1.tgz"
   "version" "1.5.1"
 
-"@react-native-community/datetimepicker@^6.1.3", "@react-native-community/datetimepicker@>=3.0.0":
-  "integrity" "sha512-3e20BPQy8QiQeIGJL4zoJaRsGWB31hl9i7oTZECWxnK6nVUeqGt/G+JRJlJinmqL6z4WePHC6RSUMgpC64OOwg=="
-  "resolved" "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-6.1.3.tgz"
-  "version" "6.1.3"
+"@react-native-community/datetimepicker@^6.3.2", "@react-native-community/datetimepicker@>=3.0.0":
+  "integrity" "sha512-z9LieDDi+u+10uLKZWvpzfgVeCv/05v1CH0059Tx7KlJGQx8DiNwtGJLyUxB+WDalcEb+7xiCFut7vxnWWyIiA=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-6.3.2.tgz"
+  "version" "6.3.2"
   dependencies:
     "invariant" "^2.2.4"
 

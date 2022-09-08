@@ -1,8 +1,8 @@
 import Config from '../config';
 
-const getUserLeaves = async () => {
+const getUserLeaves = async company_id => {
   try {
-    const res = await fetch(Config.API_URL + 'leaves', {
+    const res = await fetch(Config.API_URL + 'leaves/' + company_id, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

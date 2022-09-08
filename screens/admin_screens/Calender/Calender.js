@@ -1,17 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-  Image,
-  ImageBackground,
-  Modal,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import {View, Text, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
+import {COLORS, SIZES, FONTS} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
 import CalendarPicker from 'react-native-calendar-picker';
 import {
@@ -21,10 +10,17 @@ import {
 import {CustomToast} from '../../../Components';
 import {getUsers} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
-import {Agenda} from 'react-native-calendars';
 
 const Profile = () => {
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
   const company_id = companyData._id;
 
   const [selectedStartDate, setSelectedStartDate] = React.useState(null);
@@ -54,7 +50,7 @@ const Profile = () => {
   // ========================== Apis ==========================
 
   const userLeaves = async () => {
-    let response = await getUserLeaves();
+    let response = await getUserLeaves(company_id);
     if (response.status === 200) {
       setLeaves(response.data);
     }
@@ -131,7 +127,7 @@ const Profile = () => {
                 paddingVertical: 1,
                 borderRadius: 2,
               }}
-              onPress={() => alert('Approved')}>
+              onPress={() => alert('Reject')}>
               <Text style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
                 Reject
               </Text>
@@ -180,36 +176,32 @@ const Profile = () => {
     return (
       <View
         style={{
-          paddingHorizontal: SIZES.radius,
-          backgroundColor: COLORS.white,
-          paddingVertical: SIZES.radius,
+          padding: 15,
           borderRadius: 5,
-          marginBottom: 20,
+          backgroundColor: COLORS.white,
           ...styles.shadow,
         }}>
-        <Text style={{...FONTS.h1, color: COLORS.darkGray}}>Leaves List</Text>
+        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Leaves List</Text>
 
-        <View style={{marginTop: SIZES.radius}}>
-          <FlatList
-            data={leaves}
-            keyExtractor={item => `${item._id}`}
-            renderItem={renderItem}
-            maxHeight={170}
-            scrollEnabled={true}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={() => {
-              return (
-                <View
-                  style={{
-                    width: '100%',
-                    height: 1,
-                    backgroundColor: COLORS.lightGray1,
-                    marginVertical: 10,
-                  }}></View>
-              );
-            }}
-          />
-        </View>
+        <FlatList
+          data={leaves}
+          contentContainerStyle={{marginTop: SIZES.radius}}
+          keyExtractor={item => `${item._id}`}
+          renderItem={renderItem}
+          maxHeight={200}
+          scrollEnabled={true}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => {
+            return (
+              <View
+                style={{
+                  height: 1,
+                  backgroundColor: COLORS.gray2,
+                  marginVertical: 12,
+                }}></View>
+            );
+          }}
+        />
       </View>
     );
   }
@@ -218,7 +210,8 @@ const Profile = () => {
     return (
       <View
         style={{
-          padding: SIZES.base,
+          marginTop: SIZES.padding,
+          padding: 15,
           borderRadius: 5,
           backgroundColor: COLORS.white,
           ...styles.shadow,
@@ -407,7 +400,8 @@ const Profile = () => {
   // }
 
   return (
-    <View style={{margin: 15}}>
+    <View
+      style={{marginVertical: SIZES.padding, marginHorizontal: SIZES.radius}}>
       {renderUserLeavesList()}
       {/* {renderShowUserDetails()}
       {renderfilterModal()} */}

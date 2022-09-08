@@ -1,9 +1,10 @@
 import Config from '../config';
 
-const getReport = async (project_id,user_id)=> {
+
+const getReport = async (project_id, user_id) => {
   try {
-    const res = await fetch(Config.API_URL + 'report/' + project_id + '/'+ user_id , {
-    // const res = await fetch(Config.API_URL + 'report/' + project_id , {
+    const res = await fetch(Config.API_URL + 'report/' + project_id + '/' + user_id, {
+
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -52,4 +53,114 @@ const getQuantity = async report_id => {
   }
 };
 
-export {getReport, getManpower, getQuantity};
+const getProjectAtGlance = async company_id => {
+  try {
+    const res = await fetch(
+      Config.API_URL + 'projects-at-glance/' + company_id,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+const postProjectReportPath = async formData => {
+  try {
+    const res = await fetch(Config.API_URL + 'project-report-path', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+const getProjectReportPath = async (company_id, project_id) => {
+  try {
+    const res = await fetch(
+      Config.API_URL + 'project-report-path/' + company_id + '/' + project_id,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+const verifyReport = async (project_id, report_id, user_id) => {
+  try {
+    const res = await fetch(
+      Config.API_URL +
+        'verify-report/' +
+        project_id +
+        '/' +
+        report_id +
+        '/' +
+        user_id,
+      {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+const revertReport = async (project_id, report_id, user_id, formData) => {
+  try {
+    const res = await fetch(
+      Config.API_URL +
+        'revert-report/' +
+        project_id +
+        '/' +
+        report_id +
+        '/' +
+        user_id,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {
+  getReport,
+  getManpower,
+  getQuantity,
+  getProjectAtGlance,
+  postProjectReportPath,
+  getProjectReportPath,
+  verifyReport,
+  revertReport,
+};
