@@ -192,15 +192,15 @@ const SubmittedWorks = ({data, Submitfunction}) => {
                 <Image
                   source={icons.date}
                   style={{
-                    height: 12,
-                    width: 12,
+                    height: 10,
+                    width: 10,
                     tintColor: COLORS.darkGray,
                     right: 3,
                   }}
                 />
                 <Text
                   style={{
-                    fontSize: 12,
+                    fontSize: 10,
                     color: COLORS.darkGray,
                   }}>
                   {item.submit_work_date}
@@ -210,15 +210,15 @@ const SubmittedWorks = ({data, Submitfunction}) => {
                 <Image
                   source={icons.time}
                   style={{
-                    height: 12,
-                    width: 12,
+                    height: 10,
+                    width: 10,
                     tintColor: COLORS.darkGray,
                     right: 3,
                   }}
                 />
                 <Text
                   style={{
-                    fontSize: 12,
+                    fontSize: 10,
                     color: COLORS.darkGray,
                   }}>
                   {item.submit_work_time}
