@@ -318,15 +318,15 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   };
   useEffect(() => {
     if (userData.company_id || saveItemsStatus || loading) {
-      reportdataitem();      
+      reportdataitem();
     }
-    
+
   }, [userData.company_id, saveItemsStatus, loading]);
 
 
-  
-  
-  
+
+
+
   const checkQuantityItemExist = async () => {
     const result1 = await check_quantity_item_exist(Main_drp_pro_value, userData._id, current_dat);
     if (result1.status != 401 && result1.data.length > 0) {
@@ -376,7 +376,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const inputselect = (item, key) => {
     // console.log(item.unit_name)
     // setUnitKey(item.unit_name)
-    
+
     const _inputselcet = [...inputs];
     _inputselcet[key].item_id = item._id;
     _inputselcet[key].unit_name = item.unit_name;
@@ -497,7 +497,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       unit_id: value,
       company_id: userData.company_id
     };
-    
+
     try {
       fetch(`${process.env.API_URL}quantity-report-item`, {
         method: 'POST',
@@ -516,7 +516,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             setquantityitem('');
             setSubmitToast(true);
             setTimeout(() => {
-              setadditem(false);              
+              setadditem(false);
             }, 1500);
           } else {
             alert(data.message)
@@ -631,7 +631,17 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
     return (
       <View
         key={index1}
-        style={{ borderWidth: 2, padding: 5, margin: 4, borderColor: "green" }}
+        style={{
+          padding: 10,
+          margin: 5,
+
+          borderWidth: 1,
+          borderColor: COLORS.lightblue_500,
+          borderRadius: 2,
+          elevation: 2,
+          // padding: 10,
+
+        }}
       >
         {/* <Text style={{ color: COLORS.black }}>{index1}</Text> */}
         <View
@@ -741,7 +751,11 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
           )) : null}
           <View>
             <TouchableOpacity
-              style={{ alignSelf: "flex-end" }}
+              style={{
+                elevation: 8,
+                borderColor: COLORS.transparent,
+                alignSelf: "flex-end"
+              }}
               onPress={() => delete_inside_Handler(key, index1)}>
               <Image
                 source={icons.delete_icon}
@@ -794,7 +808,14 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
           return (
-            <View style={inputContainer} key={key}>
+            <View style={[inputContainer, {
+              borderWidth: 1,
+              borderColor: COLORS.lightGray1,
+              borderRadius: 2,
+              elevation: 2,
+              padding: 10,
+              margin: 5
+            }]} key={key}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -823,13 +844,13 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   placeholder={!isFocus ? 'Select' : '...'}
                   searchPlaceholder="Search..."
                   value={input.item_id}
-                  onFocus={()=>{
+                  onFocus={() => {
                     reportdataitem();
                     checkQuantityItemExist();
                   }}
                   onChange={item => {
                     setSelectKey(input.key);
-                    setCompanyIdData(item.company_id)                
+                    setCompanyIdData(item.company_id)
                     inputselect(item, key);
                   }}
                 />
@@ -965,7 +986,11 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                 }
                 <View style={{ alignSelf: "flex-end" }}>
                   <TouchableOpacity
-                    style={{ alignSelf: "flex-end" }}
+                    style={{
+                      elevation: 8,
+                      borderColor: COLORS.transparent,
+                       alignSelf: "flex-end"
+                    }}
                     onPress={() => deleteHandler(key)}>
                     <Image
                       source={icons.delete_icon}
