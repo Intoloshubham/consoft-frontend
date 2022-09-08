@@ -85,9 +85,10 @@ const ReportDisplay = () => {
   };
 
   // get report
+  const user_id ='';
   const fetchReport = async project_id => {
     setProjectId(project_id);
-    let response = await getReport(project_id);
+    let response = await getReport(project_id, user_id);
     // console.log(response);
     setReport(response.data);
   };
