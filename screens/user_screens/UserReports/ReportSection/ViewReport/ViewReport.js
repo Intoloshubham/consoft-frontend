@@ -8,6 +8,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     Modal,
+    TextInput,
+    TouchableWithoutFeedback,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -20,15 +22,18 @@ import {
     getManpower,
     getReport,
     getQuantity,
+    verifyReport,
+    revertReport,
+    getProjectReportPath
 } from '../../../../../controller/ReportController'
 
 
 
 const ViewReport = () => {
     const userData = useSelector(state => state.user);
-    const user_id=userData._id;
+    const user_id = userData._id;
     const company_id = userData.company_id;
-    const navigation=useNavigation();
+    const navigation = useNavigation();
     // projects
     const [onSelect, setOnSelect] = React.useState(false);
     const [openProject, setOpenProject] = React.useState(false);
@@ -46,6 +51,17 @@ const ViewReport = () => {
     //report
     const [manpower, setManpower] = React.useState([]);
     const [quantity, setQuantity] = React.useState([]);
+
+    //report path
+    const [reportPath, setReportPath] = React.useState([]);
+
+    // for report verify
+    const [projectId, setProjectId] = React.useState('');
+    const [reportId, setReportId] = React.useState('');
+
+    //modal
+    const [revertModal, setRevertModal] = React.useState(false);
+    const [revertMsg, setRevertMsg] = React.useState('');
     // get projects
     const fetchProject = async () => {
         let response = await getProjects(company_id);
@@ -59,13 +75,15 @@ const ViewReport = () => {
 
     // get report
     const fetchReport = async (project_id) => {
-        
-        let response = await getReport(project_id,user_id);
+        setProjectId(project_id);
+        let response = await getReport(project_id, user_id);
+        console.log("🚀 ~ file: ViewReport.js ~ line 80 ~ fetchReport ~ response", response)
         setReport(response.data);
     };
 
     // fetch manpower on click
     const fetchManpower = async report_id => {
+        setReportId(report_id);
         let response = await getManpower(report_id);
         if (response.status === 200) {
             setManpower(response.data);
@@ -80,8 +98,49 @@ const ViewReport = () => {
         }
     };
 
+    // fetch report path
+    const fetchReportPath = async project_id => {
+        const response = await getProjectReportPath(company_id, project_id);
+        setReportPath(response.data);
+    };
+
+    // fetch verify report
+    const fetchVerifyReport = async () => {
+        let response = await verifyReport(projectId, reportId, user_id);
+        if (response.status === 200) {
+            alert('Verified');
+            fetchReport();
+        }
+    };
+
+    // fetch revert report
+    const submitRevertReport = async () => {
+        const formData = {
+            revert_msg: revertMsg,
+        };
+        let response = await revertReport(projectId, reportId, user_id, formData);
+        if (response.status === 200) {
+            alert('Reverted Successfully');
+            setRevertMsg('');
+            setRevertModal(false);
+            fetchReport();
+        } else {
+            alert(response.message);
+        }
+    };
+
+    React.useEffect(() => {
+        fetchReport();
+    }, []);
+
     // date
     const [date, setDate] = React.useState(new Date());
+    const MyDateString =
+        date.getFullYear() +
+        '/' +
+        ('0' + date.getDate()).slice(-2) +
+        '/' +
+        ('0' + (date.getMonth() + 1)).slice(-2);
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setDate(currentDate);
@@ -103,13 +162,13 @@ const ViewReport = () => {
             <View
                 style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    paddingRight: SIZES.padding,
+                    justifyContent: 'space-between',
+                    paddingRight: -SIZES.radius*0.5,
                     alignItems: 'center',
                 }}>
                 <View
                     style={{
-                        width: '60%',
+                        width: '70%',
                         ...styles.shadow,
                     }}>
                     <DropDownPicker
@@ -144,9 +203,9 @@ const ViewReport = () => {
                             tintColor: 'black',
                         }}
                         onSelectItem={value => {
-
                             fetchReport(value.value);
                             setOnSelect(true);
+                            fetchReportPath(value.value);
                         }}
                         onOpen={onProjectOpen}
                         autoScroll={false}
@@ -174,14 +233,15 @@ const ViewReport = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
-                        flexDirection:"row",
+                        flexDirection: "row",
                         backgroundColor: COLORS.gray,
                         padding: 5,
-                        right:-SIZES.base*4,
-                        alignItems:'center',
+                        paddingVertical:9,
+                        // right: -SIZES.base * 4,
+                        alignItems: 'center',
                         borderRadius: 5,
                     }}
-                    onPress={()=>{
+                    onPress={() => {
                         navigation.navigate('UserDashboard')
                     }}
                 >
@@ -190,9 +250,9 @@ const ViewReport = () => {
                         color={COLORS.white2}
                     />
                     <Text
-                    style={{
-                        color:COLORS.white2
-                    }}
+                        style={{
+                            color: COLORS.white2
+                        }}
                     > Back </Text>
                 </TouchableOpacity>
             </View>
@@ -218,6 +278,9 @@ const ViewReport = () => {
                         user_name: item.user_name,
                         date: item.report_date,
                         time: item.report_time,
+                        verify_1_status: item.verify_1_status,
+                        verify_1_revert: item.verify_1_revert,
+                        verify_1_revert_msg: item.verify_1_revert_msg
                     });
                     fetchManpower(item._id);
                     fetchQuantity(item._id);
@@ -330,7 +393,7 @@ const ViewReport = () => {
         const footerComponent = () => (
             <View>
                 {renderQuantity()}
-                {renderFooter()}
+                {user_id && renderFooter()}
             </View>
         );
 
@@ -376,7 +439,17 @@ const ViewReport = () => {
                                 </TouchableOpacity>
                             </ImageBackground>
                         </View>
-
+                        <Text
+                            style={{
+                                textAlign: 'center',
+                                marginBottom: 8,
+                                ...FONTS.h2,
+                                color: COLORS.lightblue_900,
+                                fontWeight: '500',
+                                textDecorationLine: 'underline',
+                            }}>
+                            Daily Progress Report
+                        </Text>
                         <View
                             style={{
                                 borderWidth: 1,
@@ -452,6 +525,12 @@ const ViewReport = () => {
                                         return <View style={{ margin: 5 }}></View>;
                                     }}
                                     ListFooterComponent={footerComponent}
+                                    ListFooterComponentStyle={{
+                                        flex: 1,
+                                        // borderWidth:1,
+                                        height: "100%",
+                                        marginBottom: '50%'
+                                    }}
                                 />
                             </View>
                         </View>
@@ -794,17 +873,239 @@ const ViewReport = () => {
                 <View
                     style={{
                         borderBottomWidth: 1,
-                        marginVertical: 15,
+                        marginTop: 15,
+                        marginBottom: 10,
                         borderColor: COLORS.gray2,
                     }}></View>
-                <Text>renderFooter</Text>
+                <Text
+                    style={{
+                        ...FONTS.h4,
+                        color: COLORS.black,
+                        marginBottom: 5,
+                    }}>
+                    Verify Report :
+                </Text>
+                {reportPath.map((ele, i) => {
+
+                    return (
+                        <View style={{
+                        }} key={i}>
+                            {ele.verification_1 === user_id ? (
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text
+                                        style={{
+                                            ...FONTS.h3,
+                                            textTransform: 'capitalize',
+                                            color: COLORS.black,
+                                        }}>
+                                        {ele.verification_1_name} :
+                                    </Text>
+                                    
+                                    {reportData.verify_1_status === false && reportData.verify_1_revert === false ? (
+                                        <View
+                                            style={{
+                                                left: 20,
+                                                flexDirection: 'row',
+                                            }}>
+                                            <TouchableOpacity
+                                                style={{
+                                                    paddingHorizontal: 5,
+                                                    paddingVertical: 1,
+                                                    backgroundColor: COLORS.success_600,
+                                                }}
+                                                onPress={() => fetchVerifyReport()}>
+                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                    Verify
+                                                </Text>
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity
+                                                style={{
+                                                    left: 15,
+                                                    paddingHorizontal: 5,
+                                                    paddingVertical: 1,
+                                                    backgroundColor: COLORS.rose_600,
+                                                }}
+                                                onPress={() => setRevertModal(true)}>
+                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                    Revert
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ) : reportData.verify_1_status === true && reportData.verify_1_revert === false ?
+
+                                        <View style={{
+                                            flexDirection: "column",
+                                            flexWrap: 'wrap',
+                                            justifyContent: 'space-around'
+                                        }}>
+                                            <View
+                                                style={{
+                                                    left: 10,
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                }}>
+                                                <Text style={{ ...FONTS.h3, color: COLORS.black }}>
+                                                    Verified
+                                                </Text>
+                                                <Image
+                                                    source={icons.verify}
+                                                    style={{
+                                                        left: 8,
+                                                        width: 16,
+                                                        height: 16,
+                                                        tintColor: 'green',
+                                                    }}
+                                                />
+                                            </View>
+                                        </View>
+                                        : reportData.verify_1_revert === true ?
+                                            <View style={{
+                                                flex: 1,
+                                                flexDirection: "row",
+                                                flexWrap: 'wrap',
+                                                alignContent: "space-around",
+                                                top: 12
+                                            }}>
+                                                <View
+                                                    style={{
+                                                        left: 10,
+                                                        flexDirection: 'row',
+                                                        alignItems: 'center',
+                                                    }}>
+                                                    <Text style={{ ...FONTS.h3, color: COLORS.black,textAlign:'right' }}>
+                                                        Reverted
+                                                    </Text>
+                                                    <Image
+                                                        source={icons.verify}
+                                                        style={{
+                                                            left: 8,
+                                                            width: 16,
+                                                            height: 16,
+                                                            tintColor: 'red',
+                                                        }}
+                                                    />
+                                                </View>
+                                                <View style={{
+                                                    flexDirection:"row",
+                                                    left:'-52%',
+                                                    width: "100%",
+                                                    height: '100%',
+                                                }}>
+                                                    <Text style={{ ...FONTS.h3, color: COLORS.black }}>
+                                                        Revert Message:
+                                                    </Text>
+                                                    <Text style={{ ...FONTS.h3, textAlign:'right',left:5, color: COLORS.black }}>
+                                                        {reportData.verify_1_revert_msg}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                            : null
+                                    }
+                                </View>
+                            )
+
+                                : null}
+                        </View>
+                    );
+                })}
             </View>
+        );
+    }
+
+    function renderRevertModal() {
+        return (
+            <Modal animationType="slide" transparent={true} visible={revertModal}>
+                <TouchableWithoutFeedback onPress={() => setRevertModal(false)}>
+                    <View
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: COLORS.transparentBlack7,
+                        }}>
+                        <View
+                            style={{
+                                position: 'absolute',
+                                backgroundColor: COLORS.white,
+                                paddingHorizontal: SIZES.padding,
+                                paddingVertical: SIZES.radius,
+                                width: '90%',
+                                top: '30%',
+                                borderRadius: 5,
+                            }}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginBottom: 10,
+                                }}>
+                                <Text style={{ fontSize: 20, color: COLORS.darkGray }}>
+                                    Revert message
+                                </Text>
+                                <ImageBackground
+                                    style={{
+                                        backgroundColor: COLORS.white,
+                                        padding: 2,
+                                        elevation: 20,
+                                    }}>
+                                    <TouchableOpacity onPress={() => setRevertModal(false)}>
+                                        <Image
+                                            source={icons.cross}
+                                            style={{
+                                                height: 25,
+                                                width: 25,
+                                                tintColor: COLORS.rose_600,
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+                                </ImageBackground>
+                            </View>
+
+                            <View
+                                style={{
+                                    borderBottomWidth: 1,
+                                    borderBottomColor: COLORS.darkGray
+                                }}>
+                                <TextInput
+                                    placeholder="Write your message..."
+                                    multiline={true}
+                                    numberOfLines={3}
+                                    onChangeText={value => {
+                                        setRevertMsg(value);
+                                    }}
+                                />
+                            </View>
+
+                            <TouchableOpacity
+                                style={{
+                                    marginTop: SIZES.padding,
+                                    alignItems: 'center',
+                                }}
+                                onPress={() => submitRevertReport()}>
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        backgroundColor: COLORS.lightblue_800,
+                                        paddingHorizontal: SIZES.radius,
+                                        paddingVertical: 5,
+                                        borderRadius: 3,
+                                        color: COLORS.white,
+                                    }}>
+                                    Send
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
         );
     }
     return (
         <View style={{ margin: SIZES.radius }}>
-            { }
             {renderProjectFilter()}
+            {renderRevertModal()}
             {renderReportModal()}
             {onSelect == true && renderReport()}
         </View>

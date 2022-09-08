@@ -67,7 +67,7 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) =>
 
         if (saveProjectTeamEmptyStatus) {
             const res = await Insert_project_team_data(teamData);
-            console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 70 ~ saveProjectTeamMemberSubmit ~ res", res)
+            // console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 70 ~ saveProjectTeamMemberSubmit ~ res", res)
             if (res.status === 200) {
                 setAddProjectTeamModal(false);
                 setSaveProjectTeamEmptyStatus(false);
@@ -329,16 +329,16 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) =>
                     borderWidth: 1,
                     borderRadius: 4,
                     width: SIZES.width * 0.72,
-
+                    backgroundColor:COLORS.lightblue_500,
                     borderColor: COLORS.lightblue_300,
                     alignSelf: "center"
                 }}>
                 <View style={{}}>
-                    <Text onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.darkGray }]}>Project Team</Text>
+                    <Text onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.white2 }]}>Project Team</Text>
                 </View>
                 <View style={{ alignItems: "center", justifyContent: "center", marginLeft: SIZES.base * 0.5 }}>
                     <TouchableOpacity onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)}>
-                        <AntDesign name='caretdown' size={12} color={COLORS.gray} />
+                        <AntDesign name='caretdown' size={12} color={COLORS.white2} />
                     </TouchableOpacity>
                 </View>
             </Pressable>

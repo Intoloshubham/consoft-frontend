@@ -23,29 +23,33 @@ const DoneModal = ({ doneModal, setdoneModal, loading }) => {
     // setUserDataId(userData._id);
     const data = await get_completed_task(userData._id);
     console.log("🚀 ~ file: DoneModal.js ~ line 25 ~ fetchCompletedWorks ~ data", data)
+    // console.log("🚀 ~ file: DoneModal.js ~ line 25 ~ fetchCompletedWorks ~ data", data)
 
-    if (data) {
+    if (data.length>0) {
       data.map(async (ele, index) => {
         // console.log("🚀 ~ file: DoneModal.js ~ line 29 ~ data.map ~ ele", ele)
         // ele.assign_works.map(list => {
-        setAssignWork(ele.assign_works);
+
+        setAssignWork(ele.assign_works); 
         // })
 
       });
     }
   };
 
-  console.log("🚀 ~ file: DoneModal.js ~ line 22 ~ DoneModal ~ assignWork", assignWork)
+  // console.log("🚀 ~ file: DoneModal.js ~ line 22 ~ DoneModal ~ assignWork", assignWork)
 
 
   useMemo(() => {
-    fetchCompletedWorks();
-  }, [loading, ' ']);
+    if (loading) {
+      fetchCompletedWorks();      
+    }
+  }, []); 
 
 
 
   const renderItem = ({ item }) => (
-    <View
+   item.verify===true && item.work_status===true? <View
       style={{
         flex: 1,
         backgroundColor: COLORS.gray3,
@@ -86,6 +90,10 @@ const DoneModal = ({ doneModal, setdoneModal, loading }) => {
         </TouchableOpacity>
       </View>
     </View>
+    :
+    <View>
+      <Text>No task completed!</Text>
+    </View>
   );
 
   function Modalfunction() {
@@ -106,6 +114,7 @@ const DoneModal = ({ doneModal, setdoneModal, loading }) => {
             right: 0,
             left: 0,
             borderColor: 'whitesmoke',
+            height:'60%',
             marginTop: "40%",
             marginVertical: SIZES.width * 0.67,
             marginHorizontal: SIZES.base,
@@ -133,8 +142,9 @@ const DoneModal = ({ doneModal, setdoneModal, loading }) => {
             <FlatList
               data={assignWork}
               scrollEnabled={true}
+              maxHeight={400} 
               showsVerticalScrollIndicator={false}
-              renderItem={renderItem}
+              renderItem={renderItem} 
               keyExtractor={item => item._id}
             />
           </View>
