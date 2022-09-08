@@ -222,9 +222,9 @@ const UserReports = ({ route }) => {
           }}>
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
-          {value ? <View >
+          {value ? <View>
             <View style={{
-              marginVertical: 5       
+              marginVertical: 5
             }}>
               <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} loading={loading} />
             </View>
@@ -243,7 +243,51 @@ const UserReports = ({ route }) => {
               {/* Quality */}
               <TAndP Main_drp_pro_value={value} loading={loading} />
             </View>
-          </View> : null}
+            <View style={{
+              top: SIZES.height * 0.02
+            }}>
+              <TouchableOpacity
+                style={{
+                  marginTop: SIZES.body1 * 8,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  backgroundColor: COLORS.lightblue_800,
+                  width: "45%",
+                  padding: 10,
+                  alignSelf: "center",
+                  borderRadius: 5,
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 4,
+                  },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 4.65,
+                  elevation: 8,
+                }}
+                onPress={() => {
+                  // handleDoneTask()
+                  // navigation.navigate('ViewReport');
+
+                }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image source={icons.report} style={{
+                    height: 24,
+                    tintColor:'white',
+                    width: 24
+                  }} />
+                  <Text style={{ ...FONTS.h4, color: COLORS.white3, textTransform:'uppercase', left: 10 }}>
+                    Final Submit
+                  </Text>
+                </View>
+
+              </TouchableOpacity>
+            </View>
+          </View>
+
+
+
+            : null}
         </View>
       </KeyboardAwareScrollView>
     </View>

@@ -11,7 +11,7 @@ import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
 import { Divider } from '@ui-kitten/components';
-import {CustomToast, DeleteConfirmationToast} from '../../../Components'
+import { CustomToast, DeleteConfirmationToast } from '../../../Components'
 import styles from '../TaskModal/css/InProgressModalStyle.js';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useSelector, useDispatch } from 'react-redux';
@@ -38,6 +38,7 @@ const UserAssignWorks = ({ loading }) => {
 
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [commentCollapse, setCommentCollapse] = useState(false);
+  const [commentStatus, setCommentStatus] = useState(false)
 
   const userData = useSelector(state => state.user);
   // console.log(userData._id)
@@ -73,7 +74,9 @@ const UserAssignWorks = ({ loading }) => {
 
     if (data.status === 200) {
       setTextMsg('');
-      // fetchAssignWorks();
+      setSubmitToast(true);
+      setCommentStatus(true);
+      fetchAssignWorks();
     }
 
   };
@@ -221,7 +224,13 @@ const UserAssignWorks = ({ loading }) => {
             style={{ height: 15, width: 15, tintColor: COLORS.white }}
           />
         </View>
-        <Text style={{ color: color, marginTop: 3 }}>{message}</Text>
+        <View style={{
+          flexDirection: "row",
+
+        }}>
+          <Text style={{ color: color, marginTop: 3 }}>{message}</Text>
+          {message == 'Revert' ? <Text style={{ color: COLORS.white2, marginTop: 3 }}>: reverted</Text> : null}
+        </View>
       </View>
     );
   };
@@ -246,8 +255,9 @@ const UserAssignWorks = ({ loading }) => {
             item.verify == false &&
             item.revert_status == false ? (
             <WorkDetails item={item} message={''} color={COLORS.black} />
-          ) : null}
-
+          ) 
+          : null
+          }
         </View>
       </>
     );
@@ -277,17 +287,22 @@ const UserAssignWorks = ({ loading }) => {
               flexDirection: 'column',
               justifyContent: "space-between"
             }}>
-            <Text style={{ ...FONTS.h5, color: COLORS.white }}>
-              Targate Date: {item.exp_completion_date}
-              {/* Target Date */}
-            </Text>
-            <Text style={{ ...FONTS.h5, color: COLORS.white }}>
-              Assign Date: {item.assign_date}
-              {/* Target Date */}
-            </Text>
-            <Text style={{ ...FONTS.h5, color: COLORS.white }}>
-              Time: {item.exp_completion_time}
-            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: 2 }}>
+              <Text style={{ ...FONTS.h5, color: COLORS.white }}>
+                Targate Date:  {item.exp_completion_date}
+              </Text>
+              <Text style={{ ...FONTS.h5, color: COLORS.white }}>
+                Targate Time:  {item.exp_completion_time}
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: "space-between", marginHorizontal: 2 }}>
+              <Text style={{ ...FONTS.h5, color: COLORS.white }}>
+                Assign Date:   {item.assign_date}
+              </Text>
+              <Text style={{ ...FONTS.h5, color: COLORS.white }}>
+                Assign Time: {item.assign_time}
+              </Text>
+            </View>
             <View>
               {item.comment_status == false && item.work_percent == 0 ?
                 <TouchableOpacity
@@ -302,6 +317,7 @@ const UserAssignWorks = ({ loading }) => {
                     paddingHorizontal: SIZES.radius * 0.5
                   }}
                   onPress={() => {
+
                     setCommentCollapse(!commentCollapse)
                   }}
                 >
@@ -316,8 +332,8 @@ const UserAssignWorks = ({ loading }) => {
             }}
           />
           <View style={{ flexdirection: 'row' }}>
-            {item.comment_status === false && commentCollapse && item.work_percent == 0 ?
-              <View style={{ backgroundColor: COLORS.white, borderRadius: 5 }}>
+            {commentCollapse && item.work_percent == 0 ?
+              item.comment_status === false ? <View style={{ backgroundColor: COLORS.white, borderRadius: 5 }}>
                 <TextInput
                   style={{
                     paddingHorizontal: SIZES.radius,
@@ -332,9 +348,10 @@ const UserAssignWorks = ({ loading }) => {
                 <TouchableOpacity
                   style={{
                     alignItems: 'flex-end',
+                    paddingHorizontal: 4,
                     // marginTop: SIZES.base,
                     // backgroundColor: "red",
-                    marginLeft: SIZES.body1 * 7.8,
+                    marginLeft: SIZES.body1 * 4,
                     padding: 2
                   }}
                   onPress={() => submitComments(item._id)}>
@@ -342,17 +359,19 @@ const UserAssignWorks = ({ loading }) => {
                     <Text
                       style={{
                         color: COLORS.lightGray2,
+
                         backgroundColor: COLORS.lightblue_900,
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 5,
                         paddingVertical: 3,
                         elevation: 8,
                         borderRadius: 3,
                       }}>
-                      Submit
+                      Submit comment
                     </Text>
                   ) : null}
                 </TouchableOpacity>
-              </View> : null}
+              </View> : null
+              : null}
             {item.work_status == false ?
               <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
                 <View style={{ flexDirection: 'row' }}>
@@ -421,7 +440,10 @@ const UserAssignWorks = ({ loading }) => {
     );
   };
 
+  // console.log("🚀 ~ file: UserAssignWorks.js ~ line 543 ~ UserAssignWorks ~ getTaskInProgress", getTaskInProgress)
+
   return (
+
     <View
       style={{
         marginHorizontal: SIZES.radius,
@@ -452,36 +474,45 @@ const UserAssignWorks = ({ loading }) => {
         )
       })
      } */}
-      <ScrollView
-        horizontal={true}
-        contentContainerStyle={{ width: '100%', height: '100%',padding:5,paddingBottom:18 }}>
-        <AccordionList
-          list={getTaskInProgress ? getTaskInProgress : null}
-          header={renderHeader}
-          body={renderBody}
-          isExpanded={false}
-          style={{
-            borderWidth:1,
-            borderColor:COLORS.lightblue_400,
-            padding:5,
-            // marginBottom:40,
 
-          }}
+
+      {getTaskInProgress.length > 0 ?
+        <ScrollView
+          horizontal={true}
           contentContainerStyle={{
-            bottom:14
-          }}
-          // onToggle={(isExpanded) => {
-          //   setIsExpand(!isExpand);
-          //   // setIsExpandId(isExpanded);
-          //   // console.log("🚀 ~ file: UserAssignWorks.js ~ line 392 ~ UserAssignWorks ~ isExpanded", isExpanded)
-          // }}
-          keyExtractor={item => `${item._id}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={true}
-          nestedScrollEnabled={true}
-          maxHeight={450}
-        />
-      </ScrollView>
+            width: '100%',
+            height: '100%',
+            padding: 5,
+            paddingBottom: 18
+          }}>
+          <AccordionList
+            list={getTaskInProgress ? getTaskInProgress : null}
+            header={renderHeader}
+            body={renderBody}
+            isExpanded={false}
+            style={{
+              // borderWidth: 1,
+              // borderColor: COLORS.lightblue_400,
+              padding: 5,
+              // marginBottom:40,
+
+            }}
+            contentContainerStyle={{
+              bottom: 14
+            }}
+            // onToggle={(isExpanded) => {
+            //   setIsExpand(!isExpand);
+            //   // setIsExpandId(isExpanded);
+            //   // console.log("🚀 ~ file: UserAssignWorks.js ~ line 392 ~ UserAssignWorks ~ isExpanded", isExpanded)
+            // }}
+            keyExtractor={item => `${item._id}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={true}
+            nestedScrollEnabled={true}
+            maxHeight={450}
+          />
+        </ScrollView> : null
+      }
       <CustomToast
         isVisible={submitToast}
         onClose={() => setSubmitToast(false)}

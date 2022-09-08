@@ -162,13 +162,13 @@ const ViewReport = () => {
             <View
                 style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    paddingRight: SIZES.padding,
+                    justifyContent: 'space-between',
+                    paddingRight: -SIZES.radius*0.5,
                     alignItems: 'center',
                 }}>
                 <View
                     style={{
-                        width: '60%',
+                        width: '70%',
                         ...styles.shadow,
                     }}>
                     <DropDownPicker
@@ -236,7 +236,8 @@ const ViewReport = () => {
                         flexDirection: "row",
                         backgroundColor: COLORS.gray,
                         padding: 5,
-                        right: -SIZES.base * 4,
+                        paddingVertical:9,
+                        // right: -SIZES.base * 4,
                         alignItems: 'center',
                         borderRadius: 5,
                     }}
@@ -899,6 +900,7 @@ const ViewReport = () => {
                                         }}>
                                         {ele.verification_1_name} :
                                     </Text>
+                                    
                                     {reportData.verify_1_status === false && reportData.verify_1_revert === false ? (
                                         <View
                                             style={{

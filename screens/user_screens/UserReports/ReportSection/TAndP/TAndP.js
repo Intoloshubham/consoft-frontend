@@ -128,6 +128,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
             const resp = await save_new_equipment_item(data);
             const temp = await resp.json();
+            console.log("🚀 ~ file: TAndP.js ~ line 131 ~ saveNewEquipmentItems ~ temp", temp)
             if (temp.status == '200') {
                 setSubmitToast(true)
                 getEquipmentItems();
@@ -334,26 +335,27 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                 flex: 1,
                                 borderWidth: 1,
                                 borderColor: COLORS.lightblue_100,
+                                justifyContent:'space-between',
+                                paddingHorizontal:15,
                                 borderRadius: 1,
                                 elevation: 2,
-                                padding: 5,
-                                margin: 5
+                                padding:12,
+                                margin: 2
                             }} key={key}>
                                 <View
                                     style={{
                                         flex: 1,
-                                        paddingVertical: 12
+                                        paddingVertical: 5
                                     }}
                                     key={key}
                                 >
                                     <View style={{
-                                        flex: 1,
+                                        // flex: 1,
+                                        width: '100%',
                                         flexDirection: "row",
                                         alignItems: "center",
                                         justifyContent: "space-between",
-                                        flexWrap: "wrap",
-                                        marginHorizontal: SIZES.base,
-
+                                        flexWrap: "wrap"
                                     }}>
                                         <Dropdown
                                             style={[
@@ -365,7 +367,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                     alignSelf: "center",
                                                     paddingHorizontal: 8,
                                                     marginBottom: SIZES.base,
-                                                    width: "50%"
+                                                    width: "55%"
                                                 },
                                             ]}
                                             selectedTextStyle={{ color: COLORS.gray, }
@@ -385,10 +387,20 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                 inputEquipItemName(text._id, key);
                                             }}
                                         />
+                                        <TextInput
+                                            style={[inputfromone, { width: "28%" }]}
+                                            placeholder="Qty"
+                                            keyboardType="numeric"
+                                            placeholderTextColor={COLORS.gray}
+                                            value={input.qty}
+                                            onChangeText={text => {
+                                                inputEquipQuantity(text, key);
+                                            }}
+                                        />
                                         <TouchableOpacity
 
                                             style={{
-                                                width: "49%",
+                                                width: "50%",
                                                 flexDirection: "row",
                                                 alignItems: "center",
                                                 // borderWidth: 1,
@@ -397,7 +409,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                 borderColor: COLORS.lightblue_400,
                                                 paddingVertical: SIZES.base * 0.6,
                                                 justifyContent: "space-between",
-                                                paddingHorizontal: -SIZES.base
+                                                // paddingHorizontal: -SIZES.base
                                             }}
 
                                             onPress={() => {
@@ -426,7 +438,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                 />
                                             </View>
                                         </TouchableOpacity>
-                                        <TextInput
+                                        {/* <TextInput
                                             style={[inputfromone, { width: "20%" }]}
                                             placeholder="Qty"
                                             keyboardType="numeric"
@@ -435,7 +447,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             onChangeText={text => {
                                                 inputEquipQuantity(text, key);
                                             }}
-                                        />
+                                        /> */}
                                         <TouchableOpacity
                                             style={{
                                                 elevation: 15,
@@ -618,7 +630,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     return (
         <>
             {/* T & P */}
-            <Pressable 
+            <Pressable
                 onPress={() => setTAndP(!tAndP)}
                 style={{
                     flexDirection: "row",
@@ -629,7 +641,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                     justifyContent: "space-between",
                     top: SIZES.base * 2,
                     borderColor: COLORS.lightblue_200,
-                    backgroundColor:COLORS.lightblue_600,
+                    backgroundColor: COLORS.lightblue_600,
                     borderWidth: 1,
                     borderRadius: 4,
                     elevation: 2,

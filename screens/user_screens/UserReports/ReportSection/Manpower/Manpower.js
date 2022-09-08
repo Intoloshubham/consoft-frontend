@@ -34,7 +34,7 @@ import {
     ManpowerUserContractors,
 } from '../../../index.js';
 import { Get_Contractor_Data } from '../../ReportApi.js';
-
+import * as Animatable from 'react-native-animatable';
 
 
 const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => {
@@ -62,11 +62,9 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
 
     return (
         <>
-
-
             <Pressable
-
                 onPress={() => setTabCollapse(!TabCollapse)}
+                
                 style={{
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
@@ -99,7 +97,9 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                 </View>
 
             </Pressable>
-            {TabCollapse ? <View style={{ justifyContent: "space-evenly" }}>
+            {TabCollapse ? <Animatable.View 
+            duration={4000}
+            style={{ justifyContent: "space-evenly" }}>
                 <View>
                     {/* project team start */}
                     <ManPowerProjectTeam projectTeamList={projectTeamList} Main_drp_pro_value={Main_drp_pro_value} loading={loading} />
@@ -111,7 +111,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                     {/* Contractors close */}
                 </View>
 
-            </View> : null}
+            </Animatable.View> : null}
         </>
     )
 }

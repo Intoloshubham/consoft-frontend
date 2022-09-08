@@ -1285,7 +1285,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
               setQuantity(!quant_ity)
             }}
             style={[FONTS.h3, { color: COLORS.white2 }]}>
-            Quantity Executed Today
+            Quantity Exec. Today
           </Text>
         </View>
         <View style={{ alignItems: 'flex-end', alignSelf: 'center' }}>
