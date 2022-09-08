@@ -1167,18 +1167,19 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
           paddingHorizontal: 10,
           borderWidth: 1,
           width: SIZES.width * 0.72,
+          backgroundColor:COLORS.lightblue_500,
           alignSelf: "center",
           borderRadius: 4,
           borderColor: COLORS.lightblue_300,
         }}>
         <View>
-          <Text onPress={() => setConTeamTabCollapse(!conTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.darkGray }]}>Contractors</Text>
+          <Text onPress={() => setConTeamTabCollapse(!conTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.white2 }]}>Contractors</Text>
         </View>
         <View style={{ alignItems: "center", justifyContent: "center", marginLeft: SIZES.base * 0.5 }}>
           <TouchableOpacity onPress={() => {
             setConTeamTabCollapse(!conTeamTabCollapse)
           }}>
-            <AntDesign name='caretdown' size={12} color={COLORS.gray} />
+            <AntDesign name='caretdown' size={12} color={COLORS.white3} />
           </TouchableOpacity>
         </View>
       </Pressable>

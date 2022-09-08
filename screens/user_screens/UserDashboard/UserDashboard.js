@@ -64,8 +64,8 @@ const UserDashboard = () => {
         style={{
           flexDirection:"row",
           justifyContent:"space-between",
-          marginHorizontal: SIZES.radius,
-          paddingHorizontal: SIZES.radius,
+          marginHorizontal: SIZES.radius*0.5,
+          paddingHorizontal: SIZES.radius*0.5,
           paddingVertical: SIZES.radius,
           borderRadius: SIZES.base,
           // backgroundColor: COLORS.lightblue_500,
