@@ -7,6 +7,7 @@ import {
     Text,
     FlatList,
     StyleSheet,
+    Platform,
     Image,
     ScrollView,
     Modal,
@@ -14,6 +15,7 @@ import {
     TextInput,
     TouchableWithoutFeedback,
     TouchableOpacity,
+    UIManager,
     LogBox,
     LayoutAnimation,
     ImageBackground,
@@ -36,7 +38,11 @@ import {
 import { Get_Contractor_Data } from '../../ReportApi.js';
 import * as Animatable from 'react-native-animatable';
 
-
+// if (Platform.OS === 'android') {
+//     if (UIManager.setLayoutAnimationEnabledExperimental) {
+//         UIManager.setLayoutAnimationEnabledExperimental(true);
+//     }
+// }
 const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => {
 
     useEffect(() => {
@@ -63,8 +69,11 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
     return (
         <>
             <Pressable
-                onPress={() => setTabCollapse(!TabCollapse)}
-                
+                onPress={() => {
+                    LayoutAnimation.easeInEaseOut();
+                    setTabCollapse(!TabCollapse)
+                }}
+
                 style={{
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
@@ -72,7 +81,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                     width: SIZES.width * 0.53,
                     alignItems: "center",
                     justifyContent: "space-between",
-                    backgroundColor:COLORS.lightblue_600,
+                    backgroundColor: COLORS.lightblue_600,
                     top: SIZES.base * 2,
                     borderColor: COLORS.lightblue_200,
                     borderWidth: 1,
@@ -97,9 +106,9 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                 </View>
 
             </Pressable>
-            {TabCollapse ? <Animatable.View 
-            duration={4000}
-            style={{ justifyContent: "space-evenly" }}>
+            {TabCollapse ? <View
+                duration={4000}
+                style={{ justifyContent: "space-evenly" }}>
                 <View>
                     {/* project team start */}
                     <ManPowerProjectTeam projectTeamList={projectTeamList} Main_drp_pro_value={Main_drp_pro_value} loading={loading} />
@@ -111,7 +120,7 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                     {/* Contractors close */}
                 </View>
 
-            </Animatable.View> : null}
+            </View> : null}
         </>
     )
 }
