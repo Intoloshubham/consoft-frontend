@@ -16,7 +16,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import {useSelector} from 'react-redux';
 import {getProjects} from '../../../controller/ProjectController';
-import {SIZES, FONTS, COLORS, icons} from '../../../constants';
+import {SIZES, FONTS, COLORS, icons, reportdata} from '../../../constants';
 import {
   getManpower,
   getReport,
@@ -915,7 +915,7 @@ const ReportDisplay = () => {
                                   ? true
                                   : false
                               }
-                              onPress={() => fetchVerifyReport()}
+                              onPress={() => setRevertModal(true)}
                             />
                           </View>
                         </View>
@@ -928,15 +928,24 @@ const ReportDisplay = () => {
                           alignItems: 'center',
                         }}>
                         <Text style={{...FONTS.h4, color: COLORS.black}}>
-                          Verified
+                          {reportData.admin_1_revert == true
+                            ? 'Reverted'
+                            : 'Verified'}
                         </Text>
                         <Image
-                          source={icons.verify}
+                          source={
+                            reportData.admin_1_revert == true
+                              ? icons.revert
+                              : icons.verify
+                          }
                           style={{
                             left: 8,
                             width: 16,
                             height: 16,
-                            tintColor: 'green',
+                            tintColor:
+                              reportData.admin_1_revert == true
+                                ? 'red'
+                                : 'green',
                           }}
                         />
                       </View>
@@ -964,29 +973,40 @@ const ReportDisplay = () => {
                         }}>
                         {ele.admin_2_name} {' - '}
                       </Text>
-                      {reportData.admin_2_status == true && (
-                        <View>
-                          <View
-                            style={{
-                              left: 10,
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}>
-                            <Text style={{...FONTS.h4, color: COLORS.black}}>
-                              Verified
-                            </Text>
-                            <Image
-                              source={icons.verify}
-                              style={{
-                                left: 8,
-                                width: 16,
-                                height: 16,
-                                tintColor: 'green',
-                              }}
-                            />
-                          </View>
-                        </View>
-                      )}
+                      {/* {reportData.admin_2_status == true && ( */}
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.admin_2_revert == true
+                            ? 'Reverted'
+                            : reportData.admin_2_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.admin_2_revert == true
+                              ? icons.revert
+                              : reportData.admin_2_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.admin_2_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                      {/* )} */}
                     </View>
                     {reportData.admin_2_revert == true &&
                       reportData.verify_1_status == true && (
@@ -1010,36 +1030,44 @@ const ReportDisplay = () => {
                         }}>
                         {ele.verification_1_name} {' - '}
                       </Text>
-                      {reportData.verify_1_status == true && (
-                        <View>
-                          <View
-                            style={{
-                              left: 10,
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}>
-                            <Text style={{...FONTS.h4, color: COLORS.black}}>
-                              Verified
-                            </Text>
-                            <Image
-                              source={icons.verify}
-                              style={{
-                                left: 8,
-                                width: 16,
-                                height: 16,
-                                tintColor: 'green',
-                              }}
-                            />
-                          </View>
-                        </View>
-                      )}
-                    </View>
-                    {reportData.verify_1_revert == true &&
-                      reportData.verify_1_status == true && (
-                        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                          Revert Msg - {reportData.verify_1_revert_msg}
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_1_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_1_status === true
+                            ? 'Verified'
+                            : null}
                         </Text>
-                      )}
+                        <Image
+                          source={
+                            reportData.verify_1_revert == true
+                              ? icons.revert
+                              : reportData.verify_1_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_1_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                    </View>
+                    {reportData.verify_1_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Revert Msg - {reportData.verify_1_revert_msg}
+                      </Text>
+                    )}
                   </View>
                 </View>
               ) : ele.admin_2 === userId ? (
@@ -1082,7 +1110,7 @@ const ReportDisplay = () => {
                                   ? true
                                   : false
                               }
-                              onPress={() => fetchVerifyReport()}
+                              onPress={() => setRevertModal(true)}
                             />
                           </View>
                         </View>
@@ -1095,15 +1123,24 @@ const ReportDisplay = () => {
                           alignItems: 'center',
                         }}>
                         <Text style={{...FONTS.h4, color: COLORS.black}}>
-                          Verified
+                          {reportData.admin_2_revert == true
+                            ? 'Reverted'
+                            : 'Verified'}
                         </Text>
                         <Image
-                          source={icons.verify}
+                          source={
+                            reportData.admin_2_revert == true
+                              ? icons.revert
+                              : icons.verify
+                          }
                           style={{
                             left: 8,
                             width: 16,
                             height: 16,
-                            tintColor: 'green',
+                            tintColor:
+                              reportData.admin_2_revert == true
+                                ? 'red'
+                                : 'green',
                           }}
                         />
                       </View>
@@ -1142,29 +1179,40 @@ const ReportDisplay = () => {
                         }}>
                         {ele.admin_1_name} {' - '}
                       </Text>
-                      {reportData.admin_1_status == true && (
-                        <View>
-                          <View
-                            style={{
-                              left: 10,
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}>
-                            <Text style={{...FONTS.h4, color: COLORS.black}}>
-                              Verified
-                            </Text>
-                            <Image
-                              source={icons.verify}
-                              style={{
-                                left: 8,
-                                width: 16,
-                                height: 16,
-                                tintColor: 'green',
-                              }}
-                            />
-                          </View>
-                        </View>
-                      )}
+                      {/* {reportData.admin_1_status == true && ( */}
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.admin_1_revert == true
+                            ? 'Reverted'
+                            : reportData.admin_1_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.admin_1_revert == true
+                              ? icons.revert
+                              : reportData.admin_1_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.admin_1_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                      {/* )} */}
                     </View>
 
                     {reportData.admin_1_revert == true &&
@@ -1189,36 +1237,44 @@ const ReportDisplay = () => {
                         }}>
                         {ele.verification_1_name} {' - '}
                       </Text>
-                      {reportData.verify_1_status == true && (
-                        <View>
-                          <View
-                            style={{
-                              left: 10,
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}>
-                            <Text style={{...FONTS.h4, color: COLORS.black}}>
-                              Verified
-                            </Text>
-                            <Image
-                              source={icons.verify}
-                              style={{
-                                left: 8,
-                                width: 16,
-                                height: 16,
-                                tintColor: 'green',
-                              }}
-                            />
-                          </View>
-                        </View>
-                      )}
-                    </View>
-                    {reportData.verify_1_revert == true &&
-                      reportData.verify_1_status == true && (
-                        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                          Revert Msg - {reportData.verify_1_revert_msg}
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_1_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_1_status === true
+                            ? 'Verified'
+                            : null}
                         </Text>
-                      )}
+                        <Image
+                          source={
+                            reportData.verify_1_revert == true
+                              ? icons.revert
+                              : reportData.verify_1_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_1_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                    </View>
+                    {reportData.verify_1_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Revert Msg - {reportData.verify_1_revert_msg}
+                      </Text>
+                    )}
                   </View>
                 </View>
               ) : null}
@@ -1235,27 +1291,40 @@ const ReportDisplay = () => {
                         }}>
                         {ele.admin_1_name} {' - '}
                       </Text>
-                      {reportData.admin_1_status == true && (
-                        <View
+                      {/* {reportData.admin_1_status == true && ( */}
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.admin_1_revert == true
+                            ? 'Reverted'
+                            : reportData.admin_1_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.admin_1_revert == true
+                              ? icons.revert
+                              : reportData.admin_1_status == true
+                              ? icons.verify
+                              : null
+                          }
                           style={{
-                            left: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}>
-                          <Text style={{...FONTS.h4, color: COLORS.black}}>
-                            Verified
-                          </Text>
-                          <Image
-                            source={icons.verify}
-                            style={{
-                              left: 8,
-                              width: 16,
-                              height: 16,
-                              tintColor: 'green',
-                            }}
-                          />
-                        </View>
-                      )}
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.admin_1_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                      {/* )} */}
                     </View>
                     {reportData.admin_1_revert == true && (
                       <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
@@ -1279,27 +1348,40 @@ const ReportDisplay = () => {
                         }}>
                         {ele.admin_2_name} {' - '}
                       </Text>
-                      {reportData.admin_2_status == true && (
-                        <View
+                      {/* {reportData.admin_2_status == true && ( */}
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.admin_2_revert == true
+                            ? 'Reverted'
+                            : reportData.admin_2_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.admin_2_revert == true
+                              ? icons.revert
+                              : reportData.admin_2_status == true
+                              ? icons.verify
+                              : null
+                          }
                           style={{
-                            left: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}>
-                          <Text style={{...FONTS.h4, color: COLORS.black}}>
-                            Verified
-                          </Text>
-                          <Image
-                            source={icons.verify}
-                            style={{
-                              left: 8,
-                              width: 16,
-                              height: 16,
-                              tintColor: 'green',
-                            }}
-                          />
-                        </View>
-                      )}
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.admin_2_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                      {/* )} */}
                     </View>
                     {reportData.admin_2_revert == true && (
                       <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
@@ -1323,27 +1405,38 @@ const ReportDisplay = () => {
                         }}>
                         {ele.verification_1_name} {' - '}
                       </Text>
-                      {reportData.verify_1_status == true && (
-                        <View
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_1_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_1_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.verify_1_revert == true
+                              ? icons.revert
+                              : reportData.verify_1_status == true
+                              ? icons.verify
+                              : null
+                          }
                           style={{
-                            left: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}>
-                          <Text style={{...FONTS.h4, color: COLORS.black}}>
-                            Verified
-                          </Text>
-                          <Image
-                            source={icons.verify}
-                            style={{
-                              left: 8,
-                              width: 16,
-                              height: 16,
-                              tintColor: 'green',
-                            }}
-                          />
-                        </View>
-                      )}
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_1_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
                     </View>
                     {reportData.verify_1_revert == true && (
                       <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
