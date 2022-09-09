@@ -8,7 +8,7 @@ import {
   TouchableOpacity, LogBox
 } from 'react-native'
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../constants'
-import { FormInput, Drop, IconButton, CustomDropdown, TextButton } from '../../../Components';
+import { FormInput, Drop, IconButton, CustomDropdown, TextButton, CustomToast } from '../../../Components';
 import { Divider } from '@ui-kitten/components';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -20,6 +20,7 @@ import { Get_Project_Team_Data } from '../UserReports/ReportApi.js'
 import { getToken, getUserId } from '../../../services/asyncStorageService';
 import Config from '../../../config'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 const UserReports = ({ route }) => {
 
@@ -28,7 +29,7 @@ const UserReports = ({ route }) => {
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
-
+  const current_dat = moment().format("YYYY%2FMM%2FDD")
 
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, Project_list_drop } = styles
 
@@ -40,6 +41,12 @@ const UserReports = ({ route }) => {
   //Projects in dropdown
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
 
   //for saving projects
   const [selectedIdProjects, setSelectedIdProjects] = useState([])
@@ -139,7 +146,30 @@ const UserReports = ({ route }) => {
   }, [value, loading])
   // console.log(projectTeamList)
 
+  const finalSubmitReport = async () => {
+    try {
+      const res = await fetch(`${process.env.API_URL}final-submit-report/${userData.company_id}/${value}/${userData._id}/${current_dat}/`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify(inputs),
+      })
+      const data = await res.json();
+      console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
+      if (data.status===200) {
+      setSubmitToast(true);
+      }
 
+      setTimeout(() => {
+        setSubmitToast(false);
+      }, 2000);
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   return (
@@ -267,16 +297,17 @@ const UserReports = ({ route }) => {
                 }}
                 onPress={() => {
                   // handleDoneTask()
+                  finalSubmitReport()
                   // navigation.navigate('ViewReport');
 
                 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image source={icons.report} style={{
                     height: 24,
-                    tintColor:'white',
+                    tintColor: 'white',
                     width: 24
                   }} />
-                  <Text style={{ ...FONTS.h4, color: COLORS.white3, textTransform:'uppercase', left: 10 }}>
+                  <Text style={{ ...FONTS.h4, color: COLORS.white3, textTransform: 'uppercase', left: 10 }}>
                     Final Submit
                   </Text>
                 </View>
@@ -289,6 +320,13 @@ const UserReports = ({ route }) => {
 
             : null}
         </View>
+        <CustomToast
+          isVisible={submitToast}
+          onClose={() => setSubmitToast(false)}
+          color={COLORS.green}
+          title="Add Team"
+          message="Addedd Successfully..."
+        />
       </KeyboardAwareScrollView>
     </View>
   )

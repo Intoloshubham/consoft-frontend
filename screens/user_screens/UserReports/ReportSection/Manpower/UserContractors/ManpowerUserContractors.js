@@ -29,6 +29,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
 import moment from 'moment';
+
 const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   useEffect(() => {
@@ -152,9 +153,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       })
 
   }
-  console.log("company...................", companydata.company_id)
-  console.log("project...................", Main_drp_pro_value)
-  console.log("contra...................", contractorId)
+  // console.log("company...................", companydata.company_id)
+  // console.log("project...................", Main_drp_pro_value)
+  // console.log("contra...................", contractorId)
 
 
   const deleteContReportButton = async (id) => {
@@ -226,6 +227,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       const data = edit_manpower_report_data(id, current_dat);
       data.then(res => res.json())
         .then(result => {
+          
           setEditManpowerReport(result);
           if (result.data != undefined && filterNewCategory) {
             setUpdateManpowerId(result.data._id);
@@ -315,9 +317,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   async function GetManpowerData() {
     if (Main_drp_pro_value || manpowerPostStatus || loading || manpowerUpdateStatus) {
       const data = await get_manpower_report(Main_drp_pro_value, companydata._id, current_dat)
-      if (data.status == 200) {
+      if (data.status == 200) { 
         setManpowerReportData(data.data);
-        // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 263 ~ GetManpowerData ~ data.data", data.data)
+        // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 321 ~ GetManpowerData ~ data.data", data.data)
       } else {
         console.log("data not found!")
       }
@@ -948,7 +950,8 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   }
 
 
-  const sub_body_section = (item, index) => {
+  const sub_body_section = (item, index) => {    
+
     return <View
       style={{
         flex: 1,
