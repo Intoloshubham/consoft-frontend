@@ -26,8 +26,6 @@ const Account = () => {
     companyData = userData;
   }
 
-  // console.log(companyData);
-
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = React.useState(true);
@@ -51,8 +49,6 @@ const Account = () => {
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          // paddingHorizontal: SIZES.padding,
-          // paddingVertical: 20,
           padding: 15,
           borderRadius: SIZES.base,
           backgroundColor: COLORS.lightblue_800,
@@ -117,7 +113,7 @@ const Account = () => {
               ...FONTS.h2,
               textTransform: 'capitalize',
             }}>
-            {companyData.company_name}
+            {companyData.name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             {companyData.email}
@@ -138,7 +134,7 @@ const Account = () => {
         }}>
         <ProfileValue
           icon={icons.project_type}
-          value="Project Category & Types"
+          value="Project Categories & Types"
           image={icons.right_arr}
           onPress={() => navigation.navigate('CategoryandType')}
         />
@@ -269,9 +265,6 @@ const styles = StyleSheet.create({
   profileSectionContainer: {
     marginTop: SIZES.padding,
     paddingHorizontal: SIZES.radius,
-    // borderWidth: 1,
-    // borderRadius: SIZES.base,
-    // borderColor: COLORS.gray2,
   },
 
   profileSectionContainer1: {
