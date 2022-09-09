@@ -1063,12 +1063,11 @@ const ReportDisplay = () => {
                         />
                       </View>
                     </View>
-                    {reportData.verify_1_revert == true &&
-                      reportData.verify_1_status == true && (
-                        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                          Revert Msg - {reportData.verify_1_revert_msg}
-                        </Text>
-                      )}
+                    {reportData.verify_1_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Revert Msg - {reportData.verify_1_revert_msg}
+                      </Text>
+                    )}
                   </View>
                 </View>
               ) : ele.admin_2 === userId ? (
@@ -1271,12 +1270,11 @@ const ReportDisplay = () => {
                         />
                       </View>
                     </View>
-                    {reportData.verify_1_revert == true &&
-                      reportData.verify_1_status == true && (
-                        <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                          Revert Msg - {reportData.verify_1_revert_msg}
-                        </Text>
-                      )}
+                    {reportData.verify_1_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Revert Msg - {reportData.verify_1_revert_msg}
+                      </Text>
+                    )}
                   </View>
                 </View>
               ) : null}
