@@ -24,7 +24,7 @@ import {
 } from '../../../../../../Components'
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
-const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) => {
+const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) => {
     // console.log("ManpowerProjectTeam")
     //css
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, cont_Project_list_drop } = styles
@@ -48,6 +48,10 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) =>
     const [addProjectTeamModal, setAddProjectTeamModal] = useState(false);
     const userData = useSelector(state => state.user);
 
+
+    const animation = useRef(new Animated.Value(0)).current;
+    const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
+
     // CUSTOM TOAST OF CRUD OPERATIONS
     const [submitToast, setSubmitToast] = React.useState(false);
     const [updateToast, setUpdateToast] = React.useState(false);
@@ -55,6 +59,20 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) =>
 
     const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
+    const onPressIn = () => {
+        Animated.spring(animation, {
+            toValue: 0.2,
+            useNativeDriver: true,
+        }).start();
+    };
+    const onPressOut = () => {
+        setTimeout(() => {
+            Animated.spring(animation, {
+                toValue: 0,
+                useNativeDriver: true,
+            }).start();
+        }, 150);
+    };
 
 
     const saveProjectTeamMemberSubmit = async () => {
@@ -79,7 +97,7 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) =>
             setTimeout(() => {
                 setSubmitToast(false);
             }, 2000);
-        }else{
+        } else {
             alert("Please Select first role and assign to Specific user!")
         }
     }
@@ -88,7 +106,7 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) =>
     const fetchProjectTeam = async () => {
         const team = await Get_Project_Team_Data(Main_drp_pro_value);
         // console.log("🚀 ~ file: ManPowerProjectTeam.js ~ line 90 ~ fetchProjectTeam ~ team", team)
-        
+
         const temp = await team.json();
         if (temp.status == 200) {
             setProjectTeamName(temp.data);
@@ -98,7 +116,7 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) =>
 
     useEffect(() => {
         fetchProjectTeam();
-    }, [Main_drp_pro_value,loading]);
+    }, [Main_drp_pro_value, loading]);
 
 
 
@@ -318,30 +336,40 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value,loading }) =>
 
     return (
         <View>
-            <Pressable
-                onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)}
-                style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    marginTop: 24,
-                    paddingVertical: 2,
-                    paddingHorizontal: 10,
-                    borderWidth: 1,
-                    borderRadius: 4,
-                    width: SIZES.width * 0.72,
-                    backgroundColor:COLORS.lightblue_500,
-                    borderColor: COLORS.lightblue_300,
-                    alignSelf: "center"
-                }}>
-                <View style={{}}>
-                    <Text onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.white2 }]}>Project Team</Text>
-                </View>
-                <View style={{ alignItems: "center", justifyContent: "center", marginLeft: SIZES.base * 0.5 }}>
-                    <TouchableOpacity onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)}>
-                        <AntDesign name='caretdown' size={12} color={COLORS.white2} />
-                    </TouchableOpacity>
-                </View>
-            </Pressable>
+            <Animated.View style={{ transform: [{ scale }] }}>
+                <Pressable
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
+                    onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)}
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: 24,
+                        paddingVertical: 2,
+                        paddingHorizontal: 10,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        width: SIZES.width * 0.72,
+                        backgroundColor: COLORS.lightblue_500,
+                        borderColor: COLORS.lightblue_300,
+                        alignSelf: "center"
+                    }}>
+                    <View style={{}}>
+                        <Text
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                            onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.white2 }]}>Project Team</Text>
+                    </View>
+                    <View style={{ alignItems: "center", justifyContent: "center", marginLeft: SIZES.base * 0.5 }}>
+                        <TouchableOpacity
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                            onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)}>
+                            <AntDesign name='caretdown' size={12} color={COLORS.white2} />
+                        </TouchableOpacity>
+                    </View>
+                </Pressable>
+            </Animated.View>
             <View
                 style={{
                     alignSelf: "flex-end",
