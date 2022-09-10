@@ -21,8 +21,12 @@ import {
 } from '../../../controller/AssignWorkController';
 import {getUserRole} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
-import {revertSubmitWorks} from '../../../controller/RevertController';
+import {
+  revertAssignWorks,
+  revertSubmitWorks,
+} from '../../../controller/RevertController';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import {CustomToast} from '../../../Components';
 
 const AssignedWorks = ({data, AssignWorkfunction}) => {
   const companyData = useSelector(state => state.company);
@@ -34,6 +38,7 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
   const [filterRoleModal, setFilterRoleModal] = React.useState(false);
   const [items, setItems] = React.useState([]);
 
+  const [submitToast, setSubmitToast] = React.useState(false);
   //get assign works
   // const fetchAssignWorks = async () => {
   //   const response = await getAssignWorks(company_id);
@@ -90,9 +95,15 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
   minutes = minutes.toString().padStart(2, '0');
   let strTime = hours + ':' + minutes + ' ' + ampm;
   const formatedTime = strTime;
-  const formatedDate = `${date.getFullYear()}/${
-    date.getMonth() + 1
-  }/${date.getDate()}`;
+  // const formatedDate = `${date.getFullYear()}/${
+  //   date.getMonth() + 1
+  // }/${date.getDate()}`;
+  const formatedDate =
+    date.getFullYear() +
+    '/' +
+    ('0' + date.getDate()).slice(-2) +
+    '/' +
+    ('0' + (date.getMonth() + 1)).slice(-2);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -124,12 +135,15 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
       exp_completion_date: formatedDate,
       exp_completion_time: formatedTime,
     };
-    // console.log(formData);
-    let data = await revertSubmitWorks(assignWorkId, formData);
+    let data = await revertAssignWorks(assignWorkId, formData);
     if (data.status === 200) {
       AssignWorkfunction();
       setRevertModal(false);
+      setSubmitToast(true);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
   };
 
   //----------------------------
@@ -389,7 +403,7 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
                       </Text>
                       <TouchableOpacity
                         onPress={() => {
-                          getAssignWorkId(item._id);
+                          getAssignWorkId(ele._id);
                           setRevertModal(true);
                         }}>
                         <ImageBackground
@@ -638,6 +652,13 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => fetchAssignWorkDelete()}
+      />
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
       />
     </View>
   );

@@ -42,13 +42,14 @@ const Suppliers = () => {
 
   const [suppliersModal, setSuppliersModal] = React.useState(false);
   const [suppliers, setSuppliers] = React.useState([]);
-  // form states
+
+  // FORM STATES
   const [name, setName] = React.useState('');
   const [mobile, setMobile] = React.useState('');
   // const [email, setEmail] = React.useState('');
   const [location, setLocation] = React.useState('');
 
-  // error states
+  // ERROR STATES
   const [nameError, setNameError] = React.useState('');
   const [mobileError, setMobileError] = React.useState('');
   // const [emailError, setEmailError] = React.useState('');
@@ -59,7 +60,7 @@ const Suppliers = () => {
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
-  // delete confirmation
+  // DELETE CONFIRMATION MODAL
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
   function isEnableSubmit() {
@@ -76,7 +77,6 @@ const Suppliers = () => {
   }
 
   // ============================== Apis ===================================
-  //===
   const getSupplier = async () => {
     let response = await getSuppliers(company_id);
     if (response.status === 200) {
@@ -313,15 +313,12 @@ const Suppliers = () => {
               </ScrollView>
               <TextButton
                 label="Save"
-                disabled={isEnableSubmit() ? false : true}
                 buttonContainerStyle={{
                   height: 45,
                   alignItems: 'center',
                   marginTop: SIZES.padding,
                   borderRadius: SIZES.base,
-                  backgroundColor: isEnableSubmit()
-                    ? COLORS.lightblue_700
-                    : COLORS.transparentPrimary,
+                  backgroundColor: COLORS.lightblue_700,
                 }}
                 onPress={() => postSupplier()}
               />
@@ -471,10 +468,7 @@ const Suppliers = () => {
           backgroundColor: COLORS.lightblue_700,
         }}
         onPress={() => {
-          setName(''),
-            setMobile(''),
-            setLocation(''),
-            setSuppliersModal(true);
+          setName(''), setMobile(''), setLocation(''), setSuppliersModal(true);
         }}
       />
       {renderSuppliersModal()}

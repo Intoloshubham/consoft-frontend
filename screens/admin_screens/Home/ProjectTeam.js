@@ -66,14 +66,6 @@ const ProjectTeam = ({route}) => {
 
   const [userId, setUserId] = useState('');
 
-  const onRoleOpen = useCallback(() => {
-    setOpenUser(false);
-  }, []);
-
-  const onUserOpen = useCallback(() => {
-    setOpenRole(false);
-  }, []);
-
   //==================================== Apis ==================================
 
   // fetch project team
@@ -112,8 +104,6 @@ const ProjectTeam = ({route}) => {
       project_id: project_id,
       user_id: userValue,
     };
-
-    // console.log(teamData);
     const res = await saveProjectTeam(teamData);
     if (res.status === 200) {
       setAddProjectTeamModal(false);
@@ -140,6 +130,15 @@ const ProjectTeam = ({route}) => {
       setDeleteToast(false);
     }, 2000);
   };
+
+  const onRoleOpen = useCallback(() => {
+    addProjectTeam();
+    setOpenUser(false);
+  }, []);
+
+  const onUserOpen = useCallback(() => {
+    setOpenRole(false);
+  }, []);
 
   useEffect(() => {
     fetchProjectTeam();
@@ -256,110 +255,104 @@ const ProjectTeam = ({route}) => {
         animationType="slide"
         transparent={true}
         visible={addProjectTeamModal}>
-        <TouchableWithoutFeedback>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack6,
+          }}>
           <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack6,
+              position: 'absolute',
+              width: '95%',
+              padding: SIZES.padding,
+              borderRadius: 5,
+              backgroundColor: COLORS.white,
             }}>
-            <View
-              style={{
-                position: 'absolute',
-                width: '95%',
-                padding: SIZES.padding,
-                borderRadius: 5,
-                backgroundColor: COLORS.white,
-              }}>
-              <View style={{}}>
-                {/* header */}
-                <View
+            <View style={{}}>
+              {/* header */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 10,
+                }}>
+                <Text style={{fontSize: 25, color: COLORS.darkGray}}>
+                  Project Team
+                </Text>
+                <ImageBackground
                   style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 10,
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
                   }}>
-                  <Text style={{fontSize: 25, color: COLORS.darkGray}}>
-                    Project Team
-                  </Text>
-                  <ImageBackground
-                    style={{
-                      backgroundColor: COLORS.white,
-                      padding: 2,
-                      elevation: 20,
-                    }}>
-                    <TouchableOpacity
-                      onPress={() => setAddProjectTeamModal(false)}>
-                      <Image
-                        source={icons.cross}
-                        style={{
-                          height: 25,
-                          width: 25,
-                          tintColor: COLORS.rose_600,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </ImageBackground>
-                </View>
-                <ScrollView>
-                  <CustomDropdown
-                    placeholder="Select role"
-                    open={openRole}
-                    value={roleValue}
-                    items={roleItems}
-                    setOpen={setOpenRole}
-                    setValue={setRoleValue}
-                    setItems={setRoleItems}
-                    onOpen={onRoleOpen}
-                    categorySelectable={true}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                    maxHeight={100}
-                    zIndex={2000}
-                    zIndexInverse={2000}
-                    onChangeValue={value => {
-                      getRolebyUser(value);
-                    }}
-                  />
-                  <CustomDropdown
-                    placeholder="Select users"
-                    open={openUser}
-                    value={userValue}
-                    items={userItems}
-                    setOpen={setOpenUser}
-                    setValue={setUserValue}
-                    setItems={setUserItems}
-                    // categorySelectable={true}
-
-                    onOpen={onUserOpen}
-                    multiple={true}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                    maxHeight={80}
-                    zIndex={1000}
-                    zIndexInverse={3000}
-                    closeAfterSelecting={true}
-                  />
-
-                  <TextButton
-                    label="Submit"
-                    buttonContainerStyle={{
-                      height: 45,
-                      alignItems: 'center',
-                      marginTop: SIZES.padding * 1.5,
-                      borderRadius: SIZES.radius,
-                    }}
-                    onPress={saveProjectTeamSubmit}
-                  />
-                </ScrollView>
+                  <TouchableOpacity
+                    onPress={() => setAddProjectTeamModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
               </View>
+              <ScrollView>
+                <CustomDropdown
+                  placeholder="Select role"
+                  open={openRole}
+                  value={roleValue}
+                  items={roleItems}
+                  setOpen={setOpenRole}
+                  setValue={setRoleValue}
+                  setItems={setRoleItems}
+                  onOpen={onRoleOpen}
+                  categorySelectable={true}
+                  listParentLabelStyle={{
+                    color: COLORS.white,
+                  }}
+                  maxHeight={100}
+                  zIndex={2000}
+                  zIndexInverse={1000}
+                  onSelectItem={value => getRolebyUser(value.value)}
+                />
+                <CustomDropdown
+                  placeholder="Select users"
+                  open={openUser}
+                  value={userValue}
+                  items={userItems}
+                  setOpen={setOpenUser}
+                  setValue={setUserValue}
+                  setItems={setUserItems}
+                  onOpen={onUserOpen}
+                  multiple={true}
+                  listParentLabelStyle={{
+                    color: COLORS.white,
+                  }}
+                  maxHeight={80}
+                  zIndex={1000}
+                  zIndexInverse={2000}
+                  closeAfterSelecting={true}
+                />
+
+                <TextButton
+                  label="Submit"
+                  buttonContainerStyle={{
+                    height: 45,
+                    alignItems: 'center',
+                    marginTop: SIZES.padding * 1.5,
+                    borderRadius: SIZES.radius,
+                  }}
+                  onPress={saveProjectTeamSubmit}
+                />
+              </ScrollView>
             </View>
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       </Modal>
     );
   }
@@ -382,8 +375,8 @@ const ProjectTeam = ({route}) => {
           backgroundColor: COLORS.lightblue_700,
         }}
         onPress={() => {
+          setRoleValue('');
           setAddProjectTeamModal(true);
-          addProjectTeam();
         }}
       />
       {renderTeamList()}
