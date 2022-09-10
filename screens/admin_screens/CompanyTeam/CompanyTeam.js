@@ -12,14 +12,6 @@ import {
   Platform,
   Switch,
 } from 'react-native';
-import {SIZES, COLORS, icons, FONTS} from '../../../constants';
-import {
-  FormInput,
-  TextButton,
-  CustomDropdown,
-  CustomToast,
-} from '../../../Components';
-import {HeaderBar} from '../../../Components';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
 import {postCompanyTeam} from '../../../controller/CompanyController';
@@ -29,6 +21,14 @@ import {
   getUsers,
 } from '../../../controller/UserRoleController';
 import {getProjects} from '../../../controller/ProjectController';
+import {
+  FormInput,
+  TextButton,
+  CustomDropdown,
+  CustomToast,
+  HeaderBar,
+} from '../../../Components';
+import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 
 const CompanyTeamShow = () => {
   const companyDetail = useSelector(state => state.company);
@@ -43,30 +43,30 @@ const CompanyTeamShow = () => {
   const company_id = companyData._id;
 
   const [addTeamModal, setAddTeamModal] = React.useState(false);
-  // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
-
   const [companyTeam, setCompanyTeam] = React.useState([]);
-  // form states & dropdown role data fetch from api
+
+  // FORM STATES & DROPDOWN ROLE DATA FETCH FROM API
   const [openRole, setOpenRole] = React.useState(false);
   const [roleValue, setRoleValue] = React.useState([]);
   const [role, setRole] = React.useState([]);
-  //projects
+
+  //PROJECTS
   const [openProject, setOpenProject] = React.useState(false);
   const [projectValue, setProjectValue] = React.useState('');
   const [project, setProject] = React.useState([]);
 
-  //privileges
+  // PRIVILEGES
   const [openPrivilege, setOpenPrivilege] = React.useState(false);
   const [privilegeValue, setPrivilegeValue] = React.useState([]);
   const [privilege, setPrivilege] = React.useState([]);
 
-  //
+  // FORM STATES
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [mobile, setMobile] = React.useState('');
 
-  //error states
+  //ERROR STATES
   const [nameError, setNameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
   const [mobileError, setMobileError] = React.useState('');
@@ -82,6 +82,7 @@ const CompanyTeamShow = () => {
     );
   }
   // ================================================
+
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onRoleOpen = React.useCallback(() => {
     userRole();
@@ -101,15 +102,13 @@ const CompanyTeamShow = () => {
     setOpenRole(false);
   }, []);
 
-  // switch
+  // SWITCH FOR ASSIGN USER IN PROJECTS
   const [isEnabled, setIsEnabled] = React.useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   // ================================ Apis ====================================
-
   const getCompanyTeam = async () => {
     let response = await getUsers(company_id);
-    console.log(response);
     if (response.status === 200) {
       setCompanyTeam(response.data);
     }
@@ -127,7 +126,6 @@ const CompanyTeamShow = () => {
 
   const userRole = async () => {
     let response = await getUserRole(company_id);
-    // console.log(response);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map(one => {
         return {label: one.user_role, value: one._id};
@@ -146,6 +144,7 @@ const CompanyTeamShow = () => {
     }
   };
 
+  // POST TEAM DATA
   const postTeam = async () => {
     const formData = {
       role_id: roleValue,
@@ -176,41 +175,11 @@ const CompanyTeamShow = () => {
     }, 2000);
   };
 
-  // const openModal = () => {
-  //   setAddTeamModal(true);
-  // };
-
-  // const onEdit = (
-  //   user_id,
-  //   user_role,
-  //   user_privilege,
-  //   user_name,
-  //   user_email,
-  //   user_mobile,
-  // ) => {
-  //   userRole();
-  //   fetchPrivilege();
-  //   setAddTeamModal(true);
-
-  //   setRoleValue(user_role);
-  //   setPrivilegeValue(user_privilege);
-  //   setName(user_name);
-  //   setEmail(user_email);
-  //   setMobile(user_mobile);
-
-  //   console.log(user_id);
-  //   console.log(user_role);
-  //   console.log(user_privilege);
-  //   console.log(user_name);
-  //   console.log(user_email);
-  //   console.log(user_mobile);
-  // };
-
   React.useEffect(() => {
     getCompanyTeam();
   }, []);
 
-  // ====================================================================
+  //====================================================================
 
   function renderAddTeamModal() {
     return (
@@ -274,7 +243,7 @@ const CompanyTeamShow = () => {
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
-                    zIndex={4000}
+                    zIndex={3000}
                     maxHeight={150}
                     onOpen={onRoleOpen}
                   />
@@ -291,7 +260,7 @@ const CompanyTeamShow = () => {
                     listParentLabelStyle={{
                       color: COLORS.white,
                     }}
-                    zIndex={4000}
+                    zIndex={2000}
                     maxHeight={150}
                     onOpen={onPrivilegesOpen}
                   />
@@ -428,7 +397,7 @@ const CompanyTeamShow = () => {
                       listParentLabelStyle={{
                         color: COLORS.white,
                       }}
-                      zIndex={3000}
+                      zIndex={1000}
                       maxHeight={150}
                       onOpen={onProjectOpen}
                     />
@@ -438,15 +407,12 @@ const CompanyTeamShow = () => {
 
               <TextButton
                 label="Save"
-                disabled={isEnableSubmit() ? false : true}
                 buttonContainerStyle={{
                   height: 45,
                   alignItems: 'center',
                   marginTop: SIZES.padding,
                   borderRadius: SIZES.base,
-                  backgroundColor: isEnableSubmit()
-                    ? COLORS.lightblue_700
-                    : COLORS.transparentPrimary,
+                  backgroundColor: COLORS.lightblue_700,
                 }}
                 onPress={postTeam}
               />

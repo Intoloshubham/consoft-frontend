@@ -9,160 +9,48 @@ import {
   ImageBackground,
   Modal,
   TouchableWithoutFeedback,
-  LogBox,
+  TextInput,
 } from 'react-native';
-import {useSelector} from 'react-redux';
-import {FormInput, ProgressBar} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import {getSubmitWorks} from '../../../controller/AssignWorkController';
 import {verifySubmitWorks} from '../../../controller/VerifyController';
-import {revertSubmitWorks} from '../../../controller/RevertController';
-import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import {revertSubmitWork} from '../../../controller/RevertController';
+import {CustomToast} from '../../../Components';
 
 const SubmittedWorks = ({data, Submitfunction}) => {
-  //COMPANY DATA
-  const companyData = useSelector(state => state.company);
-  const company_id = companyData._id;
-  const [submitWork, setSubmitWork] = React.useState([]);
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [workPercent, setWorkPercent] = React.useState('');
 
   //=========================== Apis ==========================================
-
-  // const fetchSubmitWork = async () => {
-  //   const response = await getSubmitWorks(company_id);
-  //   if (response.status === 200) {
-  //     setSubmitWork(response.data);
-  //   }
-  // };
-
-  // date & time
-  const [date, setDate] = React.useState(new Date());
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  let ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  minutes = minutes.toString().padStart(2, '0');
-  let strTime = hours + ':' + minutes + ' ' + ampm;
-  const formatedTime = strTime;
-  const formatedDate = `${date.getFullYear()}/${
-    date.getMonth() + 1
-  }/${date.getDate()}`;
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setDate(currentDate);
-  };
-  const showMode = currentMode => {
-    DateTimePickerAndroid.open({
-      value: date,
-      onChange,
-      mode: currentMode,
-      locale: 'en-IN',
-      display: 'spinner',
-    });
-  };
-  const showDatepicker = () => {
-    showMode('date');
-  };
-  const showTimepicker = () => {
-    showMode('time');
-  };
-
   // verify works
   const verifyHandler = async work_Id => {
     let data = await verifySubmitWorks(work_Id);
     if (data.status === 200) {
-      // fetchSubmitWork();
       Submitfunction();
     }
   };
 
-  const getRevertWorkId = id => {
+  const getRevertWorkId = (id, work_percent) => {
     setRevertId(id);
   };
 
   const OnSubmit = async () => {
     const formData = {
-      // revert_msg: revertMsg,
-      exp_completion_date: formatedDate,
-      exp_completion_time: formatedTime,
+      revert_msg: revertMsg,
+      work_percent: workPercent,
     };
-    let data = await revertSubmitWorks(revertId, formData);
+    let data = await revertSubmitWork(revertId, formData);
     if (data.status === 200) {
-      // fetchSubmitWork();
       Submitfunction();
-      setTimeout(() => {
-        setRevertModal(false);
-      }, 500);
+      setRevertModal(false);
+      setSubmitToast(true);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 1500);
   };
-
-  // React.useEffect(() => {
-  //   fetchSubmitWork();
-  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  // }, []);
-
-  // React.useMemo(() => {
-  //   fetchSubmitWork();
-  //   // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  // }, []);
-
-  function renderStartDate() {
-    return (
-      <View style={{marginTop: 10}}>
-        {/* <Text style={{...FONTS.h3, color: 'black'}}>New Date & Time</Text> */}
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <View style={{}}>
-            <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-              Date - {formatedDate}
-            </Text>
-            <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-              Time - {formatedTime}
-            </Text>
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <TouchableOpacity
-              onPress={showDatepicker}
-              style={{
-                borderWidth: 1,
-                padding: 6,
-                borderRadius: 2,
-                right: 15,
-              }}>
-              <Image
-                source={icons.date}
-                style={{
-                  width: 22,
-                  height: 22,
-                  tintColor: COLORS.black,
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={showTimepicker}
-              style={{borderWidth: 1, padding: 6, borderRadius: 2}}>
-              <Image
-                source={icons.time}
-                style={{
-                  width: 22,
-                  height: 22,
-                  tintColor: COLORS.black,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    );
-  }
 
   function renderRevertModal() {
     return (
@@ -193,7 +81,7 @@ const SubmittedWorks = ({data, Submitfunction}) => {
                   marginBottom: 10,
                 }}>
                 <Text style={{fontSize: 20, color: COLORS.darkGray}}>
-                  New targeted date & time
+                  Comment
                 </Text>
                 <ImageBackground
                   style={{
@@ -214,34 +102,33 @@ const SubmittedWorks = ({data, Submitfunction}) => {
                 </ImageBackground>
               </View>
 
-              {renderStartDate()}
-
-              {/* <FormInput
-                label={'Comment'}
-                placeholder=""
-                multiline={true}
-                numberOfLines={3}
-                onChange={value => {
-                  setRevertMsg(value);
-                }}
-              /> */}
-              {/* <View
+              <View
                 style={{
-                  marginTop: SIZES.base,
-                  paddingHorizontal: SIZES.base,
                   borderBottomWidth: 1,
-                  borderBottomColor: COLORS.gray,
+                  borderBottomColor: COLORS.darkGray,
                 }}>
                 <TextInput
-                  placeholder="Write your message here.."
-                  
-                  multiline={true}
-                  numberOfLines={3}
-                  onChange={value => {
+                  placeholder="Write comment..."
+                  onChangeText={value => {
                     setRevertMsg(value);
                   }}
                 />
-              </View> */}
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.darkGray,
+                }}>
+                <Text style={{marginTop: 5}}>Progress %</Text>
+                <TextInput
+                  placeholder="%"
+                  value={workPercent.toString()}
+                  onChangeText={value => {
+                    setWorkPercent(value);
+                  }}
+                />
+              </View>
 
               <TouchableOpacity
                 style={{
@@ -252,10 +139,7 @@ const SubmittedWorks = ({data, Submitfunction}) => {
                 <Text
                   style={{
                     ...FONTS.h3,
-                    backgroundColor:
-                      revertMsg != null
-                        ? COLORS.lightblue_800
-                        : COLORS.darkGray,
+                    backgroundColor: COLORS.lightblue_800,
                     paddingHorizontal: SIZES.radius,
                     paddingVertical: 5,
                     borderRadius: 3,
@@ -308,15 +192,15 @@ const SubmittedWorks = ({data, Submitfunction}) => {
                 <Image
                   source={icons.date}
                   style={{
-                    height: 12,
-                    width: 12,
+                    height: 10,
+                    width: 10,
                     tintColor: COLORS.darkGray,
                     right: 3,
                   }}
                 />
                 <Text
                   style={{
-                    fontSize: 12,
+                    fontSize: 10,
                     color: COLORS.darkGray,
                   }}>
                   {item.submit_work_date}
@@ -326,15 +210,15 @@ const SubmittedWorks = ({data, Submitfunction}) => {
                 <Image
                   source={icons.time}
                   style={{
-                    height: 12,
-                    width: 12,
+                    height: 10,
+                    width: 10,
                     tintColor: COLORS.darkGray,
                     right: 3,
                   }}
                 />
                 <Text
                   style={{
-                    fontSize: 12,
+                    fontSize: 10,
                     color: COLORS.darkGray,
                   }}>
                   {item.submit_work_time}
@@ -345,7 +229,7 @@ const SubmittedWorks = ({data, Submitfunction}) => {
           {/* work  */}
           <View
             style={{
-              marginTop: 3,
+              marginTop: 5,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -372,13 +256,94 @@ const SubmittedWorks = ({data, Submitfunction}) => {
               </ImageBackground>
             </TouchableOpacity>
           </View>
+          <View
+            style={{
+              marginTop: 5,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                // marginTop: 5,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={icons.completion_date}
+                style={{
+                  height: 18,
+                  width: 18,
+                  tintColor: COLORS.darkGray,
+                }}
+              />
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.darkGray,
+                  left: 10,
+                }}>
+                {item.exp_completion_date}
+              </Text>
+
+              <Image
+                source={icons.persent_progress}
+                style={{
+                  height: 18,
+                  width: 18,
+                  tintColor: COLORS.darkGray,
+                  left: 30,
+                }}
+              />
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.darkGray,
+                  left: 40,
+                }}>
+                {item.work_percent}%
+              </Text>
+            </View>
+            {/* <Text
+              style={{
+                flex: 1,
+                ...FONTS.h4,
+                color: COLORS.black,
+              }}>
+              Msg
+              <Text style={{color: COLORS.darkGray}}>
+                - {item.submit_work_text}
+              </Text>
+            </Text> */}
+            <TouchableOpacity
+              onPress={() => {
+                setWorkPercent(item.work_percent);
+                getRevertWorkId(item._id, item.work_percent),
+                  setRevertModal(true);
+              }}
+              style={{alignItems: 'flex-end'}}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.rose_600,
+                  paddingHorizontal: 8,
+                  borderRadius: 2,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: COLORS.white,
+                  }}>
+                  Revert
+                </Text>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
         </View>
       );
     };
 
     return (
       <FlatList
-        contentContainerStyle={{}}
         data={data}
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
@@ -434,6 +399,13 @@ const SubmittedWorks = ({data, Submitfunction}) => {
       </View>
       {renderSubmitWork()}
       {renderRevertModal()}
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
     </View>
   );
 };
