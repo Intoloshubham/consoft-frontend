@@ -95,27 +95,38 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
     const getEquipmentItems = async () => {
+        let isMount = true;
         try {
             const data = await get_equipment_item_name();
-            // console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
-            setGetEquipItemName(data);
+            if (isMount === true && data.length > 0) {
+                // console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
+                setGetEquipItemName(data);
+            }
+            return () => { isMount = false }
         } catch (error) {
             console.log(error)
         }
     }
 
     const getEquipReport = async () => {
+        let isMount = true;
         try {
             const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
-            console.log("🚀 ~ file: TAndP.js ~ line 103 ~ getEquipReport ~ data", data)
-            setGetEquipmentReport(data);
+            if (isMount === true && data.length > 0) {
+
+                // console.log("🚀 ~ file: TAndP.js ~ line 103 ~ getEquipReport ~ data", data)
+                setGetEquipmentReport(data);
+            }
+            return () => { isMount = false }
         } catch (error) {
             console.log(error)
         }
     }
     useEffect(() => {
+
         getEquipmentItems();
         getEquipReport();
+        
     }, [userCompanyData.company_id, loading])
 
 
@@ -128,7 +139,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
             const resp = await save_new_equipment_item(data);
             const temp = await resp.json();
-            console.log("🚀 ~ file: TAndP.js ~ line 131 ~ saveNewEquipmentItems ~ temp", temp)
+            // console.log("🚀 ~ file: TAndP.js ~ line 131 ~ saveNewEquipmentItems ~ temp", temp)
             if (temp.status == '200') {
                 setSubmitToast(true)
                 getEquipmentItems();
@@ -335,11 +346,11 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                 flex: 1,
                                 borderWidth: 1,
                                 borderColor: COLORS.lightblue_100,
-                                justifyContent:'space-between',
-                                paddingHorizontal:15,
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 15,
                                 borderRadius: 1,
                                 elevation: 2,
-                                padding:12,
+                                padding: 12,
                                 margin: 2
                             }} key={key}>
                                 <View
