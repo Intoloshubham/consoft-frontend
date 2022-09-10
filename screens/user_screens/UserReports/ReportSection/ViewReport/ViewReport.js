@@ -571,7 +571,7 @@ const ViewReport = () => {
                                 flex: 1,
                                 borderWidth: 1,
                                 padding: SIZES.base,
-                                maxHeight:150,
+                                maxHeight:280,
                                 // top: 250,
                                 // position: 'absolute',
                                 marginTop: 5
