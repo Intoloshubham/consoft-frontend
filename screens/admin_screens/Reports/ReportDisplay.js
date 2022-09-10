@@ -170,6 +170,7 @@ const ReportDisplay = () => {
       onChange,
       mode: currentMode,
       is24Hour: true,
+      display: 'spinner',
     });
   };
   const showDatepicker = () => {
@@ -448,8 +449,8 @@ const ReportDisplay = () => {
               style={{
                 textAlign: 'center',
                 marginBottom: 8,
-                ...FONTS.h2,
-                color: COLORS.lightblue_900,
+                ...FONTS.h3,
+                color: COLORS.lightblue_700,
                 fontWeight: '500',
                 textDecorationLine: 'underline',
               }}>
@@ -764,10 +765,12 @@ const ReportDisplay = () => {
           Excluded Quantity
         </Text>
         <FlatList
+          contentContainerStyle={{maxHeight: 450}}
           data={quantity}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
+          scrollEnabled={true}
           ItemSeparatorComponent={() => {
             return (
               <View
