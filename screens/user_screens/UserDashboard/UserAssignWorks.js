@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useMemo, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
+  Animated,
+  TouchableOpacity, LayoutAnimation,
   RefreshControl, ScrollView
 } from 'react-native';
 import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
@@ -36,12 +37,33 @@ const UserAssignWorks = ({ loading }) => {
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
+
+  const animation = useRef(new Animated.Value(0)).current;
+  const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
+
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [commentCollapse, setCommentCollapse] = useState(false);
   const [commentStatus, setCommentStatus] = useState(false)
 
   const userData = useSelector(state => state.user);
   // console.log(userData._id)
+  const onPressIn = () => {
+    Animated.spring(animation, {
+      toValue: 0.2,
+      useNativeDriver: true,
+    }).start();
+  };
+  const onPressOut = () => {
+    setTimeout(() => {
+      Animated.spring(animation, {
+        toValue: 0,
+        useNativeDriver: true,
+      }).start();
+    }, 150);
+  };
+
+
+
   const fetchAssignWorks = async () => {
     setUserDataId(userData._id);
     const data = await getAssignWorks(userData._id);
@@ -237,7 +259,7 @@ const UserAssignWorks = ({ loading }) => {
 
   const renderHeader = (item, index) => {
     return (
-      <>
+      <Animated.View style={{ transform: [{ scale }] }}>
         <View>
           {item.work_status == true &&
             item.verify == false &&
@@ -255,11 +277,11 @@ const UserAssignWorks = ({ loading }) => {
             item.verify == false &&
             item.revert_status == false ? (
             <WorkDetails item={item} message={''} color={COLORS.black} />
-          ) 
-          : null
+          )
+            : null
           }
         </View>
-      </>
+      </Animated.View>
     );
   };
 
@@ -489,6 +511,12 @@ const UserAssignWorks = ({ loading }) => {
             list={getTaskInProgress ? getTaskInProgress : null}
             header={renderHeader}
             body={renderBody}
+            // onPress={
+            //   // LayoutAnimation.easeInEaseOut()
+            // ()=> { alert('sd')}
+            // }
+            // onPressIn={onPressIn}
+            // onPressOut={onPressOut}
             isExpanded={false}
             style={{
               // borderWidth: 1,
