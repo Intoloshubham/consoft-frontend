@@ -3,9 +3,9 @@ import {
     View,
     Text, FlatList,
     StyleSheet, Image,
-    ScrollView, Modal,
+    ScrollView, Modal, Animated,
     Pressable, TextInput, KeyboardAvoidingView,
-    Platform,
+    Platform, LayoutAnimation,
     TouchableOpacity, Button, Keyboard
 } from 'react-native'
 import styles from '../../ReportStyle.js'
@@ -35,7 +35,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
         container,
         inputContainer,
         inputsContainer,
-        inputfrom,
+        inputfrom, 
         inputfromtwo,
         inputfromone,
         cont_Project_list_drop
@@ -50,6 +50,8 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
     const [stockResponseStatus, setStockResponseStatus] = useState('')
     const [isFocus, setIsFocus] = useState(false);
 
+    const animation = useRef(new Animated.Value(0)).current;
+    const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
     //Insertion modal
     const [stockReportModal, setStockReportModal] = useState(false);
     const [addNewMaterial, setAddNewMaterial] = useState(false)
@@ -59,7 +61,20 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
     const [materialItemName, setMaterialItemName] = useState('')
     const [getStockData, setGetStockData] = useState([])
 
-
+    const onPressIn = () => {
+        Animated.spring(animation, {
+            toValue: 0.5,
+            useNativeDriver: true,
+        }).start();
+    };
+    const onPressOut = () => {
+        setTimeout(() => {
+            Animated.spring(animation, {
+                toValue: 0,
+                useNativeDriver: true,
+            }).start();
+        }, 150);
+    };
     // all input fields
     const [stockEntry, setStockEntry] = useState([
         {
@@ -529,11 +544,17 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
     return (
         <View>
             {/* Stock */}
+            <Animated.View style={{ transform: [{ scale }] }}>
             <Pressable
                 onPress={() => {
                     GetStockData();
+                    LayoutAnimation.easeInEaseOut();
                     setStockCollapse(!stockCollapse)
                 }}
+
+                onPressIn={onPressIn}
+                onPressOut={onPressOut}
+
                 style={{
                     flexDirection: "row",
                     paddingHorizontal: SIZES.base,
@@ -543,7 +564,7 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                     justifyContent: "space-between",
                     top: SIZES.base * 2,
                     borderColor: COLORS.lightblue_200,
-                    backgroundColor:COLORS.lightblue_600,
+                    backgroundColor: COLORS.lightblue_600,
                     borderWidth: 1,
                     borderRadius: 4,
                     elevation: 2,
@@ -556,17 +577,29 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                     shadowRadius: 4.65,
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => {
-                        Main_drp_pro_value ? null : alert("Select Project First!")
-                        setStockCollapse(!stockCollapse)
-                    }} style={[FONTS.h3, { color: COLORS.white2 }]}>Stock</Text>
+                    <Text
+                        onPressIn={onPressIn}
+                        onPressOut={onPressOut}
+                        onPress={() => {
+                            Main_drp_pro_value ? null : alert("Select Project First!")
+                            setStockCollapse(!stockCollapse);
+                            LayoutAnimation.easeInEaseOut();
+                        }} style={[FONTS.h3, { color: COLORS.white2 }]}>Stock</Text>
                 </View>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <TouchableOpacity onPress={() => setStockCollapse(!stockCollapse)}>
+                    <TouchableOpacity
+                        onPressIn={onPressIn}
+                        onPressOut={onPressOut}
+                        onPress={() => {
+                            LayoutAnimation.easeInEaseOut();
+                            setStockCollapse(!stockCollapse)
+
+                        }}>
                         <AntDesign name='caretdown' size={12} color={COLORS.white2} />
                     </TouchableOpacity>
                 </View>
             </Pressable>
+            </Animated.View>
             <View
                 style={{
                     alignSelf: "center",
