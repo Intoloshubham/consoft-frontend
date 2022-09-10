@@ -34,6 +34,10 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     let calenderKey1;
     //calender    
     const [date, setDate] = React.useState(new Date());
+
+    const animation = useRef(new Animated.Value(0)).current;
+    const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
+
     // const [showDate, setShowDate] = useState('')
     const [updateId, setUpdateId] = useState('')
     const [addNewEquipment, setAddNewEquipment] = useState(false)
@@ -41,6 +45,21 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const [calenderKey, setCalenderKey] = useState('')
     const [removeAddOnEdit, setRemoveAddOnEdit] = useState(false)
     const current_dat = moment().format("YYYY%2FMM%2FDD")
+
+    const onPressIn = () => {
+        Animated.spring(animation, {
+            toValue: 0.5,
+            useNativeDriver: true,
+        }).start();
+    };
+    const onPressOut = () => {
+        setTimeout(() => {
+            Animated.spring(animation, {
+                toValue: 0,
+                useNativeDriver: true,
+            }).start();
+        }, 150);
+    };
 
     const CONST_FIELD = {
         MANPOWER: 'Manpower',
@@ -110,7 +129,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         try {
             const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
 
-                setGetEquipmentReport(data);
+            setGetEquipmentReport(data);
         } catch (error) {
             console.log(error)
         }
@@ -120,7 +139,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
         getEquipmentItems();
         getEquipReport();
-        
+
     }, [userCompanyData.company_id, loading])
 
 
@@ -164,7 +183,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
             const resp = await insert_TAndP_report(data, CONST_FIELD);
             const temp = await resp.json();
 
-            if (isMount===true &&  temp.status == '200') {
+            if (isMount === true && temp.status == '200') {
                 setSubmitToast(true)
                 // getEquipmentItems();
                 setTimeout(() => {
@@ -638,39 +657,58 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
     return (
         <>
-            {/* T & P */}
-            <Pressable
-                onPress={() => setTAndP(!tAndP)}
-                style={{
-                    flexDirection: "row",
-                    paddingHorizontal: SIZES.base,
-                    paddingVertical: 3,
-                    width: SIZES.width * 0.53,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    top: SIZES.base * 2,
-                    borderColor: COLORS.lightblue_200,
-                    backgroundColor: COLORS.lightblue_600,
-                    borderWidth: 1,
-                    borderRadius: 4,
-                    elevation: 2,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                        width: 0,
-                        height: 4,
-                    },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 4.65,
-                }}>
-                <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => setTAndP(!tAndP)} style={[FONTS.h3, { color: COLORS.white2 }]}>T & P</Text>
-                </View>
-                <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <TouchableOpacity onPress={() => setTAndP(!tAndP)}>
-                        <AntDesign name='caretdown' size={12} color={COLORS.white2} />
-                    </TouchableOpacity>
-                </View>
-            </Pressable>
+            <Animated.View style={{ transform: [{ scale }] }}>
+                <Pressable
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
+                    onPress={() => {
+                        LayoutAnimation.easeInEaseOut();
+                        setTAndP(!tAndP)
+
+                    }}
+                    style={{
+                        flexDirection: "row",
+                        paddingHorizontal: SIZES.base,
+                        paddingVertical: 3,
+                        width: SIZES.width * 0.53,
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        top: SIZES.base * 2,
+                        borderColor: COLORS.lightblue_200,
+                        backgroundColor: COLORS.lightblue_600,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        elevation: 2,
+                        shadowColor: '#000',
+                        shadowOffset: {
+                            width: 0,
+                            height: 4,
+                        },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 4.65,
+                    }}>
+                    <View style={{ alignItems: "center", alignSelf: "center" }}>
+                        <Text
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                            onPress={() => {
+                                LayoutAnimation.easeInEaseOut();
+                                setTAndP(!tAndP)
+                            }} style={[FONTS.h3, { color: COLORS.white2 }]}>T & P</Text>
+                    </View>
+                    <View style={{ alignItems: "center", alignSelf: "center" }}>
+                        <TouchableOpacity
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                            onPress={() => {
+                                LayoutAnimation.easeInEaseOut();
+                                setTAndP(!tAndP)
+                            }}>
+                            <AntDesign name='caretdown' size={12} color={COLORS.white2} />
+                        </TouchableOpacity>
+                    </View>
+                </Pressable>
+            </Animated.View>
             <View
                 style={{
                     alignSelf: "center",

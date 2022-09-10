@@ -611,7 +611,6 @@ const ViewReport = () => {
                                     <View style={{
                                     }} key={i}>
                                         {
-                                            ele.verification_1 === user_id ?
                                                 (
                                                     <View style={{
                                                         flex: 1,
@@ -695,6 +694,7 @@ const ViewReport = () => {
                                                                 }}
                                                             >
                                                                 <Text
+                                                                numberOfLines={1}
                                                                     style={{
                                                                         ...FONTS.h3,
                                                                         textTransform: 'capitalize',
@@ -713,6 +713,7 @@ const ViewReport = () => {
                                                                 }}
                                                             >
                                                                 <Text
+                                                                numberOfLines={1}
                                                                     style={{
                                                                         ...FONTS.h3,
                                                                         textTransform: 'capitalize',
@@ -731,6 +732,7 @@ const ViewReport = () => {
                                                                 }}
                                                             >
                                                                 <Text
+                                                                numberOfLines={1}
                                                                     style={{
                                                                         ...FONTS.h3,
                                                                         textTransform: 'capitalize',
@@ -1463,6 +1465,7 @@ const ViewReport = () => {
                                                                                                         }}
                                                                                                     >
                                                                                                         <Text
+                                                                                                        numberOfLines={1}
                                                                                                             style={{
                                                                                                                 ...FONTS.h5,
                                                                                                                 textTransform: 'capitalize',
@@ -1626,6 +1629,7 @@ const ViewReport = () => {
                                                                                                                     }}
                                                                                                                 >
                                                                                                                     <Text
+                                                                                                                    numberOfLines={1}
                                                                                                                         style={{
                                                                                                                             ...FONTS.h5,
                                                                                                                             textTransform: 'capitalize',
@@ -1794,7 +1798,9 @@ const ViewReport = () => {
                                                                                                                         }}
                                                                                                                     >
                                                                                                                         <Text
+                                                                                                                        numberOfLines={1}
                                                                                                                             style={{
+                                                                                                                                
                                                                                                                                 ...FONTS.h5,
                                                                                                                                 textTransform: 'capitalize',
                                                                                                                                 color: COLORS.black,
@@ -1814,7 +1820,8 @@ const ViewReport = () => {
                                                     </View>
                                                 )
 
-                                                : null}
+                                                
+                                                }
                                     </View>
                                 );
                             }) : null
