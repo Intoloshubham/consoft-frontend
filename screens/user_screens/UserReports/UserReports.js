@@ -157,7 +157,7 @@ const UserReports = ({ route }) => {
         // body: JSON.stringify(inputs),
       })
       const data = await res.json();
-      console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
+      // console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
       if (data.status === 200) {
         setSubmitToast(true);
       }
@@ -273,9 +273,6 @@ const UserReports = ({ route }) => {
               {/* Quality */}
               <TAndP Main_drp_pro_value={value} loading={loading} />
             </View>
-          </View>
-
-            : null}
           <View style={{
             top: SIZES.height * 0.2,
             // position: 'relative',
@@ -328,6 +325,9 @@ const UserReports = ({ route }) => {
 
             </TouchableOpacity>
           </View>
+          </View>
+
+            : null}
         </View>
         <CustomToast
           isVisible={submitToast}

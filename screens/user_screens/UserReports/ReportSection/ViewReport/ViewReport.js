@@ -26,6 +26,7 @@ import {
     revertReport,
     getProjectReportPath
 } from '../../../../../controller/ReportController'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -75,31 +76,6 @@ const ViewReport = () => {
     };
 
 
-    // get report
-    // const fetchReport = async (project_id) => {
-    //     //     setProjectId(project_id);
-    //     //     {
-    //     //         reportPath.map(async (ele, i) => {
-    //     //                 console.log("🚀 ~ file: ViewReport.js ~ line 102 ~ user_id.map ~ ele.verification_1 ", ele.verification_1 )
-
-
-    //     //             if (ele.verification_1 === user_id) {
-    //     //                 console.log('match-----------')
-    //     //                 // let user_id = '';
-    //     //                 // rep_resp = await getReport(project_id, user_id);
-    //     //                 // console.log("🚀 ~ file: ViewReport.js ~ line 86 ~ reportPath.map ~ rep_resp", rep_resp)
-
-    //     //             } else {
-
-    //     //                 console.log('not match-----------')
-    //     //                 // rep_resp = await getReport(project_id, user_id);
-    //     //             }
-    //     //  // setReport(rep_resp.data); 
-
-    //     //         })
-    //     //     }
-    // };
-
     // fetch manpower on click
     const fetchManpower = async report_id => {
         setReportId(report_id);
@@ -120,7 +96,6 @@ const ViewReport = () => {
     // fetch report path
     const fetchReportPath = async project_id => {
         const response = await getProjectReportPath(company_id, project_id);
-        // console.log("🚀 ~ file: ViewReport.js ~ line 123 ~ fetchReportPath ~ response", response)
         setProjectId(project_id);
 
         if (response.data) {
@@ -301,7 +276,7 @@ const ViewReport = () => {
         );
     }
 
-    console.log("🚀 ~ file: ViewReport.js ~ line 305 ~ ViewReport ~ reportData", reportData)
+    // console.log("🚀 ~ file: ViewReport.js ~ line 305 ~ ViewReport ~ reportData", reportData)
 
     // report user list
     function renderReport() {
@@ -396,7 +371,7 @@ const ViewReport = () => {
     // report showing modal
     function renderReportModal() {
 
-        const renderItem = ({ item }) => (
+        const renderItem = ({ item ,index}) => (
             <View
                 style={{
                     borderWidth: 1,
@@ -404,7 +379,8 @@ const ViewReport = () => {
                     padding: 5,
                     borderRadius: 3,
                     width: SIZES.width / 2.4,
-                }}>
+                }}
+                >
                 <Text style={{ ...FONTS.h3, color: 'black' }}>
                     {item.contractor_name}
                 </Text>
@@ -580,6 +556,7 @@ const ViewReport = () => {
                                         return <View style={{ margin: 5 }}></View>;
                                     }}
                                     ListFooterComponent={footerComponent}
+                                    maxHeight={200}
                                     ListFooterComponentStyle={{
                                         flex: 1,
                                         // borderWidth:1,
@@ -594,23 +571,38 @@ const ViewReport = () => {
                                 flex: 1,
                                 borderWidth: 1,
                                 padding: SIZES.base,
+                                maxHeight:150,
+                                // top: 250,
+                                // position: 'absolute',
                                 marginTop: 5
                             }}
                         >
-                            <Text
-                                style={{
-                                    ...FONTS.h3,
-                                    color: COLORS.black,
-                                    marginBottom: 5,
-                                    textAlign: 'center'
-                                }}>
-                                Track Verification Process :
-                            </Text>
-                            {reportPath ? reportPath.map((ele, i) => {
-                                return (
-                                    <View style={{
-                                    }} key={i}>
-                                        {
+                            <ScrollView
+                            style={{
+                                // flex:1
+                            }}
+                            // scrollEnabled={true}
+                            // nestedScrollEnabled={true}
+                            contentContainerStyle={{
+                                flex:1
+                            }}
+                            >
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        color: COLORS.black,
+                                        marginBottom: 5,
+                                        textAlign: 'center'
+                                    }}>
+                                    Track Verification Process :
+                                </Text>
+                                {reportPath ? reportPath.map((ele, idx) => {
+                                    return (
+                                        <View style={{
+                                        }} 
+                                        key={idx}
+                                        >
+                                            {
                                                 (
                                                     <View style={{
                                                         flex: 1,
@@ -694,7 +686,7 @@ const ViewReport = () => {
                                                                 }}
                                                             >
                                                                 <Text
-                                                                numberOfLines={1}
+                                                                    numberOfLines={1}
                                                                     style={{
                                                                         ...FONTS.h3,
                                                                         textTransform: 'capitalize',
@@ -713,7 +705,7 @@ const ViewReport = () => {
                                                                 }}
                                                             >
                                                                 <Text
-                                                                numberOfLines={1}
+                                                                    numberOfLines={1}
                                                                     style={{
                                                                         ...FONTS.h3,
                                                                         textTransform: 'capitalize',
@@ -732,7 +724,7 @@ const ViewReport = () => {
                                                                 }}
                                                             >
                                                                 <Text
-                                                                numberOfLines={1}
+                                                                    numberOfLines={1}
                                                                     style={{
                                                                         ...FONTS.h3,
                                                                         textTransform: 'capitalize',
@@ -760,9 +752,9 @@ const ViewReport = () => {
                                                             </Text>
                                                         </View> */}
                                                         </View>
-                                                        {reportPath.map((ele, i) => {
+                                                        {
 
-                                                            return (
+                                                            (
 
                                                                 <View
                                                                     style={{
@@ -772,7 +764,7 @@ const ViewReport = () => {
                                                                         left: 190,
                                                                         marginTop: 25
                                                                     }}
-                                                                    key={i}
+                                                                // key={i}
                                                                 >
                                                                     {
                                                                         reportData.verify_1_status === false && reportData.verify_1_revert === false &&
@@ -1465,7 +1457,7 @@ const ViewReport = () => {
                                                                                                         }}
                                                                                                     >
                                                                                                         <Text
-                                                                                                        numberOfLines={1}
+                                                                                                            numberOfLines={1}
                                                                                                             style={{
                                                                                                                 ...FONTS.h5,
                                                                                                                 textTransform: 'capitalize',
@@ -1629,7 +1621,7 @@ const ViewReport = () => {
                                                                                                                     }}
                                                                                                                 >
                                                                                                                     <Text
-                                                                                                                    numberOfLines={1}
+                                                                                                                        numberOfLines={1}
                                                                                                                         style={{
                                                                                                                             ...FONTS.h5,
                                                                                                                             textTransform: 'capitalize',
@@ -1798,9 +1790,9 @@ const ViewReport = () => {
                                                                                                                         }}
                                                                                                                     >
                                                                                                                         <Text
-                                                                                                                        numberOfLines={1}
+                                                                                                                            numberOfLines={1}
                                                                                                                             style={{
-                                                                                                                                
+
                                                                                                                                 ...FONTS.h5,
                                                                                                                                 textTransform: 'capitalize',
                                                                                                                                 color: COLORS.black,
@@ -1816,17 +1808,17 @@ const ViewReport = () => {
                                                                 </View>
 
                                                             )
-                                                        })}
+                                                        }
                                                     </View>
                                                 )
 
-                                                
-                                                }
-                                    </View>
-                                );
-                            }) : null
-                            }
 
+                                            }
+                                        </View>
+                                    );
+                                }) : null
+                                }
+                            </ScrollView>
                         </View>
                     </View>
                 </View>
@@ -2053,7 +2045,12 @@ const ViewReport = () => {
         );
 
         return (
-            <View>
+            <View
+                style={{
+                    // height:'100%'
+                }}
+                
+            >
                 <View
                     style={{
                         borderBottomWidth: 1,
@@ -2068,12 +2065,12 @@ const ViewReport = () => {
                     }}>
                     Excluded Quantity
                 </Text>
-                {/* <Text style={{...FONTS.h3, color: COLORS.black}}>Contractors</Text> */}
                 <FlatList
                     // contentContainerStyle={{marginTop: 5}}
                     data={quantity}
-                    keyExtractor={item => `${item._id}`}
+                    keyExtractor={(item, index) => `${index}`}
                     renderItem={renderItem}
+                    nestedScrollEnabled={true}
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => {
                         return (
@@ -2161,339 +2158,7 @@ const ViewReport = () => {
         );
     }
 
-    function renderFooter() {
-        return (
-            <View style={{
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start'
-            }}>
-                <View
-                    style={{
-                        borderBottomWidth: 1,
-                        marginTop: 15,
-                        marginBottom: 10,
-                        borderColor: COLORS.gray2,
-                    }}></View>
-                <Text
-                    style={{
-                        ...FONTS.h4,
-                        color: COLORS.black,
-                        marginBottom: 5,
-                    }}>
-                    Track Verification Process :
-                </Text>
-                {reportPath.map((ele, i) => {
-
-                    return (
-                        <View style={{
-                        }} key={i}>
-                            {ele.verification_1 === user_id ? (
-                                <View style={{
-                                    flexDirection: 'row', alignItems: 'center'
-                                }}>
-                                    <Text
-                                        style={{
-                                            ...FONTS.h3,
-                                            textTransform: 'capitalize',
-                                            color: COLORS.black,
-                                        }}>
-                                        {ele.verification_1_name} :
-                                    </Text>
-
-                                    {
-                                        reportData.verify_1_status === false && reportData.verify_1_revert === false &&
-                                            reportData.admin_1_status === false && reportData.admin_1_revert === false &&
-                                            reportData.admin_2_status === false && reportData.admin_2_revert === false
-                                            ? (
-                                                <View
-                                                    style={{
-                                                        left: 20,
-                                                        flexDirection: 'row',
-                                                    }}>
-                                                    <TouchableOpacity
-                                                        style={{
-                                                            paddingHorizontal: 5,
-                                                            paddingVertical: 1,
-                                                            backgroundColor: COLORS.success_600,
-                                                        }}
-                                                        onPress={() => fetchVerifyReport()}>
-                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
-                                                            Verify
-                                                        </Text>
-                                                    </TouchableOpacity>
-
-                                                    <TouchableOpacity
-                                                        style={{
-                                                            left: 15,
-                                                            paddingHorizontal: 5,
-                                                            paddingVertical: 1,
-                                                            backgroundColor: COLORS.rose_600,
-                                                        }}
-                                                        onPress={() => setRevertModal(true)}>
-                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
-                                                            Revert
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            ) :
-                                            reportData.verify_1_status === true && reportData.verify_1_revert === false &&
-                                                reportData.admin_1_status === false && reportData.admin_1_revert === false &&
-                                                reportData.admin_2_status === false && reportData.admin_2_revert === false
-                                                ?
-
-                                                <View style={{
-                                                    flexDirection: "column",
-                                                    flexWrap: 'wrap',
-                                                    justifyContent: 'space-around'
-                                                }}>
-                                                    <View
-                                                        style={{
-                                                            left: 10,
-                                                            flexDirection: 'row',
-                                                            alignItems: 'center',
-                                                        }}>
-                                                        <Text style={{ ...FONTS.h3, color: COLORS.black }}>
-                                                            Verified
-                                                        </Text>
-                                                        <Image
-                                                            source={icons.verify}
-                                                            style={{
-                                                                left: 8,
-                                                                width: 16,
-                                                                height: 16,
-                                                                tintColor: 'green',
-                                                            }}
-                                                        />
-                                                    </View>
-                                                </View>
-                                                : reportData.verify_1_status === true && reportData.verify_1_revert === false &&
-                                                    reportData.admin_1_status === true && reportData.admin_1_revert === false &&
-                                                    reportData.admin_2_status === false && reportData.admin_2_revert === false
-
-                                                    ?
-                                                    <View style={{
-                                                        flex: 1,
-                                                        flexDirection: "row",
-                                                        flexWrap: 'wrap',
-                                                        alignContent: "space-around",
-                                                        top: 12
-                                                    }}>
-                                                        <View
-                                                            style={{
-                                                                left: 10,
-                                                                flexDirection: 'row',
-                                                                alignItems: 'center',
-                                                            }}>
-                                                            <Text style={{ ...FONTS.h3, color: COLORS.black, textAlign: 'right' }}>
-                                                                Reverted
-                                                            </Text>
-                                                            <Image
-                                                                source={icons.verify}
-                                                                style={{
-                                                                    left: 8,
-                                                                    width: 16,
-                                                                    height: 16,
-                                                                    tintColor: 'red',
-                                                                }}
-                                                            />
-                                                        </View>
-                                                        <View style={{
-                                                            flexDirection: "row",
-                                                            left: '-52%',
-                                                            width: "100%",
-                                                            height: '100%',
-                                                        }}>
-                                                            <Text style={{ ...FONTS.h3, color: COLORS.black }}>
-                                                                Revert Message:
-                                                            </Text>
-                                                            <Text style={{ ...FONTS.h3, textAlign: 'right', left: 5, color: COLORS.black }}>
-                                                                {reportData.verify_1_revert_msg}
-                                                            </Text>
-                                                        </View>
-                                                    </View>
-                                                    : reportData.verify_1_status === true && reportData.verify_1_revert === false &&
-                                                        reportData.admin_1_status === true && reportData.admin_1_revert === false &&
-                                                        reportData.admin_2_status === true && reportData.admin_2_revert === false
-                                                        ?
-                                                        <View
-                                                            style={{
-                                                                left: 20,
-                                                                flexDirection: 'row',
-                                                            }}>
-                                                            <TouchableOpacity
-                                                                style={{
-                                                                    paddingHorizontal: 5,
-                                                                    paddingVertical: 1,
-                                                                    backgroundColor: COLORS.success_600,
-                                                                }}
-                                                                onPress={() => fetchVerifyReport()}>
-                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
-                                                                    Verify
-                                                                </Text>
-                                                            </TouchableOpacity>
-
-                                                            <TouchableOpacity
-                                                                style={{
-                                                                    left: 15,
-                                                                    paddingHorizontal: 5,
-                                                                    paddingVertical: 1,
-                                                                    backgroundColor: COLORS.rose_600,
-                                                                }}
-                                                                onPress={() => setRevertModal(true)}>
-                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
-                                                                    Revert
-                                                                </Text>
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                        : reportData.verify_1_revert === true &&
-                                                            reportData.admin_1_revert === false &&
-                                                            reportData.admin_2_revert === false
-                                                            ?
-                                                            <View style={{
-                                                                flex: 1,
-                                                                flexDirection: "row",
-                                                                flexWrap: 'wrap',
-                                                                alignContent: "space-around",
-                                                                top: 12
-                                                            }}>
-                                                                <View
-                                                                    style={{
-                                                                        left: 10,
-                                                                        flexDirection: 'row',
-                                                                        alignItems: 'center',
-                                                                    }}>
-                                                                    <Text style={{ ...FONTS.h3, color: COLORS.black, textAlign: 'right' }}>
-                                                                        Reverted
-                                                                    </Text>
-                                                                    <Image
-                                                                        source={icons.verify}
-                                                                        style={{
-                                                                            left: 8,
-                                                                            width: 16,
-                                                                            height: 16,
-                                                                            tintColor: 'green',
-                                                                        }}
-                                                                    />
-                                                                </View>
-                                                                <View style={{
-                                                                    flexDirection: "row",
-                                                                    left: '-52%',
-                                                                    width: "100%",
-                                                                    height: '100%',
-                                                                }}>
-                                                                    <Text style={{ ...FONTS.h3, color: COLORS.black }}>
-                                                                        Revert Message:
-                                                                    </Text>
-                                                                    <Text style={{ ...FONTS.h3, textAlign: 'right', left: 5, color: COLORS.black }}>
-                                                                        {reportData.verify_1_revert_msg}
-                                                                    </Text>
-                                                                </View>
-                                                            </View>
-                                                            :
-                                                            reportData.verify_1_status === true &&
-                                                                reportData.admin_1_revert === true &&
-                                                                reportData.admin_2_revert === false
-                                                                ?
-                                                                <View style={{
-                                                                    flex: 1,
-                                                                    flexDirection: "row",
-                                                                    flexWrap: 'wrap',
-                                                                    alignContent: "space-around",
-                                                                    top: 12
-                                                                }}>
-                                                                    <View
-                                                                        style={{
-                                                                            left: 10,
-                                                                            flexDirection: 'row',
-                                                                            alignItems: 'center',
-                                                                        }}>
-                                                                        <Text style={{ ...FONTS.h3, color: COLORS.black, textAlign: 'right' }}>
-                                                                            Reverted
-                                                                        </Text>
-                                                                        <Image
-                                                                            source={icons.verify}
-                                                                            style={{
-                                                                                left: 8,
-                                                                                width: 16,
-                                                                                height: 16,
-                                                                                tintColor: 'red',
-                                                                            }}
-                                                                        />
-                                                                    </View>
-                                                                    <View style={{
-                                                                        flexDirection: "row",
-                                                                        left: '-52%',
-                                                                        width: "100%",
-                                                                        height: '100%',
-                                                                    }}>
-                                                                        <Text style={{ ...FONTS.h3, color: COLORS.black }}>
-                                                                            Revert Message:
-                                                                        </Text>
-                                                                        <Text style={{ ...FONTS.h3, textAlign: 'right', left: 5, color: COLORS.black }}>
-                                                                            {reportData.verify_1_revert_msg}
-                                                                        </Text>
-                                                                    </View>
-                                                                </View>
-                                                                :
-                                                                reportData.admin_1_status === true &&
-                                                                    reportData.admin_2_revert === false
-                                                                    ?
-                                                                    <View style={{
-                                                                        flex: 1,
-                                                                        flexDirection: "row",
-                                                                        flexWrap: 'wrap',
-                                                                        alignContent: "space-around",
-                                                                        top: 12
-                                                                    }}>
-                                                                        <View
-                                                                            style={{
-                                                                                left: 10,
-                                                                                flexDirection: 'row',
-                                                                                alignItems: 'center',
-                                                                            }}>
-                                                                            <Text style={{ ...FONTS.h3, color: COLORS.black, textAlign: 'right' }}>
-                                                                                Reverted
-                                                                            </Text>
-                                                                            <Image
-                                                                                source={icons.verify}
-                                                                                style={{
-                                                                                    left: 8,
-                                                                                    width: 16,
-                                                                                    height: 16,
-                                                                                    tintColor: 'red',
-                                                                                }}
-                                                                            />
-                                                                        </View>
-                                                                        <View style={{
-                                                                            flexDirection: "row",
-                                                                            left: '-52%',
-                                                                            width: "100%",
-                                                                            height: '100%',
-                                                                        }}>
-                                                                            <Text style={{ ...FONTS.h3, color: COLORS.black }}>
-                                                                                Revert Message:
-                                                                            </Text>
-                                                                            <Text style={{ ...FONTS.h3, textAlign: 'right', left: 5, color: COLORS.black }}>
-                                                                                {reportData.verify_1_revert_msg}
-                                                                            </Text>
-                                                                        </View>
-                                                                    </View>
-                                                                    : null
-
-
-                                    }
-                                </View>
-                            )
-
-                                : null}
-                        </View>
-                    );
-                })}
-
-            </View>
-        );
-    }
+  
 
     function renderRevertModal() {
         return (

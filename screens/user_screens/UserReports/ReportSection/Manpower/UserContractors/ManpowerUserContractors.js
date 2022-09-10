@@ -48,6 +48,11 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   const [active, setactive] = useState(null)
   const [Report_list, setReport_list] = useState('')
   //main contractor collapse
+
+
+  const animation = useRef(new Animated.Value(0)).current;
+  const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
+
   const [con_item_id, setcon_item_id] = useState(null)
   const [conTeamTabCollapse, setConTeamTabCollapse] = useState(false)
 
@@ -114,7 +119,20 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     TANDP: 'Tandp'
   }
 
-
+  const onPressIn = () => {
+    Animated.spring(animation, {
+      toValue: 0.2,
+      useNativeDriver: true,
+    }).start();
+  };
+  const onPressOut = () => {
+    setTimeout(() => {
+      Animated.spring(animation, {
+        toValue: 0,
+        useNativeDriver: true,
+      }).start();
+    }, 150);
+  };
 
   //defining functions for all
 
@@ -227,7 +245,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       const data = edit_manpower_report_data(id, current_dat);
       data.then(res => res.json())
         .then(result => {
-          
+
           setEditManpowerReport(result);
           if (result.data != undefined && filterNewCategory) {
             setUpdateManpowerId(result.data._id);
@@ -317,7 +335,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   async function GetManpowerData() {
     if (Main_drp_pro_value || manpowerPostStatus || loading || manpowerUpdateStatus) {
       const data = await get_manpower_report(Main_drp_pro_value, companydata._id, current_dat)
-      if (data.status == 200) { 
+      if (data.status == 200) {
         setManpowerReportData(data.data);
         // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 321 ~ GetManpowerData ~ data.data", data.data)
       } else {
@@ -950,7 +968,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   }
 
 
-  const sub_body_section = (item, index) => {    
+  const sub_body_section = (item, index) => {
 
     return <View
       style={{
@@ -1160,32 +1178,42 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
   return (
     <View style={{ marginTop: 5 }}>
-      <Pressable
-        onPress={() => setConTeamTabCollapse(!conTeamTabCollapse)}
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginBottom: -22,
-          paddingVertical: 2,
-          paddingHorizontal: 10,
-          borderWidth: 1,
-          width: SIZES.width * 0.72,
-          backgroundColor:COLORS.lightblue_500,
-          alignSelf: "center",
-          borderRadius: 4,
-          borderColor: COLORS.lightblue_300,
-        }}>
-        <View>
-          <Text onPress={() => setConTeamTabCollapse(!conTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.white2 }]}>Contractors</Text>
-        </View>
-        <View style={{ alignItems: "center", justifyContent: "center", marginLeft: SIZES.base * 0.5 }}>
-          <TouchableOpacity onPress={() => {
-            setConTeamTabCollapse(!conTeamTabCollapse)
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <Pressable
+          onPressIn={onPressIn}
+          onPressOut={onPressOut}
+          onPress={() => setConTeamTabCollapse(!conTeamTabCollapse)}
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: -22,
+            paddingVertical: 2,
+            paddingHorizontal: 10,
+            borderWidth: 1,
+            width: SIZES.width * 0.72,
+            backgroundColor: COLORS.lightblue_500,
+            alignSelf: "center",
+            borderRadius: 4,
+            borderColor: COLORS.lightblue_300,
           }}>
-            <AntDesign name='caretdown' size={12} color={COLORS.white3} />
-          </TouchableOpacity>
-        </View>
-      </Pressable>
+          <View>
+            <Text
+              onPressIn={onPressIn}
+              onPressOut={onPressOut}
+              onPress={() => setConTeamTabCollapse(!conTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.white2 }]}>Contractors</Text>
+          </View>
+          <View style={{ alignItems: "center", justifyContent: "center", marginLeft: SIZES.base * 0.5 }}>
+            <TouchableOpacity
+              onPressIn={onPressIn}
+              onPressOut={onPressOut}
+              onPress={() => {
+                setConTeamTabCollapse(!conTeamTabCollapse)
+              }}>
+              <AntDesign name='caretdown' size={12} color={COLORS.white3} />
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Animated.View>
       <View
         style={{
           alignSelf: "flex-end",
@@ -1233,11 +1261,11 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
           </View>
         ) :
         <View style={{
-          backgroundColor:COLORS.lightblue_100,
-          marginHorizontal:SIZES.h2*2,
-          marginBottom:conTeamTabCollapse? -24:0,
-          }}>
-        { conTeamTabCollapse?  <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center", marginHorizontal: SIZES.body1  }]}>No Contractors right now!</Text>:null}
+          backgroundColor: COLORS.lightblue_100,
+          marginHorizontal: SIZES.h2 * 2,
+          marginBottom: conTeamTabCollapse ? -24 : 0,
+        }}>
+          {conTeamTabCollapse ? <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center", marginHorizontal: SIZES.body1 }]}>No Contractors right now!</Text> : null}
         </View>
       }
       {/* create contractor model */}
