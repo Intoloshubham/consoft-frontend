@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Modal,
   ScrollView,
-  LogBox,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
@@ -16,7 +15,6 @@ import {
 import {
   HeaderBar,
   TextButton,
-  IconButton,
   FormInput,
   CustomDropdown,
   CustomToast,
@@ -39,46 +37,46 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 const CategoryandType = () => {
   const [showTip, setTip] = React.useState(false);
   const [showTip1, setTip1] = React.useState(false);
+
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
-  // delete confirmation
+  // DELETE CONFIRMATION
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [deleteConfirm1, setDeleteConfirm1] = React.useState(false);
 
   // COMPANY DATA
-  // const companyData = useSelector(state => state.company);
-  // const company_id = companyData._id;
   const companyDetail = useSelector(state => state.company);
   const userData = useSelector(state => state.user);
 
   var companyData;
   if (companyDetail._id) {
-    companyData = useSelector(state => state.company);
-  }
-  if (userData._id) {
-    companyData = useSelector(state => state.user);
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
   }
   const company_id = companyData._id;
-  // console.log("object",company_id)
 
   // STATES FOR STORING CATEGORIES & PROJECT TYPES DATA
   const [projectCategories, setProjectCategories] = React.useState([]);
   const [projectTypes, setProjectTypes] = React.useState([]);
-  //Modal
+
+  //MODAL
   const [showCategoryModal, setShowCategoryModal] = React.useState(false);
   const [showTypesModal, setShowTypesModal] = React.useState(false);
-  // Form Data
+
+  // FORM DATA
   const [catName, setCatName] = React.useState('');
   const [typeName, setTypeName] = React.useState('');
-  //Dropdown
+
+  //DROPDOWN
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState([]);
   const [items, setItems] = React.useState([]);
 
-  // get project category
+  // GET PROJECT CATEGORY
   const projectCategory = async () => {
     let response = await getProjectCategory(company_id);
     if (response.status === 200) {
@@ -90,6 +88,7 @@ const CategoryandType = () => {
     }
   };
 
+  // POST PROJECT CATEGORY DATA
   const postCategory = async () => {
     const formData = {
       category_name: catName,
@@ -111,22 +110,21 @@ const CategoryandType = () => {
 
   const [id, setId] = React.useState('');
   const getId = id => {
-    // console.log(id);
     setId(id);
   };
 
-  // get cat data
+  // GET CATEGORY DATA
   const getData = name => {
     setCatName(name);
   };
 
+  // EDIT PROJECT CATEGORY
   const editCategory = async () => {
     const formData = {
       category_name: catName,
       company_id: company_id,
     };
     let response = await updateProjectCategory(id, formData);
-
     if (response.status == 200) {
       setUpdateToast(true);
       projectCategory();
@@ -140,12 +138,14 @@ const CategoryandType = () => {
     }, 2000);
   };
 
+  // GET CATEGORY ID
   const getCategoryId = id => {
     setCategoryId(id);
     setDeleteConfirm(true);
   };
   const [category_id, setCategoryId] = React.useState('');
 
+  // DELETE PROJECT CATEGORY
   const deletecategory = async () => {
     let response = await deleteProjectCategory(category_id);
     if (response.status == 200) {
@@ -158,7 +158,7 @@ const CategoryandType = () => {
     }, 1500);
   };
 
-  // get project types
+  // GET PROJECT TYPES
   const getprojectTypes = async () => {
     let response = await getProjectType(company_id);
     if (response.status === 200) {
@@ -166,6 +166,7 @@ const CategoryandType = () => {
     }
   };
 
+  // POST PROJECT TYPES DATA
   const postTypes = async () => {
     const formData = {
       category_id: value,
@@ -186,18 +187,19 @@ const CategoryandType = () => {
     }, 2000);
   };
 
+  // GET TYPE ID
   const [typeid, setTypeId] = React.useState('');
-  // console.log("object", typeid)
   const gettypeId = id => {
-    // console.log(id)
     setTypeId(id);
   };
 
+  // GET TYPE DATA
   const getTypeData = (cat_id, name) => {
     setValue(cat_id);
     setTypeName(name);
   };
 
+  // EDIT PROJECT TYPE
   const edittype = async () => {
     const formData = {
       category_id: value,
@@ -225,6 +227,7 @@ const CategoryandType = () => {
   };
   const [type_id, setTypId] = React.useState('');
 
+  // DELETE PROJECT TYPE
   const deleteType = async () => {
     let response = await deleteProjectType(type_id);
     if (response.status === 200) {
@@ -322,7 +325,6 @@ const CategoryandType = () => {
         style={{
           marginHorizontal: SIZES.padding,
           backgroundColor: COLORS.white,
-          // padding: 15,
         }}>
         <View
           style={{
@@ -372,11 +374,7 @@ const CategoryandType = () => {
                 </View>
               }
               onClose={() => setTip(false)}
-              placement="bottom"
-              // topAdjustment={
-              //   Platform.OS === 'android' ? -StatusBar.currentHeight : 0
-              // }
-            >
+              placement="bottom">
               <TouchableOpacity style={{}} onPress={() => setTip(true)}>
                 <Image
                   source={icons.help1}
@@ -452,8 +450,6 @@ const CategoryandType = () => {
                 gettypeId(item._id);
                 getTypeData(item.category_id, item.project_type);
                 setShowTypesModal(true);
-                // OnEditTypes();
-                // edittype();
               }}>
               <ImageBackground
                 style={{
@@ -549,11 +545,7 @@ const CategoryandType = () => {
                 </View>
               }
               onClose={() => setTip1(false)}
-              placement="bottom"
-              // topAdjustment={
-              //   Platform.OS === 'android' ? -StatusBar.currentHeight : 0
-              // }
-            >
+              placement="bottom">
               <TouchableOpacity style={{}} onPress={() => setTip1(true)}>
                 <Image
                   source={icons.help1}
@@ -808,6 +800,7 @@ const CategoryandType = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   shadow: {
     shadowColor: '#000',

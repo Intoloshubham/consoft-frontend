@@ -25,17 +25,15 @@ import {useSelector} from 'react-redux';
 import {getUserRole} from '../../../controller/UserRoleController';
 
 const UserRole = () => {
-  // const companyData = useSelector(state => state.company);
-  // const company_id = companyData._id;
+  // COMPANY & USER DATA
   const companyDetail = useSelector(state => state.company);
   const userData = useSelector(state => state.user);
 
   var companyData;
   if (companyDetail._id) {
-    companyData = useSelector(state => state.company);
-  }
-  if (userData._id) {
-    companyData = useSelector(state => state.user);
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
   }
   const company_id = companyData._id;
 
@@ -43,11 +41,11 @@ const UserRole = () => {
   const [submitToast, setSubmitToast] = React.useState(false);
   const [createUserModal, setCreateUserModal] = React.useState(false);
 
-  // form data
+  // FORM STATES
   const [userRole, setUserRole] = React.useState('');
   const [userRoles, setUserRoles] = React.useState([]);
 
-  //error states
+  //ERROR STATES
   const [userRoleError, setUserRoleError] = React.useState('');
 
   function isEnableSubmit() {
@@ -160,15 +158,12 @@ const UserRole = () => {
             </ScrollView>
             <TextButton
               label="Save"
-              disabled={isEnableSubmit() ? false : true}
               buttonContainerStyle={{
                 height: 45,
                 alignItems: 'center',
                 marginTop: SIZES.padding,
                 borderRadius: SIZES.base,
-                backgroundColor: isEnableSubmit()
-                  ? COLORS.lightblue_700
-                  : COLORS.transparentPrimary,
+                backgroundColor: COLORS.lightblue_700,
               }}
               onPress={submitUserRole}
             />

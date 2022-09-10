@@ -16,7 +16,6 @@ import {
   HeaderBar,
   TextButton,
   FormInput,
-  IconButton,
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
@@ -39,11 +38,12 @@ const Contractors = ({route}) => {
     companyData = userData;
   }
   const company_id = companyData._id;
+  const {project_id} = route.params;
 
-  const {project_id} = route.params; //
   const [showContractorsModal, setShowContractorsModal] = React.useState(false);
   const [contractors, setContractors] = React.useState([]);
-  // company team states
+
+  //
   const [name, setName] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
   const [nameError, setNameError] = React.useState('');
