@@ -95,33 +95,27 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
     const getEquipmentItems = async () => {
-        let isMount = true;
         try {
             const data = await get_equipment_item_name();
-            if (isMount === true && data.length > 0) {
+            if (data.length > 0) {
                 // console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
                 setGetEquipItemName(data);
             }
-            return () => { isMount = false }
         } catch (error) {
             console.log(error)
         }
     }
 
     const getEquipReport = async () => {
-        let isMount = true;
         try {
             const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
-            if (isMount === true && data.length > 0) {
 
-                // console.log("🚀 ~ file: TAndP.js ~ line 103 ~ getEquipReport ~ data", data)
                 setGetEquipmentReport(data);
-            }
-            return () => { isMount = false }
         } catch (error) {
             console.log(error)
         }
     }
+
     useEffect(() => {
 
         getEquipmentItems();
@@ -131,6 +125,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
     const saveNewEquipmentItems = async () => {
+        let isMount = true;
         try {
             const data = {
                 tools_machinery_name: equipItemName,
@@ -139,8 +134,8 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
             const resp = await save_new_equipment_item(data);
             const temp = await resp.json();
-            // console.log("🚀 ~ file: TAndP.js ~ line 131 ~ saveNewEquipmentItems ~ temp", temp)
-            if (temp.status == '200') {
+
+            if (isMount = true && temp.status == '200') {
                 setSubmitToast(true)
                 getEquipmentItems();
                 setTimeout(() => {
@@ -148,12 +143,14 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                 }, 1500);
 
             }
+            return () => { isMount = false }
         } catch (error) {
             console.log(error)
         }
     }
 
     const insertTAndPReport = async () => {
+        let isMount = true;
         try {
 
             const data = {
@@ -167,7 +164,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
             const resp = await insert_TAndP_report(data, CONST_FIELD);
             const temp = await resp.json();
 
-            if (temp.status == '200') {
+            if (isMount===true &&  temp.status == '200') {
                 setSubmitToast(true)
                 // getEquipmentItems();
                 setTimeout(() => {
@@ -175,6 +172,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                 }, 1500);
                 equipmentField.splice(0, equipmentField.length);
             }
+            return () => { isMount = false }
         } catch (error) {
             console.log(error)
         }
