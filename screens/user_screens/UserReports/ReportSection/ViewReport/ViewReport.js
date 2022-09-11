@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
     View,
     Text,
@@ -10,6 +10,7 @@ import {
     Modal,
     TextInput,
     TouchableWithoutFeedback,
+    RefreshControl
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -45,6 +46,21 @@ const ViewReport = () => {
         fetchProject();
     }, []);
 
+    function delay(timeout) {
+        return new Promise(resolve => {
+            setTimeout(resolve, timeout);
+        });
+    }
+    const [loading, setLoading] = React.useState(false);
+    const loadMore = React.useCallback(async () => {
+        setLoading(true);
+
+        delay(2000).then(() => setLoading(false));
+    }, [loading]);
+
+
+    const [trackId, setTrackId] = useState('')
+
     const [report, setReport] = React.useState([]);
     const [reportModal, setReportModal] = React.useState(false);
     const [reportData, setReportData] = React.useState('');
@@ -76,6 +92,9 @@ const ViewReport = () => {
     };
 
 
+
+
+
     // fetch manpower on click
     const fetchManpower = async report_id => {
         setReportId(report_id);
@@ -94,9 +113,10 @@ const ViewReport = () => {
     };
 
     // fetch report path
-    const fetchReportPath = async project_id => {
-        const response = await getProjectReportPath(company_id, project_id);
-        setProjectId(project_id);
+    const fetchReportPath = async () => {
+        const response = await getProjectReportPath(company_id, projectId);
+
+        // setProjectId(project_id);
 
         if (response.data) {
             {
@@ -104,11 +124,64 @@ const ViewReport = () => {
 
                     if (ele.verification_1 === user_id) {
                         let user_id = '';
-                        rep_resp = await getReport(project_id, user_id);
+                        rep_resp = await getReport(projectId, user_id);
+                        if (rep_resp.data) {
+                            rep_resp.data.map((item, idx) => {
+                                if (item._id === trackId) {
+                                    setReportData({
+                                        project_name: item.project_name,
+                                        user_name: item.user_name,
+                                        date: item.report_date,
+                                        time: item.report_time,
+
+                                        verify_1_status: item.verify_1_status,
+                                        verify_1_revert: item.verify_1_revert,
+                                        verify_1_revert_msg: item.verify_1_revert_msg,
+
+                                        admin_1_status: item.admin_1_status,
+                                        admin_1_revert: item.admin_1_revert,
+                                        admin_1_revert_msg: item.admin_1_revert_msg,
+
+                                        admin_2_status: item.admin_2_status,
+                                        admin_2_revert: item.admin_2_revert,
+                                        admin_2_revert_msg: item.admin_2_revert_msg
+
+                                    });
+                                }
+                            })
+                        }
+
 
                     } else {
-                        rep_resp = await getReport(project_id, user_id);
+                        rep_resp = await getReport(projectId, user_id);
+                        if (rep_resp.data) {
+                            rep_resp.data.map((item, idx) => {
+                                if (item._id === trackId) {
+                                    setReportData({
+                                        project_name: item.project_name,
+                                        user_name: item.user_name,
+                                        date: item.report_date,
+                                        time: item.report_time,
+
+                                        verify_1_status: item.verify_1_status,
+                                        verify_1_revert: item.verify_1_revert,
+                                        verify_1_revert_msg: item.verify_1_revert_msg,
+
+                                        admin_1_status: item.admin_1_status,
+                                        admin_1_revert: item.admin_1_revert,
+                                        admin_1_revert_msg: item.admin_1_revert_msg,
+
+                                        admin_2_status: item.admin_2_status,
+                                        admin_2_revert: item.admin_2_revert,
+                                        admin_2_revert_msg: item.admin_2_revert_msg
+
+                                    });
+                                }
+                            })
+                        }
+
                     }
+
                     setReport(rep_resp.data);
 
                 })
@@ -118,16 +191,28 @@ const ViewReport = () => {
 
     };
 
+    useMemo(() => {
+        fetchReportPath()
+
+    }, [loading, trackId]);
+
 
 
     // fetch verify report
     const fetchVerifyReport = async () => {
+
         let response = await verifyReport(projectId, reportId, user_id);
+        // console.log("🚀 ~ file: ViewReport.js ~ line 127 ~ fetchVerifyReport ~ reportId", reportId)
+        // console.log("🚀 ~ file: ViewReport.js ~ line 127 ~ fetchVerifyReport ~ user_id", user_id)
+        // console.log("🚀 ~ file: ViewReport.js ~ line 127 ~ fetchVerifyReport ~ projectId", projectId)
         if (response.status === 200) {
             alert('Verified');
-            fetchReportPath();
+            fetchReportPath(projectId);
         }
     };
+
+
+
 
     // fetch revert report
     const submitRevertReport = async () => {
@@ -173,6 +258,9 @@ const ViewReport = () => {
     const showDatepicker = () => {
         showMode('date');
     };
+
+
+
 
     function renderProjectFilter() {
         return (
@@ -221,8 +309,9 @@ const ViewReport = () => {
                         }}
                         onSelectItem={value => {
                             // fetchReport(value.value);
+                            setProjectId(value.value);
                             setOnSelect(true);
-                            fetchReportPath(value.value);
+                            fetchReportPath();
                         }}
                         onOpen={onProjectOpen}
                         autoScroll={false}
@@ -278,6 +367,8 @@ const ViewReport = () => {
 
     // console.log("🚀 ~ file: ViewReport.js ~ line 305 ~ ViewReport ~ reportPath", reportPath)
 
+
+
     // report user list
     function renderReport() {
         const renderItem = ({ item }) => (
@@ -290,27 +381,31 @@ const ViewReport = () => {
                     padding: 10,
                     elevation: 1,
                 }}
+
                 onPress={() => {
                     setReportModal(true);
-                    setReportData({
-                        project_name: item.project_name,
-                        user_name: item.user_name,
-                        date: item.report_date,
-                        time: item.report_time,
+                    setTrackId(item._id);
+                    // console.log("🚀 ~ file: ViewReport.js ~ line 337 ~ renderReport ~ item", item)
 
-                        verify_1_status: item.verify_1_status,
-                        verify_1_revert: item.verify_1_revert,
-                        verify_1_revert_msg: item.verify_1_revert_msg,
+                    // setReportData({
+                    //     project_name: item.project_name,
+                    //     user_name: item.user_name,
+                    //     date: item.report_date,
+                    //     time: item.report_time,
 
-                        admin_1_status: item.admin_1_status,
-                        admin_1_revert: item.admin_1_revert,
-                        admin_1_revert_msg: item.admin_1_revert_msg,
+                    //     verify_1_status: item.verify_1_status,
+                    //     verify_1_revert: item.verify_1_revert,
+                    //     verify_1_revert_msg: item.verify_1_revert_msg,
 
-                        admin_2_status: item.admin_2_status,
-                        admin_2_revert: item.admin_2_revert,
-                        admin_2_revert_msg: item.admin_2_revert_msg
+                    //     admin_1_status: item.admin_1_status,
+                    //     admin_1_revert: item.admin_1_revert,
+                    //     admin_1_revert_msg: item.admin_1_revert_msg,
 
-                    });
+                    //     admin_2_status: item.admin_2_status,
+                    //     admin_2_revert: item.admin_2_revert,
+                    //     admin_2_revert_msg: item.admin_2_revert_msg
+
+                    // });
                     fetchManpower(item._id);
                     fetchQuantity(item._id);
                 }}>
@@ -370,6 +465,8 @@ const ViewReport = () => {
     }
 
     const trackVerificationProcess = () => {
+        // console.log("🚀 ~ file: ViewReport.js ~ line 1647 ~ trackVerificationProcess ~ reportData", reportData)
+
         return (<View
             style={{
                 flex: 1,
@@ -380,6 +477,14 @@ const ViewReport = () => {
             }}
         >
             <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        progressBackgroundColor="white"
+                        tintColor="red"
+                        refreshing={loading}
+                        onRefresh={loadMore}
+                    />
+                }
                 style={{
                     flex: 1,
                     height: 500
@@ -537,9 +642,7 @@ const ViewReport = () => {
                                             </View>
                                         </View>
                                         {
-
                                             (
-
                                                 <View
                                                     style={{
                                                         flex: 1,
@@ -548,7 +651,6 @@ const ViewReport = () => {
                                                         left: 190,
                                                         marginTop: 25
                                                     }}
-                                                // key={i}
                                                 >
                                                     {
                                                         reportData.verify_1_status === false && reportData.verify_1_revert === false &&
@@ -1120,7 +1222,7 @@ const ViewReport = () => {
                                                                                                         backgroundColor: COLORS.success_600,
                                                                                                     }}
                                                                                                     onPress={() => {
-                                                                                                        fetchVerifyReport()
+                                                                                                        // fetchVerifyReport()
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Verify
