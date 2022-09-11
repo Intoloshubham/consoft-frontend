@@ -131,7 +131,6 @@ const UserDashboard = () => {
             </View>
           </View>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={{
             marginTop: SIZES.base,

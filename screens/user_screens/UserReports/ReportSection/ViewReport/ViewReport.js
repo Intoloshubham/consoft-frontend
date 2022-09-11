@@ -476,6 +476,15 @@ const ViewReport = () => {
                 marginTop: 5
             }}
         >
+            <Text
+                style={{
+                    ...FONTS.h3,
+                    color: COLORS.black,
+                    marginBottom: 5,
+                    textAlign: 'center'
+                }}>
+                Track Verification Process :
+            </Text>
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -490,18 +499,7 @@ const ViewReport = () => {
                     height: 500
                 }}
                 contentContainerStyle={{ flexGrow: 1, height: 200 }}
-            >
-                <View>
-                    <Text
-                        style={{
-                            ...FONTS.h3,
-                            color: COLORS.black,
-                            marginBottom: 5,
-                            textAlign: 'center'
-                        }}>
-                        Track Verification Process :
-                    </Text>
-                </View>
+            >              
                 {reportPath ? reportPath.map((ele, idx) => {
                     return (
                         <View style={{
@@ -873,7 +871,7 @@ const ViewReport = () => {
                                                                                 }}
                                                                                 onPress={() => {
                                                                                     // setRevertModal(true)
-                                                                                    ele.verification_1 === user_id ? setRevertModal(true) : null
+                                                                                    // ele.verification_1 === user_id ? setRevertModal(true) : null
 
                                                                                 }}>
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1024,7 +1022,7 @@ const ViewReport = () => {
                                                                                         }}
                                                                                         onPress={() => {
                                                                                             // setRevertModal(true)
-                                                                                            ele.verification_1 === user_id ? setRevertModal(true) : null
+                                                                                            // ele.verification_1 === user_id ? setRevertModal(true) : null
 
                                                                                         }}>
                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1041,7 +1039,7 @@ const ViewReport = () => {
                                                                                         }}
                                                                                         onPress={() => {
                                                                                             // setRevertModal(true)
-                                                                                            ele.admin_1 === user_id ? setRevertModal(true) : null
+                                                                                            // ele.admin_1 === user_id ? setRevertModal(true) : null
 
                                                                                         }}>
                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1181,7 +1179,7 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // setRevertModal(true)
-                                                                                                ele.verification_1 === user_id ? setRevertModal(true) : null
+                                                                                                // ele.verification_1 === user_id ? setRevertModal(true) : null
 
                                                                                             }}>
                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1198,7 +1196,7 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // setRevertModal(true)
-                                                                                                ele.admin_1 === user_id ? setRevertModal(true) : null
+                                                                                                // ele.admin_1 === user_id ? setRevertModal(true) : null
 
                                                                                             }}>
                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1215,7 +1213,7 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // setRevertModal(true)
-                                                                                                ele.admin_2 === user_id ? setRevertModal(true) : null
+                                                                                                // ele.admin_2 === user_id ? setRevertModal(true) : null
 
                                                                                             }}>
                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1259,7 +1257,7 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // fetchVerifyReport()
-                                                                                                        ele.verification_1 === user_id ? fetchVerifyReport() : null
+                                                                                                        // ele.verification_1 === user_id ? fetchVerifyReport() : null
 
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1426,7 +1424,7 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // setRevertModal(true)
-                                                                                                        ele.verification_1 === user_id ? setRevertModal(true) : null
+                                                                                                        // ele.verification_1 === user_id ? setRevertModal(true) : null
 
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1466,7 +1464,7 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // setRevertModal(true)
-                                                                                                        ele.admin_2 === user_id ? setRevertModal(true) : null
+                                                                                                        // ele.admin_2 === user_id ? setRevertModal(true) : null
 
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1520,7 +1518,7 @@ const ViewReport = () => {
                                                                                                         }}
                                                                                                         onPress={() => {
                                                                                                             // fetchVerifyReport()
-                                                                                                            ele.admin_1 === user_id ? fetchVerifyReport() : null
+                                                                                                            // ele.admin_1 === user_id ? fetchVerifyReport() : null
 
                                                                                                         }
                                                                                                         }>
@@ -1543,7 +1541,7 @@ const ViewReport = () => {
                                                                                                         }}
                                                                                                         onPress={() => {
                                                                                                             // fetchVerifyReport()
-                                                                                                            ele.admin_2 === user_id ? fetchVerifyReport() : null
+                                                                                                            // ele.admin_2 === user_id ? fetchVerifyReport() : null
 
                                                                                                         }}>
                                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1655,7 +1653,7 @@ const ViewReport = () => {
                                                                                                             }}
                                                                                                             onPress={() => {
                                                                                                                 // fetchVerifyReport()
-                                                                                                                ele.admin_2 === user_id ? fetchVerifyReport() : null
+                                                                                                                // ele.admin_2 === user_id ? fetchVerifyReport() : null
 
 
                                                                                                             }}>
@@ -1680,7 +1678,7 @@ const ViewReport = () => {
                                                                                                             }}
                                                                                                             onPress={() => {
                                                                                                                 // setRevertModal(true)
-                                                                                                            ele.verification_1 === user_id ? setRevertModal(true) : null
+                                                                                                                // ele.verification_1 === user_id ? setRevertModal(true) : null
 
                                                                                                             }}>
                                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1697,7 +1695,7 @@ const ViewReport = () => {
                                                                                                             }}
                                                                                                             onPress={() => {
                                                                                                                 // setRevertModal(true)
-                                                                                                            ele.admin_1 === user_id ? setRevertModal(true) : null
+                                                                                                                // ele.admin_1 === user_id ? setRevertModal(true) : null
 
                                                                                                             }}>
                                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1713,7 +1711,7 @@ const ViewReport = () => {
                                                                                                                 alignItems: 'center',
                                                                                                                 backgroundColor: COLORS.transparent,
                                                                                                             }}
-                                                                                                            onPress={() => {                                                                                                                
+                                                                                                            onPress={() => {
                                                                                                                 // setRevertModal(true)
                                                                                                             }}>
                                                                                                             <Image
