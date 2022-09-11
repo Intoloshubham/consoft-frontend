@@ -125,7 +125,7 @@ const UserDashboard = () => {
               <Image source={icons.done} style={{ height: 22, width: 22 }} />
             </View>
             <View>
-              <Text style={{ ...FONTS.h4, color: COLORS.darkGray, textAlign: 'right' }}>
+              <Text style={{ ...FONTS.h4, color: COLORS.darkGray, textAlign: 'left' }}>
                 Completed Tasks
               </Text>
             </View>

@@ -38,11 +38,11 @@ import {
 import { Get_Contractor_Data } from '../../ReportApi.js';
 import * as Animatable from 'react-native-animatable';
 
-// if (Platform.OS === 'android') {
-//     if (UIManager.setLayoutAnimationEnabledExperimental) {
-//         UIManager.setLayoutAnimationEnabledExperimental(true);
-//     }
-// }
+if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+}
 const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => {
 
     useEffect(() => {

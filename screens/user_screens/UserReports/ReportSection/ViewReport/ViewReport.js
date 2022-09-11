@@ -465,7 +465,7 @@ const ViewReport = () => {
     }
 
     const trackVerificationProcess = () => {
-        // console.log("🚀 ~ file: ViewReport.js ~ line 1647 ~ trackVerificationProcess ~ reportData", reportData)
+        // console.log("🚀 ~ file: ViewReport.js ~ line 1647 ~ trackVerificationProcess ~ user_id", user_id)
 
         return (<View
             style={{
@@ -665,8 +665,9 @@ const ViewReport = () => {
                                                                     }}>
 
                                                                     <View style={{
-                                                                        left: 90,
+                                                                        left: 70
                                                                     }}>
+
                                                                         <TouchableOpacity
                                                                             style={{
                                                                                 left: 15,
@@ -674,11 +675,12 @@ const ViewReport = () => {
                                                                                 paddingVertical: 1,
                                                                                 backgroundColor: COLORS.rose_600,
                                                                             }}
-                                                                            onPress={() => setRevertModal(true)}>
+                                                                            onPress={() => { ele.verification_1 === user_id ? setRevertModal(true) : null }}>
                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                 Revert
                                                                             </Text>
                                                                         </TouchableOpacity>
+
                                                                         <TouchableOpacity
                                                                             style={{
                                                                                 left: 15,
@@ -688,7 +690,7 @@ const ViewReport = () => {
                                                                                 backgroundColor: COLORS.rose_600,
                                                                             }}
                                                                             onPress={() => {
-                                                                                // setRevertModal(true)
+                                                                                ele.admin_1 === user_id ? setRevertModal(true) : null
                                                                             }}>
                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                 Revert
@@ -703,12 +705,13 @@ const ViewReport = () => {
                                                                                 backgroundColor: COLORS.rose_600,
                                                                             }}
                                                                             onPress={() => {
-                                                                                // setRevertModal(true)
+                                                                                ele.admin_2 === user_id ? setRevertModal(true) : null
                                                                             }}>
                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                 Revert
                                                                             </Text>
                                                                         </TouchableOpacity>
+
                                                                     </View>
                                                                     <View style={{
                                                                         position: 'absolute',
@@ -726,7 +729,9 @@ const ViewReport = () => {
                                                                                     paddingVertical: 1,
                                                                                     backgroundColor: COLORS.success_600,
                                                                                 }}
-                                                                                onPress={() => fetchVerifyReport()}>
+                                                                                onPress={() => {
+                                                                                    ele.verification_1 === user_id ? fetchVerifyReport() : null
+                                                                                }}>
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                     Verify
                                                                                 </Text>
@@ -745,7 +750,7 @@ const ViewReport = () => {
                                                                                     backgroundColor: COLORS.success_600,
                                                                                 }}
                                                                                 onPress={() => {
-                                                                                    // fetchVerifyReport()
+                                                                                    ele.admin_1 === user_id ? fetchVerifyReport() : null
                                                                                 }
                                                                                 }>
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -766,7 +771,7 @@ const ViewReport = () => {
                                                                                     backgroundColor: COLORS.success_600,
                                                                                 }}
                                                                                 onPress={() => {
-                                                                                    // fetchVerifyReport()
+                                                                                    ele.admin_2 === user_id ? fetchVerifyReport() : null
                                                                                 }}>
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                     Verify
@@ -800,7 +805,7 @@ const ViewReport = () => {
                                                                                         backgroundColor: COLORS.transparent,
                                                                                     }}
                                                                                     onPress={() => {
-                                                                                        // fetchVerifyReport()
+                                                                                        // ele.verification_1 === user_id ? fetchVerifyReport() : null
                                                                                     }}>
                                                                                     <Image
                                                                                         source={icons.verify}
@@ -826,7 +831,7 @@ const ViewReport = () => {
                                                                                         backgroundColor: COLORS.success_600,
                                                                                     }}
                                                                                     onPress={() => {
-                                                                                        // fetchVerifyReport()
+                                                                                        ele.admin_1 === user_id ? fetchVerifyReport() : null
                                                                                     }}>
                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                         Verify
@@ -846,7 +851,8 @@ const ViewReport = () => {
                                                                                         backgroundColor: COLORS.success_600,
                                                                                     }}
                                                                                     onPress={() => {
-                                                                                        // fetchVerifyReport()
+                                                                                        ele.admin_2 === user_id ? fetchVerifyReport() : null
+
                                                                                     }}>
                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                         Verify
@@ -856,7 +862,7 @@ const ViewReport = () => {
                                                                         </View>
                                                                         <View
                                                                             style={{
-                                                                                left: 40
+                                                                                left: 25
                                                                             }}>
                                                                             <TouchableOpacity
                                                                                 style={{
@@ -867,6 +873,8 @@ const ViewReport = () => {
                                                                                 }}
                                                                                 onPress={() => {
                                                                                     // setRevertModal(true)
+                                                                                    ele.verification_1 === user_id ? setRevertModal(true) : null
+
                                                                                 }}>
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                     Revert
@@ -882,6 +890,8 @@ const ViewReport = () => {
                                                                                 }}
                                                                                 onPress={() => {
                                                                                     // setRevertModal(true)
+                                                                                    ele.admin_1 === user_id ? setRevertModal(true) : null
+
                                                                                 }}>
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                     Revert
@@ -897,6 +907,8 @@ const ViewReport = () => {
                                                                                 }}
                                                                                 onPress={() => {
                                                                                     // setRevertModal(true)
+                                                                                    ele.admin_2 === user_id ? setRevertModal(true) : null
+
                                                                                 }}>
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                     Revert
@@ -932,6 +944,8 @@ const ViewReport = () => {
                                                                                         }}
                                                                                         onPress={() => {
                                                                                             // fetchVerifyReport()
+                                                                                            // ele.verification_1 === user_id ? fetchVerifyReport() : null
+
                                                                                         }}>
                                                                                         <Image
                                                                                             source={icons.verify}
@@ -959,6 +973,8 @@ const ViewReport = () => {
                                                                                         }}
                                                                                         onPress={() => {
                                                                                             // fetchVerifyReport()
+                                                                                            // ele.admin_1 === user_id ? fetchVerifyReport() : null
+
                                                                                         }}>
                                                                                         <Image
                                                                                             source={icons.verify}
@@ -985,6 +1001,8 @@ const ViewReport = () => {
                                                                                         }}
                                                                                         onPress={() => {
                                                                                             // fetchVerifyReport()
+                                                                                            ele.admin_2 === user_id ? fetchVerifyReport() : null
+
                                                                                         }}>
                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                             Verify
@@ -995,7 +1013,7 @@ const ViewReport = () => {
                                                                             <View>
                                                                                 <View
                                                                                     style={{
-                                                                                        left: 40
+                                                                                        left: 30
                                                                                     }}>
                                                                                     <TouchableOpacity
                                                                                         style={{
@@ -1006,6 +1024,8 @@ const ViewReport = () => {
                                                                                         }}
                                                                                         onPress={() => {
                                                                                             // setRevertModal(true)
+                                                                                            ele.verification_1 === user_id ? setRevertModal(true) : null
+
                                                                                         }}>
                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                             Revert
@@ -1021,6 +1041,8 @@ const ViewReport = () => {
                                                                                         }}
                                                                                         onPress={() => {
                                                                                             // setRevertModal(true)
+                                                                                            ele.admin_1 === user_id ? setRevertModal(true) : null
+
                                                                                         }}>
                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                             Revert
@@ -1036,6 +1058,8 @@ const ViewReport = () => {
                                                                                         }}
                                                                                         onPress={() => {
                                                                                             // setRevertModal(true)
+                                                                                            ele.admin_2 === user_id ? setRevertModal(true) : null
+
                                                                                         }}>
                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                             Revert
@@ -1070,6 +1094,8 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // fetchVerifyReport()
+                                                                                                // ele.verification_1 === user_id ? fetchVerifyReport() : null
+
                                                                                             }}>
                                                                                             <Image
                                                                                                 source={icons.verify}
@@ -1097,6 +1123,8 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // fetchVerifyReport()
+                                                                                                // ele.admin_1 === user_id ? fetchVerifyReport() : null
+
                                                                                             }}>
                                                                                             <Image
                                                                                                 source={icons.verify}
@@ -1124,6 +1152,8 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // fetchVerifyReport()
+                                                                                                // ele.admin_2 === user_id ? fetchVerifyReport() : null
+
                                                                                             }}>
                                                                                             <Image
                                                                                                 source={icons.verify}
@@ -1140,7 +1170,7 @@ const ViewReport = () => {
                                                                                 <View>
                                                                                     <View
                                                                                         style={{
-                                                                                            left: 40
+                                                                                            left: 30
                                                                                         }}>
                                                                                         <TouchableOpacity
                                                                                             style={{
@@ -1151,6 +1181,8 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // setRevertModal(true)
+                                                                                                ele.verification_1 === user_id ? setRevertModal(true) : null
+
                                                                                             }}>
                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                 Revert
@@ -1166,6 +1198,8 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // setRevertModal(true)
+                                                                                                ele.admin_1 === user_id ? setRevertModal(true) : null
+
                                                                                             }}>
                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                 Revert
@@ -1181,6 +1215,8 @@ const ViewReport = () => {
                                                                                             }}
                                                                                             onPress={() => {
                                                                                                 // setRevertModal(true)
+                                                                                                ele.admin_2 === user_id ? setRevertModal(true) : null
+
                                                                                             }}>
                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                 Revert
@@ -1223,6 +1259,8 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // fetchVerifyReport()
+                                                                                                        ele.verification_1 === user_id ? fetchVerifyReport() : null
+
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Verify
@@ -1243,6 +1281,8 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // fetchVerifyReport()
+                                                                                                        ele.admin_1 === user_id ? fetchVerifyReport() : null
+
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Verify
@@ -1263,6 +1303,8 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // fetchVerifyReport()
+                                                                                                        ele.admin_2 === user_id ? fetchVerifyReport() : null
+
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Verify
@@ -1272,7 +1314,7 @@ const ViewReport = () => {
                                                                                         </View>
 
                                                                                         <View style={{
-                                                                                            left: 90
+                                                                                            left: 60
                                                                                         }}>
                                                                                             <View style={{
                                                                                                 flex: 1,
@@ -1311,6 +1353,8 @@ const ViewReport = () => {
                                                                                                 }}
                                                                                                 onPress={() => {
                                                                                                     // setRevertModal(true)
+                                                                                                    ele.admin_1 === user_id ? setRevertModal(true) : null
+
                                                                                                 }}>
                                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                     Revert
@@ -1326,6 +1370,8 @@ const ViewReport = () => {
                                                                                                 }}
                                                                                                 onPress={() => {
                                                                                                     //  setRevertModal(true)
+                                                                                                    ele.admin_2 === user_id ? setRevertModal(true) : null
+
                                                                                                 }}>
                                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                     Revert
@@ -1369,7 +1415,7 @@ const ViewReport = () => {
 
                                                                                             <View style={{
 
-                                                                                                left: 90,
+                                                                                                left: 60,
                                                                                             }}>
                                                                                                 <TouchableOpacity
                                                                                                     style={{
@@ -1380,6 +1426,8 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // setRevertModal(true)
+                                                                                                        ele.verification_1 === user_id ? setRevertModal(true) : null
+
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Revert
@@ -1418,6 +1466,8 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // setRevertModal(true)
+                                                                                                        ele.admin_2 === user_id ? setRevertModal(true) : null
+
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Revert
@@ -1470,6 +1520,8 @@ const ViewReport = () => {
                                                                                                         }}
                                                                                                         onPress={() => {
                                                                                                             // fetchVerifyReport()
+                                                                                                            ele.admin_1 === user_id ? fetchVerifyReport() : null
+
                                                                                                         }
                                                                                                         }>
                                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
@@ -1491,6 +1543,8 @@ const ViewReport = () => {
                                                                                                         }}
                                                                                                         onPress={() => {
                                                                                                             // fetchVerifyReport()
+                                                                                                            ele.admin_2 === user_id ? fetchVerifyReport() : null
+
                                                                                                         }}>
                                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                             Verify
@@ -1601,6 +1655,9 @@ const ViewReport = () => {
                                                                                                             }}
                                                                                                             onPress={() => {
                                                                                                                 // fetchVerifyReport()
+                                                                                                                ele.admin_2 === user_id ? fetchVerifyReport() : null
+
+
                                                                                                             }}>
                                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                                 Verify
@@ -1611,7 +1668,7 @@ const ViewReport = () => {
                                                                                                 <View>
                                                                                                     <View
                                                                                                         style={{
-                                                                                                            left: 40,
+                                                                                                            left: 25,
                                                                                                             position: 'absolute'
                                                                                                         }}>
                                                                                                         <TouchableOpacity
@@ -1623,6 +1680,8 @@ const ViewReport = () => {
                                                                                                             }}
                                                                                                             onPress={() => {
                                                                                                                 // setRevertModal(true)
+                                                                                                            ele.verification_1 === user_id ? setRevertModal(true) : null
+
                                                                                                             }}>
                                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                                 Revert
@@ -1638,6 +1697,8 @@ const ViewReport = () => {
                                                                                                             }}
                                                                                                             onPress={() => {
                                                                                                                 // setRevertModal(true)
+                                                                                                            ele.admin_1 === user_id ? setRevertModal(true) : null
+
                                                                                                             }}>
                                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                                 Revert
@@ -1652,7 +1713,7 @@ const ViewReport = () => {
                                                                                                                 alignItems: 'center',
                                                                                                                 backgroundColor: COLORS.transparent,
                                                                                                             }}
-                                                                                                            onPress={() => {
+                                                                                                            onPress={() => {                                                                                                                
                                                                                                                 // setRevertModal(true)
                                                                                                             }}>
                                                                                                             <Image
