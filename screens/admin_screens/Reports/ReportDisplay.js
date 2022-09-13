@@ -102,7 +102,9 @@ const ReportDisplay = () => {
 
   // fetch quantity report on click
   const fetchQuantity = async report_id => {
+    console.log(report_id);
     let response = await getQuantity(report_id);
+    console.log(response);
     if (response.status === 200) {
       setQuantity(response.data);
     }
