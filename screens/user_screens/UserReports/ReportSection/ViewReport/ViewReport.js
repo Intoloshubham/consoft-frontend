@@ -1,24 +1,32 @@
 import React, {useMemo, useState} from 'react';
 import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-  TextInput,
-  TouchableWithoutFeedback,
-  RefreshControl,
+
+    View,
+    Text,
+    FlatList,
+    Image,
+    ImageBackground,
+    TouchableOpacity,
+    StyleSheet,
+    Modal,
+    TextInput,
+    TouchableWithoutFeedback,
+    RefreshControl,
+
+    PermissionsAndroid
+
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
-import {getProjects} from '../../../../../controller/ProjectController';
-import {SIZES, FONTS, COLORS, icons, images} from '../../../../../constants';
+
+
+import { useNavigation } from '@react-navigation/native';
+import { getProjects } from '../../../../../controller/ProjectController'
+import { SIZES, FONTS, COLORS, icons, images } from '../../../../../constants'
+// import RNHTMLtoPDF from 'react-native-html-to-pdf';
+
 import {
   getManpower,
   getReport,
@@ -30,61 +38,71 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 
 const ViewReport = () => {
-  const userData = useSelector(state => state.user);
-  const user_id = userData._id;
-  const company_id = userData.company_id;
-  const navigation = useNavigation();
-  // projects
-  const [onSelect, setOnSelect] = React.useState(false);
-  const [openProject, setOpenProject] = React.useState(false);
-  const [projectValue, setProjectValue] = React.useState([]);
-  const [project, setProject] = React.useState([]);
-  const onProjectOpen = React.useCallback(() => {
-    setOnSelect(false);
-    fetchProject();
-  }, []);
 
-  function delay(timeout) {
-    return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
-  }
-  const [loading, setLoading] = React.useState(false);
-  const loadMore = React.useCallback(async () => {
-    setLoading(true);
+    const userData = useSelector(state => state.user);
+    const user_id = userData._id;
+    const company_id = userData.company_id;
+    const navigation = useNavigation();
+    // projects
+    const [onSelect, setOnSelect] = React.useState(false);
+    const [openProject, setOpenProject] = React.useState(false);
+    const [projectValue, setProjectValue] = React.useState([]);
+    const [project, setProject] = React.useState([]);
+    const onProjectOpen = React.useCallback(() => {
+        setOnSelect(false);
+        fetchProject();
+    }, []);
 
-    delay(2000).then(() => setLoading(false));
-  }, [loading]);
+    // const [filePath, setFilePath] = useState('');
 
-  const [trackId, setTrackId] = useState('');
+    // const isPermitted = async () => {
+    //     if (Platform.OS === 'android') {
+    //         try {
+    //             const granted = await PermissionsAndroid.request(
+    //                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //                 {
+    //                     title: 'External Storage Write Permission',
+    //                     message: 'App needs access to Storage data',
+    //                 },
+    //             );
 
-  const [report, setReport] = React.useState([]);
-  const [reportModal, setReportModal] = React.useState(false);
-  const [reportData, setReportData] = React.useState('');
+    //             return granted === PermissionsAndroid.RESULTS.GRANTED;
+    //         } catch (err) {
+    //             alert('Write permission err', err);
+    //             return false;
+    //         }
+    //     } else {
+    //         return true;
+    //     }
+    // };
 
-  //report
-  const [manpower, setManpower] = React.useState([]);
-  const [quantity, setQuantity] = React.useState([]);
 
-  //report path
-  const [reportPath, setReportPath] = React.useState([]);
+    // const createPDF = async () => {
+    //     if (await isPermitted()) {
+    //         let options = {
+    //             //Content to print
+    //             html:
+    //                 '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">${<Text></Text>}</p><p style="text-align: center;"><strong>Team About React</strong></p>',
+    //             //File Name
+    //             fileName: 'test',
+    //             //File directory
+    //             directory: '../Downloads',
+    //         };
 
-  // for report verify
-  const [projectId, setProjectId] = React.useState('');
-  const [reportId, setReportId] = React.useState('');
+    //         let file = await RNHTMLtoPDF.convert(options);
 
-  //modal
-  const [revertModal, setRevertModal] = React.useState(false);
-  const [revertMsg, setRevertMsg] = React.useState('');
-  let rep_resp;
-  // get projects
-  const fetchProject = async () => {
-    let response = await getProjects(company_id);
-    if (response.status === 200) {
-      let projectFromApi = response.data.map(ele => {
-        return {label: ele.project_name, value: ele._id};
-      });
-      setProject(projectFromApi);
+    //         console.log(file.filePath);
+
+    //         setFilePath(file.filePath);
+    //     }
+    // };
+
+
+
+    function delay(timeout) {
+        return new Promise(resolve => {
+            setTimeout(resolve, timeout);
+        });
     }
   };
 
@@ -400,39 +418,1278 @@ const ViewReport = () => {
             <Text style={{fontSize: 12, color: COLORS.darkGray}}>
               {item.report_date}
             </Text>
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={icons.time}
-              style={{height: 12, width: 12, right: 10}}
-            />
-            <Text style={{fontSize: 12, color: COLORS.darkGray}}>
-              {item.report_time}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-    return (
-      <FlatList
-        contentContainerStyle={{marginTop: 20}}
-        data={report}
-        keyExtractor={item => `${item._id}`}
-        renderItem={renderItem}
-        scrollEnabled={true}
-        nestedScrollEnabled={true}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => {
-          return (
-            <View
-              style={{
-                marginVertical: SIZES.base - 2,
-              }}></View>
-          );
-        }}
-      />
-    );
-  }
+
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        progressBackgroundColor="white"
+                        tintColor="red"
+                        refreshing={loading}
+                        onRefresh={loadMore}
+                    />
+                }
+                style={{
+                    flex: 1,
+                    height: 500
+                }}
+                contentContainerStyle={{ flexGrow: 1, height: 200 }}
+            >
+                {reportPath ? reportPath.map((ele, idx) => {
+                    return (
+                        <View style={{
+                        }}
+                            key={idx}
+                        >
+                            {
+                                (
+                                    <View style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        position: 'relative',
+                                        // backgroundColor: 'dodgerblue',
+                                        // top: 20,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0
+                                    }}>
+                                        <View style={{
+                                            flex: 1,
+                                            flexDirection: 'row',
+                                            position: 'absolute',
+                                            left: 0,
+                                            top: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            flexWrap: 'wrap'
+
+                                        }}>
+                                            <View style={{
+                                                // backgroundColor: 'red',
+                                                position: 'absolute',
+                                                left: 0,
+                                                width: SIZES.width * 0.17
+
+                                            }}>
+                                                <Text>Verifier</Text>
+                                            </View>
+                                            <View style={{
+                                                // backgroundColor: 'dodgerblue',
+                                                position: 'absolute',
+                                                left: 70,
+                                                width: SIZES.width * 0.3
+                                            }}>
+                                                <Text>Verifier Name</Text>
+                                            </View>
+                                            <View style={{
+                                                // backgroundColor: 'green',
+                                                position: 'absolute',
+                                                left: 185,
+                                                width: SIZES.width * 0.3
+                                            }}>
+                                                <Text>Verify Status</Text>
+                                            </View>
+                                            <View style={{
+                                                // backgroundColor: 'yellow',
+                                                position: 'absolute',
+                                                left: 275,
+                                                width: SIZES.width * 0.3
+                                            }}>
+                                                <Text>Revtd. Status</Text>
+                                            </View>
+                                            <View style={{
+                                                // backgroundColor: 'yellow',
+                                                position: 'absolute',
+                                                top: 110,
+                                                left: 0,
+                                                width: SIZES.width * 0.35
+                                            }}>
+                                                <Text>Reverted-Message</Text>
+                                            </View>
+                                        </View>
+                                        <View style={{
+                                            flex: 1,
+                                            flexDirection: 'column',
+                                            // alignContent:'space-between',
+                                            // justifyContent: 'space-between',
+                                            // position: 'absolute',
+                                            // left: 0,
+                                            // bottom: 0,
+                                            marginTop: 25
+                                        }}>
+                                            <View
+                                                style={{
+                                                    position: 'absolute',
+                                                    left: 1,
+                                                    width: SIZES.width * 0.48,
+                                                    // backgroundColor: 'yellow'
+                                                }}
+                                            >
+                                                <Text
+                                                    numberOfLines={1}
+                                                    style={{
+                                                        ...FONTS.h3,
+                                                        textTransform: 'capitalize',
+                                                        color: COLORS.black,
+                                                    }}>
+                                                    Verifier 1: {ele.verification_1_name}
+                                                </Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    position: 'absolute',
+                                                    left: 1,
+                                                    top: 25,
+                                                    width: SIZES.width * 0.5,
+                                                    // backgroundColor: 'yellow'
+                                                }}
+                                            >
+                                                <Text
+                                                    numberOfLines={1}
+                                                    style={{
+                                                        ...FONTS.h3,
+                                                        textTransform: 'capitalize',
+                                                        color: COLORS.black,
+                                                    }}>
+                                                    Admin 1:  {ele.admin_1_name}
+                                                </Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    position: 'absolute',
+                                                    left: 1,
+                                                    top: 49,
+                                                    width: SIZES.width * 0.5,
+                                                    // backgroundColor: 'yellow'
+                                                }}
+                                            >
+                                                <Text
+                                                    numberOfLines={1}
+                                                    style={{
+                                                        ...FONTS.h3,
+                                                        textTransform: 'capitalize',
+                                                        color: COLORS.black,
+                                                    }}>
+                                                    Admin 2:  {ele.admin_2_name}
+                                                </Text>
+                                            </View>
+                                        </View>
+                                        {
+                                            (
+                                                <View
+                                                    style={{
+                                                        flex: 1,
+                                                        flexDirection: 'column',
+                                                        position: 'absolute',
+                                                        left: 190,
+                                                        marginTop: 25
+                                                    }}
+                                                >
+                                                    {
+                                                        reportData.verify_1_status === false && reportData.verify_1_revert === false &&
+                                                            reportData.admin_1_status === false && reportData.admin_1_revert === false &&
+                                                            reportData.admin_2_status === false && reportData.admin_2_revert === false
+                                                            ? (
+                                                                <View
+                                                                    style={{
+                                                                        flexDirection: 'row',
+                                                                        alignContent: 'space-between',
+                                                                        position: 'absolute'
+                                                                    }}>
+
+                                                                    <View style={{
+                                                                        left: 70
+                                                                    }}>
+
+                                                                        <TouchableOpacity
+                                                                            style={{
+                                                                                left: 15,
+                                                                                paddingHorizontal: 5,
+                                                                                paddingVertical: 1,
+                                                                                backgroundColor: COLORS.rose_600,
+                                                                            }}
+                                                                            onPress={() => { ele.verification_1 === user_id ? setRevertModal(true) : null }}>
+                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                Revert
+                                                                            </Text>
+                                                                        </TouchableOpacity>
+
+                                                                        <TouchableOpacity
+                                                                            style={{
+                                                                                left: 15,
+                                                                                top: 1,
+                                                                                paddingHorizontal: 5,
+                                                                                paddingVertical: 1,
+                                                                                backgroundColor: COLORS.rose_600,
+                                                                            }}
+                                                                            onPress={() => {
+                                                                                ele.admin_1 === user_id ? setRevertModal(true) : null
+                                                                            }}>
+                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                Revert
+                                                                            </Text>
+                                                                        </TouchableOpacity>
+                                                                        <TouchableOpacity
+                                                                            style={{
+                                                                                left: 15,
+                                                                                top: 2,
+                                                                                paddingHorizontal: 5,
+                                                                                paddingVertical: 1,
+                                                                                backgroundColor: COLORS.rose_600,
+                                                                            }}
+                                                                            onPress={() => {
+                                                                                ele.admin_2 === user_id ? setRevertModal(true) : null
+                                                                            }}>
+                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                Revert
+                                                                            </Text>
+                                                                        </TouchableOpacity>
+
+                                                                    </View>
+                                                                    <View style={{
+                                                                        position: 'absolute',
+                                                                        left: 0,
+                                                                    }}>
+                                                                        <View
+                                                                            style={{
+                                                                                left: 20,
+
+                                                                                flexDirection: 'row',
+                                                                            }}>
+                                                                            <TouchableOpacity
+                                                                                style={{
+                                                                                    paddingHorizontal: 5,
+                                                                                    paddingVertical: 1,
+                                                                                    backgroundColor: COLORS.success_600,
+                                                                                }}
+                                                                                onPress={() => {
+                                                                                    ele.verification_1 === user_id ? fetchVerifyReport() : null
+                                                                                }}>
+                                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                    Verify
+                                                                                </Text>
+                                                                            </TouchableOpacity>
+                                                                        </View>
+                                                                        <View
+                                                                            style={{
+                                                                                left: 20,
+                                                                                top: 1,
+                                                                                flexDirection: 'row',
+                                                                            }}>
+                                                                            <TouchableOpacity
+                                                                                style={{
+                                                                                    paddingHorizontal: 5,
+                                                                                    paddingVertical: 1,
+                                                                                    backgroundColor: COLORS.success_600,
+                                                                                }}
+                                                                                onPress={() => {
+                                                                                    ele.admin_1 === user_id ? fetchVerifyReport() : null
+                                                                                }
+                                                                                }>
+                                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                    Verify
+                                                                                </Text>
+                                                                            </TouchableOpacity>
+                                                                        </View>
+                                                                        <View
+                                                                            style={{
+                                                                                left: 20,
+                                                                                top: 2,
+                                                                                flexDirection: 'row',
+                                                                            }}>
+                                                                            <TouchableOpacity
+                                                                                style={{
+                                                                                    paddingHorizontal: 5,
+                                                                                    paddingVertical: 1,
+                                                                                    backgroundColor: COLORS.success_600,
+                                                                                }}
+                                                                                onPress={() => {
+                                                                                    ele.admin_2 === user_id ? fetchVerifyReport() : null
+                                                                                }}>
+                                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                    Verify
+                                                                                </Text>
+                                                                            </TouchableOpacity>
+                                                                        </View>
+                                                                    </View>
+                                                                </View>
+                                                            ) :
+                                                            reportData.verify_1_status === true && reportData.verify_1_revert === false &&
+                                                                reportData.admin_1_status === false && reportData.admin_1_revert === false &&
+                                                                reportData.admin_2_status === false && reportData.admin_2_revert === false
+                                                                ? (
+                                                                    <View
+                                                                        style={{
+                                                                            flexDirection: 'row',
+                                                                            alignContent: 'space-between',
+                                                                            position: 'absolute'
+                                                                        }}>
+                                                                        <View>
+                                                                            <View
+                                                                                style={{
+                                                                                    left: 20,
+                                                                                    flexDirection: 'row',
+                                                                                }}>
+                                                                                <TouchableOpacity
+                                                                                    style={{
+                                                                                        paddingHorizontal: 16,
+                                                                                        paddingVertical: 1,
+                                                                                        alignItems: 'center',
+                                                                                        backgroundColor: COLORS.transparent,
+                                                                                    }}
+                                                                                    onPress={() => {
+                                                                                        // ele.verification_1 === user_id ? fetchVerifyReport() : null
+                                                                                    }}>
+                                                                                    <Image
+                                                                                        source={icons.verify}
+                                                                                        style={{
+                                                                                            // left: 8,
+                                                                                            width: 16,
+                                                                                            height: 16,
+                                                                                            tintColor: 'green',
+                                                                                        }}
+                                                                                    />
+                                                                                </TouchableOpacity>
+                                                                            </View>
+                                                                            <View
+                                                                                style={{
+                                                                                    left: 20,
+                                                                                    flexDirection: 'row',
+                                                                                }}>
+                                                                                <TouchableOpacity
+                                                                                    style={{
+                                                                                        paddingHorizontal: 5,
+                                                                                        paddingVertical: 1,
+                                                                                        top: 3,
+                                                                                        backgroundColor: COLORS.success_600,
+                                                                                    }}
+                                                                                    onPress={() => {
+                                                                                        ele.admin_1 === user_id ? fetchVerifyReport() : null
+                                                                                    }}>
+                                                                                    <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                        Verify
+                                                                                    </Text>
+                                                                                </TouchableOpacity>
+                                                                            </View>
+                                                                            <View
+                                                                                style={{
+                                                                                    left: 20,
+                                                                                    flexDirection: 'row',
+                                                                                }}>
+                                                                                <TouchableOpacity
+                                                                                    style={{
+                                                                                        paddingHorizontal: 5,
+                                                                                        top: 5,
+                                                                                        paddingVertical: 1,
+                                                                                        backgroundColor: COLORS.success_600,
+                                                                                    }}
+                                                                                    onPress={() => {
+                                                                                        ele.admin_2 === user_id ? fetchVerifyReport() : null
+
+                                                                                    }}>
+                                                                                    <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                        Verify
+                                                                                    </Text>
+                                                                                </TouchableOpacity>
+                                                                            </View>
+                                                                        </View>
+                                                                        <View
+                                                                            style={{
+                                                                                left: 25
+                                                                            }}>
+                                                                            <TouchableOpacity
+                                                                                style={{
+                                                                                    left: 15,
+                                                                                    paddingHorizontal: 5,
+                                                                                    paddingVertical: 1,
+                                                                                    backgroundColor: COLORS.rose_600,
+                                                                                }}
+                                                                                onPress={() => {
+                                                                                    // setRevertModal(true)
+                                                                                    // ele.verification_1 === user_id ? setRevertModal(true) : null
+
+                                                                                }}>
+                                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                    Revert
+                                                                                </Text>
+                                                                            </TouchableOpacity>
+                                                                            <TouchableOpacity
+                                                                                style={{
+                                                                                    left: 15,
+                                                                                    top: 1,
+                                                                                    paddingHorizontal: 5,
+                                                                                    paddingVertical: 1,
+                                                                                    backgroundColor: COLORS.rose_600,
+                                                                                }}
+                                                                                onPress={() => {
+                                                                                    // setRevertModal(true)
+                                                                                    ele.admin_1 === user_id ? setRevertModal(true) : null
+
+                                                                                }}>
+                                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                    Revert
+                                                                                </Text>
+                                                                            </TouchableOpacity>
+                                                                            <TouchableOpacity
+                                                                                style={{
+                                                                                    left: 15,
+                                                                                    top: 2,
+                                                                                    paddingHorizontal: 5,
+                                                                                    paddingVertical: 1,
+                                                                                    backgroundColor: COLORS.rose_600,
+                                                                                }}
+                                                                                onPress={() => {
+                                                                                    // setRevertModal(true)
+                                                                                    ele.admin_2 === user_id ? setRevertModal(true) : null
+
+                                                                                }}>
+                                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                    Revert
+                                                                                </Text>
+                                                                            </TouchableOpacity>
+                                                                        </View>
+                                                                    </View>
+                                                                ) :
+                                                                reportData.verify_1_status === true && reportData.verify_1_revert === false &&
+                                                                    reportData.admin_1_status === true && reportData.admin_1_revert === false &&
+                                                                    reportData.admin_2_status === false && reportData.admin_2_revert === false
+                                                                    ? (
+                                                                        <View
+                                                                            style={{
+                                                                                flexDirection: 'row',
+                                                                                alignContent: 'space-between',
+                                                                                position: 'absolute'
+                                                                            }}
+                                                                        >
+                                                                            <View>
+                                                                                <View
+                                                                                    style={{
+                                                                                        left: 20,
+                                                                                        top: 3,
+                                                                                        flexDirection: 'row',
+                                                                                    }}>
+                                                                                    <TouchableOpacity
+                                                                                        style={{
+                                                                                            paddingHorizontal: 16,
+                                                                                            paddingVertical: 1,
+                                                                                            alignItems: 'center',
+                                                                                            backgroundColor: COLORS.transparent,
+                                                                                        }}
+                                                                                        onPress={() => {
+                                                                                            // fetchVerifyReport()
+                                                                                            // ele.verification_1 === user_id ? fetchVerifyReport() : null
+
+                                                                                        }}>
+                                                                                        <Image
+                                                                                            source={icons.verify}
+                                                                                            style={{
+                                                                                                // left: 8,
+                                                                                                width: 16,
+                                                                                                height: 16,
+                                                                                                tintColor: 'green',
+                                                                                            }}
+                                                                                        />
+                                                                                    </TouchableOpacity>
+                                                                                </View>
+                                                                                <View
+                                                                                    style={{
+                                                                                        left: 20,
+                                                                                        top: 8,
+                                                                                        flexDirection: 'row',
+                                                                                    }}>
+                                                                                    <TouchableOpacity
+                                                                                        style={{
+                                                                                            paddingHorizontal: 16,
+                                                                                            paddingVertical: 1,
+                                                                                            alignItems: 'center',
+                                                                                            backgroundColor: COLORS.transparent,
+                                                                                        }}
+                                                                                        onPress={() => {
+                                                                                            // fetchVerifyReport()
+                                                                                            // ele.admin_1 === user_id ? fetchVerifyReport() : null
+
+                                                                                        }}>
+                                                                                        <Image
+                                                                                            source={icons.verify}
+                                                                                            style={{
+                                                                                                // left: 8,
+                                                                                                width: 16,
+                                                                                                height: 16,
+                                                                                                tintColor: 'green',
+                                                                                            }}
+                                                                                        />
+                                                                                    </TouchableOpacity>
+                                                                                </View>
+                                                                                <View
+                                                                                    style={{
+                                                                                        left: 20,
+                                                                                        top: 13,
+                                                                                        flexDirection: 'row',
+                                                                                    }}>
+                                                                                    <TouchableOpacity
+                                                                                        style={{
+                                                                                            paddingHorizontal: 5,
+                                                                                            paddingVertical: 1,
+                                                                                            backgroundColor: COLORS.success_600,
+                                                                                        }}
+                                                                                        onPress={() => {
+                                                                                            // fetchVerifyReport()
+                                                                                            ele.admin_2 === user_id ? fetchVerifyReport() : null
+
+                                                                                        }}>
+                                                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                            Verify
+                                                                                        </Text>
+                                                                                    </TouchableOpacity>
+                                                                                </View>
+                                                                            </View>
+                                                                            <View>
+                                                                                <View
+                                                                                    style={{
+                                                                                        left: 30
+                                                                                    }}>
+                                                                                    <TouchableOpacity
+                                                                                        style={{
+                                                                                            left: 15,
+                                                                                            paddingHorizontal: 5,
+                                                                                            paddingVertical: 1,
+                                                                                            backgroundColor: COLORS.rose_600,
+                                                                                        }}
+                                                                                        onPress={() => {
+                                                                                            // setRevertModal(true)
+                                                                                            // ele.verification_1 === user_id ? setRevertModal(true) : null
+
+                                                                                        }}>
+                                                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                            Revert
+                                                                                        </Text>
+                                                                                    </TouchableOpacity>
+                                                                                    <TouchableOpacity
+                                                                                        style={{
+                                                                                            left: 15,
+                                                                                            top: 1,
+                                                                                            paddingHorizontal: 5,
+                                                                                            paddingVertical: 1,
+                                                                                            backgroundColor: COLORS.rose_600,
+                                                                                        }}
+                                                                                        onPress={() => {
+                                                                                            // setRevertModal(true)
+                                                                                            // ele.admin_1 === user_id ? setRevertModal(true) : null
+
+                                                                                        }}>
+                                                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                            Revert
+                                                                                        </Text>
+                                                                                    </TouchableOpacity>
+                                                                                    <TouchableOpacity
+                                                                                        style={{
+                                                                                            left: 15,
+                                                                                            top: 2,
+                                                                                            paddingHorizontal: 5,
+                                                                                            paddingVertical: 1,
+                                                                                            backgroundColor: COLORS.rose_600,
+                                                                                        }}
+                                                                                        onPress={() => {
+                                                                                            // setRevertModal(true)
+                                                                                            ele.admin_2 === user_id ? setRevertModal(true) : null
+
+                                                                                        }}>
+                                                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                            Revert
+                                                                                        </Text>
+                                                                                    </TouchableOpacity>
+                                                                                </View>
+                                                                            </View>
+                                                                        </View>
+                                                                    )
+                                                                    : reportData.verify_1_status === true && reportData.verify_1_revert === false &&
+                                                                        reportData.admin_1_status === true && reportData.admin_1_revert === false &&
+                                                                        reportData.admin_2_status === true && reportData.admin_2_revert === false
+                                                                        ? (
+                                                                            <View style={{
+                                                                                flexDirection: 'row',
+                                                                                alignContent: 'space-between',
+                                                                                position: 'absolute'
+                                                                            }}>
+                                                                                <View>
+                                                                                    <View
+                                                                                        style={{
+                                                                                            left: 20,
+                                                                                            top: 3,
+                                                                                            flexDirection: 'row',
+                                                                                        }}>
+                                                                                        <TouchableOpacity
+                                                                                            style={{
+                                                                                                paddingHorizontal: 16,
+                                                                                                paddingVertical: 1,
+                                                                                                alignItems: 'center',
+                                                                                                backgroundColor: COLORS.transparent,
+                                                                                            }}
+                                                                                            onPress={() => {
+                                                                                                // fetchVerifyReport()
+                                                                                                // ele.verification_1 === user_id ? fetchVerifyReport() : null
+
+                                                                                            }}>
+                                                                                            <Image
+                                                                                                source={icons.verify}
+                                                                                                style={{
+                                                                                                    // left: 8,
+                                                                                                    width: 16,
+                                                                                                    height: 16,
+                                                                                                    tintColor: 'green',
+                                                                                                }}
+                                                                                            />
+                                                                                        </TouchableOpacity>
+                                                                                    </View>
+                                                                                    <View
+                                                                                        style={{
+                                                                                            left: 20,
+                                                                                            top: 8,
+                                                                                            flexDirection: 'row',
+                                                                                        }}>
+                                                                                        <TouchableOpacity
+                                                                                            style={{
+                                                                                                paddingHorizontal: 16,
+                                                                                                paddingVertical: 1,
+                                                                                                alignItems: 'center',
+                                                                                                backgroundColor: COLORS.transparent,
+                                                                                            }}
+                                                                                            onPress={() => {
+                                                                                                // fetchVerifyReport()
+                                                                                                // ele.admin_1 === user_id ? fetchVerifyReport() : null
+
+                                                                                            }}>
+                                                                                            <Image
+                                                                                                source={icons.verify}
+                                                                                                style={{
+                                                                                                    // left: 8,
+                                                                                                    width: 16,
+                                                                                                    height: 16,
+                                                                                                    tintColor: 'green',
+                                                                                                }}
+                                                                                            />
+                                                                                        </TouchableOpacity>
+                                                                                    </View>
+                                                                                    <View
+                                                                                        style={{
+                                                                                            left: 20,
+                                                                                            top: 16,
+                                                                                            flexDirection: 'row',
+                                                                                        }}>
+                                                                                        <TouchableOpacity
+                                                                                            style={{
+                                                                                                paddingHorizontal: 16,
+                                                                                                paddingVertical: 1,
+                                                                                                alignItems: 'center',
+                                                                                                backgroundColor: COLORS.transparent,
+                                                                                            }}
+                                                                                            onPress={() => {
+                                                                                                // fetchVerifyReport()
+                                                                                                // ele.admin_2 === user_id ? fetchVerifyReport() : null
+
+                                                                                            }}>
+                                                                                            <Image
+                                                                                                source={icons.verify}
+                                                                                                style={{
+                                                                                                    // left: 8,
+                                                                                                    width: 16,
+                                                                                                    height: 16,
+                                                                                                    tintColor: 'green',
+                                                                                                }}
+                                                                                            />
+                                                                                        </TouchableOpacity>
+                                                                                    </View>
+                                                                                </View>
+                                                                                <View>
+                                                                                    <View
+                                                                                        style={{
+                                                                                            left: 30
+                                                                                        }}>
+                                                                                        <TouchableOpacity
+                                                                                            style={{
+                                                                                                left: 15,
+                                                                                                paddingHorizontal: 5,
+                                                                                                paddingVertical: 1,
+                                                                                                backgroundColor: COLORS.rose_600,
+                                                                                            }}
+                                                                                            onPress={() => {
+                                                                                                // setRevertModal(true)
+                                                                                                // ele.verification_1 === user_id ? setRevertModal(true) : null
+
+                                                                                            }}>
+                                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                Revert
+                                                                                            </Text>
+                                                                                        </TouchableOpacity>
+                                                                                        <TouchableOpacity
+                                                                                            style={{
+                                                                                                left: 15,
+                                                                                                top: 1,
+                                                                                                paddingHorizontal: 5,
+                                                                                                paddingVertical: 1,
+                                                                                                backgroundColor: COLORS.rose_600,
+                                                                                            }}
+                                                                                            onPress={() => {
+                                                                                                // setRevertModal(true)
+                                                                                                // ele.admin_1 === user_id ? setRevertModal(true) : null
+
+                                                                                            }}>
+                                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                Revert
+                                                                                            </Text>
+                                                                                        </TouchableOpacity>
+                                                                                        <TouchableOpacity
+                                                                                            style={{
+                                                                                                left: 15,
+                                                                                                top: 2,
+                                                                                                paddingHorizontal: 5,
+                                                                                                paddingVertical: 1,
+                                                                                                backgroundColor: COLORS.rose_600,
+                                                                                            }}
+                                                                                            onPress={() => {
+                                                                                                // setRevertModal(true)
+                                                                                                // ele.admin_2 === user_id ? setRevertModal(true) : null
+
+                                                                                            }}>
+                                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                Revert
+                                                                                            </Text>
+                                                                                        </TouchableOpacity>
+                                                                                    </View>
+                                                                                </View>
+                                                                            </View>
+                                                                        )
+                                                                        : reportData.verify_1_revert === true &&
+                                                                            reportData.admin_1_revert === false &&
+                                                                            reportData.admin_2_revert === false
+                                                                            ? (
+                                                                                <View
+                                                                                    style={{
+                                                                                        flex: 1,
+                                                                                        position: 'absolute'
+
+                                                                                    }}
+                                                                                >
+                                                                                    <View style={{
+                                                                                        flexDirection: 'row',
+                                                                                        alignContent: 'space-between',
+
+                                                                                    }}>
+                                                                                        <View style={{
+                                                                                            position: 'absolute',
+                                                                                            left: 0,
+                                                                                        }}>
+                                                                                            <View
+                                                                                                style={{
+                                                                                                    left: 20,
+                                                                                                    flexDirection: 'row',
+                                                                                                }}>
+                                                                                                <TouchableOpacity
+                                                                                                    style={{
+                                                                                                        paddingHorizontal: 5,
+                                                                                                        paddingVertical: 1,
+                                                                                                        backgroundColor: COLORS.success_600,
+                                                                                                    }}
+                                                                                                    onPress={() => {
+                                                                                                        // fetchVerifyReport()
+                                                                                                        // ele.verification_1 === user_id ? fetchVerifyReport() : null
+
+                                                                                                    }}>
+                                                                                                    <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                        Verify
+                                                                                                    </Text>
+                                                                                                </TouchableOpacity>
+                                                                                            </View>
+                                                                                            <View
+                                                                                                style={{
+                                                                                                    left: 20,
+                                                                                                    top: 1,
+                                                                                                    flexDirection: 'row',
+                                                                                                }}>
+                                                                                                <TouchableOpacity
+                                                                                                    style={{
+                                                                                                        paddingHorizontal: 5,
+                                                                                                        paddingVertical: 1,
+                                                                                                        backgroundColor: COLORS.success_600,
+                                                                                                    }}
+                                                                                                    onPress={() => {
+                                                                                                        // fetchVerifyReport()
+                                                                                                        ele.admin_1 === user_id ? fetchVerifyReport() : null
+
+                                                                                                    }}>
+                                                                                                    <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                        Verify
+                                                                                                    </Text>
+                                                                                                </TouchableOpacity>
+                                                                                            </View>
+                                                                                            <View
+                                                                                                style={{
+                                                                                                    left: 20,
+                                                                                                    top: 2,
+                                                                                                    flexDirection: 'row',
+                                                                                                }}>
+                                                                                                <TouchableOpacity
+                                                                                                    style={{
+                                                                                                        paddingHorizontal: 5,
+                                                                                                        paddingVertical: 1,
+                                                                                                        backgroundColor: COLORS.success_600,
+                                                                                                    }}
+                                                                                                    onPress={() => {
+                                                                                                        // fetchVerifyReport()
+                                                                                                        ele.admin_2 === user_id ? fetchVerifyReport() : null
+
+                                                                                                    }}>
+                                                                                                    <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                        Verify
+                                                                                                    </Text>
+                                                                                                </TouchableOpacity>
+                                                                                            </View>
+                                                                                        </View>
+
+                                                                                        <View style={{
+                                                                                            left: 60
+                                                                                        }}>
+                                                                                            <View style={{
+                                                                                                flex: 1,
+                                                                                                flexDirection: "row",
+                                                                                                top: 5,
+                                                                                                flexWrap: 'wrap',
+                                                                                                alignContent: "space-around",
+
+                                                                                                // top: 12
+                                                                                            }}>
+                                                                                                <View
+                                                                                                    style={{
+                                                                                                        left: 15,
+                                                                                                        flexDirection: 'row',
+                                                                                                        alignItems: 'center',
+                                                                                                        paddingHorizontal: 20
+
+                                                                                                    }}>
+                                                                                                    <Image
+                                                                                                        source={icons.verify}
+                                                                                                        style={{
+                                                                                                            width: 16,
+                                                                                                            height: 16,
+                                                                                                            tintColor: 'red',
+                                                                                                        }}
+                                                                                                    />
+                                                                                                </View>
+                                                                                            </View>
+                                                                                            <TouchableOpacity
+                                                                                                style={{
+                                                                                                    left: 15,
+                                                                                                    paddingHorizontal: 5,
+                                                                                                    paddingVertical: 1,
+                                                                                                    top: 10,
+                                                                                                    backgroundColor: COLORS.rose_600,
+                                                                                                }}
+                                                                                                onPress={() => {
+                                                                                                    // setRevertModal(true)
+                                                                                                    ele.admin_1 === user_id ? setRevertModal(true) : null
+
+                                                                                                }}>
+                                                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                    Revert
+                                                                                                </Text>
+                                                                                            </TouchableOpacity>
+                                                                                            <TouchableOpacity
+                                                                                                style={{
+                                                                                                    left: 15,
+                                                                                                    top: 12,
+                                                                                                    paddingHorizontal: 5,
+                                                                                                    paddingVertical: 1,
+                                                                                                    backgroundColor: COLORS.rose_600,
+                                                                                                }}
+                                                                                                onPress={() => {
+                                                                                                    //  setRevertModal(true)
+                                                                                                    ele.admin_2 === user_id ? setRevertModal(true) : null
+
+                                                                                                }}>
+                                                                                                <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                    Revert
+                                                                                                </Text>
+                                                                                            </TouchableOpacity>
+                                                                                        </View>
+                                                                                    </View>
+                                                                                    <View
+                                                                                        style={{
+                                                                                            // backgroundColor: 'dodgerblue',
+                                                                                            width: SIZES.width * 0.5,
+                                                                                            top: 45,
+                                                                                            right: 190,
+                                                                                            padding: 2
+                                                                                        }}
+                                                                                    >
+                                                                                        <Text
+                                                                                            numberOfLines={1}
+                                                                                            style={{
+                                                                                                ...FONTS.h5,
+                                                                                                textTransform: 'capitalize',
+                                                                                                color: COLORS.black,
+                                                                                            }}>
+                                                                                            {reportData.verify_1_revert_msg}
+                                                                                        </Text>
+                                                                                    </View>
+                                                                                </View>
+                                                                            )
+                                                                            :
+                                                                            reportData.verify_1_status === true &&
+                                                                                reportData.admin_1_revert === true &&
+                                                                                reportData.admin_2_revert === false
+                                                                                ? (
+                                                                                    <>
+                                                                                        <View
+                                                                                            style={{
+                                                                                                flexDirection: 'row',
+                                                                                                alignContent: 'space-between',
+                                                                                                position: 'absolute'
+                                                                                            }}>
+
+                                                                                            <View style={{
+
+                                                                                                left: 60,
+                                                                                            }}>
+                                                                                                <TouchableOpacity
+                                                                                                    style={{
+                                                                                                        left: 15,
+                                                                                                        paddingHorizontal: 5,
+                                                                                                        paddingVertical: 1,
+                                                                                                        backgroundColor: COLORS.rose_600,
+                                                                                                    }}
+                                                                                                    onPress={() => {
+                                                                                                        // setRevertModal(true)
+                                                                                                        // ele.verification_1 === user_id ? setRevertModal(true) : null
+
+                                                                                                    }}>
+                                                                                                    <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                        Revert
+                                                                                                    </Text>
+                                                                                                </TouchableOpacity>
+
+                                                                                                <TouchableOpacity
+                                                                                                    style={{
+                                                                                                        left: 15,
+                                                                                                        top: 5,
+                                                                                                        paddingHorizontal: 5,
+                                                                                                        paddingVertical: 1,
+                                                                                                        alignItems: 'center',
+                                                                                                        backgroundColor: COLORS.transparent,
+                                                                                                    }}
+                                                                                                    onPress={() => {
+                                                                                                        // fetchVerifyReport()
+                                                                                                    }}>
+                                                                                                    <Image
+                                                                                                        source={icons.verify}
+                                                                                                        style={{
+                                                                                                            // left: 8,
+                                                                                                            width: 16,
+                                                                                                            height: 16,
+                                                                                                            tintColor: 'red',
+                                                                                                        }}
+                                                                                                    />
+                                                                                                </TouchableOpacity>
+                                                                                                <TouchableOpacity
+                                                                                                    style={{
+                                                                                                        left: 15,
+                                                                                                        top: 8,
+                                                                                                        paddingHorizontal: 5,
+                                                                                                        paddingVertical: 1,
+                                                                                                        backgroundColor: COLORS.rose_600,
+                                                                                                    }}
+                                                                                                    onPress={() => {
+                                                                                                        // setRevertModal(true)
+                                                                                                        // ele.admin_2 === user_id ? setRevertModal(true) : null
+
+                                                                                                    }}>
+                                                                                                    <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                        Revert
+                                                                                                    </Text>
+                                                                                                </TouchableOpacity>
+                                                                                            </View>
+                                                                                            <View style={{
+                                                                                                position: 'absolute',
+                                                                                                left: 0,
+                                                                                            }}>
+                                                                                                <View
+                                                                                                    style={{
+                                                                                                        left: 20,
+                                                                                                        top: 3,
+                                                                                                        flexDirection: 'row',
+                                                                                                    }}>
+                                                                                                    <TouchableOpacity
+                                                                                                        style={{
+                                                                                                            paddingHorizontal: 16,
+                                                                                                            paddingVertical: 1,
+                                                                                                            alignItems: 'center',
+                                                                                                            backgroundColor: COLORS.transparent,
+                                                                                                        }}
+                                                                                                        onPress={() => {
+                                                                                                            // fetchVerifyReport()
+                                                                                                        }}>
+                                                                                                        <Image
+                                                                                                            source={icons.verify}
+                                                                                                            style={{
+                                                                                                                // left: 8,
+
+                                                                                                                width: 16,
+                                                                                                                height: 16,
+                                                                                                                tintColor: 'green',
+                                                                                                            }}
+                                                                                                        />
+                                                                                                    </TouchableOpacity>
+                                                                                                </View>
+                                                                                                <View
+                                                                                                    style={{
+                                                                                                        left: 20,
+                                                                                                        top: 5,
+                                                                                                        flexDirection: 'row',
+                                                                                                    }}>
+                                                                                                    <TouchableOpacity
+                                                                                                        style={{
+                                                                                                            paddingHorizontal: 5,
+                                                                                                            paddingVertical: 1,
+                                                                                                            backgroundColor: COLORS.success_600,
+                                                                                                        }}
+                                                                                                        onPress={() => {
+                                                                                                            // fetchVerifyReport()
+                                                                                                            // ele.admin_1 === user_id ? fetchVerifyReport() : null
+
+                                                                                                        }
+                                                                                                        }>
+                                                                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                            Verify
+                                                                                                        </Text>
+                                                                                                    </TouchableOpacity>
+                                                                                                </View>
+                                                                                                <View
+                                                                                                    style={{
+                                                                                                        left: 20,
+                                                                                                        top: 6,
+                                                                                                        flexDirection: 'row',
+                                                                                                    }}>
+                                                                                                    <TouchableOpacity
+                                                                                                        style={{
+                                                                                                            paddingHorizontal: 5,
+                                                                                                            paddingVertical: 1,
+                                                                                                            backgroundColor: COLORS.success_600,
+                                                                                                        }}
+                                                                                                        onPress={() => {
+                                                                                                            // fetchVerifyReport()
+                                                                                                            // ele.admin_2 === user_id ? fetchVerifyReport() : null
+
+                                                                                                        }}>
+                                                                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                            Verify
+                                                                                                        </Text>
+                                                                                                    </TouchableOpacity>
+                                                                                                </View>
+                                                                                                <View
+                                                                                                    style={{
+                                                                                                        // backgroundColor: 'dodgerblue',
+                                                                                                        width: SIZES.width * 0.5,
+                                                                                                        top: 40,
+                                                                                                        right: 191,
+                                                                                                        padding: 2
+                                                                                                    }}
+                                                                                                >
+                                                                                                    <Text
+                                                                                                        numberOfLines={1}
+                                                                                                        style={{
+                                                                                                            ...FONTS.h5,
+                                                                                                            textTransform: 'capitalize',
+                                                                                                            color: COLORS.black,
+                                                                                                        }}>
+                                                                                                        {reportData.admin_1_revert_msg}
+                                                                                                    </Text>
+                                                                                                </View>
+                                                                                            </View>
+                                                                                        </View>
+                                                                                    </>
+
+                                                                                )
+                                                                                :
+                                                                                reportData.admin_1_status === true &&
+                                                                                    reportData.admin_2_revert === true
+                                                                                    ? (
+                                                                                        <>
+                                                                                            <View style={{
+                                                                                                flexDirection: 'row',
+                                                                                                alignContent: 'space-between',
+                                                                                                position: 'absolute'
+                                                                                            }}>
+                                                                                                <View>
+                                                                                                    <View
+                                                                                                        style={{
+                                                                                                            left: 20,
+                                                                                                            top: 3,
+                                                                                                            flexDirection: 'row',
+                                                                                                        }}>
+                                                                                                        <TouchableOpacity
+                                                                                                            style={{
+                                                                                                                paddingHorizontal: 16,
+                                                                                                                paddingVertical: 1,
+                                                                                                                alignItems: 'center',
+                                                                                                                backgroundColor: COLORS.transparent,
+                                                                                                            }}
+                                                                                                            onPress={() => {
+                                                                                                                // fetchVerifyReport()
+                                                                                                            }}>
+                                                                                                            <Image
+                                                                                                                source={icons.verify}
+                                                                                                                style={{
+                                                                                                                    // left: 8,
+                                                                                                                    width: 16,
+                                                                                                                    height: 16,
+                                                                                                                    tintColor: 'green',
+                                                                                                                }}
+                                                                                                            />
+                                                                                                        </TouchableOpacity>
+                                                                                                    </View>
+                                                                                                    <View
+                                                                                                        style={{
+                                                                                                            left: 20,
+                                                                                                            top: 8,
+                                                                                                            flexDirection: 'row',
+                                                                                                        }}>
+                                                                                                        <TouchableOpacity
+                                                                                                            style={{
+                                                                                                                paddingHorizontal: 16,
+                                                                                                                paddingVertical: 1,
+                                                                                                                alignItems: 'center',
+                                                                                                                backgroundColor: COLORS.transparent,
+                                                                                                            }}
+                                                                                                            onPress={() => {
+                                                                                                                // fetchVerifyReport()
+                                                                                                            }}>
+                                                                                                            <Image
+                                                                                                                source={icons.verify}
+                                                                                                                style={{
+                                                                                                                    // left: 8,
+                                                                                                                    width: 16,
+                                                                                                                    height: 16,
+                                                                                                                    tintColor: 'green',
+                                                                                                                }}
+                                                                                                            />
+                                                                                                        </TouchableOpacity>
+                                                                                                    </View>
+                                                                                                    <View
+                                                                                                        style={{
+                                                                                                            left: 20,
+                                                                                                            top: 14,
+                                                                                                            flexDirection: 'row',
+                                                                                                        }}>
+
+                                                                                                        <TouchableOpacity
+                                                                                                            style={{
+                                                                                                                paddingHorizontal: 5,
+                                                                                                                paddingVertical: 1,
+                                                                                                                backgroundColor: COLORS.success_600,
+                                                                                                            }}
+                                                                                                            onPress={() => {
+                                                                                                                // fetchVerifyReport()
+                                                                                                                // ele.admin_2 === user_id ? fetchVerifyReport() : null
+
+
+                                                                                                            }}>
+                                                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                                Verify
+                                                                                                            </Text>
+                                                                                                        </TouchableOpacity>
+                                                                                                    </View>
+                                                                                                </View>
+                                                                                                <View>
+                                                                                                    <View
+                                                                                                        style={{
+                                                                                                            left: 25,
+                                                                                                            position: 'absolute'
+                                                                                                        }}>
+                                                                                                        <TouchableOpacity
+                                                                                                            style={{
+                                                                                                                left: 15,
+                                                                                                                paddingHorizontal: 5,
+                                                                                                                paddingVertical: 1,
+                                                                                                                backgroundColor: COLORS.rose_600,
+                                                                                                            }}
+                                                                                                            onPress={() => {
+                                                                                                                // setRevertModal(true)
+                                                                                                                // ele.verification_1 === user_id ? setRevertModal(true) : null
+
+                                                                                                            }}>
+                                                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                                Revert
+                                                                                                            </Text>
+                                                                                                        </TouchableOpacity>
+                                                                                                        <TouchableOpacity
+                                                                                                            style={{
+                                                                                                                left: 15,
+                                                                                                                top: 1,
+                                                                                                                paddingHorizontal: 5,
+                                                                                                                paddingVertical: 1,
+                                                                                                                backgroundColor: COLORS.rose_600,
+                                                                                                            }}
+                                                                                                            onPress={() => {
+                                                                                                                // setRevertModal(true)
+                                                                                                                // ele.admin_1 === user_id ? setRevertModal(true) : null
+
+                                                                                                            }}>
+                                                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                                Revert
+                                                                                                            </Text>
+                                                                                                        </TouchableOpacity>
+                                                                                                        <TouchableOpacity
+                                                                                                            style={{
+                                                                                                                left: 15,
+                                                                                                                top: 10,
+                                                                                                                paddingHorizontal: 16,
+                                                                                                                paddingVertical: 1,
+                                                                                                                alignItems: 'center',
+                                                                                                                backgroundColor: COLORS.transparent,
+                                                                                                            }}
+                                                                                                            onPress={() => {
+                                                                                                                // setRevertModal(true)
+                                                                                                            }}>
+                                                                                                            <Image
+                                                                                                                source={icons.verify}
+                                                                                                                style={{
+                                                                                                                    // left: 8,
+                                                                                                                    width: 16,
+                                                                                                                    height: 16,
+                                                                                                                    tintColor: 'red',
+                                                                                                                }}
+                                                                                                            />
+                                                                                                        </TouchableOpacity>
+                                                                                                    </View>
+                                                                                                    <View
+                                                                                                        style={{
+                                                                                                            // backgroundColor: 'dodgerblue',
+                                                                                                            width: SIZES.width * 0.5,
+                                                                                                            top: 105,
+                                                                                                            right: 240,
+                                                                                                            padding: 2
+                                                                                                        }}
+                                                                                                    >
+                                                                                                        <Text
+                                                                                                            numberOfLines={1}
+                                                                                                            style={{
+
+                                                                                                                ...FONTS.h5,
+                                                                                                                textTransform: 'capitalize',
+                                                                                                                color: COLORS.black,
+                                                                                                            }}>
+                                                                                                            {reportData.admin_2_revert_msg}
+                                                                                                        </Text>
+                                                                                                    </View>
+                                                                                                </View>
+                                                                                            </View>
+                                                                                        </>
+                                                                                    ) : null
+                                                    }
+                                                </View>
+
+                                            )
+                                        }
+                                    </View>
+                                )
 
   const trackVerificationProcess = () => {
     // console.log("🚀 ~ file: ViewReport.js ~ line 1647 ~ trackVerificationProcess ~ user_id", user_id)
@@ -1424,656 +2681,318 @@ const ViewReport = () => {
                                       </Text>
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                      style={{
-                                        left: 15,
-                                        top: 5,
-                                        paddingHorizontal: 5,
-                                        paddingVertical: 1,
-                                        alignItems: 'center',
-                                        backgroundColor: COLORS.transparent,
-                                      }}
-                                      onPress={() => {
-                                        // fetchVerifyReport()
-                                      }}>
-                                      <Image
-                                        source={icons.verify}
-                                        style={{
-                                          // left: 8,
-                                          width: 16,
-                                          height: 16,
-                                          tintColor: 'red',
-                                        }}
-                                      />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                      style={{
-                                        left: 15,
-                                        top: 8,
-                                        paddingHorizontal: 5,
-                                        paddingVertical: 1,
-                                        backgroundColor: COLORS.rose_600,
-                                      }}
-                                      onPress={() => {
-                                        // setRevertModal(true)
-                                        // ele.admin_2 === user_id ? setRevertModal(true) : null
-                                      }}>
-                                      <Text
-                                        style={{color: 'white', ...FONTS.h4}}>
-                                        Revert
-                                      </Text>
-                                    </TouchableOpacity>
-                                  </View>
-                                  <View
-                                    style={{
-                                      position: 'absolute',
-                                      left: 0,
-                                    }}>
-                                    <View
-                                      style={{
-                                        left: 20,
-                                        top: 3,
-                                        flexDirection: 'row',
-                                      }}>
-                                      <TouchableOpacity
-                                        style={{
-                                          paddingHorizontal: 16,
-                                          paddingVertical: 1,
-                                          alignItems: 'center',
-                                          backgroundColor: COLORS.transparent,
-                                        }}
-                                        onPress={() => {
-                                          // fetchVerifyReport()
-                                        }}>
-                                        <Image
-                                          source={icons.verify}
-                                          style={{
-                                            // left: 8,
 
-                                            width: 16,
-                                            height: 16,
-                                            tintColor: 'green',
-                                          }}
-                                        />
-                                      </TouchableOpacity>
-                                    </View>
-                                    <View
-                                      style={{
-                                        left: 20,
-                                        top: 5,
-                                        flexDirection: 'row',
-                                      }}>
-                                      <TouchableOpacity
-                                        style={{
-                                          paddingHorizontal: 5,
-                                          paddingVertical: 1,
-                                          backgroundColor: COLORS.success_600,
-                                        }}
-                                        onPress={() => {
-                                          // fetchVerifyReport()
-                                          // ele.admin_1 === user_id ? fetchVerifyReport() : null
-                                        }}>
-                                        <Text
-                                          style={{color: 'white', ...FONTS.h4}}>
-                                          Verify
-                                        </Text>
-                                      </TouchableOpacity>
-                                    </View>
-                                    <View
-                                      style={{
-                                        left: 20,
-                                        top: 6,
-                                        flexDirection: 'row',
-                                      }}>
-                                      <TouchableOpacity
-                                        style={{
-                                          paddingHorizontal: 5,
-                                          paddingVertical: 1,
-                                          backgroundColor: COLORS.success_600,
-                                        }}
-                                        onPress={() => {
-                                          // fetchVerifyReport()
-                                          // ele.admin_2 === user_id ? fetchVerifyReport() : null
-                                        }}>
-                                        <Text
-                                          style={{color: 'white', ...FONTS.h4}}>
-                                          Verify
-                                        </Text>
-                                      </TouchableOpacity>
-                                    </View>
-                                    <View
-                                      style={{
-                                        // backgroundColor: 'dodgerblue',
-                                        width: SIZES.width * 0.5,
-                                        top: 40,
-                                        right: 191,
-                                        padding: 2,
-                                      }}>
-                                      <Text
-                                        numberOfLines={1}
-                                        style={{
-                                          ...FONTS.h5,
-                                          textTransform: 'capitalize',
-                                          color: COLORS.black,
-                                        }}>
-                                        {reportData.admin_1_revert_msg}
-                                      </Text>
-                                    </View>
-                                  </View>
-                                </View>
-                              </>
-                            ) : reportData.admin_1_status === true &&
-                              reportData.admin_2_revert === true ? (
-                              <>
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    alignContent: 'space-between',
-                                    position: 'absolute',
-                                  }}>
-                                  <View>
-                                    <View
-                                      style={{
-                                        left: 20,
-                                        top: 3,
-                                        flexDirection: 'row',
-                                      }}>
-                                      <TouchableOpacity
-                                        style={{
-                                          paddingHorizontal: 16,
-                                          paddingVertical: 1,
-                                          alignItems: 'center',
-                                          backgroundColor: COLORS.transparent,
-                                        }}
-                                        onPress={() => {
-                                          // fetchVerifyReport()
-                                        }}>
-                                        <Image
-                                          source={icons.verify}
-                                          style={{
-                                            // left: 8,
-                                            width: 16,
-                                            height: 16,
-                                            tintColor: 'green',
-                                          }}
-                                        />
-                                      </TouchableOpacity>
-                                    </View>
-                                    <View
-                                      style={{
-                                        left: 20,
-                                        top: 8,
-                                        flexDirection: 'row',
-                                      }}>
-                                      <TouchableOpacity
-                                        style={{
-                                          paddingHorizontal: 16,
-                                          paddingVertical: 1,
-                                          alignItems: 'center',
-                                          backgroundColor: COLORS.transparent,
-                                        }}
-                                        onPress={() => {
-                                          // fetchVerifyReport()
-                                        }}>
-                                        <Image
-                                          source={icons.verify}
-                                          style={{
-                                            // left: 8,
-                                            width: 16,
-                                            height: 16,
-                                            tintColor: 'green',
-                                          }}
-                                        />
-                                      </TouchableOpacity>
-                                    </View>
-                                    <View
-                                      style={{
-                                        left: 20,
-                                        top: 14,
-                                        flexDirection: 'row',
-                                      }}>
-                                      <TouchableOpacity
-                                        style={{
-                                          paddingHorizontal: 5,
-                                          paddingVertical: 1,
-                                          backgroundColor: COLORS.success_600,
-                                        }}
-                                        onPress={() => {
-                                          // fetchVerifyReport()
-                                          // ele.admin_2 === user_id ? fetchVerifyReport() : null
-                                        }}>
-                                        <Text
-                                          style={{color: 'white', ...FONTS.h4}}>
-                                          Verify
-                                        </Text>
-                                      </TouchableOpacity>
-                                    </View>
-                                  </View>
-                                  <View>
-                                    <View
-                                      style={{
-                                        left: 25,
-                                        position: 'absolute',
-                                      }}>
-                                      <TouchableOpacity
-                                        style={{
-                                          left: 15,
-                                          paddingHorizontal: 5,
-                                          paddingVertical: 1,
-                                          backgroundColor: COLORS.rose_600,
-                                        }}
-                                        onPress={() => {
-                                          // setRevertModal(true)
-                                          // ele.verification_1 === user_id ? setRevertModal(true) : null
-                                        }}>
-                                        <Text
-                                          style={{color: 'white', ...FONTS.h4}}>
-                                          Revert
-                                        </Text>
-                                      </TouchableOpacity>
-                                      <TouchableOpacity
-                                        style={{
-                                          left: 15,
-                                          top: 1,
-                                          paddingHorizontal: 5,
-                                          paddingVertical: 1,
-                                          backgroundColor: COLORS.rose_600,
-                                        }}
-                                        onPress={() => {
-                                          // setRevertModal(true)
-                                          // ele.admin_1 === user_id ? setRevertModal(true) : null
-                                        }}>
-                                        <Text
-                                          style={{color: 'white', ...FONTS.h4}}>
-                                          Revert
-                                        </Text>
-                                      </TouchableOpacity>
-                                      <TouchableOpacity
-                                        style={{
-                                          left: 15,
-                                          top: 10,
-                                          paddingHorizontal: 16,
-                                          paddingVertical: 1,
-                                          alignItems: 'center',
-                                          backgroundColor: COLORS.transparent,
-                                        }}
-                                        onPress={() => {
-                                          // setRevertModal(true)
-                                        }}>
-                                        <Image
-                                          source={icons.verify}
-                                          style={{
-                                            // left: 8,
-                                            width: 16,
-                                            height: 16,
-                                            tintColor: 'red',
-                                          }}
-                                        />
-                                      </TouchableOpacity>
-                                    </View>
-                                    <View
-                                      style={{
-                                        // backgroundColor: 'dodgerblue',
-                                        width: SIZES.width * 0.5,
-                                        top: 105,
-                                        right: 240,
-                                        padding: 2,
-                                      }}>
-                                      <Text
-                                        numberOfLines={1}
-                                        style={{
-                                          ...FONTS.h5,
-                                          textTransform: 'capitalize',
-                                          color: COLORS.black,
-                                        }}>
-                                        {reportData.admin_2_revert_msg}
-                                      </Text>
-                                    </View>
-                                  </View>
-                                </View>
-                              </>
-                            ) : null}
-                          </View>
-                        }
-                      </View>
-                    }
-                  </View>
-                );
-              })
-            : null}
-        </ScrollView>
-      </View>
-    );
-  };
+    // quantity report
+    function renderQuantity() {
 
-  // report showing modal
-  function renderReportModal() {
-    const renderItem = ({item, index}) => (
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: COLORS.gray2,
-          padding: 5,
-          borderRadius: 3,
-          width: SIZES.width / 2.4,
-        }}>
-        <Text style={{...FONTS.h3, color: 'black'}}>
-          {item.contractor_name}
-        </Text>
-        <View style={{}}>
-          {item.manpowerCategories.map((ele, i) => {
+        const renderItem = ({item, index}) =>
+          item.quantityWorkItems.map((ele, i) => {
+            
             return (
-              <View
-                key={i}
-                style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-                  {i + 1}.
-                </Text>
+              <View key={i}>
                 <View
                   style={{
-                    left: 5,
                     flexDirection: 'row',
-                    alignItems: 'center',
                   }}>
                   <Text
                     style={{
-                      ...FONTS.h4,
+                      flex: 1,
+                      ...FONTS.h3,
                       color: COLORS.black,
                     }}>
-                    {ele.manpower_category_name} {' - '}
+                    {ele.item_name}
                   </Text>
                   <Text
                     style={{
-                      ...FONTS.h4,
+                      ...FONTS.h3,
+                      flex: 0.5,
                       color: COLORS.black,
+                      textAlign: 'right',
                     }}>
-                    {ele.manpower_member}
+                    {ele.num_length}
                   </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      flex: 0.5,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.num_width}
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      flex: 0.5,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.num_height}
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      flex: 1,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.num_total}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      flex: 1,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.remark}
+                  </Text>
+                </View>
+                {/* {i == 0 ? (
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      marginVertical: index == 0 ? 10 : null,
+                      borderColor: COLORS.darkGray2,
+                    }}></View>
+                ) : null} */}
+                <View style={{}}>
+                  {ele.subquantityitems.map((ele, i) => {
+                    return (
+                      <View key={i}>
+                        {i == 0 ? (
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                            }}>
+                            <Text
+                              style={{
+                                flex: 1,
+                                ...FONTS.h4,
+                                color: COLORS.black,
+                              }}></Text>
+                            <Text
+                              style={{
+                                ...FONTS.h4,
+                                flex: 0.5,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              L
+                            </Text>
+                            <Text
+                              style={{
+                                ...FONTS.h4,
+                                flex: 0.5,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              W
+                            </Text>
+                            <Text
+                              style={{
+                                ...FONTS.h4,
+                                flex: 0.5,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              H
+                            </Text>
+                            <Text
+                              style={{
+                                ...FONTS.h4,
+                                flex: 1,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              Total
+                            </Text>
+                            <Text
+                              style={{
+                                ...FONTS.h3,
+                                flex: 1,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              Remark
+                            </Text>
+                          </View>
+                        ) : null}
+                        <View
+                          style={{
+                            left: 100,
+                            borderBottomWidth: 1,
+                            borderColor: COLORS.darkGray2,
+                            width: '75%',
+                            marginVertical: 5,
+                          }}></View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                          }}>
+                          <Text
+                            style={{
+                              flex: 1,
+                              ...FONTS.h4,
+                              color: COLORS.black,
+                            }}></Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              flex: 0.5,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_length}
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              flex: 0.5,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_width}
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              flex: 0.5,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_height}
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              flex: 1,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_total}
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h3,
+                              flex: 1,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_quality_type}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  })}
+                  {i == 0 ? (
+                    <View
+                      style={{
+                        borderBottomWidth: 1,
+                        marginVertical: index == 0 ? 10 : null,
+                        borderColor: COLORS.darkGray,
+                      }}></View>
+                  ) : null}
                 </View>
               </View>
             );
-          })}
-        </View>
-      </View>
-    );
-
-    const footerComponent = () => (
-      <View>
-        {renderQuantity()}
-        {/* {user_id && renderFooter()} */}
-      </View>
-    );
-
-    return (
-      <Modal animationType="slide" transparent={true} visible={reportModal}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: COLORS.transparentBlack7,
-          }}>
-          <View
-            style={{
-              top: 50,
-              backgroundColor: COLORS.white,
-              paddingHorizontal: SIZES.radius,
-              paddingBottom: SIZES.radius,
-              height: '100%',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-            }}>
+          });
+    
+        return (
+          <View>
             <View
               style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <ImageBackground
-                style={{
-                  borderWidth: 2,
-                  borderRadius: 20,
-                  borderColor: 'white',
-                  padding: 3,
-                  top: -20,
-                  backgroundColor: COLORS.rose_600,
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setReportModal(false);
-                  }}>
-                  <Image
-                    source={icons.cross}
-                    style={{height: 25, width: 25, tintColor: COLORS.white}}
-                  />
-                </TouchableOpacity>
-              </ImageBackground>
-            </View>
+                borderBottomWidth: 1,
+                marginTop: 15,
+                marginBottom: 5,
+                borderColor: COLORS.gray2,
+              }}></View>
             <Text
               style={{
+                fontSize: 18,
+                color: COLORS.black,
                 textAlign: 'center',
-                marginBottom: 8,
-                ...FONTS.h2,
-                color: COLORS.lightblue_900,
-                fontWeight: '500',
                 textDecorationLine: 'underline',
+                marginBottom: 5,
               }}>
-              Daily Progress Report
+              Excluded Quantity
             </Text>
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: COLORS.darkGray2,
-                borderRadius: 3,
-                padding: 15,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  // alignItems: 'center',
-                }}>
-                <Text
-                  style={{
-                    ...FONTS.h2,
-                    color: COLORS.black,
-                    textTransform: 'capitalize',
-                  }}>
-                  {reportData.project_name}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                  }}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 13, color: COLORS.darkGray}}>
-                      Date{' - '}
-                    </Text>
-                    <Text style={{fontSize: 12, color: COLORS.darkGray}}>
-                      {reportData.date}
-                    </Text>
-                  </View>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 13, color: COLORS.darkGray}}>
-                      Time{' - '}
-                    </Text>
-                    <Text style={{fontSize: 12, color: COLORS.darkGray}}>
-                      {reportData.time}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  marginVertical: 10,
-                  borderColor: COLORS.gray2,
-                }}></View>
-              <View>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    color: COLORS.black,
-                    textAlign: 'center',
-                  }}>
-                  Manpower
-                </Text>
-                <Text style={{...FONTS.h3, color: COLORS.black}}>
-                  Contractors
-                </Text>
-
-                <FlatList
-                  contentContainerStyle={{marginTop: 5}}
-                  numColumns={2}
-                  columnWrapperStyle={{justifyContent: 'space-between'}}
-                  data={manpower}
-                  keyExtractor={item => `${item._id}`}
-                  renderItem={renderItem}
-                  showsVerticalScrollIndicator={false}
-                  ItemSeparatorComponent={() => {
-                    return <View style={{margin: 5}}></View>;
-                  }}
-                  ListFooterComponent={footerComponent}
-                  maxHeight={200}
-                  ListFooterComponentStyle={{
-                    flex: 1,
-                    // borderWidth:1,
-                    height: '100%',
-                    // marginBottom: '40%'
-                  }}
-                />
-              </View>
-            </View>
-            <View style={{flex: 1}}>{trackVerificationProcess()}</View>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-
-  // quantity report
-  function renderQuantity() {
-    const renderItem = ({item, index}) => (
-      <View>
-        <View
-          style={{
-            // marginTop: 5,
-            flexDirection: 'row',
-          }}>
-          <Text
-            style={{
-              flex: 1,
-              ...FONTS.h3,
-              color: COLORS.darkGray,
-            }}>
-            {item.quantityWorkItems.item_name}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.darkGray,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_length}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.darkGray,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_width}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.darkGray,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_height}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 1,
-              color: COLORS.darkGray,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_total}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 1,
-              color: COLORS.darkGray,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.quality_type}
-          </Text>
-        </View>
-        {index == 0 ? (
-          <View
-            style={{
-              borderBottomWidth: 1,
-              marginVertical: index == 0 ? 10 : null,
-              borderColor: COLORS.darkGray2,
-            }}></View>
-        ) : null}
-        <View style={{}}>
-          {item.quantityWorkItems.subquantityitems.map((ele, i) => {
-            return (
-              <View key={i}>
-                {i == 0 ? (
+            <FlatList
+              // contentContainerStyle={{maxHeight: 450}}
+              data={quantity}
+              keyExtractor={item => `${item._id}`}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+              // horizontal
+              scrollEnabled={true}
+              ItemSeparatorComponent={() => {
+                return (
                   <View
                     style={{
+                      height: 1,
+                      backgroundColor: COLORS.darkGray,
+                      marginVertical: 10,
+                    }}></View>
+                );
+              }}
+              ListHeaderComponent={
+                <View>
+                  <View
+                    style={{
+                      marginTop: 10,
                       flexDirection: 'row',
-                      // marginBottom: SIZES.base,
+                      marginBottom: 5,
+
                     }}>
                     <Text
                       style={{
                         flex: 1,
-                        ...FONTS.h4,
+
+                        ...FONTS.h3,
                         color: COLORS.black,
-                        // fsontWeight: 'bold',
-                      }}></Text>
+                      }}>
+                      Items
+                    </Text>
                     <Text
                       style={{
-                        ...FONTS.h4,
+                        ...FONTS.h3,
                         flex: 0.5,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
+
                       }}>
                       L
                     </Text>
                     <Text
                       style={{
-                        ...FONTS.h4,
+
+                        ...FONTS.h3,
                         flex: 0.5,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
+
                       }}>
                       W
                     </Text>
                     <Text
                       style={{
-                        ...FONTS.h4,
+
+                        ...FONTS.h3,
                         flex: 0.5,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
+
                       }}>
                       H
                     </Text>
                     <Text
                       style={{
-                        ...FONTS.h4,
+
+                        ...FONTS.h3,
                         flex: 1,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
+
                       }}>
                       Total
                     </Text>
@@ -2083,203 +3002,27 @@ const ViewReport = () => {
                         flex: 1,
                         color: COLORS.black,
                         textAlign: 'right',
-                        // fontWeight: 'bold',
+
+
                       }}>
                       Remark
                     </Text>
                   </View>
-                ) : null}
-                <View
-                  style={{
-                    left: 100,
-                    borderBottomWidth: 1,
-                    borderColor: COLORS.darkGray2,
-                    width: '75%',
-                    marginVertical: 5,
-                  }}></View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    // marginBottom: SIZES.base,
-                  }}>
-                  <Text
-                    style={{
-                      flex: 1,
-                      ...FONTS.h4,
-                      color: COLORS.darkGray,
-                      // fsontWeight: 'bold',
-                    }}></Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.darkGray,
-                      textAlign: 'right',
-                      // fontWeight: 'bold',
-                    }}>
-                    {ele.sub_length}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.darkGray,
-                      textAlign: 'right',
-                      // fontWeight: 'bold',
-                    }}>
-                    {ele.sub_width}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.darkGray,
-                      textAlign: 'right',
-                      // fontWeight: 'bold',
-                    }}>
-                    {ele.sub_height}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 1,
-                      color: COLORS.darkGray,
-                      textAlign: 'right',
-                      // fontWeight: 'bold',
-                    }}>
-                    {ele.sub_total}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h3,
-                      flex: 1,
-                      color: COLORS.darkGray,
-                      textAlign: 'right',
-                      // fontWeight: 'bold',
-                    }}>
-                    {ele.sub_quality_type}
-                  </Text>
-                </View>
-              </View>
-            );
-          })}
-        </View>
-      </View>
-    );
 
-    return (
-      <View
-        style={
-          {
-            // height:'100%'
-          }
-        }>
-        <View
-          style={{
-            borderBottomWidth: 1,
-            marginVertical: 10,
-            borderColor: COLORS.gray2,
-          }}></View>
-        <Text
-          style={{
-            ...FONTS.h3,
-            color: COLORS.black,
-            textAlign: 'center',
-          }}>
-          Excluded Quantity
-        </Text>
-        <FlatList
-          // contentContainerStyle={{marginTop: 5}}
-          data={quantity}
-          keyExtractor={(item, index) => `${index}`}
-          renderItem={renderItem}
-          nestedScrollEnabled={true}
-          showsVerticalScrollIndicator={true}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.darkGray,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-          ListHeaderComponent={
-            <View>
-              <View
-                style={{
-                  marginTop: 15,
-                  flexDirection: 'row',
-                  marginBottom: SIZES.base,
-                }}>
-                <Text
-                  style={{
-                    flex: 1,
-                    ...FONTS.h3,
-                    color: COLORS.black,
-                  }}>
-                  Items
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 0.5,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  L
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 0.5,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  W
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 0.5,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  H
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  Total
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  Remark
-                </Text>
-              </View>
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderColor: COLORS.darkGray,
-                  marginBottom: 10,
-                }}></View>
-            </View>
-          }
-        />
-      </View>
-    );
-  }
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      borderColor: COLORS.darkGray,
+                      marginBottom: 10,
+                    }}></View>
+                </View>
+              }
+            />
+          </View>
+        );
+      }
+
+
 
   function renderRevertModal() {
     return (
@@ -2346,28 +3089,72 @@ const ViewReport = () => {
                 />
               </View>
 
-              <TouchableOpacity
-                style={{
-                  marginTop: SIZES.padding,
-                  alignItems: 'center',
-                }}
-                onPress={() => submitRevertReport()}>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    backgroundColor: COLORS.lightblue_800,
-                    paddingHorizontal: SIZES.radius,
-                    paddingVertical: 5,
-                    borderRadius: 3,
-                    color: COLORS.white,
-                  }}>
-                  Send
-                </Text>
-              </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={{
+                                    marginTop: SIZES.padding,
+                                    alignItems: 'center',
+                                }}
+                                onPress={() => submitRevertReport()}>
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        backgroundColor: COLORS.lightblue_800,
+                                        paddingHorizontal: SIZES.radius,
+                                        paddingVertical: 5,
+                                        borderRadius: 3,
+                                        color: COLORS.white,
+                                    }}>
+                                    Send
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+        );
+    }
+    return (
+        <View style={{ margin: SIZES.radius }}>
+            {renderProjectFilter()}
+            {renderRevertModal()}
+            {renderReportModal()}
+            {onSelect == true && renderReport()}
+            <View>
+                {/* <View style={{
+                    flex: 1,
+                    padding: 10,
+                    backgroundColor: '#fff',
+                    alignItems: 'center',
+                }}>
+                    <TouchableOpacity onPress={createPDF}>
+                        <View>
+                            <Image
+                                //We are showing the Image from online
+                                source={{
+                                    uri:
+                                        'https://raw.githubusercontent.com/AboutReact/sampleresource/master/pdf.png',
+                                }}
+                                style={{
+                                    width: 150,
+                                    height: 150,
+                                    margin: 5,
+                                    resizeMode: 'stretch',
+                                }}
+                            />
+                            <Text style={{ color: 'black' }}>Create PDF</Text>
+                        </View>
+                        <Text style={{
+                            fontSize: 18,
+                            padding: 10,
+                            color: 'black',
+                            textAlign: 'center',
+                        }}>{filePath}</Text>
+                    </TouchableOpacity>
+                </View> */}
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+        </View>
+
     );
   }
   return (
@@ -2387,10 +3174,26 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
+
+    container: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+    },
+    textStyle: {
+        fontSize: 18,
+        padding: 10,
+        color: 'black',
+        textAlign: 'center',
+    },
+    imageStyle: {
+        width: 150,
+        height: 150,
+        margin: 5,
+        resizeMode: 'stretch',
+    },
+
 });
 
 export default ViewReport;
