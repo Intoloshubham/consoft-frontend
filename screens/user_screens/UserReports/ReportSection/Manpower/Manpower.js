@@ -36,7 +36,6 @@ import {
     ManpowerUserContractors,
 } from '../../../index.js';
 import { Get_Contractor_Data } from '../../ReportApi.js';
-import * as Animatable from 'react-native-animatable';
 
 if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -45,9 +44,9 @@ if (Platform.OS === 'android') {
 }
 const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => {
 
-    useEffect(() => {
-        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    }, []);
+    // useEffect(() => {
+    //     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    // }, []);
     const {
         header,
         con_body,
@@ -140,7 +139,6 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                 </Pressable>
             </Animated.View>
             {TabCollapse ? <View
-                duration={4000}
                 style={{ justifyContent: "space-evenly" }}>
                 <View>
                     {/* project team start */}

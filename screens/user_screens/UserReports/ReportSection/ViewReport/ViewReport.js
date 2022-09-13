@@ -10,7 +10,9 @@ import {
     Modal,
     TextInput,
     TouchableWithoutFeedback,
-    RefreshControl
+    RefreshControl,
+
+    PermissionsAndroid
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -19,6 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { getProjects } from '../../../../../controller/ProjectController'
 import { SIZES, FONTS, COLORS, icons, images } from '../../../../../constants'
+// import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {
     getManpower,
     getReport,
@@ -45,6 +48,52 @@ const ViewReport = () => {
         setOnSelect(false);
         fetchProject();
     }, []);
+
+    // const [filePath, setFilePath] = useState('');
+
+    // const isPermitted = async () => {
+    //     if (Platform.OS === 'android') {
+    //         try {
+    //             const granted = await PermissionsAndroid.request(
+    //                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //                 {
+    //                     title: 'External Storage Write Permission',
+    //                     message: 'App needs access to Storage data',
+    //                 },
+    //             );
+
+    //             return granted === PermissionsAndroid.RESULTS.GRANTED;
+    //         } catch (err) {
+    //             alert('Write permission err', err);
+    //             return false;
+    //         }
+    //     } else {
+    //         return true;
+    //     }
+    // };
+
+
+    // const createPDF = async () => {
+    //     if (await isPermitted()) {
+    //         let options = {
+    //             //Content to print
+    //             html:
+    //                 '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">${<Text></Text>}</p><p style="text-align: center;"><strong>Team About React</strong></p>',
+    //             //File Name
+    //             fileName: 'test',
+    //             //File directory
+    //             directory: '../Downloads',
+    //         };
+
+    //         let file = await RNHTMLtoPDF.convert(options);
+
+    //         console.log(file.filePath);
+
+    //         setFilePath(file.filePath);
+    //     }
+    // };
+
+
 
     function delay(timeout) {
         return new Promise(resolve => {
@@ -499,7 +548,7 @@ const ViewReport = () => {
                     height: 500
                 }}
                 contentContainerStyle={{ flexGrow: 1, height: 200 }}
-            >              
+            >
                 {reportPath ? reportPath.map((ele, idx) => {
                     return (
                         <View style={{
@@ -1979,336 +2028,331 @@ const ViewReport = () => {
 
     // quantity report
     function renderQuantity() {
-        const renderItem = ({ item, index }) => (
-            <View>
+
+        const renderItem = ({item, index}) =>
+          item.quantityWorkItems.map((ele, i) => {
+            
+            return (
+              <View key={i}>
                 <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  <Text
                     style={{
-                        // marginTop: 5,
-                        flexDirection: 'row',
+                      flex: 1,
+                      ...FONTS.h3,
+                      color: COLORS.black,
+                    }}>
+                    {ele.item_name}
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      flex: 0.5,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.num_length}
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      flex: 0.5,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.num_width}
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      flex: 0.5,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.num_height}
+                  </Text>
+                  <Text
+                    style={{
+                      ...FONTS.h3,
+                      flex: 1,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.num_total}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      flex: 1,
+                      color: COLORS.black,
+                      textAlign: 'right',
+                    }}>
+                    {ele.remark}
+                  </Text>
+                </View>
+                {/* {i == 0 ? (
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      marginVertical: index == 0 ? 10 : null,
+                      borderColor: COLORS.darkGray2,
+                    }}></View>
+                ) : null} */}
+                <View style={{}}>
+                  {ele.subquantityitems.map((ele, i) => {
+                    return (
+                      <View key={i}>
+                        {i == 0 ? (
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                            }}>
+                            <Text
+                              style={{
+                                flex: 1,
+                                ...FONTS.h4,
+                                color: COLORS.black,
+                              }}></Text>
+                            <Text
+                              style={{
+                                ...FONTS.h4,
+                                flex: 0.5,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              L
+                            </Text>
+                            <Text
+                              style={{
+                                ...FONTS.h4,
+                                flex: 0.5,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              W
+                            </Text>
+                            <Text
+                              style={{
+                                ...FONTS.h4,
+                                flex: 0.5,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              H
+                            </Text>
+                            <Text
+                              style={{
+                                ...FONTS.h4,
+                                flex: 1,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              Total
+                            </Text>
+                            <Text
+                              style={{
+                                ...FONTS.h3,
+                                flex: 1,
+                                color: COLORS.black,
+                                textAlign: 'right',
+                              }}>
+                              Remark
+                            </Text>
+                          </View>
+                        ) : null}
+                        <View
+                          style={{
+                            left: 100,
+                            borderBottomWidth: 1,
+                            borderColor: COLORS.darkGray2,
+                            width: '75%',
+                            marginVertical: 5,
+                          }}></View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                          }}>
+                          <Text
+                            style={{
+                              flex: 1,
+                              ...FONTS.h4,
+                              color: COLORS.black,
+                            }}></Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              flex: 0.5,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_length}
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              flex: 0.5,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_width}
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              flex: 0.5,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_height}
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              flex: 1,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_total}
+                          </Text>
+                          <Text
+                            style={{
+                              ...FONTS.h3,
+                              flex: 1,
+                              color: COLORS.black,
+                              textAlign: 'right',
+                            }}>
+                            {ele.sub_quality_type}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  })}
+                  {i == 0 ? (
+                    <View
+                      style={{
+                        borderBottomWidth: 1,
+                        marginVertical: index == 0 ? 10 : null,
+                        borderColor: COLORS.darkGray,
+                      }}></View>
+                  ) : null}
+                </View>
+              </View>
+            );
+          });
+    
+        return (
+          <View>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                marginTop: 15,
+                marginBottom: 5,
+                borderColor: COLORS.gray2,
+              }}></View>
+            <Text
+              style={{
+                fontSize: 18,
+                color: COLORS.black,
+                textAlign: 'center',
+                textDecorationLine: 'underline',
+                marginBottom: 5,
+              }}>
+              Excluded Quantity
+            </Text>
+            <FlatList
+              // contentContainerStyle={{maxHeight: 450}}
+              data={quantity}
+              keyExtractor={item => `${item._id}`}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+              // horizontal
+              scrollEnabled={true}
+              ItemSeparatorComponent={() => {
+                return (
+                  <View
+                    style={{
+                      height: 1,
+                      backgroundColor: COLORS.darkGray,
+                      marginVertical: 10,
+                    }}></View>
+                );
+              }}
+              ListHeaderComponent={
+                <View>
+                  <View
+                    style={{
+                      marginTop: 10,
+                      flexDirection: 'row',
+                      marginBottom: 5,
                     }}>
                     <Text
-                        style={{
-                            flex: 1,
-                            ...FONTS.h3,
-                            color: COLORS.darkGray,
-                        }}>
-                        {item.quantityWorkItems.item_name}
-                    </Text>
-                    <Text
-                        style={{
-                            ...FONTS.h3,
-                            flex: 0.5,
-                            color: COLORS.darkGray,
-                            textAlign: 'right',
-                        }}>
-                        {item.quantityWorkItems.num_length}
-                    </Text>
-                    <Text
-                        style={{
-                            ...FONTS.h3,
-                            flex: 0.5,
-                            color: COLORS.darkGray,
-                            textAlign: 'right',
-                        }}>
-                        {item.quantityWorkItems.num_width}
-                    </Text>
-                    <Text
-                        style={{
-                            ...FONTS.h3,
-                            flex: 0.5,
-                            color: COLORS.darkGray,
-                            textAlign: 'right',
-                        }}>
-                        {item.quantityWorkItems.num_height}
-                    </Text>
-                    <Text
-                        style={{
-                            ...FONTS.h3,
-                            flex: 1,
-                            color: COLORS.darkGray,
-                            textAlign: 'right',
-                        }}>
-                        {item.quantityWorkItems.num_total}
-                    </Text>
-                    <Text
-                        style={{
-                            ...FONTS.h3,
-                            flex: 1,
-                            color: COLORS.darkGray,
-                            textAlign: 'right',
-                        }}>
-                        {item.quantityWorkItems.quality_type}
-                    </Text>
-                </View>
-                {index == 0 ? (
-                    <View
-                        style={{
-                            borderBottomWidth: 1,
-                            marginVertical: index == 0 ? 10 : null,
-                            borderColor: COLORS.darkGray2,
-                        }}></View>
-                ) : null}
-                <View style={{}}>
-                    {item.quantityWorkItems.subquantityitems.map((ele, i) => {
-                        return (
-                            <View key={i}>
-                                {i == 0 ? (
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            // marginBottom: SIZES.base,
-                                        }}>
-                                        <Text
-                                            style={{
-                                                flex: 1,
-                                                ...FONTS.h4,
-                                                color: COLORS.black,
-                                                // fsontWeight: 'bold',
-                                            }}></Text>
-                                        <Text
-                                            style={{
-                                                ...FONTS.h4,
-                                                flex: 0.5,
-                                                color: COLORS.black,
-                                                textAlign: 'right',
-                                                // fontWeight: 'bold',
-                                            }}>
-                                            L
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                ...FONTS.h4,
-                                                flex: 0.5,
-                                                color: COLORS.black,
-                                                textAlign: 'right',
-                                                // fontWeight: 'bold',
-                                            }}>
-                                            W
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                ...FONTS.h4,
-                                                flex: 0.5,
-                                                color: COLORS.black,
-                                                textAlign: 'right',
-                                                // fontWeight: 'bold',
-                                            }}>
-                                            H
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                ...FONTS.h4,
-                                                flex: 1,
-                                                color: COLORS.black,
-                                                textAlign: 'right',
-                                                // fontWeight: 'bold',
-                                            }}>
-                                            Total
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                ...FONTS.h3,
-                                                flex: 1,
-                                                color: COLORS.black,
-                                                textAlign: 'right',
-                                                // fontWeight: 'bold',
-                                            }}>
-                                            Remark
-                                        </Text>
-                                    </View>
-                                ) : null}
-                                <View
-                                    style={{
-                                        left: 100,
-                                        borderBottomWidth: 1,
-                                        borderColor: COLORS.darkGray2,
-                                        width: '75%',
-                                        marginVertical: 5,
-                                    }}></View>
-                                <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        // marginBottom: SIZES.base,
-                                    }}>
-                                    <Text
-                                        style={{
-                                            flex: 1,
-                                            ...FONTS.h4,
-                                            color: COLORS.darkGray,
-                                            // fsontWeight: 'bold',
-                                        }}></Text>
-                                    <Text
-                                        style={{
-                                            ...FONTS.h4,
-                                            flex: 0.5,
-                                            color: COLORS.darkGray,
-                                            textAlign: 'right',
-                                            // fontWeight: 'bold',
-                                        }}>
-                                        {ele.sub_length}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            ...FONTS.h4,
-                                            flex: 0.5,
-                                            color: COLORS.darkGray,
-                                            textAlign: 'right',
-                                            // fontWeight: 'bold',
-                                        }}>
-                                        {ele.sub_width}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            ...FONTS.h4,
-                                            flex: 0.5,
-                                            color: COLORS.darkGray,
-                                            textAlign: 'right',
-                                            // fontWeight: 'bold',
-                                        }}>
-                                        {ele.sub_height}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            ...FONTS.h4,
-                                            flex: 1,
-                                            color: COLORS.darkGray,
-                                            textAlign: 'right',
-                                            // fontWeight: 'bold',
-                                        }}>
-                                        {ele.sub_total}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            ...FONTS.h3,
-                                            flex: 1,
-                                            color: COLORS.darkGray,
-                                            textAlign: 'right',
-                                            // fontWeight: 'bold',
-                                        }}>
-                                        {ele.sub_quality_type}
-                                    </Text>
-                                </View>
-                            </View>
-                        );
-                    })}
-                </View>
-            </View>
-        );
-
-        return (
-            <View
-                style={{
-                    // height:'100%'
-                }}
-
-            >
-                <View
-                    style={{
-                        borderBottomWidth: 1,
-                        marginVertical: 10,
-                        borderColor: COLORS.gray2,
-                    }}></View>
-                <Text
-                    style={{
+                      style={{
+                        flex: 1,
                         ...FONTS.h3,
                         color: COLORS.black,
-                        textAlign: 'center',
-                    }}>
-                    Excluded Quantity
-                </Text>
-                <FlatList
-                    // contentContainerStyle={{marginTop: 5}}
-                    data={quantity}
-                    keyExtractor={(item, index) => `${index}`}
-                    renderItem={renderItem}
-                    nestedScrollEnabled={true}
-                    showsVerticalScrollIndicator={true}
-                    ItemSeparatorComponent={() => {
-                        return (
-                            <View
-                                style={{
-                                    width: '100%',
-                                    height: 1,
-                                    backgroundColor: COLORS.darkGray,
-                                    marginVertical: 10,
-                                }}></View>
-                        );
-                    }}
-                    ListHeaderComponent={
-                        <View>
-                            <View
-                                style={{
-                                    marginTop: 15,
-                                    flexDirection: 'row',
-                                    marginBottom: SIZES.base,
-                                }}>
-                                <Text
-                                    style={{
-                                        flex: 1,
-                                        ...FONTS.h3,
-                                        color: COLORS.black,
-                                    }}>
-                                    Items
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    L
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    W
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    H
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 1,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    Total
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 1,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    Remark
-                                </Text>
-                            </View>
-                            <View
-                                style={{
-                                    borderBottomWidth: 1,
-                                    borderColor: COLORS.darkGray,
-                                    marginBottom: 10,
-                                }}></View>
-                        </View>
-                    }
-                />
-            </View>
+                      }}>
+                      Items
+                    </Text>
+                    <Text
+                      style={{
+                        ...FONTS.h3,
+                        flex: 0.5,
+                        color: COLORS.black,
+                        textAlign: 'right',
+                      }}>
+                      L
+                    </Text>
+                    <Text
+                      style={{
+                        ...FONTS.h3,
+                        flex: 0.5,
+                        color: COLORS.black,
+                        textAlign: 'right',
+                      }}>
+                      W
+                    </Text>
+                    <Text
+                      style={{
+                        ...FONTS.h3,
+                        flex: 0.5,
+                        color: COLORS.black,
+                        textAlign: 'right',
+                      }}>
+                      H
+                    </Text>
+                    <Text
+                      style={{
+                        ...FONTS.h3,
+                        flex: 1,
+                        color: COLORS.black,
+                        textAlign: 'right',
+                      }}>
+                      Total
+                    </Text>
+                    <Text
+                      style={{
+                        ...FONTS.h3,
+                        flex: 1,
+                        color: COLORS.black,
+                        textAlign: 'right',
+                      }}>
+                      Remark
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      borderColor: COLORS.darkGray,
+                      marginBottom: 10,
+                    }}></View>
+                </View>
+              }
+            />
+          </View>
         );
-    }
-
+      }
 
 
     function renderRevertModal() {
@@ -2406,6 +2450,39 @@ const ViewReport = () => {
             {renderRevertModal()}
             {renderReportModal()}
             {onSelect == true && renderReport()}
+            <View>
+                {/* <View style={{
+                    flex: 1,
+                    padding: 10,
+                    backgroundColor: '#fff',
+                    alignItems: 'center',
+                }}>
+                    <TouchableOpacity onPress={createPDF}>
+                        <View>
+                            <Image
+                                //We are showing the Image from online
+                                source={{
+                                    uri:
+                                        'https://raw.githubusercontent.com/AboutReact/sampleresource/master/pdf.png',
+                                }}
+                                style={{
+                                    width: 150,
+                                    height: 150,
+                                    margin: 5,
+                                    resizeMode: 'stretch',
+                                }}
+                            />
+                            <Text style={{ color: 'black' }}>Create PDF</Text>
+                        </View>
+                        <Text style={{
+                            fontSize: 18,
+                            padding: 10,
+                            color: 'black',
+                            textAlign: 'center',
+                        }}>{filePath}</Text>
+                    </TouchableOpacity>
+                </View> */}
+            </View>
         </View>
     );
 }
@@ -2420,6 +2497,24 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 4.65,
         elevation: 8,
+    },
+    container: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+    },
+    textStyle: {
+        fontSize: 18,
+        padding: 10,
+        color: 'black',
+        textAlign: 'center',
+    },
+    imageStyle: {
+        width: 150,
+        height: 150,
+        margin: 5,
+        resizeMode: 'stretch',
     },
 });
 
