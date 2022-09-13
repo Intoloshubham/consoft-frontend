@@ -38,11 +38,11 @@ import {
 import { Get_Contractor_Data } from '../../ReportApi.js';
 import * as Animatable from 'react-native-animatable';
 
-// if (Platform.OS === 'android') {
-//     if (UIManager.setLayoutAnimationEnabledExperimental) {
-//         UIManager.setLayoutAnimationEnabledExperimental(true);
-//     }
-// }
+if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+}
 const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => {
 
     useEffect(() => {
@@ -59,6 +59,8 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
         body_ed_de_view,
     } = styles;
 
+    const animation = useRef(new Animated.Value(0)).current;
+    const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
     // console.log("Manpower")
     // console.log("🚀 ~ file: Manpower.js ~ line 56 ~ Manpower ~ projectTeamList", projectTeamList)
     // console.log("🚀 ~ file: Manpower.js ~ line 58 ~ Manpower ~ ProList", ProList)
@@ -66,46 +68,77 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
     //Manpower collapse
     const [TabCollapse, setTabCollapse] = useState(false)
 
+    const onPressIn = () => {
+        Animated.spring(animation, {
+            toValue: 0.5,
+            useNativeDriver: true,
+        }).start();
+    };
+    const onPressOut = () => {
+        setTimeout(() => {
+            Animated.spring(animation, {
+                toValue: 0,
+                useNativeDriver: true,
+            }).start();
+        }, 150);
+    };
     return (
         <>
-            <Pressable
-                onPress={() => {
-                    LayoutAnimation.easeInEaseOut();
-                    setTabCollapse(!TabCollapse)
-                }}
+            <Animated.View style={{ transform: [{ scale }] }}>
+                <Pressable
+                    onPress={() => {
+                        LayoutAnimation.easeInEaseOut();
+                        setTabCollapse(!TabCollapse)
+                    }}
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
 
-                style={{
-                    flexDirection: "row",
-                    paddingHorizontal: SIZES.base,
-                    paddingVertical: 3,
-                    width: SIZES.width * 0.53,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    backgroundColor: COLORS.lightblue_600,
-                    top: SIZES.base * 2,
-                    borderColor: COLORS.lightblue_200,
-                    borderWidth: 1,
-                    borderRadius: 4,
-                    elevation: 2,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                        width: 0,
-                        height: 4,
-                    },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 4.65,
-                }}>
-                <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.white }]}>Manpower</Text>
-                </View>
+                    style={{
+                        flexDirection: "row",
+                        paddingHorizontal: SIZES.base,
+                        paddingVertical: 3,
+                        width: SIZES.width * 0.53,
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        backgroundColor: COLORS.lightblue_600,
+                        top: SIZES.base * 2,
+                        borderColor: COLORS.lightblue_200,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        elevation: 2,
+                        shadowColor: '#000',
+                        shadowOffset: {
+                            width: 0,
+                            height: 4,
+                        },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 4.65,
+                    }}>
+                    <View style={{ alignItems: "center", alignSelf: "center" }}>
+                        <Text
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                            onPress={() => {
+                                LayoutAnimation.easeInEaseOut();
+                                setTabCollapse(!TabCollapse)
+                            }} style={[FONTS.h3, { color: COLORS.white }]}>Manpower</Text>
+                    </View>
 
-                <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <TouchableOpacity onPress={() => setTabCollapse(!TabCollapse)}>
-                        <AntDesign name='caretdown' size={12} color={COLORS.white2} />
-                    </TouchableOpacity>
-                </View>
+                    <View style={{ alignItems: "center", alignSelf: "center" }}>
+                        <TouchableOpacity
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                            onPress={() => {
+                                LayoutAnimation.easeInEaseOut();
 
-            </Pressable>
+                                setTabCollapse(!TabCollapse)
+                            }}>
+                            <AntDesign name='caretdown' size={12} color={COLORS.white2} />
+                        </TouchableOpacity>
+                    </View>
+
+                </Pressable>
+            </Animated.View>
             {TabCollapse ? <View
                 duration={4000}
                 style={{ justifyContent: "space-evenly" }}>

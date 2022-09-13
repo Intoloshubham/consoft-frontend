@@ -9,7 +9,9 @@ import {
   Pressable,
   Button,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  LayoutAnimation,
+  Animated
 
 } from 'react-native';
 import { Title, Divider } from 'react-native-paper';
@@ -58,6 +60,25 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
+
+  const animation = useRef(new Animated.Value(0)).current;
+  const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
+
+
+  const onPressIn = () => {
+    Animated.spring(animation, {
+      toValue: 0.5,
+      useNativeDriver: true,
+    }).start();
+  };
+  const onPressOut = () => {
+    setTimeout(() => {
+      Animated.spring(animation, {
+        toValue: 0,
+        useNativeDriver: true,
+      }).start();
+    }, 150);
+  };
 
   // state
   const [quantityitem, setquantityitem] = useState('');
@@ -1252,21 +1273,26 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
   return (
     <View>
+    <Animated.View style={{ transform: [{ scale }] }}>
       <Pressable
         onPress={() => {
           Main_drp_pro_value ? null : alert("Select Project First!")
           setQuantity(!quant_ity)
+          LayoutAnimation.easeInEaseOut();
         }}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
         style={{
           flexDirection: 'row',
           paddingHorizontal: SIZES.base,
           paddingVertical: 3,
+          overflow: 'hidden',
           width: SIZES.width * 0.53,
           alignItems: 'center',
           justifyContent: 'space-between',
           top: SIZES.base * 2,
           borderColor: COLORS.lightblue_200,
-          backgroundColor:COLORS.lightblue_600,
+          backgroundColor: COLORS.lightblue_600,
           borderWidth: 1,
           borderRadius: 4,
           elevation: 2,
@@ -1280,26 +1306,36 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
         }}>
         <View style={{ alignItems: 'center', alignSelf: 'center' }}>
           <Text
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
             onPress={() => {
               Main_drp_pro_value ? null : alert("Select Project First!")
-              setQuantity(!quant_ity)
+              setQuantity(!quant_ity);
+              LayoutAnimation.easeInEaseOut()
+
             }}
             style={[FONTS.h3, { color: COLORS.white2 }]}>
             Quantity Exec. Today
           </Text>
         </View>
         <View style={{ alignItems: 'flex-end', alignSelf: 'center' }}>
-          <TouchableOpacity onPress={() => {
-            setQuantity(!quant_ity)
+          <TouchableOpacity
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
+            onPress={() => {
+              setQuantity(!quant_ity);
+              LayoutAnimation.easeInEaseOut();
 
-            Main_drp_pro_value ? null : alert("Select Project First!")
+
+              Main_drp_pro_value ? null : alert("Select Project First!")
 
 
-          }}>
+            }}>
             <AntDesign name="caretdown" size={12} color={COLORS.white2} />
           </TouchableOpacity>
         </View>
       </Pressable>
+    </Animated.View>
       <View
         style={{
           alignSelf: "center",

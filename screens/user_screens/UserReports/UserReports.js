@@ -157,9 +157,9 @@ const UserReports = ({ route }) => {
         // body: JSON.stringify(inputs),
       })
       const data = await res.json();
-      console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
-      if (data.status===200) {
-      setSubmitToast(true);
+      // console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
+      if (data.status === 200) {
+        setSubmitToast(true);
       }
 
       setTimeout(() => {
@@ -273,50 +273,59 @@ const UserReports = ({ route }) => {
               {/* Quality */}
               <TAndP Main_drp_pro_value={value} loading={loading} />
             </View>
-            <View style={{
-              top: SIZES.height * 0.02
-            }}>
-              <TouchableOpacity
-                style={{
-                  marginTop: SIZES.body1 * 8,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  backgroundColor: COLORS.lightblue_800,
-                  width: "45%",
-                  padding: 10,
-                  alignSelf: "center",
-                  borderRadius: 5,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 4,
-                  },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 4.65,
-                  elevation: 8,
-                }}
-                onPress={() => {
-                  // handleDoneTask()
-                  finalSubmitReport()
-                  // navigation.navigate('ViewReport');
+          <View style={{
+            top: SIZES.height * 0.2,
+            // position: 'relative',
 
-                }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Image source={icons.report} style={{
-                    height: 24,
-                    tintColor: 'white',
-                    width: 24
-                  }} />
-                  <Text style={{ ...FONTS.h4, color: COLORS.white3, textTransform: 'uppercase', left: 10 }}>
-                    Final Submit
-                  </Text>
-                </View>
+          }}>
+            <TouchableOpacity
+              style={{
+                marginTop: SIZES.body1 * 4,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                backgroundColor: COLORS.lightblue_800,
+                width: "45%",
+                padding: 10,
+                alignSelf: "center",
+                // top: 0,
+                // left: 0,
+                // right: 0,
+                // bottom:0,
+                // position:'absolute',
+                borderRadius: 5,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 4,
+                },
+                shadowOpacity: 0.3,
+                shadowRadius: 4.65,
+                elevation: 8,
+              }}
+              onPress={() => {
+                // handleDoneTask()
+                finalSubmitReport()
+                // navigation.navigate('ViewReport');
 
-              </TouchableOpacity>
-            </View>
+              }}>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+
+              }}>
+                <Image source={icons.report} style={{
+                  height: 24,
+                  tintColor: 'white',
+                  width: 24
+                }} />
+                <Text style={{ ...FONTS.h4, color: COLORS.white3, textTransform: 'uppercase', left: 10 }}>
+                  Final Submit
+                </Text>
+              </View>
+
+            </TouchableOpacity>
           </View>
-
-
+          </View>
 
             : null}
         </View>
@@ -324,8 +333,8 @@ const UserReports = ({ route }) => {
           isVisible={submitToast}
           onClose={() => setSubmitToast(false)}
           color={COLORS.green}
-          title="Add Team"
-          message="Addedd Successfully..."
+          title="Final Report Submission"
+          message=" Report submitted Successfully..."
         />
       </KeyboardAwareScrollView>
     </View>

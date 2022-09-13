@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useMemo, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
-  RefreshControl, ScrollView
+  Animated,
+  TouchableOpacity, LayoutAnimation,
+  RefreshControl, ScrollView, Pressable
 } from 'react-native';
 import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { AccordionList } from 'accordion-collapse-react-native';
@@ -36,12 +37,33 @@ const UserAssignWorks = ({ loading }) => {
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
+
+  const animation = useRef(new Animated.Value(0)).current;
+  const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
+
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [commentCollapse, setCommentCollapse] = useState(false);
   const [commentStatus, setCommentStatus] = useState(false)
 
   const userData = useSelector(state => state.user);
   // console.log(userData._id)
+  const onPressIn = () => {
+    Animated.spring(animation, {
+      toValue: 0.5,
+      useNativeDriver: true,
+    }).start();
+  };
+  const onPressOut = () => {
+    setTimeout(() => {
+      Animated.spring(animation, {
+        toValue: 0.2,
+        useNativeDriver: true,
+      }).start();
+    }, 150);
+  };
+
+
+
   const fetchAssignWorks = async () => {
     setUserDataId(userData._id);
     const data = await getAssignWorks(userData._id);
@@ -184,60 +206,60 @@ const UserAssignWorks = ({ loading }) => {
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
         }}>
-        <View style={{
-          backgroundColor: COLORS.white,
-          elevation: 15,
-          width: `${item.work_percent}%`,
-          borderBottomWidth: 10, borderColor: COLORS.green
-        }}>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+          <View style={{
+            backgroundColor: COLORS.white,
+            elevation: 15,
+            width: `${item.work_percent}%`,
+            borderBottomWidth: 10, borderColor: COLORS.green
           }}>
-
-          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-            <Text
-              style={{
-                fontSize: 12,
-                paddingHorizontal: 5,
-                backgroundColor: COLORS.white,
-                color: COLORS.black,
-                elevation: 10,
-                borderRadius: 1,
-              }}>
-              {item.work_code}
-            </Text>
-            <Text
-              style={{
-                ...FONTS.h4,
-                color: COLORS.lightGray2,
-                left: 10,
-              }}>
-              {item.work}
-            </Text>
           </View>
-          <Image
-            source={icons.down_arrow}
-            style={{ height: 15, width: 15, tintColor: COLORS.white }}
-          />
-        </View>
-        <View style={{
-          flexDirection: "row",
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
 
-        }}>
-          <Text style={{ color: color, marginTop: 3 }}>{message}</Text>
-          {message == 'Revert' ? <Text style={{ color: COLORS.white2, marginTop: 3 }}>: reverted</Text> : null}
-        </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  paddingHorizontal: 5,
+                  backgroundColor: COLORS.white,
+                  color: COLORS.black,
+                  elevation: 10,
+                  borderRadius: 1,
+                }}>
+                {item.work_code}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.lightGray2,
+                  left: 10,
+                }}>
+                {item.work}
+              </Text>
+            </View>
+            <Image
+              source={icons.down_arrow}
+              style={{ height: 15, width: 15, tintColor: COLORS.white }}
+            />
+          </View>
+          <View style={{
+            flexDirection: "row",
+
+          }}>
+            <Text style={{ color: color, marginTop: 3 }}>{message}</Text>
+            {message == 'Revert' ? <Text style={{ color: COLORS.white2, marginTop: 3 }}>: reverted</Text> : null}
+          </View>
       </View>
     );
   };
 
   const renderHeader = (item, index) => {
     return (
-      <>
+      <Animated.View style={{ transform: [{ scale }] }}>
         <View>
           {item.work_status == true &&
             item.verify == false &&
@@ -255,11 +277,11 @@ const UserAssignWorks = ({ loading }) => {
             item.verify == false &&
             item.revert_status == false ? (
             <WorkDetails item={item} message={''} color={COLORS.black} />
-          ) 
-          : null
+          )
+            : null
           }
         </View>
-      </>
+      </Animated.View>
     );
   };
 
@@ -439,9 +461,6 @@ const UserAssignWorks = ({ loading }) => {
       </View>
     );
   };
-
-  // console.log("🚀 ~ file: UserAssignWorks.js ~ line 543 ~ UserAssignWorks ~ getTaskInProgress", getTaskInProgress)
-
   return (
 
     <View
@@ -488,7 +507,14 @@ const UserAssignWorks = ({ loading }) => {
           <AccordionList
             list={getTaskInProgress ? getTaskInProgress : null}
             header={renderHeader}
+            
             body={renderBody}
+            // onPress={
+            //   // LayoutAnimation.easeInEaseOut()
+            // ()=> { alert('sd')}
+            // }
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
             isExpanded={false}
             style={{
               // borderWidth: 1,
@@ -503,7 +529,6 @@ const UserAssignWorks = ({ loading }) => {
             // onToggle={(isExpanded) => {
             //   setIsExpand(!isExpand);
             //   // setIsExpandId(isExpanded);
-            //   // console.log("🚀 ~ file: UserAssignWorks.js ~ line 392 ~ UserAssignWorks ~ isExpanded", isExpanded)
             // }}
             keyExtractor={item => `${item._id}`}
             showsVerticalScrollIndicator={false}
