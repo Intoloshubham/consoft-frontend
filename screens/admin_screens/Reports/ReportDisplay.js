@@ -102,7 +102,9 @@ const ReportDisplay = () => {
 
   // fetch quantity report on click
   const fetchQuantity = async report_id => {
+    // console.log(report_id);
     let response = await getQuantity(report_id);
+    // console.log(response);
     if (response.status === 200) {
       setQuantity(response.data);
     }
@@ -349,7 +351,7 @@ const ReportDisplay = () => {
           borderWidth: 1,
           borderColor: COLORS.gray2,
           padding: 10,
-          width: SIZES.width / 2.4,
+          width: SIZES.width / 2.3,
         }}>
         <Text
           style={{
@@ -396,6 +398,68 @@ const ReportDisplay = () => {
       </View>
     );
 
+    const headerComponent = () => (
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 25,
+              color: COLORS.lightblue_800,
+              textTransform: 'capitalize',
+            }}>
+            {reportData.project_name}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{fontSize: 14, color: COLORS.black}}>
+                Date{' - '}
+              </Text>
+              <Text style={{fontSize: 13, color: COLORS.black}}>
+                {reportData.date}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{fontSize: 14, color: COLORS.black}}>
+                Time{' - '}
+              </Text>
+              <Text style={{fontSize: 13, color: COLORS.black}}>
+                {reportData.time}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            marginTop: 15,
+            marginBottom: 5,
+            borderColor: COLORS.gray2,
+          }}></View>
+        <View>
+          <Text
+            style={{
+              fontSize: 18,
+              color: COLORS.lightblue_700,
+              textAlign: 'center',
+              textDecorationLine: 'underline',
+              marginBottom: 5,
+            }}>
+            Manpower
+          </Text>
+          <Text style={{...FONTS.h3, color: COLORS.black}}>Contractors</Text>
+        </View>
+      </View>
+    );
+
     const footerComponent = () => (
       <View>
         {renderQuantity()}
@@ -412,338 +476,272 @@ const ReportDisplay = () => {
           }}>
           <View
             style={{
-              top: 30,
+              top: 20,
               backgroundColor: COLORS.white,
-              paddingHorizontal: SIZES.radius,
-              paddingBottom: SIZES.radius,
+              paddingHorizontal: SIZES.base,
+              // paddingBottom: SIZES.radius,
               height: '100%',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
             }}>
             <View
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <ImageBackground
-                style={{
-                  borderWidth: 2,
-                  borderRadius: 20,
-                  borderColor: 'white',
-                  padding: 3,
-                  top: -20,
-                  backgroundColor: COLORS.rose_600,
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setReportModal(false);
-                  }}>
-                  <Image
-                    source={icons.cross}
-                    style={{height: 25, width: 25, tintColor: COLORS.white}}
-                  />
-                </TouchableOpacity>
-              </ImageBackground>
+              <TouchableOpacity
+                onPress={() => {
+                  setReportModal(false);
+                }}
+                style={{top: -5}}>
+                <Image
+                  source={icons.minus}
+                  style={{height: 35, width: 35, tintColor: COLORS.darkGray}}
+                />
+              </TouchableOpacity>
             </View>
-            <Text
-              style={{
-                textAlign: 'center',
-                marginBottom: 8,
-                ...FONTS.h3,
-                color: COLORS.lightblue_700,
-                fontWeight: '500',
-                textDecorationLine: 'underline',
-              }}>
-              Daily Progress Report
-            </Text>
             <View
               style={{
                 borderWidth: 1,
                 borderColor: COLORS.darkGray2,
-                padding: 15,
+                padding: 12,
               }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Text
-                  style={{
-                    fontSize: 25,
-                    color: COLORS.black,
-                    textTransform: 'capitalize',
-                  }}>
-                  {reportData.project_name}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                  }}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 14, color: COLORS.black}}>
-                      Date{' - '}
-                    </Text>
-                    <Text style={{fontSize: 13, color: COLORS.black}}>
-                      {reportData.date}
-                    </Text>
-                  </View>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 14, color: COLORS.black}}>
-                      Time{' - '}
-                    </Text>
-                    <Text style={{fontSize: 13, color: COLORS.black}}>
-                      {reportData.time}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  marginTop: 15,
-                  marginBottom: 5,
-                  borderColor: COLORS.gray2,
-                }}></View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: COLORS.black,
-                    textAlign: 'center',
-                    textDecorationLine: 'underline',
-                    marginBottom: 5,
-                  }}>
-                  Manpower
-                </Text>
-                <Text style={{...FONTS.h3, color: COLORS.black}}>
-                  Contractors
-                </Text>
-
-                <FlatList
-                  contentContainerStyle={{marginTop: 5, maxHeight: 450}}
-                  numColumns={2}
-                  columnWrapperStyle={{justifyContent: 'space-between'}}
-                  data={manpower}
-                  keyExtractor={item => `${item._id}`}
-                  renderItem={renderItem}
-                  scrollEnabled={true}
-                  showsVerticalScrollIndicator={false}
-                  ItemSeparatorComponent={() => {
-                    return <View style={{margin: 5}}></View>;
-                  }}
-                  ListFooterComponent={footerComponent}
-                />
-              </View>
+              <FlatList
+                numColumns={2}
+                columnWrapperStyle={{justifyContent: 'space-between'}}
+                data={manpower}
+                keyExtractor={item => `${item._id}`}
+                renderItem={renderItem}
+                scrollEnabled={true}
+                maxHeight={600}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => {
+                  return <View style={{margin: 5}}></View>;
+                }}
+                ListHeaderComponent={headerComponent}
+                ListFooterComponent={footerComponent}
+              />
             </View>
           </View>
         </View>
+        {/* </View> */}
       </Modal>
     );
   }
 
   // quantity report
   function renderQuantity() {
-    const renderItem = ({item, index}) => (
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
-          <Text
-            style={{
-              flex: 1,
-              ...FONTS.h3,
-              color: COLORS.black,
-            }}>
-            {item.quantityWorkItems.item_name}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_length}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_width}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_height}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 1,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_total}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 1,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.quality_type}
-          </Text>
-        </View>
-        {index == 0 ? (
-          <View
-            style={{
-              borderBottomWidth: 1,
-              marginVertical: index == 0 ? 10 : null,
-              borderColor: COLORS.darkGray2,
-            }}></View>
-        ) : null}
-        <View style={{}}>
-          {item.quantityWorkItems.subquantityitems.map((ele, i) => {
-            return (
-              <View key={i}>
-                {i == 0 ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                    }}>
-                    <Text
+    const renderItem = ({item, index}) =>
+      item.quantityWorkItems.map((ele, i) => {
+        return (
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <Text
+                style={{
+                  flex: 1,
+                  ...FONTS.h3,
+                  color: COLORS.black,
+                }}>
+                {ele.item_name}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 0.5,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                }}>
+                {ele.num_length}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 0.5,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                }}>
+                {ele.num_width}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 0.5,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                }}>
+                {ele.num_height}
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 1,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                }}>
+                {ele.num_total}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  flex: 1,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                }}>
+                {ele.remark}
+              </Text>
+            </View>
+            {/* {i == 0 ? (
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  marginVertical: index == 0 ? 10 : null,
+                  borderColor: COLORS.darkGray2,
+                }}></View>
+            ) : null} */}
+            <View style={{}}>
+              {ele.subquantityitems.map((ele, i) => {
+                return (
+                  <View key={i}>
+                    {i == 0 ? (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                        }}>
+                        <Text
+                          style={{
+                            flex: 1,
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                          }}></Text>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            flex: 0.5,
+                            color: COLORS.black,
+                            textAlign: 'right',
+                          }}>
+                          L
+                        </Text>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            flex: 0.5,
+                            color: COLORS.black,
+                            textAlign: 'right',
+                          }}>
+                          W
+                        </Text>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            flex: 0.5,
+                            color: COLORS.black,
+                            textAlign: 'right',
+                          }}>
+                          H
+                        </Text>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            flex: 1,
+                            color: COLORS.black,
+                            textAlign: 'right',
+                          }}>
+                          Total
+                        </Text>
+                        <Text
+                          style={{
+                            ...FONTS.h3,
+                            flex: 1,
+                            color: COLORS.black,
+                            textAlign: 'right',
+                          }}>
+                          Remark
+                        </Text>
+                      </View>
+                    ) : null}
+                    <View
                       style={{
-                        flex: 1,
-                        ...FONTS.h4,
-                        color: COLORS.black,
-                      }}></Text>
-                    <Text
+                        left: 100,
+                        borderBottomWidth: 1,
+                        borderColor: COLORS.darkGray2,
+                        width: '75%',
+                        marginVertical: 5,
+                      }}></View>
+                    <View
                       style={{
-                        ...FONTS.h4,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
+                        flexDirection: 'row',
                       }}>
-                      L
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      W
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      H
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        flex: 1,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      Total
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h3,
-                        flex: 1,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      Remark
-                    </Text>
+                      <Text
+                        style={{
+                          flex: 1,
+                          ...FONTS.h4,
+                          color: COLORS.black,
+                        }}></Text>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          flex: 0.5,
+                          color: COLORS.black,
+                          textAlign: 'right',
+                        }}>
+                        {ele.sub_length}
+                      </Text>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          flex: 0.5,
+                          color: COLORS.black,
+                          textAlign: 'right',
+                        }}>
+                        {ele.sub_width}
+                      </Text>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          flex: 0.5,
+                          color: COLORS.black,
+                          textAlign: 'right',
+                        }}>
+                        {ele.sub_height}
+                      </Text>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          flex: 1,
+                          color: COLORS.black,
+                          textAlign: 'right',
+                        }}>
+                        {ele.sub_total}
+                      </Text>
+                      <Text
+                        style={{
+                          ...FONTS.h3,
+                          flex: 1,
+                          color: COLORS.black,
+                          textAlign: 'right',
+                        }}>
+                        {ele.sub_quality_type}
+                      </Text>
+                    </View>
                   </View>
-                ) : null}
+                );
+              })}
+              {i == 0 ? (
                 <View
                   style={{
-                    left: 100,
                     borderBottomWidth: 1,
-                    borderColor: COLORS.darkGray2,
-                    width: '75%',
-                    marginVertical: 5,
+                    marginVertical: index == 0 ? 10 : null,
+                    borderColor: COLORS.darkGray,
                   }}></View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      flex: 1,
-                      ...FONTS.h4,
-                      color: COLORS.black,
-                    }}></Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_length}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_width}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_height}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 1,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_total}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h3,
-                      flex: 1,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_quality_type}
-                  </Text>
-                </View>
-              </View>
-            );
-          })}
-        </View>
-      </View>
-    );
+              ) : null}
+            </View>
+          </View>
+        );
+      });
 
     return (
       <View>
@@ -757,7 +755,7 @@ const ReportDisplay = () => {
         <Text
           style={{
             fontSize: 18,
-            color: COLORS.black,
+            color: COLORS.lightblue_700,
             textAlign: 'center',
             textDecorationLine: 'underline',
             marginBottom: 5,
@@ -765,7 +763,6 @@ const ReportDisplay = () => {
           Excluded Quantity
         </Text>
         <FlatList
-          contentContainerStyle={{maxHeight: 450}}
           data={quantity}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
@@ -868,12 +865,22 @@ const ReportDisplay = () => {
           }}></View>
         <Text
           style={{
-            ...FONTS.h3,
-            color: COLORS.black,
-            marginBottom: 5,
+            fontSize: 18,
+            color: COLORS.lightblue_700,
+            textAlign: 'center',
+            textDecorationLine: 'underline',
+            marginBottom: 15,
           }}>
-          Report status :
+          Report Progress Status
         </Text>
+        {/* <Text
+          style={{
+            fontSize: 18,
+            color: COLORS.black,
+            marginBottom: 8,
+          }}>
+          Report Progress Status:
+        </Text> */}
         {reportPath.map((ele, i) => {
           return (
             <View key={i}>
@@ -1551,6 +1558,7 @@ const ReportDisplay = () => {
       {renderProjectFilter()}
       {renderRevertModal()}
       {renderReportModal()}
+
       {onSelect == true && renderReport()}
     </View>
   );
