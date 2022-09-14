@@ -5,7 +5,7 @@ import {
     Text, FlatList,
     StyleSheet, Image,
     ScrollView, Modal, Button,
-    Pressable, TextInput, TouchableWithoutFeedback,
+    Pressable, TextInput, TouchableWithoutFeedback,Platform,UIManager,
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
 import styles from '../../ReportStyle.js'
@@ -25,6 +25,12 @@ import {
 } from '../../ReportApi'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
+if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
+
 const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, cont_Project_list_drop,
         body_ed_de_view, container, inputsContainer, inputContainer, inputfromone } = styles
@@ -40,6 +46,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
     // const [showDate, setShowDate] = useState('')
     const [updateId, setUpdateId] = useState('')
+    const [tAndPInsertStatus, setTandPInsertStatus] = useState(false)
     const [addNewEquipment, setAddNewEquipment] = useState(false)
     const userCompanyData = useSelector(state => state.user);
     const [calenderKey, setCalenderKey] = useState('')
@@ -116,8 +123,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const getEquipmentItems = async () => {
         try {
             const data = await get_equipment_item_name();
-            if (data.length > 0) {
-                // console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
+            if (data.length >= 0) {
                 setGetEquipItemName(data);
             }
         } catch (error) {
@@ -128,7 +134,6 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const getEquipReport = async () => {
         try {
             const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
-
             setGetEquipmentReport(data);
         } catch (error) {
             console.log(error)
@@ -140,7 +145,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         getEquipmentItems();
         getEquipReport();
 
-    }, [userCompanyData.company_id, loading])
+    }, [userCompanyData.company_id, loading,tAndPInsertStatus])
 
 
     const saveNewEquipmentItems = async () => {
@@ -186,6 +191,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
             if (isMount === true && temp.status == '200') {
                 setSubmitToast(true)
                 // getEquipmentItems();
+                setTandPInsertStatus(true);
                 setTimeout(() => {
                     setTandPModal(false);
                 }, 1500);
@@ -198,6 +204,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     }
 
     const editTAndPReportBtn = async (id) => {
+        setTandPInsertStatus(false);
         setRemoveAddOnEdit(true);
         setTandPModal(true);
         setUpdateId(id);
@@ -549,7 +556,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                     justifyContent: 'space-between',
                                     marginTop: 10,
                                 }}>
-                                <TouchableOpacity
+                             {!removeAddOnEdit?   <TouchableOpacity
                                     style={{
                                         borderWidth: 1,
                                         borderRadius: 1,
@@ -575,7 +582,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             color={COLORS.green}
                                         />
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity>:null}
                                 <TouchableOpacity
                                     style={{
                                         paddingHorizontal: 4,
@@ -808,7 +815,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             }}>
                                             <>
                                                 {
-                                                    getEquipmentReport.data.length > 0 ? getEquipmentReport.data.map((list, index) => (
+                                                    getEquipmentReport.data.length >= 0 ? getEquipmentReport.data.map((list, index) => (
 
                                                         <View
                                                             style={{
