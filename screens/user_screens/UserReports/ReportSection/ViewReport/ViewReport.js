@@ -1782,7 +1782,7 @@ const ViewReport = () => {
                                                                                                         <TouchableOpacity
                                                                                                             style={{
                                                                                                                 left: 30,
-                                                                                                                top: 50,
+                                                                                                                top: 53,
                                                                                                                 paddingHorizontal: 16,
                                                                                                                 paddingVertical: 1,
                                                                                                                 alignItems: 'center',

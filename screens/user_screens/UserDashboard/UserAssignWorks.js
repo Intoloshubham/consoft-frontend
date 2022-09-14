@@ -327,13 +327,18 @@ const UserAssignWorks = ({ loading }) => {
                 Assign Time: {item.assign_time}
               </Text>
             </View>
-            <View>
+           {item.comment? <View style={{
+              backgroundColor:COLORS.darkGray2,
+              paddingHorizontal:5
+            }}>
               <Text
-                style={{ ...FONTS.h5, color: COLORS.white }}
-              >Comment msg: {item.comment}
+                style={{ ...FONTS.h5, color: COLORS.white2 }}
+              >Comment Msg: {item.comment}
               </Text>
-            </View>
-            <View>
+            </View>:null}
+            <View style={{
+              top:5
+            }}>
               {item.comment_status == false && item.work_percent == 0 ?
                 <TouchableOpacity
                   style={{

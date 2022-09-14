@@ -90,14 +90,14 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     ])
 
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate;
 
+        const currentDate = selectedDate;
         const formatedDate =
             selectedDate.getFullYear() +
             '/' +
-            ('0' + selectedDate.getDate()).slice(-2) +
+            ('0' + (selectedDate.getMonth() + 1)).slice(-2)+
             '/' +
-            ('0' + (selectedDate.getMonth() + 1)).slice(-2);
+            ('0' + selectedDate.getDate()).slice(-2) 
 
         // const formatedDate = `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1
         //     }/${selectedDate.getDate()}`;
