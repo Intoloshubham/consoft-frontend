@@ -26,6 +26,8 @@ import {
 } from '../../../controller/ReportController';
 import {getProjectReportPath} from '../../../controller/ReportController';
 import {getUserId} from '../../../services/asyncStorageService';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import ReportPdf from './ReportPdf';
 
 const ReportDisplay = () => {
   const companyDetail = useSelector(state => state.company);
@@ -152,6 +154,18 @@ const ReportDisplay = () => {
   React.useEffect(() => {
     fetchReport();
   }, []);
+
+  //pdf
+  // const createPDF = async () => {
+  //   let options = {
+  //     html: ReportPdf(reportData, manpower, quantity),
+  //     fileName: 'report',
+  //     directory: 'Documents',
+  //   };
+
+  //   let file = await RNHTMLtoPDF.convert(options);
+  //   alert('Pdf Created Successfully');
+  // };
 
   // date section
   const [date, setDate] = React.useState(new Date());
@@ -496,10 +510,15 @@ const ReportDisplay = () => {
                 style={{top: -5}}>
                 <Image
                   source={icons.minus}
-                  style={{height: 35, width: 35, tintColor: COLORS.darkGray}}
+                  style={{height: 30, width: 35, tintColor: COLORS.darkGray}}
                 />
               </TouchableOpacity>
             </View>
+            {/* <TouchableOpacity
+              onPress={createPDF}
+              style={{alignItems: 'flex-end'}}>
+              <Text style={{color: COLORS.black, ...FONTS.h4}}>Print</Text>
+            </TouchableOpacity> */}
             <View
               style={{
                 borderWidth: 1,
@@ -534,7 +553,7 @@ const ReportDisplay = () => {
     const renderItem = ({item, index}) =>
       item.quantityWorkItems.map((ele, i) => {
         return (
-          <View>
+          <View key={i}>
             <View
               style={{
                 flexDirection: 'row',
@@ -719,12 +738,12 @@ const ReportDisplay = () => {
                       </Text>
                       <Text
                         style={{
-                          ...FONTS.h3,
+                          fontSize: 15,
                           flex: 1,
                           color: COLORS.black,
                           textAlign: 'right',
                         }}>
-                        {ele.sub_quality_type}
+                        {ele.sub_remark}
                       </Text>
                     </View>
                   </View>
