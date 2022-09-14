@@ -49,9 +49,9 @@ const UserDashboard = () => {
 
   return (
     <ScrollView
-      
+
       contentContainerStyle={{
-        flex:1
+        flex: 1
       }}
       refreshControl={
         <RefreshControl
@@ -104,6 +104,7 @@ const UserDashboard = () => {
           />
         )} */}
 
+     
         <TouchableOpacity
           style={{
             marginTop: SIZES.base,
@@ -111,24 +112,18 @@ const UserDashboard = () => {
             justifyContent: 'space-between',
             backgroundColor: COLORS.white,
             width: "45%",
-            paddingHorizontal:10,
-            alignItems:'center',
+            padding: 10,
             borderRadius: 5,
             ...styles.shadow,
           }}
-          onPress={() => handleDoneTask()}>
-          <View style={{
-            flexDirection: 'row',
-            alignItems:'center',
+          onPress={() => {
+            handleDoneTask()
           }}>
-            <View>
-              <Image source={icons.done} style={{ height: 22, width: 22 }} />
-            </View>
-            <View>
-              <Text style={{ ...FONTS.h4, color: COLORS.darkGray, textAlign: 'left' }}>
-                Completed Tasks
-              </Text>
-            </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={icons.done} style={{ height: 22, width: 22 }} />
+            <Text style={{ ...FONTS.h4, color: COLORS.darkGray, left: 10 }}>
+              Done Tasks !
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity

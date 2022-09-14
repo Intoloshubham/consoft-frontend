@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
     View, Animated,
     Easing, Switch,
-    Text, FlatList,
+    Text, FlatList,Platform,UIManager,
     StyleSheet, Image,
     ScrollView, Modal, SectionList,
     Pressable, TextInput, TouchableWithoutFeedback, SafeAreaView,
@@ -22,6 +22,12 @@ import {
     IconButton, TextButton, CustomToast,
     DeleteConfirmationToast,
 } from '../../../../../../Components'
+
+if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+}
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) => {
@@ -58,6 +64,8 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) =
     const [deleteToast, setDeleteToast] = React.useState(false);
 
     const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+
+
 
     const onPressIn = () => {
         Animated.spring(animation, {
@@ -115,10 +123,11 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) =
 
 
     useMemo(() => {
-            if (Main_drp_pro_value ||  loading) {
-                fetchProjectTeam();                
-            }
-            
+        let isMount = true;
+        if (isMount === true || Main_drp_pro_value || loading) {
+            fetchProjectTeam();
+        }
+        return () => { isMount = false }
     }, [Main_drp_pro_value, loading]);
 
 

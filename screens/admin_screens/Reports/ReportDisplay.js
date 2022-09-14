@@ -419,7 +419,6 @@ const ReportDisplay = () => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-            
           <Text
             style={{
               flex: 1,
@@ -554,7 +553,7 @@ const ReportDisplay = () => {
     const renderItem = ({item, index}) =>
       item.quantityWorkItems.map((ele, i) => {
         return (
-          <View>
+          <View key={i}>
             <View
               style={{
                 flexDirection: 'row',

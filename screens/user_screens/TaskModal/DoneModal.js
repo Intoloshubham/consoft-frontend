@@ -22,7 +22,6 @@ const DoneModal = ({ doneModal, setdoneModal, loading }) => {
   const fetchCompletedWorks = async () => {
     // setUserDataId(userData._id);
     const data = await get_completed_task(userData._id);
-    console.log("🚀 ~ file: DoneModal.js ~ line 25 ~ fetchCompletedWorks ~ data", data)
     // console.log("🚀 ~ file: DoneModal.js ~ line 25 ~ fetchCompletedWorks ~ data", data)
 
     if (data.length>0) {
@@ -41,10 +40,8 @@ const DoneModal = ({ doneModal, setdoneModal, loading }) => {
 
 
   useMemo(() => {
-    if (loading) {
       fetchCompletedWorks();      
-    }
-  }, []); 
+  }, [loading]); 
 
 
 
