@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,12 @@ import {
   StyleSheet,
   LogBox,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Config from '../../../config';
-import {useNavigation} from '@react-navigation/native';
-import {ProfileValue} from '../../../Components';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
-import {userLogout} from '../../../services/userAuthApi';
+import { useNavigation } from '@react-navigation/native';
+import { ProfileValue } from '../../../Components';
+import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
+import { userLogout } from '../../../services/userAuthApi';
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -23,11 +23,11 @@ const Profile = () => {
 
   // get user data
   useEffect(() => {
-    fetch(`${Config.API_URL}user`, {
+    fetch(`${process.env.API_URL}user/${userData._id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${userData.token}`,
+        // authorization: `Bearer ${userData.token}`,
       },
     })
       .then(response => response.json())
@@ -37,7 +37,7 @@ const Profile = () => {
       .catch(error => {
         console.log(error);
       });
-  }, []);
+  }, [userData._id]);
 
   const logout = () => {
     dispatch(userLogout());
@@ -47,6 +47,8 @@ const Profile = () => {
   React.useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   });
+
+
 
   function renderProfileCard() {
     return (
@@ -121,10 +123,10 @@ const Profile = () => {
             }}>
             {userDetail.name}
           </Text>
-          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+          <Text style={{ color: COLORS.white, ...FONTS.body4 }}>
             {userDetail.email}
           </Text>
-          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+          <Text style={{ color: COLORS.white, ...FONTS.body4 }}>
             +91{userDetail.mobile}
           </Text>
         </View>
