@@ -175,6 +175,7 @@ const Boq = ({route}) => {
 
   const fetchBoqItems = async () => {
     let response = await getBOQItems(company_id, project_id);
+    // console.log(response);
     if (response.status === 200) {
       setBoqItems(response.data);
     }
@@ -336,7 +337,7 @@ const Boq = ({route}) => {
               <FormInput
                 label="Quantity"
                 keyboardType="numeric"
-                value={itemQty}
+                value={itemQty.toString()}
                 onChange={value => {
                   setItemQty(value);
                 }}
@@ -410,7 +411,7 @@ const Boq = ({route}) => {
             textAlign: 'right',
             // fontWeight: 'bold',
           }}>
-          {item.qty}
+          {item.completed_qty}/{item.qty}
         </Text>
         <Text
           style={{
