@@ -1502,9 +1502,10 @@ const ViewReport = () => {
 
                                                                                             <View style={{
 
-                                                                                                left: 60,
+                                                                                                left: 80,
+                                                                                                top:3
                                                                                             }}>
-                                                                                                {/* <TouchableOpacity
+                                                                                                <TouchableOpacity
                                                                                                     style={{
                                                                                                         left: 15,
                                                                                                         paddingHorizontal: 5,
@@ -1513,18 +1514,17 @@ const ViewReport = () => {
                                                                                                     }}
                                                                                                     onPress={() => {
                                                                                                         // setRevertModal(true)
-                                                                                                        // ele.verification_1 === user_id ? setRevertModal(true) : null
+                                                                                                        ele.verification_1 === user_id ? setRevertModal(true) : null
 
                                                                                                     }}>
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Revert
                                                                                                     </Text>
-                                                                                                </TouchableOpacity> */}
-
+                                                                                                </TouchableOpacity>
                                                                                                 <TouchableOpacity
                                                                                                     style={{
-                                                                                                        left: 35,
-                                                                                                        top: 25,
+                                                                                                        left: 15,
+                                                                                                        top: 8,
                                                                                                         paddingHorizontal: 5,
                                                                                                         paddingVertical: 1,
                                                                                                         alignItems: 'center',
@@ -1565,7 +1565,7 @@ const ViewReport = () => {
                                                                                                 position: 'absolute',
                                                                                                 left: 0,
                                                                                             }}>
-                                                                                                {/* <View
+                                                                                                <View
                                                                                                     style={{
                                                                                                         left: 20,
                                                                                                         top: 3,
@@ -1579,7 +1579,7 @@ const ViewReport = () => {
                                                                                                         }}
                                                                                                         onPress={() => {
                                                                                                             // fetchVerifyReport()
-                                                                                                            // ele.admin_1 === user_id ? fetchVerifyReport() : null
+                                                                                                            ele.admin_1 === user_id ? fetchVerifyReport() : null
 
                                                                                                         }
                                                                                                         }>
@@ -1587,7 +1587,7 @@ const ViewReport = () => {
                                                                                                             Verify
                                                                                                         </Text>
                                                                                                     </TouchableOpacity>
-                                                                                                </View> */}
+                                                                                                </View>
                                                                                                 {/* <View
                                                                                                     style={{
                                                                                                         left: 20,
@@ -1637,7 +1637,7 @@ const ViewReport = () => {
                                                                                                     style={{
                                                                                                         // backgroundColor: 'dodgerblue',
                                                                                                         width: SIZES.width * 0.5,
-                                                                                                        top: 100,
+                                                                                                        top: 75,
                                                                                                         right: 191,
                                                                                                         padding: 2
                                                                                                     }}
