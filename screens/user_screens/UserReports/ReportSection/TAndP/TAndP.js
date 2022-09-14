@@ -5,7 +5,7 @@ import {
     Text, FlatList,
     StyleSheet, Image,
     ScrollView, Modal, Button,
-    Pressable, TextInput, TouchableWithoutFeedback,
+    Pressable, TextInput, TouchableWithoutFeedback, Platform, UIManager,
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground
 } from 'react-native'
 import styles from '../../ReportStyle.js'
@@ -25,6 +25,12 @@ import {
 } from '../../ReportApi'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
+if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+}
+
 const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, cont_Project_list_drop,
         body_ed_de_view, container, inputsContainer, inputContainer, inputfromone } = styles
@@ -40,6 +46,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
 
     // const [showDate, setShowDate] = useState('')
     const [updateId, setUpdateId] = useState('')
+    const [tAndPInsertStatus, setTandPInsertStatus] = useState(false)
     const [addNewEquipment, setAddNewEquipment] = useState(false)
     const userCompanyData = useSelector(state => state.user);
     const [calenderKey, setCalenderKey] = useState('')
@@ -85,8 +92,15 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
 
-        const formatedDate = `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1
-            }/${selectedDate.getDate()}`;
+        const formatedDate =
+            selectedDate.getFullYear() +
+            '/' +
+            ('0' + selectedDate.getDate()).slice(-2) +
+            '/' +
+            ('0' + (selectedDate.getMonth() + 1)).slice(-2);
+
+        // const formatedDate = `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1
+        //     }/${selectedDate.getDate()}`;
 
         const _inputs = [...equipmentField];
         _inputs[calenderKey1].onDateChange = formatedDate;
@@ -140,7 +154,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         getEquipmentItems();
         getEquipReport();
 
-    }, [userCompanyData.company_id, loading])
+    }, [userCompanyData.company_id, loading, tAndPInsertStatus])
 
 
     const saveNewEquipmentItems = async () => {
@@ -186,6 +200,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
             if (isMount === true && temp.status == '200') {
                 setSubmitToast(true)
                 // getEquipmentItems();
+                setTandPInsertStatus(true);
                 setTimeout(() => {
                     setTandPModal(false);
                 }, 1500);
@@ -198,6 +213,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     }
 
     const editTAndPReportBtn = async (id) => {
+        setTandPInsertStatus(false);
         setRemoveAddOnEdit(true);
         setTandPModal(true);
         setUpdateId(id);
@@ -549,7 +565,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                     justifyContent: 'space-between',
                                     marginTop: 10,
                                 }}>
-                                <TouchableOpacity
+                                {!removeAddOnEdit ? <TouchableOpacity
                                     style={{
                                         borderWidth: 1,
                                         borderRadius: 1,
@@ -575,7 +591,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             color={COLORS.green}
                                         />
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity> : null}
                                 <TouchableOpacity
                                     style={{
                                         paddingHorizontal: 4,
@@ -854,8 +870,8 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                                     position: "absolute",
                                                                     left: 85,
                                                                     top: 3,
-                                                                    borderWidth: 1,
-                                                                    borderColor: COLORS.lightblue_200,
+                                                                    // borderWidth: 1,
+                                                                    // borderColor: COLORS.lightblue_200,
                                                                     right: 10,
                                                                 }}>
                                                                     <View>
@@ -875,13 +891,14 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                                         position: "absolute",
                                                                         left: 239,
                                                                         top: 3,
-                                                                        borderWidth: 1,
-                                                                        borderColor: COLORS.lightblue_200,
+                                                                        // borderWidth: 1,
+                                                                        // borderColor: COLORS.lightblue_200,
                                                                         right: 10,
                                                                     }}
                                                                 >
                                                                     <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                                                        {new Date(list.toolsAndMachineryReportItem.onDateChange).toLocaleDateString()}
+                                                                        {/* {new Date(list.toolsAndMachineryReportItem.onDateChange).toLocaleDateString()} */}
+                                                                        {list.toolsAndMachineryReportItem.onDateChange}
                                                                     </Text>
                                                                 </View>
                                                                 <View
@@ -892,8 +909,8 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                                                         position: "absolute",
                                                                         left: 350,
                                                                         top: 3,
-                                                                        borderWidth: 1,
-                                                                        borderColor: COLORS.lightblue_200,
+                                                                        // borderWidth: 1,
+                                                                        // borderColor: COLORS.lightblue_200,
                                                                         // right: 10,
                                                                     }}
                                                                 >

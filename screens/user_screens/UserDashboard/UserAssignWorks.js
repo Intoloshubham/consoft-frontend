@@ -195,6 +195,7 @@ const UserAssignWorks = ({ loading }) => {
 
   const WorkDetails = ({ item, message, color, index }) => {
 
+
     return (
       <View
         style={{
@@ -206,58 +207,59 @@ const UserAssignWorks = ({ loading }) => {
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
         }}>
-          <View style={{
-            backgroundColor: COLORS.white,
-            elevation: 15,
-            width: `${item.work_percent}%`,
-            borderBottomWidth: 10, borderColor: COLORS.green
+        <View style={{
+          backgroundColor: COLORS.white,
+          elevation: 15,
+          width: `${item.work_percent}%`,
+          borderBottomWidth: 10, borderColor: COLORS.green
+        }}>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingHorizontal: 5,
-                  backgroundColor: COLORS.white,
-                  color: COLORS.black,
-                  elevation: 10,
-                  borderRadius: 1,
-                }}>
-                {item.work_code}
-              </Text>
-              <Text
-                style={{
-                  ...FONTS.h4,
-                  color: COLORS.lightGray2,
-                  left: 10,
-                }}>
-                {item.work}
-              </Text>
-            </View>
-            <Image
-              source={icons.down_arrow}
-              style={{ height: 15, width: 15, tintColor: COLORS.white }}
-            />
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+            <Text
+              style={{
+                fontSize: 12,
+                paddingHorizontal: 5,
+                backgroundColor: COLORS.white,
+                color: COLORS.black,
+                elevation: 10,
+                borderRadius: 1,
+              }}>
+              {item.work_code}
+            </Text>
+            <Text
+              style={{
+                ...FONTS.h4,
+                color: COLORS.lightGray2,
+                left: 10,
+              }}>
+              {item.work}
+            </Text>
           </View>
-          <View style={{
-            flexDirection: "row",
+          <Image
+            source={icons.down_arrow}
+            style={{ height: 15, width: 15, tintColor: COLORS.white }}
+          />
+        </View>
+        <View style={{
+          flexDirection: "row",
 
-          }}>
-            <Text style={{ color: color, marginTop: 3 }}>{message}</Text>
-            {message == 'Revert' ? <Text style={{ color: COLORS.white2, marginTop: 3 }}>: reverted</Text> : null}
-          </View>
+        }}>
+          <Text style={{ color: color, marginTop: 3 }}>{message}</Text>
+          {message == 'Revert' ? <Text style={{ color: color, marginTop: 3 }}>{item.revert_msg}</Text> : null}
+        </View>
       </View>
     );
   };
 
   const renderHeader = (item, index) => {
+
     return (
       <Animated.View style={{ transform: [{ scale }] }}>
         <View>
@@ -323,6 +325,12 @@ const UserAssignWorks = ({ loading }) => {
               </Text>
               <Text style={{ ...FONTS.h5, color: COLORS.white }}>
                 Assign Time: {item.assign_time}
+              </Text>
+            </View>
+            <View>
+              <Text
+                style={{ ...FONTS.h5, color: COLORS.white }}
+              >Comment msg: {item.comment}
               </Text>
             </View>
             <View>
@@ -394,7 +402,7 @@ const UserAssignWorks = ({ loading }) => {
                 </TouchableOpacity>
               </View> : null
               : null}
-            {item.work_status == false ?
+            {item.work_status == false && item.comment_status == false ?
               <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
                 <View style={{ flexDirection: 'row' }}>
                   <TouchableOpacity
@@ -507,7 +515,7 @@ const UserAssignWorks = ({ loading }) => {
           <AccordionList
             list={getTaskInProgress ? getTaskInProgress : null}
             header={renderHeader}
-            
+
             body={renderBody}
             // onPress={
             //   // LayoutAnimation.easeInEaseOut()

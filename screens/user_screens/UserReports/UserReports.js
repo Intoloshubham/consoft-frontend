@@ -157,7 +157,7 @@ const UserReports = ({ route }) => {
         // body: JSON.stringify(inputs),
       })
       const data = await res.json();
-      console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
+      // console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
       if (data.status === 200) {
         setSubmitToast(true);
       }
