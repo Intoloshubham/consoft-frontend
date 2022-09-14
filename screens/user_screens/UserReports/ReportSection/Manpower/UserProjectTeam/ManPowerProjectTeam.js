@@ -114,8 +114,11 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) =
     };
 
 
-    useEffect(() => {
-        fetchProjectTeam();
+    useMemo(() => {
+            if (Main_drp_pro_value ||  loading) {
+                fetchProjectTeam();                
+            }
+            
     }, [Main_drp_pro_value, loading]);
 
 

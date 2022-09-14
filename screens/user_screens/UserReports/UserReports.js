@@ -136,8 +136,8 @@ const UserReports = ({ route }) => {
       const data = Get_Project_Team_Data(value)
       data.then(res => res.json())
         .then(result => {
-          console.log("result")
-          console.log(result)
+          // console.log("result")
+          // console.log(result)
           setProjectTeamList(result.data)
         })
     } else {
@@ -157,7 +157,7 @@ const UserReports = ({ route }) => {
         // body: JSON.stringify(inputs),
       })
       const data = await res.json();
-      // console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
+      console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
       if (data.status === 200) {
         setSubmitToast(true);
       }
