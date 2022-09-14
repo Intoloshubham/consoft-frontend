@@ -558,7 +558,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                     justifyContent: 'space-between',
                                     marginTop: 10,
                                 }}>
-                                <TouchableOpacity
+                             {!removeAddOnEdit?   <TouchableOpacity
                                     style={{
                                         borderWidth: 1,
                                         borderRadius: 1,
@@ -584,7 +584,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             color={COLORS.green}
                                         />
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity>:null}
                                 <TouchableOpacity
                                     style={{
                                         paddingHorizontal: 4,

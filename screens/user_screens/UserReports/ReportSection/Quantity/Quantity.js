@@ -19,7 +19,8 @@ import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
-import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data, get_quality_type } from '../../ReportApi.js'
+import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist,  update_quantity_data, 
+  get_quality_type,delete_Qty_Record } from '../../ReportApi.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -32,7 +33,12 @@ import {
   icons,
   images,
 } from '../../../../../constants';
-import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
+import {
+  FormInput, TextButton,
+  HeaderBar,
+  DeleteConfirmationToast,
+  CustomToast
+} from '../../../../../Components';
 
 const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const {
@@ -60,6 +66,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
+  const [deleteConfirm, setDeleteConfirm] = useState(false)
 
   const animation = useRef(new Animated.Value(0)).current;
   const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
@@ -109,6 +116,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const [saveItemsStatus, setSaveItemsStatus] = useState('')
   const [updateStatus, setUpdateStatus] = useState('')
 
+  const [deleteQtyId,setDeleteQtyId]=useState('')
 
   //setting post qty data  status 
   const [postQtyData, setPostQtyData] = useState('')
@@ -313,18 +321,15 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
 
-  // console.log("editReportData")
-  // console.log(editReportData.data._id.toString())
-  const deleteReportButton = () => {
-    // setReportmodal(true);
-    alert("delete")
-    //  if (mainCompId) {
-    //   const data = delete_report_data(mainCompId)
-    //   data.then(res => res.json())
-    //    .then(result => {
-    //       console.log(result)
-    //     })
-    // }
+  const deleteReportButton =async () => {
+    const res = await delete_Qty_Record(deleteQtyId);
+    // console.log("🚀 ~ file: Quantity.js ~ line 325 ~ deleteReportButton ~ res", res)
+    if (res.status === 200) {
+      setTimeout(() => {
+        setDeleteConfirm(false);
+      }, 300);
+      getReportData();
+    }
   }
 
 
@@ -1258,7 +1263,9 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
           </View>
           <View style={body_edit_btn}>
             <TouchableOpacity
-              onPress={() => deleteReportButton(__id)}
+              onPress={() => {
+                setDeleteQtyId(__id);
+                setDeleteConfirm(true)}}
             >
               <MaterialCommunityIcons name='delete' color={COLORS.red} size={del_size} />
             </TouchableOpacity>
@@ -1273,69 +1280,69 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
   return (
     <View>
-    <Animated.View style={{ transform: [{ scale }] }}>
-      <Pressable
-        onPress={() => {
-          Main_drp_pro_value ? null : alert("Select Project First!")
-          setQuantity(!quant_ity)
-          LayoutAnimation.easeInEaseOut();
-        }}
-        onPressIn={onPressIn}
-        onPressOut={onPressOut}
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: SIZES.base,
-          paddingVertical: 3,
-          overflow: 'hidden',
-          width: SIZES.width * 0.53,
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          top: SIZES.base * 2,
-          borderColor: COLORS.lightblue_200,
-          backgroundColor: COLORS.lightblue_600,
-          borderWidth: 1,
-          borderRadius: 4,
-          elevation: 2,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 4,
-          },
-          shadowOpacity: 0.3,
-          shadowRadius: 4.65,
-        }}>
-        <View style={{ alignItems: 'center', alignSelf: 'center' }}>
-          <Text
-            onPressIn={onPressIn}
-            onPressOut={onPressOut}
-            onPress={() => {
-              Main_drp_pro_value ? null : alert("Select Project First!")
-              setQuantity(!quant_ity);
-              LayoutAnimation.easeInEaseOut()
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <Pressable
+          onPress={() => {
+            Main_drp_pro_value ? null : alert("Select Project First!")
+            setQuantity(!quant_ity)
+            LayoutAnimation.easeInEaseOut();
+          }}
+          onPressIn={onPressIn}
+          onPressOut={onPressOut}
+          style={{
+            flexDirection: 'row',
+            paddingHorizontal: SIZES.base,
+            paddingVertical: 3,
+            overflow: 'hidden',
+            width: SIZES.width * 0.53,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            top: SIZES.base * 2,
+            borderColor: COLORS.lightblue_200,
+            backgroundColor: COLORS.lightblue_600,
+            borderWidth: 1,
+            borderRadius: 4,
+            elevation: 2,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 4,
+            },
+            shadowOpacity: 0.3,
+            shadowRadius: 4.65,
+          }}>
+          <View style={{ alignItems: 'center', alignSelf: 'center' }}>
+            <Text
+              onPressIn={onPressIn}
+              onPressOut={onPressOut}
+              onPress={() => {
+                Main_drp_pro_value ? null : alert("Select Project First!")
+                setQuantity(!quant_ity);
+                LayoutAnimation.easeInEaseOut()
 
-            }}
-            style={[FONTS.h3, { color: COLORS.white2 }]}>
-            Quantity Exec. Today
-          </Text>
-        </View>
-        <View style={{ alignItems: 'flex-end', alignSelf: 'center' }}>
-          <TouchableOpacity
-            onPressIn={onPressIn}
-            onPressOut={onPressOut}
-            onPress={() => {
-              setQuantity(!quant_ity);
-              LayoutAnimation.easeInEaseOut();
-
-
-              Main_drp_pro_value ? null : alert("Select Project First!")
+              }}
+              style={[FONTS.h3, { color: COLORS.white2 }]}>
+              Quantity Exec. Today
+            </Text>
+          </View>
+          <View style={{ alignItems: 'flex-end', alignSelf: 'center' }}>
+            <TouchableOpacity
+              onPressIn={onPressIn}
+              onPressOut={onPressOut}
+              onPress={() => {
+                setQuantity(!quant_ity);
+                LayoutAnimation.easeInEaseOut();
 
 
-            }}>
-            <AntDesign name="caretdown" size={12} color={COLORS.white2} />
-          </TouchableOpacity>
-        </View>
-      </Pressable>
-    </Animated.View>
+                Main_drp_pro_value ? null : alert("Select Project First!")
+
+
+              }}>
+              <AntDesign name="caretdown" size={12} color={COLORS.white2} />
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Animated.View>
       <View
         style={{
           alignSelf: "center",
@@ -1884,6 +1891,15 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
         color={COLORS.rose_600}
         title="Delete"
         message="Deleted Successfully..."
+      />
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => deleteReportButton()}
       />
 
     </View>

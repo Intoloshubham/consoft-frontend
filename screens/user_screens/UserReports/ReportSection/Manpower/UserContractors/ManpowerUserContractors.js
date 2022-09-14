@@ -325,18 +325,18 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     let temp_data = postUpdateData();
     // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 319 ~ updateManpowerReport ~ temp_data", temp_data)
 
-    // let data = {
-    //   manpowerCategories: temp_data
-    // }
-    // let res = await update_manpower_report(updateManpowerId, data);
-    // setManpowerUpdateStatus(res)
-    // if (res.status == '200') {
+    let data = {
+      manpowerCategories: temp_data
+    }
+    let res = await update_manpower_report(updateManpowerId, data);
+    setManpowerUpdateStatus(res)
+    if (res.status == '200') {
 
-    //   setUpdateToast(true);
-    //   setTimeout(() => {
-    //     setAddConMemberReportModal(false);
-    //   }, 1500);
-    // }
+      setUpdateToast(true);
+      setTimeout(() => {
+        setAddConMemberReportModal(false);
+      }, 1500);
+    }
   }
 
 
@@ -350,6 +350,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
         console.log("data not found!")
       }
     }
+    
   }
 
   useEffect(() => {
