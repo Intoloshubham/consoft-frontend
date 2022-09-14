@@ -50,7 +50,7 @@ const Home = ({navigation}) => {
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(companyData._id);
-    console.log(response);
+    // console.log(response);
     if (response.status === 200) {
       setSubmitWork(response.data);
     }
