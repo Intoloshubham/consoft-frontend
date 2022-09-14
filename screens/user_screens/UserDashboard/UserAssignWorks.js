@@ -258,6 +258,8 @@ const UserAssignWorks = ({ loading }) => {
   };
 
   const renderHeader = (item, index) => {
+    // console.log("🚀 ~ file: UserAssignWorks.js ~ line 261 ~ renderHeader ~ item", item)
+    
     return (
       <Animated.View style={{ transform: [{ scale }] }}>
         <View>

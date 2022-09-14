@@ -728,13 +728,13 @@ const ViewReport = () => {
                                                                             </Text>
                                                                         </TouchableOpacity>
 
-                                                                        <TouchableOpacity
+                                                                        {/* <TouchableOpacity
                                                                             style={{
                                                                                 left: 15,
                                                                                 top: 1,
                                                                                 paddingHorizontal: 5,
                                                                                 paddingVertical: 1,
-                                                                                backgroundColor: COLORS.rose_600,
+                                                                                backgroundColor: COLORS.red_300,
                                                                             }}
                                                                             onPress={() => {
                                                                                 ele.admin_1 === user_id ? setRevertModal(true) : null
@@ -742,14 +742,14 @@ const ViewReport = () => {
                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                 Revert
                                                                             </Text>
-                                                                        </TouchableOpacity>
-                                                                        <TouchableOpacity
+                                                                        </TouchableOpacity> */}
+                                                                        {/* <TouchableOpacity
                                                                             style={{
                                                                                 left: 15,
                                                                                 top: 2,
                                                                                 paddingHorizontal: 5,
                                                                                 paddingVertical: 1,
-                                                                                backgroundColor: COLORS.rose_600,
+                                                                                backgroundColor: COLORS.red_300,
                                                                             }}
                                                                             onPress={() => {
                                                                                 ele.admin_2 === user_id ? setRevertModal(true) : null
@@ -757,7 +757,7 @@ const ViewReport = () => {
                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                 Revert
                                                                             </Text>
-                                                                        </TouchableOpacity>
+                                                                        </TouchableOpacity> */}
 
                                                                     </View>
                                                                     <View style={{
@@ -784,7 +784,7 @@ const ViewReport = () => {
                                                                                 </Text>
                                                                             </TouchableOpacity>
                                                                         </View>
-                                                                        <View
+                                                                        {/* <View
                                                                             style={{
                                                                                 left: 20,
                                                                                 top: 1,
@@ -794,7 +794,7 @@ const ViewReport = () => {
                                                                                 style={{
                                                                                     paddingHorizontal: 5,
                                                                                     paddingVertical: 1,
-                                                                                    backgroundColor: COLORS.success_600,
+                                                                                    backgroundColor: COLORS.success_300,
                                                                                 }}
                                                                                 onPress={() => {
                                                                                     ele.admin_1 === user_id ? fetchVerifyReport() : null
@@ -804,8 +804,8 @@ const ViewReport = () => {
                                                                                     Verify
                                                                                 </Text>
                                                                             </TouchableOpacity>
-                                                                        </View>
-                                                                        <View
+                                                                        </View> */}
+                                                                        {/* <View
                                                                             style={{
                                                                                 left: 20,
                                                                                 top: 2,
@@ -815,7 +815,7 @@ const ViewReport = () => {
                                                                                 style={{
                                                                                     paddingHorizontal: 5,
                                                                                     paddingVertical: 1,
-                                                                                    backgroundColor: COLORS.success_600,
+                                                                                    backgroundColor: COLORS.success_300,
                                                                                 }}
                                                                                 onPress={() => {
                                                                                     ele.admin_2 === user_id ? fetchVerifyReport() : null
@@ -824,7 +824,7 @@ const ViewReport = () => {
                                                                                     Verify
                                                                                 </Text>
                                                                             </TouchableOpacity>
-                                                                        </View>
+                                                                        </View> */}
                                                                     </View>
                                                                 </View>
                                                             ) :
@@ -865,7 +865,7 @@ const ViewReport = () => {
                                                                                     />
                                                                                 </TouchableOpacity>
                                                                             </View>
-                                                                            <View
+                                                                            {/* <View
                                                                                 style={{
                                                                                     left: 20,
                                                                                     flexDirection: 'row',
@@ -884,8 +884,8 @@ const ViewReport = () => {
                                                                                         Verify
                                                                                     </Text>
                                                                                 </TouchableOpacity>
-                                                                            </View>
-                                                                            <View
+                                                                            </View> */}
+                                                                            {/* <View
                                                                                 style={{
                                                                                     left: 20,
                                                                                     flexDirection: 'row',
@@ -895,7 +895,7 @@ const ViewReport = () => {
                                                                                         paddingHorizontal: 5,
                                                                                         top: 5,
                                                                                         paddingVertical: 1,
-                                                                                        backgroundColor: COLORS.success_600,
+                                                                                        backgroundColor: COLORS.success_300,
                                                                                     }}
                                                                                     onPress={() => {
                                                                                         ele.admin_2 === user_id ? fetchVerifyReport() : null
@@ -905,9 +905,9 @@ const ViewReport = () => {
                                                                                         Verify
                                                                                     </Text>
                                                                                 </TouchableOpacity>
-                                                                            </View>
+                                                                            </View> */}
                                                                         </View>
-                                                                        <View
+                                                                        {/* <View
                                                                             style={{
                                                                                 left: 25
                                                                             }}>
@@ -916,7 +916,7 @@ const ViewReport = () => {
                                                                                     left: 15,
                                                                                     paddingHorizontal: 5,
                                                                                     paddingVertical: 1,
-                                                                                    backgroundColor: COLORS.rose_600,
+                                                                                    backgroundColor: COLORS.red_300,
                                                                                 }}
                                                                                 onPress={() => {
                                                                                     // setRevertModal(true)
@@ -961,7 +961,7 @@ const ViewReport = () => {
                                                                                     Revert
                                                                                 </Text>
                                                                             </TouchableOpacity>
-                                                                        </View>
+                                                                        </View> */}
                                                                     </View>
                                                                 ) :
                                                                 reportData.verify_1_status === true && reportData.verify_1_revert === false &&
@@ -1034,7 +1034,7 @@ const ViewReport = () => {
                                                                                         />
                                                                                     </TouchableOpacity>
                                                                                 </View>
-                                                                                <View
+                                                                                {/* <View
                                                                                     style={{
                                                                                         left: 20,
                                                                                         top: 13,
@@ -1055,9 +1055,9 @@ const ViewReport = () => {
                                                                                             Verify
                                                                                         </Text>
                                                                                     </TouchableOpacity>
-                                                                                </View>
+                                                                                </View> */}
                                                                             </View>
-                                                                            <View>
+                                                                            {/* <View>
                                                                                 <View
                                                                                     style={{
                                                                                         left: 30
@@ -1113,7 +1113,7 @@ const ViewReport = () => {
                                                                                         </Text>
                                                                                     </TouchableOpacity>
                                                                                 </View>
-                                                                            </View>
+                                                                            </View> */}
                                                                         </View>
                                                                     )
                                                                     : reportData.verify_1_status === true && reportData.verify_1_revert === false &&
@@ -1214,7 +1214,7 @@ const ViewReport = () => {
                                                                                         </TouchableOpacity>
                                                                                     </View>
                                                                                 </View>
-                                                                                <View>
+                                                                                {/* <View>
                                                                                     <View
                                                                                         style={{
                                                                                             left: 30
@@ -1270,7 +1270,7 @@ const ViewReport = () => {
                                                                                             </Text>
                                                                                         </TouchableOpacity>
                                                                                     </View>
-                                                                                </View>
+                                                                                </View> */}
                                                                             </View>
                                                                         )
                                                                         : reportData.verify_1_revert === true &&
@@ -1293,7 +1293,7 @@ const ViewReport = () => {
                                                                                             position: 'absolute',
                                                                                             left: 0,
                                                                                         }}>
-                                                                                            <View
+                                                                                            {/* <View
                                                                                                 style={{
                                                                                                     left: 20,
                                                                                                     flexDirection: 'row',
@@ -1313,8 +1313,8 @@ const ViewReport = () => {
                                                                                                         Verify
                                                                                                     </Text>
                                                                                                 </TouchableOpacity>
-                                                                                            </View>
-                                                                                            <View
+                                                                                            </View> */}
+                                                                                            {/* <View
                                                                                                 style={{
                                                                                                     left: 20,
                                                                                                     top: 1,
@@ -1335,8 +1335,8 @@ const ViewReport = () => {
                                                                                                         Verify
                                                                                                     </Text>
                                                                                                 </TouchableOpacity>
-                                                                                            </View>
-                                                                                            <View
+                                                                                            </View> */}
+                                                                                            {/* <View
                                                                                                 style={{
                                                                                                     left: 20,
                                                                                                     top: 2,
@@ -1357,7 +1357,7 @@ const ViewReport = () => {
                                                                                                         Verify
                                                                                                     </Text>
                                                                                                 </TouchableOpacity>
-                                                                                            </View>
+                                                                                            </View> */}
                                                                                         </View>
 
                                                                                         <View style={{
@@ -1390,7 +1390,7 @@ const ViewReport = () => {
                                                                                                     />
                                                                                                 </View>
                                                                                             </View>
-                                                                                            <TouchableOpacity
+                                                                                            {/* <TouchableOpacity
                                                                                                 style={{
                                                                                                     left: 15,
                                                                                                     paddingHorizontal: 5,
@@ -1406,8 +1406,8 @@ const ViewReport = () => {
                                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                     Revert
                                                                                                 </Text>
-                                                                                            </TouchableOpacity>
-                                                                                            <TouchableOpacity
+                                                                                            </TouchableOpacity> */}
+                                                                                            {/* <TouchableOpacity
                                                                                                 style={{
                                                                                                     left: 15,
                                                                                                     top: 12,
@@ -1423,15 +1423,15 @@ const ViewReport = () => {
                                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                     Revert
                                                                                                 </Text>
-                                                                                            </TouchableOpacity>
+                                                                                            </TouchableOpacity> */}
                                                                                         </View>
                                                                                     </View>
                                                                                     <View
                                                                                         style={{
                                                                                             // backgroundColor: 'dodgerblue',
                                                                                             width: SIZES.width * 0.5,
-                                                                                            top: 45,
-                                                                                            right: 190,
+                                                                                            top: 85,
+                                                                                            right: 192,
                                                                                             padding: 2
                                                                                         }}
                                                                                     >
@@ -1448,7 +1448,7 @@ const ViewReport = () => {
                                                                                 </View>
                                                                             )
                                                                             :
-                                                                            reportData.verify_1_status === true &&
+                                                                            reportData.verify_1_status === false &&
                                                                                 reportData.admin_1_revert === true &&
                                                                                 reportData.admin_2_revert === false
                                                                                 ? (
@@ -1464,7 +1464,7 @@ const ViewReport = () => {
 
                                                                                                 left: 60,
                                                                                             }}>
-                                                                                                <TouchableOpacity
+                                                                                                {/* <TouchableOpacity
                                                                                                     style={{
                                                                                                         left: 15,
                                                                                                         paddingHorizontal: 5,
@@ -1479,12 +1479,12 @@ const ViewReport = () => {
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Revert
                                                                                                     </Text>
-                                                                                                </TouchableOpacity>
+                                                                                                </TouchableOpacity> */}
 
                                                                                                 <TouchableOpacity
                                                                                                     style={{
-                                                                                                        left: 15,
-                                                                                                        top: 5,
+                                                                                                        left: 35,
+                                                                                                        top: 25,
                                                                                                         paddingHorizontal: 5,
                                                                                                         paddingVertical: 1,
                                                                                                         alignItems: 'center',
@@ -1503,10 +1503,10 @@ const ViewReport = () => {
                                                                                                         }}
                                                                                                     />
                                                                                                 </TouchableOpacity>
-                                                                                                <TouchableOpacity
+                                                                                                {/* <TouchableOpacity
                                                                                                     style={{
                                                                                                         left: 15,
-                                                                                                        top: 8,
+                                                                                                        top: 13,
                                                                                                         paddingHorizontal: 5,
                                                                                                         paddingVertical: 1,
                                                                                                         backgroundColor: COLORS.rose_600,
@@ -1519,13 +1519,13 @@ const ViewReport = () => {
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Revert
                                                                                                     </Text>
-                                                                                                </TouchableOpacity>
+                                                                                                </TouchableOpacity> */}
                                                                                             </View>
                                                                                             <View style={{
                                                                                                 position: 'absolute',
                                                                                                 left: 0,
                                                                                             }}>
-                                                                                                <View
+                                                                                                {/* <View
                                                                                                     style={{
                                                                                                         left: 20,
                                                                                                         top: 3,
@@ -1533,27 +1533,22 @@ const ViewReport = () => {
                                                                                                     }}>
                                                                                                     <TouchableOpacity
                                                                                                         style={{
-                                                                                                            paddingHorizontal: 16,
+                                                                                                            paddingHorizontal: 5,
                                                                                                             paddingVertical: 1,
-                                                                                                            alignItems: 'center',
-                                                                                                            backgroundColor: COLORS.transparent,
+                                                                                                            backgroundColor: COLORS.success_600,
                                                                                                         }}
                                                                                                         onPress={() => {
                                                                                                             // fetchVerifyReport()
-                                                                                                        }}>
-                                                                                                        <Image
-                                                                                                            source={icons.verify}
-                                                                                                            style={{
-                                                                                                                // left: 8,
+                                                                                                            // ele.admin_1 === user_id ? fetchVerifyReport() : null
 
-                                                                                                                width: 16,
-                                                                                                                height: 16,
-                                                                                                                tintColor: 'green',
-                                                                                                            }}
-                                                                                                        />
+                                                                                                        }
+                                                                                                        }>
+                                                                                                        <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                            Verify
+                                                                                                        </Text>
                                                                                                     </TouchableOpacity>
-                                                                                                </View>
-                                                                                                <View
+                                                                                                </View> */}
+                                                                                                {/* <View
                                                                                                     style={{
                                                                                                         left: 20,
                                                                                                         top: 5,
@@ -1575,8 +1570,8 @@ const ViewReport = () => {
                                                                                                             Verify
                                                                                                         </Text>
                                                                                                     </TouchableOpacity>
-                                                                                                </View>
-                                                                                                <View
+                                                                                                </View> */}
+                                                                                                {/* <View
                                                                                                     style={{
                                                                                                         left: 20,
                                                                                                         top: 6,
@@ -1597,12 +1592,12 @@ const ViewReport = () => {
                                                                                                             Verify
                                                                                                         </Text>
                                                                                                     </TouchableOpacity>
-                                                                                                </View>
+                                                                                                </View> */}
                                                                                                 <View
                                                                                                     style={{
                                                                                                         // backgroundColor: 'dodgerblue',
                                                                                                         width: SIZES.width * 0.5,
-                                                                                                        top: 40,
+                                                                                                        top: 100,
                                                                                                         right: 191,
                                                                                                         padding: 2
                                                                                                     }}
@@ -1623,7 +1618,7 @@ const ViewReport = () => {
 
                                                                                 )
                                                                                 :
-                                                                                reportData.admin_1_status === true &&
+                                                                                reportData.admin_1_status === false &&
                                                                                     reportData.admin_2_revert === true
                                                                                     ? (
                                                                                         <>
@@ -1633,7 +1628,7 @@ const ViewReport = () => {
                                                                                                 position: 'absolute'
                                                                                             }}>
                                                                                                 <View>
-                                                                                                    <View
+                                                                                                    {/* <View
                                                                                                         style={{
                                                                                                             left: 20,
                                                                                                             top: 3,
@@ -1659,8 +1654,8 @@ const ViewReport = () => {
                                                                                                                 }}
                                                                                                             />
                                                                                                         </TouchableOpacity>
-                                                                                                    </View>
-                                                                                                    <View
+                                                                                                    </View> */}
+                                                                                                    {/* <View
                                                                                                         style={{
                                                                                                             left: 20,
                                                                                                             top: 8,
@@ -1668,29 +1663,22 @@ const ViewReport = () => {
                                                                                                         }}>
                                                                                                         <TouchableOpacity
                                                                                                             style={{
-                                                                                                                paddingHorizontal: 16,
+                                                                                                                paddingHorizontal: 5,
                                                                                                                 paddingVertical: 1,
-                                                                                                                alignItems: 'center',
-                                                                                                                backgroundColor: COLORS.transparent,
+                                                                                                                backgroundColor: COLORS.success_600,
                                                                                                             }}
                                                                                                             onPress={() => {
-                                                                                                                // fetchVerifyReport()
+
                                                                                                             }}>
-                                                                                                            <Image
-                                                                                                                source={icons.verify}
-                                                                                                                style={{
-                                                                                                                    // left: 8,
-                                                                                                                    width: 16,
-                                                                                                                    height: 16,
-                                                                                                                    tintColor: 'green',
-                                                                                                                }}
-                                                                                                            />
+                                                                                                            <Text style={{ color: 'white', ...FONTS.h4 }}>
+                                                                                                                Verify
+                                                                                                            </Text>
                                                                                                         </TouchableOpacity>
-                                                                                                    </View>
-                                                                                                    <View
+                                                                                                    </View> */}
+                                                                                                    {/* <View
                                                                                                         style={{
                                                                                                             left: 20,
-                                                                                                            top: 14,
+                                                                                                            top: 9,
                                                                                                             flexDirection: 'row',
                                                                                                         }}>
 
@@ -1710,7 +1698,7 @@ const ViewReport = () => {
                                                                                                                 Verify
                                                                                                             </Text>
                                                                                                         </TouchableOpacity>
-                                                                                                    </View>
+                                                                                                    </View> */}
                                                                                                 </View>
                                                                                                 <View>
                                                                                                     <View
@@ -1718,7 +1706,7 @@ const ViewReport = () => {
                                                                                                             left: 25,
                                                                                                             position: 'absolute'
                                                                                                         }}>
-                                                                                                        <TouchableOpacity
+                                                                                                        {/* <TouchableOpacity
                                                                                                             style={{
                                                                                                                 left: 15,
                                                                                                                 paddingHorizontal: 5,
@@ -1733,8 +1721,8 @@ const ViewReport = () => {
                                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                                 Revert
                                                                                                             </Text>
-                                                                                                        </TouchableOpacity>
-                                                                                                        <TouchableOpacity
+                                                                                                        </TouchableOpacity> */}
+                                                                                                        {/* <TouchableOpacity
                                                                                                             style={{
                                                                                                                 left: 15,
                                                                                                                 top: 1,
@@ -1750,11 +1738,11 @@ const ViewReport = () => {
                                                                                                             <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                                 Revert
                                                                                                             </Text>
-                                                                                                        </TouchableOpacity>
+                                                                                                        </TouchableOpacity> */}
                                                                                                         <TouchableOpacity
                                                                                                             style={{
-                                                                                                                left: 15,
-                                                                                                                top: 10,
+                                                                                                                left: 60,
+                                                                                                                top: 50,
                                                                                                                 paddingHorizontal: 16,
                                                                                                                 paddingVertical: 1,
                                                                                                                 alignItems: 'center',
@@ -2029,70 +2017,70 @@ const ViewReport = () => {
     // quantity report
     function renderQuantity() {
 
-        const renderItem = ({item, index}) =>
-          item.quantityWorkItems.map((ele, i) => {
-            
-            return (
-              <View key={i}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      flex: 1,
-                      ...FONTS.h3,
-                      color: COLORS.black,
-                    }}>
-                    {ele.item_name}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h3,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.num_length}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h3,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.num_width}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h3,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.num_height}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h3,
-                      flex: 1,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.num_total}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      flex: 1,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.remark}
-                  </Text>
-                </View>
-                {/* {i == 0 ? (
+        const renderItem = ({ item, index }) =>
+            item.quantityWorkItems.map((ele, i) => {
+
+                return (
+                    <View key={i}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                            }}>
+                            <Text
+                                style={{
+                                    flex: 1,
+                                    ...FONTS.h3,
+                                    color: COLORS.black,
+                                }}>
+                                {ele.item_name}
+                            </Text>
+                            <Text
+                                style={{
+                                    ...FONTS.h3,
+                                    flex: 0.5,
+                                    color: COLORS.black,
+                                    textAlign: 'right',
+                                }}>
+                                {ele.num_length}
+                            </Text>
+                            <Text
+                                style={{
+                                    ...FONTS.h3,
+                                    flex: 0.5,
+                                    color: COLORS.black,
+                                    textAlign: 'right',
+                                }}>
+                                {ele.num_width}
+                            </Text>
+                            <Text
+                                style={{
+                                    ...FONTS.h3,
+                                    flex: 0.5,
+                                    color: COLORS.black,
+                                    textAlign: 'right',
+                                }}>
+                                {ele.num_height}
+                            </Text>
+                            <Text
+                                style={{
+                                    ...FONTS.h3,
+                                    flex: 1,
+                                    color: COLORS.black,
+                                    textAlign: 'right',
+                                }}>
+                                {ele.num_total}
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: 15,
+                                    flex: 1,
+                                    color: COLORS.black,
+                                    textAlign: 'right',
+                                }}>
+                                {ele.remark}
+                            </Text>
+                        </View>
+                        {/* {i == 0 ? (
                   <View
                     style={{
                       borderBottomWidth: 1,
@@ -2100,259 +2088,259 @@ const ViewReport = () => {
                       borderColor: COLORS.darkGray2,
                     }}></View>
                 ) : null} */}
-                <View style={{}}>
-                  {ele.subquantityitems.map((ele, i) => {
-                    return (
-                      <View key={i}>
-                        {i == 0 ? (
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                            }}>
-                            <Text
-                              style={{
-                                flex: 1,
-                                ...FONTS.h4,
-                                color: COLORS.black,
-                              }}></Text>
-                            <Text
-                              style={{
-                                ...FONTS.h4,
-                                flex: 0.5,
-                                color: COLORS.black,
-                                textAlign: 'right',
-                              }}>
-                              L
-                            </Text>
-                            <Text
-                              style={{
-                                ...FONTS.h4,
-                                flex: 0.5,
-                                color: COLORS.black,
-                                textAlign: 'right',
-                              }}>
-                              W
-                            </Text>
-                            <Text
-                              style={{
-                                ...FONTS.h4,
-                                flex: 0.5,
-                                color: COLORS.black,
-                                textAlign: 'right',
-                              }}>
-                              H
-                            </Text>
-                            <Text
-                              style={{
-                                ...FONTS.h4,
-                                flex: 1,
-                                color: COLORS.black,
-                                textAlign: 'right',
-                              }}>
-                              Total
-                            </Text>
-                            <Text
-                              style={{
-                                ...FONTS.h3,
-                                flex: 1,
-                                color: COLORS.black,
-                                textAlign: 'right',
-                              }}>
-                              Remark
-                            </Text>
-                          </View>
-                        ) : null}
-                        <View
-                          style={{
-                            left: 100,
-                            borderBottomWidth: 1,
-                            borderColor: COLORS.darkGray2,
-                            width: '75%',
-                            marginVertical: 5,
-                          }}></View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                          }}>
-                          <Text
-                            style={{
-                              flex: 1,
-                              ...FONTS.h4,
-                              color: COLORS.black,
-                            }}></Text>
-                          <Text
-                            style={{
-                              ...FONTS.h4,
-                              flex: 0.5,
-                              color: COLORS.black,
-                              textAlign: 'right',
-                            }}>
-                            {ele.sub_length}
-                          </Text>
-                          <Text
-                            style={{
-                              ...FONTS.h4,
-                              flex: 0.5,
-                              color: COLORS.black,
-                              textAlign: 'right',
-                            }}>
-                            {ele.sub_width}
-                          </Text>
-                          <Text
-                            style={{
-                              ...FONTS.h4,
-                              flex: 0.5,
-                              color: COLORS.black,
-                              textAlign: 'right',
-                            }}>
-                            {ele.sub_height}
-                          </Text>
-                          <Text
-                            style={{
-                              ...FONTS.h4,
-                              flex: 1,
-                              color: COLORS.black,
-                              textAlign: 'right',
-                            }}>
-                            {ele.sub_total}
-                          </Text>
-                          <Text
-                            style={{
-                              ...FONTS.h3,
-                              flex: 1,
-                              color: COLORS.black,
-                              textAlign: 'right',
-                            }}>
-                            {ele.sub_quality_type}
-                          </Text>
+                        <View style={{}}>
+                            {ele.subquantityitems.map((ele, i) => {
+                                return (
+                                    <View key={i}>
+                                        {i == 0 ? (
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                }}>
+                                                <Text
+                                                    style={{
+                                                        flex: 1,
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                    }}></Text>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        flex: 0.5,
+                                                        color: COLORS.black,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    L
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        flex: 0.5,
+                                                        color: COLORS.black,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    W
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        flex: 0.5,
+                                                        color: COLORS.black,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    H
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        flex: 1,
+                                                        color: COLORS.black,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    Total
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h3,
+                                                        flex: 1,
+                                                        color: COLORS.black,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    Remark
+                                                </Text>
+                                            </View>
+                                        ) : null}
+                                        <View
+                                            style={{
+                                                left: 100,
+                                                borderBottomWidth: 1,
+                                                borderColor: COLORS.darkGray2,
+                                                width: '75%',
+                                                marginVertical: 5,
+                                            }}></View>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                            }}>
+                                            <Text
+                                                style={{
+                                                    flex: 1,
+                                                    ...FONTS.h4,
+                                                    color: COLORS.black,
+                                                }}></Text>
+                                            <Text
+                                                style={{
+                                                    ...FONTS.h4,
+                                                    flex: 0.5,
+                                                    color: COLORS.black,
+                                                    textAlign: 'right',
+                                                }}>
+                                                {ele.sub_length}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    ...FONTS.h4,
+                                                    flex: 0.5,
+                                                    color: COLORS.black,
+                                                    textAlign: 'right',
+                                                }}>
+                                                {ele.sub_width}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    ...FONTS.h4,
+                                                    flex: 0.5,
+                                                    color: COLORS.black,
+                                                    textAlign: 'right',
+                                                }}>
+                                                {ele.sub_height}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    ...FONTS.h4,
+                                                    flex: 1,
+                                                    color: COLORS.black,
+                                                    textAlign: 'right',
+                                                }}>
+                                                {ele.sub_total}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    ...FONTS.h3,
+                                                    flex: 1,
+                                                    color: COLORS.black,
+                                                    textAlign: 'right',
+                                                }}>
+                                                {ele.sub_quality_type}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                );
+                            })}
+                            {i == 0 ? (
+                                <View
+                                    style={{
+                                        borderBottomWidth: 1,
+                                        marginVertical: index == 0 ? 10 : null,
+                                        borderColor: COLORS.darkGray,
+                                    }}></View>
+                            ) : null}
                         </View>
-                      </View>
-                    );
-                  })}
-                  {i == 0 ? (
-                    <View
-                      style={{
-                        borderBottomWidth: 1,
-                        marginVertical: index == 0 ? 10 : null,
-                        borderColor: COLORS.darkGray,
-                      }}></View>
-                  ) : null}
-                </View>
-              </View>
-            );
-          });
-    
-        return (
-          <View>
-            <View
-              style={{
-                borderBottomWidth: 1,
-                marginTop: 15,
-                marginBottom: 5,
-                borderColor: COLORS.gray2,
-              }}></View>
-            <Text
-              style={{
-                fontSize: 18,
-                color: COLORS.black,
-                textAlign: 'center',
-                textDecorationLine: 'underline',
-                marginBottom: 5,
-              }}>
-              Excluded Quantity
-            </Text>
-            <FlatList
-              // contentContainerStyle={{maxHeight: 450}}
-              data={quantity}
-              keyExtractor={item => `${item._id}`}
-              renderItem={renderItem}
-              showsVerticalScrollIndicator={false}
-              // horizontal
-              scrollEnabled={true}
-              ItemSeparatorComponent={() => {
-                return (
-                  <View
-                    style={{
-                      height: 1,
-                      backgroundColor: COLORS.darkGray,
-                      marginVertical: 10,
-                    }}></View>
+                    </View>
                 );
-              }}
-              ListHeaderComponent={
-                <View>
-                  <View
+            });
+
+        return (
+            <View>
+                <View
                     style={{
-                      marginTop: 10,
-                      flexDirection: 'row',
-                      marginBottom: 5,
-                    }}>
-                    <Text
-                      style={{
-                        flex: 1,
-                        ...FONTS.h3,
-                        color: COLORS.black,
-                      }}>
-                      Items
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h3,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      L
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h3,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      W
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h3,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      H
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h3,
-                        flex: 1,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      Total
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h3,
-                        flex: 1,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      Remark
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      borderBottomWidth: 1,
-                      borderColor: COLORS.darkGray,
-                      marginBottom: 10,
+                        borderBottomWidth: 1,
+                        marginTop: 15,
+                        marginBottom: 5,
+                        borderColor: COLORS.gray2,
                     }}></View>
-                </View>
-              }
-            />
-          </View>
+                <Text
+                    style={{
+                        fontSize: 18,
+                        color: COLORS.black,
+                        textAlign: 'center',
+                        textDecorationLine: 'underline',
+                        marginBottom: 5,
+                    }}>
+                    Excluded Quantity
+                </Text>
+                <FlatList
+                    // contentContainerStyle={{maxHeight: 450}}
+                    data={quantity}
+                    keyExtractor={item => `${item._id}`}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
+                    // horizontal
+                    scrollEnabled={true}
+                    ItemSeparatorComponent={() => {
+                        return (
+                            <View
+                                style={{
+                                    height: 1,
+                                    backgroundColor: COLORS.darkGray,
+                                    marginVertical: 10,
+                                }}></View>
+                        );
+                    }}
+                    ListHeaderComponent={
+                        <View>
+                            <View
+                                style={{
+                                    marginTop: 10,
+                                    flexDirection: 'row',
+                                    marginBottom: 5,
+                                }}>
+                                <Text
+                                    style={{
+                                        flex: 1,
+                                        ...FONTS.h3,
+                                        color: COLORS.black,
+                                    }}>
+                                    Items
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    L
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    W
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    H
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        flex: 1,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    Total
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        flex: 1,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    Remark
+                                </Text>
+                            </View>
+                            <View
+                                style={{
+                                    borderBottomWidth: 1,
+                                    borderColor: COLORS.darkGray,
+                                    marginBottom: 10,
+                                }}></View>
+                        </View>
+                    }
+                />
+            </View>
         );
-      }
+    }
 
 
     function renderRevertModal() {

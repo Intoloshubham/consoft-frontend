@@ -10,6 +10,8 @@ import {
   ScrollView,
   Modal,
   Pressable,
+  Platform,
+  UIManager,
   Button,
 } from 'react-native';
 import {Title, DataTable, Card} from 'react-native-paper';
@@ -20,6 +22,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Dropdown} from 'react-native-element-dropdown';
 import config from '../../../../config';
 import {getCompanyId, getToken} from '../../../../services/asyncStorageService';
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 const Quantity = () => {
   // state

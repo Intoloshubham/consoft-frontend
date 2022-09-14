@@ -5,7 +5,7 @@ import {
     StyleSheet, Image,
     ScrollView, Modal, Animated,
     Pressable, TextInput, KeyboardAvoidingView,
-    Platform, LayoutAnimation,
+    Platform, LayoutAnimation, UIManager,
     TouchableOpacity, Button, Keyboard
 } from 'react-native'
 import styles from '../../ReportStyle.js'
@@ -20,6 +20,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useSelector } from 'react-redux';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
+
+if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+}
+
 const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
     const {
         header,

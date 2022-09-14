@@ -4,7 +4,7 @@ import {
   Easing, Switch,
   Text, FlatList,
   StyleSheet, Image,
-  ScrollView, Modal,
+  ScrollView, Modal,Platform,UIManager,
   Pressable, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView,
   TouchableOpacity, LogBox, LayoutAnimation, ImageBackground, Keyboard
 } from 'react-native'
@@ -30,11 +30,18 @@ import { useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
 import moment from 'moment';
 
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
+
+
 const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
+  // useEffect(() => {
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // }, []);
 
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, cont_Project_list_drop } = styles
   //getting post data into state
@@ -316,19 +323,20 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   const updateManpowerReport = async () => {
     // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 286 ~ updateManpowerReport ~ update_id", filterNewCategory)
     let temp_data = postUpdateData();
+    // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 319 ~ updateManpowerReport ~ temp_data", temp_data)
 
-    let data = {
-      manpowerCategories: temp_data
-    }
-    let res = await update_manpower_report(updateManpowerId, data);
-    setManpowerUpdateStatus(res)
-    if (res.status == '200') {
+    // let data = {
+    //   manpowerCategories: temp_data
+    // }
+    // let res = await update_manpower_report(updateManpowerId, data);
+    // setManpowerUpdateStatus(res)
+    // if (res.status == '200') {
 
-      setUpdateToast(true);
-      setTimeout(() => {
-        setAddConMemberReportModal(false);
-      }, 1500);
-    }
+    //   setUpdateToast(true);
+    //   setTimeout(() => {
+    //     setAddConMemberReportModal(false);
+    //   }, 1500);
+    // }
   }
 
 
@@ -345,11 +353,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   }
 
   useEffect(() => {
-    let isMount = true;
-    if (isMount) {
-      GetManpowerData();
-    }
-    return () => { isMount = false }
+    GetManpowerData();
   }, [manpowerPostStatus, Main_drp_pro_value, conTeamTabCollapse, loading, manpowerUpdateStatus])
 
 
@@ -378,7 +382,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       ...ele, manpower_member: ''
     }))
     setGetNewCategory(temp)
-
   }
 
 
@@ -702,6 +705,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                       width: 180,
 
                     }}
+                    editable={false}
                     onChange={text => {
                       __memberName(text, index);
                       utils.validateText(text, setMemberErrorMsg);
@@ -873,7 +877,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
             <View style={{
               justifyContent: "space-between"
             }}>
-              <TextButton
+              {!removeAddManpowerOnEdit ? <TextButton
                 label="Add Category"
                 buttonContainerStyle={{
                   height: 33,
@@ -887,7 +891,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
                 onPress={() => {
                   setAddCategoryModal(true)
                 }}
-              />
+              /> : null}
             </View>
             <View style={{ flex: 1 }}>
               {
