@@ -419,6 +419,7 @@ const ReportDisplay = () => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
+            
           <Text
             style={{
               flex: 1,
