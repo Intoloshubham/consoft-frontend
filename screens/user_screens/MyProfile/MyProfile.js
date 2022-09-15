@@ -53,11 +53,10 @@ const MyProfile = () => {
   // console.log(todayFormatted)
 
   useEffect(() => {
-    fetch(`${config.API_URL}user/`+user_id, {
+    fetch(`${config.API_URL}user/` + user_id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-
       },
     })
       .then(response => response.json())
@@ -77,8 +76,8 @@ const MyProfile = () => {
     // console.log(selectDate)
     // setLeavesDate(date=> [...leavesdate,  ${date.length}`]);
     // if(leavesdate){
-      // const obj = [...new Map(
-        // leavesdate.map(item => [JSON.stringify(item), item])).values()];
+    // const obj = [...new Map(
+    // leavesdate.map(item => [JSON.stringify(item), item])).values()];
     // setPushDate(obj);
     // }
     setLeavesDate(selectDate);
@@ -91,9 +90,9 @@ const MyProfile = () => {
     const applyleaves = {
       leavedates: pushdate,
       user_id: user_id,
-      company_id:userData.company_id
+      company_id: userData.company_id,
     };
-    console.log(applyleaves)
+    // console.log(applyleaves)
     try {
       fetch(`${process.env.API_URL}apply-leaves`, {
         method: 'POST',
@@ -119,8 +118,8 @@ const MyProfile = () => {
   const showleavesdata = async () => {
     const resp = await fetch(process.env.API_URL + 'attendance/' + user_id);
     const leavesDate = await resp.json();
-    console.log(leavesDate);
-    // setShowLeaves(leavesDate);
+    // console.log(leavesDate);
+    setShowLeaves(leavesDate);
   };
 
   useEffect(() => {
@@ -135,15 +134,16 @@ const MyProfile = () => {
       });
     }
   }, [showleaves]);
+  // console.log(monthshow)
 
-  useMemo(() => {
-    if (monthshow.months) {
-      monthshow.months.map((month, index) => {
-        setLeavesDay(month);
-      });
-    }
-  }, [showleaves]);
-
+  // useMemo(() => {
+  //   if (monthshow.leavedates) {
+  //     monthshow.leavedates.map((month, index) => {
+  //       console.log(month)
+  //       // setLeavesDay(month);
+  //     });
+  //   }
+  // }, [showleaves]);
 
   const ClearDate = () => {
     setPushDate('');
@@ -165,6 +165,7 @@ const MyProfile = () => {
   // var finalTime = "Time  - " + hours + ":" + minutes + " " + AmOrPm;
   var finalTime = hours + ':' + minutes + AmOrPm;
 
+  var approved;
   return (
     <View>
       {/* <HeaderBar right={true} title="Leaves" /> */}
@@ -248,40 +249,47 @@ const MyProfile = () => {
               onPress={() => setLeavesModal(true)}
             />
           </View>
-          <View style={{marginTop: 5}}>
-            {leavesday.leavedays != undefined
-              ? leavesday.leavedays.map((Ldays, index) => {
-                  // {console.log(Ldays)}
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                        {Ldays.leave_date}
-                      </Text>
-
-                      <TouchableOpacity>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 'bold',
-                            backgroundColor: 'orange',
-                            marginTop: 2,
-                            padding: 2,
-                            margin: 2,
-                          }}>
-                          Pending
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })
-              : null}
-          </View>
+          <ScrollView nestedScrollEnabled={true} maxHeight={50}>
+            <View style={{marginTop: 5}}>
+              {monthshow.leavedates != undefined
+                ? monthshow.leavedates.map((Ldays, index) => {
+                    {
+                      console.log(Ldays);
+                    }
+                    return (
+                      <View
+                        key={index}
+                        style={{
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          justifyContent: 'space-between',
+                        }}>
+                        {Ldays.approved === false ? (
+                          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                            {Ldays.leave_date}
+                          </Text>
+                        ) : null}
+                        {Ldays.approved === true ? null : (
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                backgroundColor: 'orange',
+                                marginTop: 2,
+                                padding: 2,
+                                margin: 2,
+                              }}>
+                              Pending
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    );
+                  })
+                : null}
+            </View>
+          </ScrollView>
           {/* leacves modal start  */}
         </View>
 
@@ -389,7 +397,7 @@ const MyProfile = () => {
                                       : null,
                                   ]}
                                   onPress={() => {
-                                    dateClickHandler({leave_date:col.date});
+                                    dateClickHandler({leave_date: col.date});
                                   }}>
                                   <Title style={{color: '#fff'}}>
                                     {col.value}
@@ -399,7 +407,9 @@ const MyProfile = () => {
                                 <TouchableOpacity
                                   key={i}
                                   className={col.classes}
-                                  onPress={() => dateClickHandler({leave_date:col.date})
+                                  onPress={
+                                    () =>
+                                      dateClickHandler({leave_date: col.date})
                                     // checkBoxHandler({leave_date_id: el._id})};
                                   }>
                                   <Title
