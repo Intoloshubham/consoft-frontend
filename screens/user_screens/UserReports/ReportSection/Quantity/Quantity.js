@@ -196,7 +196,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             // getRreportData()
             setTimeout(() => {
               setReportmodal(false);
-            }, 1500);
+              setSubmitToast(false)
+            }, 900);
             inputs.splice(0, inputs.length);
           }
 
@@ -222,7 +223,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       setUpdateToast(true);
       setTimeout(() => {
         setReportmodal(false);
-      }, 1500);
+        setUpdateToast(false)
+      }, 900);
       inputs.splice(0, inputs.length);
 
     }
@@ -544,7 +546,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             setSubmitToast(true);
             setTimeout(() => {
               setadditem(false);
-            }, 1500);
+              setSubmitToast(false);
+            }, 500);
           } else {
             alert(data.message)
           }

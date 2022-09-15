@@ -11,7 +11,7 @@ import {
 import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { AccordionList } from 'accordion-collapse-react-native';
 import { TextInput } from 'react-native-paper';
-import { Divider } from '@ui-kitten/components';
+import { Divider, IndexPath } from '@ui-kitten/components';
 import { CustomToast, DeleteConfirmationToast } from '../../../Components'
 import styles from '../TaskModal/css/InProgressModalStyle.js';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -98,6 +98,9 @@ const UserAssignWorks = ({ loading }) => {
       setSubmitToast(true);
       setCommentStatus(true);
       fetchAssignWorks();
+      setTimeout(() => {
+        setSubmitToast(false);
+      }, 900);
     }
 
   };
@@ -120,8 +123,10 @@ const UserAssignWorks = ({ loading }) => {
     if (data.status === 200) {
       fetchAssignWorks();
       setSubmitToast(true);
+      setTimeout(() => {
+        setSubmitToast(false);
+      }, 900);
     }
-
   }
 
 
@@ -286,6 +291,71 @@ const UserAssignWorks = ({ loading }) => {
     );
   };
 
+  function counterSection(item, index) {
+    return (
+      <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity
+            style={{ elevation: 20 }}
+            onPress={() => {
+              __handle_decrease_counter(item, index)
+            }}
+          >
+            <Entypo
+              name="minus"
+              size={25}
+              color={COLORS.white}
+            />
+          </TouchableOpacity>
+          <View>
+            <TextInput
+              style={[styles.inputfromone, { elevation: 5 }]}
+              editable={false}
+              value={String(`${item.work_percent} %`)}
+              onChangeText={(text) => __handle_counter(text, index)}
+              placeholderTextColor={COLORS.lightGray1}
+              keyboardType="numeric"
+              placeholder={'counter'}
+            />
+          </View>
+          <TouchableOpacity
+            style={{ elevation: 20 }}
+            onPress={() => __handle_increase_counter(item, index)}
+          >
+            <Entypo
+              name="plus"
+              size={25}
+              color={COLORS.white}
+            />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={{
+            alignItems: 'flex-end',
+            marginTop: SIZES.base,
+            // backgroundColor: COLORS.red
+          }}
+          onPress={(text) => {
+            submitWorkPercent(item, index)
+          }}>
+          <Text
+            style={{
+              color: COLORS.white,
+              backgroundColor: COLORS.lightblue_500,
+              elevation: 15,
+              // borderWidth: 1,
+              backgroundColor: COLORS.lightblue_600,
+              paddingHorizontal: 10,
+              paddingVertical: 3,
+              borderRadius: 3,
+            }}>
+            Submit
+          </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   const renderBody = (item, index) => {
 
     return (
@@ -326,17 +396,17 @@ const UserAssignWorks = ({ loading }) => {
                 Assign Time: {item.assign_time}
               </Text>
             </View>
-           {item.comment? <View style={{
-              backgroundColor:COLORS.darkGray2,
-              paddingHorizontal:5
+            {item.comment ? <View style={{
+              backgroundColor: COLORS.darkGray2,
+              paddingHorizontal: 5
             }}>
               <Text
                 style={{ ...FONTS.h5, color: COLORS.white2 }}
               >Comment Msg: {item.comment}
               </Text>
-            </View>:null}
+            </View> : null}
             <View style={{
-              top:5
+              top: 5
             }}>
               {item.comment_status == false && item.work_percent == 0 ?
                 <TouchableOpacity
@@ -406,68 +476,13 @@ const UserAssignWorks = ({ loading }) => {
                 </TouchableOpacity>
               </View> : null
               : null}
-            {item.work_status == false && item.comment_status == false ?
-              <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: "center" }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity
-                    style={{ elevation: 20 }}
-                    onPress={() => {
-                      __handle_decrease_counter(item, index)
-                    }}
-                  >
-                    <Entypo
-                      name="minus"
-                      size={25}
-                      color={COLORS.white}
-                    />
-                  </TouchableOpacity>
-                  <View>
-                    <TextInput
-                      style={[styles.inputfromone, { elevation: 5 }]}
-                      editable={false}
-                      value={String(`${item.work_percent} %`)}
-                      onChangeText={(text) => __handle_counter(text, index)}
-                      placeholderTextColor={COLORS.lightGray1}
-                      keyboardType="numeric"
-                      placeholder={'counter'}
-                    />
-                  </View>
-                  <TouchableOpacity
-                    style={{ elevation: 20 }}
-                    onPress={() => __handle_increase_counter(item, index)}
-                  >
-                    <Entypo
-                      name="plus"
-                      size={25}
-                      color={COLORS.white}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    alignItems: 'flex-end',
-                    marginTop: SIZES.base,
-                    // backgroundColor: COLORS.red
-                  }}
-                  onPress={(text) => {
-                    submitWorkPercent(item, index)
-                  }}>
-                  <Text
-                    style={{
-                      color: COLORS.white,
-                      backgroundColor: COLORS.lightblue_500,
-                      elevation: 15,
-                      // borderWidth: 1,
-                      backgroundColor: COLORS.lightblue_600,
-                      paddingHorizontal: 10,
-                      paddingVertical: 3,
-                      borderRadius: 3,
-                    }}>
-                    Submit
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              : null}
+            {item.work_status == false && item.comment_status == true && item.comment_reply_status == true ?
+              counterSection(item, index)
+              : item.work_status == false && item.comment_status == true && item.comment_reply_status == false ?
+                null :
+                item.work_status == false && item.comment_status == false && item.comment_reply_status === false ?
+                  counterSection(item, index) :
+                  null}
           </View>
         </View>
       </View>

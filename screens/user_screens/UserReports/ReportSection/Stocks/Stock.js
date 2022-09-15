@@ -154,7 +154,8 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                     GetStockData();
                     setTimeout(() => {
                         setStockReportModal(false);
-                    }, 1500);
+                        setSubmitToast(false)
+                    }, 900);
                     stockEntry.splice(0, stockEntry.length);
                 }
             } else {
