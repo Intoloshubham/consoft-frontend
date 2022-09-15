@@ -11,7 +11,7 @@ import CustomDropdown from './CustomDropdown';
 import ItemBox from './ItemBox';
 import CustomToast from './CustomToast';
 import DeleteConfirmationToast from './DeleteConfirmationToast';
-import {ListItem} from './ListItem';
+import ListItem from './ListItem';
 
 export {
   TextButton,

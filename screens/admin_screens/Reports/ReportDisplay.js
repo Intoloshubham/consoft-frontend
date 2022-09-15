@@ -303,7 +303,7 @@ const ReportDisplay = () => {
         }}>
         <Text
           style={{
-            ...FONTS.h2,
+            ...FONTS.h3,
             color: COLORS.darkGray,
             textTransform: 'capitalize',
           }}>
@@ -316,15 +316,18 @@ const ReportDisplay = () => {
             justifyContent: 'flex-start',
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
+            {/* <Image
               source={icons.date}
-              style={{height: 12, width: 12, right: 10}}
-            />
+              style={{height: 12, width: 12, right: 5}}
+            /> */}
             <Text style={{fontSize: 12, color: COLORS.darkGray}}>
               {item.report_date}
             </Text>
+            <Text style={{fontSize: 12, color: COLORS.darkGray,left:5}}>
+              {item.report_time}
+            </Text>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Image
               source={icons.time}
               style={{height: 12, width: 12, right: 10}}
@@ -332,7 +335,7 @@ const ReportDisplay = () => {
             <Text style={{fontSize: 12, color: COLORS.darkGray}}>
               {item.report_time}
             </Text>
-          </View>
+          </View> */}
         </View>
       </TouchableOpacity>
     );
@@ -912,7 +915,7 @@ const ReportDisplay = () => {
                         textTransform: 'capitalize',
                         color: COLORS.black,
                       }}>
-                      {ele.admin_1_name} :
+                      {ele.admin_1_name} -
                     </Text>
                     {reportData.admin_1_status === false ? (
                       <View
@@ -988,7 +991,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           marginBottom: 5,
                         }}>
-                        Your Reverted msg{' : '}
+                        Your Reverted msg{' - '}
                         {reportData.admin_1_revert_msg}
                       </Text>
                     )}
@@ -1108,7 +1111,7 @@ const ReportDisplay = () => {
                         textTransform: 'capitalize',
                         color: COLORS.black,
                       }}>
-                      {ele.admin_2_name} :
+                      {ele.admin_2_name} -
                     </Text>
                     {reportData.admin_2_status === false ? (
                       <View
@@ -1193,7 +1196,7 @@ const ReportDisplay = () => {
                             color: COLORS.darkGray,
                             marginBottom: 5,
                           }}>
-                          Your Reverted msg{' : '}
+                          Your Reverted msg{' - '}
                           {reportData.admin_2_revert_msg}
                         </Text>
                       </View>
