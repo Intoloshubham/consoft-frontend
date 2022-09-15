@@ -50,7 +50,7 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
-    console.log("🚀 ~ file: Login.js ~ line 53 ~ userOnSubmit ~ res", res)
+    // console.log("🚀 ~ file: Login.js ~ line 53 ~ userOnSubmit ~ res", res)
     if (res.payload.status === 200) {
       setSubmitToast(true);
       if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
