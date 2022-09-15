@@ -68,7 +68,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         }, 150);
     };
 
-    const CONST_FIELD = { 
+    const CONST_FIELD = {
         MANPOWER: 'Manpower',
         STOCK: 'Stock',
         QUANTITY: 'Quantity',
@@ -95,9 +95,9 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         const formatedDate =
             selectedDate.getFullYear() +
             '/' +
-            ('0' + (selectedDate.getMonth() + 1)).slice(-2)+
+            ('0' + (selectedDate.getMonth() + 1)).slice(-2) +
             '/' +
-            ('0' + selectedDate.getDate()).slice(-2) 
+            ('0' + selectedDate.getDate()).slice(-2)
 
         // const formatedDate = `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1
         //     }/${selectedDate.getDate()}`;
@@ -173,7 +173,9 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                 getEquipmentItems();
                 setTimeout(() => {
                     setAddNewEquipment(false);
-                }, 1500);
+                    setSubmitToast(false);
+                }, 800);
+               
 
             }
             return () => { isMount = false }
@@ -203,7 +205,8 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                 setTandPInsertStatus(true);
                 setTimeout(() => {
                     setTandPModal(false);
-                }, 1500);
+                    setSubmitToast(false);
+                }, 900);
                 equipmentField.splice(0, equipmentField.length);
             }
             return () => { isMount = false }
@@ -236,6 +239,9 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
             getEquipReport();
             setTandPModal(false)
         }
+        setTimeout(() => {
+            setUpdateToast(false);
+          }, 900);
     }
 
     const add_tAndP_icon_button = () => {
