@@ -301,6 +301,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
         setAddConMemberReportModal(false);
         setSubmitToast(true)
       }, 100);
+      setTimeout(() => {
+        setSubmitToast(false);
+      }, 200); 
     }
 
   }
@@ -335,7 +338,8 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       setUpdateToast(true);
       setTimeout(() => {
         setAddConMemberReportModal(false);
-      }, 1500);
+        setUpdateToast(false);
+      }, 900);
     }
   }
 
