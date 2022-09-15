@@ -65,7 +65,7 @@ const ManageStock = () => {
     const _id = await getCompanyId();
     setCompany_id(_id);
   }
-  console.log(company_id);
+  // console.log(company_id);
   //setting token
   React.useEffect(() => {
     (async () => await _companyId())();
@@ -103,7 +103,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
         .then(response => response.json())
         .then(data => {
           voucherItem();
-          console.log('Success:', data,alert("voucger update")); 
+          // console.log('Success:', data,alert("voucger update")); 
         })
     }
 
@@ -137,7 +137,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
       company_id:company_id
     };
     let data = await saveStockitem(voucheritem)
-    console.log(data)
+    // console.log(data)
     if(data.status===200){
         setValue('');
         setqty('');
@@ -196,7 +196,7 @@ const voucherItemupdate = (id,item_id,qty,location,vehicle,)=>{
         setValueunit('');
         // listData();
         itemData();
-        console.log('Success:', data);
+        // console.log('Success:', data);
         {
           itemname == '' || valueunit == ''
             ? alert('all filed fill ')

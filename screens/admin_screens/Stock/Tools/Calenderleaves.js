@@ -28,7 +28,7 @@ const Calenderleaves = () => {
   const dateClickHandler = date => {
     setLeavesDate(date)
   };
-  console.log(leavesdate)
+  // console.log(leavesdate)
   return (
       <View>
         <Card style={{borderWidth: 2, elevation: 10, margin: 10}}>
