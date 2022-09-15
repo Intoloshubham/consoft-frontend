@@ -18,7 +18,7 @@ const love = require('../assets/icons/love.png');
 const calories = require('../assets/icons/calories.png');
 const home = require('../assets/icons/home.png');
 const location = require('../assets/icons/location.png');
-const logout = require('../assets/icons/logout.png');
+// const logout = require('../assets/icons/logout.png');
 const notification = require('../assets/icons/notification.png');
 const profile = require('../assets/icons/profile.png');
 const setting = require('../assets/icons/setting.png');
@@ -80,24 +80,24 @@ const mail = require('../assets/icons/mail.png');
 const website = require('../assets/icons/website.png');
 const up_arrow = require('../assets/icons/up_arrow.png');
 const down1 = require('../assets/icons/down1.png');
-const Suppliers = require('../assets/icons/Suppliers.png');
-const suppliers1 = require('../assets/icons/suppliers1.png');
+// const Suppliers = require('../assets/icons/Suppliers.png');
+// const suppliers1 = require('../assets/icons/suppliers1.png');
 const staff = require('../assets/icons/staff.png');
 const verify = require('../assets/icons/verify.png');
 const revert = require('../assets/icons/revert.png');
 // const location = require('../assets/icons/location.png');
 
 //final selected
-const company_team = require('../assets/icons/final/company_team.png');
+// const company_team = require('../assets/icons/final/company_team.png');
 const down_arro = require('../assets/icons/final/down_arrow.png');
 const itemss = require('../assets/icons/final/items.png');
 const manage_stock = require('../assets/icons/final/manage_stock.png');
 const project_type = require('../assets/icons/final/project_type.png');
-const stock_management = require('../assets/icons/final/stock_management.png');
-const supplier = require('../assets/icons/final/supplier.png');
+// const stock_management = require('../assets/icons/final/stock_management.png');
+// const supplier = require('../assets/icons/final/supplier.png');
 const units = require('../assets/icons/final/units.png');
 const delete_withbg = require('../assets/icons/delete_withbg.png');
-const user_role = require('../assets/icons/group.png');
+// const user_role = require('../assets/icons/group.png');
 
 //user-end quantity report
 const add_qty_item = require('../assets/icons/add_qty_item.png');
@@ -106,15 +106,25 @@ const help1 = require('../assets/icons/question.png');
 const completion_date = require('../assets/icons/complete.png');
 const persent_progress = require('../assets/icons/persent_progress.png');
 
+//final icons
+const project_cate_type = require('../assets/icons/_icons/project_cate_type.png');
+const user_role = require('../assets/icons/_icons/user_role.png');
+const company_team = require('../assets/icons/_icons/company_team.png');
+const stock_management = require('../assets/icons/_icons/stock_management.png');
+const supplier = require('../assets/icons/_icons/supplier.png');
+const logout = require('../assets/icons/_icons/logout.png');
+const right_arrow = require('../assets/icons/_icons/right_arrow.png');
+const dashboard_1 = require('../assets/icons/_icons/dashboard1.png');
+
 export default {
   // final
-  company_team,
+  // company_team,
   down_arro,
   itemss,
   manage_stock,
   project_type,
-  stock_management,
-  supplier,
+  // stock_management,
+  // supplier,
   units,
   //
   revert,
@@ -144,7 +154,7 @@ export default {
   calories,
   home,
   location,
-  logout,
+  // logout,
   notification,
   profile,
   setting,
@@ -195,14 +205,25 @@ export default {
   minus,
   minus1,
   plus1,
-  Suppliers,
-  suppliers1,
+  // Suppliers,
+  // suppliers1,
   staff,
   boq,
   add_qty_item,
   add_qty_item1,
   delete_withbg,
-  user_role,
+  // user_role,
   help1,
-  completion_date,persent_progress
+  completion_date,
+  persent_progress,
+
+  //final
+  project_cate_type,
+  user_role,
+  company_team,
+  stock_management,
+  supplier,
+  logout,
+  right_arrow,
+  dashboard_1,
 };
