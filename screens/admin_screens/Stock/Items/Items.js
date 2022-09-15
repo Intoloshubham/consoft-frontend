@@ -63,7 +63,7 @@ const Items = () => {
       unit_id: value,
     };
     let data = await submitItem(dataitem);
-    console.log(data);
+    // console.log(data);
     if (data.status === 200) {
       setItemname('');
       setValue('');
@@ -90,7 +90,7 @@ const Items = () => {
       unit_name: unitname,
     };
     let data = await saveUnitname(unitdata);
-    console.log(data);
+    // console.log(data);
     if (data.status === 200) {
       setUnitname('');
       fetchData();

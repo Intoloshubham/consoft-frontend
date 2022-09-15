@@ -22,7 +22,7 @@ const SignIn = ({navigation}) => {
       mobile: mobileNo,
       password: password,
     };
-    console.log(data);
+    // console.log(data);
     fetch(url, {
       method: 'POST',
       headers: {
@@ -32,13 +32,13 @@ const SignIn = ({navigation}) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         if (data.role == 'Administrator' || data.role == 'Editor') {
           navigation.navigate('Home');
         } else if (data.role == 'User') {
           navigation.navigate('UserDashboard');
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           alert('Error !');
         }
       })

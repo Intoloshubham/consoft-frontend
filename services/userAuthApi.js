@@ -98,7 +98,7 @@ export const userSlice = createSlice({
             state.status = STATUSES.LOADING;
         })
         .addCase(userLogin.fulfilled,(state, action) => {
-          console.log(action.payload)
+          // console.log(action.payload)
 
             if (action.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
               

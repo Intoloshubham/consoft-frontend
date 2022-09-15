@@ -28,9 +28,9 @@ const Requirement = () => {
     };
 
     let file = await RNHTMLtoPDF.convert(options);
-    console.log(file.filePath);
+    // console.log(file.filePath);
     alert(file.filePath);
-    console.log('object');
+    // console.log('object');
   };
 
   return (

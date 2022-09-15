@@ -99,7 +99,7 @@ const Quantitywork = () => {
         .then(data => {
           setvalue('');
           setquantityitem('');
-          console.log('Success:', data);
+          // console.log('Success:', data);
         });
     } catch (error) {
       console.log('Error:', error);
@@ -122,7 +122,7 @@ const Quantitywork = () => {
     try {
       const resp = await fetch(`${config.API_URL}quantity-report`);
       const tabledata = await resp.json();
-      console.log(tabledata);
+      // console.log(tabledata);
       // setquantityitemdata(quantitydata);
     }
     catch (error) {
