@@ -882,6 +882,7 @@ const ViewReport = () => {
                                                                             <View
                                                                                 style={{
                                                                                     left: 20,
+                                                                                    top:5,
                                                                                     flexDirection: 'row',
                                                                                 }}>
                                                                                 <TouchableOpacity
@@ -1314,7 +1315,7 @@ const ViewReport = () => {
                                                                             </View>
                                                                         )
                                                                         : reportData.verify_1_revert === true &&
-                                                                            reportData.admin_1_revert === false &&
+                                                                            reportData.admin_1_revert === false  &&
                                                                             reportData.admin_2_revert === false
                                                                             ? (
                                                                                 <View
@@ -1399,7 +1400,6 @@ const ViewReport = () => {
                                                                                                 </TouchableOpacity>
                                                                                             </View> */}
                                                                                         </View>
-
                                                                                         <View style={{
                                                                                             left: 60
                                                                                         }}>
@@ -1501,11 +1501,11 @@ const ViewReport = () => {
                                                                                             }}>
 
                                                                                             <View style={{
-
+                                                                                                
                                                                                                 left: 80,
                                                                                                 top:3
                                                                                             }}>
-                                                                                                <TouchableOpacity
+                                                                                                {/* <TouchableOpacity
                                                                                                     style={{
                                                                                                         left: 15,
                                                                                                         paddingHorizontal: 5,
@@ -1520,11 +1520,12 @@ const ViewReport = () => {
                                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                         Revert
                                                                                                     </Text>
-                                                                                                </TouchableOpacity>
+                                                                                                </TouchableOpacity> */}
                                                                                                 <TouchableOpacity
                                                                                                     style={{
-                                                                                                        left: 15,
-                                                                                                        top: 8,
+                                                                                                        left: 18,
+
+                                                                                                        top: 26,
                                                                                                         paddingHorizontal: 5,
                                                                                                         paddingVertical: 1,
                                                                                                         alignItems: 'center',
@@ -1571,7 +1572,7 @@ const ViewReport = () => {
                                                                                                         top: 3,
                                                                                                         flexDirection: 'row',
                                                                                                     }}>
-                                                                                                    <TouchableOpacity
+                                                                                                    {/* <TouchableOpacity
                                                                                                         style={{
                                                                                                             paddingHorizontal: 5,
                                                                                                             paddingVertical: 1,
@@ -1586,7 +1587,7 @@ const ViewReport = () => {
                                                                                                         <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                                             Verify
                                                                                                         </Text>
-                                                                                                    </TouchableOpacity>
+                                                                                                    </TouchableOpacity> */}
                                                                                                 </View>
                                                                                                 {/* <View
                                                                                                     style={{
@@ -1637,7 +1638,7 @@ const ViewReport = () => {
                                                                                                     style={{
                                                                                                         // backgroundColor: 'dodgerblue',
                                                                                                         width: SIZES.width * 0.5,
-                                                                                                        top: 75,
+                                                                                                        top: 100,
                                                                                                         right: 191,
                                                                                                         padding: 2
                                                                                                     }}
@@ -1670,11 +1671,11 @@ const ViewReport = () => {
                                                                                                 <View>
                                                                                                     <View
                                                                                                         style={{
-                                                                                                            left: 20,
+                                                                                                            left: 0,
                                                                                                             top: 3,
                                                                                                             flexDirection: 'row',
                                                                                                         }}>
-                                                                                                        <TouchableOpacity
+                                                                                                        {/* <TouchableOpacity
                                                                                                             style={{
                                                                                                                 paddingHorizontal: 16,
                                                                                                                 paddingVertical: 1,
@@ -1693,7 +1694,7 @@ const ViewReport = () => {
                                                                                                                     tintColor: 'green',
                                                                                                                 }}
                                                                                                             />
-                                                                                                        </TouchableOpacity>
+                                                                                                        </TouchableOpacity> */}
                                                                                                     </View>
                                                                                                     {/* <View
                                                                                                         style={{
@@ -1781,7 +1782,7 @@ const ViewReport = () => {
                                                                                                         </TouchableOpacity> */}
                                                                                                         <TouchableOpacity
                                                                                                             style={{
-                                                                                                                left: 30,
+                                                                                                                left: 70,
                                                                                                                 top: 53,
                                                                                                                 paddingHorizontal: 16,
                                                                                                                 paddingVertical: 1,
