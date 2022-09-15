@@ -6,7 +6,6 @@ import HeaderBar from './HeaderBar';
 import LineDivider from './LineDivider';
 import ProgressBar from './ProgressBar';
 import ProfileValue from './ProfileValue';
-import FloatingButton from './FloatingButton';
 import CustomDropdown from './CustomDropdown';
 import ItemBox from './ItemBox';
 import CustomToast from './CustomToast';
@@ -22,7 +21,6 @@ export {
   LineDivider,
   ProgressBar,
   ProfileValue,
-  FloatingButton,
   CustomDropdown,
   ItemBox,
   CustomToast,

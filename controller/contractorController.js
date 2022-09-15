@@ -46,4 +46,20 @@ const deleteContractors = async id => {
   }
 };
 
-export {getContractors, postContractors, deleteContractors};
+const updateContractors = async (formData, contractor_id) => {
+  try {
+    const res = await fetch(Config.API_URL + 'contractor/' + contractor_id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {getContractors, postContractors, deleteContractors, updateContractors};

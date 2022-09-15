@@ -38,6 +38,7 @@ const MyProfile = () => {
   const [leavesday, setLeavesDay] = useState([]);
   const [haliddayates, setHalidayDates] = useState([]);
 
+  // console.log(userDetail);
   // const [removedate, setRemoveDate] = useState(false)
   const [pushdate, setPushDate] = useState([]);
 
@@ -53,16 +54,15 @@ const MyProfile = () => {
   // console.log(todayFormatted)
 
   useEffect(() => {
-    fetch(`${config.API_URL}user`, {
+    fetch(`${config.API_URL}user/` + userData._id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${userData.token}`,
       },
     })
       .then(response => response.json())
       .then(data => {
-        // console.log(data)
+        console.log(data);
         setUserDetail(data);
       })
       .catch(error => {
@@ -91,7 +91,7 @@ const MyProfile = () => {
       leavedates: pushdate,
       user_id: user_id,
     };
-    console.log(applyleaves)
+    console.log(applyleaves);
     try {
       fetch(`${process.env.API_URL}apply-leaves`, {
         method: 'POST',
