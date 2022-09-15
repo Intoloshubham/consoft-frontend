@@ -83,7 +83,7 @@ const CalenderFuncation = () => {
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth),
   });
-  console.log(days)
+  // console.log(days)
 
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, {months: -1});

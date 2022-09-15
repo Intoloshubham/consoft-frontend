@@ -36,11 +36,11 @@ const Leaves = () => {
   };
 
   // console.log(selectedId);
-  console.log(leavesdate);
+  // console.log(leavesdate);
 
 
   const submitLeaves=()=>{
-    alert(JSON.stringify(leavesdate))
+    // alert(JSON.stringify(leavesdate))
       //const leavesdata = {
       //   option_type:leavesdate,
       //   company_id:user_id

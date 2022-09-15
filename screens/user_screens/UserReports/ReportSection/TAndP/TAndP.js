@@ -95,9 +95,9 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         const formatedDate =
             selectedDate.getFullYear() +
             '/' +
-            ('0' + (selectedDate.getMonth() + 1)).slice(-2)+
+            ('0' + (selectedDate.getMonth() + 1)).slice(-2) +
             '/' +
-            ('0' + selectedDate.getDate()).slice(-2) 
+            ('0' + selectedDate.getDate()).slice(-2)
 
         // const formatedDate = `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1
         //     }/${selectedDate.getDate()}`;
@@ -130,8 +130,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const getEquipmentItems = async () => {
         try {
             const data = await get_equipment_item_name();
-            if (data.length > 0) {
-                // console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
+            if (data.length >= 0) {
                 setGetEquipItemName(data);
             }
         } catch (error) {
@@ -142,7 +141,6 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const getEquipReport = async () => {
         try {
             const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
-
             setGetEquipmentReport(data);
         } catch (error) {
             console.log(error)
@@ -173,7 +171,9 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                 getEquipmentItems();
                 setTimeout(() => {
                     setAddNewEquipment(false);
-                }, 1500);
+                    setSubmitToast(false);
+                }, 800);
+               
 
             }
             return () => { isMount = false }
@@ -203,7 +203,8 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                 setTandPInsertStatus(true);
                 setTimeout(() => {
                     setTandPModal(false);
-                }, 1500);
+                    setSubmitToast(false);
+                }, 900);
                 equipmentField.splice(0, equipmentField.length);
             }
             return () => { isMount = false }
@@ -236,6 +237,9 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
             getEquipReport();
             setTandPModal(false)
         }
+        setTimeout(() => {
+            setUpdateToast(false);
+          }, 900);
     }
 
     const add_tAndP_icon_button = () => {
@@ -824,7 +828,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             }}>
                                             <>
                                                 {
-                                                    getEquipmentReport.data.length > 0 ? getEquipmentReport.data.map((list, index) => (
+                                                    getEquipmentReport.data.length >= 0 ? getEquipmentReport.data.map((list, index) => (
 
                                                         <View
                                                             style={{

@@ -17,6 +17,7 @@ import {
 import { Title, Divider } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
 import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist,  update_quantity_data, 
@@ -195,7 +196,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             // getRreportData()
             setTimeout(() => {
               setReportmodal(false);
-            }, 1500);
+              setSubmitToast(false)
+            }, 900);
             inputs.splice(0, inputs.length);
           }
 
@@ -221,7 +223,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       setUpdateToast(true);
       setTimeout(() => {
         setReportmodal(false);
-      }, 1500);
+        setUpdateToast(false)
+      }, 900);
       inputs.splice(0, inputs.length);
 
     }
@@ -543,7 +546,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             setSubmitToast(true);
             setTimeout(() => {
               setadditem(false);
-            }, 1500);
+              setSubmitToast(false);
+            }, 500);
           } else {
             alert(data.message)
           }

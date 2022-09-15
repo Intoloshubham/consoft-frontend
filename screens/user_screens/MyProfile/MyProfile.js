@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,15 +10,15 @@ import {
   Button,
   ScrollView,
 } from 'react-native';
-import {HeaderBar, TextButton, FormInput} from '../../../Components';
-import {Title, Card} from 'react-native-paper';
-import {SIZES, COLORS, icons} from '../../../constants';
+import { HeaderBar, TextButton, FormInput } from '../../../Components';
+import { Title, Card } from 'react-native-paper';
+import { SIZES, COLORS, icons } from '../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import CustomCalender from './CustomCalender';
 
-import {useSelector, useDispatch} from 'react-redux';
-import {Popable} from 'react-native-popable';
+import { useSelector, useDispatch } from 'react-redux';
+import { Popable } from 'react-native-popable';
 import config from '../../../config';
 // import CalendarPicker from 'react-native-calendar-picker';
 
@@ -53,8 +53,11 @@ const MyProfile = () => {
   } = CustomCalender();
   // console.log(todayFormatted)
 
+
+
+
   useEffect(() => {
-    fetch(`${config.API_URL}user/` + userData._id, {
+    fetch(`${config.API_URL}user/` + user_id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -62,17 +65,22 @@ const MyProfile = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         setUserDetail(data);
       })
       .catch(error => {
         console.log(error);
       });
-  }, [user_id]);
+  }, []);
+
+
+
+
 
   const dateClickHandler = (date, i) => {
     //  const newDate= removedate?[...leavesdate, date]:leavesdate.pop(date);
     const selectDate = [...leavesdate, date];
+    const newselectdate = [...new Set(leavesdate), date];
+    // console.log(selectDate)
     // setLeavesDate(date=> [...leavesdate,  ${date.length}`]);
     // if(leavesdate){
     // const obj = [...new Map(
@@ -81,7 +89,6 @@ const MyProfile = () => {
     // }
     setLeavesDate(selectDate);
     setSelectedId(i);
-    const newselectdate = [...new Set(leavesdate), date];
     // console.log(newselectdate);
     setPushDate(newselectdate);
   };
@@ -90,8 +97,10 @@ const MyProfile = () => {
     const applyleaves = {
       leavedates: pushdate,
       user_id: user_id,
+      company_id:userData.company_id
+
     };
-    console.log(applyleaves);
+    // console.log(applyleaves)
     try {
       fetch(`${process.env.API_URL}apply-leaves`, {
         method: 'POST',
@@ -104,7 +113,7 @@ const MyProfile = () => {
         .then(response => response.json())
         .then(data => {
           showleavesdata();
-          console.log('Success:', data);
+          // console.log('Success:', data);
         });
     } catch (error) {
       console.error('Error:', error);
@@ -117,10 +126,9 @@ const MyProfile = () => {
   const showleavesdata = async () => {
     const resp = await fetch(process.env.API_URL + 'attendance/' + user_id);
     const leavesDate = await resp.json();
-    // console.log(leavesDate);
     setShowLeaves(leavesDate);
   };
-
+  
   useEffect(() => {
     showleavesdata();
   }, []);
@@ -133,29 +141,16 @@ const MyProfile = () => {
       });
     }
   }, [showleaves]);
-
-  useMemo(() => {
-    if (monthshow.months) {
-      monthshow.months.map((month, index) => {
-        setLeavesDay(month);
-      });
-    }
-  }, [showleaves]);
+  // console.log(monthshow)
 
   // useMemo(() => {
-  //   if (leavesday.leavedays) {
-
-  //      leavesday.leavedays.map((days,index)=> {
-  //         console.log(days)
-  //       // console.log(index)
-  //       let dates = days.leave_date
-  //         // console.log(dates)
-  //       setHalidayDates(dates)
+  //   if (monthshow.leavedates) {
+  //     monthshow.leavedates.map((month, index) => {
+  //       console.log(month)
+  //       // setLeavesDay(month);
   //     });
   //   }
-  // }, []);
-
-  // console.log(haliddayates)
+  // }, [showleaves]);
 
   const ClearDate = () => {
     setPushDate('');
@@ -177,6 +172,7 @@ const MyProfile = () => {
   // var finalTime = "Time  - " + hours + ":" + minutes + " " + AmOrPm;
   var finalTime = hours + ':' + minutes + AmOrPm;
 
+  var approved;
   return (
     <View>
       {/* <HeaderBar right={true} title="Leaves" /> */}
@@ -201,10 +197,10 @@ const MyProfile = () => {
               alignItems: 'center',
               marginBottom: 10,
             }}>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
               Name:-{userDetail.name}
             </Text>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
               Designation:-{userDetail.role}
             </Text>
           </View>
@@ -215,7 +211,7 @@ const MyProfile = () => {
               alignItems: 'center',
               marginBottom: 10,
             }}>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
               Email:-{userDetail.email}
             </Text>
           </View>
@@ -226,10 +222,10 @@ const MyProfile = () => {
               alignItems: 'center',
               marginBottom: 10,
             }}>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
               Emp_id:-{userDetail.role_id}
             </Text>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
               {/* Join_Date:-{'20/08/2021'} */}
             </Text>
           </View>
@@ -239,7 +235,7 @@ const MyProfile = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
               Mobile-No:-{userDetail.mobile}
             </Text>
           </View>
@@ -249,7 +245,7 @@ const MyProfile = () => {
               justifyContent: 'space-between',
               marginTop: 10,
             }}>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>Leaves Date</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Leaves Date</Text>
             <TextButton
               label="Apply for leaves"
               buttonContainerStyle={{
@@ -260,40 +256,50 @@ const MyProfile = () => {
               onPress={() => setLeavesModal(true)}
             />
           </View>
-          <View style={{marginTop: 5}}>
-            {leavesday.leavedays !== undefined
-              ? leavesday.leavedays.map((Ldays, index) => {
-                  // {console.log(Ldays)}
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                        {Ldays.leave_date}
-                      </Text>
 
-                      <TouchableOpacity>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 'bold',
-                            backgroundColor: 'orange',
-                            marginTop: 2,
-                            padding: 2,
-                            margin: 2,
-                          }}>
-                          Pending
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })
-              : null}
-          </View>
+          <ScrollView nestedScrollEnabled={true} maxHeight={50}>
+            <View style={{marginTop: 5}}>
+              {monthshow.leavedates != undefined
+                ? monthshow.leavedates.map((Ldays, index) => {
+                    {
+                      console.log(Ldays);
+                    }
+                    return (
+                      <View
+                        key={index}
+                        style={{
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          justifyContent: 'space-between',
+                        }}>
+                        {Ldays.approved === false ? (
+                          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                            {Ldays.leave_date}
+                          </Text>
+                        ) : null}
+                        {Ldays.approved === true ? null : (
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                backgroundColor: 'orange',
+                                marginTop: 2,
+                                padding: 2,
+                                margin: 2,
+                              }}>
+                              Pending
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    );
+                  })
+                : null}
+            </View>
+          </ScrollView>
+
+        
           {/* leacves modal start  */}
         </View>
 
@@ -323,9 +329,9 @@ const MyProfile = () => {
                   <AntDesign name="close" size={30} color="black" />
                 </Pressable>
               </View>
-              <View style={{marginTop: 10}}>
+              <View style={{ marginTop: 10 }}>
                 <View>
-                  <Card style={{borderWidth: 2, elevation: 10, margin: 10}}>
+                  <Card style={{ borderWidth: 2, elevation: 10, margin: 10 }}>
                     <Card.Content>
                       <View>
                         {/* <Card style={{borderWidth: 2}}>
@@ -337,19 +343,18 @@ const MyProfile = () => {
                             alignItems: 'center',
                           }}>
                           <Title>
-                            {`${
-                              monthNames[selectedDate.getMonth()]
-                            }-${selectedDate.getFullYear()}`}
+                            {`${monthNames[selectedDate.getMonth()]
+                              }-${selectedDate.getFullYear()}`}
                           </Title>
                           {/* <Text>Today{todayFormatted}</Text> */}
-                          <View style={{flexDirection: 'row'}}>
+                          <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity onPress={getPrevMonth}>
-                              <Text style={{marginRight: 10, fontSize: 18}}>
+                              <Text style={{ marginRight: 10, fontSize: 18 }}>
                                 Prev
                               </Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={getNextMonth}>
-                              <Text style={{fontSize: 18}}>Next</Text>
+                              <Text style={{ fontSize: 18 }}>Next</Text>
                             </TouchableOpacity>
                           </View>
                         </View>
@@ -368,7 +373,7 @@ const MyProfile = () => {
                         {daysShort.map((day, index) => (
                           // console.log(day,index)
                           <Title
-                            style={[index == 6 ? {color: 'red'} : null]}
+                            style={[index == 6 ? { color: 'red' } : null]}
                             key={index}>
                             {day}
                           </Title>
@@ -393,17 +398,17 @@ const MyProfile = () => {
                                   style={[
                                     todayFormatted
                                       ? {
-                                          backgroundColor: 'green',
-                                          borderRadius: 50,
-                                          paddingHorizontal: 10,
-                                          marginLeft: -5,
-                                        }
+                                        backgroundColor: 'green',
+                                        borderRadius: 50,
+                                        paddingHorizontal: 10,
+                                        marginLeft: -5,
+                                      }
                                       : null,
                                   ]}
                                   onPress={() => {
-                                    dateClickHandler({leave_date: col.date});
+                                    dateClickHandler({ leave_date: col.date });
                                   }}>
-                                  <Title style={{color: '#fff'}}>
+                                  <Title style={{ color: '#fff' }}>
                                     {col.value}
                                   </Title>
                                 </TouchableOpacity>
@@ -412,35 +417,36 @@ const MyProfile = () => {
                                   key={i}
                                   className={col.classes}
                                   onPress={() => {
-                                    dateClickHandler({leave_date: col.date});
+                                    dateClickHandler({ leave_date: col.date });
                                   }}>
+
                                   <Title
                                     style={[
                                       col.classes == 'in-prev-month'
-                                        ? {opacity: 0.5}
+                                        ? { opacity: 0.5 }
                                         : col.classes == 'in-next-month'
-                                        ? {opacity: 0.5}
-                                        : i == 6
-                                        ? {
-                                            backgroundColor: 'orange',
-                                            borderRadius: 50,
-                                            paddingHorizontal: 5,
-                                            marginLeft: -5,
-                                          }
-                                        : col.date == leavesdate[i]
-                                        ? {
-                                            backgroundColor: 'red',
-                                            borderRadius: 50,
-                                            paddingHorizontal: 5,
-                                            marginLeft: -5,
-                                            color: '#fff',
-                                          }
-                                        : {
-                                            backgroundColor: COLORS.gray3,
-                                            borderRadius: 50,
-                                            paddingHorizontal: 5,
-                                            marginLeft: -5,
-                                          },
+                                          ? { opacity: 0.5 }
+                                          : i == 6
+                                            ? {
+                                              backgroundColor: 'orange',
+                                              borderRadius: 50,
+                                              paddingHorizontal: 5,
+                                              marginLeft: -5,
+                                            }
+                                            : col.date == leavesdate[i]
+                                              ? {
+                                                backgroundColor: 'red',
+                                                borderRadius: 50,
+                                                paddingHorizontal: 5,
+                                                marginLeft: -5,
+                                                color: '#fff',
+                                              }
+                                              : {
+                                                backgroundColor: COLORS.gray3,
+                                                borderRadius: 50,
+                                                paddingHorizontal: 5,
+                                                marginLeft: -5,
+                                              },
                                     ]}>
                                     {col.value}
                                   </Title>
@@ -480,7 +486,7 @@ const MyProfile = () => {
                   onPress={() => submitLeaves()}
                 />
                 <View>
-                  {/* <Title>{JSON.stringify(leavesdate)}</Title> */}
+                  <Title>{JSON.stringify(leavesdate)}</Title>
                   <Title>{JSON.stringify(pushdate)}</Title>
                 </View>
               </View>
@@ -499,7 +505,7 @@ const MyProfile = () => {
             marginBottom: SIZES.padding,
             borderRadius: SIZES.radius,
           }}>
-          <Card style={{borderWidth: 2, elevation: 10, borderRadius: 10}}>
+          <Card style={{ borderWidth: 2, elevation: 10, borderRadius: 10 }}>
             <Card.Content>
               <View>
                 {/* <Card style={{borderWidth: 2}}>
@@ -511,17 +517,16 @@ const MyProfile = () => {
                     alignItems: 'center',
                   }}>
                   <Title>
-                    {`${
-                      monthNames[selectedDate.getMonth()]
-                    }-${selectedDate.getFullYear()}`}
+                    {`${monthNames[selectedDate.getMonth()]
+                      }-${selectedDate.getFullYear()}`}
                   </Title>
                   {/* <Text>Today{todayFormatted}</Text> */}
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity onPress={getPrevMonth}>
-                      <Text style={{marginRight: 10, fontSize: 18}}>Prev</Text>
+                      <Text style={{ marginRight: 10, fontSize: 18 }}>Prev</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={getNextMonth}>
-                      <Text style={{fontSize: 18}}>Next</Text>
+                      <Text style={{ fontSize: 18 }}>Next</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -539,7 +544,7 @@ const MyProfile = () => {
                 {daysShort.map((day, index) => (
                   // console.log(day,index)
                   <Title
-                    style={[index == 6 ? {color: 'red'} : null]}
+                    style={[index == 6 ? { color: 'red' } : null]}
                     key={index}>
                     {day}
                   </Title>
@@ -564,14 +569,14 @@ const MyProfile = () => {
                           style={[
                             todayFormatted
                               ? {
-                                  backgroundColor: 'green',
-                                  borderRadius: 50,
-                                  paddingHorizontal: 10,
-                                  marginLeft: -5,
-                                }
+                                backgroundColor: 'green',
+                                borderRadius: 50,
+                                paddingHorizontal: 10,
+                                marginLeft: -5,
+                              }
                               : null,
                           ]}
-                          // style={{color:"red"}}
+                        // style={{color:"red"}}
                         >
                           <Popable
                             animationType="spring"
@@ -587,12 +592,12 @@ const MyProfile = () => {
                                   // width:100
                                 }}>
                                 <Text
-                                  style={{fontSize: 15, fontWeight: 'bold'}}>
+                                  style={{ fontSize: 15, fontWeight: 'bold' }}>
                                   In-{finalTime}Out
                                 </Text>
                               </View>
                             }>
-                            <Title style={{color: '#fff'}}>{col.value}</Title>
+                            <Title style={{ color: '#fff' }}>{col.value}</Title>
                           </Popable>
                         </TouchableOpacity>
                       ) : (
@@ -612,7 +617,7 @@ const MyProfile = () => {
                                   width: 100,
                                 }}>
                                 <Text
-                                  style={{fontSize: 15, fontWeight: 'bold'}}>
+                                  style={{ fontSize: 15, fontWeight: 'bold' }}>
                                   In-{finalTime}Out
                                 </Text>
                               </View>
@@ -620,31 +625,31 @@ const MyProfile = () => {
                             <Title
                               style={[
                                 col.classes == 'in-prev-month'
-                                  ? {opacity: 0.5}
+                                  ? { opacity: 0.5 }
                                   : col.classes == 'in-next-month'
-                                  ? {opacity: 0.5}
-                                  : i == 6
-                                  ? {
-                                      backgroundColor: 'orange',
-                                      borderRadius: 50,
-                                      paddingHorizontal: 5, //10
-                                      marginLeft: -5,
-                                    }
-                                  : col.date == [leavesday.leave_date]
-                                  ? {
-                                      backgroundColor: 'blue',
-                                      color: '#fff',
-                                      borderRadius: 50,
-                                      paddingHorizontal: 10,
-                                      marginLeft: -5,
-                                    }
-                                  : {
-                                      // textAlign:"center",
-                                      backgroundColor: COLORS.gray3,
-                                      borderRadius: 50,
-                                      paddingHorizontal: 5,
-                                      marginLeft: -5,
-                                    },
+                                    ? { opacity: 0.5 }
+                                    : i == 6
+                                      ? {
+                                        backgroundColor: 'orange',
+                                        borderRadius: 50,
+                                        paddingHorizontal: 5, //10
+                                        marginLeft: -5,
+                                      }
+                                      : col.date == [leavesday.leave_date]
+                                        ? {
+                                          backgroundColor: 'blue',
+                                          color: '#fff',
+                                          borderRadius: 50,
+                                          paddingHorizontal: 10,
+                                          marginLeft: -5,
+                                        }
+                                        : {
+                                          // textAlign:"center",
+                                          backgroundColor: COLORS.gray3,
+                                          borderRadius: 50,
+                                          paddingHorizontal: 5,
+                                          marginLeft: -5,
+                                        },
                               ]}>
                               {col.value}
                             </Title>

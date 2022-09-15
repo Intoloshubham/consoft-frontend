@@ -115,7 +115,7 @@ const CheckList = () => {
       checklist_option_type_id: roleValue,
       company_id: company_id_option_type,
     };
-    console.log(data);
+    // console.log(data);
     fetch(`${config.API_URL}checklists`, {
       method: 'POST',
       headers: {
@@ -128,7 +128,7 @@ const CheckList = () => {
         setcreatelist('');
         setInputslist('');
         checklistItem();
-        console.log('Success:', data, alert('createlist'));
+        // console.log('Success:', data, alert('createlist'));
         // {
         //   createlist === ' ' || inputs === ' ' || drop === ' '
         //     ? alert('plz fill textbox')
@@ -165,7 +165,7 @@ const CheckList = () => {
 
   // update createlist
   const update = (id, name, type, items) => {
-    console.log(id, name, items, type);
+    // console.log(id, name, items, type);
     setupdatelist(true);
     setchecklistId(id);
     setcreatelist(name);
@@ -220,7 +220,7 @@ const CheckList = () => {
       .then(data => {
         checklistItem();
         setcreatelist('');
-        console.log('Success:', data, alert(' update'));
+        // console.log('Success:', data, alert(' update'));
         createlist === ' ';
       });
     
