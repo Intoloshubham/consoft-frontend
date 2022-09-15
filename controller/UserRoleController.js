@@ -15,14 +15,17 @@ const getUserRole = async company_id => {
   }
 };
 
-const roleByUser = async role_id => {
+const roleByUser = async (company_id, role_id) => {
   try {
-    const res = await fetch(Config.API_URL + 'role-by-users/' + role_id, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      Config.API_URL + 'role-by-users/' + company_id + '/' + role_id,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
     const data = await res.json();
     return data;
   } catch (error) {
@@ -33,6 +36,21 @@ const roleByUser = async role_id => {
 const getUsers = async company_id => {
   try {
     const res = await fetch(Config.API_URL + 'users/' + company_id, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getSingleUser = async user_id => {
+  try {
+    const res = await fetch(Config.API_URL + 'user/' + user_id, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -61,4 +79,45 @@ const postUserRole = async formData => {
   }
 };
 
-export {getUserRole, roleByUser, getUsers, postUserRole};
+const getPrivileges = async () => {
+  try {
+    const res = await fetch(Config.API_URL + 'privilege', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getUserByPrivileges = async (company_id, privilege_id) => {
+  try {
+    const res = await fetch(
+      Config.API_URL + 'privilege-by-users/' + company_id + '/' + privilege_id,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {
+  getUserRole,
+  roleByUser,
+  getUsers,
+  postUserRole,
+  getPrivileges,
+  getSingleUser,
+  getUserByPrivileges,
+};

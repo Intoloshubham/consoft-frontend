@@ -135,12 +135,12 @@ const Apps = ({navigation}) => {
   //Submit form date to your API end point
   const handlePressSubmitButton = () => {
     if (!validateFormMultipleFields()) {
-      console.log('Form data is not valid. And not ready to submit.');
+      // console.log('Form data is not valid. And not ready to submit.');
       return;
     } else {
       //Form data going to submit on API
-      console.log('Form data is valid and ready to submit.');
-      console.log(formInputs);
+      // console.log('Form data is valid and ready to submit.');
+      // console.log(formInputs);
     }
   };
 

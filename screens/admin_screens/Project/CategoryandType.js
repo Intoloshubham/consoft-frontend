@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Modal,
   ScrollView,
-  LogBox,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
@@ -16,7 +15,6 @@ import {
 import {
   HeaderBar,
   TextButton,
-  IconButton,
   FormInput,
   CustomDropdown,
   CustomToast,
@@ -39,35 +37,46 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 const CategoryandType = () => {
   const [showTip, setTip] = React.useState(false);
   const [showTip1, setTip1] = React.useState(false);
+
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
-  // delete confirmation
+  // DELETE CONFIRMATION
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [deleteConfirm1, setDeleteConfirm1] = React.useState(false);
 
   // COMPANY DATA
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
   const company_id = companyData._id;
-  // console.log("object",company_id)
 
   // STATES FOR STORING CATEGORIES & PROJECT TYPES DATA
   const [projectCategories, setProjectCategories] = React.useState([]);
   const [projectTypes, setProjectTypes] = React.useState([]);
-  //Modal
+
+  //MODAL
   const [showCategoryModal, setShowCategoryModal] = React.useState(false);
   const [showTypesModal, setShowTypesModal] = React.useState(false);
-  // Form Data
+
+  // FORM DATA
   const [catName, setCatName] = React.useState('');
   const [typeName, setTypeName] = React.useState('');
-  //Dropdown
+
+  //DROPDOWN
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState([]);
   const [items, setItems] = React.useState([]);
 
-  // get project category
+  // GET PROJECT CATEGORY
   const projectCategory = async () => {
     let response = await getProjectCategory(company_id);
     if (response.status === 200) {
@@ -79,10 +88,11 @@ const CategoryandType = () => {
     }
   };
 
+  // POST PROJECT CATEGORY DATA
   const postCategory = async () => {
     const formData = {
       category_name: catName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await postProjectCategory(formData);
     if (response.status == 200) {
@@ -100,22 +110,21 @@ const CategoryandType = () => {
 
   const [id, setId] = React.useState('');
   const getId = id => {
-    // console.log(id);
     setId(id);
   };
 
-  // get cat data
+  // GET CATEGORY DATA
   const getData = name => {
     setCatName(name);
   };
 
+  // EDIT PROJECT CATEGORY
   const editCategory = async () => {
     const formData = {
       category_name: catName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await updateProjectCategory(id, formData);
-
     if (response.status == 200) {
       setUpdateToast(true);
       projectCategory();
@@ -129,12 +138,14 @@ const CategoryandType = () => {
     }, 2000);
   };
 
+  // GET CATEGORY ID
   const getCategoryId = id => {
     setCategoryId(id);
     setDeleteConfirm(true);
   };
   const [category_id, setCategoryId] = React.useState('');
 
+  // DELETE PROJECT CATEGORY
   const deletecategory = async () => {
     let response = await deleteProjectCategory(category_id);
     if (response.status == 200) {
@@ -147,7 +158,7 @@ const CategoryandType = () => {
     }, 1500);
   };
 
-  // get project types
+  // GET PROJECT TYPES
   const getprojectTypes = async () => {
     let response = await getProjectType(company_id);
     if (response.status === 200) {
@@ -155,11 +166,12 @@ const CategoryandType = () => {
     }
   };
 
+  // POST PROJECT TYPES DATA
   const postTypes = async () => {
     const formData = {
       category_id: value,
       project_type: typeName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await postProjectType(formData);
     if (response.status === 200) {
@@ -175,23 +187,24 @@ const CategoryandType = () => {
     }, 2000);
   };
 
+  // GET TYPE ID
   const [typeid, setTypeId] = React.useState('');
-  // console.log("object", typeid)
   const gettypeId = id => {
-    // console.log(id)
     setTypeId(id);
   };
 
+  // GET TYPE DATA
   const getTypeData = (cat_id, name) => {
     setValue(cat_id);
     setTypeName(name);
   };
 
+  // EDIT PROJECT TYPE
   const edittype = async () => {
     const formData = {
       category_id: value,
       project_type: typeName,
-      company_id: companyData._id,
+      company_id: company_id,
     };
     let response = await updateProjectType(typeid, formData);
     if (response.status === 200) {
@@ -214,6 +227,7 @@ const CategoryandType = () => {
   };
   const [type_id, setTypId] = React.useState('');
 
+  // DELETE PROJECT TYPE
   const deleteType = async () => {
     let response = await deleteProjectType(type_id);
     if (response.status === 200) {
@@ -309,12 +323,8 @@ const CategoryandType = () => {
     return (
       <View
         style={{
-          marginTop: SIZES.radius,
           marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.lightblue_50,
-          ...styles.shadow,
+          backgroundColor: COLORS.white,
         }}>
         <View
           style={{
@@ -364,11 +374,7 @@ const CategoryandType = () => {
                 </View>
               }
               onClose={() => setTip(false)}
-              placement="bottom"
-              // topAdjustment={
-              //   Platform.OS === 'android' ? -StatusBar.currentHeight : 0
-              // }
-            >
+              placement="bottom">
               <TouchableOpacity style={{}} onPress={() => setTip(true)}>
                 <Image
                   source={icons.help1}
@@ -383,22 +389,21 @@ const CategoryandType = () => {
           </View>
         </View>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
           data={projectCategories}
+          contentContainerStyle={{marginTop: SIZES.base, paddingBottom: 25}}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={200}
+          maxHeight={250}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
                   backgroundColor: COLORS.gray2,
-                  // marginVertical: 5,
+                  marginVertical: 2,
                 }}></View>
             );
           }}
@@ -445,8 +450,6 @@ const CategoryandType = () => {
                 gettypeId(item._id);
                 getTypeData(item.category_id, item.project_type);
                 setShowTypesModal(true);
-                // OnEditTypes();
-                // edittype();
               }}>
               <ImageBackground
                 style={{
@@ -485,12 +488,9 @@ const CategoryandType = () => {
     return (
       <View
         style={{
-          marginVertical: SIZES.padding * 1.5,
+          marginTop: SIZES.padding * 1.5,
           marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.lightblue_50,
-          ...styles.shadow,
+          backgroundColor: COLORS.white,
         }}>
         <View
           style={{
@@ -537,19 +537,15 @@ const CategoryandType = () => {
                       textAlign: 'left',
                     }}>
                     Project Types like Residential - bungalows, duplexes,
-                    high-rise & mid-rise apartments. {'\n'}Commercial -
-                    offices, malls & multiplexes. {'\n'}Industrial - warehouses,
-                    factories. {'\n'}Institutional - schools, colleges.{'\n'}Mixed-use -
-                    nursing homes, restaurants, etc.
+                    high-rise & mid-rise apartments. {'\n'}Commercial - offices,
+                    malls & multiplexes. {'\n'}Industrial - warehouses,
+                    factories. {'\n'}Institutional - schools, colleges.{'\n'}
+                    Mixed-use - nursing homes, restaurants, etc.
                   </Text>
                 </View>
               }
               onClose={() => setTip1(false)}
-              placement="bottom"
-              // topAdjustment={
-              //   Platform.OS === 'android' ? -StatusBar.currentHeight : 0
-              // }
-            >
+              placement="bottom">
               <TouchableOpacity style={{}} onPress={() => setTip1(true)}>
                 <Image
                   source={icons.help1}
@@ -564,21 +560,21 @@ const CategoryandType = () => {
           </View>
         </View>
         <FlatList
-          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 15}}
+          contentContainerStyle={{marginTop: SIZES.radius, paddingBottom: 25}}
           data={projectTypes}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
           nestedScrollEnabled={true}
-          maxHeight={200}
+          maxHeight={250}
           ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
                   backgroundColor: COLORS.gray2,
+                  marginVertical: 2,
                 }}></View>
             );
           }}
@@ -603,7 +599,7 @@ const CategoryandType = () => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -675,7 +671,7 @@ const CategoryandType = () => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -719,7 +715,7 @@ const CategoryandType = () => {
             />
             <View style={{marginTop: 30}}>
               <FormInput
-                label="Name"
+                label="Type Name"
                 keyboardType="default"
                 autoCompleteType="username"
                 value={typeName}
@@ -751,6 +747,7 @@ const CategoryandType = () => {
     <View
       style={{
         flex: 1,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Categories & Types" />
 
@@ -784,7 +781,7 @@ const CategoryandType = () => {
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this project category?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => {
@@ -795,7 +792,7 @@ const CategoryandType = () => {
         isVisible={deleteConfirm1}
         onClose={() => setDeleteConfirm1(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this project type?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => deleteType()}
@@ -803,6 +800,7 @@ const CategoryandType = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   shadow: {
     shadowColor: '#000',

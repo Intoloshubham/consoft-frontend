@@ -42,6 +42,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setUserId, removeUserId, storeToken, removeToken } from './asyncStorageService';
 import Config from '../config'
+import { constants } from "../constants";
 
 export const STATUSES = Object.freeze({
   IDLE: 'idle',
@@ -54,6 +55,10 @@ const initialState = {
   token: "",
   _id: "",
   company_id: "",
+  company_name: "",
+  name: '',
+  mobile: '',
+  email: '',
   status:STATUSES.IDLE,
 }
 
@@ -65,6 +70,10 @@ export const userSlice = createSlice({
       state.token = action.payload.access_token,
       state._id = action.payload._id,
       state.company_id = action.payload.company_id,
+      state.company_name = action.payload.company_name,
+      state.name = action.payload.name,
+      state.mobile = action.payload.mobile,
+      state.email = action.payload.email,
       state.status = STATUSES.IDLE
     },
     
@@ -72,6 +81,10 @@ export const userSlice = createSlice({
       state.token = null,
       state._id = null,
       state.company_id = null,
+      state.company_name = null,
+      state.name = null;
+      state.mobile = null;
+      state.email = null;
       state.status = STATUSES.LOGOUT
       removeToken('token')
       removeUserId('user_id')
@@ -85,14 +98,39 @@ export const userSlice = createSlice({
             state.status = STATUSES.LOADING;
         })
         .addCase(userLogin.fulfilled,(state, action) => {
-            if (action.payload.status === 200) {
-              state.status = STATUSES.IDLE;
-              state.token = action.payload.access_token;
-              state._id = action.payload._id;
-              state.company_id = action.payload.company_id;
-              setUserId(action.payload._id);
-              storeToken(action.payload.access_token);
-            }  
+          // console.log(action.payload)
+
+            if (action.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
+              
+              if (action.payload.status === 200) {
+                state.status = STATUSES.IDLE;
+                state.token = action.payload.access_token;
+                state._id = action.payload._id;
+                state.company_id = action.payload.company_id;
+                state.company_name = action.payload.company_name;
+                state.name = action.payload.name;
+                state.mobile = action.payload.mobile;
+                state.email = action.payload.email;
+                setUserId(action.payload._id);
+                storeToken(action.payload.access_token);
+              }  
+            }else{
+              //admin section
+              if (action.payload.status === 200) {
+                state.status = STATUSES.IDLE;
+                state.token = action.payload.access_token;
+                state._id = action.payload.company_id;
+                state.company_id = action.payload.company_id;
+                state.company_name = action.payload.company_name;
+                state.name = action.payload.name;
+                state.mobile = action.payload.mobile;
+                state.email = action.payload.email;
+                setUserId(action.payload._id);
+                storeToken(action.payload.access_token);
+              }
+
+            }
+
         })
         .addCase(userLogin.rejected, (state, action) => {
             state.status = STATUSES.ERROR;

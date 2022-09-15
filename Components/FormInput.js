@@ -17,7 +17,8 @@ const FormInput = ({
   errorMsg = '',
   value,
   multiline,
-  numberOfLines,editable
+  numberOfLines,
+  editable,
 }) => {
   return (
     <View style={{...containerStyle}}>
@@ -36,7 +37,7 @@ const FormInput = ({
         style={{
           flexDirection: 'row',
           height: 40,
-          paddingHorizontal: SIZES.padding,
+          paddingHorizontal: SIZES.radius,
           // marginTop: SIZES.base,
           borderRadius: SIZES.base,
           backgroundColor: COLORS.gray3,

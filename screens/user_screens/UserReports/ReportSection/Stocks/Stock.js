@@ -3,9 +3,9 @@ import {
     View,
     Text, FlatList,
     StyleSheet, Image,
-    ScrollView, Modal,
+    ScrollView, Modal, Animated,
     Pressable, TextInput, KeyboardAvoidingView,
-    Platform,
+    Platform, LayoutAnimation, UIManager,
     TouchableOpacity, Button, Keyboard
 } from 'react-native'
 import styles from '../../ReportStyle.js'
@@ -20,7 +20,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useSelector } from 'react-redux';
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../../../constants'
 import { FormInput, TextButton, HeaderBar, CustomToast } from '../../../../../Components';
-const Stock = ({ project_id, Main_drp_pro_value }) => {
+
+if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+}
+
+const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
     const {
         header,
         con_body,
@@ -50,6 +57,8 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
     const [stockResponseStatus, setStockResponseStatus] = useState('')
     const [isFocus, setIsFocus] = useState(false);
 
+    const animation = useRef(new Animated.Value(0)).current;
+    const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });
     //Insertion modal
     const [stockReportModal, setStockReportModal] = useState(false);
     const [addNewMaterial, setAddNewMaterial] = useState(false)
@@ -59,7 +68,20 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
     const [materialItemName, setMaterialItemName] = useState('')
     const [getStockData, setGetStockData] = useState([])
 
-
+    const onPressIn = () => {
+        Animated.spring(animation, {
+            toValue: 0.5,
+            useNativeDriver: true,
+        }).start();
+    };
+    const onPressOut = () => {
+        setTimeout(() => {
+            Animated.spring(animation, {
+                toValue: 0,
+                useNativeDriver: true,
+            }).start();
+        }, 150);
+    };
     // all input fields
     const [stockEntry, setStockEntry] = useState([
         {
@@ -77,7 +99,6 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
     const getStockDataItems = async () => {
         try {
             const data = await get_stock_item_name();
-            console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
             setStockItemData(data);
         } catch (error) {
 
@@ -88,7 +109,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
 
     useMemo(() => {
         getStockDataItems();
-    }, [userCompanyData.company_id])
+    }, [userCompanyData.company_id, loading])
 
 
 
@@ -101,6 +122,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                     return ele.stockEntryData;
                 })
                 setGetStockData(temp_data);
+                // console.log("🚀 ~ file: Stock.js ~ line 103 ~ GetStockData ~ temp_data", temp_data)
             }
         } catch (error) {
             console.log(error)
@@ -111,9 +133,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
         let isMount = true;
         GetStockData();
         return () => { isMount = false }
-    }, [userCompanyData.company_id])
-    // console.log("🚀 ~ file: Stock.js ~ line 95 ~ GetStockData ~ getStockData", getStockData)
-
+    }, [userCompanyData.company_id, loading])
 
 
     const postStockDataItems = async () => {
@@ -199,15 +219,24 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                     {stockEntry ? stockEntry.map((input, key) => {
 
                         return (
-                            <View style={inputContainer} key={key}>
+                            <View style={[inputsContainer, {
+                                borderWidth: 1,
+                                borderColor: COLORS.lightGray1,
+                                borderRadius: 2,
+                                elevation: 2,
+                                padding: 10,
+                                margin: 5
+                            }]} key={key}>
                                 <View
                                     style={{
                                         flexDirection: 'row',
                                         justifyContent: 'space-between',
-                                        paddingHorizontal: 5
+                                        paddingHorizontal: 5,
+
+
                                     }}
                                     key={key}
-                                // key="{(key+1)}"
+
                                 >
                                     <Dropdown
                                         style={[
@@ -276,9 +305,16 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ alignSelf: "flex-end" }}>
+                                <View style={{
+
+                                    width: "100%",
+                                    alignItems: "flex-end"
+                                }}>
                                     <TouchableOpacity
-                                        style={{ marginLeft: 310 }}
+                                        style={{
+                                            elevation: 8,
+                                            borderColor: COLORS.transparent
+                                        }}
                                         onPress={() => deleteStockHandler(key)}>
                                         <Image
                                             source={icons.delete_icon}
@@ -292,7 +328,10 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                 </View>
                             </View>
                         )
-                    }) : null}
+                    })
+                        :
+                        null
+                    }
                 </ScrollView>
             </View>
         )
@@ -303,17 +342,18 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
         return (
 
             <Modal visible={stockReportModal} transparent={false} animationType="slide">
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                <View
                     style={{ flex: 1, backgroundColor: COLORS.transparentBlack1 }}
                 >
-                    <View style={{ flex: 1, backgroundColor: '#000000aa', padding: 10 }}>
+                    <View style={{ flex: 1, backgroundColor: '#000000aa' }}>
                         <View
                             style={{
-                                flex: 1,
+                                height: "90%",
+                                width: "100%",
                                 backgroundColor: '#fff',
-                                marginTop: 50,
-                                borderRadius: 20,
+                                marginTop: 90,
+                                borderTopLeftRadius: 20,
+                                borderTopRightRadius: 20,
                                 padding: 22,
                             }}>
                             <View
@@ -337,7 +377,13 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                     marginTop: 10,
                                 }}>
                                 <TouchableOpacity
-                                    style={{ borderWidth: 1, borderRadius: 5, borderColor: COLORS.gray, paddingHorizontal: 2, marginVertical: 2 }}
+                                    style={{
+                                        paddingHorizontal: 2,
+                                        margin: 5,
+                                        borderRadius: 1,
+                                        elevation: 1,
+                                        borderColor: COLORS.transparent,
+                                    }}
                                     onPress={() => {
                                         addStockInputHandler();
                                     }}>
@@ -358,8 +404,11 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={{
-                                        borderWidth: 1, borderRadius: 2, paddingVertical: 1, marginVertical: 3,
-                                        paddingHorizontal: 4
+                                        paddingHorizontal: 4,
+                                        margin: 5,
+                                        borderRadius: 1,
+                                        elevation: 1,
+                                        borderColor: COLORS.transparent,
                                     }}
                                     onPress={() => {
                                         setAddNewMaterial(true);
@@ -370,154 +419,202 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                             <View style={{ flex: 1 }}>
                                 {add_stock_input()}
                             </View>
-                                <Button
-                                    title="submit"
-                                    onPress={() => {
-                                        postStockDataItems();
-                                    }}
-                                />
+                            {/* <Button
+                                title="submit"
+                                onPress={() => {
+                                    postStockDataItems();
+                                }}
+                            /> */}
+                            <TextButton
+                                label="Submit"
+                                buttonContainerStyle={{
+                                    height: 55,
+                                    width: '100%',
+                                    alignItems: 'center',
+                                    borderRadius: SIZES.radius,
+                                    backgroundColor: COLORS.lightblue_700
+                                }}
+                                onPress={() => {
+                                    postStockDataItems();
+                                }
+                                }
+                            />
                         </View>
                     </View>
-                </KeyboardAvoidingView>
+                </View>
             </Modal>
         )
     }
-      
+
     const add_new_material_modal = () => {
         return (
-          <View>
-            <Modal transparent={false} visible={addNewMaterial} animationType="slide">
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: '#000000aa',
-                }}>
-                <View
-                  style={{
-                    backgroundColor: '#fff',
-                    marginTop: 80,
-                    padding: 20,
-                    borderRadius: 20,
-                    margin: 10,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add New Material</Text>
-                    <Pressable onPress={()=>setAddNewMaterial(false)}>
-                      <AntDesign name="close" size={30} color={COLORS.black} />
-                    </Pressable>
-                  </View>
-                  <View style={{ marginTop: 20 }}>
-                    <FormInput
-                      label="Name"
-                      onChange={text => {
-                        setMaterialItemName(text)
-                      }}
-                    />                   
-                  </View>
-                  <View>
-                    <TextButton
-                      label="save"
-                      buttonContainerStyle={{
-                        height: 45,
-                        borderRadius: SIZES.radius,
-                        marginTop: SIZES.padding,
-                      }}
-                      onPress={() => {
-                        // saveNewMaterial();
-                      }}
-                    />
-                  </View>
-                  {/* <Toast config={showToastItem} /> */}
-                </View>
-              </View>
-            </Modal>
-          </View>
+            <View>
+                <Modal transparent={false} visible={addNewMaterial} animationType="slide">
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: '#000000aa',
+                        }}>
+                        <View
+                            style={{
+                                backgroundColor: '#fff',
+                                marginTop: 80,
+                                padding: 20,
+                                borderRadius: 8,
+                                margin: 10,
+                            }}>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}>
+                                <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Add New Material</Text>
+                                <Pressable onPress={() => setAddNewMaterial(false)}>
+                                    <AntDesign name="close" size={30} color={COLORS.black} />
+                                </Pressable>
+                            </View>
+                            <View style={{ marginTop: 20 }}>
+                                <FormInput
+                                    label="Name"
+                                    onChange={text => {
+                                        setMaterialItemName(text)
+                                    }}
+                                />
+                            </View>
+                            <View>
+                                <TextButton
+                                    label="save"
+                                    buttonContainerStyle={{
+                                        height: 45,
+                                        borderRadius: SIZES.radius,
+                                        marginTop: SIZES.padding,
+                                    }}
+                                    onPress={() => {
+                                        // saveNewMaterial();
+                                    }}
+                                />
+                            </View>
+                            {/* <Toast config={showToastItem} /> */}
+                        </View>
+                    </View>
+                </Modal>
+            </View>
         )
-      }
-    
-   
+    }
+
+
 
     const add_stock_icon_button = () => {
         return (
-            <TouchableOpacity
-                style={{
-                    // backgroundColor: COLORS.white,
-                    borderRadius: SIZES.radius * 0.2,
-                    justifyContent: "center",
-                    flexDirection: "row",
-                    paddingHorizontal: 2,
-                }}
-                onPress={() => {
-                    stockEntry.splice(0, stockEntry.length);
-                    setStockReportModal(true);
-                }}>
-                <View style={{
-                    alignSelf: "center",
-                    alignItems: "center",
-                    position: "absolute",
-                    justifyContent: "space-evenly",
-                    flexDirection: "row",
-                    backgroundColor: COLORS.lightblue_400,
-                    padding: SIZES.base * 0.1,
-                    paddingHorizontal: 2,
-                    paddingVertical: -2,
-                    borderRadius: 5,
-                    top: -SIZES.base * 1.2
-                }}>
-                    <View>
-                        <Text style={[FONTS.body5, { color: COLORS.white }]}>Add</Text>
-                    </View>
-                    <View>
-                        <MaterialIcons
-                            name='add'
-                            size={15}
-                            color={COLORS.white}
-                        />
-                    </View>
+            <Animated.View style={{ transform: [{ scale }] }}>
+                <TouchableOpacity
+                    style={{
+                        // backgroundColor: COLORS.white,
+                        borderRadius: SIZES.radius * 0.2,
+                        justifyContent: "center",
+                        flexDirection: "row",
+                        paddingHorizontal: 2,
+                    }}
 
-                </View>
-            </TouchableOpacity>
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
+                    onPress={() => {
+                        stockEntry.splice(0, stockEntry.length);
+                        setStockReportModal(true);
+                    }}>
+                    <View style={{
+                        alignSelf: "center",
+                        alignItems: "center",
+                        position: "absolute",
+                        justifyContent: "space-evenly",
+                        flexDirection: "row",
+                        backgroundColor: COLORS.lightblue_400,
+                        padding: SIZES.base * 0.1,
+                        paddingHorizontal: 2,
+                        paddingVertical: -2,
+                        borderRadius: 5,
+                        top: -SIZES.base * 1.2
+                    }}>
+                        <View>
+                            <Text
+                                onPressIn={onPressIn}
+                                onPressOut={onPressOut}
+                                style={[FONTS.body5, { color: COLORS.white }]}>Add</Text>
+                        </View>
+                        <View>
+                            <MaterialIcons
+                                name='add'
+                                size={15}
+                                color={COLORS.white}
+                            />
+                        </View>
+
+                    </View>
+                </TouchableOpacity>
+            </Animated.View>
         )
     }
 
     return (
         <View>
             {/* Stock */}
-            <Pressable
-                onPress={() => {
-                    GetStockData();
-                    setStockCollapse(!stockCollapse)
-                }}
-                style={{
-                    flexDirection: "row",
-                    paddingHorizontal: SIZES.base,
-                    paddingVertical: 3,
-                    width: SIZES.width * 0.35,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    top: SIZES.base * 2,
-                    borderColor: COLORS.lightblue_200,
-                    borderWidth: 1,
-                    borderRadius: 1,
-                    elevation: 1
-                }}>
-                <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => {
-                        Main_drp_pro_value ? null : alert("Select Project First!")
+            <Animated.View style={{ transform: [{ scale }] }}>
+                <Pressable
+                    onPress={() => {
+                        GetStockData();
+                        LayoutAnimation.easeInEaseOut();
                         setStockCollapse(!stockCollapse)
-                    }} style={[FONTS.h3, { color: COLORS.darkGray }]}>Stock</Text>
-                </View>
-                <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <TouchableOpacity onPress={() => setStockCollapse(!stockCollapse)}>
-                        <AntDesign name='caretdown' size={12} color={COLORS.gray} />
-                    </TouchableOpacity>
-                </View>
-            </Pressable>
+                    }}
+
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
+
+                    style={{
+                        flexDirection: "row",
+                        paddingHorizontal: SIZES.base,
+                        paddingVertical: 3,
+                        width: SIZES.width * 0.53,
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        top: SIZES.base * 2,
+                        borderColor: COLORS.lightblue_200,
+                        backgroundColor: COLORS.lightblue_600,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        elevation: 2,
+                        shadowColor: '#000',
+                        shadowOffset: {
+                            width: 0,
+                            height: 4,
+                        },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 4.65,
+                    }}>
+                    <View style={{ alignItems: "center", alignSelf: "center" }}>
+                        <Text
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                            onPress={() => {
+                                Main_drp_pro_value ? null : alert("Select Project First!")
+                                setStockCollapse(!stockCollapse);
+                                LayoutAnimation.easeInEaseOut();
+                            }} style={[FONTS.h3, { color: COLORS.white2 }]}>Stock</Text>
+                    </View>
+                    <View style={{ alignItems: "center", alignSelf: "center" }}>
+                        <TouchableOpacity
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
+                            onPress={() => {
+                                LayoutAnimation.easeInEaseOut();
+                                setStockCollapse(!stockCollapse)
+
+                            }}>
+                            <AntDesign name='caretdown' size={12} color={COLORS.white2} />
+                        </TouchableOpacity>
+                    </View>
+                </Pressable>
+            </Animated.View>
             <View
                 style={{
                     alignSelf: "center",
@@ -527,7 +624,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
             >
                 {stockCollapse ?
                     <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}>
-                        <View style={{ backgroundColor: "blue" }}>
+                        <View style={{ backgroundColor: "blue", paddingLeft: 140 }}>
                             {add_stock_icon_button()}
                         </View>
                         <View
@@ -539,20 +636,30 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                 position: "relative",
                                 top: 20,
                                 marginLeft: 17,
-                                // height: 200,
                                 maxHeight: 200,
                                 paddingBottom: 6,
-                                // flex:2,
-                                // marginBottom: -20,
-                                // padding: 5,
                                 elevation: 1
                             }}
                         >
 
 
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, maxHeight: 500, borderWidth: 2 }} >
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle=
+                                {{
+                                    flexGrow: 1,
+                                    maxHeight: 500,
+                                    borderWidth: 2
+                                }} >
                                 <View style={{}}>
-                                    <View style={{ flexDirection: "row", justifyContent: "space-between", top: 5, left: -12, position: "relative" }}>
+                                    <View style={{
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                        top: 5,
+                                        left: -12,
+                                        position: "relative"
+                                    }}>
                                         <View
                                             style={{
                                                 paddingHorizontal: 5,
@@ -633,7 +740,7 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
 
                                         <>
                                             {
-                                                getStockData ? getStockData.map((list, index) => (
+                                                getStockData.length > 0 ? getStockData.map((list, index) => (
                                                     <View
                                                         style={{
                                                             flexDirection: "column",
@@ -795,7 +902,11 @@ const Stock = ({ project_id, Main_drp_pro_value }) => {
                                                         </View>
                                                     </View>
 
-                                                )) : null
+                                                ))
+                                                    :
+                                                    <View>
+                                                        <Text style={[FONTS.h4, { color: COLORS.gray, textAlign: "center" }]}>Currently, no report to show!</Text>
+                                                    </View>
                                             }
 
                                         </>

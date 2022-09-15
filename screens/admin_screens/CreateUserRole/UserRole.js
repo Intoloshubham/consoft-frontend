@@ -25,18 +25,27 @@ import {useSelector} from 'react-redux';
 import {getUserRole} from '../../../controller/UserRoleController';
 
 const UserRole = () => {
-  const companyData = useSelector(state => state.company);
+  // COMPANY & USER DATA
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
   const company_id = companyData._id;
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [createUserModal, setCreateUserModal] = React.useState(false);
 
-  // form data
+  // FORM STATES
   const [userRole, setUserRole] = React.useState('');
   const [userRoles, setUserRoles] = React.useState([]);
 
-  //error states
+  //ERROR STATES
   const [userRoleError, setUserRoleError] = React.useState('');
 
   function isEnableSubmit() {
@@ -63,7 +72,6 @@ const UserRole = () => {
 
   const getUsersRole = async () => {
     let response = await getUserRole(company_id);
-    console.log(response)
     if (response.status === 200) {
       setUserRoles(response.data);
     }
@@ -86,7 +94,7 @@ const UserRole = () => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -150,15 +158,12 @@ const UserRole = () => {
             </ScrollView>
             <TextButton
               label="Save"
-              disabled={isEnableSubmit() ? false : true}
               buttonContainerStyle={{
                 height: 45,
                 alignItems: 'center',
                 marginTop: SIZES.padding,
                 borderRadius: SIZES.base,
-                backgroundColor: isEnableSubmit()
-                  ? COLORS.lightblue_700
-                  : COLORS.transparentPrimary,
+                backgroundColor: COLORS.lightblue_700,
               }}
               onPress={submitUserRole}
             />
@@ -170,7 +175,12 @@ const UserRole = () => {
 
   function renderUserRole() {
     const renderItem = ({item, index}) => (
-      <View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
         <View style={{flexDirection: 'row'}}>
           <Text style={{...FONTS.h4}}>{index + 1}.</Text>
           <Text
@@ -183,38 +193,68 @@ const UserRole = () => {
             {item.user_role}
           </Text>
         </View>
+        {/* <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity onPress={() => console.log('edit')}>
+            <ImageBackground
+              style={{
+                backgroundColor: COLORS.green,
+                padding: 3,
+                borderRadius: 2,
+                right: 12,
+              }}>
+              <Image
+                source={icons.edit}
+                style={{
+                  width: 15,
+                  height: 15,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </ImageBackground>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => console.log('delete')}>
+            <ImageBackground
+              style={{
+                backgroundColor: COLORS.rose_600,
+                padding: 3,
+                borderRadius: 2,
+              }}>
+              <Image
+                source={icons.delete_icon}
+                style={{
+                  width: 15,
+                  height: 15,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </ImageBackground>
+          </TouchableOpacity>
+        </View> */}
       </View>
     );
 
     return (
-      <View
-        style={{
-          marginTop: SIZES.radius,
+      <FlatList
+        contentContainerStyle={{
           marginHorizontal: SIZES.padding,
-          backgroundColor: COLORS.lightblue_50,
-          padding: 20,
-          ...styles.shadow,
-        }}>
-        <FlatList
-          data={userRoles}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          maxHeight={450}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.gray2,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-        />
-      </View>
+          paddingBottom: 50,
+        }}
+        data={userRoles}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
+      />
     );
   }
 
@@ -230,7 +270,7 @@ const UserRole = () => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,

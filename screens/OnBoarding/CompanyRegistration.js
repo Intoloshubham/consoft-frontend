@@ -19,10 +19,12 @@ const CompanyRegistration = ({navigation}) => {
   const [cName, setCName] = React.useState('');
   const [cMobileNo, setCMobileNo] = React.useState('');
   const [cEmail, setCEmail] = React.useState('');
+  const [cOwnerName, setCOwnername] = React.useState('');
 
   const [cNameError, setCNameError] = React.useState('');
   const [cMobileNoError, setCMobileNoError] = React.useState('');
   const [cEmailError, setCEmailError] = React.useState('');
+  const [cOwnerNameError, setCOwnerNameError] = React.useState('');
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
@@ -32,6 +34,7 @@ const CompanyRegistration = ({navigation}) => {
       company_name: cName,
       mobile: cMobileNo,
       email: cEmail,
+      name: cOwnerName,
     };
     const result = await dispatch(registerCompany(companyData));
     if (result.payload.status === 200) {
@@ -41,6 +44,7 @@ const CompanyRegistration = ({navigation}) => {
         setCName('');
         setCMobileNo('');
         setCEmail('');
+        setCOwnername('');
       }, 300);
     } else {
       alert(result.payload.message);
@@ -49,11 +53,12 @@ const CompanyRegistration = ({navigation}) => {
       setSubmitToast(false);
     }, 4000);
   };
+
   return (
     <View style={{flex: 1}}>
       <HeaderBar right={true} title="registration" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
         style={{flex: 1}}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View
@@ -88,7 +93,7 @@ const CompanyRegistration = ({navigation}) => {
             </View>
             <View>
               <FormInput
-                label="Name"
+                label="Company Name"
                 keyboardType="default"
                 autoCompleteType="name"
                 onChange={value => {
@@ -111,6 +116,38 @@ const CompanyRegistration = ({navigation}) => {
                           cName == ''
                             ? COLORS.gray
                             : cName != '' && cNameError == ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <FormInput
+                label="Owner Name"
+                keyboardType="default"
+                autoCompleteType="name"
+                onChange={value => {
+                  utils.validateText(value, setCOwnerNameError);
+                  setCOwnername(value);
+                }}
+                errorMsg={cOwnerNameError}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        cOwnerName == '' ||
+                        (cOwnerName != '' && cOwnerNameError == '')
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          cOwnerName == ''
+                            ? COLORS.gray
+                            : cOwnerName != '' && cOwnerNameError == ''
                             ? COLORS.green
                             : COLORS.red,
                       }}

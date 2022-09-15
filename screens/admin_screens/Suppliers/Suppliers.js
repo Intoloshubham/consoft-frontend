@@ -15,7 +15,6 @@ import {
   HeaderBar,
   FormInput,
   TextButton,
-  IconButton,
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
@@ -27,20 +26,33 @@ import {
   postSuppliers,
   deleteSuppliers,
 } from '../../../controller/SupplierController';
+import {useSelector} from 'react-redux';
 
 const Suppliers = () => {
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+  const company_id = companyData._id;
+
   const [suppliersModal, setSuppliersModal] = React.useState(false);
   const [suppliers, setSuppliers] = React.useState([]);
-  // form states
+
+  // FORM STATES
   const [name, setName] = React.useState('');
   const [mobile, setMobile] = React.useState('');
-  const [email, setEmail] = React.useState('');
+  // const [email, setEmail] = React.useState('');
   const [location, setLocation] = React.useState('');
 
-  // error states
+  // ERROR STATES
   const [nameError, setNameError] = React.useState('');
   const [mobileError, setMobileError] = React.useState('');
-  const [emailError, setEmailError] = React.useState('');
+  // const [emailError, setEmailError] = React.useState('');
   const [locationError, setLocationError] = React.useState('');
 
   // CUSTOM TOAST OF CRUD OPERATIONS
@@ -48,7 +60,7 @@ const Suppliers = () => {
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
-  // delete confirmation
+  // DELETE CONFIRMATION MODAL
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
   function isEnableSubmit() {
@@ -57,17 +69,16 @@ const Suppliers = () => {
       nameError == '' &&
       mobile != '' &&
       mobileError == '' &&
-      email != '' &&
-      emailError == '' &&
+      // email != '' &&
+      // emailError == '' &&
       location != '' &&
       locationError == ''
     );
   }
 
   // ============================== Apis ===================================
-
   const getSupplier = async () => {
-    let response = await getSuppliers();
+    let response = await getSuppliers(company_id);
     if (response.status === 200) {
       setSuppliers(response.data);
     } else {
@@ -79,8 +90,9 @@ const Suppliers = () => {
     const formData = {
       supplier_name: name,
       supplier_mobile: mobile,
-      supplier_email: email,
+      // supplier_email: email,
       supplier_location: location,
+      company_id: company_id,
     };
     let response = await postSuppliers(formData);
     if (response.status === 200) {
@@ -89,7 +101,7 @@ const Suppliers = () => {
       setSuppliersModal(false);
       setName('');
       setMobile('');
-      setEmail('');
+      // setEmail('');
       setLocation('');
     } else {
       alert(response.message);
@@ -138,7 +150,7 @@ const Suppliers = () => {
                 backgroundColor: COLORS.white,
                 padding: SIZES.padding,
                 borderRadius: 5,
-                width: '90%',
+                width: '95%',
               }}>
               <View
                 style={{
@@ -235,7 +247,7 @@ const Suppliers = () => {
                       </View>
                     }
                   />
-                  <FormInput
+                  {/* <FormInput
                     label="Email"
                     keyboardType="email-address"
                     autoCompleteType="email"
@@ -265,9 +277,9 @@ const Suppliers = () => {
                         />
                       </View>
                     }
-                  />
+                  /> */}
                   <FormInput
-                    label="Location"
+                    label="Address"
                     keyboardType="default"
                     onChange={value => {
                       utils.validateText(value, setLocationError);
@@ -301,15 +313,12 @@ const Suppliers = () => {
               </ScrollView>
               <TextButton
                 label="Save"
-                disabled={isEnableSubmit() ? false : true}
                 buttonContainerStyle={{
                   height: 45,
                   alignItems: 'center',
                   marginTop: SIZES.padding,
                   borderRadius: SIZES.base,
-                  backgroundColor: isEnableSubmit()
-                    ? COLORS.lightblue_700
-                    : COLORS.transparentPrimary,
+                  backgroundColor: COLORS.lightblue_700,
                 }}
                 onPress={() => postSupplier()}
               />
@@ -320,134 +329,128 @@ const Suppliers = () => {
     );
   }
 
-  const renderItem = ({item, index}) => {
-    return (
-      <View>
-        <Text
-          style={{
-            ...FONTS.h3,
-            textTransform: 'capitalize',
-            color: COLORS.lightblue_900,
-          }}>
-          {item.supplier_name}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            // justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={icons.call}
+  function renderSuppliers() {
+    const renderItem = ({item, index}) => {
+      return (
+        <View>
+          <Text
+            style={{
+              ...FONTS.h3,
+              textTransform: 'capitalize',
+              color: COLORS.lightblue_900,
+            }}>
+            {item.supplier_name}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              // justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Image
+                source={icons.call}
+                style={{
+                  height: 10,
+                  width: 10,
+                }}
+              />
+              <Text
+                style={{
+                  ...FONTS.h5,
+                  color: COLORS.darkGray,
+                  left: 5,
+                }}>
+                {item.supplier_mobile}
+              </Text>
+            </View>
+            {/* <View
               style={{
-                height: 10,
-                width: 10,
-              }}
-            />
-            <Text
-              style={{
-                ...FONTS.h5,
-                color: COLORS.darkGray,
-                left: 5,
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginLeft: 30,
               }}>
-              {item.supplier_mobile}
-            </Text>
+              <Image
+                source={icons.mail}
+                style={{
+                  height: 10,
+                  width: 10,
+                }}
+              />
+              <Text style={{...FONTS.h5, color: COLORS.darkGray, left: 5}}>
+                {item.supplier_email}
+              </Text>
+            </View> */}
           </View>
           <View
             style={{
               flexDirection: 'row',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              marginLeft: 30,
             }}>
-            <Image
-              source={icons.mail}
-              style={{
-                height: 10,
-                width: 10,
-              }}
-            />
-            <Text style={{...FONTS.h5, color: COLORS.darkGray, left: 5}}>
-              {item.supplier_email}
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={icons.location}
-              style={{
-                height: 10,
-                width: 10,
-                tintColor: COLORS.darkGray,
-              }}
-            />
-            <Text
-              style={{
-                ...FONTS.h5,
-                color: COLORS.darkGray,
-                left: 5,
-                textTransform: 'capitalize',
-              }}>
-              {item.supplier_location}
-            </Text>
-          </View>
-          <TouchableOpacity onPress={() => getSupplierId(item._id)}>
-            <ImageBackground
-              style={{
-                backgroundColor: COLORS.warning_200,
-                padding: 3,
-                borderRadius: 2,
-              }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
-                source={icons.delete_icon}
+                source={icons.location}
                 style={{
-                  width: 12,
-                  height: 12,
-                  tintColor: COLORS.rose_600,
+                  height: 10,
+                  width: 10,
+                  tintColor: COLORS.darkGray,
                 }}
               />
-            </ImageBackground>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
-  function renderSuppliers() {
-    return (
-      <View
-        style={{
-          marginBottom: SIZES.padding,
-          marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 3,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-        }}>
-        <FlatList
-          data={suppliers}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          maxHeight={510}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
+              <Text
                 style={{
-                  height: 1,
-                  backgroundColor: COLORS.lightGray1,
-                  marginVertical: SIZES.radius,
-                }}></View>
-            );
-          }}
-        />
-      </View>
+                  ...FONTS.h5,
+                  color: COLORS.darkGray,
+                  left: 5,
+                  textTransform: 'capitalize',
+                }}>
+                {item.supplier_location}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => getSupplierId(item._id)}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.warning_200,
+                  padding: 3,
+                  borderRadius: 2,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    tintColor: COLORS.rose_600,
+                  }}
+                />
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    };
+
+    return (
+      <FlatList
+        contentContainerStyle={{
+          marginHorizontal: SIZES.padding,
+          paddingBottom: 50,
+        }}
+        data={suppliers}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
+      />
     );
   }
 
@@ -459,17 +462,13 @@ const Suppliers = () => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
         }}
         onPress={() => {
-          setName(''),
-            setMobile(''),
-            setEmail(''),
-            setLocation(''),
-            setSuppliersModal(true);
+          setName(''), setMobile(''), setLocation(''), setSuppliersModal(true);
         }}
       />
       {renderSuppliersModal()}

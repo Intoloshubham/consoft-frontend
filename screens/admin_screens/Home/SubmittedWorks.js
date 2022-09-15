@@ -9,67 +9,48 @@ import {
   ImageBackground,
   Modal,
   TouchableWithoutFeedback,
-  LogBox,
+  TextInput,
 } from 'react-native';
-import {useSelector} from 'react-redux';
-import {FormInput, ProgressBar} from '../../../Components';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
-import {getSubmitWorks} from '../../../controller/AssignWorkController';
 import {verifySubmitWorks} from '../../../controller/VerifyController';
-import {revertSubmitWorks} from '../../../controller/RevertController';
+import {revertSubmitWork} from '../../../controller/RevertController';
+import {CustomToast} from '../../../Components';
 
 const SubmittedWorks = ({data, Submitfunction}) => {
-  //COMPANY DATA
-  const companyData = useSelector(state => state.company);
-  const company_id = companyData._id;
-  const [submitWork, setSubmitWork] = React.useState([]);
   const [revertModal, setRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
   const [revertId, setRevertId] = React.useState('');
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [workPercent, setWorkPercent] = React.useState('');
 
   //=========================== Apis ==========================================
-
-  // const fetchSubmitWork = async () => {
-  //   const response = await getSubmitWorks(company_id);
-  //   if (response.status === 200) {
-  //     setSubmitWork(response.data);
-  //   }
-  // };
-
   // verify works
   const verifyHandler = async work_Id => {
     let data = await verifySubmitWorks(work_Id);
     if (data.status === 200) {
-      // fetchSubmitWork();
       Submitfunction();
     }
   };
 
-  const getRevertWorkId = id => {
+  const getRevertWorkId = (id, work_percent) => {
     setRevertId(id);
   };
 
   const OnSubmit = async () => {
-    const formData = {revert_msg: revertMsg};
-    let data = await revertSubmitWorks(revertId, formData);
+    const formData = {
+      revert_msg: revertMsg,
+      work_percent: workPercent,
+    };
+    let data = await revertSubmitWork(revertId, formData);
     if (data.status === 200) {
-      // fetchSubmitWork();
-      Submitfunction()
-      setTimeout(() => {
-        setRevertModal(false);
-      }, 500);
+      Submitfunction();
+      setRevertModal(false);
+      setSubmitToast(true);
     }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 1500);
   };
-
-  // React.useEffect(() => {
-  //   fetchSubmitWork();
-  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  // }, []);
-
-  // React.useMemo(() => {
-  //   fetchSubmitWork();
-  //   // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  // }, []);
 
   function renderRevertModal() {
     return (
@@ -88,56 +69,80 @@ const SubmittedWorks = ({data, Submitfunction}) => {
                 backgroundColor: COLORS.white,
                 paddingHorizontal: SIZES.padding,
                 paddingVertical: SIZES.radius,
-                width: '80%',
+                width: '90%',
                 top: '30%',
-                borderRadius: SIZES.base,
+                borderRadius: 5,
               }}>
-              <View>
-                <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
+                <Text style={{fontSize: 20, color: COLORS.darkGray}}>
                   Comment
                 </Text>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity onPress={() => setRevertModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
               </View>
-              <FormInput
-                placeholder=""
-                multiline={true}
-                numberOfLines={3}
-                onChange={value => {
-                  setRevertMsg(value);
-                }}
-              />
-              {/* <View
+
+              <View
                 style={{
-                  marginTop: SIZES.base,
-                  paddingHorizontal: SIZES.base,
                   borderBottomWidth: 1,
-                  borderBottomColor: COLORS.gray,
+                  borderBottomColor: COLORS.darkGray,
                 }}>
                 <TextInput
-                  placeholder="Write your message here.."
-                  
-                  multiline={true}
-                  numberOfLines={3}
-                  onChange={value => {
+                  placeholder="Write comment..."
+                  onChangeText={value => {
                     setRevertMsg(value);
                   }}
                 />
-              </View> */}
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.darkGray,
+                }}>
+                <Text style={{marginTop: 5}}>Progress %</Text>
+                <TextInput
+                  placeholder="%"
+                  value={workPercent.toString()}
+                  onChangeText={value => {
+                    setWorkPercent(value);
+                  }}
+                />
+              </View>
+
               <TouchableOpacity
                 style={{
-                  marginTop: SIZES.radius,
-                  alignItems: 'flex-end',
+                  marginTop: SIZES.padding,
+                  alignItems: 'center',
                 }}
                 onPress={() => OnSubmit()}>
                 <Text
                   style={{
                     ...FONTS.h3,
-                    backgroundColor:
-                      revertMsg != null
-                        ? COLORS.lightblue_600
-                        : COLORS.darkGray,
-                    paddingHorizontal: SIZES.base,
-                    paddingVertical: 3,
-                    borderRadius: 2,
+                    backgroundColor: COLORS.lightblue_800,
+                    paddingHorizontal: SIZES.radius,
+                    paddingVertical: 5,
+                    borderRadius: 3,
                     color: COLORS.white,
                   }}>
                   Send
@@ -164,19 +169,18 @@ const SubmittedWorks = ({data, Submitfunction}) => {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text
                 style={{
-                  ...FONTS.h4,
-                  color: COLORS.darkGray,
+                  ...FONTS.h3,
+                  color: COLORS.black,
                   textTransform: 'capitalize',
-                  fontWeight: 'bold',
                 }}>
                 {item.user_name}
               </Text>
               <Text
                 style={{
-                  fontSize: 8,
-                  left: 3,
-                  paddingHorizontal: 3,
+                  left: 5,
                   backgroundColor: COLORS.yellow_400,
+                  paddingHorizontal: 5,
+                  fontSize: 10,
                   color: COLORS.black,
                 }}>
                 {item.work_code}
@@ -225,6 +229,7 @@ const SubmittedWorks = ({data, Submitfunction}) => {
           {/* work  */}
           <View
             style={{
+              marginTop: 5,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -232,40 +237,74 @@ const SubmittedWorks = ({data, Submitfunction}) => {
             <Text
               style={{
                 flex: 1,
-                ...FONTS.h4,
-                color: COLORS.black,
+                ...FONTS.h3,
+                color: COLORS.darkGray,
               }}>
               Work
-              <Text style={{color: COLORS.darkGray}}> - {item.work}</Text>
+              <Text style={{color: COLORS.darkGray, ...FONTS.h3}}>
+                - {item.work}
+              </Text>
             </Text>
             <TouchableOpacity onPress={() => verifyHandler(item._id)}>
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.green,
-                  paddingHorizontal: 5,
+                  paddingHorizontal: 10,
                   borderRadius: 2,
                 }}>
-                <Text style={{fontSize: 10, color: COLORS.white}}>Verify</Text>
-                {/* <Image
-                  source={verifyResponse == 200 ? icons.verify : icons.cancel}
-                  resizeMode="contain"
-                  style={{
-                    height: 10,
-                    width: 10,
-                    tintColor: COLORS.lightblue_900,
-                  }}
-                /> */}
+                <Text style={{fontSize: 14, color: COLORS.white}}>Verify</Text>
               </ImageBackground>
             </TouchableOpacity>
           </View>
-          {/* message  */}
           <View
             style={{
+              marginTop: 5,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text
+            <View
+              style={{
+                // marginTop: 5,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={icons.completion_date}
+                style={{
+                  height: 18,
+                  width: 18,
+                  tintColor: COLORS.darkGray,
+                }}
+              />
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.darkGray,
+                  left: 10,
+                }}>
+                {item.exp_completion_date}
+              </Text>
+
+              <Image
+                source={icons.persent_progress}
+                style={{
+                  height: 18,
+                  width: 18,
+                  tintColor: COLORS.darkGray,
+                  left: 30,
+                }}
+              />
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.darkGray,
+                  left: 40,
+                }}>
+                {item.work_percent}%
+              </Text>
+            </View>
+            {/* <Text
               style={{
                 flex: 1,
                 ...FONTS.h4,
@@ -275,21 +314,23 @@ const SubmittedWorks = ({data, Submitfunction}) => {
               <Text style={{color: COLORS.darkGray}}>
                 - {item.submit_work_text}
               </Text>
-            </Text>
+            </Text> */}
             <TouchableOpacity
               onPress={() => {
-                getRevertWorkId(item._id), setRevertModal(true);
+                setWorkPercent(item.work_percent);
+                getRevertWorkId(item._id, item.work_percent),
+                  setRevertModal(true);
               }}
               style={{alignItems: 'flex-end'}}>
               <ImageBackground
                 style={{
                   backgroundColor: COLORS.rose_600,
-                  paddingHorizontal: 5,
+                  paddingHorizontal: 8,
                   borderRadius: 2,
                 }}>
                 <Text
                   style={{
-                    fontSize: 10,
+                    fontSize: 14,
                     color: COLORS.white,
                   }}>
                   Revert
@@ -297,59 +338,41 @@ const SubmittedWorks = ({data, Submitfunction}) => {
               </ImageBackground>
             </TouchableOpacity>
           </View>
-          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text
-              style={{
-                flex: 1,
-                ...FONTS.h5,
-                color: COLORS.black,
-              }}>
-              Submit Date & Time :
-              <Text style={{color: COLORS.darkGray}}>
-                {' '}
-                {item.submit_work_date}
-                {'  '} {item.submit_work_time}
-              </Text>
-            </Text>
-          </View> */}
-          {/* <View style={{marginTop: SIZES.base}}>
-            <ProgressBar progress={item.persentage} />
-          </View> */}
         </View>
       );
     };
 
     return (
       <FlatList
-        contentContainerStyle={{}}
         data={data}
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         scrollEnabled={true}
         nestedScrollEnabled={true}
-        maxHeight={250}
+        maxHeight={300}
         ItemSeparatorComponent={() => {
           return (
             <View
               style={{
                 borderBottomWidth: 1,
-                borderColor: COLORS.gray2,
-                marginVertical: SIZES.radius,
+                borderBottomColor: COLORS.gray,
+                marginVertical: 12,
               }}></View>
           );
         }}
       />
     );
   }
+
   return (
     <View
       style={{
         backgroundColor: COLORS.white,
-        marginHorizontal: SIZES.padding,
+        marginHorizontal: SIZES.radius,
         marginTop: SIZES.padding,
         borderRadius: 5,
-        padding: 20,
+        padding: 15,
         ...styles.shadow,
       }}>
       <View
@@ -362,6 +385,7 @@ const SubmittedWorks = ({data, Submitfunction}) => {
           style={{
             ...FONTS.h2,
             color: COLORS.darkGray,
+            marginBottom: SIZES.radius,
           }}>
           Submitted Works
         </Text>
@@ -373,14 +397,15 @@ const SubmittedWorks = ({data, Submitfunction}) => {
           />
         </TouchableOpacity> */}
       </View>
-      <View
-        style={{
-          height: 1,
-          backgroundColor: COLORS.gray2,
-          marginVertical: SIZES.base,
-        }}></View>
       {renderSubmitWork()}
       {renderRevertModal()}
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
+      />
     </View>
   );
 };

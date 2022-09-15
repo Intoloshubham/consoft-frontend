@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, FlatList, Image} from 'react-native';
-import {COLORS, FONTS, icons} from '../../../constants';
+import {COLORS, FONTS, icons, SIZES} from '../../../constants';
 
 const RevertWorks = ({RevertData}) => {
   const renderItem = ({item}) => (
@@ -14,19 +14,19 @@ const RevertWorks = ({RevertData}) => {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text
             style={{
-              ...FONTS.h4,
-              color: COLORS.darkGray,
+              ...FONTS.h3,
+              color: COLORS.black,
               textTransform: 'capitalize',
-              fontWeight: 'bold',
+              // fontWeight: 'bold',
             }}>
             {item.user_name}
           </Text>
           <Text
             style={{
-              fontSize: 9,
-              left: 3,
+              fontSize: 10,
+              left: 5,
               paddingHorizontal: 3,
-              backgroundColor: COLORS.rose_600,
+              backgroundColor: COLORS.green,
               color: COLORS.white,
               borderRadius: 2,
             }}>
@@ -43,15 +43,15 @@ const RevertWorks = ({RevertData}) => {
             <Image
               source={icons.date}
               style={{
-                height: 10,
-                width: 10,
+                height: 12,
+                width: 12,
                 tintColor: COLORS.darkGray,
                 right: 3,
               }}
             />
             <Text
               style={{
-                fontSize: 10,
+                fontSize: 12,
                 color: COLORS.darkGray,
               }}>
               {item.verify_date}
@@ -61,15 +61,15 @@ const RevertWorks = ({RevertData}) => {
             <Image
               source={icons.time}
               style={{
-                height: 10,
-                width: 10,
+                height: 12,
+                width: 12,
                 tintColor: COLORS.darkGray,
                 right: 3,
               }}
             />
             <Text
               style={{
-                fontSize: 10,
+                fontSize: 12,
                 color: COLORS.darkGray,
               }}>
               {item.verify_time}
@@ -77,39 +77,37 @@ const RevertWorks = ({RevertData}) => {
           </View>
         </View>
       </View>
-      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-        <Text style={{...FONTS.h4, color: COLORS.black}}>Work{' - '}</Text>
+      <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+        <Text style={{...FONTS.h3, color: COLORS.darkGray}}>Work{' - '}</Text>
         {item.work}
       </Text>
-      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-        <Text style={{...FONTS.h4, color: COLORS.black}}>Msg{' - '}</Text>
+      {/* <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+        <Text style={{...FONTS.h3, color: COLORS.darkGray}}>Msg{' - '}</Text>
         {item.submit_work_text}
-      </Text>
+      </Text> */}
     </View>
   );
 
   return (
-    <View style={{marginTop: 5, padding: 10}}>
-      <FlatList
-        data={RevertData}
-        keyExtractor={item => `${item._id}`}
-        renderItem={renderItem}
-        ItemSeparatorComponent={() => {
-          return (
-            <View
-              style={{
-                width: '100%',
-                height: 1,
-                backgroundColor: COLORS.gray,
-                marginVertical: 10,
-              }}></View>
-          );
-        }}
-        scrollEnabled={true}
-        nestedScrollEnabled={true}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <FlatList
+      data={RevertData}
+      keyExtractor={item => `${item._id}`}
+      contentContainerStyle={{marginTop: SIZES.base}}
+      renderItem={renderItem}
+      ItemSeparatorComponent={() => {
+        return (
+          <View
+            style={{
+              height: 1,
+              backgroundColor: COLORS.gray,
+              marginVertical: 12,
+            }}></View>
+        );
+      }}
+      scrollEnabled={true}
+      nestedScrollEnabled={true}
+      showsVerticalScrollIndicator={false}
+    />
   );
 };
 

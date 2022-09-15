@@ -11,6 +11,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ImageBackground,
 } from 'react-native';
 import FilePicker, {types} from 'react-native-document-picker';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
@@ -26,7 +27,18 @@ import {getUserRole, roleByUser} from '../../../controller/UserRoleController';
 import {postAssignWork} from '../../../controller/AssignWorkController';
 
 const WorkAssignModal = ({projectId, isVisible, onClose}) => {
-  const companyData = useSelector(state => state.company);
+  // const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = useSelector(state => state.company);
+  }
+  if (userData._id) {
+    companyData = useSelector(state => state.user);
+  }
+  const company_id = companyData._id;
 
   //ADD DYNAMICALLY INPUT FEILD
   const [work, setWork] = React.useState([{key: '', value: ''}]);
@@ -74,6 +86,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onRoleOpen = React.useCallback(() => {
     setOpenUsers(false);
+    getUserRoles();
   }, []);
 
   const onUserOpen = React.useCallback(() => {
@@ -83,7 +96,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   //=================================== Apis ===================================
 
   const getUserRoles = async () => {
-    let response = await getUserRole(companyData._id);
+    let response = await getUserRole(company_id);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map((one, i) => {
         return {label: one.user_role, value: one._id};
@@ -93,7 +106,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
   };
 
   const getUserByRoleId = async role_id => {
-    let response = await roleByUser(role_id);
+    let response = await roleByUser(company_id, role_id);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map(ele => {
         return {label: ele.name, value: ele._id};
@@ -109,7 +122,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
       work: newWork,
       exp_completion_date: formatedDate,
       exp_completion_time: formatedTime,
-      company_id: companyData._id,
+      company_id: company_id,
       project_id: projectId,
     };
     let response = await postAssignWork(formData);
@@ -127,9 +140,9 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
     }, 1500);
   };
 
-  React.useEffect(() => {
-    getUserRoles();
-  }, []);
+  // React.useEffect(() => {
+  //   getUserRoles();
+  // }, []);
 
   // DOCUMENT PICKER
   // const [fileData, setFileData] = React.useState([]);
@@ -187,60 +200,65 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
 
   function renderStartDate() {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          borderRadius: SIZES.base,
-          backgroundColor: COLORS.gray3,
-          paddingHorizontal: SIZES.radius,
-          paddingVertical: SIZES.base,
-          // ...styles.shadow,
-        }}>
+      <View>
+        <Text style={{color: COLORS.darkGray, ...FONTS.body4}}>
+          Target date & Time
+        </Text>
         <View
           style={{
-            flex: 1,
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            borderRadius: SIZES.base,
+            backgroundColor: COLORS.gray3,
+            paddingHorizontal: SIZES.radius,
+            paddingVertical: SIZES.base,
+            // ...styles.shadow,
           }}>
-          <View style={{flexDirection: 'row'}}>
-            <Text
-              style={{
-                ...FONTS.body4,
-                color: COLORS.darkGray,
-              }}>
-              Date - {date.toLocaleDateString()}
-            </Text>
-            <Text
-              style={{
-                ...FONTS.body4,
-                color: COLORS.darkGray,
-                left: 10,
-              }}>
-              Time - {date.toLocaleTimeString()}
-            </Text>
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={showDatepicker}>
-              <Image
-                source={icons.date}
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <Text
                 style={{
-                  width: 20,
-                  height: 20,
-                  tintColor: COLORS.lightblue_900,
-                  right: 8,
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={showTimepicker}>
-              <Image
-                source={icons.time}
+                  ...FONTS.body4,
+                  color: COLORS.darkGray,
+                }}>
+                Date - {formatedDate}
+              </Text>
+              <Text
                 style={{
-                  width: 20,
-                  height: 20,
-                  tintColor: COLORS.lightblue_900,
-                }}
-              />
-            </TouchableOpacity>
+                  ...FONTS.body4,
+                  color: COLORS.darkGray,
+                  left: 10,
+                }}>
+                Time - {date.toLocaleTimeString()}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={showDatepicker}>
+                <Image
+                  source={icons.date}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    tintColor: COLORS.black,
+                    right: 10,
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={showTimepicker}>
+                <Image
+                  source={icons.time}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    tintColor: COLORS.black,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -249,42 +267,49 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
 
   return (
     <View>
-      <Modal animationType="fade" transparent={true} visible={isVisible}>
+      <Modal animationType="slide" transparent={true} visible={isVisible}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.transparentBlack7,
+            backgroundColor: COLORS.transparentBlack6,
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: SIZES.base,
               backgroundColor: COLORS.white,
               maxHeight: 500,
             }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{flex: 1, ...FONTS.h2, color: COLORS.darkGray}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <Text style={{fontSize: 25, color: COLORS.darkGray}}>
                 Assign Work
               </Text>
-              <IconButton
-                containerStyle={{
-                  boborderWidth: 2,
-                  borderRadius: 10,
-                  borderColor: COLORS.gray2,
-                }}
-                icon={icons.cross}
-                iconStyle={{
-                  tintColor: COLORS.gray,
-                }}
-                onPress={onClose}
-              />
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
+                }}>
+                <TouchableOpacity onPress={onClose}>
+                  <Image
+                    source={icons.cross}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
             <CustomDropdown
-              placeholder="Select"
+              placeholder="Select role"
               open={openUserRole}
               value={userRoleValue}
               items={userRoles}
@@ -303,7 +328,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
             />
             <View style={{marginTop: 30, marginBottom: 25}}>
               <CustomDropdown
-                placeholder="Select"
+                placeholder="Select user"
                 open={openUsers}
                 value={usersValue}
                 items={users}
@@ -325,11 +350,9 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
               style={{marginVertical: 5}}>
               <View
                 style={{
-                  // flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                {/* <ScrollView> */}
                 {work.map((input, key) => (
                   <View style={{}} key={key}>
                     <View style={{flexDirection: 'row'}}>
@@ -366,34 +389,45 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                         />
                       </View>
                       <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity
-                          style={{}}
-                          onPress={() => removeHandler(key)}>
+                        <TouchableOpacity onPress={() => removeHandler(key)}>
                           {key != 0 && (
-                            <Image
-                              source={icons.minus1}
+                            <ImageBackground
                               style={{
-                                height: 25,
-                                width: 25,
-                                right: 2,
-                              }}
-                            />
+                                backgroundColor: COLORS.rose_600,
+                                padding: 5,
+                                right: 5,
+                              }}>
+                              <Image
+                                source={icons.minus}
+                                style={{
+                                  height: 15,
+                                  width: 15,
+                                  tintColor: 'white',
+                                }}
+                              />
+                            </ImageBackground>
                           )}
                         </TouchableOpacity>
                         <TouchableOpacity onPress={addHandler}>
-                          <Image
-                            source={icons.plus1}
+                          <ImageBackground
                             style={{
-                              height: key == 0 ? 25 : 25,
-                              width: key == 0 ? 25 : 25,
-                            }}
-                          />
+                              backgroundColor: COLORS.success_600,
+                              padding: 5,
+                            }}>
+                            <Image
+                              source={icons.plus}
+                              style={{
+                                height: key == 0 ? 15 : 15,
+                                width: key == 0 ? 15 : 15,
+                                tintColor: 'white',
+                              }}
+                            />
+                          </ImageBackground>
                         </TouchableOpacity>
                       </View>
                     </View>
                   </View>
                 ))}
-                {/* </ScrollView> */}
               </View>
 
               {/* <Text
@@ -443,7 +477,7 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                 </TouchableOpacity>
               </View> */}
             </ScrollView>
-            <View style={{marginTop: SIZES.radius}}>{renderStartDate()}</View>
+            <View style={{}}>{renderStartDate()}</View>
             <TextButton
               label="Submit"
               buttonContainerStyle={{

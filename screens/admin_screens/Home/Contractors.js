@@ -16,7 +16,6 @@ import {
   HeaderBar,
   TextButton,
   FormInput,
-  IconButton,
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
@@ -29,12 +28,22 @@ import {
 import {useSelector} from 'react-redux';
 
 const Contractors = ({route}) => {
-  const companyData = useSelector(state => state.company);
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
   const company_id = companyData._id;
-  const {project_id} = route.params; //
+  const {project_id} = route.params;
+
   const [showContractorsModal, setShowContractorsModal] = React.useState(false);
   const [contractors, setContractors] = React.useState([]);
-  // company team states
+
+  //
   const [name, setName] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
   const [nameError, setNameError] = React.useState('');
@@ -51,7 +60,6 @@ const Contractors = ({route}) => {
   // get contractors
   const fetchContractors = async () => {
     let data = await getContractors();
-    // console.log(data)
     setContractors(data);
   };
 
@@ -104,7 +112,6 @@ const Contractors = ({route}) => {
     <View
       style={{
         flexDirection: 'row',
-        paddingVertical: SIZES.base,
       }}>
       <Text style={{...FONTS.h3, color: COLORS.darkGray}}>{index + 1}.</Text>
       <View style={{flex: 1, marginLeft: SIZES.radius}}>
@@ -120,7 +127,7 @@ const Contractors = ({route}) => {
               color: COLORS.lightblue_900,
               textTransform: 'capitalize',
             }}>
-            Mr. {item.contractor_name}
+            {item.contractor_name}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -195,7 +202,7 @@ const Contractors = ({route}) => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -307,6 +314,7 @@ const Contractors = ({route}) => {
     <View
       style={{
         flex: 1,
+        backgroundColor: 'white',
       }}>
       <HeaderBar right={true} title="Contractors" />
       <TextButton
@@ -314,7 +322,7 @@ const Contractors = ({route}) => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
@@ -325,30 +333,24 @@ const Contractors = ({route}) => {
           setShowContractorsModal(true);
         }}
       />
-      <View
-        style={{
-          marginBottom: SIZES.padding,
-          marginHorizontal: SIZES.padding,
-          padding: 20,
-          borderRadius: 5,
-          backgroundColor: COLORS.white2,
-          ...styles.shadow,
-        }}>
+      <View>
         <FlatList
+          contentContainerStyle={{
+            marginHorizontal: SIZES.padding,
+            paddingBottom: 50,
+          }}
           data={contractors}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
           scrollEnabled={true}
-          maxHeight={510}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
             return (
               <View
                 style={{
-                  width: '100%',
                   height: 1,
-                  backgroundColor: COLORS.gray2,
-                  marginVertical: 5,
+                  backgroundColor: COLORS.lightGray1,
+                  marginVertical: 12,
                 }}></View>
             );
           }}

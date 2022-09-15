@@ -7,9 +7,10 @@ import {COLORS, FONTS, SIZES, icons, images} from '../constants';
 import {
   UserDashboard,
   Profile,
-  Demo,
+  UserEndVoucher,
   MyProfile,
   UserReports,
+  ViewReport,
 } from '../screens/user_screens';
 
 const Tab = createBottomTabNavigator();
@@ -29,14 +30,23 @@ const UserTabs = ({navigation, route}) => {
           onPress();
         }}>
         <LinearGradient
-          colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
+          colors={[COLORS.lightblue_800, COLORS.lightblue_600]}
           style={{
-            width: 60,
-            height: 60,
+            width: 50,
+            elevation: 15,
+            height: 50,
             borderRadius: 35,
           }}>
           {children}
         </LinearGradient>
+        <Text
+          style={{
+            color: COLORS.black,
+            ...FONTS.body5,
+            textAlign: 'auto',
+          }}>
+          Show Report
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -109,8 +119,8 @@ const UserTabs = ({navigation, route}) => {
         }}
       />
       <Tab.Screen
-        name="Demo"
-        component={Demo}
+        name="Requirement"
+        component={UserEndVoucher}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -127,7 +137,7 @@ const UserTabs = ({navigation, route}) => {
                   color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Demo
+                Requirement
               </Text>
             </View>
           ),
@@ -139,15 +149,17 @@ const UserTabs = ({navigation, route}) => {
         // initialParams={{userId: useridRef}}
         options={{
           tabBarIcon: ({focused}) => (
-            <Image
-              source={icons.report}
-              resizeMode="contain"
-              style={{
-                height: 25,
-                width: 25,
-                tintColor: COLORS.white,
-              }}
-            />
+            <View>
+              <Image
+                source={icons.report}
+                resizeMode="contain"
+                style={{
+                  height: focused ? 22 : 20,
+                  width: focused ? 22 : 20,
+                  tintColor: COLORS.white,
+                }}
+              />
+            </View>
           ),
           tabBarButton: props => <TabBarCustomButton {...props} />,
           // headerShown:false

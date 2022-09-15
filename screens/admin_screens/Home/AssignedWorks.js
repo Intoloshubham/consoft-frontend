@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -10,10 +10,9 @@ import {
   FlatList,
   Animated,
   ImageBackground,
-  LogBox,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {IconButton, DeleteConfirmationToast} from '../../../Components';
+import {DeleteConfirmationToast} from '../../../Components';
 import {COLORS, SIZES, icons, FONTS} from '../../../constants';
 import {Swipeable} from 'react-native-gesture-handler';
 import {
@@ -22,17 +21,24 @@ import {
 } from '../../../controller/AssignWorkController';
 import {getUserRole} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
+import {
+  revertAssignWorks,
+  revertSubmitWorks,
+} from '../../../controller/RevertController';
+import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import {CustomToast} from '../../../Components';
 
-const AssignedWorks = ({data,AssignWorkfunction}) => {
+const AssignedWorks = ({data, AssignWorkfunction}) => {
   const companyData = useSelector(state => state.company);
   const company_id = companyData._id;
   // console.log(companyData._id)
-
+  const [revertModal, setRevertModal] = React.useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const [filterRoleModal, setFilterRoleModal] = React.useState(false);
   const [items, setItems] = React.useState([]);
 
+  const [submitToast, setSubmitToast] = React.useState(false);
   //get assign works
   // const fetchAssignWorks = async () => {
   //   const response = await getAssignWorks(company_id);
@@ -62,7 +68,7 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
     const response = await deleteAssignWorks(workId);
     if (response.status === 200) {
       // fetchAssignWorks();
-      AssignWorkfunction()
+      AssignWorkfunction();
       setDeleteConfirm(false);
     }
   };
@@ -76,6 +82,71 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
   // React.useMemo(() => {
   //   fetchAssignWorks();
   // }, []);
+
+  //----------------------------
+
+  // date & time
+  const [date, setDate] = React.useState(new Date());
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes.toString().padStart(2, '0');
+  let strTime = hours + ':' + minutes + ' ' + ampm;
+  const formatedTime = strTime;
+  // const formatedDate = `${date.getFullYear()}/${
+  //   date.getMonth() + 1
+  // }/${date.getDate()}`;
+  const formatedDate =
+    date.getFullYear() +
+    '/' +
+    ('0' + date.getDate()).slice(-2) +
+    '/' +
+    ('0' + (date.getMonth() + 1)).slice(-2);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setDate(currentDate);
+  };
+  const showMode = currentMode => {
+    DateTimePickerAndroid.open({
+      value: date,
+      onChange,
+      mode: currentMode,
+      locale: 'en-IN',
+      display: 'spinner',
+    });
+  };
+  const showDatepicker = () => {
+    showMode('date');
+  };
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
+  const [assignWorkId, setAssignWorkId] = React.useState('');
+  const getAssignWorkId = id => {
+    setAssignWorkId(id);
+  };
+
+  const OnSubmit = async () => {
+    const formData = {
+      exp_completion_date: formatedDate,
+      exp_completion_time: formatedTime,
+    };
+    let data = await revertAssignWorks(assignWorkId, formData);
+    if (data.status === 200) {
+      AssignWorkfunction();
+      setRevertModal(false);
+      setSubmitToast(true);
+    }
+    setTimeout(() => {
+      setSubmitToast(false);
+    }, 2000);
+  };
+
+  //----------------------------
 
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {
@@ -175,112 +246,144 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'flex-end',
-            width: 80,
+            width: 50,
             transform: [{translateX: 0}],
           }}>
           <TouchableOpacity onPress={() => onDeleteAssignWork(id)}>
             <ImageBackground
               style={{
-                backgroundColor: COLORS.warning_200,
-                padding: 3,
-                borderRadius: 2,
-                right: 10,
+                backgroundColor: COLORS.white,
+                padding: 5,
+                borderRadius: 3,
               }}>
               <Image
                 source={icons.delete_icon}
-                style={{height: 12, width: 12, tintColor: COLORS.rose_600}}
+                style={{height: 18, width: 18, tintColor: COLORS.rose_600}}
               />
             </ImageBackground>
           </TouchableOpacity>
-          {/* <TouchableOpacity onPress={() => alert('Edit...')}>
-            <ImageBackground
-              style={{
-                backgroundColor: COLORS.lightblue_200,
-                padding: 5,
-                borderRadius: SIZES.base,
-              }}>
-              <Image
-                source={icons.edit}
-                style={{height: 15, width: 15, tintColor: COLORS.lightblue_900}}
-              />
-            </ImageBackground>
-          </TouchableOpacity> */}
         </Animated.View>
       );
     };
+
     const renderItem = ({item, index}) => {
       return (
         <View
           style={{
             backgroundColor: COLORS.lightblue_600,
-            ...styles.cartItemContainer,
+            padding: 10,
+            borderRadius: 5,
           }}>
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              marginBottom: 5,
             }}>
-            <View style={{flexDirection: 'row'}}>
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  color: COLORS.lightGray2,
-                }}>
-                {index + 1}
-                {' -'}
-              </Text>
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  color: COLORS.lightGray2,
-                  marginLeft: 5,
-                  textTransform: 'capitalize',
-                }}>
-                {item.user_name}
-              </Text>
-            </View>
+            <Text
+              style={{
+                ...FONTS.h3,
+                color: COLORS.white,
+              }}>
+              {index + 1}.
+            </Text>
+            <Text
+              style={{
+                ...FONTS.h3,
+                color: COLORS.white,
+                left: 5,
+                textTransform: 'capitalize',
+              }}>
+              {item.user_name}
+            </Text>
           </View>
-          <View
-            style={{
-              width: '100%',
-              height: 0.5,
-              backgroundColor: COLORS.lightGray1,
-              marginTop: 5,
-            }}></View>
-          <View>
-            {item.assign_works.map((ele, i) => {
-              // console.log(ele);
-              return (
-                <Swipeable
-                  key={ele._id}
-                  renderRightActions={progress =>
-                    renderRight(progress, ele._id)
-                  }>
+
+          {item.assign_works.map((ele, i) => {
+            return (
+              <Swipeable
+                key={ele._id}
+                renderRightActions={progress => renderRight(progress, ele._id)}>
+                <View
+                  style={{
+                    backgroundColor: COLORS.white,
+                    marginTop: i == 0 ? null : 8,
+                    padding: 6,
+                    borderRadius: 5,
+                  }}>
                   <View
                     style={{
-                      marginTop: SIZES.base,
-                      backgroundColor: COLORS.white,
-                      padding: SIZES.base,
-                      borderRadius: SIZES.base,
+                      flexDirection: 'row',
+                      alignItems: 'center',
                     }}>
+                    <Text
+                      style={{
+                        backgroundColor: COLORS.yellow_400,
+                        paddingHorizontal: 5,
+                        fontSize: 10,
+                        color: COLORS.black,
+                      }}>
+                      {ele.work_code}
+                    </Text>
+                    <Text
+                      style={{
+                        color: COLORS.darkGray,
+                        ...FONTS.h3,
+                        left: 8,
+                        flex: 1,
+                      }}>
+                      {ele.work}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      marginTop: 5,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      source={icons.completion_date}
+                      style={{
+                        height: 18,
+                        width: 18,
+                        tintColor: COLORS.darkGray,
+                      }}
+                    />
+                    <Text
+                      style={{
+                        ...FONTS.h4,
+                        color: COLORS.darkGray,
+                        left: 10,
+                      }}>
+                      {ele.exp_completion_date}
+                    </Text>
+
+                    <Image
+                      source={icons.persent_progress}
+                      style={{
+                        height: 18,
+                        width: 18,
+                        tintColor: COLORS.darkGray,
+                        left: 30,
+                      }}
+                    />
+                    <Text
+                      style={{
+                        ...FONTS.h4,
+                        color: COLORS.darkGray,
+                        left: 40,
+                      }}>
+                      {ele.work_percent}%
+                    </Text>
+                  </View>
+                  {ele.comment_status == true ? (
                     <View
                       style={{
-                        flexDirection: 'row',
-                      }}>
-                      <Text
-                        style={{
-                          flex: 1,
-                          ...FONTS.h5,
-                          color: COLORS.black,
-                        }}>
-                        {ele.work_code}
-                        <Text style={{color: COLORS.darkGray, ...FONTS.h5}}>
-                          {' - '}
-                          {ele.work}
-                        </Text>
-                      </Text>
-                    </View>
+                        height: 1,
+                        marginVertical: 8,
+                        borderBottomWidth: 1,
+                        borderBottomColor: COLORS.gray2,
+                      }}></View>
+                  ) : null}
+                  {ele.comment_status == true && ele.comment_reply_status == false ? (
                     <View
                       style={{
                         flexDirection: 'row',
@@ -289,69 +392,41 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
                       }}>
                       <Text
                         style={{
-                          ...FONTS.h5,
+                          flex: 1,
+                          ...FONTS.h3,
                           color: COLORS.darkGray,
                         }}>
-                        exp completion date: {ele.exp_completion_date}
+                        Msg{' - '}
+                        <Text style={{color: COLORS.darkGray}}>
+                          {ele.comment}
+                        </Text>
                       </Text>
-                      <TouchableOpacity onPress={() => console.log('revert')}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          getAssignWorkId(ele._id);
+                          setRevertModal(true);
+                        }}>
                         <ImageBackground
                           style={{
-                            backgroundColor: COLORS.warning_200,
-                            padding: 5,
-                            borderRadius: SIZES.padding,
+                            backgroundColor: COLORS.rose_600,
+                            paddingHorizontal: 6,
+                            borderRadius: 2,
                           }}>
-                          <Image
-                            source={icons.revert}
-                            resizeMode="contain"
+                          <Text
                             style={{
-                              height: 10,
-                              width: 10,
-                              tintColor: COLORS.rose_600,
-                            }}
-                          />
+                              fontSize: 14,
+                              color: COLORS.white,
+                            }}>
+                            Reply
+                          </Text>
                         </ImageBackground>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                </Swipeable>
-              );
-            })}
-          </View>
-        </View>
-      );
-    };
-    const renderHiddenItem = ({item}) => {
-      return (
-        <View
-          style={{
-            // flex: 1,
-            // height: 70,
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            flexDirection: 'row',
-            backgroundColor: COLORS.lightblue_700,
-            ...styles.cartItemContainer,
-          }}>
-          <IconButton
-            containerStyle={{justifyContent: 'flex-end'}}
-            icon={icons.edit}
-            iconStyle={{
-              height: 20,
-              width: 20,
-              right: 10,
-            }}
-            onPress={() => alert('Edit...')}
-          />
-          <IconButton
-            containerStyle={{justifyContent: 'flex-end'}}
-            icon={icons.delete_icon}
-            iconStyle={{
-              height: 20,
-              width: 20,
-            }}
-            onPress={() => alert('Delete...')}
-          />
+                  ) : null}
+                </View>
+              </Swipeable>
+            );
+          })}
         </View>
       );
     };
@@ -360,67 +435,230 @@ const AssignedWorks = ({data,AssignWorkfunction}) => {
       <SwipeListView
         data={data}
         keyExtractor={item => `${item._id}`}
-        contentContainerStyle={{
-          marginTop: SIZES.radius,
-          paddingBottom: SIZES.padding * 2,
-          marginBottom: SIZES.padding,
-          paddingHorizontal: SIZES.radius,
-        }}
+        contentContainerStyle={{}}
         scrollEnabled={true}
         nestedScrollEnabled={true}
-        maxHeight={300}
+        maxHeight={400}
         showsVerticalScrollIndicator={false}
         disableRightSwipe={true}
-        rightOpenValue={-70}
         renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.gray,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
       />
     );
   }
+
+  function renderStartDate() {
+    return (
+      <View style={{marginTop: 10}}>
+        {/* <Text style={{...FONTS.h3, color: 'black'}}>New Date & Time</Text> */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{}}>
+            <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+              Date - {formatedDate}
+            </Text>
+            <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+              Time - {formatedTime}
+            </Text>
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity
+              onPress={showDatepicker}
+              style={{
+                borderWidth: 1,
+                padding: 6,
+                borderRadius: 2,
+                right: 15,
+              }}>
+              <Image
+                source={icons.date}
+                style={{
+                  width: 22,
+                  height: 22,
+                  tintColor: COLORS.black,
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={showTimepicker}
+              style={{borderWidth: 1, padding: 6, borderRadius: 2}}>
+              <Image
+                source={icons.time}
+                style={{
+                  width: 22,
+                  height: 22,
+                  tintColor: COLORS.black,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  function renderRevertModal() {
+    return (
+      <Modal animationType="slide" transparent={true} visible={revertModal}>
+        <TouchableWithoutFeedback onPress={() => setRevertModal(false)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                backgroundColor: COLORS.white,
+                paddingHorizontal: SIZES.padding,
+                paddingVertical: SIZES.radius,
+                width: '90%',
+                top: '30%',
+                borderRadius: 5,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
+                <Text style={{fontSize: 20, color: COLORS.darkGray}}>
+                  New targeted date & time
+                </Text>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity onPress={() => setRevertModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
+              </View>
+
+              {renderStartDate()}
+
+              {/* <FormInput
+                label={'Comment'}
+                placeholder=""
+                multiline={true}
+                numberOfLines={3}
+                onChange={value => {
+                  setRevertMsg(value);
+                }}
+              /> */}
+              {/* <View
+                style={{
+                  marginTop: SIZES.base,
+                  paddingHorizontal: SIZES.base,
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.gray,
+                }}>
+                <TextInput
+                  placeholder="Write your message here.."
+                  
+                  multiline={true}
+                  numberOfLines={3}
+                  onChange={value => {
+                    setRevertMsg(value);
+                  }}
+                />
+              </View> */}
+
+              <TouchableOpacity
+                style={{
+                  marginTop: SIZES.padding,
+                  alignItems: 'center',
+                }}
+                onPress={() => OnSubmit()}>
+                <Text
+                  style={{
+                    ...FONTS.h3,
+                    backgroundColor: COLORS.lightblue_800,
+                    paddingHorizontal: SIZES.radius,
+                    paddingVertical: 5,
+                    borderRadius: 3,
+                    color: COLORS.white,
+                  }}>
+                  Send
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
   return (
     <View
       style={{
         marginTop: SIZES.padding,
-        marginHorizontal: SIZES.padding,
-        borderRadius: 5,
+        marginHorizontal: SIZES.radius,
         backgroundColor: COLORS.white,
+        padding: 15,
+        borderRadius: 5,
         ...styles.shadow,
       }}>
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between',
           alignItems: 'center',
-          paddingHorizontal: SIZES.padding,
-          paddingTop: SIZES.radius,
+          justifyContent: 'space-between',
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
-          Assigned works
+        <Text
+          style={{
+            ...FONTS.h2,
+            color: COLORS.darkGray,
+            marginBottom: SIZES.radius,
+          }}>
+          Assigned Works
         </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => setFilterRoleModal(true)}>
-            <Image
-              source={icons.filter}
-              style={{
-                height: 15,
-                width: 15,
-                tintColor: COLORS.darkGray,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
+        <></>
       </View>
-      {renderSwipeList()}
+      {renderRevertModal()}
       {renderRoleFilterModal()}
+      {renderSwipeList()}
 
       <DeleteConfirmationToast
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this work?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => fetchAssignWorkDelete()}
+      />
+      <CustomToast
+        isVisible={submitToast}
+        onClose={() => setSubmitToast(false)}
+        color={COLORS.green}
+        title="Submit"
+        message="Submitted Successfully..."
       />
     </View>
   );
@@ -438,7 +676,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   cartItemContainer: {
-    marginTop: SIZES.base,
+    marginBottom: SIZES.base,
     paddingVertical: SIZES.radius,
     paddingHorizontal: SIZES.radius,
     borderRadius: SIZES.base,

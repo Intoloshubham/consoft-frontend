@@ -81,16 +81,17 @@ const MyProfile = () => {
     // }
     setLeavesDate(selectDate);
     setSelectedId(i);
-    // const newselectdate = [...new Set(leavesdate), date];
+    const newselectdate = [...new Set(leavesdate), date];
     // console.log(newselectdate);
-    // setPushDate(newselectdate);
+    setPushDate(newselectdate);
   };
 
   const submitLeaves = () => {
     const applyleaves = {
-      leavedates: leavesdate,
+      leavedates: pushdate,
       user_id: user_id,
     };
+    // console.log(applyleaves)
     try {
       fetch(`${process.env.API_URL}apply-leaves`, {
         method: 'POST',
@@ -103,7 +104,7 @@ const MyProfile = () => {
         .then(response => response.json())
         .then(data => {
           showleavesdata();
-          console.log('Success:', data);
+          // console.log('Success:', data);
         });
     } catch (error) {
       console.error('Error:', error);
@@ -400,7 +401,7 @@ const MyProfile = () => {
                                       : null,
                                   ]}
                                   onPress={() => {
-                                    dateClickHandler(col.date, i);
+                                    dateClickHandler({leave_date: col.date});
                                   }}>
                                   <Title style={{color: '#fff'}}>
                                     {col.value}
@@ -411,7 +412,7 @@ const MyProfile = () => {
                                   key={i}
                                   className={col.classes}
                                   onPress={() => {
-                                    dateClickHandler(col.date, i);
+                                    dateClickHandler({leave_date: col.date});
                                   }}>
                                   <Title
                                     style={[
