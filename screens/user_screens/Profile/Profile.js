@@ -37,7 +37,7 @@ const Profile = () => {
       .catch(error => {
         console.log(error);
       });
-  }, [userData._id]);
+  }, []);
 
   const logout = () => {
     dispatch(userLogout());
