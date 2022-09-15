@@ -535,6 +535,7 @@ const ViewReport = () => {
                 Track Verification Process :
             </Text>
             <ScrollView
+            showsVerticalScrollIndicator={false}
                 refreshControl={
                     <RefreshControl
                         progressBackgroundColor="white"
