@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -6,35 +6,28 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  LogBox,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {ProfileValue, LineDivider} from '../../../Components';
 import {useSelector, useDispatch} from 'react-redux';
-import { companyLogout } from '../../../services/companyAuthApi';
+import {companyLogout} from '../../../services/companyAuthApi';
 
 const Account = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = React.useState(true);
 
   const logout = () => {
     dispatch(companyLogout());
     navigation.navigate('Login');
   };
 
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
-
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
-
 
   function renderProfileCard() {
     return (
@@ -128,9 +121,16 @@ const Account = () => {
         }}>
         <ProfileValue
           icon={icons.project_type}
-          value="Project Categories & Types"
+          value="Project Category & Types"
           image={icons.right_arr}
           onPress={() => navigation.navigate('CategoryandType')}
+        />
+        <LineDivider />
+        <ProfileValue
+          icon={icons.user_role}
+          value="Create User Role"
+          image={icons.right_arr}
+          onPress={() => navigation.navigate('UserRole')}
         />
         <LineDivider />
         <ProfileValue
@@ -147,7 +147,7 @@ const Account = () => {
           onPress={toggleExpanded}
         />
         <Collapsible collapsed={collapsed} duration={300}>
-          <View style={{marginLeft: SIZES.padding * 1.8}}>
+          <View style={{marginLeft: SIZES.padding * 1.5}}>
             <ProfileValue
               icon={icons.itemss}
               value="Items"
@@ -155,12 +155,12 @@ const Account = () => {
               onPress={() => navigation.navigate('Items')}
             />
             <LineDivider />
-            <ProfileValue
+            {/* <ProfileValue
               icon={icons.units}
               value="Unit"
               image={icons.right_arr}
               onPress={() => navigation.navigate('Unit')}
-            />
+            /> */}
             <LineDivider />
             <ProfileValue
               icon={icons.manage_stock}
@@ -168,11 +168,8 @@ const Account = () => {
               image={icons.right_arr}
               onPress={() => navigation.navigate('ManageStock')}
             />
-          </View>
-        </Collapsible>
-        <LineDivider />
-        <Collapsible collapsed={collapsed} duration={300}>
-          <View style={{marginLeft: SIZES.padding * 1.8}}>
+            <LineDivider />
+
             <ProfileValue
               icon={icons.itemss}
               value="Checklist"
@@ -182,14 +179,14 @@ const Account = () => {
             <LineDivider />
             <ProfileValue
               icon={icons.units}
-              value="Optiontype"
+              value="Option Type"
               image={icons.right_arr}
               onPress={() => navigation.navigate('Optiontype')}
             />
             <LineDivider />
             <ProfileValue
               icon={icons.units}
-              value="Tools & Machinery1"
+              value="Tools & Machinery"
               image={icons.right_arr}
               onPress={() => navigation.navigate('ToolsAndMachinery1')}
             />

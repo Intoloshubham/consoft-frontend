@@ -53,7 +53,7 @@ const postBOQItem = async formData => {
 const getBOQItems = async (company_id, project_id) => {
   try {
     const res = await fetch(
-      `${Config.API_URL}manage-boq/` + company_id + '/' + project_id,
+      Config.API_URL + 'manage-boq/' + company_id + '/' + project_id,
       {
         method: 'get',
         headers: {
@@ -68,10 +68,10 @@ const getBOQItems = async (company_id, project_id) => {
   }
 };
 
-const updateBoqItem = async (id, item_id, formData) => {
+const updateBoqItem = async (id, formData) => {
   try {
     const res = await fetch(
-      `${Config.API_URL}manage-boq/` + id + '/' + item_id,
+      Config.API_URL + 'update-manage-boq/' + id ,
       {
         method: 'put',
         headers: {

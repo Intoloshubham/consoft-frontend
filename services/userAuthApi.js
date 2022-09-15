@@ -106,7 +106,7 @@ export const { setUserToken, userLogout } = userSlice.actions
 export default userSlice.reducer
 
 export const userLogin = createAsyncThunk('user/login', async (userData) => { 
-  const res = await fetch(process.env.REACT_APP_API_URL+'login',{
+  const res = await fetch(process.env.API_URL+'login',{
     method:"post",
     body:JSON.stringify(userData),
     headers:{

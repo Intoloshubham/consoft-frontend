@@ -8,6 +8,8 @@ import {
   ImageBackground,
   StyleSheet,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 import {
@@ -61,17 +63,27 @@ const CompanyTeam = () => {
       emailError == ''
     );
   }
+  // ================================================
+  // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
+  const onRoleOpen = React.useCallback(() => {
+    setOpenProject(false);
+  }, []);
+
+  const onProjectOpen = React.useCallback(() => {
+    setOpenRole(false);
+  }, []);
 
   // ================================ Apis ====================================
 
   const getCompanyTeam = async () => {
-    let response = await getUsers();
-    // console.log(response);
-    setCompanyTeam(response);
+    let response = await getUsers(company_id);
+    if (response.status === 200) {
+      setCompanyTeam(response.data);
+    }
   };
 
   const userRole = async () => {
-    let response = await getUserRole();
+    let response = await getUserRole(company_id);
     if (response.status === 200) {
       let roleDataFromApi = response.data.map(one => {
         return {label: one.user_role, value: one._id};
@@ -97,7 +109,7 @@ const CompanyTeam = () => {
       email: email,
       mobile: mobile,
       company_id: company_data._id,
-      project_id: projectValue,
+      // project_id: projectValue,
     };
     let response = await postCompanyTeam(formData);
     if (response.status === 200) {
@@ -118,7 +130,7 @@ const CompanyTeam = () => {
     projects();
   };
 
-  React.useState(() => {
+  React.useEffect(() => {
     getCompanyTeam();
   }, []);
 
@@ -127,19 +139,20 @@ const CompanyTeam = () => {
   function renderAddTeamModal() {
     return (
       <Modal animationType="slide" transparent={true} visible={addTeamModal}>
-        <View
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
           style={{
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.transparentBlack5,
+            backgroundColor: COLORS.transparentBlack7,
           }}>
           <View
             style={{
               position: 'absolute',
               backgroundColor: COLORS.white,
               padding: SIZES.padding,
-              borderRadius: SIZES.radius,
+              borderRadius: 5,
               width: '90%',
             }}>
             <View
@@ -147,20 +160,21 @@ const CompanyTeam = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                marginBottom: 10,
               }}>
-              <Text style={{fontSize: 20, color: COLORS.darkGray}}>
+              <Text style={{fontSize: 25, color: COLORS.darkGray}}>
                 New Team
               </Text>
               <ImageBackground
                 style={{
-                  backgroundColor: COLORS.darkGray,
-                  padding: 3,
-                  borderRadius: 3,
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
                 }}>
                 <TouchableOpacity onPress={() => setAddTeamModal(false)}>
                   <Image
                     source={icons.cross}
-                    style={{height: 12, width: 12, tintColor: COLORS.white}}
+                    style={{height: 25, width: 25, tintColor: COLORS.rose_600}}
                   />
                 </TouchableOpacity>
               </ImageBackground>
@@ -179,6 +193,7 @@ const CompanyTeam = () => {
                 }}
                 zIndex={4000}
                 maxHeight={150}
+                onOpen={onRoleOpen}
               />
               <FormInput
                 label="Name"
@@ -272,7 +287,7 @@ const CompanyTeam = () => {
                   </View>
                 }
               />
-              <CustomDropdown
+              {/* <CustomDropdown
                 placeholder="Assign to projects"
                 open={openProject}
                 value={projectValue}
@@ -285,7 +300,8 @@ const CompanyTeam = () => {
                 }}
                 zIndex={3000}
                 maxHeight={150}
-              />
+                onOpen={onProjectOpen}
+              /> */}
               <TextButton
                 label="Save"
                 disabled={isEnableSubmit() ? false : true}
@@ -302,7 +318,7 @@ const CompanyTeam = () => {
               />
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }

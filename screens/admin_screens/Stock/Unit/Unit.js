@@ -16,9 +16,14 @@ import {
 import {Card, Title} from 'react-native-paper';
 import {FormInput, HeaderBar, TextButton} from '../../../../Components';
 import {SIZES, COLORS, icons, Images, FONTS} from '../../../../constants';
-import { getUnits,postunits,unitdalete,updateunitname} from '../../../../controller/unitController';
 
-// const url = 'http://192.168.1.99:8000/api/unit';
+import {
+  getUnits,
+  postUnits,
+  unitDelete,
+  updateUnit,
+} from '../../../../controller/UnitController';
+
 
 const Unit = () => {
   const [unitname, setUintname] = useState('');
@@ -41,19 +46,18 @@ const Unit = () => {
     const updateunitdata = {
       unit_name: unitname,
     };
-    
-     let data = await updateunitname(unitid, updateunitdata)
-        setUintname('');
-        fetchData();
-        alert('unit successfull update ');
-         unitname == ''
-            
-    
-     setShowBox(false)
+
+    let data = await updateUnit(unitid, updateunitdata);
+    setUintname('');
+    fetchData();
+    alert('unit successfull update ');
+    unitname == '';
+
+    setShowBox(false);
   };
 
   const fetchData = async () => {
-   const data = await getUnits()
+    const data = await getUnits();
     setdata(data);
   };
   // get data api list
@@ -64,30 +68,29 @@ const Unit = () => {
 
   // console.log(data);
 
-  const submit = async(e)=> {
+  const submit = async e => {
     const unitdata = {
       unit_name: unitname,
     };
-      let data = await postunits(unitdata)
-      if(data.status===200){
-        setUintname('');
-        fetchData();
-        
-      }
-        {
-          unitname == ''
-            ? alert('plz fill unitname')
-            : data.message == 'This unit is already exist'
-            ? alert('This unit is already exist')
-            : alert(' create ');
-        }
-     setModal(false)
-  }
+    let data = await postUnits(unitdata);
+    if (data.status === 200) {
+      setUintname('');
+      fetchData();
+    }
+    {
+      unitname == ''
+        ? alert('plz fill unitname')
+        : data.message == 'This unit is already exist'
+        ? alert('This unit is already exist')
+        : alert(' create ');
+    }
+    setModal(false);
+  };
 
   //  delete unit api
-  const DeleteUnit = async unitid=> {
-    let data = await unitdalete(unitid)
-      alert('this unit  deleted ');
+  const DeleteUnit = async unitid => {
+    let data = await unitDelete(unitid);
+    alert('this unit  deleted ');
     fetchData();
   };
 
@@ -99,12 +102,10 @@ const Unit = () => {
             <Text style={styles.title}>{item.unit_name}</Text>
             <View
               style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-              <View style={{flexDirection:"row"}}>
+              <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
-                  onPress={() =>
-                    updateunit(item._id, item.unit_name)
-                  }>
-                    <Image
+                  onPress={() => updateunit(item._id, item.unit_name)}>
+                  <Image
                     source={icons.edit}
                     style={{
                       width: 18,
@@ -113,10 +114,9 @@ const Unit = () => {
                       tintColor: COLORS.lightblue_900,
                     }}
                   />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => DeleteUnit(item._id)}>
-                    <Image
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => DeleteUnit(item._id)}>
+                  <Image
                     source={icons.delete_icon}
                     style={{
                       width: 18,
@@ -125,7 +125,7 @@ const Unit = () => {
                       tintColor: COLORS.red,
                     }}
                   />
-                  </TouchableOpacity>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    textTransform:"capitalize"
+    textTransform: 'capitalize',
   },
   input: {
     backgroundColor: 'white',

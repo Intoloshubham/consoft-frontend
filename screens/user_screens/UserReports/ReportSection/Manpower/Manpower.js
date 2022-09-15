@@ -1,56 +1,60 @@
-import React, {useState, useEffect, useRef, useMemo} from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
-  View,
-  Animated,
-  Easing,
-  Switch,
-  Text,
-  FlatList,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Modal,
-  Pressable,
-  TextInput,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  LogBox,
-  LayoutAnimation,
-  ImageBackground,
+    View,
+    Animated,
+    Easing,
+    Switch,
+    Text,
+    FlatList,
+    StyleSheet,
+    Image,
+    ScrollView, 
+    Modal,
+    Pressable,
+    TextInput,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    LogBox,
+    LayoutAnimation,
+    ImageBackground,
 } from 'react-native';
 import {
-  COLORS,
-  FONTS,
-  SIZES,
-  dummyData,
-  icons,
-  images,
+    COLORS,
+    FONTS,
+    SIZES,
+    dummyData,
+    icons,
+    images,
 } from '../../../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from '../../ReportStyle.js';
 import {
-  EditDeletebuttons,
-  ManPowerProjectTeam,
-  ManpowerUserContractors,
+    EditDeletebuttons,
+    ManPowerProjectTeam,
+    ManpowerUserContractors,
 } from '../../../index.js';
-import {Get_Contractor_Data} from '../../ReportApi.js';
+import { Get_Contractor_Data } from '../../ReportApi.js';
 
-const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
-  const {
-    header,
-    con_body,
-    input,
-    body_del,
-    body_edit,
-    body_del_btn,
-    body_edit_btn,
-    body_ed_de_view,
-  } = styles;
+const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value}) => {
 
-    console.log("Manpower")
-    // console.log(projectTeamList)
-    // console.log(ProList)
-    // console.log(Main_drp_pro_value)
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    }, []);
+    const {
+        header,
+        con_body,
+        input,
+        body_del,
+        body_edit,
+        body_del_btn,
+        body_edit_btn,
+        body_ed_de_view,
+    } = styles;
+
+    // console.log("Manpower")
+    // console.log("🚀 ~ file: Manpower.js ~ line 56 ~ Manpower ~ projectTeamList", projectTeamList)
+    // console.log("🚀 ~ file: Manpower.js ~ line 58 ~ Manpower ~ ProList", ProList)
+    // console.log("🚀 ~ file: Manpower.js ~ line 60 ~ Manpower ~ Main_drp_pro_value", Main_drp_pro_value)
     //Manpower collapse
     const [TabCollapse, setTabCollapse] = useState(false)
 
@@ -73,7 +77,7 @@ const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
                     elevation: 1
                 }}>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
-                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.darkGray}]}>Manpower</Text>
+                    <Text onPress={() => setTabCollapse(!TabCollapse)} style={[FONTS.h3, { color: COLORS.darkGray }]}>Manpower</Text>
                 </View>
                 <View style={{ alignItems: "center", alignSelf: "center" }}>
                     <TouchableOpacity onPress={() => setTabCollapse(!TabCollapse)}>
@@ -81,15 +85,15 @@ const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
                     </TouchableOpacity>
                 </View>
             </Pressable>
-            {TabCollapse ? <View style={{ top: -10, marginBottom: -10 }}>
+            {TabCollapse ? <View style={{ justifyContent: "space-evenly" }}>
                 <View>
-                    {/* project team start */}
+                    {/* project team start */} 
                     <ManPowerProjectTeam projectTeamList={projectTeamList} />
                     {/* Project Team close */}
                 </View>
                 <View>
                     {/* Contractors start */}
-                    <ManpowerUserContractors ProList={ProList} Main_drp_pro_value={Main_drp_pro_value} />
+                    <ManpowerUserContractors ProList={ProList} Main_drp_pro_value={Main_drp_pro_value}  />
                     {/* Contractors close */}
                 </View>
 
@@ -97,3 +101,5 @@ const Manpower = ({projectTeamList, ProList, Main_drp_pro_value}) => {
         </>
     )
 }
+
+export default Manpower;

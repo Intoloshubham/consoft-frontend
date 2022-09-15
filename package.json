@@ -39,7 +39,7 @@
     "react-native-animated-tree-view": "^0.1.4",
     "react-native-awesome-alerts": "^2.0.0",
     "react-native-calendar-picker": "^7.1.2",
-    "react-native-calendars": "^1.1285.0",
+    "react-native-calendars": "^1.1287.0",
     "react-native-collapsible": "^1.6.0",
     "react-native-custom-calendars": "^1.2.3",
     "react-native-document-picker": "^8.1.1",
@@ -67,6 +67,7 @@
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-tab-view": "^3.1.1",
     "react-native-vector-icons": "^9.1.0",
+    "react-native-walkthrough-tooltip": "^1.4.0",
     "react-redux": "^8.0.2",
     "react-swipeable-list": "^1.5.1"
   },

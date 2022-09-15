@@ -91,7 +91,7 @@ const RevertWorks = ({RevertData}) => {
   return (
     <View style={{marginTop: 5, padding: 10}}>
       <FlatList
-        data={[RevertData]}
+        data={RevertData}
         keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         ItemSeparatorComponent={() => {

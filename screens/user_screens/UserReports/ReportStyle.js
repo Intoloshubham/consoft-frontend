@@ -71,7 +71,7 @@ export default styles = StyleSheet.create({
         paddingHorizontal: 8,
         marginTop: 20,
         marginBottom:5,
-        width:347,
+        width:320,
         bottom:-15
     },
     //for quantity styles

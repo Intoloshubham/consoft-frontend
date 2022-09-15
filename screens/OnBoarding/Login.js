@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,10 @@ import {
   StyleSheet,
   Switch,
   Linking,
+  TextInput,
+  TouchableWithoutFeedback,
+  Button,
+  Keyboard,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
@@ -25,14 +29,8 @@ import {
   getToken,
 } from '../../services/asyncStorageService';
 
-const Login = ({ navigation }) => {
+const Login = ({navigation}) => {
   const dispatch = useDispatch();
-
-  const [switchValue, setSwitchValue] = React.useState(false);
-  const toggleSwitch = value => {
-    setSwitchValue(value);
-  };
-
   const [userMobileNo, setUserMobileNo] = React.useState('');
   const [userPassword, setUserPassword] = React.useState('');
   const [userMobileNoError, setUserMobileNoError] = React.useState('');
@@ -41,23 +39,23 @@ const Login = ({ navigation }) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   const [showPass, setShowPass] = React.useState(false);
 
+  // CUSTOM TOAST OF CRUD OPERATIONS 
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [switchValue, setSwitchValue] = React.useState(false);
+  const toggleSwitch = value => {
+    setSwitchValue(value);
+    if (value) {
+      setUserMobileNo('');
+      setUserPassword('');
+    } else {
+      setCompanyMobileNo('');
+      setCompanyPassword('');
+    }
+  };
+
   const [userId, setUserId] = React.useState('');
   const [companyId, setCompanyId] = React.useState('');
   const [token, setToken] = React.useState('');
-
-  // CUSTOM TOAST OF CRUD OPERATIONS
-  const [submitToast, setSubmitToast] = React.useState(false);
-  const [updateToast, setUpdateToast] = React.useState(false);
-  const [deleteToast, setDeleteToast] = React.useState(false);
-
-  function isEnableLogin() {
-    return (
-      userMobileNo != '' &&
-      userMobileNoError == '' &&
-      companyMobileNo != '' &&
-      companyMobileNoError == ''  
-    );
-  }
 
   const userOnSubmit = async () => {
     const UserData = {
@@ -68,6 +66,8 @@ const Login = ({ navigation }) => {
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('UserDashboard');
+      // setUserMobileNo('');
+      // setUserPassword('');
     } else {
       alert(res.payload.message);
     }
@@ -75,7 +75,7 @@ const Login = ({ navigation }) => {
       setSubmitToast(false);
     }, 2000);
   };
- 
+
   const companyOnSubmit = async () => {
     const company_data = {
       mobile: companyMobileNo,
@@ -85,6 +85,8 @@ const Login = ({ navigation }) => {
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('Home');
+      // setCompanyMobileNo('');
+      // setCompanyPassword('');
     } else {
       alert(res.payload.message);
     }
@@ -101,17 +103,6 @@ const Login = ({ navigation }) => {
       phoneNumber = 'telprompt:${+919988774455}';
     }
     Linking.openURL(phoneNumber);
-  };
-
-  const message = 'Hello';
-  const number = +919479505099;
-  const openURL = async url => {
-    const isSupported = await Linking.canOpenURL(url);
-    if (isSupported) {
-      await Linking.openURL(url);
-    } else {
-      alert(`url is not correct: ${url}`);
-    }
   };
 
   function renderHeaderLogo() {
@@ -174,11 +165,11 @@ const Login = ({ navigation }) => {
             }}
             errorMsg={userMobileNoError}
             appendComponent={
-              <View style={{ justifyContent: 'center' }}>
+              <View style={{justifyContent: 'center'}}>
                 <Image
                   source={
                     userMobileNo == '' ||
-                      (userMobileNo != '' && userMobileNoError == '')
+                    (userMobileNo != '' && userMobileNoError == '')
                       ? icons.correct
                       : icons.cancel
                   }
@@ -189,8 +180,8 @@ const Login = ({ navigation }) => {
                       userMobileNo == ''
                         ? COLORS.gray
                         : userMobileNo != '' && userMobileNoError == ''
-                          ? COLORS.green
-                          : COLORS.red,
+                        ? COLORS.green
+                        : COLORS.red,
                   }}
                 />
               </View>
@@ -232,6 +223,88 @@ const Login = ({ navigation }) => {
             onPress={userOnSubmit}
           />
         </View>
+        <View
+          style={{
+            marginTop: 30,
+            marginHorizontal: SIZES.padding * 4,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 6,
+              borderRadius: 5,
+            }}
+            onPress={() => {
+              Linking.openURL(
+                'mailto:ssdoffice44@gmail.com?subject=Subject&body=description',
+              );
+            }}>
+            <Image
+              source={icons.mail}
+              resizeMode="contain"
+              style={{
+                height: 12,
+                width: 12,
+                tintColor: COLORS.black,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 6,
+              borderRadius: 5,
+            }}
+            onPress={makeCall}>
+            <Image
+              source={icons.call}
+              resizeMode="contain"
+              style={{
+                height: 12,
+                width: 12,
+                tintColor: COLORS.black,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 6,
+              borderRadius: 5,
+            }}
+            onPress={() => {
+              Linking.openURL('https://wa.me/8109093551');
+            }}>
+            <Image
+              source={icons.whatsapp}
+              resizeMode="contain"
+              style={{
+                height: 12,
+                width: 12,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              padding: 6,
+              borderRadius: 5,
+            }}
+            onPress={() => Linking.openURL('http://www.intoloindia.com/')}>
+            <Image
+              source={icons.website}
+              resizeMode="contain"
+              style={{
+                height: 12,
+                width: 12,
+                tintColor: COLORS.black,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -240,10 +313,13 @@ const Login = ({ navigation }) => {
     return (
       <View
         style={{
-          marginTop: SIZES.padding,
+          marginTop: SIZES.base,
           marginHorizontal: SIZES.radius,
           ...styles.formContainer,
         }}>
+        <Text style={{textAlign: 'center', color: 'black', fontSize: 15}}>
+          Registered Company Login
+        </Text>
         <View>
           <FormInput
             placeholder="Mobile No."
@@ -256,11 +332,11 @@ const Login = ({ navigation }) => {
             }}
             errorMsg={companyMobileNoError}
             appendComponent={
-              <View style={{ justifyContent: 'center' }}>
+              <View style={{justifyContent: 'center'}}>
                 <Image
                   source={
                     companyMobileNo == '' ||
-                      (companyMobileNo != '' && companyMobileNoError == '')
+                    (companyMobileNo != '' && companyMobileNoError == '')
                       ? icons.correct
                       : icons.cancel
                   }
@@ -271,8 +347,8 @@ const Login = ({ navigation }) => {
                       companyMobileNo == ''
                         ? COLORS.gray
                         : companyMobileNo != '' && companyMobileNoError == ''
-                          ? COLORS.green
-                          : COLORS.red,
+                        ? COLORS.green
+                        : COLORS.red,
                   }}
                 />
               </View>
@@ -321,7 +397,7 @@ const Login = ({ navigation }) => {
             justifyContent: 'center',
             paddingBottom: 5,
           }}>
-          <TouchableOpacity onPress={() => console.log('Demo Video')}>
+          <TouchableOpacity onPress={() => alert('Demo Video')}>
             <Text
               style={{
                 color: COLORS.black,
@@ -360,7 +436,7 @@ const Login = ({ navigation }) => {
             paddingBottom: SIZES.radius,
           }}>
           <TextButton
-            label="Purchase & Register"
+            label="Free Register Or Purchase"
             buttonContainerStyle={{
               backgroundColor: COLORS.lightblue_900,
               paddingHorizontal: SIZES.radius * 3,
@@ -389,7 +465,7 @@ const Login = ({ navigation }) => {
             }}
             onPress={() => {
               Linking.openURL(
-                'mailto:ssdoffice44@gmail.com?subject=SendMail&body=Description',
+                'mailto:ssdoffice44@gmail.com?subject=Subject&body=description',
               );
             }}>
             <Image
@@ -426,7 +502,7 @@ const Login = ({ navigation }) => {
               borderRadius: 5,
             }}
             onPress={() => {
-              Linking.openURL('https://wa.me/9479505099');
+              Linking.openURL('https://wa.me/8109093551');
             }}>
             <Image
               source={icons.whatsapp}
@@ -479,7 +555,7 @@ const Login = ({ navigation }) => {
         <Switch
           onValueChange={toggleSwitch}
           value={switchValue}
-          trackColor={{ false: COLORS.gray, true: COLORS.gray }}
+          trackColor={{false: COLORS.gray, true: COLORS.gray}}
           thumbColor={switchValue ? COLORS.white : COLORS.white}
           ios_backgroundColor={COLORS.blue}
         />
@@ -496,47 +572,54 @@ const Login = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? SIZES.padding : SIZES.height}
-      style={{ flex: 1 }}>
-      <LinearGradient
-        colors={[COLORS.lightblue_100, COLORS.lightblue_300]}
-        style={{ flex: 1 }}>
-        {renderHeaderLogo()}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <KeyboardAwareScrollView
-            keyboardDismissMode="on-drag"
-            contentContainerStyle={{
+    <LinearGradient
+      colors={[COLORS.lightblue_100, COLORS.lightblue_300]}
+      style={{flex: 1}}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View
+            style={{
               flex: 1,
+              justifyContent: 'space-around',
             }}>
-            {renderHeaderImage()}
-            {renderToggleButton()}
-            {switchValue ? renderCompanyForm() : renderUserForm()}
-          </KeyboardAwareScrollView>
-        </ScrollView>
-      </LinearGradient>
-      <CustomToast
-        isVisible={submitToast}
-        onClose={() => setSubmitToast(false)}
-        color={COLORS.green}
-        title="Login"
-        message="Login Successfully..."
-      />
-      <CustomToast
-        isVisible={updateToast}
-        onClose={() => setUpdateToast(false)}
-        color={COLORS.yellow_400}
-        title="Update"
-        message="Updated Successfully..."
-      />
-      <CustomToast
-        isVisible={deleteToast}
-        onClose={() => setDeleteToast(false)}
-        color={COLORS.rose_600}
-        title="Delete"
-        message="Deleted Successfully..."
-      />
-    </KeyboardAvoidingView>
+            <View
+              style={{
+                marginBottom: 48,
+                alignItems: 'center',
+              }}>
+              <Image
+                source={images.consoft_PNG}
+                resizeMode="contain"
+                style={{
+                  height: 100,
+                }}
+              />
+              <View
+                style={{
+                  marginTop: SIZES.radius,
+                  height: 30,
+                  justifyContent: 'center',
+                }}>
+                <Image
+                  source={images.build_f}
+                  resizeMode="contain"
+                  style={{
+                    width: 180,
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{}}>
+              {renderToggleButton()}
+              {switchValue ? renderCompanyForm() : renderUserForm()}
+            </View>
+            <View style={{marginBottom: 80}}></View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 };
 
@@ -554,6 +637,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+  },
+  container: {
+    flex: 1,
+  },
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: 'space-around',
+  },
+  header: {
+    fontSize: 36,
+    marginBottom: 48,
+  },
+  textInput: {
+    height: 40,
+    borderColor: '#000000',
+    borderBottomWidth: 1,
+    marginBottom: 36,
+  },
+  btnContainer: {
+    backgroundColor: 'white',
+    marginTop: 12,
   },
 });
 

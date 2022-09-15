@@ -32,7 +32,6 @@ const postToolsAndMachinery = async formData => {
 };
 
 const deleteToolsAndMachinery = async id => {
-  console.log('object', id);
   try {
     const res = await fetch(Config.API_URL + 'tools-machinery/' + id, {
       method: 'delete',

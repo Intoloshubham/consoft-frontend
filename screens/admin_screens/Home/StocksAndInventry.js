@@ -10,6 +10,8 @@ import {
   Modal,
   TouchableWithoutFeedback,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {
   HeaderBar,
@@ -26,8 +28,14 @@ import {
   getStockEntry,
   postStockEntry,
 } from '../../../controller/StockController';
+import {useSelector} from 'react-redux';
 
-const StocksAndInventry = () => {
+const StocksAndInventry = ({route}) => {
+  const {project_id} = route.params; //
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+  // console.log(companyData._id)
+
   const [showAddMaterialsModal, setShowAddMaterialsModal] =
     React.useState(false);
   // company team states
@@ -54,6 +62,7 @@ const StocksAndInventry = () => {
 
   const stockItem = async () => {
     let response = await getItem();
+    console.log(response);
     let itemFromApi = response.map(one => {
       return {label: one.item_name, value: one._id};
     });
@@ -73,6 +82,8 @@ const StocksAndInventry = () => {
       qty: quantity,
       location: location,
       vehicle_no: vehicleNo,
+      company_id: company_id,
+      project_id: project_id,
     };
 
     let response = await postStockEntry(formData);
@@ -90,7 +101,6 @@ const StocksAndInventry = () => {
     setTimeout(() => {
       setSubmitToast(false);
     }, 2000);
-
   };
 
   React.useEffect(() => {
@@ -214,157 +224,149 @@ const StocksAndInventry = () => {
         animationType="slide"
         transparent={true}
         visible={showAddMaterialsModal}>
-        <TouchableWithoutFeedback
-          onPress={() => setShowAddMaterialsModal(false)}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack7,
+          }}>
           <View
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.transparentBlack7,
+              width: '90%',
+              padding: SIZES.padding,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.white,
             }}>
-            <View
-              style={{
-                position: 'absolute',
-                left: SIZES.padding,
-                width: '90%',
-                padding: SIZES.padding,
-                borderRadius: SIZES.radius,
-                backgroundColor: COLORS.white,
-              }}>
-              <View style={{}}>
-                {/* header */}
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
-                    Materials
-                  </Text>
-                  <IconButton
-                    containerStyle={{
-                      boborderWidth: 2,
-                      borderRadius: 10,
-                      borderColor: COLORS.gray2,
-                    }}
-                    icon={icons.cross}
-                    iconStyle={{
-                      tintColor: COLORS.gray,
-                    }}
-                    onPress={() => setShowAddMaterialsModal(false)}
-                  />
-                </View>
-                <ScrollView>
-                  <CustomDropdown
-                    placeholder="Select Item"
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
-                    categorySelectable={true}
-                    listParentLabelStyle={{
-                      color: COLORS.white,
-                    }}
-                  />
-                  <FormInput
-                    label="Quantity"
-                    keyboardType="numeric"
-                    onChange={value => {
-                      setQuantity(value);
-                    }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            quantity == '' || quantity != ''
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              quantity == ''
-                                ? COLORS.gray
-                                : quantity != ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-                  <FormInput
-                    label="Location"
-                    keyboardType="default"
-                    onChange={value => {
-                      setLocation(value);
-                    }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            location == '' || location != ''
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              location == ''
-                                ? COLORS.gray
-                                : location != ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-                  <FormInput
-                    label="Vehicle No"
-                    keyboardType="default"
-                    onChange={value => {
-                      setVehicleNo(value);
-                    }}
-                    appendComponent={
-                      <View style={{justifyContent: 'center'}}>
-                        <Image
-                          source={
-                            vehicleNo == '' || vehicleNo != ''
-                              ? icons.correct
-                              : icons.cancel
-                          }
-                          style={{
-                            height: 20,
-                            width: 20,
-                            tintColor:
-                              vehicleNo == ''
-                                ? COLORS.gray
-                                : vehicleNo != ''
-                                ? COLORS.green
-                                : COLORS.red,
-                          }}
-                        />
-                      </View>
-                    }
-                  />
-
-                  <TextButton
-                    label="Submit"
-                    buttonContainerStyle={{
-                      height: 55,
-                      alignItems: 'center',
-                      marginTop: SIZES.padding,
-                      borderRadius: SIZES.radius,
-                    }}
-                    onPress={postStockEntryData}
-                  />
-                </ScrollView>
-              </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{flex: 1, fontSize: 20, color: COLORS.darkGray}}>
+                Materials
+              </Text>
+              <IconButton
+                containerStyle={{
+                  boborderWidth: 2,
+                  borderRadius: 10,
+                  borderColor: COLORS.gray2,
+                }}
+                icon={icons.cross}
+                iconStyle={{
+                  tintColor: COLORS.gray,
+                }}
+                onPress={() => setShowAddMaterialsModal(false)}
+              />
             </View>
+            <ScrollView>
+              <CustomDropdown
+                placeholder="Select Item"
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+                categorySelectable={true}
+                listParentLabelStyle={{
+                  color: COLORS.white,
+                }}
+              />
+              <FormInput
+                label="Quantity"
+                keyboardType="numeric"
+                onChange={value => {
+                  setQuantity(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        quantity == '' || quantity != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          quantity == ''
+                            ? COLORS.gray
+                            : quantity != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <FormInput
+                label="Location"
+                keyboardType="default"
+                onChange={value => {
+                  setLocation(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        location == '' || location != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          location == ''
+                            ? COLORS.gray
+                            : location != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <FormInput
+                label="Vehicle No"
+                keyboardType="default"
+                onChange={value => {
+                  setVehicleNo(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        vehicleNo == '' || vehicleNo != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          vehicleNo == ''
+                            ? COLORS.gray
+                            : vehicleNo != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+            </ScrollView>
+            <TextButton
+              label="Submit"
+              buttonContainerStyle={{
+                height: 55,
+                alignItems: 'center',
+                marginTop: SIZES.padding,
+                borderRadius: SIZES.radius,
+              }}
+              onPress={postStockEntryData}
+            />
           </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }

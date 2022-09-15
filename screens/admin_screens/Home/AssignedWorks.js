@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   FlatList,
   Animated,
   ImageBackground,
+  LogBox,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {IconButton, DeleteConfirmationToast} from '../../../Components';
@@ -20,23 +21,33 @@ import {
   deleteAssignWorks,
 } from '../../../controller/AssignWorkController';
 import {getUserRole} from '../../../controller/UserRoleController';
+import {useSelector} from 'react-redux';
 
-const AssignedWorks = () => {
+const AssignedWorks = ({data,AssignWorkfunction}) => {
+  const companyData = useSelector(state => state.company);
+  const company_id = companyData._id;
+  // console.log(companyData._id)
+
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const [filterRoleModal, setFilterRoleModal] = React.useState(false);
   const [items, setItems] = React.useState([]);
 
   //get assign works
-  const fetchAssignWorks = async () => {
-    const response = await getAssignWorks();
-    setAssignWorkData(response);
-  };
+  // const fetchAssignWorks = async () => {
+  //   const response = await getAssignWorks(company_id);
+  //   // console.log(response)
+  //   if (response.status === 200) {
+  //     setAssignWorkData(response.data);
+  //   }
+  // };
 
   //get user role
   const fetchUserRole = async () => {
-    const response = await getUserRole();
-    setItems(response);
+    const response = await getUserRole(company_id);
+    if (response.status === 200) {
+      setItems(response.data);
+    }
   };
 
   // get work id
@@ -50,17 +61,21 @@ const AssignedWorks = () => {
   const fetchAssignWorkDelete = async () => {
     const response = await deleteAssignWorks(workId);
     if (response.status === 200) {
-      fetchAssignWorks();
+      // fetchAssignWorks();
+      AssignWorkfunction()
       setDeleteConfirm(false);
     }
   };
 
+  // React.useEffect(() => {
+  //   fetchAssignWorks();
+  //   fetchUserRole();
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // }, []);
 
-  React.useEffect(() => {
-    fetchAssignWorks();
-    fetchUserRole();
-  }, []);
-
+  // React.useMemo(() => {
+  //   fetchAssignWorks();
+  // }, []);
 
   function renderRoleFilterModal() {
     const renderItem = ({item}) => {
@@ -197,7 +212,7 @@ const AssignedWorks = () => {
       return (
         <View
           style={{
-            backgroundColor: COLORS.lightblue_800,
+            backgroundColor: COLORS.lightblue_600,
             ...styles.cartItemContainer,
           }}>
           <View
@@ -315,7 +330,7 @@ const AssignedWorks = () => {
             justifyContent: 'flex-end',
             alignItems: 'center',
             flexDirection: 'row',
-            backgroundColor: COLORS.lightblue_800,
+            backgroundColor: COLORS.lightblue_700,
             ...styles.cartItemContainer,
           }}>
           <IconButton
@@ -343,7 +358,7 @@ const AssignedWorks = () => {
 
     return (
       <SwipeListView
-        data={assignWorkData}
+        data={data}
         keyExtractor={item => `${item._id}`}
         contentContainerStyle={{
           marginTop: SIZES.radius,
@@ -368,7 +383,7 @@ const AssignedWorks = () => {
         marginTop: SIZES.padding,
         marginHorizontal: SIZES.padding,
         borderRadius: 5,
-        backgroundColor: COLORS.lightblue_900,
+        backgroundColor: COLORS.white,
         ...styles.shadow,
       }}>
       <View
@@ -379,8 +394,8 @@ const AssignedWorks = () => {
           paddingHorizontal: SIZES.padding,
           paddingTop: SIZES.radius,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.lightGray1}}>
-          Assign Works
+        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>
+          Assigned works
         </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setFilterRoleModal(true)}>
@@ -389,38 +404,15 @@ const AssignedWorks = () => {
               style={{
                 height: 15,
                 width: 15,
-                tintColor: COLORS.lightGray1,
+                tintColor: COLORS.darkGray,
               }}
             />
           </TouchableOpacity>
-          {/* <Text
-            style={{
-              color: COLORS.lightblue_50,
-              backgroundColor: COLORS.lightblue_900,
-              paddingHorizontal: SIZES.base,
-              paddingVertical: 2,
-              borderRadius: SIZES.base,
-            }}>
-            25
-          </Text> */}
         </View>
       </View>
       {renderSwipeList()}
       {renderRoleFilterModal()}
 
-      {/* <ConformationAlert
-        isVisible={deleteConfirm}
-        onCancel={() => {
-          setDeleteConfirm(false);
-        }}
-        title="Delete Assign Work"
-        message="Are you sure want to delete this work ?"
-        cancelText="Cancel"
-        confirmText="Yes"
-        onConfirmPressed={() => {
-          fetchAssignWorkDelete();
-        }}
-      /> */}
       <DeleteConfirmationToast
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}

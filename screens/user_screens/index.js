@@ -1,11 +1,10 @@
 import UserDashboard from './UserDashboard/UserDashboard';
 //saurabh
 import UserAssignWorks from './UserDashboard/UserAssignWorks';
-
 import Profile from './Profile/Profile';
 import Demo from './Demo/Demo';
 import Demo1 from './Demo1/Demo1';
-import Demo2 from './Demo2/Demo2';
+import MyProfile from './MyProfile/MyProfile';
 import UserReports from './UserReports/UserReports.js';
 import EditDeletebuttons from './UserReports/ReportSection/OtherReusableComp/EditDeletebuttons.js';
 import Manpower from './UserReports/ReportSection/Manpower/Manpower.js';
@@ -17,13 +16,12 @@ import TAndP from './UserReports/ReportSection/TAndP/TAndP.js';
 import ManPowerProjectTeam from './UserReports/ReportSection/Manpower/UserProjectTeam/ManPowerProjectTeam.js';
 import ManpowerUserContractors from './UserReports/ReportSection/Manpower/UserContractors/ManpowerUserContractors.js';
 
-
 export {
   UserDashboard,
   Profile,
   Demo,
   Demo1,
-  Demo2,
+  MyProfile,
   UserReports,
   EditDeletebuttons,
   Manpower,
