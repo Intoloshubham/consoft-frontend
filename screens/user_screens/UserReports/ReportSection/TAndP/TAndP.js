@@ -68,7 +68,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         }, 150);
     };
 
-    const CONST_FIELD = {
+    const CONST_FIELD = { 
         MANPOWER: 'Manpower',
         STOCK: 'Stock',
         QUANTITY: 'Quantity',
