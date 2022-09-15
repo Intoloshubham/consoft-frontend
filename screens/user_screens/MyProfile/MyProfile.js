@@ -53,11 +53,11 @@ const MyProfile = () => {
   // console.log(todayFormatted)
 
   useEffect(() => {
-    fetch(`${config.API_URL}user`, {
+    fetch(`${config.API_URL}user/`+user_id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${userData.token}`,
+
       },
     })
       .then(response => response.json())
@@ -91,6 +91,7 @@ const MyProfile = () => {
     const applyleaves = {
       leavedates: pushdate,
       user_id: user_id,
+      company_id:userData.company_id
     };
     console.log(applyleaves)
     try {

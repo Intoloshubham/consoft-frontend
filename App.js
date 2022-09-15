@@ -49,7 +49,7 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={'Water'}>
+          initialRouteName={'Login'}>
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen
             name="CompanyRegistration"
@@ -85,7 +85,7 @@ const App = () => {
           <Stack.Screen name="Boq" component={Boq} />
           <Stack.Screen name="CategoryandType" component={CategoryandType} />
           <Stack.Screen name="Items" component={Items} />
-          <Stack.Screen name="Water" component={Water} />
+         
 
 
           <Stack.Screen name="Unit" component={Unit} />
