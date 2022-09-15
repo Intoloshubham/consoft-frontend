@@ -91,7 +91,7 @@ const MyProfile = () => {
       leavedates: pushdate,
       user_id: user_id,
     };
-    console.log(applyleaves)
+    // console.log(applyleaves)
     try {
       fetch(`${process.env.API_URL}apply-leaves`, {
         method: 'POST',
@@ -104,7 +104,7 @@ const MyProfile = () => {
         .then(response => response.json())
         .then(data => {
           showleavesdata();
-          console.log('Success:', data);
+          // console.log('Success:', data);
         });
     } catch (error) {
       console.error('Error:', error);

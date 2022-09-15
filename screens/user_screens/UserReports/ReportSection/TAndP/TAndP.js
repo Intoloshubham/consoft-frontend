@@ -68,7 +68,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         }, 150);
     };
 
-    const CONST_FIELD = {
+    const CONST_FIELD = { 
         MANPOWER: 'Manpower',
         STOCK: 'Stock',
         QUANTITY: 'Quantity',
@@ -130,8 +130,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const getEquipmentItems = async () => {
         try {
             const data = await get_equipment_item_name();
-            if (data.length > 0) {
-                // console.log("🚀 ~ file: Stock.js ~ line 68 ~ getStockDataItems ~ data", data);
+            if (data.length >= 0) {
                 setGetEquipItemName(data);
             }
         } catch (error) {
@@ -142,7 +141,6 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
     const getEquipReport = async () => {
         try {
             const data = await get_equipment_report(Main_drp_pro_value, userCompanyData._id, current_dat);
-
             setGetEquipmentReport(data);
         } catch (error) {
             console.log(error)
@@ -824,7 +822,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                                             }}>
                                             <>
                                                 {
-                                                    getEquipmentReport.data.length > 0 ? getEquipmentReport.data.map((list, index) => (
+                                                    getEquipmentReport.data.length >= 0 ? getEquipmentReport.data.map((list, index) => (
 
                                                         <View
                                                             style={{
