@@ -36,9 +36,10 @@ import {
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {useSelector} from 'react-redux';
 
-const ProjectsBanner = () => {
-  const companyData = useSelector(state => state.company);
-  const company_id = companyData._id;
+const ProjectsBanner = ({company}) => {
+  // const companyData = useSelector(state => state.company);
+  const company_id = company;
+
   const [showTip, setTip] = React.useState(false);
 
   const navigation = useNavigation();
@@ -255,7 +256,6 @@ const ProjectsBanner = () => {
   function renderProjects() {
     const renderItem = ({item, index}) => (
       <TouchableOpacity
-        style={{marginVertical: SIZES.base}}
         onPress={() => {
           navigation.navigate('ProjectsDetails', {
             name: item.project_name,
@@ -264,10 +264,9 @@ const ProjectsBanner = () => {
         }}>
         <View
           style={{
+            backgroundColor: COLORS.white,
+            padding: 15,
             borderRadius: 5,
-            backgroundColor: COLORS.white2,
-            paddingHorizontal: SIZES.radius,
-            paddingVertical: SIZES.radius,
             ...styles.shadow,
           }}>
           <View
@@ -277,13 +276,13 @@ const ProjectsBanner = () => {
               alignItems: 'center',
             }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{...FONTS.h3, color: COLORS.black}}>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
                 {index + 1}.
               </Text>
               <Text
                 style={{
-                  marginLeft: 4,
-                  fontSize: 18,
+                  ...FONTS.h3,
+                  left: 5,
                   color: COLORS.darkGray,
                   textTransform: 'capitalize',
                 }}>
@@ -294,22 +293,21 @@ const ProjectsBanner = () => {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'center',
               }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   alert('All Notification Message Show in here...');
                 }}>
                 <Image
                   source={icons.notification}
                   style={{
-                    width: 18,
-                    height: 18,
+                    right: 8,
+                    width: 20,
+                    height: 20,
                     tintColor: COLORS.darkGray,
-                    right: 5,
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 onPress={() => {
                   modalHandler(item._id);
@@ -333,20 +331,6 @@ const ProjectsBanner = () => {
               </TouchableOpacity>
             </View>
           </View>
-          {/* <Text
-            style={{
-              ...FONTS.body4,
-              color: COLORS.gray,
-            }}>
-            Project code - {index + 1}
-          </Text> */}
-          <Text
-            style={{
-              ...FONTS.body4,
-              color: COLORS.gray,
-            }}>
-            Progress - 0%
-          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -355,7 +339,6 @@ const ProjectsBanner = () => {
       <FlatList
         contentContainerStyle={{
           marginTop: SIZES.padding,
-          paddingBottom: SIZES.padding,
         }}
         data={projects}
         keyExtractor={item => `${item._id}`}
@@ -364,6 +347,9 @@ const ProjectsBanner = () => {
         nestedScrollEnabled={true}
         maxHeight={300}
         showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return <View style={{marginBottom: SIZES.radius}}></View>;
+        }}
       />
     );
   }
@@ -974,83 +960,52 @@ const ProjectsBanner = () => {
       </Modal>
     );
   }
-  
+
   return (
     <View
       style={{
         marginTop: SIZES.radius,
-        marginHorizontal: SIZES.padding,
-        paddingVertical: SIZES.radius,
-        paddingHorizontal: SIZES.padding,
+        marginHorizontal: SIZES.radius,
+        padding: 15,
         backgroundColor: COLORS.lightblue_600,
         borderRadius: 5,
         ...styles.shadow,
       }}>
-      <View
+      <TouchableOpacity
         style={{
-          flex: 1,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-        }}>
+        }}
+        onPress={toggleExpanded}>
         <Text style={{...FONTS.h2, color: COLORS.white}}>Projects</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity
             style={{
-              right: 10,
+              right: 15,
               alignItems: 'center',
               backgroundColor: COLORS.yellow_400,
               paddingHorizontal: 5,
               paddingVertical: 1,
-              borderRadius: 3,
+              borderRadius: 1,
             }}
             onPress={() => createProject()}>
-            <Text style={{...FONTS.h4, color: COLORS.black}}>Create New</Text>
+            <Text style={{...FONTS.h4, color: COLORS.darkBlue}}>
+              Create New
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleExpanded}>
             <Image
               source={collapsed ? icons.down_arrow : icons.up_arrow}
               style={{
-                height: 18,
-                width: 18,
+                height: 20,
+                width: 20,
                 tintColor: COLORS.white,
               }}
             />
           </TouchableOpacity>
         </View>
-        {/* <TextButton
-          label="Create New"
-          disabled={false}
-          buttonContainerStyle={{
-            marginLeft: SIZES.padding * 4,
-            alignItems: 'center',
-            paddingHorizontal: SIZES.base,
-            paddingVertical: SIZES.base,
-            paddingVertical: 2,
-            borderRadius: 5,
-            backgroundColor: COLORS.yellow_400,
-          }}
-          labelStyle={{
-            color: COLORS.black,
-            ...FONTS.body5,
-          }}
-          onPress={() => {
-            createProject();
-          }}
-          // onPress={ createProject()}
-        />
-        <TouchableOpacity onPress={toggleExpanded}>
-          <Image
-            source={collapsed ? icons.down_arrow : icons.up_arrow}
-            style={{
-              height: 18,
-              width: 18,
-              tintColor: COLORS.white,
-              justifyContent: 'flex-end',
-            }}
-          />
-        </TouchableOpacity> */}
-      </View>
+      </TouchableOpacity>
       <Collapsible collapsed={collapsed}>{renderProjects()}</Collapsible>
 
       {renderCreateProjectModal()}
@@ -1083,7 +1038,7 @@ const ProjectsBanner = () => {
         isVisible={deleteConfirm}
         onClose={() => setDeleteConfirm(false)}
         title={'Are You Sure?'}
-        message={'Do you really want to delete?'}
+        message={'Do you really want to delete this project?'}
         color={COLORS.rose_600}
         icon={icons.delete_withbg}
         onClickYes={() => projectDeleteSubmit()}

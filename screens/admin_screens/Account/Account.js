@@ -13,15 +13,29 @@ import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
 import {ProfileValue, LineDivider} from '../../../Components';
 import {useSelector, useDispatch} from 'react-redux';
 import {companyLogout} from '../../../services/companyAuthApi';
+import {userLogout} from '../../../services/userAuthApi';
 
 const Account = () => {
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const companyData = useSelector(state => state.company);
   const [collapsed, setCollapsed] = React.useState(true);
 
   const logout = () => {
-    dispatch(companyLogout());
+    if (companyDetail._id) {
+      dispatch(companyLogout());
+    } else {
+      dispatch(userLogout());
+    }
     navigation.navigate('Login');
   };
 
@@ -35,9 +49,8 @@ const Account = () => {
         style={{
           flexDirection: 'row',
           marginTop: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
-          paddingVertical: 20,
-          borderRadius: SIZES.radius,
+          padding: 15,
+          borderRadius: SIZES.base,
           backgroundColor: COLORS.lightblue_800,
           alignItems: 'center',
         }}>
@@ -70,7 +83,7 @@ const Account = () => {
               style={{
                 width: 30,
                 height: 30,
-                marginBottom: -15,
+                marginBottom: -10,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 15,
@@ -80,8 +93,8 @@ const Account = () => {
                 source={icons.camera}
                 resizeMode="contain"
                 style={{
-                  width: 17,
-                  height: 17,
+                  width: 15,
+                  height: 15,
                 }}
               />
             </View>
@@ -100,7 +113,7 @@ const Account = () => {
               ...FONTS.h2,
               textTransform: 'capitalize',
             }}>
-            {companyData.company_name}
+            {companyData.name}
           </Text>
           <Text style={{color: COLORS.white, ...FONTS.body4}}>
             {companyData.email}
@@ -120,23 +133,23 @@ const Account = () => {
           ...styles.profileSectionContainer,
         }}>
         <ProfileValue
-          icon={icons.project_type}
-          value="Project Category & Types"
-          image={icons.right_arr}
+          icon={icons.project_cate_type}
+          value="Project Categories & Types"
+          image={icons.right_arrow}
           onPress={() => navigation.navigate('CategoryandType')}
         />
         <LineDivider />
         <ProfileValue
           icon={icons.user_role}
           value="Create User Role"
-          image={icons.right_arr}
+          image={icons.right_arrow}
           onPress={() => navigation.navigate('UserRole')}
         />
         <LineDivider />
         <ProfileValue
           icon={icons.company_team}
-          value="Add Company Team"
-          image={icons.right_arr}
+          value="Company Team"
+          image={icons.right_arrow}
           onPress={() => navigation.navigate('CompanyTeam')}
         />
         <LineDivider />
@@ -151,7 +164,7 @@ const Account = () => {
             <ProfileValue
               icon={icons.itemss}
               value="Items"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('Items')}
             />
             <LineDivider />
@@ -165,7 +178,7 @@ const Account = () => {
             <ProfileValue
               icon={icons.manage_stock}
               value="Manage Stock"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('ManageStock')}
             />
             <LineDivider />
@@ -173,21 +186,21 @@ const Account = () => {
             <ProfileValue
               icon={icons.itemss}
               value="Checklist"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('CheckList')}
             />
             <LineDivider />
             <ProfileValue
               icon={icons.units}
               value="Option Type"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('Optiontype')}
             />
             <LineDivider />
             <ProfileValue
               icon={icons.units}
               value="Tools & Machinery"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('ToolsAndMachinery1')}
             />
           </View>
@@ -196,7 +209,7 @@ const Account = () => {
         <ProfileValue
           icon={icons.supplier}
           value="Suppliers"
-          image={icons.right_arr}
+          image={icons.right_arrow}
           onPress={() => navigation.navigate('Suppliers')}
         />
         <LineDivider />
@@ -227,7 +240,7 @@ const Account = () => {
       }}>
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: SIZES.padding,
+          paddingHorizontal: SIZES.radius,
           paddingBottom: 150,
         }}>
         {renderProfileCard()}
@@ -252,10 +265,8 @@ const styles = StyleSheet.create({
   profileSectionContainer: {
     marginTop: SIZES.padding,
     paddingHorizontal: SIZES.radius,
-    borderWidth: 1,
-    borderRadius: SIZES.base,
-    borderColor: COLORS.gray2,
   },
+
   profileSectionContainer1: {
     marginTop: SIZES.padding,
     paddingHorizontal: SIZES.radius,

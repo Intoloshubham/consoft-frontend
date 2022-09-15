@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   RefreshControl,
   Image,
-  ImageBackground,
   TouchableOpacity,
 } from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
@@ -18,27 +17,40 @@ import {useSelector} from 'react-redux';
 import {getSubmitWorks} from '../../../controller/AssignWorkController';
 import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController';
 import {getAssignWorks} from '../../../controller/AssignWorkController';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {SIZES, COLORS, FONTS, images} from '../../../constants';
+import {getProjectAtGlance} from '../../../controller/ReportController';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 const Home = ({navigation}) => {
-  const companyData = useSelector(state => state.company);
-
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchAssignWorks();
     fetchVerifyAndRevertWork();
     fetchSubmitWork();
+    fetchProjectAtGlance();
     wait(1000).then(() => setRefreshing(false));
   }, []);
+
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+
+  // console.log(companyData)
 
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(companyData._id);
+    // console.log(response);
     if (response.status === 200) {
       setSubmitWork(response.data);
     }
@@ -64,9 +76,19 @@ const Home = ({navigation}) => {
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const fetchAssignWorks = async () => {
     const response = await getAssignWorks(companyData._id);
-    // console.log(response)
+    // console.log(response);
     if (response.status === 200) {
       setAssignWorkData(response.data);
+    }
+  };
+
+  //=======================
+  const [reportData, setReportData] = React.useState([]);
+  const fetchProjectAtGlance = async () => {
+    const response = await getProjectAtGlance(companyData._id);
+    // console.log(response)
+    if (response.status === 200) {
+      setReportData(response.data);
     }
   };
 
@@ -74,6 +96,7 @@ const Home = ({navigation}) => {
     fetchSubmitWork();
     fetchVerifyAndRevertWork();
     fetchAssignWorks();
+    fetchProjectAtGlance();
   }, []);
 
   return (
@@ -81,7 +104,8 @@ const Home = ({navigation}) => {
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        }
+        showsVerticalScrollIndicator={false}>
         <View
           style={{
             flex: 1,
@@ -90,46 +114,41 @@ const Home = ({navigation}) => {
           <View
             style={{
               marginHorizontal: SIZES.padding,
-              marginTop: SIZES.radius,
+              marginVertical: SIZES.radius,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
             <View>
-              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
-                Welcome...
-              </Text>
-              <Text
-                style={{
-                  ...FONTS.h2,
-                  textTransform: 'capitalize',
-                  color: COLORS.lightblue_700,
-                  fontWeight: 'bold',
-                }}>
-                {companyData.company_name}
-              </Text>
-            </View>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-              <ImageBackground
-                style={{
-                  backgroundColor: COLORS.lightblue_900,
-                  padding: 2,
-                  borderRadius: 5,
-                }}>
-                <Image
-                  source={images.civil_eng}
+              <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+                <Text
                   style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 5,
-                  }}
-                />
-              </ImageBackground>
-            </TouchableOpacity> */}
+                    ...FONTS.h2,
+                    textTransform: 'capitalize',
+                    color: COLORS.lightblue_700,
+                    fontWeight: 'bold',
+                  }}>
+                  {companyData.company_name}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity>
+              <Image
+                source={images.consoft_PNG}
+                style={{
+                  height: 40,
+                  width: 80,
+                  borderRadius: 5,
+                }}
+              />
+            </TouchableOpacity>
           </View>
-          <ProjectsBanner company_id={companyData._id} />
+          <ProjectsBanner company={companyData._id} />
           <SubmittedWorks data={submitWork} Submitfunction={fetchSubmitWork} />
-          <ProjectReports />
+          <ProjectReports
+            data={reportData}
+            reportFunction={fetchProjectAtGlance}
+          />
           <AssignedWorks
             data={assignWorkData}
             AssignWorkfunction={fetchAssignWorks}

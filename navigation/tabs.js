@@ -6,11 +6,10 @@ import {COLORS, FONTS, SIZES, icons, images} from '../constants';
 import {
   Home,
   Account,
-  Profile,
+  Calender,
   ReportsDisplay,
-  Tasks,
+  Requirement,
 } from '../screens/admin_screens';
-import {useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,27 +17,32 @@ const TabBarCustomButton = ({children, onPress}) => {
   return (
     <TouchableOpacity
       style={{
-        top: -15,
+        top: -12,
         justifyContent: 'center',
         alignItems: 'center',
         ...styles.shadow,
       }}
       onPress={onPress}>
       <LinearGradient
-        colors={[COLORS.lightblue_500, COLORS.lightblue_900]}
+        colors={[COLORS.success_400, COLORS.success_800]}
         style={{
-          width: 60,
-          height: 60,
+          width: 45,
+          height: 45,
           borderRadius: 35,
         }}>
         {children}
       </LinearGradient>
+      <Text
+        style={{
+          color: COLORS.black,
+          ...FONTS.body5,
+        }}>
+        Report
+      </Text>
     </TouchableOpacity>
   );
 };
 const Tabs = () => {
-  const companyData = useSelector(state => state.company);
-
   return (
     <Tab.Navigator
       screenOptions={{
@@ -74,49 +78,49 @@ const Tabs = () => {
         name={'Dashboard'}
         component={Home}
         options={{
-          // headerShown:false,
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
                 source={icons.dashboard}
                 resizeMode="contain"
                 style={{
-                  height: 18,
-                  width: 18,
-                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
+                  height: focused ? 20 : 18,
+                  width: focused ? 20 : 18,
+                  tintColor: COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.yellow_700 : COLORS.black,
+                  color: COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Dashboard
+                Home
               </Text>
             </View>
           ),
         }}
       />
       <Tab.Screen
-        name="Tasks"
-        component={Tasks}
+        name="Requirement"
+        component={Requirement}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
                 source={icons.tasks}
                 style={{
-                  height: 18,
-                  width: 18,
-                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
+                  height: focused ? 20 : 18,
+                  width: focused ? 20 : 18,
+                  tintColor: COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.yellow_700 : COLORS.black,
+                  color: COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Tasks
+                Requirement
               </Text>
             </View>
           ),
@@ -131,8 +135,8 @@ const Tabs = () => {
               source={icons.report}
               resizeMode="contain"
               style={{
-                height: 25,
-                width: 25,
+                height: focused ? 22 : 20,
+                width: focused ? 22 : 20,
                 tintColor: COLORS.white,
               }}
             />
@@ -141,25 +145,25 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Calender"
+        component={Calender}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
-                source={icons.profile}
+                source={icons.date}
                 style={{
-                  height: 18,
-                  width: 18,
-                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
+                  height: focused ? 20 : 18,
+                  width: focused ? 20 : 18,
+                  tintColor: COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.yellow_700 : COLORS.black,
+                  color: COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Profile
+                Calender
               </Text>
             </View>
           ),
@@ -174,14 +178,14 @@ const Tabs = () => {
               <Image
                 source={icons.account}
                 style={{
-                  height: 18,
-                  width: 18,
-                  tintColor: focused ? COLORS.yellow_700 : COLORS.black,
+                  height: focused ? 20 : 18,
+                  width: focused ? 20 : 18,
+                  tintColor: COLORS.black,
                 }}
               />
               <Text
                 style={{
-                  color: focused ? COLORS.yellow_700 : COLORS.black,
+                  color: COLORS.black,
                   ...FONTS.body5,
                 }}>
                 Account

@@ -34,7 +34,18 @@ import {
 
 const Boq = ({route}) => {
   // get company id
-  const companyData = useSelector(state => state.company);
+  // const companyData = useSelector(state => state.company);
+  // const company_id = companyData._id;
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+
   const company_id = companyData._id;
   const {project_id} = route.params;
 
@@ -85,7 +96,7 @@ const Boq = ({route}) => {
   // post boq new list items
   const postBoqNewListItem = async () => {
     const formData = {
-      company_id: companyData._id,
+      company_id: company_id,
       item_name: boqItemName,
       unit_id: unitValue,
     };
@@ -139,7 +150,7 @@ const Boq = ({route}) => {
   // post boq items
   const postBoqItem = async () => {
     const formData = {
-      company_id: companyData._id,
+      company_id: company_id,
       project_id: project_id,
       item_id: itemsValue,
       unit_name: showUnitName,
@@ -164,6 +175,7 @@ const Boq = ({route}) => {
 
   const fetchBoqItems = async () => {
     let response = await getBOQItems(company_id, project_id);
+    // console.log(response);
     if (response.status === 200) {
       setBoqItems(response.data);
     }
@@ -187,7 +199,7 @@ const Boq = ({route}) => {
   // update boq items
   const updateBoq = async () => {
     const formData = {
-      company_id: companyData._id,
+      company_id: company_id,
       project_id: project_id,
       item_id: itemsValue,
       unit_name: showUnitName,
@@ -325,7 +337,7 @@ const Boq = ({route}) => {
               <FormInput
                 label="Quantity"
                 keyboardType="numeric"
-                value={itemQty}
+                value={itemQty.toString()}
                 onChange={value => {
                   setItemQty(value);
                 }}
@@ -399,7 +411,7 @@ const Boq = ({route}) => {
             textAlign: 'right',
             // fontWeight: 'bold',
           }}>
-          {item.qty}
+          {item.completed_qty}/{item.qty}
         </Text>
         <Text
           style={{
@@ -435,98 +447,91 @@ const Boq = ({route}) => {
     );
 
     return (
-      <View
-        style={{
-          marginHorizontal: SIZES.radius,
-          padding: 5,
-          // borderRadius: 3,
-          // backgroundColor: COLORS.white,
-          // ...styles.shadow,
-        }}>
-        <FlatList
-          data={boqItems}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          maxHeight={510}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
+      <FlatList
+        contentContainerStyle={{
+          marginHorizontal: SIZES.padding,
+          paddingBottom: 50,
+        }}
+        data={boqItems}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.lightGray1,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
+        ListHeaderComponent={
+          <View style={{marginBottom: 3}}>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <Text
                 style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.black,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-          ListHeaderComponent={
-            <View style={{marginBottom: 3}}>
-              <View
-                style={{
-                  flexDirection: 'row',
+                  ...FONTS.h3,
+                  flex: 0.5,
+                  color: COLORS.black,
+                  // fontWeight: 'bold',
                 }}>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 0.5,
-                    color: COLORS.black,
-                    // fontWeight: 'bold',
-                  }}>
-                  Sn.
-                </Text>
-                <Text
-                  style={{
-                    flex: 2,
-                    ...FONTS.h3,
-                    color: COLORS.black,
-                    // fontWeight: 'bold',
-                  }}>
-                  Name
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1.3,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                    // fontWeight: 'bold',
-                  }}>
-                  Quality
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                    // fontWeight: 'bold',
-                  }}>
-                  Unit
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1.2,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                    // fontWeight: 'bold',
-                  }}>
-                  Edit{'\n'}/Delete
-                </Text>
-              </View>
-              <View
+                Sn.
+              </Text>
+              <Text
                 style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.black,
-                  marginVertical: SIZES.base,
-                }}></View>
+                  flex: 2,
+                  ...FONTS.h3,
+                  color: COLORS.black,
+                  // fontWeight: 'bold',
+                }}>
+                Name
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 1.3,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                  // fontWeight: 'bold',
+                }}>
+                Quality
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 1,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                  // fontWeight: 'bold',
+                }}>
+                Unit
+              </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 1.2,
+                  color: COLORS.black,
+                  textAlign: 'right',
+                  // fontWeight: 'bold',
+                }}>
+                Edit{'\n'}/Delete
+              </Text>
             </View>
-          }
-        />
-      </View>
+            <View
+              style={{
+                width: '100%',
+                height: 1,
+                backgroundColor: COLORS.black,
+                marginVertical: SIZES.base,
+              }}></View>
+          </View>
+        }
+      />
     );
   }
 
@@ -546,7 +551,7 @@ const Boq = ({route}) => {
           }}>
           <View
             style={{
-              width: '92%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -653,7 +658,7 @@ const Boq = ({route}) => {
           }}>
           <View
             style={{
-              width: '90%',
+              width: '95%',
               padding: SIZES.padding,
               borderRadius: 5,
               backgroundColor: COLORS.white,
@@ -833,7 +838,7 @@ const Boq = ({route}) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.lightblue_50,
+        backgroundColor: COLORS.white,
       }}>
       <HeaderBar right={true} title="Bill of Quantities" />
       <TextButton

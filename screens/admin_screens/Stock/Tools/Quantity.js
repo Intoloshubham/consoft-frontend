@@ -10,6 +10,8 @@ import {
   ScrollView,
   Modal,
   Pressable,
+  Platform,
+  UIManager,
   Button,
 } from 'react-native';
 import {Title, DataTable, Card} from 'react-native-paper';
@@ -20,6 +22,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Dropdown} from 'react-native-element-dropdown';
 import config from '../../../../config';
 import {getCompanyId, getToken} from '../../../../services/asyncStorageService';
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 const Quantity = () => {
   // state
@@ -181,7 +189,7 @@ const Quantity = () => {
   };
 
   const addsubmit = () => {
-      console.log(inputs);
+      // console.log(inputs);
     }
 
 
@@ -217,7 +225,7 @@ const Quantity = () => {
           setvalue('');
           setquantityitem('');
           reportdataitem();
-          console.log('Success:', data);
+          // console.log('Success:', data);
         });
     } catch (error) {
       console.log('Error:', error);
@@ -433,7 +441,7 @@ const Quantity = () => {
                             keyboardType="numeric"
                             onChangeText={value => {
                               inputtotal(value, key);
-                              console.log(value)
+                              // console.log(value)
                           }}
                         />
                      

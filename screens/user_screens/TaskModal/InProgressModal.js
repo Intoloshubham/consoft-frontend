@@ -3,83 +3,96 @@ import {
   Text,
   Modal,
   TouchableOpacity,
-  Alert,
-  StyleSheet,
-  FlatList,
-  Image,
-  Animated,
   TextInput,
-  ScrollView,
-  Pressable, TouchableWithoutFeedback
+  ScrollView
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback, useMemo } from 'react';
 import {
   icons,
   COLORS,
   SIZES,
   FONTS,
   dummyData,
-  images,
 } from '../../../constants';
 import Entypo from 'react-native-vector-icons/Entypo';
 import styles from './css/InProgressModalStyle';
-import { IconButton } from '../../../Components'
+import { IconButton } from '../../../Components';
+import {get_works_in_progress} from '../UserReports/ReportApi.js';
+import {useSelector} from 'react-redux'
 
 Entypo.loadFont();
 
 function InProgressModal({ inProgressModal, setinProgressModal }) {
 
-  const [counterData, setCounterData] = React.useState(dummyData.barData);
-
-  const [inputs, setInputs] = useState(counterData);
-
+ 
+  const [getTaskInProgress,setGetTaskInProgress]=useState(); 
+  
+  
   const __handle_increase_counter = (item, index1) => {
-    const _inputs = [...inputs];
-    if (_inputs[index1].count < 100) {
-      _inputs[index1].count = _inputs[index1].count + 5;
+    const _inputs = [...getTaskInProgress];
+    if (_inputs[index1].work_percent < 100) {
+      _inputs[index1].work_percent = _inputs[index1].work_percent + 5;
       _inputs[index1].key = index1;
-      // console.log("🚀 ~ file: InProgressModal.js ~ line 39 ~ InProgressModal ~ _inputs", _inputs)
-      setInputs(_inputs);
+      setGetTaskInProgress(_inputs);
     }
   };
-
+  
   const __handle_decrease_counter = (item, index1) => {
-    const _inputs = [...inputs];
-    if (_inputs[index1].count > 0) {
-      _inputs[index1].count = _inputs[index1].count - 5;
+    const _inputs = [...getTaskInProgress];
+    if (_inputs[index1].work_percent > 0) {
+      _inputs[index1].work_percent =  _inputs[index1].work_percent - 5;
       _inputs[index1].key = index1;
-      // console.log("🚀 ~ file: InProgressModal.js ~ line 39 ~ InProgressModal ~ _inputs", _inputs)
-      setInputs(_inputs);
+      setGetTaskInProgress(_inputs);
     }
   };
-
-
-
-
+  
+  
+  const userData = useSelector(state => state.user);
+  
+  const fetchAssignWorksForSubmission = async () => {
+    
+    const data = await get_works_in_progress(userData._id); 
+    
+    if (data) { 
+      data.map(ele => {
+        setGetTaskInProgress(ele.assign_works); 
+      });
+    }     
+    
+  }
+  
+  useEffect(() => { 
+    fetchAssignWorksForSubmission();
+  }, []);  
+  
+  
+ 
 
   function CountingComponent() {
     return (
       <View style={{ margin: 10 }}>
         {
-          inputs.map((item, index) => {
+          getTaskInProgress? getTaskInProgress.map((item, index) => {
             return (
               <View key={index}
                 style={{
                   marginTop: 15,
-                  backgroundColor: COLORS.lightblue_200,
+                  backgroundColor: COLORS.lightblue_200, 
                   height: 150,
                   borderRadius: 5,
                   elevation: 10
 
                 }}>
-                <View style={{ backgroundColor: COLORS.lightblue_300, width: `${item.count}%`, borderBottomWidth: 10, borderColor:COLORS.green }}>
+                <View style={{ backgroundColor: COLORS.lightblue_300, 
+                width: `${item.work_percent}%`,
+                 borderBottomWidth: 10, borderColor: COLORS.green }}>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
-                  <Text style={{ color: 'black' }}>{item.code}</Text>
-                  <Text style={{ color: 'black' }}>{item.date}</Text>
+                  <Text style={{ color: 'black' }}>{item.work_code}</Text>
+                  <Text style={{ color: 'black' }}>{item.exp_completion_date}</Text>
                 </View>
                 <View style={{ backgroundColor: COLORS.lightblue_500, height: 80, marginHorizontal: 10, marginTop: 5, padding: 10, borderRadius: 5 }}>
-                  <Text style={{ color: 'black' }}>filling</Text>
+                  <Text style={{ color: 'black' }}>{item.work}</Text>
                 </View>
                 <View style={{ marginTop: 5, marginHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'row' }}>
@@ -97,8 +110,8 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                         style={styles.inputfromone}
                         editable={false}
                         // value={item.count[index1]}
-                        value={String(`${item.count}%`)}
-                        // onChangeText={(text)=>__handle_increase_counter(text,index1)}
+                        value={String(`${item.work_percent}%`)}
+                        onChangeText={(text)=>__handle_increase_counter(text,index1)}
                         placeholderTextColor={COLORS.lightGray1}
                         keyboardType="numeric"
                         placeholder={'counter'}
@@ -121,7 +134,7 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
                 </View>
               </View>
             )
-          })
+          }):null
         }
       </View>
     )
@@ -154,8 +167,8 @@ function InProgressModal({ inProgressModal, setinProgressModal }) {
             borderTopLeftRadius: SIZES.base,
             backgroundColor: COLORS.white,
           }}>
-          <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center' ,marginBottom:15}}>
-          <Text style={{color:'black',...FONTS.h2}}>Active Tasks Statistics</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
+            <Text style={{ color: 'black', ...FONTS.h2 }}>Active Tasks Statistics</Text>
             <IconButton
               containerStyle={{
                 boborderWidth: 2,

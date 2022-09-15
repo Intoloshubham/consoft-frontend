@@ -5,10 +5,10 @@ const myProfile = {
 };
 
 const reports = [
-  { id: 1, name: 'Quality' },
-  { id: 2, name: 'Quantity' },
-  { id: 3, name: 'Stock keeper' },
-  { id: 4, name: 'Other' },
+  {id: 1, name: 'Quality'},
+  {id: 2, name: 'Quantity'},
+  {id: 3, name: 'Stock keeper'},
+  {id: 4, name: 'Other'},
 ];
 
 const categories = [
@@ -61,37 +61,37 @@ const barData = [
     work: '',
     date: '10/05/2021',
     code: '1050',
-    count: 0
+    count: 0,
   },
   {
     work: '',
     date: '11/05/2021',
     code: '1051',
-    count: 0
+    count: 0,
   },
   {
     work: '',
     date: '12/05/2021',
     code: '1052',
-    count: 0 
+    count: 0,
   },
   {
     work: '',
     date: '13/05/2021',
     code: '1053',
-    count: 0 
+    count: 0,
   },
   {
     work: '',
     date: '14/05/2021',
     code: '1055',
-    count: 0
+    count: 0,
   },
   {
     work: '',
     date: '14/05/2021',
     code: '1056',
-    count: 0
+    count: 0,
   },
 ];
 
@@ -148,7 +148,6 @@ const Cost = {
   price: 15.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/hamburger.png'),
 };
 
 const Timeline = {
@@ -159,7 +158,6 @@ const Timeline = {
   price: 10.99,
   calories: 78,
   isFavourite: false,
-  image: require('../assets/dummyData/hot_tacos.png'),
 };
 
 const Stock = {
@@ -170,7 +168,6 @@ const Stock = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/veg_biryani.png'),
 };
 
 const Manpower = {
@@ -181,7 +178,6 @@ const Manpower = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/wrap_sandwich.png'),
 };
 
 const Quality = {
@@ -192,7 +188,6 @@ const Quality = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/wrap_sandwich.png'),
 };
 
 const Safety = {
@@ -203,7 +198,6 @@ const Safety = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/wrap_sandwich.png'),
 };
 
 const Technical = {
@@ -214,7 +208,6 @@ const Technical = {
   price: 10.99,
   calories: 78,
   isFavourite: true,
-  image: require('../assets/dummyData/wrap_sandwich.png'),
 };
 
 const menu = [

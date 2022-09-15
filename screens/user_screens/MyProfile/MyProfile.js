@@ -106,7 +106,7 @@ const MyProfile = () => {
         .then(response => response.json())
         .then(data => {
           showleavesdata();
-          console.log('Success:', data);
+          // console.log('Success:', data);
         });
     } catch (error) {
       console.error('Error:', error);

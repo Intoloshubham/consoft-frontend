@@ -5,29 +5,20 @@ import {
   TouchableOpacity,
   Image,
   KeyboardAvoidingView,
-  ScrollView,
   Platform,
   StyleSheet,
   Switch,
   Linking,
-  TextInput,
   TouchableWithoutFeedback,
-  Button,
   Keyboard,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
 import utils from '../../utils';
-import {FormInput, TextButton, CustomToast} from '../../Components';
-import {FONTS, COLORS, SIZES, icons, images} from '../../constants';
+import {FormInput, TextButton} from '../../Components';
+import {FONTS, COLORS, SIZES, icons, images, constants} from '../../constants';
 import {userLogin} from '../../services/userAuthApi';
 import {companyLogin} from '../../services/companyAuthApi';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  getCompanyId,
-  getUserId,
-  getToken,
-} from '../../services/asyncStorageService';
+import {useDispatch} from 'react-redux';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
@@ -39,7 +30,7 @@ const Login = ({navigation}) => {
   const [companyMobileNoError, setCompanyMobileNoError] = React.useState('');
   const [showPass, setShowPass] = React.useState(false);
 
-  // CUSTOM TOAST OF CRUD OPERATIONS 
+  // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [switchValue, setSwitchValue] = React.useState(false);
   const toggleSwitch = value => {
@@ -53,21 +44,20 @@ const Login = ({navigation}) => {
     }
   };
 
-  const [userId, setUserId] = React.useState('');
-  const [companyId, setCompanyId] = React.useState('');
-  const [token, setToken] = React.useState('');
-
   const userOnSubmit = async () => {
     const UserData = {
       mobile: userMobileNo,
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
+    // console.log("🚀 ~ file: Login.js ~ line 53 ~ userOnSubmit ~ res", res)
     if (res.payload.status === 200) {
       setSubmitToast(true);
-      navigation.navigate('UserDashboard');
-      // setUserMobileNo('');
-      // setUserPassword('');
+      if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
+        navigation.navigate('UserDashboard');
+      } else {
+        navigation.navigate('Home');
+      }
     } else {
       alert(res.payload.message);
     }
@@ -85,8 +75,6 @@ const Login = ({navigation}) => {
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('Home');
-      // setCompanyMobileNo('');
-      // setCompanyPassword('');
     } else {
       alert(res.payload.message);
     }
@@ -226,7 +214,7 @@ const Login = ({navigation}) => {
         <View
           style={{
             marginTop: 30,
-            marginHorizontal: SIZES.padding * 4,
+            marginHorizontal: SIZES.padding * 3.8,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -235,7 +223,7 @@ const Login = ({navigation}) => {
             style={{
               backgroundColor: COLORS.white,
               padding: 6,
-              borderRadius: 5,
+              borderRadius: 3,
             }}
             onPress={() => {
               Linking.openURL(
@@ -246,8 +234,8 @@ const Login = ({navigation}) => {
               source={icons.mail}
               resizeMode="contain"
               style={{
-                height: 12,
-                width: 12,
+                height: 15,
+                width: 15,
                 tintColor: COLORS.black,
               }}
             />
@@ -256,15 +244,15 @@ const Login = ({navigation}) => {
             style={{
               backgroundColor: COLORS.white,
               padding: 6,
-              borderRadius: 5,
+              borderRadius: 3,
             }}
             onPress={makeCall}>
             <Image
               source={icons.call}
               resizeMode="contain"
               style={{
-                height: 12,
-                width: 12,
+                height: 15,
+                width: 15,
                 tintColor: COLORS.black,
               }}
             />
@@ -273,17 +261,17 @@ const Login = ({navigation}) => {
             style={{
               backgroundColor: COLORS.white,
               padding: 6,
-              borderRadius: 5,
+              borderRadius: 3,
             }}
             onPress={() => {
-              Linking.openURL('https://wa.me/8109093551');
+              Linking.openURL('https://wa.me/+91-8109093551');
             }}>
             <Image
               source={icons.whatsapp}
               resizeMode="contain"
               style={{
-                height: 12,
-                width: 12,
+                height: 15,
+                width: 15,
               }}
             />
           </TouchableOpacity>
@@ -291,15 +279,15 @@ const Login = ({navigation}) => {
             style={{
               backgroundColor: COLORS.white,
               padding: 6,
-              borderRadius: 5,
+              borderRadius: 3,
             }}
             onPress={() => Linking.openURL('http://www.intoloindia.com/')}>
             <Image
               source={icons.website}
               resizeMode="contain"
               style={{
-                height: 12,
-                width: 12,
+                height: 15,
+                width: 15,
                 tintColor: COLORS.black,
               }}
             />
@@ -317,7 +305,7 @@ const Login = ({navigation}) => {
           marginHorizontal: SIZES.radius,
           ...styles.formContainer,
         }}>
-        <Text style={{textAlign: 'center', color: 'black', fontSize: 15}}>
+        <Text style={{textAlign: 'center', color: 'black', ...FONTS.h3}}>
           Registered Company Login
         </Text>
         <View>
@@ -392,8 +380,8 @@ const Login = ({navigation}) => {
         </View>
         <View
           style={{
-            flexDirection: 'row',
             marginTop: SIZES.padding,
+            flexDirection: 'row',
             justifyContent: 'center',
             paddingBottom: 5,
           }}>
@@ -401,7 +389,7 @@ const Login = ({navigation}) => {
             <Text
               style={{
                 color: COLORS.black,
-                ...FONTS.body4,
+                ...FONTS.h3,
                 fontWeight: 'bold',
               }}>
               Demo{' '}
@@ -410,20 +398,20 @@ const Login = ({navigation}) => {
           <Text
             style={{
               color: COLORS.black,
-              ...FONTS.body4,
+              ...FONTS.h3,
               fontWeight: 'bold',
             }}>
             &
           </Text>
           <TextButton
-            label="Free 7-days trial"
+            label="Free 7 - Days trial"
             buttonContainerStyle={{
               marginLeft: 4,
               backgroundColor: null,
             }}
             labelStyle={{
-              color: COLORS.rose_600,
-              ...FONTS.h4,
+              color: COLORS.red,
+              ...FONTS.h3,
               fontWeight: 'bold',
             }}
             onPress={() => navigation.navigate('CompanyRegistration')}
@@ -452,7 +440,7 @@ const Login = ({navigation}) => {
         </View>
         <View
           style={{
-            marginHorizontal: SIZES.padding * 4,
+            marginHorizontal: SIZES.padding * 3.8,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -461,19 +449,19 @@ const Login = ({navigation}) => {
             style={{
               backgroundColor: COLORS.white,
               padding: 6,
-              borderRadius: 5,
+              borderRadius: 3,
             }}
             onPress={() => {
               Linking.openURL(
-                'mailto:ssdoffice44@gmail.com?subject=Subject&body=description',
+                'mailto:ssdoffice44@gmail.com?subject=Subject&body=',
               );
             }}>
             <Image
               source={icons.mail}
               resizeMode="contain"
               style={{
-                height: 12,
-                width: 12,
+                height: 15,
+                width: 15,
                 tintColor: COLORS.black,
               }}
             />
@@ -489,8 +477,8 @@ const Login = ({navigation}) => {
               source={icons.call}
               resizeMode="contain"
               style={{
-                height: 12,
-                width: 12,
+                height: 15,
+                width: 15,
                 tintColor: COLORS.black,
               }}
             />
@@ -502,14 +490,14 @@ const Login = ({navigation}) => {
               borderRadius: 5,
             }}
             onPress={() => {
-              Linking.openURL('https://wa.me/8109093551');
+              Linking.openURL('https://wa.me/+91-8109093551');
             }}>
             <Image
               source={icons.whatsapp}
               resizeMode="contain"
               style={{
-                height: 12,
-                width: 12,
+                height: 15,
+                width: 15,
               }}
             />
           </TouchableOpacity>
@@ -524,8 +512,8 @@ const Login = ({navigation}) => {
               source={icons.website}
               resizeMode="contain"
               style={{
-                height: 12,
-                width: 12,
+                height: 15,
+                width: 15,
                 tintColor: COLORS.black,
               }}
             />

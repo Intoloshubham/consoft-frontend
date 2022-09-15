@@ -10,45 +10,63 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Switch,
 } from 'react-native';
-import {SIZES, COLORS, icons, FONTS} from '../../../constants';
+import utils from '../../../utils';
+import {useSelector} from 'react-redux';
+import {postCompanyTeam} from '../../../controller/CompanyController';
+import {
+  getPrivileges,
+  getUserRole,
+  getUsers,
+} from '../../../controller/UserRoleController';
+import {getProjects} from '../../../controller/ProjectController';
 import {
   FormInput,
   TextButton,
   CustomDropdown,
   CustomToast,
+  HeaderBar,
 } from '../../../Components';
-import {HeaderBar} from '../../../Components';
-import utils from '../../../utils';
-import {useSelector} from 'react-redux';
-import {postCompanyTeam} from '../../../controller/CompanyController';
-import {getUserRole, getUsers} from '../../../controller/UserRoleController';
-import {getProjects} from '../../../controller/ProjectController';
+import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 
-const CompanyTeam = () => {
+const CompanyTeamShow = () => {
+  const companyDetail = useSelector(state => state.company);
+  const userData = useSelector(state => state.user);
+
+  var companyData;
+  if (companyDetail._id) {
+    companyData = companyDetail;
+  } else {
+    companyData = userData;
+  }
+  const company_id = companyData._id;
+
   const [addTeamModal, setAddTeamModal] = React.useState(false);
-
-  const company_data = useSelector(state => state.company);
-  const company_id = company_data._id;
-
-  // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
-
   const [companyTeam, setCompanyTeam] = React.useState([]);
-  // form states & dropdown role data fetch from api
+
+  // FORM STATES & DROPDOWN ROLE DATA FETCH FROM API
   const [openRole, setOpenRole] = React.useState(false);
   const [roleValue, setRoleValue] = React.useState([]);
   const [role, setRole] = React.useState([]);
-  //projects
+
+  //PROJECTS
   const [openProject, setOpenProject] = React.useState(false);
-  const [projectValue, setProjectValue] = React.useState([]);
+  const [projectValue, setProjectValue] = React.useState('');
   const [project, setProject] = React.useState([]);
-  //
+
+  // PRIVILEGES
+  const [openPrivilege, setOpenPrivilege] = React.useState(false);
+  const [privilegeValue, setPrivilegeValue] = React.useState([]);
+  const [privilege, setPrivilege] = React.useState([]);
+
+  // FORM STATES
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [mobile, setMobile] = React.useState('');
 
-  //error states
+  //ERROR STATES
   const [nameError, setNameError] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
   const [mobileError, setMobileError] = React.useState('');
@@ -64,21 +82,45 @@ const CompanyTeam = () => {
     );
   }
   // ================================================
+
   // CLOSE DROPDOWN ON OPEN ANOTHER DROPDOWN
   const onRoleOpen = React.useCallback(() => {
+    userRole();
     setOpenProject(false);
+    setOpenPrivilege(false);
   }, []);
 
   const onProjectOpen = React.useCallback(() => {
+    projects();
+    setOpenRole(false);
+    setOpenPrivilege(false);
+  }, []);
+
+  const onPrivilegesOpen = React.useCallback(() => {
+    fetchPrivilege();
+    setOpenProject(false);
     setOpenRole(false);
   }, []);
 
-  // ================================ Apis ====================================
+  // SWITCH FOR ASSIGN USER IN PROJECTS
+  const [isEnabled, setIsEnabled] = React.useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
+  // ================================ Apis ====================================
   const getCompanyTeam = async () => {
     let response = await getUsers(company_id);
     if (response.status === 200) {
       setCompanyTeam(response.data);
+    }
+  };
+
+  const fetchPrivilege = async () => {
+    let response = await getPrivileges();
+    if (response.status === 200) {
+      let privilesFromApi = response.data.map(one => {
+        return {label: one.privilege, value: one._id};
+      });
+      setPrivilege(privilesFromApi);
     }
   };
 
@@ -102,20 +144,29 @@ const CompanyTeam = () => {
     }
   };
 
+  // POST TEAM DATA
   const postTeam = async () => {
     const formData = {
       role_id: roleValue,
       name: name,
       email: email,
       mobile: mobile,
-      company_id: company_data._id,
-      // project_id: projectValue,
+      company_id: company_id,
+      assign_project: isEnabled,
+      project_id: projectValue,
+      user_privilege: privilegeValue,
     };
+
     let response = await postCompanyTeam(formData);
     if (response.status === 200) {
       setAddTeamModal(false);
       setSubmitToast(true);
       getCompanyTeam();
+      setRoleValue('');
+      setPrivilegeValue('');
+      setName('');
+      setEmail('');
+      setMobile('');
     } else {
       alert(response.message);
     }
@@ -124,17 +175,11 @@ const CompanyTeam = () => {
     }, 2000);
   };
 
-  const openModal = () => {
-    setAddTeamModal(true);
-    userRole();
-    projects();
-  };
-
   React.useEffect(() => {
     getCompanyTeam();
   }, []);
 
-  // ====================================================================
+  //====================================================================
 
   function renderAddTeamModal() {
     return (
@@ -153,7 +198,7 @@ const CompanyTeam = () => {
               backgroundColor: COLORS.white,
               padding: SIZES.padding,
               borderRadius: 5,
-              width: '90%',
+              width: '95%',
             }}>
             <View
               style={{
@@ -180,25 +225,52 @@ const CompanyTeam = () => {
               </ImageBackground>
             </View>
             <View>
-              <CustomDropdown
-                placeholder="Select role"
-                open={openRole}
-                value={roleValue}
-                items={role}
-                setOpen={setOpenRole}
-                setValue={setRoleValue}
-                setItems={setRole}
-                listParentLabelStyle={{
-                  color: COLORS.white,
-                }}
-                zIndex={4000}
-                maxHeight={150}
-                onOpen={onRoleOpen}
-              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <View style={{width: '50%'}}>
+                  <CustomDropdown
+                    placeholder="Select role"
+                    open={openRole}
+                    value={roleValue}
+                    items={role}
+                    setOpen={setOpenRole}
+                    setValue={setRoleValue}
+                    setItems={setRole}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    zIndex={3000}
+                    maxHeight={150}
+                    onOpen={onRoleOpen}
+                  />
+                </View>
+                <View style={{width: '45%'}}>
+                  <CustomDropdown
+                    placeholder="Select"
+                    open={openPrivilege}
+                    value={privilegeValue}
+                    items={privilege}
+                    setOpen={setOpenPrivilege}
+                    setValue={setPrivilegeValue}
+                    setItems={setPrivilege}
+                    listParentLabelStyle={{
+                      color: COLORS.white,
+                    }}
+                    zIndex={2000}
+                    maxHeight={150}
+                    onOpen={onPrivilegesOpen}
+                  />
+                </View>
+              </View>
               <FormInput
                 label="Name"
                 keyboardType="default"
                 autoCompleteType="username"
+                value={name}
                 onChange={value => {
                   utils.validateText(value, setNameError);
                   setName(value);
@@ -230,6 +302,7 @@ const CompanyTeam = () => {
                 label="Email"
                 keyboardType="email-address"
                 autoCompleteType="email"
+                value={email}
                 onChange={value => {
                   utils.validateEmail(value, setEmailError);
                   setEmail(value);
@@ -260,6 +333,7 @@ const CompanyTeam = () => {
               <FormInput
                 label="Mobile No."
                 keyboardType="numeric"
+                value={mobile}
                 onChange={value => {
                   utils.validateNumber(value, setMobileError);
                   setMobile(value);
@@ -287,32 +361,58 @@ const CompanyTeam = () => {
                   </View>
                 }
               />
-              {/* <CustomDropdown
-                placeholder="Assign to projects"
-                open={openProject}
-                value={projectValue}
-                items={project}
-                setOpen={setOpenProject}
-                setValue={setProjectValue}
-                setItems={setProject}
-                listParentLabelStyle={{
-                  color: COLORS.white,
-                }}
-                zIndex={3000}
-                maxHeight={150}
-                onOpen={onProjectOpen}
-              /> */}
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <View style={{alignItems: 'flex-start'}}>
+                  <Text style={{color: COLORS.darkGray, ...FONTS.body4}}>
+                    {/* Assign to */}
+                  </Text>
+                  <Switch
+                    trackColor={{
+                      false: COLORS.darkGray,
+                      true: COLORS.darkGray,
+                    }}
+                    thumbColor={isEnabled ? COLORS.red_300 : COLORS.lightGray1}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                  />
+                </View>
+
+                {isEnabled == true && (
+                  <View style={{width: '80%'}}>
+                    <CustomDropdown
+                      placeholder="Assign on project"
+                      open={openProject}
+                      value={projectValue}
+                      items={project}
+                      setOpen={setOpenProject}
+                      setValue={setProjectValue}
+                      setItems={setProject}
+                      listParentLabelStyle={{
+                        color: COLORS.white,
+                      }}
+                      zIndex={1000}
+                      maxHeight={150}
+                      onOpen={onProjectOpen}
+                    />
+                  </View>
+                )}
+              </View>
+
               <TextButton
                 label="Save"
-                disabled={isEnableSubmit() ? false : true}
                 buttonContainerStyle={{
                   height: 45,
                   alignItems: 'center',
                   marginTop: SIZES.padding,
                   borderRadius: SIZES.base,
-                  backgroundColor: isEnableSubmit()
-                    ? COLORS.lightblue_700
-                    : COLORS.transparentPrimary,
+                  backgroundColor: COLORS.lightblue_700,
                 }}
                 onPress={postTeam}
               />
@@ -326,26 +426,83 @@ const CompanyTeam = () => {
   function renderCompanyTeam() {
     const renderItem = ({item, index}) => (
       <View>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{...FONTS.h4}}>{index + 1}.</Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              left: 5,
-              color: COLORS.black,
-              textTransform: 'capitalize',
-            }}>
-            {item.name}
-          </Text>
-          <Text style={{left: 5}}>{'  -  '}</Text>
-          <Text
-            style={{
-              ...FONTS.h5,
-              left: 5,
-              color: COLORS.darkGray,
-            }}>
-            ({item.user_role})
-          </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{...FONTS.h4}}>{index + 1}.</Text>
+            <Text
+              style={{
+                ...FONTS.h3,
+                left: 5,
+                color: COLORS.black,
+                textTransform: 'capitalize',
+              }}>
+              {item.name}
+            </Text>
+            <Text style={{left: 5}}>{'  -  '}</Text>
+            <Text
+              style={{
+                ...FONTS.h5,
+                left: 5,
+                color: COLORS.darkGray,
+              }}>
+              ({item.user_role})
+            </Text>
+          </View>
+          {/* <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              onPress={() => {
+                onEdit(
+                  item._id,
+                  item.role_id,
+                  item.user_privilege,
+                  item.name,
+                  item.email,
+                  item.mobile,
+                );
+              }}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.green,
+                  padding: 3,
+                  borderRadius: 2,
+                  right: 12,
+                }}>
+                <Image
+                  source={icons.edit}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                alert('Delete');
+              }}>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.rose_600,
+                  padding: 3,
+                  borderRadius: 2,
+                }}>
+                <Image
+                  source={icons.delete_icon}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </ImageBackground>
+            </TouchableOpacity>
+          </View> */}
         </View>
         <Text style={{...FONTS.h4, left: 15, color: COLORS.darkGray}}>
           Mobile No. {item.mobile}
@@ -357,34 +514,27 @@ const CompanyTeam = () => {
     );
 
     return (
-      <View
-        style={{
-          marginTop: SIZES.radius,
+      <FlatList
+        contentContainerStyle={{
           marginHorizontal: SIZES.padding,
-          backgroundColor: COLORS.lightblue_50,
-          padding: 20,
-          ...styles.shadow,
-        }}>
-        <FlatList
-          data={companyTeam}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          maxHeight={450}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: '100%',
-                  height: 1,
-                  backgroundColor: COLORS.gray2,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-        />
-      </View>
+          paddingBottom: 50,
+        }}
+        data={companyTeam}
+        keyExtractor={item => `${item._id}`}
+        renderItem={renderItem}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: COLORS.gray2,
+                marginVertical: 12,
+              }}></View>
+          );
+        }}
+      />
     );
   }
 
@@ -400,13 +550,13 @@ const CompanyTeam = () => {
         buttonContainerStyle={{
           height: 45,
           alignItems: 'center',
-          marginHorizontal: SIZES.padding,
+          marginHorizontal: SIZES.radius,
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightblue_700,
           ...styles.shadow,
         }}
-        onPress={openModal}
+        onPress={() => setAddTeamModal(true)}
       />
       {renderAddTeamModal()}
       {renderCompanyTeam()}
@@ -433,4 +583,5 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 });
-export default CompanyTeam;
+
+export default CompanyTeamShow;

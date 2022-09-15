@@ -4,11 +4,11 @@ import {
   Text, FlatList,
   StyleSheet, Image,
   ScrollView, Modal,
-  Pressable, TextInput,
+  Pressable, TextInput, RefreshControl,
   TouchableOpacity, LogBox
 } from 'react-native'
 import { COLORS, FONTS, SIZES, dummyData, icons, images } from '../../../constants'
-import { FormInput, Drop, IconButton, CustomDropdown, TextButton } from '../../../Components';
+import { FormInput, Drop, IconButton, CustomDropdown, TextButton, CustomToast } from '../../../Components';
 import { Divider } from '@ui-kitten/components';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -19,6 +19,8 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Get_Project_Team_Data } from '../UserReports/ReportApi.js'
 import { getToken, getUserId } from '../../../services/asyncStorageService';
 import Config from '../../../config'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 const UserReports = ({ route }) => {
 
@@ -27,7 +29,7 @@ const UserReports = ({ route }) => {
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
-
+  const current_dat = moment().format("YYYY%2FMM%2FDD")
 
   const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, Project_list_drop } = styles
 
@@ -40,11 +42,30 @@ const UserReports = ({ route }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
 
+
+  // CUSTOM TOAST OF CRUD OPERATIONS
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+
   //for saving projects
   const [selectedIdProjects, setSelectedIdProjects] = useState([])
   const [userid, setUserid] = useState(null)
   const userData = useSelector(state => state.user);
 
+  // refresh
+  function delay(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+  const [loading, setLoading] = React.useState(false);
+
+  const loadMore = React.useCallback(async () => {
+    setLoading(true);
+
+    delay(2000).then(() => setLoading(false));
+  }, [loading]);
   // const Get_UserId_Data = async () => {
   //   const userid = await getUserId();
   //   const new_userid = userid;
@@ -60,20 +81,20 @@ const UserReports = ({ route }) => {
   // }, [getUserId])
 
   useMemo(() => {
-    console.log("userbyproject...........")
-    console.log(userData._id)
+    // console.log("userbyproject...........")
+    // console.log(userData._id)
     if (userData._id) {
       const sendUserId = async () => {
         let data = await fetch(`${process.env.API_URL}user-by-projects/${userData._id}`)
         //  console.log("🚀 ~ file: UserReports.js ~ line 70 ~ sendUserId ~ data", data)
         let resp = await data.json();
-        console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
+        // console.log("🚀 ~ file: UserReports.js ~ line 71 ~ sendUserId ~ resp", resp)
         setSelectedIdProjects(resp);
 
       }
       sendUserId();
     }
-  }, [])
+  }, [loading])
   // console.log("selectedIdProjects..........584")
   // console.log(selectedIdProjects)
 
@@ -104,7 +125,7 @@ const UserReports = ({ route }) => {
       setProList(ProData)
 
     }
-  }, [selectedIdProjects])
+  }, [selectedIdProjects, loading])
 
   // console.log("ProList..........121")
   // console.log(ProList) 
@@ -115,29 +136,61 @@ const UserReports = ({ route }) => {
       const data = Get_Project_Team_Data(value)
       data.then(res => res.json())
         .then(result => {
-          console.log("result")
-          console.log(result)
+          // console.log("result")
+          // console.log(result)
           setProjectTeamList(result.data)
         })
     } else {
       return
     }
-  }, [value])
+  }, [value, loading])
   // console.log(projectTeamList)
 
+  const finalSubmitReport = async () => {
+    try {
+      const res = await fetch(`${process.env.API_URL}final-submit-report/${userData.company_id}/${value}/${userData._id}/${current_dat}/`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify(inputs),
+      })
+      const data = await res.json();
+      // console.log("🚀 ~ file: UserReports.js ~ line 154 ~ finalSubmitReport ~ data", data)
+      if (data.status === 200) {
+        setSubmitToast(true);
+      }
 
+      setTimeout(() => {
+        setSubmitToast(false);
+      }, 2000);
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   return (
     <View
       source={images.Graph_paper}
-      style={{ flex: 1, margin: SIZES.base, position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}
+      style={{
+        flex: 1,
+        margin: SIZES.base,
+        position: "absolute",
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0
+      }}
     >
       <Dropdown
-        style={[ 
+        style={[
           Project_list_drop,
           proListIsFocus && {
-            borderColor: COLORS.lightblue_600,
+            borderColor: COLORS.lightblue_400,
+
           },
         ]}
         placeholderStyle={{ ...FONTS.h3, color: COLORS.black, textTransform: 'capitalize' }
@@ -173,7 +226,22 @@ const UserReports = ({ route }) => {
         }}
 
       />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ height: SIZES.height }} nestedScrollEnabled={false} scrollEnabled={true} horizontal={false}>
+      <KeyboardAwareScrollView
+        refreshControl={
+          <RefreshControl
+            progressBackgroundColor="white"
+            tintColor="red"
+            refreshing={loading}
+            onRefresh={loadMore}
+          />
+        }
+        enableOnAndroid={true}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ height: SIZES.height }}
+        nestedScrollEnabled={true}
+        keyboardShouldPersistTaps='handled'
+        scrollEnabled={true}
+        horizontal={false}>
         <View
           style={{
             flex: 1,
@@ -184,28 +252,91 @@ const UserReports = ({ route }) => {
           }}>
           <ReportDateTimeHeader />
           <Divider style={{ backgroundColor: COLORS.lightGray1, width: SIZES.width * 0.90, marginHorizontal: 2, top: 5 }} />
-          {value ? <View >
-            <View style={{ marginVertical: 5 }}>
-              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value}  />
+          {value ? <View>
+            <View style={{
+              marginVertical: 5
+            }}>
+              <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }}>
               {/* Stock component */}
-              <Stock project_id={value} Main_drp_pro_value={value} />
+              <Stock project_id={value} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>
               {/* Quantity */}
-              <Quantity project_id={value} Main_drp_pro_value={value} />
+              <Quantity project_id={value} Main_drp_pro_value={value} loading={loading} />
             </View>
             {/* <View style={{ marginVertical: 5 }}>
               <Quality />
             </View> */}
             <View style={{ marginVertical: 5 }}>
               {/* Quality */}
-              <TAndP />
+              <TAndP Main_drp_pro_value={value} loading={loading} />
             </View>
-          </View> : null}
+          <View style={{
+            top: SIZES.height * 0.2,
+            // position: 'relative',
+
+          }}>
+            <TouchableOpacity
+              style={{
+                marginTop: SIZES.body1 * 4,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                backgroundColor: COLORS.lightblue_800,
+                width: "45%",
+                padding: 10,
+                alignSelf: "center",
+                // top: 0,
+                // left: 0,
+                // right: 0,
+                // bottom:0,
+                // position:'absolute',
+                borderRadius: 5,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 4,
+                },
+                shadowOpacity: 0.3,
+                shadowRadius: 4.65,
+                elevation: 8,
+              }}
+              onPress={() => {
+                // handleDoneTask()
+                finalSubmitReport()
+                // navigation.navigate('ViewReport');
+
+              }}>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+
+              }}>
+                <Image source={icons.report} style={{
+                  height: 24,
+                  tintColor: 'white',
+                  width: 24
+                }} />
+                <Text style={{ ...FONTS.h4, color: COLORS.white3, textTransform: 'uppercase', left: 10 }}>
+                  Final Submit
+                </Text>
+              </View>
+
+            </TouchableOpacity>
+          </View>
+          </View>
+
+            : null}
         </View>
-      </ScrollView>
+        <CustomToast
+          isVisible={submitToast}
+          onClose={() => setSubmitToast(false)}
+          color={COLORS.green}
+          title="Final Report Submission"
+          message=" Report submitted Successfully..."
+        />
+      </KeyboardAwareScrollView>
     </View>
   )
 }

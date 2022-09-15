@@ -30,11 +30,12 @@ export default styles = StyleSheet.create({
     },
     body_edit_btn: {
         // backgroundColor: "gray",
-        paddingHorizontal: 2
+        paddingHorizontal: 4
     },
     body_ed_de_view: {
         flexDirection: "row",
         justifyContent: "space-around",
+        // justifyContent: "space-between",
         // right: -52,
         // backgroundColor: "red",
     },
