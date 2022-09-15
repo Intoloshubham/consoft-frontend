@@ -383,7 +383,7 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
                         borderBottomColor: COLORS.gray2,
                       }}></View>
                   ) : null}
-                  {ele.comment_status == true ? (
+                  {ele.comment_status == true && ele.comment_reply_status == false ? (
                     <View
                       style={{
                         flexDirection: 'row',
