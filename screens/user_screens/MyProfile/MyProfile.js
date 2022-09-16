@@ -57,10 +57,11 @@ const MyProfile = () => {
 
 
   useEffect(() => {
-    fetch(`${config.API_URL}user/` + user_id, {
+    fetch(`${process.env.API_URL}user/${userData._id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        // authorization: `Bearer ${userData.token}`,
       },
     })
       .then(response => response.json())
@@ -79,8 +80,6 @@ const MyProfile = () => {
   const dateClickHandler = (date, i) => {
     //  const newDate= removedate?[...leavesdate, date]:leavesdate.pop(date);
     const selectDate = [...leavesdate, date];
-    const newselectdate = [...new Set(leavesdate), date];
-    // console.log(selectDate)
     // setLeavesDate(date=> [...leavesdate,  ${date.length}`]);
     // if(leavesdate){
     // const obj = [...new Map(
@@ -89,6 +88,7 @@ const MyProfile = () => {
     // }
     setLeavesDate(selectDate);
     setSelectedId(i);
+    const newselectdate = [...new Set(leavesdate), date];
     // console.log(newselectdate);
     setPushDate(newselectdate);
   };
@@ -98,7 +98,6 @@ const MyProfile = () => {
       leavedates: pushdate,
       user_id: user_id,
       company_id:userData.company_id
-
     };
     // console.log(applyleaves)
     try {
@@ -141,16 +140,29 @@ const MyProfile = () => {
       });
     }
   }, [showleaves]);
-  // console.log(monthshow)
+
+  useMemo(() => {
+    if (monthshow.months) {
+      monthshow.months.map((month, index) => {
+        setLeavesDay(month);
+      });
+    }
+  }, [showleaves]);
 
   // useMemo(() => {
-  //   if (monthshow.leavedates) {
-  //     monthshow.leavedates.map((month, index) => {
-  //       console.log(month)
-  //       // setLeavesDay(month);
+  //   if (leavesday.leavedays) {
+
+  //      leavesday.leavedays.map((days,index)=> {
+  //         console.log(days)
+  //       // console.log(index)
+  //       let dates = days.leave_date
+  //         // console.log(dates)
+  //       setHalidayDates(dates)
   //     });
   //   }
-  // }, [showleaves]);
+  // }, []);
+
+  // console.log(haliddayates)
 
   const ClearDate = () => {
     setPushDate('');
@@ -172,7 +184,6 @@ const MyProfile = () => {
   // var finalTime = "Time  - " + hours + ":" + minutes + " " + AmOrPm;
   var finalTime = hours + ':' + minutes + AmOrPm;
 
-  var approved;
   return (
     <View>
       {/* <HeaderBar right={true} title="Leaves" /> */}
@@ -256,50 +267,40 @@ const MyProfile = () => {
               onPress={() => setLeavesModal(true)}
             />
           </View>
+          <View style={{ marginTop: 5 }}>
+            {leavesday.leavedays != undefined
+              ? leavesday.leavedays.map((Ldays, index) => {
+                {/* console.log(Ldays) */}
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
+                      {Ldays.leave_date}
+                    </Text>
 
-          <ScrollView nestedScrollEnabled={true} maxHeight={50}>
-            <View style={{marginTop: 5}}>
-              {monthshow.leavedates != undefined
-                ? monthshow.leavedates.map((Ldays, index) => {
-                    {
-                      console.log(Ldays);
-                    }
-                    return (
-                      <View
-                        key={index}
+                    <TouchableOpacity>
+                      <Text
                         style={{
-                          flexDirection: 'row',
-                          flexWrap: 'wrap',
-                          justifyContent: 'space-between',
+                          fontSize: 12,
+                          fontWeight: 'bold',
+                          backgroundColor: 'orange',
+                          marginTop: 2,
+                          padding: 2,
+                          margin: 2,
                         }}>
-                        {Ldays.approved === false ? (
-                          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                            {Ldays.leave_date}
-                          </Text>
-                        ) : null}
-                        {Ldays.approved === true ? null : (
-                          <TouchableOpacity>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                fontWeight: 'bold',
-                                backgroundColor: 'orange',
-                                marginTop: 2,
-                                padding: 2,
-                                margin: 2,
-                              }}>
-                              Pending
-                            </Text>
-                          </TouchableOpacity>
-                        )}
-                      </View>
-                    );
-                  })
-                : null}
-            </View>
-          </ScrollView>
-
-        
+                        Pending
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })
+              : null}
+          </View>
           {/* leacves modal start  */}
         </View>
 
@@ -419,7 +420,6 @@ const MyProfile = () => {
                                   onPress={() => {
                                     dateClickHandler({ leave_date: col.date });
                                   }}>
-
                                   <Title
                                     style={[
                                       col.classes == 'in-prev-month'
@@ -486,7 +486,7 @@ const MyProfile = () => {
                   onPress={() => submitLeaves()}
                 />
                 <View>
-                  <Title>{JSON.stringify(leavesdate)}</Title>
+                  {/* <Title>{JSON.stringify(leavesdate)}</Title> */}
                   <Title>{JSON.stringify(pushdate)}</Title>
                 </View>
               </View>
