@@ -24,6 +24,7 @@ import {
   getContractors,
   postContractors,
   deleteContractors,
+  updateContractors,
 } from '../../../controller/ContractorController';
 import {useSelector} from 'react-redux';
 
@@ -83,7 +84,7 @@ const Contractors = ({route}) => {
     }
     setTimeout(() => {
       setSubmitToast(false);
-    }, 2000);
+    }, 1500);
   };
 
   const [conId, setConId] = React.useState('');
@@ -91,6 +92,7 @@ const Contractors = ({route}) => {
     setConId(id);
     setDeleteConfirm(true);
   };
+
   //delete contractors
   const DeleteContractors = async () => {
     let data = await deleteContractors(conId);
@@ -101,6 +103,35 @@ const Contractors = ({route}) => {
     }
     setTimeout(() => {
       setDeleteToast(false);
+    }, 1500);
+  };
+
+  const [contractorsId, setContractorsId] = React.useState('');
+  const onEdit = (id, name, mobile) => {
+    setContractorsId(id);
+    setName(name);
+    setMobileNo(mobile);
+    setShowContractorsModal(true);
+  };
+
+  const EditContractors = async () => {
+    const formData = {
+      project_id: project_id,
+      contractor_name: name,
+      phone_no: mobileNo,
+      company_id: company_id,
+    };
+    const response = await updateContractors(formData, contractorsId);
+    if (response.status === 200) {
+      setUpdateToast(true);
+      setShowContractorsModal(false);
+      fetchContractors();
+    } else {
+      alert(response.message);
+    }
+
+    setTimeout(() => {
+      setUpdateToast(false);
     }, 1500);
   };
 
@@ -132,7 +163,7 @@ const Contractors = ({route}) => {
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => {
-                alert('edit name');
+                onEdit(item._id, item.contractor_name, item.phone_no);
               }}>
               <ImageBackground
                 style={{
@@ -237,6 +268,7 @@ const Contractors = ({route}) => {
                 label="Name"
                 keyboardType="default"
                 autoCompleteType="username"
+                value={name}
                 onChange={value => {
                   setName(value);
                 }}
@@ -266,6 +298,7 @@ const Contractors = ({route}) => {
               <FormInput
                 label="Mobile No."
                 keyboardType="numeric"
+                value={mobileNo.toString()}
                 onChange={value => {
                   setMobileNo(value);
                 }}
@@ -295,14 +328,16 @@ const Contractors = ({route}) => {
               />
             </ScrollView>
             <TextButton
-              label="Submit"
+              label={contractorsId == '' ? 'Submit' : 'Update'}
               buttonContainerStyle={{
                 height: 50,
                 alignItems: 'center',
                 marginTop: SIZES.padding,
                 borderRadius: SIZES.radius,
               }}
-              onPress={() => SubmitContractors()}
+              onPress={() => {
+                contractorsId == '' ? SubmitContractors() : EditContractors();
+              }}
             />
           </View>
         </KeyboardAvoidingView>
@@ -330,6 +365,7 @@ const Contractors = ({route}) => {
         onPress={() => {
           setName('');
           setMobileNo('');
+          setContractorsId('');
           setShowContractorsModal(true);
         }}
       />
@@ -337,7 +373,7 @@ const Contractors = ({route}) => {
         <FlatList
           contentContainerStyle={{
             marginHorizontal: SIZES.padding,
-            paddingBottom: 50,
+            paddingBottom: 100,
           }}
           data={contractors}
           keyExtractor={item => `${item._id}`}

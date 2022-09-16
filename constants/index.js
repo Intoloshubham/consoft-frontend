@@ -3,7 +3,6 @@ import theme, {COLORS, SIZES, FONTS} from './theme';
 import images from './images';
 import icons from './icons';
 import dummyData from './dummyData';
-import reportdata from './reportdata';
 import STATUS from './status';
 
 export {
@@ -15,6 +14,5 @@ export {
   images,
   icons,
   dummyData,
-  reportdata,
   STATUS,
 };
