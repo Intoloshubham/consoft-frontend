@@ -138,23 +138,23 @@ const Account = () => {
           ...styles.profileSectionContainer,
         }}>
         <ProfileValue
-          icon={icons.project_type}
+          icon={icons.project_cate_type}
           value="Project Categories & Types"
-          image={icons.right_arr}
+          image={icons.right_arrow}
           onPress={() => navigation.navigate('CategoryandType')}
         />
         <LineDivider />
         <ProfileValue
           icon={icons.user_role}
           value="Create User Role"
-          image={icons.right_arr}
+          image={icons.right_arrow}
           onPress={() => navigation.navigate('UserRole')}
         />
         <LineDivider />
         <ProfileValue
           icon={icons.company_team}
           value="Company Team"
-          image={icons.right_arr}
+          image={icons.right_arrow}
           onPress={() => navigation.navigate('CompanyTeam')}
         />
         <LineDivider />
@@ -169,7 +169,7 @@ const Account = () => {
             <ProfileValue
               icon={icons.itemss}
               value="Items"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('Items')}
             />
             <LineDivider />
@@ -183,7 +183,7 @@ const Account = () => {
             <ProfileValue
               icon={icons.manage_stock}
               value="Manage Stock"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('ManageStock')}
             />
             <LineDivider />
@@ -191,21 +191,21 @@ const Account = () => {
             <ProfileValue
               icon={icons.itemss}
               value="Checklist"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('CheckList')}
             />
             <LineDivider />
             <ProfileValue
               icon={icons.units}
               value="Option Type"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('Optiontype')}
             />
             <LineDivider />
             <ProfileValue
               icon={icons.units}
               value="Tools & Machinery"
-              image={icons.right_arr}
+              image={icons.right_arrow}
               onPress={() => navigation.navigate('ToolsAndMachinery1')}
             />
           </View>
@@ -214,7 +214,7 @@ const Account = () => {
         <ProfileValue
           icon={icons.supplier}
           value="Suppliers"
-          image={icons.right_arr}
+          image={icons.right_arrow}
           onPress={() => navigation.navigate('Suppliers')}
         />
         <LineDivider />

@@ -47,7 +47,7 @@ const Otp = ({navigation}) => {
             ...FONTS.h3,
           }}
           onCodeFilled={code => {
-            console.log(code);
+            // console.log(code);
           }}
         />
         {/* countdown timer  */}

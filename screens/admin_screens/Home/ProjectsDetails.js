@@ -35,6 +35,7 @@ const ProjectsDetails = ({route}) => {
       <TouchableOpacity
         style={{
           flexDirection: 'row',
+          alignItems: 'center',
         }}
         onPress={() => {
           item.id == 1
@@ -53,15 +54,22 @@ const ProjectsDetails = ({route}) => {
             ? navigation.navigate('ReportSettings', {project_id})
             : null;
         }}>
-        <Image
-          source={item.img}
-          resizeMode="contain"
+        <View
           style={{
-            width: 20,
-            height: 20,
-            tintColor: COLORS.darkGray,
-          }}
-        />
+            padding: 5,
+            borderRadius: 20,
+            backgroundColor: COLORS.lightblue_100,
+          }}>
+          <Image
+            source={item.img}
+            resizeMode="contain"
+            style={{
+              height: 20,
+              width: 20,
+              tintColor: COLORS.lightblue_800,
+            }}
+          />
+        </View>
         <View
           style={{
             marginLeft: SIZES.radius * 1.5,

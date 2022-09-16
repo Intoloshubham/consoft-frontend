@@ -87,6 +87,9 @@ const App = () => {
           <Stack.Screen name="Boq" component={Boq} />
           <Stack.Screen name="CategoryandType" component={CategoryandType} />
           <Stack.Screen name="Items" component={Items} />
+         
+
+
           <Stack.Screen name="Unit" component={Unit} />
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />

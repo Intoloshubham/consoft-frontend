@@ -294,7 +294,7 @@ const ProjectsBanner = ({company}) => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   alert('All Notification Message Show in here...');
                 }}>
@@ -307,7 +307,7 @@ const ProjectsBanner = ({company}) => {
                     tintColor: COLORS.darkGray,
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 onPress={() => {
                   modalHandler(item._id);

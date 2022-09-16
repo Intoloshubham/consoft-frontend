@@ -90,7 +90,6 @@ const UserAssignWorks = ({ loading }) => {
     const submit_data = {
       comment: textMsg
     };
-    // console.log("🚀 ~ file: UserAssignWorks.js ~ line 62 ~ submitComments ~ submit_data", submit_data)
 
     const data = await submitComment(submit_data, work_id);
 
