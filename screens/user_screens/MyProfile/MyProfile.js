@@ -111,7 +111,7 @@ const MyProfile = () => {
         .then(response => response.json())
         .then(data => {
           showleavesdata();
-          console.log('Success:', data);
+          // console.log('Success:', data);
         });
     } catch (error) {
       console.error('Error:', error);
@@ -269,7 +269,7 @@ const MyProfile = () => {
           <View style={{ marginTop: 5 }}>
             {leavesday.leavedays != undefined
               ? leavesday.leavedays.map((Ldays, index) => {
-                console.log(Ldays)
+                {/* console.log(Ldays) */}
                 return (
                   <View
                     key={index}
