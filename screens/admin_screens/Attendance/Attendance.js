@@ -2,16 +2,14 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
 import {COLORS, SIZES, FONTS} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
-import CalendarPicker from 'react-native-calendar-picker';
 import {
   getUserLeaves,
   postUserLeaves,
 } from '../../../controller/LeavesController';
 import {CustomToast} from '../../../Components';
-import {getUsers} from '../../../controller/UserRoleController';
 import {useSelector} from 'react-redux';
 
-const Profile = () => {
+const Attendance = () => {
   const companyDetail = useSelector(state => state.company);
   const userData = useSelector(state => state.user);
 
@@ -23,8 +21,6 @@ const Profile = () => {
   }
   const company_id = companyData._id;
 
-  const [selectedStartDate, setSelectedStartDate] = React.useState(null);
-  const [selectedEndDate, setSelectedEndDate] = React.useState(null);
   const [leaves, setLeaves] = React.useState([]);
   const [checked, setChecked] = React.useState({});
   const [data, setData] = React.useState('');
@@ -33,21 +29,10 @@ const Profile = () => {
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
 
-  const [filterModal, setFilterModal] = React.useState(false);
-  const [users, setUsers] = React.useState([]);
-
-  // ====================================
-
   const checkBoxHandler = leave_date_id => {
     let d = [...data, leave_date_id];
     setData(d);
   };
-
-  const onDateChange = (date, type) => {
-    setSelectedStartDate(date);
-  };
-
-  // ========================== Apis ==========================
 
   const userLeaves = async () => {
     let response = await getUserLeaves(company_id);
@@ -67,19 +52,6 @@ const Profile = () => {
     }, 1500);
   };
 
-  const getusers = async () => {
-    let response = await getUsers(company_id);
-    if (response.status === 200) {
-      setUsers(response.data);
-    }
-  };
-
-  const [userId, setUserId] = React.useState('');
-  const OnUserSelecter = user_id => {
-    setUserId(user_id);
-    setFilterModal(false);
-  };
-
   React.useEffect(() => {
     userLeaves();
   }, []);
@@ -96,8 +68,8 @@ const Profile = () => {
           }}>
           <Text
             style={{
-              ...FONTS.h3,
-              color: COLORS.lightblue_700,
+              fontSize: 18,
+              color: COLORS.lightblue_800,
               textTransform: 'capitalize',
             }}>
             {item.user_name}
@@ -109,7 +81,7 @@ const Profile = () => {
             }}>
             <TouchableOpacity
               style={{
-                right: 15,
+                // right: 15,
                 backgroundColor: COLORS.green,
                 paddingHorizontal: 3,
                 paddingVertical: 1,
@@ -120,7 +92,7 @@ const Profile = () => {
                 Approve
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 backgroundColor: COLORS.rose_600,
                 paddingHorizontal: 3,
@@ -131,12 +103,12 @@ const Profile = () => {
               <Text style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
                 Reject
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         {item.leavedates.map((el, index) => {
           return (
-            <View key={index} style={{}}>
+            <View key={index}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -146,6 +118,7 @@ const Profile = () => {
                 <View
                   style={{
                     flexDirection: 'row',
+                    marginBottom: 5,
                   }}>
                   <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
                     {index + 1}.{' '}
@@ -177,18 +150,16 @@ const Profile = () => {
       <View
         style={{
           padding: 15,
-          borderRadius: 5,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
         }}>
         <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Leaves List</Text>
-
         <FlatList
           data={leaves}
-          contentContainerStyle={{marginTop: SIZES.radius}}
+          contentContainerStyle={{
+            marginTop: SIZES.radius,
+            paddingBottom: 50,
+          }}
           keyExtractor={item => `${item._id}`}
           renderItem={renderItem}
-          maxHeight={200}
           scrollEnabled={true}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
@@ -196,7 +167,7 @@ const Profile = () => {
               <View
                 style={{
                   height: 1,
-                  backgroundColor: COLORS.gray2,
+                  backgroundColor: COLORS.darkGray,
                   marginVertical: 12,
                 }}></View>
             );
@@ -206,75 +177,9 @@ const Profile = () => {
     );
   }
 
-  function renderCalender() {
-    return (
-      <View
-        style={{
-          marginTop: SIZES.padding,
-          padding: 15,
-          borderRadius: 5,
-          backgroundColor: COLORS.white,
-          ...styles.shadow,
-        }}>
-        <CalendarPicker
-          width={350}
-          height={350}
-          showDayStragglers={true}
-          startFromMonday={true}
-          minDate={new Date(2000, 1, 1)}
-          maxDate={new Date(2050, 6, 3)}
-          weekdays={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
-          months={[
-            'January',
-            'Febraury',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-          ]}
-          onDateChange={onDateChange}
-          monthTitleStyle={{
-            backgroundColor: COLORS.rose_600,
-            paddingHorizontal: 5,
-            paddingVertical: 2,
-            color: 'white',
-            fontSize: 18,
-          }}
-          yearTitleStyle={{
-            backgroundColor: COLORS.darkGray,
-            paddingHorizontal: 5,
-            paddingVertical: 2,
-            color: 'white',
-            fontSize: 18,
-          }}
-          todayBackgroundColor={COLORS.rose_600}
-          todayTextStyle={{color: 'white'}}
-          previousTitle={'<'}
-          nextTitle={'>'}
-          previousTitleStyle={{fontSize: 25}}
-          nextTitleStyle={{fontSize: 25}}
-          selectedDayColor={'#16a34a'}
-          selectedDayTextColor={'white'}
-          selectedDayTextStyle={{fontSize: 18}}
-          textStyle={{fontSize: 15}}
-          selectMonthTitle={'Select Month '}
-          selectYearTitle={'Select Year'}
-        />
-      </View>
-    );
-  }
-
   return (
-    <View
-      style={{marginVertical: SIZES.padding, marginHorizontal: SIZES.radius}}>
-      {leaves && renderUserLeavesList()}
-      {renderCalender()}
+    <View>
+      {renderUserLeavesList()}
       <CustomToast
         isVisible={submitToast}
         onClose={() => setSubmitToast(false)}
@@ -286,50 +191,4 @@ const Profile = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: '#0000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  addbutton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  item: {
-    backgroundColor: COLORS.darkGray,
-    flex: 1,
-    borderRadius: 5,
-    padding: 15,
-    marginRight: 10,
-    marginTop: 25,
-  },
-  name: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  timing: {
-    color: COLORS.white,
-  },
-  type: {
-    color: '#03A9F4',
-  },
-  emptyDate: {
-    height: 15,
-    flex: 1,
-    paddingTop: 30,
-  },
-  modalContent: {
-    flex: 1,
-    marginTop: 20,
-    alignItems: 'center',
-  },
-});
-export default Profile;
+export default Attendance;

@@ -80,6 +80,7 @@ const CompanyRegistration = ({navigation}) => {
                 style={{
                   textAlign: 'center',
                   ...FONTS.h2,
+                  color:COLORS.darkGray
                 }}>
                 Let's Create Company
               </Text>

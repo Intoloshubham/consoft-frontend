@@ -305,9 +305,9 @@ const Login = ({navigation}) => {
           marginHorizontal: SIZES.radius,
           ...styles.formContainer,
         }}>
-        <Text style={{textAlign: 'center', color: 'black', ...FONTS.h3}}>
+        {/* <Text style={{textAlign: 'center', color: 'black', ...FONTS.h3}}>
           Registered Company Login
-        </Text>
+        </Text> */}
         <View>
           <FormInput
             placeholder="Mobile No."
@@ -538,7 +538,7 @@ const Login = ({navigation}) => {
             marginRight: SIZES.base,
             color: switchValue ? COLORS.gray : COLORS.black,
           }}>
-          User Login
+          Team Login
         </Text>
         <Switch
           onValueChange={toggleSwitch}

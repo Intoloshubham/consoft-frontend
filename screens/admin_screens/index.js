@@ -20,7 +20,7 @@ import ReportsDisplay from './Reports/ReportDisplay';
 import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
-import Calender from './Calender/Calender';
+import Attendance from './Attendance/Attendance';
 import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
 import Quantitywork from './Stock/Tools/Quantitywork';
@@ -55,7 +55,7 @@ export {
   Items,
   ManageStock,
   Unit,
-  Calender,
+  Attendance,
   Suppliers,
   SubmittedWorks,
   Optiontype,
