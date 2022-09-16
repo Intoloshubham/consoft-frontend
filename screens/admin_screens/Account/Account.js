@@ -7,13 +7,13 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
-import {ProfileValue, LineDivider} from '../../../Components';
-import {useSelector, useDispatch} from 'react-redux';
-import {companyLogout} from '../../../services/companyAuthApi';
-import {userLogout} from '../../../services/userAuthApi';
+import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
+import { ProfileValue, LineDivider } from '../../../Components';
+import { useSelector, useDispatch } from 'react-redux';
+import { companyLogout } from '../../../services/companyAuthApi';
+import { userLogout } from '../../../services/userAuthApi';
 
 const Account = () => {
   const companyDetail = useSelector(state => state.company);
@@ -29,6 +29,7 @@ const Account = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = React.useState(true);
+  const [reportCollapsed, setReportCollapsed] = React.useState(true)
 
   const logout = () => {
     if (companyDetail._id) {
@@ -42,6 +43,10 @@ const Account = () => {
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
+
+  const toggleReport =()=>{
+    setReportCollapsed(!reportCollapsed)
+  }
 
   function renderProfileCard() {
     return (
@@ -115,10 +120,10 @@ const Account = () => {
             }}>
             {companyData.name}
           </Text>
-          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+          <Text style={{ color: COLORS.white, ...FONTS.body4 }}>
             {companyData.email}
           </Text>
-          <Text style={{color: COLORS.white, ...FONTS.body4}}>
+          <Text style={{ color: COLORS.white, ...FONTS.body4 }}>
             +91{companyData.mobile}
           </Text>
         </View>
@@ -160,7 +165,7 @@ const Account = () => {
           onPress={toggleExpanded}
         />
         <Collapsible collapsed={collapsed} duration={300}>
-          <View style={{marginLeft: SIZES.padding * 1.5}}>
+          <View style={{ marginLeft: SIZES.padding * 1.5 }}>
             <ProfileValue
               icon={icons.itemss}
               value="Items"
@@ -213,6 +218,22 @@ const Account = () => {
           onPress={() => navigation.navigate('Suppliers')}
         />
         <LineDivider />
+        <ProfileValue
+          icon={icons.report}
+          value="Report"
+          image={icons.down_arro}
+          onPress={toggleReport}
+        />
+       <Collapsible collapsed={reportCollapsed} duration={300}>
+          <View style={{ marginLeft: SIZES.padding * 1.5 }}>
+            <ProfileValue
+              icon={icons.itemss}
+              value="Quantity Item"
+              image={icons.right_arr}
+              onPress={() => navigation.navigate('QuantityItem')}
+            />
+          </View>
+        </Collapsible>
       </View>
     );
   }
