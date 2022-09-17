@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
     View, Animated,
     Easing, Switch,
-    Text, FlatList,Platform,UIManager,
+    Text, FlatList, Platform, UIManager,
     StyleSheet, Image,
-    ScrollView, Modal, SectionList,
+    ScrollView, Modal, SectionList, ToastAndroid,
     Pressable, TextInput, TouchableWithoutFeedback, SafeAreaView,
     TouchableOpacity, LogBox, LayoutAnimation, ImageBackground, VirtualizedList
 } from 'react-native'
@@ -31,7 +31,7 @@ if (Platform.OS === 'android') {
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) => {
-    // console.log("ManpowerProjectTeam")
+
     //css
     const { header, con_body, input, body_del, body_edit, body_del_btn, body_edit_btn, body_ed_de_view, cont_Project_list_drop } = styles
     //for projectteam collapse
@@ -122,15 +122,17 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) =
     };
 
 
-    useMemo(() => {
-        let isMount = true;
-        if (isMount === true || Main_drp_pro_value || loading) {
-            fetchProjectTeam();
-        }
-        return () => { isMount = false }
-    }, [Main_drp_pro_value, loading]);
+    // useMemo(() => {
+    //     let isMount = true;
+    //     if (isMount === true || Main_drp_pro_value || loading) {
+    //         fetchProjectTeam();
+    //     }
+    //     return () => { isMount = false }
+    // }, [Main_drp_pro_value, loading]);
 
-
+    useEffect(() => {
+        fetchProjectTeam();
+    }, [])
 
     const addProjectTeam = async () => {
         setAddProjectTeamModal(true);
@@ -370,7 +372,11 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) =
                         <Text
                             onPressIn={onPressIn}
                             onPressOut={onPressOut}
-                            onPress={() => setProTeamTabCollapse(!proTeamTabCollapse)} style={[FONTS.body4, { color: COLORS.white2 }]}>Project Team</Text>
+                            onPress={() => {
+                                fetchProjectTeam();
+                                setProTeamTabCollapse(!proTeamTabCollapse)
+                            }}
+                            style={[FONTS.body4, { color: COLORS.white2 }]}>Project Team</Text>
                     </View>
                     <View style={{ alignItems: "center", justifyContent: "center", marginLeft: SIZES.base * 0.5 }}>
                         <TouchableOpacity
@@ -401,7 +407,14 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) =
                         horizontal={true}
                         contentContainerStyle={{ width: '100%', height: '100%' }}>
                         <FlatList
-                            data={ProjectTeamName ? ProjectTeamName : alert('Currently no team members are there!!')}
+                            data={ProjectTeamName ?
+                                ProjectTeamName :
+                                ToastAndroid.showWithGravity(
+                                    "Currently no team members are there!!",
+                                    ToastAndroid.SHORT,
+                                    ToastAndroid.CENTER
+                                )
+                            }
                             horizontal={false}
                             scrollEnabled={true}
                             nestedScrollEnabled={true}
