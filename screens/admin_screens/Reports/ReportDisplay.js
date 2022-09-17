@@ -23,6 +23,8 @@ import {
   getQuantity,
   verifyReport,
   revertReport,
+  finalVerifyReport,
+  finalRevertReport,
 } from '../../../controller/ReportController';
 import {getProjectReportPath} from '../../../controller/ReportController';
 import {getUserId} from '../../../services/asyncStorageService';
@@ -71,7 +73,9 @@ const ReportDisplay = () => {
 
   //modal
   const [revertModal, setRevertModal] = React.useState(false);
+  const [finalRevertModal, setFinalRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
+  const [finalRevertMsg, setFinalRevertMsg] = React.useState('');
 
   // get projects
   const fetchProject = async () => {
@@ -123,7 +127,16 @@ const ReportDisplay = () => {
   const fetchVerifyReport = async () => {
     let response = await verifyReport(projectId, reportId, userId);
     if (response.status === 200) {
-      alert('Verified');
+      alert('Verified Successfully');
+      fetchReport();
+    }
+  };
+
+  const fetchFinalVerifyReport = async () => {
+    let response = await finalVerifyReport(company_id, projectId, reportId);
+    // console.log(response)
+    if (response.status === 200) {
+      alert('Final Verified Successfully');
       fetchReport();
     }
   };
@@ -138,6 +151,26 @@ const ReportDisplay = () => {
       alert('Reverted Successfully');
       setRevertMsg('');
       setRevertModal(false);
+      fetchReport();
+    } else {
+      alert(response.message);
+    }
+  };
+
+  const onFinalRevertReport = async () => {
+    const formData = {
+      revert_msg: finalRevertMsg,
+    };
+    let response = await finalRevertReport(
+      company_id,
+      projectId,
+      reportId,
+      formData,
+    );
+    if (response.status === 200) {
+      alert('Reverted Successfully');
+      setFinalRevertMsg('');
+      setFinalRevertModal(false);
       fetchReport();
     } else {
       alert(response.message);
@@ -295,8 +328,14 @@ const ReportDisplay = () => {
             verify_1_status: item.verify_1_status,
             verify_1_revert_msg: item.verify_1_revert_msg,
             verify_1_revert: item.verify_1_revert,
+            verify_2_status: item.verify_2_status,
+            verify_2_revert_msg: item.verify_2_revert_msg,
+            verify_2_revert: item.verify_2_revert,
             admin_1_revert: item.admin_1_revert,
             admin_2_revert: item.admin_2_revert,
+            final_verify_status: item.final_verify_status,
+            final_verify_revert_msg: item.final_verify_revert_msg,
+            final_verify_revert: item.final_verify_revert,
           });
           fetchManpower(item._id);
           fetchQuantity(item._id);
@@ -323,7 +362,7 @@ const ReportDisplay = () => {
             <Text style={{fontSize: 12, color: COLORS.darkGray}}>
               {item.report_date}
             </Text>
-            <Text style={{fontSize: 12, color: COLORS.darkGray,left:5}}>
+            <Text style={{fontSize: 12, color: COLORS.darkGray, left: 5}}>
               {item.report_time}
             </Text>
           </View>
@@ -893,7 +932,7 @@ const ReportDisplay = () => {
             textDecorationLine: 'underline',
             marginBottom: 15,
           }}>
-          Report Progress Status
+          Report Progress Status -
         </Text>
         {/* <Text
           style={{
@@ -915,7 +954,7 @@ const ReportDisplay = () => {
                         textTransform: 'capitalize',
                         color: COLORS.black,
                       }}>
-                      {ele.admin_1_name} -
+                      {ele.admin_1_name}(A1) -
                     </Text>
                     {reportData.admin_1_status === false ? (
                       <View
@@ -1003,7 +1042,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.admin_2_name} {' - '}
+                        {ele.admin_2_name}(A2) {' - '}
                       </Text>
                       {/* {reportData.admin_2_status == true && ( */}
                       <View
@@ -1060,7 +1099,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.verification_1_name} {' - '}
+                        {ele.verification_1_name}(V1) {' - '}
                       </Text>
                       <View
                         style={{
@@ -1101,6 +1140,55 @@ const ReportDisplay = () => {
                       </Text>
                     )}
                   </View>
+                  <View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          color: COLORS.black,
+                          textTransform: 'capitalize',
+                        }}>
+                        {ele.verification_2_name}(V2) {' - '}
+                      </Text>
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_2_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_2_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.verify_2_revert == true
+                              ? icons.revert
+                              : reportData.verify_2_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_2_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                    </View>
+                    {reportData.verify_2_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Revert Msg - {reportData.verify_2_revert_msg}
+                      </Text>
+                    )}
+                  </View>
                 </View>
               ) : ele.admin_2 === userId ? (
                 <View style={{}}>
@@ -1111,7 +1199,7 @@ const ReportDisplay = () => {
                         textTransform: 'capitalize',
                         color: COLORS.black,
                       }}>
-                      {ele.admin_2_name} -
+                      {ele.admin_2_name}(A2) -
                     </Text>
                     {reportData.admin_2_status === false ? (
                       <View
@@ -1209,7 +1297,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.admin_1_name} {' - '}
+                        {ele.admin_1_name}(A1) {' - '}
                       </Text>
                       {/* {reportData.admin_1_status == true && ( */}
                       <View
@@ -1267,7 +1355,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.verification_1_name} {' - '}
+                        {ele.verification_1_name}(V1) {' - '}
                       </Text>
                       <View
                         style={{
@@ -1308,6 +1396,56 @@ const ReportDisplay = () => {
                       </Text>
                     )}
                   </View>
+
+                  <View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          color: COLORS.black,
+                          textTransform: 'capitalize',
+                        }}>
+                        {ele.verification_2_name}(V2) {' - '}
+                      </Text>
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_2_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_2_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.verify_2_revert == true
+                              ? icons.revert
+                              : reportData.verify_2_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_2_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                    </View>
+                    {reportData.verify_2_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Revert Msg - {reportData.verify_2_revert_msg}
+                      </Text>
+                    )}
+                  </View>
                 </View>
               ) : null}
 
@@ -1321,7 +1459,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.admin_1_name} {' - '}
+                        {ele.admin_1_name}(A1) {' - '}
                       </Text>
                       {/* {reportData.admin_1_status == true && ( */}
                       <View
@@ -1378,7 +1516,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.admin_2_name} {' - '}
+                        {ele.admin_2_name}(A2) {' - '}
                       </Text>
                       {/* {reportData.admin_2_status == true && ( */}
                       <View
@@ -1435,7 +1573,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.verification_1_name} {' - '}
+                        {ele.verification_1_name}(V1) {' - '}
                       </Text>
                       <View
                         style={{
@@ -1476,6 +1614,110 @@ const ReportDisplay = () => {
                       </Text>
                     )}
                   </View>
+                  <View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          color: COLORS.black,
+                          textTransform: 'capitalize',
+                        }}>
+                        {ele.verification_2_name}(V2) {' - '}
+                      </Text>
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_2_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_2_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.verify_2_revert == true
+                              ? icons.revert
+                              : reportData.verify_2_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_2_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                    </View>
+                    {reportData.verify_2_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Msg - {reportData.verify_2_revert_msg}
+                      </Text>
+                    )}
+                  </View>
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      borderColor: COLORS.gray2,
+                      marginVertical: 8,
+                    }}></View>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text
+                      style={{
+                        ...FONTS.h3,
+                        color: COLORS.black,
+                        textTransform: 'capitalize',
+                      }}>
+                      Final Verification -
+                    </Text>
+                    <View style={{left: 10}}>
+                      <Button
+                        title={
+                          reportData.final_verify_status == true
+                            ? 'Verified'
+                            : 'Verify'
+                        }
+                        color={COLORS.success_600}
+                        disabled={
+                          reportData.admin_2_status == false ||
+                          reportData.final_verify_status == true
+                            ? true
+                            : false
+                        }
+                        onPress={() => fetchFinalVerifyReport()}
+                      />
+                    </View>
+                    <View style={{left: 30}}>
+                      <Button
+                        title={
+                          reportData.final_verify_revert == true
+                            ? 'Reverted'
+                            : 'Revert'
+                        }
+                        color={COLORS.rose_600}
+                        disabled={
+                          reportData.admin_2_status == false ||
+                          reportData.final_verify_revert == true
+                            ? true
+                            : false
+                        }
+                        onPress={() => setFinalRevertModal(true)}
+                      />
+                    </View>
+                  </View>
+                  {reportData.final_verify_revert == true && (
+                    <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                      Msg - {reportData.final_verify_revert_msg}
+                    </Text>
+                  )}
                 </View>
               ) : null}
             </View>
@@ -1575,10 +1817,104 @@ const ReportDisplay = () => {
     );
   }
 
+  function renderFinalRevertModal() {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={finalRevertModal}>
+        <TouchableWithoutFeedback onPress={() => setFinalRevertModal(false)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                backgroundColor: COLORS.white,
+                paddingHorizontal: SIZES.padding,
+                paddingVertical: SIZES.radius,
+                width: '90%',
+                top: '30%',
+                borderRadius: 5,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
+                <Text style={{fontSize: 20, color: COLORS.darkGray}}>
+                  Revert message
+                </Text>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity onPress={() => setFinalRevertModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.darkGray,
+                }}>
+                <TextInput
+                  placeholder="Write your message..."
+                  multiline={true}
+                  numberOfLines={1}
+                  onChangeText={value => {
+                    setFinalRevertMsg(value);
+                  }}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={{
+                  marginTop: SIZES.padding,
+                  alignItems: 'center',
+                }}
+                onPress={() => onFinalRevertReport()}>
+                <Text
+                  style={{
+                    ...FONTS.h3,
+                    backgroundColor: COLORS.lightblue_800,
+                    paddingHorizontal: SIZES.radius,
+                    paddingVertical: 5,
+                    borderRadius: 3,
+                    color: COLORS.white,
+                  }}>
+                  Send
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
   return (
     <View style={{margin: SIZES.radius}}>
       {renderProjectFilter()}
       {renderRevertModal()}
+      {renderFinalRevertModal()}
       {renderReportModal()}
 
       {onSelect == true && renderReport()}

@@ -32,7 +32,7 @@ import RevertWorks from './VerifyAndRevertWork.js/RevertWorks';
 import UserRole from './CreateUserRole/UserRole';
 import ReportSettings from './Home/ReportSettings';
 import Requirement from './Requirement/Requirement';
-import QuantityItem from './AccountReport/QuantityItem.js'
+import BoqViewAndEdit from './Account/BoqViewAndEdit';
 
 export {
   Account,
@@ -69,5 +69,5 @@ export {
   UserRole,
   ReportSettings,
   Requirement,
-  QuantityItem
+  BoqViewAndEdit,
 };

@@ -116,6 +116,7 @@ const logout = require('../assets/icons/_icons/logout.png');
 const right_arrow = require('../assets/icons/_icons/right_arrow.png');
 const dashboard_1 = require('../assets/icons/_icons/dashboard1.png');
 const pencil = require('../assets/icons/_icons/pencil.png');
+const lr_arrow = require('../assets/icons/_icons/lr_arrow.png');
 
 export default {
   // final
@@ -228,4 +229,5 @@ export default {
   right_arrow,
   dashboard_1,
   pencil,
+  lr_arrow,
 };

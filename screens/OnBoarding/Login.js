@@ -305,9 +305,7 @@ const Login = ({navigation}) => {
           marginHorizontal: SIZES.radius,
           ...styles.formContainer,
         }}>
-        {/* <Text style={{textAlign: 'center', color: 'black', ...FONTS.h3}}>
-          Registered Company Login
-        </Text> */}
+        <Text style={{}}>{/* Registered Company Login */}</Text>
         <View>
           <FormInput
             placeholder="Mobile No."

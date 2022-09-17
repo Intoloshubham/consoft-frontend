@@ -29,11 +29,17 @@ import {
   ToolsAndMachinery1,
   Boq,
   VerifyAndRevertWork,
-  UserRole,ReportSettings,
-  QuantityItem
-
+  UserRole,
+  ReportSettings,
+  BoqViewAndEdit,
 } from './screens/admin_screens';
-import {Profile, UserEndVoucher, Demo1, MyProfile,ViewReport} from './screens/user_screens';
+import {
+  Profile,
+  UserEndVoucher,
+  Demo1,
+  MyProfile,
+  ViewReport,
+} from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
 import Account from './screens/admin_screens/Account/Account';
@@ -87,15 +93,13 @@ const App = () => {
           <Stack.Screen name="Boq" component={Boq} />
           <Stack.Screen name="CategoryandType" component={CategoryandType} />
           <Stack.Screen name="Items" component={Items} />
-         
-
 
           <Stack.Screen name="Unit" component={Unit} />
           <Stack.Screen name="CompanyTeam" component={CompanyTeam} />
           <Stack.Screen name="ManageStock" component={ManageStock} />
           <Stack.Screen name="CheckList" component={CheckList} />
           <Stack.Screen name="Optiontype" component={Optiontype} />
-          <Stack.Screen name='QuantityItem' component={QuantityItem}/>
+          <Stack.Screen name="BoqViewAndEdit" component={BoqViewAndEdit} />
           <Stack.Screen
             name="ToolsAndMachinery1"
             component={ToolsAndMachinery1}

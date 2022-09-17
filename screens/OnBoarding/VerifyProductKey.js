@@ -31,7 +31,7 @@ const VerifyProductKey = ({navigation}) => {
     const result = await dispatch(verifyProductKey(productData));
     if (result.payload.status === 200) {
       setSubmitToast(true);
-      navigation.navigate('Home');
+      navigation.navigate('CompanyPayment');
       setProductKey('');
     } else {
       alert(result.payload.message);
