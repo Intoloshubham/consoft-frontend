@@ -40,7 +40,9 @@ const CompanyRegistration = ({navigation}) => {
     if (result.payload.status === 200) {
       setTimeout(() => {
         setSubmitToast(true);
-        navigation.navigate('VerifyProductKey');
+        navigation.navigate('VerifyProductKey', {
+          company_id: result.payload.company_id,
+        });
         setCName('');
         setCMobileNo('');
         setCEmail('');
@@ -80,7 +82,7 @@ const CompanyRegistration = ({navigation}) => {
                 style={{
                   textAlign: 'center',
                   ...FONTS.h2,
-                  color:COLORS.darkGray
+                  color: COLORS.darkGray,
                 }}>
                 Let's Create Company
               </Text>
