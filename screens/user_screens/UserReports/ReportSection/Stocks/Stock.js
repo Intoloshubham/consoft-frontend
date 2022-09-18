@@ -625,9 +625,9 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
             >
                 {stockCollapse ?
                     <View style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}>
-                        <View style={{ backgroundColor: "blue", paddingLeft: 140 }}>
+                        {/* <View style={{ backgroundColor: "blue", paddingLeft: 140 }}>
                             {add_stock_icon_button()}
-                        </View>
+                        </View> */}
                         <View
                             style={{
                                 borderWidth: 1,

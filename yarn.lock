@@ -7268,11 +7268,6 @@
 "react-native-animated-tree-view@^0.1.4":
   "version" "0.1.4"
 
-"react-native-awesome-alerts@^2.0.0":
-  "version" "2.0.0"
-  dependencies:
-    "prop-types" "^15.7.2"
-
 "react-native-calendar-picker@^7.1.2":
   "version" "7.1.2"
   dependencies:

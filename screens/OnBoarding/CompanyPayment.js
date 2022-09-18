@@ -5,7 +5,9 @@ import {COLORS, SIZES, FONTS, icons, images} from '../../constants';
 import {payment} from '../../controller/PaymentController';
 import {useSelector} from 'react-redux';
 
-const CompanyPayment = ({navigation}) => {
+const CompanyPayment = ({navigation, route}) => {
+  const {company_id} = route.params;
+
   const companyDetail = useSelector(state => state.company);
 
   // CUSTOM TOAST OF CRUD OPERATIONS
@@ -20,7 +22,7 @@ const CompanyPayment = ({navigation}) => {
     const response = await payment(formData);
     if (response.status === 200) {
       setSubmitToast(true);
-      navigation.navigate('Home');
+      navigation.navigate('Login');
       setAmount('');
     } else {
       alert(response.message);

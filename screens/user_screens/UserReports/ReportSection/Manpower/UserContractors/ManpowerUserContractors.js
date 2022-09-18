@@ -4,7 +4,7 @@ import {
   Easing, Switch,
   Text, FlatList,
   StyleSheet, Image,
-  ScrollView, Modal,Platform,UIManager,
+  ScrollView, Modal, Platform, UIManager, ToastAndroid,
   Pressable, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView,
   TouchableOpacity, LogBox, LayoutAnimation, ImageBackground, Keyboard
 } from 'react-native'
@@ -141,6 +141,17 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
     }, 150);
   };
 
+  const validateFields = (message) => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP,
+      25,
+      10
+    );
+  }
+
+
   //defining functions for all
 
   const companydata = useSelector(state => state.user);
@@ -152,6 +163,13 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       phone_no: ContractorPhone,
       project_id: Main_drp_pro_value
     }
+
+    data.contractor_name == '' ?
+      validateFields('Contractor Field required!') :
+      data.phone_no==''?
+      validateFields('Phone number required!'):
+      validateFields('Empty fields')
+
 
 
     fetch(`${process.env.API_URL}contractor`, {
@@ -204,9 +222,6 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
         .then(result => {
           setReport_list(result)
         })
-    }
-    else {
-      alert("Select Project first!")
     }
   }
 
@@ -303,7 +318,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       }, 100);
       setTimeout(() => {
         setSubmitToast(false);
-      }, 200); 
+      }, 200);
     }
 
   }
@@ -349,12 +364,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
       const data = await get_manpower_report(Main_drp_pro_value, companydata._id, current_dat)
       if (data.status == 200) {
         setManpowerReportData(data.data);
-        // console.log("🚀 ~ file: ManpowerUserContractors.js ~ line 321 ~ GetManpowerData ~ data.data", data.data)
-      } else {
-        console.log("data not found!")
       }
     }
-    
+
   }
 
   useEffect(() => {

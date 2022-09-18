@@ -50,7 +50,6 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
-    // console.log("🚀 ~ file: Login.js ~ line 53 ~ userOnSubmit ~ res", res)
     if (res.payload.status === 200) {
       setSubmitToast(true);
       if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
@@ -72,9 +71,18 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
     const res = await dispatch(companyLogin(company_data));
+    console.log(res);
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('Home');
+    } else if (res.payload.status == 301) {
+      navigation.navigate('VerifyProductKey', {
+        company_id: res.payload.company_id,
+      });
+    } else if (res.payload.status == 302) {
+      navigation.navigate('CompanyPayment', {
+        company_id: res.payload.company_id,
+      });
     } else {
       alert(res.payload.message);
     }
