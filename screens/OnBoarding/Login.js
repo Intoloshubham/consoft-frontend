@@ -71,7 +71,7 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
     const res = await dispatch(companyLogin(company_data));
-    console.log(res);
+    // console.log(res);
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('Home');
