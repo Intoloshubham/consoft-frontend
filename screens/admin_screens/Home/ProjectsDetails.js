@@ -21,7 +21,7 @@ const ProjectsDetails = ({route}) => {
     {id: 3, img: icons.stock, name: 'Stock / Inventry'},
     {id: 4, img: icons.machine, name: 'Tools & Machinery'},
     {id: 5, img: icons.time_seh, name: 'Sehedule & Timeline'},
-    {id: 6, img: icons.boq, name: 'BOQ'},
+    {id: 6, img: icons.report, name: 'BOQ'},
     {id: 7, img: icons.report1, name: 'Report Settings'},
   ];
 

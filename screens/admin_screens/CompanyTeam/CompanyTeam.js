@@ -433,7 +433,7 @@ const CompanyTeamShow = () => {
             justifyContent: 'space-between',
           }}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{...FONTS.h4}}>{index + 1}.</Text>
+            <Text style={{...FONTS.h4,color:COLORS.darkGray}}>{index + 1}.</Text>
             <Text
               style={{
                 ...FONTS.h3,
