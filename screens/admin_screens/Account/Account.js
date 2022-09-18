@@ -7,13 +7,13 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
-import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
-import { ProfileValue, LineDivider } from '../../../Components';
-import { useSelector, useDispatch } from 'react-redux';
-import { companyLogout } from '../../../services/companyAuthApi';
-import { userLogout } from '../../../services/userAuthApi';
+import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
+import {ProfileValue, LineDivider} from '../../../Components';
+import {useSelector, useDispatch} from 'react-redux';
+import {companyLogout} from '../../../services/companyAuthApi';
+import {userLogout} from '../../../services/userAuthApi';
 
 const Account = () => {
   const companyDetail = useSelector(state => state.company);
@@ -29,7 +29,7 @@ const Account = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = React.useState(true);
-  const [reportCollapsed, setReportCollapsed] = React.useState(true)
+  const [reportCollapsed, setReportCollapsed] = React.useState(true);
 
   const logout = () => {
     if (companyDetail._id) {
@@ -44,9 +44,9 @@ const Account = () => {
     setCollapsed(!collapsed);
   };
 
-  const toggleReport =()=>{
-    setReportCollapsed(!reportCollapsed)
-  }
+  const toggleReport = () => {
+    setReportCollapsed(!reportCollapsed);
+  };
 
   function renderProfileCard() {
     return (
@@ -120,10 +120,10 @@ const Account = () => {
             }}>
             {companyData.name}
           </Text>
-          <Text style={{ color: COLORS.white, ...FONTS.body4 }}>
+          <Text style={{color: COLORS.white, ...FONTS.body4}}>
             {companyData.email}
           </Text>
-          <Text style={{ color: COLORS.white, ...FONTS.body4 }}>
+          <Text style={{color: COLORS.white, ...FONTS.body4}}>
             +91{companyData.mobile}
           </Text>
         </View>
@@ -165,7 +165,7 @@ const Account = () => {
           onPress={toggleExpanded}
         />
         <Collapsible collapsed={collapsed} duration={300}>
-          <View style={{ marginLeft: SIZES.padding * 1.5 }}>
+          <View style={{marginLeft: SIZES.padding * 1.5}}>
             <ProfileValue
               icon={icons.itemss}
               value="Items"
@@ -187,20 +187,12 @@ const Account = () => {
               onPress={() => navigation.navigate('ManageStock')}
             />
             <LineDivider />
-
-            <ProfileValue
-              icon={icons.itemss}
-              value="Checklist"
-              image={icons.right_arrow}
-              onPress={() => navigation.navigate('CheckList')}
-            />
-            <LineDivider />
-            <ProfileValue
+            {/* <ProfileValue
               icon={icons.units}
               value="Option Type"
               image={icons.right_arrow}
               onPress={() => navigation.navigate('Optiontype')}
-            />
+            /> */}
             <LineDivider />
             <ProfileValue
               icon={icons.units}
@@ -224,16 +216,22 @@ const Account = () => {
           image={icons.down_arro}
           onPress={toggleReport}
         />
-       <Collapsible collapsed={reportCollapsed} duration={300}>
-          <View style={{ marginLeft: SIZES.padding * 1.5 }}>
+        <Collapsible collapsed={reportCollapsed} duration={300}>
+          <View style={{marginLeft: SIZES.padding * 1.5}}>
             <ProfileValue
               icon={icons.itemss}
-              value="Quantity Item"
+              value="BOQ View/Edit"
               image={icons.right_arr}
-              onPress={() => navigation.navigate('QuantityItem')}
+              onPress={() => navigation.navigate('BoqViewAndEdit')}
             />
           </View>
         </Collapsible>
+        <ProfileValue
+          icon={icons.itemss}
+          value="Checklist"
+          image={icons.right_arrow}
+          onPress={() => navigation.navigate('CheckList')}
+        />
       </View>
     );
   }

@@ -46,13 +46,14 @@ const Suppliers = () => {
   // FORM STATES
   const [name, setName] = React.useState('');
   const [mobile, setMobile] = React.useState('');
-  // const [email, setEmail] = React.useState('');
+  const [concernPersonName, setConcernPersonName] = React.useState('');
   const [location, setLocation] = React.useState('');
 
   // ERROR STATES
   const [nameError, setNameError] = React.useState('');
   const [mobileError, setMobileError] = React.useState('');
-  // const [emailError, setEmailError] = React.useState('');
+  const [concernPersonNameError, setConcernPersonNameError] =
+    React.useState('');
   const [locationError, setLocationError] = React.useState('');
 
   // CUSTOM TOAST OF CRUD OPERATIONS
@@ -89,8 +90,8 @@ const Suppliers = () => {
   const postSupplier = async () => {
     const formData = {
       supplier_name: name,
+      concern_person: concernPersonName,
       supplier_mobile: mobile,
-      // supplier_email: email,
       supplier_location: location,
       company_id: company_id,
     };
@@ -101,7 +102,7 @@ const Suppliers = () => {
       setSuppliersModal(false);
       setName('');
       setMobile('');
-      // setEmail('');
+      setConcernPersonName('');
       setLocation('');
     } else {
       alert(response.message);
@@ -187,7 +188,7 @@ const Suppliers = () => {
                     flex: 1,
                   }}>
                   <FormInput
-                    label="Name"
+                    label="Company /Firm /Shop Name"
                     keyboardType="default"
                     autoCompleteType="username"
                     onChange={value => {
@@ -210,6 +211,40 @@ const Suppliers = () => {
                               name == ''
                                 ? COLORS.gray
                                 : name != '' && nameError == ''
+                                ? COLORS.green
+                                : COLORS.red,
+                          }}
+                        />
+                      </View>
+                    }
+                  />
+                  <FormInput
+                    label="Concern Person Name"
+                    keyboardType="default"
+                    autoCompleteType="username"
+                    onChange={value => {
+                      utils.validateText(value, setConcernPersonNameError);
+                      setConcernPersonName(value);
+                    }}
+                    errorMsg={concernPersonNameError}
+                    appendComponent={
+                      <View style={{justifyContent: 'center'}}>
+                        <Image
+                          source={
+                            concernPersonName == '' ||
+                            (concernPersonName != '' &&
+                              concernPersonNameError == '')
+                              ? icons.correct
+                              : icons.cancel
+                          }
+                          style={{
+                            height: 20,
+                            width: 20,
+                            tintColor:
+                              concernPersonName == ''
+                                ? COLORS.gray
+                                : concernPersonName != '' &&
+                                  concernPersonNameError == ''
                                 ? COLORS.green
                                 : COLORS.red,
                           }}
@@ -335,14 +370,23 @@ const Suppliers = () => {
         <View>
           <Text
             style={{
-              ...FONTS.h3,
+              fontSize: 18,
               textTransform: 'capitalize',
               color: COLORS.lightblue_900,
             }}>
             {item.supplier_name}
           </Text>
+          <Text
+            style={{
+              ...FONTS.h4,
+              textTransform: 'capitalize',
+              color: COLORS.lightblue_900,
+            }}>
+            Concern Person - {item.concern_person}
+          </Text>
           <View
             style={{
+              marginTop: 3,
               flexDirection: 'row',
               // justifyContent: 'space-between',
               alignItems: 'center',
@@ -351,15 +395,15 @@ const Suppliers = () => {
               <Image
                 source={icons.call}
                 style={{
-                  height: 10,
-                  width: 10,
+                  height: 15,
+                  width: 15,
                 }}
               />
               <Text
                 style={{
-                  ...FONTS.h5,
+                  ...FONTS.h4,
                   color: COLORS.darkGray,
-                  left: 5,
+                  left: 10,
                 }}>
                 {item.supplier_mobile}
               </Text>
@@ -392,16 +436,16 @@ const Suppliers = () => {
               <Image
                 source={icons.location}
                 style={{
-                  height: 10,
-                  width: 10,
+                  height: 15,
+                  width: 15,
                   tintColor: COLORS.darkGray,
                 }}
               />
               <Text
                 style={{
-                  ...FONTS.h5,
+                  ...FONTS.h4,
                   color: COLORS.darkGray,
-                  left: 5,
+                  left: 10,
                   textTransform: 'capitalize',
                 }}>
                 {item.supplier_location}

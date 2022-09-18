@@ -20,7 +20,7 @@ import ReportsDisplay from './Reports/ReportDisplay';
 import Items from './Stock/Items/Items';
 import ManageStock from './Stock/ManageStock/ManageStock';
 import Unit from './Stock/Unit/Unit';
-import Calender from './Calender/Calender';
+import Attendance from './Attendance/Attendance';
 import Suppliers from './Suppliers/Suppliers';
 import SubmittedWorks from './Home/SubmittedWorks';
 import Quantitywork from './Stock/Tools/Quantitywork';
@@ -32,7 +32,7 @@ import RevertWorks from './VerifyAndRevertWork.js/RevertWorks';
 import UserRole from './CreateUserRole/UserRole';
 import ReportSettings from './Home/ReportSettings';
 import Requirement from './Requirement/Requirement';
-import QuantityItem from './AccountReport/QuantityItem.js'
+import BoqViewAndEdit from './Account/BoqViewAndEdit';
 
 export {
   Account,
@@ -56,7 +56,7 @@ export {
   Items,
   ManageStock,
   Unit,
-  Calender,
+  Attendance,
   Suppliers,
   SubmittedWorks,
   Optiontype,
@@ -69,5 +69,5 @@ export {
   UserRole,
   ReportSettings,
   Requirement,
-  QuantityItem
+  BoqViewAndEdit,
 };

@@ -6,7 +6,7 @@ import {COLORS, FONTS, SIZES, icons, images} from '../constants';
 import {
   Home,
   Account,
-  Calender,
+  Attendance,
   ReportsDisplay,
   Requirement,
 } from '../screens/admin_screens';
@@ -145,8 +145,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Calender"
-        component={Calender}
+        name="Attendance"
+        component={Attendance}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -163,7 +163,7 @@ const Tabs = () => {
                   color: COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Calender
+                Attendance
               </Text>
             </View>
           ),
