@@ -26,7 +26,7 @@ const RevertWorks = ({RevertData}) => {
               fontSize: 10,
               left: 5,
               paddingHorizontal: 3,
-              backgroundColor: COLORS.green,
+              backgroundColor: COLORS.rose_600,
               color: COLORS.white,
               borderRadius: 2,
             }}>

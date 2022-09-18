@@ -662,7 +662,7 @@ const ReportDisplay = () => {
                   borderColor: COLORS.darkGray2,
                 }}></View>
             ) : null} */}
-            <View style={{}}>
+            <View style={{marginTop:8}}>
               {ele.subquantityitems.map((ele, i) => {
                 return (
                   <View key={i}>
@@ -720,7 +720,7 @@ const ReportDisplay = () => {
                             color: COLORS.black,
                             textAlign: 'right',
                           }}>
-                          Remark
+                          Quality
                         </Text>
                       </View>
                     ) : null}
@@ -785,7 +785,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textAlign: 'right',
                         }}>
-                        {ele.sub_remark}
+                        {ele.sub_quality_type}
                       </Text>
                     </View>
                   </View>
@@ -1695,23 +1695,25 @@ const ReportDisplay = () => {
                         onPress={() => fetchFinalVerifyReport()}
                       />
                     </View>
-                    <View style={{left: 30}}>
-                      <Button
-                        title={
-                          reportData.final_verify_revert == true
-                            ? 'Reverted'
-                            : 'Revert'
-                        }
-                        color={COLORS.rose_600}
-                        disabled={
-                          reportData.admin_2_status == false ||
-                          reportData.final_verify_revert == true
-                            ? true
-                            : false
-                        }
-                        onPress={() => setFinalRevertModal(true)}
-                      />
-                    </View>
+                    {reportData.final_verify_status == false && (
+                      <View style={{left: 30}}>
+                        <Button
+                          title={
+                            reportData.final_verify_revert == true
+                              ? 'Reverted'
+                              : 'Revert'
+                          }
+                          color={COLORS.rose_600}
+                          disabled={
+                            reportData.admin_2_status == false ||
+                            reportData.final_verify_revert == true
+                              ? true
+                              : false
+                          }
+                          onPress={() => setFinalRevertModal(true)}
+                        />
+                      </View>
+                    )}
                   </View>
                   {reportData.final_verify_revert == true && (
                     <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
@@ -1783,6 +1785,7 @@ const ReportDisplay = () => {
                   borderBottomColor: COLORS.darkGray,
                 }}>
                 <TextInput
+                  style={{color: COLORS.black}}
                   placeholder="Write your message..."
                   multiline={true}
                   numberOfLines={1}
@@ -1876,6 +1879,7 @@ const ReportDisplay = () => {
                   borderBottomColor: COLORS.darkGray,
                 }}>
                 <TextInput
+                  style={{color: COLORS.black}}
                   placeholder="Write your message..."
                   multiline={true}
                   numberOfLines={1}

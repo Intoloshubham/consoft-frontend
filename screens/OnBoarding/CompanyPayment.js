@@ -24,7 +24,7 @@ const CompanyPayment = ({navigation, route}) => {
   const onPaymentSubmit = async () => {
     const formData = {
       payment: amount,
-      company_id: companyDetail._id,
+      company_id: companyDetail._id == '' ? company_id : companyDetail._id,
     };
     const response = await payment(formData);
     if (response.status === 200) {

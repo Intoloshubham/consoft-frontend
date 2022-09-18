@@ -186,20 +186,20 @@ const Account = () => {
               image={icons.right_arrow}
               onPress={() => navigation.navigate('ManageStock')}
             />
-            <LineDivider />
+            {/* <LineDivider /> */}
             {/* <ProfileValue
               icon={icons.units}
               value="Option Type"
               image={icons.right_arrow}
               onPress={() => navigation.navigate('Optiontype')}
             /> */}
-            <LineDivider />
+            {/* <LineDivider />
             <ProfileValue
               icon={icons.units}
               value="Tools & Machinery"
               image={icons.right_arrow}
               onPress={() => navigation.navigate('ToolsAndMachinery1')}
-            />
+            /> */}
           </View>
         </Collapsible>
         <LineDivider />

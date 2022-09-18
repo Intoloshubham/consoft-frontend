@@ -36,7 +36,7 @@ const forward_arrow = require('../assets/icons/forward_arrow.png');
 const check = require('../assets/icons/check.png');
 
 const account = require('../assets/icons/account.png');
-const report = require('../assets/icons/report.png');
+// const report = require('../assets/icons/report.png');
 const tasks = require('../assets/icons/tasks.png');
 const dashboard = require('../assets/icons/dashboard.png');
 const tracker = require('../assets/icons/tracker.png');
@@ -117,6 +117,7 @@ const right_arrow = require('../assets/icons/_icons/right_arrow.png');
 const dashboard_1 = require('../assets/icons/_icons/dashboard1.png');
 const pencil = require('../assets/icons/_icons/pencil.png');
 const lr_arrow = require('../assets/icons/_icons/lr_arrow.png');
+const report = require('../assets/icons/_icons/report.png');
 
 export default {
   // final
@@ -132,7 +133,7 @@ export default {
   revert,
   verify,
   account,
-  report,
+  // report,
   tasks,
   dashboard,
   tracker,
@@ -230,4 +231,5 @@ export default {
   dashboard_1,
   pencil,
   lr_arrow,
+  report,
 };

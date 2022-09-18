@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 import {COLORS, FONTS, icons, SIZES} from '../../../constants';
 import {getProjectAtGlance} from '../../../controller/ReportController';
+import {useNavigation} from '@react-navigation/native';
 
 const ProjectReports = ({data, reportFunction}) => {
+  const navigation = useNavigation();
   function renderProjectAtGlance() {
     const renderItem = ({item, index}) => (
       <View style={{}}>
@@ -24,14 +26,22 @@ const ProjectReports = ({data, reportFunction}) => {
             }}>
             {index + 1}.{' '}
           </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              color: COLORS.darkGray,
-              textTransform: 'capitalize',
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ProjectsDetails', {
+                name: item.project_name,
+                project_id: item._id,
+              });
             }}>
-            {item.project_name}
-          </Text>
+            <Text
+              style={{
+                ...FONTS.h3,
+                color: COLORS.darkGray,
+                textTransform: 'capitalize',
+              }}>
+              {item.project_name}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
