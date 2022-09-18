@@ -256,7 +256,7 @@ const UserAssignWorks = ({ loading }) => {
 
         }}>
           <Text style={{ color: color, marginTop: 3 }}>{message}</Text>
-          {message == 'Revert' ? <Text style={{ color: color, marginTop: 3 }}>{item.revert_msg}</Text> : null}
+          {message == 'Revert' ? <Text style={{ color: color, marginTop: 3 }}>{" - "+ item.revert_msg}</Text> : null}
         </View>
       </View>
     );
@@ -492,9 +492,9 @@ const UserAssignWorks = ({ loading }) => {
 
     <View
       style={{
-        marginHorizontal: SIZES.radius,
+        marginHorizontal: SIZES.base,
         marginVertical: SIZES.radius,
-        paddingHorizontal: SIZES.radius,
+        paddingHorizontal: SIZES.base,
         paddingTop: SIZES.base,
         paddingBottom: SIZES.base,
         backgroundColor: COLORS.white,
@@ -506,6 +506,7 @@ const UserAssignWorks = ({ loading }) => {
         style={{
           ...FONTS.h2,
           color: COLORS.darkGray,
+          marginHorizontal: SIZES.base,
           marginBottom: SIZES.base,
         }}>
         Assigned Works
@@ -528,8 +529,8 @@ const UserAssignWorks = ({ loading }) => {
           contentContainerStyle={{
             width: '100%',
             height: '100%',
-            padding: 5,
-            paddingBottom: 18
+            // padding: 5,
+            // paddingBottom: 10
           }}>
           <AccordionList
             list={getTaskInProgress ? getTaskInProgress : null}
