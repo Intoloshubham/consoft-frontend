@@ -14,7 +14,9 @@ import {COLORS, images, SIZES, icons, FONTS} from '../../constants';
 import {useSelector, useDispatch} from 'react-redux';
 import {verifyProductKey} from '../../services/companyAuthApi';
 
-const VerifyProductKey = ({navigation}) => {
+const VerifyProductKey = ({navigation, route}) => {
+  const {company_id} = route.params;
+
   const dispatch = useDispatch();
   const companyData = useSelector(state => state.company);
   const [productKey, setProductKey] = React.useState('');
@@ -25,7 +27,7 @@ const VerifyProductKey = ({navigation}) => {
 
   const OnSubmit = async () => {
     const productData = {
-      company_id: companyData._id,
+      company_id: companyData._id == '' ? company_id : companyData._id,
       product_key: productKey,
     };
     const result = await dispatch(verifyProductKey(productData));
