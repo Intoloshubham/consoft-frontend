@@ -166,9 +166,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
     data.contractor_name == '' ?
       validateFields('Contractor Field required!') :
-      data.phone_no==''?
-      validateFields('Phone number required!'):
-      validateFields('Empty fields')
+      data.phone_no == '' ?
+        validateFields('Phone number required!') :
+        null
 
 
 

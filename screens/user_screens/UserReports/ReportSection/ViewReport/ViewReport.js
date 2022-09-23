@@ -449,6 +449,8 @@ const ViewReport = () => {
                     backgroundColor: 'white',
                     padding: 10,
                     elevation: 1,
+                    borderLeftWidth: 5,
+                    borderColor: item.final_verify_status ? COLORS.green : COLORS.yellow_500
                 }}
 
                 onPress={() => {
@@ -639,7 +641,11 @@ const ViewReport = () => {
                                                 left: 0,
                                                 width: SIZES.width * 0.35
                                             }}>
-                                                <Text>Reverted-Message</Text>
+                                                <Text style={{
+                                                    ...FONTS.h3,
+                                                    textTransform: 'capitalize',
+                                                    color: COLORS.black,
+                                                }}>Reverted-Message</Text>
                                             </View>
                                         </View>
 
