@@ -171,7 +171,7 @@ const ViewReport = () => {
             {
                 response.data.map(async (ele, i) => {
 
-                    if (ele.verification_1 === user_id) {
+                    if (ele.verification_1 === user_id || ele.verification_2 === user_id) {
                         let user_id = '';
                         rep_resp = await getReport(projectId, user_id);
                         if (rep_resp.data) {
@@ -961,7 +961,7 @@ const ViewReport = () => {
                                                                             <View
                                                                                 style={{
                                                                                     left: 20,
-                                                                                    top: 5,
+                                                                                    top: 8,
                                                                                     flexDirection: 'row',
                                                                                 }}>
                                                                                 <TouchableOpacity
@@ -985,26 +985,26 @@ const ViewReport = () => {
                                                                                     />
                                                                                 </TouchableOpacity>
                                                                             </View>
-                                                                            {/* <View
+                                                                            <View
                                                                                 style={{
                                                                                     left: 20,
                                                                                     flexDirection: 'row',
                                                                                 }}>
                                                                                 <TouchableOpacity
                                                                                     style={{
-                                                                                        paddingHorizontal: 5,
-                                                                                        paddingVertical: 1,
-                                                                                        top: 3,
+                                                                                        paddingHorizontal: 3,
+                                                                                        paddingVertical: 0.6,
+                                                                                        top: 8,
                                                                                         backgroundColor: COLORS.success_600,
                                                                                     }}
                                                                                     onPress={() => {
-                                                                                        ele.admin_1 === user_id ? fetchVerifyReport() : null
+                                                                                        ele.verification_2 === user_id ? fetchVerifyReport() : null
                                                                                     }}>
                                                                                     <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                         Verify
                                                                                     </Text>
                                                                                 </TouchableOpacity>
-                                                                            </View> */}
+                                                                            </View>
                                                                             {/* <View
                                                                                 style={{
                                                                                     left: 20,
@@ -1027,11 +1027,12 @@ const ViewReport = () => {
                                                                                 </TouchableOpacity>
                                                                             </View> */}
                                                                         </View>
-                                                                        {/* <View
+                                                                        <View
                                                                             style={{
-                                                                                left: 25
+                                                                                left: 25,
+                                                                                top: 25
                                                                             }}>
-                                                                            <TouchableOpacity
+                                                                            {/* <TouchableOpacity
                                                                                 style={{
                                                                                     left: 15,
                                                                                     paddingHorizontal: 5,
@@ -1046,25 +1047,25 @@ const ViewReport = () => {
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                     Revert
                                                                                 </Text>
-                                                                            </TouchableOpacity>
+                                                                            </TouchableOpacity> */}
                                                                             <TouchableOpacity
                                                                                 style={{
                                                                                     left: 15,
                                                                                     top: 1,
-                                                                                    paddingHorizontal: 5,
-                                                                                    paddingVertical: 1,
+                                                                                    paddingHorizontal: 3,
+                                                                                    paddingVertical: 0.5,
                                                                                     backgroundColor: COLORS.rose_600,
                                                                                 }}
                                                                                 onPress={() => {
                                                                                     // setRevertModal(true)
-                                                                                    ele.admin_1 === user_id ? setRevertModal(true) : null
+                                                                                    ele.verification_2 === user_id ? setRevertModal(true) : null
 
                                                                                 }}>
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                     Revert
                                                                                 </Text>
                                                                             </TouchableOpacity>
-                                                                            <TouchableOpacity
+                                                                            {/* <TouchableOpacity
                                                                                 style={{
                                                                                     left: 15,
                                                                                     top: 2,
@@ -1080,8 +1081,8 @@ const ViewReport = () => {
                                                                                 <Text style={{ color: 'white', ...FONTS.h4 }}>
                                                                                     Revert
                                                                                 </Text>
-                                                                            </TouchableOpacity>
-                                                                        </View> */}
+                                                                            </TouchableOpacity> */}
+                                                                        </View>
                                                                     </View>
                                                                 ) :
                                                                 reportData.verify_1_status === true && reportData.verify_1_revert === false &&
