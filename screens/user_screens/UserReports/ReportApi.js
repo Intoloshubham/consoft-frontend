@@ -29,6 +29,12 @@ const Get_user_name_by_role = async (Id) => {
     return data;
 }
 
+const get_latest_steel_id = async (company_id) => {
+    const res = await fetch(`${process.env.API_URL}steel-quantity-item/${company_id}`);
+    const data = await res.json();
+    return data;
+}
+
 const Insert_project_team_data = async (teamData) => {
     try {
         const res = await fetch(`${process.env.API_URL}project-team`, {
@@ -258,15 +264,15 @@ const delete_manpower_data = async (Id) => {
     }
 }
 
-const delete_Qty_Record =async (Id) =>{
+const delete_Qty_Record = async (Id) => {
     try {
-        const res=await fetch(`${process.env.API_URL}/quantity-report/${Id}`,{
-            method:'DELETE',
-            headers:{
-                'Content-Type':'application/json',
+        const res = await fetch(`${process.env.API_URL}/quantity-report/${Id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
             },
         });
-        const result=await res.json();
+        const result = await res.json();
         return result;
     } catch (error) {
         return error;
@@ -297,7 +303,7 @@ const get_quality_type = async () => {
     }
 }
 
-const check_quantity_item_exist = async (project_id, user_id,current_date) => {
+const check_quantity_item_exist = async (project_id, user_id, current_date) => {
     try {
         const res = await fetch(`${process.env.API_URL}quantity-item-exist/${project_id}/${user_id}/${current_date}`)
         const data = await res.json();
@@ -345,7 +351,7 @@ const update_manpower_report = async (manpower_report_id, inputs) => {
 }
 
 
-const update_TAndP_report_data = async (id,equipmentField) => {
+const update_TAndP_report_data = async (id, equipmentField) => {
     try {
         const res = await fetch(`${process.env.API_URL}tools-machinery-report/${id}`,
             {
@@ -415,8 +421,8 @@ export {
     get_stock_item_name, insert_stock_data, get_stock_data, insert_new_category, get_new_category, insert_new_sub_category,
     insert_manpower_report, get_manpower_report, delete_manpower_data, filter_new_category_by_cont_Id, get_works_in_progress,
     Get_user_name_by_role, Insert_project_team_data, edit_manpower_report_data, update_manpower_report, get_equipment_item_name,
-    save_new_equipment_item, insert_TAndP_report, get_equipment_report, edit_TAndP_report_data, update_TAndP_report_data,get_completed_task,
-    delete_Qty_Record
+    save_new_equipment_item, insert_TAndP_report, get_equipment_report, edit_TAndP_report_data, update_TAndP_report_data, get_completed_task,
+    delete_Qty_Record, get_latest_steel_id
 }
 
 

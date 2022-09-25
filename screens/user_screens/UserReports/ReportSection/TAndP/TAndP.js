@@ -175,7 +175,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                     setAddNewEquipment(false);
                     setSubmitToast(false);
                 }, 800);
-               
+
 
             }
             return () => { isMount = false }
@@ -241,7 +241,7 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
         }
         setTimeout(() => {
             setUpdateToast(false);
-          }, 900);
+        }, 900);
     }
 
     const add_tAndP_icon_button = () => {
@@ -684,7 +684,18 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                     onPressIn={onPressIn}
                     onPressOut={onPressOut}
                     onPress={() => {
-                        LayoutAnimation.easeInEaseOut();
+                        LayoutAnimation.configureNext({
+                            duration: 300,
+                            create:
+                            {
+                                type: LayoutAnimation.Types.easeInEaseOut,
+                                property: LayoutAnimation.Properties.opacity,
+                            },
+                            update:
+                            {
+                                type: LayoutAnimation.Types.easeInEaseOut,
+                            }
+                        });
                         setTAndP(!tAndP)
 
                     }}
@@ -714,7 +725,18 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                             onPressIn={onPressIn}
                             onPressOut={onPressOut}
                             onPress={() => {
-                                LayoutAnimation.easeInEaseOut();
+                                LayoutAnimation.configureNext({
+                                    duration: 300,
+                                    create:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                        property: LayoutAnimation.Properties.opacity,
+                                    },
+                                    update:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                    }
+                                });
                                 setTAndP(!tAndP)
                             }} style={[FONTS.h3, { color: COLORS.white2 }]}>T & P</Text>
                     </View>
@@ -723,7 +745,18 @@ const TAndP = ({ project_id, Main_drp_pro_value, loading }) => {
                             onPressIn={onPressIn}
                             onPressOut={onPressOut}
                             onPress={() => {
-                                LayoutAnimation.easeInEaseOut();
+                                LayoutAnimation.configureNext({
+                                    duration: 300,
+                                    create:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                        property: LayoutAnimation.Properties.opacity,
+                                    },
+                                    update:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                    }
+                                });
                                 setTAndP(!tAndP)
                             }}>
                             <AntDesign name='caretdown' size={12} color={COLORS.white2} />

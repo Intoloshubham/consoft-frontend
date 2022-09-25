@@ -31,6 +31,7 @@ import {
     getProjectReportPath
 } from '../../../../../controller/ReportController'
 import { ScrollView } from 'react-native-gesture-handler';
+import moment from 'moment';
 
 
 
@@ -38,6 +39,7 @@ const ViewReport = () => {
     const userData = useSelector(state => state.user);
     const user_id = userData._id;
     const company_id = userData.company_id;
+    const current_dat = moment().format("YYYY%2FMM%2FDD")
     const navigation = useNavigation();
     // projects
     const [onSelect, setOnSelect] = React.useState(false);
@@ -164,16 +166,19 @@ const ViewReport = () => {
     // fetch report path
     const fetchReportPath = async () => {
         const response = await getProjectReportPath(company_id, projectId);
+        // console.log("🚀 ~ file: ViewReport.js ~ line 169 ~ fetchReportPath ~ response", response)
 
         // setProjectId(project_id);
 
         if (response.data) {
             {
                 response.data.map(async (ele, i) => {
+                    // console.log("🚀 ~ file: ViewReport.js ~ line 176 ~ response.data.map ~ ele", ele)
 
                     if (ele.verification_1 === user_id || ele.verification_2 === user_id) {
                         let user_id = '';
-                        rep_resp = await getReport(projectId, user_id);
+                        rep_resp = await getReport(projectId, date, user_id);
+                        // console.log("🚀 ~ file: ViewReport.js ~ line 179 ~ response.data.map ~ rep_resp", rep_resp)
                         if (rep_resp.data) {
                             rep_resp.data.map((item, idx) => {
                                 if (item._id === trackId) {
@@ -214,7 +219,7 @@ const ViewReport = () => {
 
 
                     } else {
-                        rep_resp = await getReport(projectId, user_id);
+                        rep_resp = await getReport(projectId, date, user_id);
                         if (rep_resp.data) {
                             rep_resp.data.map((item, idx) => {
                                 if (item._id === trackId) {

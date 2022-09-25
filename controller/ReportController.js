@@ -1,9 +1,9 @@
 import Config from '../config';
 
-const getReport = async (project_id, user_id) => {
+const getReport = async (project_id, date, user_id) => {
   try {
     const res = await fetch(
-      Config.API_URL + 'report/' + project_id + '/' + user_id,
+      Config.API_URL + 'report/' + project_id + '/' + date + '/' + user_id,
       {
         method: 'get',
         headers: {
@@ -110,12 +110,12 @@ const verifyReport = async (project_id, report_id, user_id) => {
   try {
     const res = await fetch(
       Config.API_URL +
-        'verify-report/' +
-        project_id +
-        '/' +
-        report_id +
-        '/' +
-        user_id,
+      'verify-report/' +
+      project_id +
+      '/' +
+      report_id +
+      '/' +
+      user_id,
       {
         method: 'put',
         headers: {
@@ -134,12 +134,12 @@ const revertReport = async (project_id, report_id, user_id, formData) => {
   try {
     const res = await fetch(
       Config.API_URL +
-        'revert-report/' +
-        project_id +
-        '/' +
-        report_id +
-        '/' +
-        user_id,
+      'revert-report/' +
+      project_id +
+      '/' +
+      report_id +
+      '/' +
+      user_id,
       {
         method: 'PUT',
         headers: {
