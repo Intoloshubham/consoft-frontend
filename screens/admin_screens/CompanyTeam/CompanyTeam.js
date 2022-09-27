@@ -181,7 +181,7 @@ const CompanyTeamShow = () => {
     }
     setTimeout(() => {
       setSubmitToast(false);
-    }, 2000);
+    }, 1000);
   };
 
   const [userId, setUserId] = React.useState('');
@@ -212,6 +212,7 @@ const CompanyTeamShow = () => {
     const response = await updateCompanyTeam(formData, userId);
     if (response.status === 200) {
       setAddTeamModal(false);
+      setUpdateToast(true);
       getCompanyTeam();
       setRoleValue('');
       setPrivilegeValue('');
@@ -222,6 +223,9 @@ const CompanyTeamShow = () => {
     } else {
       alert(response.message);
     }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 1000);
   };
 
   const onDelete = id => {
@@ -486,9 +490,7 @@ const CompanyTeamShow = () => {
             justifyContent: 'space-between',
           }}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-              {index + 1}.
-            </Text>
+            <Text style={{...FONTS.h4, color: COLORS.black}}>{index + 1}.</Text>
             <Text
               style={{
                 ...FONTS.h3,
@@ -558,7 +560,7 @@ const CompanyTeamShow = () => {
             color: COLORS.darkGray,
             textTransform: 'capitalize',
           }}>
-          Role - {item.user_role}, Privilege - {item.privilege}
+          Role - {item.user_role} ({item.privilege})
         </Text>
         <Text style={{...FONTS.h4, left: 15, color: COLORS.darkGray}}>
           Mobile No - {item.mobile}
@@ -630,6 +632,13 @@ const CompanyTeamShow = () => {
         color={COLORS.green}
         title="Submit"
         message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
       />
       <DeleteConfirmationToast
         isVisible={deleteConfirm}

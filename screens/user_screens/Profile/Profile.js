@@ -27,7 +27,7 @@ const Profile = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // authorization: `Bearer ${userData.token}`,
+        authorization: `Bearer ${userData.token}`,
       },
     })
       .then(response => response.json())
