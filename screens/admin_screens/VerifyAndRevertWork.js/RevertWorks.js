@@ -26,7 +26,7 @@ const RevertWorks = ({RevertData}) => {
               fontSize: 10,
               left: 5,
               paddingHorizontal: 3,
-              backgroundColor: COLORS.green,
+              backgroundColor: COLORS.rose_600,
               color: COLORS.white,
               borderRadius: 2,
             }}>
@@ -81,10 +81,10 @@ const RevertWorks = ({RevertData}) => {
         <Text style={{...FONTS.h3, color: COLORS.darkGray}}>Work{' - '}</Text>
         {item.work}
       </Text>
-      <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+      {/* <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
         <Text style={{...FONTS.h3, color: COLORS.darkGray}}>Msg{' - '}</Text>
         {item.submit_work_text}
-      </Text>
+      </Text> */}
     </View>
   );
 

@@ -130,6 +130,30 @@ const verifyReport = async (project_id, report_id, user_id) => {
   }
 };
 
+const finalVerifyReport = async (company_id, project_id, report_id) => {
+  try {
+    const res = await fetch(
+      Config.API_URL +
+        'final-verify-report/' +
+        company_id +
+        '/' +
+        project_id +
+        '/' +
+        report_id,
+      {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
 const revertReport = async (project_id, report_id, user_id, formData) => {
   try {
     const res = await fetch(
@@ -154,6 +178,50 @@ const revertReport = async (project_id, report_id, user_id, formData) => {
     console.log(error);
   }
 };
+const finalRevertReport = async (
+  company_id,
+  project_id,
+  report_id,
+  formData,
+) => {
+  try {
+    const res = await fetch(
+      Config.API_URL +
+        'final-revert-report/' +
+        company_id +
+        '/' +
+        project_id +
+        '/' +
+        report_id,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteReportPath = async id => {
+  try {
+    const res = await fetch(Config.API_URL + 'project-report-path/' + id, {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export {
   getReport,
@@ -164,4 +232,7 @@ export {
   getProjectReportPath,
   verifyReport,
   revertReport,
+  finalVerifyReport,
+  finalRevertReport,
+  deleteReportPath,
 };

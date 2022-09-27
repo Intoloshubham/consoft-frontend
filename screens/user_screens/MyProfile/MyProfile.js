@@ -38,6 +38,7 @@ const MyProfile = () => {
   const [leavesday, setLeavesDay] = useState([]);
   const [haliddayates, setHalidayDates] = useState([]);
 
+  // console.log(userDetail);
   // const [removedate, setRemoveDate] = useState(false)
   const [pushdate, setPushDate] = useState([]);
 

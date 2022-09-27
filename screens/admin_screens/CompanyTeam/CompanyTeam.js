@@ -27,6 +27,7 @@ import {
   CustomDropdown,
   CustomToast,
   HeaderBar,
+  DeleteConfirmationToast,
 } from '../../../Components';
 import {SIZES, COLORS, icons, FONTS} from '../../../constants';
 
@@ -42,9 +43,16 @@ const CompanyTeamShow = () => {
   }
   const company_id = companyData._id;
 
+  // console.log(company_id);
+
   const [addTeamModal, setAddTeamModal] = React.useState(false);
-  const [submitToast, setSubmitToast] = React.useState(false);
   const [companyTeam, setCompanyTeam] = React.useState([]);
+
+  // toasts
+  const [submitToast, setSubmitToast] = React.useState(false);
+  const [updateToast, setUpdateToast] = React.useState(false);
+  const [deleteToast, setDeleteToast] = React.useState(false);
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
   // FORM STATES & DROPDOWN ROLE DATA FETCH FROM API
   const [openRole, setOpenRole] = React.useState(false);
@@ -173,6 +181,24 @@ const CompanyTeamShow = () => {
     setTimeout(() => {
       setSubmitToast(false);
     }, 2000);
+  };
+
+  const [userId, setUserId] = React.useState('');
+
+  const onEdit = (id, roleId, privilegeId, name, email, mobile) => {
+    setUserId(id);
+    setRoleValue(roleId);
+    setPrivilegeValue(privilegeId);
+    setName(name);
+    setEmail(email);
+    setMobile(mobile);
+    userRole();
+    fetchPrivilege();
+    setAddTeamModal(true);
+  };
+
+  const onDelete = id => {
+    console.log(id);
   };
 
   React.useEffect(() => {
@@ -406,7 +432,7 @@ const CompanyTeamShow = () => {
               </View>
 
               <TextButton
-                label="Save"
+                label={userId != '' ? 'Update' : 'Save'}
                 buttonContainerStyle={{
                   height: 45,
                   alignItems: 'center',
@@ -433,7 +459,9 @@ const CompanyTeamShow = () => {
             justifyContent: 'space-between',
           }}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{...FONTS.h4}}>{index + 1}.</Text>
+            <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+              {index + 1}.
+            </Text>
             <Text
               style={{
                 ...FONTS.h3,
@@ -449,11 +477,13 @@ const CompanyTeamShow = () => {
                 ...FONTS.h5,
                 left: 5,
                 color: COLORS.darkGray,
+                textTransform: 'capitalize',
               }}>
-              ({item.user_role})
+              ({item.user_role}) ({item.privilege})
             </Text>
           </View>
-          {/* <View style={{flexDirection: 'row'}}>
+
+          <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => {
                 onEdit(
@@ -484,7 +514,7 @@ const CompanyTeamShow = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                alert('Delete');
+                onDelete(item._id);
               }}>
               <ImageBackground
                 style={{
@@ -502,7 +532,7 @@ const CompanyTeamShow = () => {
                 />
               </ImageBackground>
             </TouchableOpacity>
-          </View> */}
+          </View>
         </View>
         <Text style={{...FONTS.h4, left: 15, color: COLORS.darkGray}}>
           Mobile No. {item.mobile}
@@ -556,7 +586,15 @@ const CompanyTeamShow = () => {
           backgroundColor: COLORS.lightblue_700,
           ...styles.shadow,
         }}
-        onPress={() => setAddTeamModal(true)}
+        onPress={() => {
+          setUserId('');
+          setName('');
+          setEmail('');
+          setMobile('');
+          setRoleValue('');
+          setPrivilegeValue('');
+          setAddTeamModal(true);
+        }}
       />
       {renderAddTeamModal()}
       {renderCompanyTeam()}
@@ -566,6 +604,15 @@ const CompanyTeamShow = () => {
         color={COLORS.green}
         title="Submit"
         message="Submitted Successfully..."
+      />
+      <DeleteConfirmationToast
+        isVisible={deleteConfirm}
+        onClose={() => setDeleteConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to delete this user?'}
+        color={COLORS.rose_600}
+        icon={icons.delete_withbg}
+        onClickYes={() => console.log(object)}
       />
     </View>
   );

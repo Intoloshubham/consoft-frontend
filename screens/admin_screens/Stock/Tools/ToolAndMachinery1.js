@@ -77,7 +77,7 @@ const ToolAndMachinery1 = () => {
       .then(data => {
         fetchDatatools();
         setToolsname('');
-        console.log('Success:', data);
+        // console.log('Success:', data);
 
         {
           Toolsname == ''
@@ -113,13 +113,13 @@ const ToolAndMachinery1 = () => {
   const DeleteTools = async toolsId => {
     try {
       let result = await fetch(
-        'http://192.168.1.99:8000/api/tools-machinery/' + `${toolsId}`,
+        'http://107.20.37.104:8000/api/tools-machinery/' + `${toolsId}`,
         {
           method: 'DELETE',
         },
       );
       result = await result.json();
-      console.log(result, alert('deleted'));
+      // console.log(result, alert('deleted'));
       fetchDatatools();
     } catch (error) {
       console.log('error', error);
@@ -144,7 +144,7 @@ const ToolAndMachinery1 = () => {
         setToolsname('');
         setToolquantity('');
         fetchDatatools();
-        console.log('Success:', data);
+        // console.log('Success:', data);
 
         // {
         //   Toolsname == ''

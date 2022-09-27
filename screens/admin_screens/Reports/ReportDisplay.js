@@ -11,6 +11,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Button,
+  ScrollView,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
@@ -23,9 +24,13 @@ import {
   getQuantity,
   verifyReport,
   revertReport,
+  finalVerifyReport,
+  finalRevertReport,
 } from '../../../controller/ReportController';
 import {getProjectReportPath} from '../../../controller/ReportController';
 import {getUserId} from '../../../services/asyncStorageService';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import ReportPdf from './ReportPdf';
 
 const ReportDisplay = () => {
   const companyDetail = useSelector(state => state.company);
@@ -40,7 +45,6 @@ const ReportDisplay = () => {
 
   const company_id = companyData._id;
   const [userId, setUserId] = React.useState('');
-  // console.log(userId)
   const getUser_Id = async () => {
     const id = await getUserId();
     setUserId(id);
@@ -69,7 +73,9 @@ const ReportDisplay = () => {
 
   //modal
   const [revertModal, setRevertModal] = React.useState(false);
+  const [finalRevertModal, setFinalRevertModal] = React.useState(false);
   const [revertMsg, setRevertMsg] = React.useState('');
+  const [finalRevertMsg, setFinalRevertMsg] = React.useState('');
 
   // get projects
   const fetchProject = async () => {
@@ -87,7 +93,6 @@ const ReportDisplay = () => {
   const fetchReport = async project_id => {
     setProjectId(project_id);
     let response = await getReport(project_id, user_id);
-    // console.log(response);
     setReport(response.data);
   };
 
@@ -102,6 +107,7 @@ const ReportDisplay = () => {
 
   // fetch quantity report on click
   const fetchQuantity = async report_id => {
+    // console.log(report_id)
     let response = await getQuantity(report_id);
     if (response.status === 200) {
       setQuantity(response.data);
@@ -111,7 +117,6 @@ const ReportDisplay = () => {
   // fetch report path
   const fetchReportPath = async project_id => {
     const response = await getProjectReportPath(company_id, project_id);
-    // console.log(response);
     setReportPath(response.data);
   };
 
@@ -119,7 +124,15 @@ const ReportDisplay = () => {
   const fetchVerifyReport = async () => {
     let response = await verifyReport(projectId, reportId, userId);
     if (response.status === 200) {
-      alert('Verified');
+      alert('Verified Successfully');
+      fetchReport();
+    }
+  };
+
+  const fetchFinalVerifyReport = async () => {
+    let response = await finalVerifyReport(company_id, projectId, reportId);
+    if (response.status === 200) {
+      alert('Final Verified Successfully');
       fetchReport();
     }
   };
@@ -140,6 +153,26 @@ const ReportDisplay = () => {
     }
   };
 
+  const onFinalRevertReport = async () => {
+    const formData = {
+      revert_msg: finalRevertMsg,
+    };
+    let response = await finalRevertReport(
+      company_id,
+      projectId,
+      reportId,
+      formData,
+    );
+    if (response.status === 200) {
+      alert('Reverted Successfully');
+      setFinalRevertMsg('');
+      setFinalRevertModal(false);
+      fetchReport();
+    } else {
+      alert(response.message);
+    }
+  };
+
   // open project dropdown
   const onProjectOpen = React.useCallback(() => {
     setOnSelect(false);
@@ -151,14 +184,26 @@ const ReportDisplay = () => {
     fetchReport();
   }, []);
 
+  //pdf
+  // const createPDF = async () => {
+  //   let options = {
+  //     html: ReportPdf(reportData, manpower, quantity),
+  //     fileName: 'report',
+  //     directory: 'Documents',
+  //   };
+
+  //   let file = await RNHTMLtoPDF.convert(options);
+  //   alert('Pdf Created Successfully');
+  // };
+
   // date section
   const [date, setDate] = React.useState(new Date());
   const MyDateString =
     date.getFullYear() +
-    '/' +
-    ('0' + date.getDate()).slice(-2) +
-    '/' +
-    ('0' + (date.getMonth() + 1)).slice(-2);
+    '%2F' +
+    ('0' + (date.getMonth() + 1)).slice(-2) +
+    '%2F' +
+    ('0' + date.getDate()).slice(-2);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -223,6 +268,7 @@ const ReportDisplay = () => {
             }}
             onSelectItem={value => {
               fetchReport(value.value);
+
               setOnSelect(true);
               fetchReportPath(value.value);
             }}
@@ -263,6 +309,9 @@ const ReportDisplay = () => {
           backgroundColor: 'white',
           padding: 10,
           elevation: 1,
+          borderLeftWidth: 2,
+          borderLeftColor:
+            item.final_verify_status == true ? COLORS.green : COLORS.yellow_400,
         }}
         onPress={() => {
           setReportModal(true);
@@ -279,15 +328,21 @@ const ReportDisplay = () => {
             verify_1_status: item.verify_1_status,
             verify_1_revert_msg: item.verify_1_revert_msg,
             verify_1_revert: item.verify_1_revert,
+            verify_2_status: item.verify_2_status,
+            verify_2_revert_msg: item.verify_2_revert_msg,
+            verify_2_revert: item.verify_2_revert,
             admin_1_revert: item.admin_1_revert,
             admin_2_revert: item.admin_2_revert,
+            final_verify_status: item.final_verify_status,
+            final_verify_revert_msg: item.final_verify_revert_msg,
+            final_verify_revert: item.final_verify_revert,
           });
           fetchManpower(item._id);
           fetchQuantity(item._id);
         }}>
         <Text
           style={{
-            ...FONTS.h2,
+            ...FONTS.h3,
             color: COLORS.darkGray,
             textTransform: 'capitalize',
           }}>
@@ -300,15 +355,18 @@ const ReportDisplay = () => {
             justifyContent: 'flex-start',
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
+            {/* <Image
               source={icons.date}
-              style={{height: 12, width: 12, right: 10}}
-            />
+              style={{height: 12, width: 12, right: 5}}
+            /> */}
             <Text style={{fontSize: 12, color: COLORS.darkGray}}>
               {item.report_date}
             </Text>
+            <Text style={{fontSize: 12, color: COLORS.darkGray, left: 5}}>
+              {item.report_time}
+            </Text>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Image
               source={icons.time}
               style={{height: 12, width: 12, right: 10}}
@@ -316,7 +374,7 @@ const ReportDisplay = () => {
             <Text style={{fontSize: 12, color: COLORS.darkGray}}>
               {item.report_time}
             </Text>
-          </View>
+          </View> */}
         </View>
       </TouchableOpacity>
     );
@@ -349,7 +407,7 @@ const ReportDisplay = () => {
           borderWidth: 1,
           borderColor: COLORS.gray2,
           padding: 10,
-          width: SIZES.width / 2.4,
+          width: SIZES.width / 2.3,
         }}>
         <Text
           style={{
@@ -396,6 +454,77 @@ const ReportDisplay = () => {
       </View>
     );
 
+    const headerComponent = () => (
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 25,
+              color: COLORS.lightblue_800,
+              textTransform: 'capitalize',
+            }}>
+            {reportData.project_name}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{fontSize: 14, color: COLORS.black}}>
+                Date{' - '}
+              </Text>
+              <Text style={{fontSize: 13, color: COLORS.black}}>
+                {reportData.date}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{fontSize: 14, color: COLORS.black}}>
+                Time{' - '}
+              </Text>
+              <Text style={{fontSize: 13, color: COLORS.black}}>
+                {reportData.time}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            marginTop: 15,
+            marginBottom: 5,
+            borderColor: COLORS.gray2,
+          }}></View>
+        <View>
+          <Text
+            style={{
+              fontSize: 18,
+              color: COLORS.lightblue_700,
+              textAlign: 'center',
+              textDecorationLine: 'underline',
+              marginBottom: 5,
+            }}>
+            Manpower
+          </Text>
+          <Text style={{...FONTS.h3, color: COLORS.black}}>
+            Company team -{' '}
+          </Text>
+          <View
+            style={{
+              borderBottomWidth: 1,
+              marginVertical: 5,
+              borderColor: COLORS.gray3,
+            }}></View>
+          <Text style={{...FONTS.h3, color: COLORS.black}}>Contractors - </Text>
+        </View>
+      </View>
+    );
+
     const footerComponent = () => (
       <View>
         {renderQuantity()}
@@ -412,129 +541,56 @@ const ReportDisplay = () => {
           }}>
           <View
             style={{
-              top: 30,
+              top: 20,
               backgroundColor: COLORS.white,
-              paddingHorizontal: SIZES.radius,
-              paddingBottom: SIZES.radius,
+              paddingHorizontal: SIZES.base,
+              // paddingBottom: SIZES.radius,
               height: '100%',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
             }}>
             <View
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <ImageBackground
-                style={{
-                  borderWidth: 2,
-                  borderRadius: 20,
-                  borderColor: 'white',
-                  padding: 3,
-                  top: -20,
-                  backgroundColor: COLORS.rose_600,
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setReportModal(false);
-                  }}>
-                  <Image
-                    source={icons.cross}
-                    style={{height: 25, width: 25, tintColor: COLORS.white}}
-                  />
-                </TouchableOpacity>
-              </ImageBackground>
+              <TouchableOpacity
+                onPress={() => {
+                  setReportModal(false);
+                }}
+                style={{top: -5}}>
+                <Image
+                  source={icons.minus}
+                  style={{height: 30, width: 35, tintColor: COLORS.darkGray}}
+                />
+              </TouchableOpacity>
             </View>
-            <Text
-              style={{
-                textAlign: 'center',
-                marginBottom: 8,
-                ...FONTS.h3,
-                color: COLORS.lightblue_700,
-                fontWeight: '500',
-                textDecorationLine: 'underline',
-              }}>
-              Daily Progress Report
-            </Text>
+            {/* <TouchableOpacity
+              onPress={createPDF}
+              style={{alignItems: 'flex-end'}}>
+              <Text style={{color: COLORS.black, ...FONTS.h4}}>Print</Text>
+            </TouchableOpacity> */}
             <View
               style={{
                 borderWidth: 1,
                 borderColor: COLORS.darkGray2,
-                padding: 15,
+                padding: 12,
               }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Text
-                  style={{
-                    fontSize: 25,
-                    color: COLORS.black,
-                    textTransform: 'capitalize',
-                  }}>
-                  {reportData.project_name}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                  }}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 14, color: COLORS.black}}>
-                      Date{' - '}
-                    </Text>
-                    <Text style={{fontSize: 13, color: COLORS.black}}>
-                      {reportData.date}
-                    </Text>
-                  </View>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 14, color: COLORS.black}}>
-                      Time{' - '}
-                    </Text>
-                    <Text style={{fontSize: 13, color: COLORS.black}}>
-                      {reportData.time}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  marginTop: 15,
-                  marginBottom: 5,
-                  borderColor: COLORS.gray2,
-                }}></View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: COLORS.black,
-                    textAlign: 'center',
-                    textDecorationLine: 'underline',
-                    marginBottom: 5,
-                  }}>
-                  Manpower
-                </Text>
-                <Text style={{...FONTS.h3, color: COLORS.black}}>
-                  Contractors
-                </Text>
-
-                <FlatList
-                  contentContainerStyle={{marginTop: 5, maxHeight: 450}}
-                  numColumns={2}
-                  columnWrapperStyle={{justifyContent: 'space-between'}}
-                  data={manpower}
-                  keyExtractor={item => `${item._id}`}
-                  renderItem={renderItem}
-                  scrollEnabled={true}
-                  showsVerticalScrollIndicator={false}
-                  ItemSeparatorComponent={() => {
-                    return <View style={{margin: 5}}></View>;
-                  }}
-                  ListFooterComponent={footerComponent}
-                />
-              </View>
+              <FlatList
+                numColumns={2}
+                columnWrapperStyle={{justifyContent: 'space-between'}}
+                data={manpower}
+                keyExtractor={item => `${item._id}`}
+                renderItem={renderItem}
+                scrollEnabled={true}
+                maxHeight={600}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => {
+                  return <View style={{margin: 5}}></View>;
+                }}
+                ListHeaderComponent={headerComponent}
+                ListFooterComponent={footerComponent}
+              />
             </View>
           </View>
         </View>
@@ -544,207 +600,6 @@ const ReportDisplay = () => {
 
   // quantity report
   function renderQuantity() {
-    const renderItem = ({item, index}) => (
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
-          <Text
-            style={{
-              flex: 1,
-              ...FONTS.h3,
-              color: COLORS.black,
-            }}>
-            {item.quantityWorkItems.item_name}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_length}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_width}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 0.5,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_height}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 1,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.num_total}
-          </Text>
-          <Text
-            style={{
-              ...FONTS.h3,
-              flex: 1,
-              color: COLORS.black,
-              textAlign: 'right',
-            }}>
-            {item.quantityWorkItems.quality_type}
-          </Text>
-        </View>
-        {index == 0 ? (
-          <View
-            style={{
-              borderBottomWidth: 1,
-              marginVertical: index == 0 ? 10 : null,
-              borderColor: COLORS.darkGray2,
-            }}></View>
-        ) : null}
-        <View style={{}}>
-          {item.quantityWorkItems.subquantityitems.map((ele, i) => {
-            return (
-              <View key={i}>
-                {i == 0 ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                    }}>
-                    <Text
-                      style={{
-                        flex: 1,
-                        ...FONTS.h4,
-                        color: COLORS.black,
-                      }}></Text>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      L
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      W
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        flex: 0.5,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      H
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h4,
-                        flex: 1,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      Total
-                    </Text>
-                    <Text
-                      style={{
-                        ...FONTS.h3,
-                        flex: 1,
-                        color: COLORS.black,
-                        textAlign: 'right',
-                      }}>
-                      Remark
-                    </Text>
-                  </View>
-                ) : null}
-                <View
-                  style={{
-                    left: 100,
-                    borderBottomWidth: 1,
-                    borderColor: COLORS.darkGray2,
-                    width: '75%',
-                    marginVertical: 5,
-                  }}></View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      flex: 1,
-                      ...FONTS.h4,
-                      color: COLORS.black,
-                    }}></Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_length}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_width}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 0.5,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_height}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      flex: 1,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_total}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h3,
-                      flex: 1,
-                      color: COLORS.black,
-                      textAlign: 'right',
-                    }}>
-                    {ele.sub_quality_type}
-                  </Text>
-                </View>
-              </View>
-            );
-          })}
-        </View>
-      </View>
-    );
-
     return (
       <View>
         <View
@@ -757,101 +612,493 @@ const ReportDisplay = () => {
         <Text
           style={{
             fontSize: 18,
-            color: COLORS.black,
+            color: COLORS.lightblue_700,
             textAlign: 'center',
             textDecorationLine: 'underline',
-            marginBottom: 5,
+            marginBottom: 15,
           }}>
-          Excluded Quantity
+          Executed Quantity
         </Text>
-        <FlatList
-          contentContainerStyle={{maxHeight: 450}}
-          data={quantity}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={true}
-          ItemSeparatorComponent={() => {
-            return (
-              <View
+        <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                backgroundColor: COLORS.yellow_200,
+                padding: 5,
+              }}>
+              <Text
                 style={{
-                  height: 1,
-                  backgroundColor: COLORS.darkGray,
-                  marginVertical: 10,
-                }}></View>
-            );
-          }}
-          ListHeaderComponent={
-            <View>
-              <View
-                style={{
-                  marginTop: 10,
-                  flexDirection: 'row',
-                  marginBottom: 5,
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 20,
+                  textAlign: 'left',
                 }}>
-                <Text
-                  style={{
-                    flex: 1,
-                    ...FONTS.h3,
-                    color: COLORS.black,
-                  }}>
-                  Items
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 0.5,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  L
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 0.5,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  W
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 0.5,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  H
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  Total
-                </Text>
-                <Text
-                  style={{
-                    ...FONTS.h3,
-                    flex: 1,
-                    color: COLORS.black,
-                    textAlign: 'right',
-                  }}>
-                  Remark
-                </Text>
-              </View>
-              <View
+                Sn.
+              </Text>
+              <View style={{marginHorizontal: 5}}></View>
+              <Text
                 style={{
-                  borderBottomWidth: 1,
-                  borderColor: COLORS.darkGray,
-                  marginBottom: 10,
-                }}></View>
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 60,
+                  textAlign: 'left',
+                }}>
+                Items
+              </Text>
+              <View style={{marginHorizontal: 10}}></View>
+
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 30,
+                  textAlign: 'right',
+                }}>
+                Nos
+              </Text>
+              <View style={{marginHorizontal: 10}}></View>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 50,
+                  textAlign: 'right',
+                }}>
+                L
+              </Text>
+              <View style={{marginHorizontal: 10}}></View>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 50,
+                  textAlign: 'right',
+                }}>
+                W
+              </Text>
+              <View style={{marginHorizontal: 10}}></View>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 50,
+                  textAlign: 'right',
+                }}>
+                H
+              </Text>
+              <View style={{marginHorizontal: 10}}></View>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 30,
+                  textAlign: 'right',
+                }}>
+                Unit
+              </Text>
+              <View style={{marginHorizontal: 10}}></View>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 50,
+                  textAlign: 'right',
+                }}>
+                MM
+              </Text>
+              <View style={{marginHorizontal: 10}}></View>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 50,
+                  textAlign: 'right',
+                }}>
+                Qty
+              </Text>
+              <View style={{marginHorizontal: 15}}></View>
+              <Text
+                style={{
+                  ...FONTS.h4,
+                  color: COLORS.black,
+                  width: 200,
+                  textAlign: 'left',
+                }}>
+                Remarks
+              </Text>
             </View>
-          }
-        />
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderColor: COLORS.darkGray,
+                marginBottom: 3,
+              }}></View>
+
+            <ScrollView nestedScrollEnabled={true}>
+              {quantity.map((ele, index) =>
+                ele.quantityWorkItems.map((ele1, index1) => {
+                  return (
+                    <View style={{}}>
+                      {index1 != 0 ? (
+                        <View
+                          style={{
+                            borderBottomWidth: 1,
+                            borderColor: COLORS.darkGray2,
+                            marginVertical: 5,
+                          }}></View>
+                      ) : null}
+                      <View
+                        key={index1}
+                        style={{
+                          flexDirection: 'row',
+                          padding: 5,
+                        }}>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 20,
+                            textAlign: 'left',
+                          }}>
+                          {index1 + 1}.
+                        </Text>
+                        <View style={{marginHorizontal: 5}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 60,
+                            textAlign: 'left',
+                            textTransform: 'capitalize',
+                          }}>
+                          {ele1.item_name}
+                        </Text>
+                        <View style={{marginHorizontal: 10}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 30,
+                            textAlign: 'right',
+                          }}>
+                          {ele1.nos == null ? '-' : ele1.nos}
+                        </Text>
+                        <View style={{marginHorizontal: 10}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 50,
+                            textAlign: 'right',
+                          }}>
+                          {ele1.num_length == null ? '-' : ele1.num_length}
+                        </Text>
+                        <View style={{marginHorizontal: 10}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 50,
+                            textAlign: 'right',
+                          }}>
+                          {ele1.num_width == null ? '-' : ele1.num_width}
+                        </Text>
+                        <View style={{marginHorizontal: 10}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 50,
+                            textAlign: 'right',
+                          }}>
+                          {ele1.num_height == null ? '-' : ele1.num_height}
+                        </Text>
+                        <View style={{marginHorizontal: 10}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 30,
+                            textAlign: 'right',
+                          }}>
+                          {ele1.unit_name == null ? '-' : ele1.unit_name}
+                        </Text>
+                        <View style={{marginHorizontal: 10}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 50,
+                            textAlign: 'right',
+                          }}>
+                          {ele1.steel_mm == null ? '-' : ele1.steel_mm}
+                        </Text>
+                        <View style={{marginHorizontal: 10}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            color: COLORS.black,
+                            width: 50,
+                            textAlign: 'right',
+                          }}>
+                          {ele1.num_total == null ? '-' : ele1.num_total}
+                        </Text>
+                        <View style={{marginHorizontal: 15}}></View>
+                        <Text
+                          style={{
+                            ...FONTS.h5,
+                            color: COLORS.black,
+                            width: 200,
+                            textAlign: 'left',
+                          }}>
+                          {ele1.remark}
+                        </Text>
+                      </View>
+                      <View>
+                        {ele1.subquantityitems.map((ele2, index2) => {
+                          return (
+                            <View key={index2}>
+                              <View
+                                style={{
+                                  width: '85%',
+                                  alignSelf: 'flex-end',
+                                  borderBottomWidth: 1,
+                                  borderColor: COLORS.lightblue_600,
+                                }}></View>
+                              {index2 == 0 ? (
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    padding: 5,
+                                  }}>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 20,
+                                      textAlign: 'left',
+                                    }}></Text>
+                                  <View style={{marginHorizontal: 5}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 60,
+                                      textAlign: 'left',
+                                    }}></Text>
+                                  <View style={{marginHorizontal: 10}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 30,
+                                      textAlign: 'right',
+                                    }}>
+                                    Nos
+                                  </Text>
+                                  <View style={{marginHorizontal: 10}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 50,
+                                      textAlign: 'right',
+                                    }}>
+                                    L
+                                  </Text>
+                                  <View style={{marginHorizontal: 10}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 50,
+                                      textAlign: 'right',
+                                    }}>
+                                    W
+                                  </Text>
+                                  <View style={{marginHorizontal: 10}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 50,
+                                      textAlign: 'right',
+                                    }}>
+                                    H
+                                  </Text>
+                                  <View style={{marginHorizontal: 10}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 30,
+                                      textAlign: 'right',
+                                    }}>
+                                    Unit
+                                  </Text>
+                                  <View style={{marginHorizontal: 10}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 50,
+                                      textAlign: 'right',
+                                    }}>
+                                    MM
+                                  </Text>
+                                  <View style={{marginHorizontal: 10}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 50,
+                                      textAlign: 'right',
+                                    }}>
+                                    Qty
+                                  </Text>
+                                  <View style={{marginHorizontal: 15}}></View>
+                                  <Text
+                                    style={{
+                                      ...FONTS.h5,
+                                      color: COLORS.lightblue_700,
+                                      width: 200,
+                                      textAlign: 'left',
+                                    }}>
+                                    Remarks
+                                  </Text>
+                                </View>
+                              ) : null}
+                              <View
+                                style={{
+                                  alignSelf: 'flex-end',
+                                  borderBottomWidth: 1,
+                                  borderColor: COLORS.lightblue_700,
+                                  width: '85%',
+                                }}></View>
+                              <View
+                                key={index2}
+                                style={{
+                                  flexDirection: 'row',
+                                  padding: 5,
+                                }}>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 20,
+                                    textAlign: 'left',
+                                  }}></Text>
+                                <View style={{marginHorizontal: 5}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 60,
+                                    textAlign: 'left',
+                                  }}></Text>
+                                <View style={{marginHorizontal: 10}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 30,
+                                    textAlign: 'right',
+                                  }}>
+                                  {ele2.sub_nos == null ? '-' : ele2.sub_nos}
+                                </Text>
+                                <View style={{marginHorizontal: 10}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                  }}>
+                                  {ele2.sub_length == null
+                                    ? '-'
+                                    : ele2.sub_length}
+                                </Text>
+                                <View style={{marginHorizontal: 10}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                  }}>
+                                  {ele2.sub_width == null
+                                    ? '-'
+                                    : ele2.sub_width}
+                                </Text>
+                                <View style={{marginHorizontal: 10}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                  }}>
+                                  {ele2.sub_height == null
+                                    ? '-'
+                                    : ele2.sub_height}
+                                </Text>
+                                <View style={{marginHorizontal: 10}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 30,
+                                    textAlign: 'right',
+                                  }}>
+                                  -
+                                </Text>
+                                <View style={{marginHorizontal: 10}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                  }}>
+                                  {ele2.sub_steel_mm == null
+                                    ? '-'
+                                    : ele2.sub_steel_mm}
+                                </Text>
+                                <View style={{marginHorizontal: 10}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                  }}>
+                                  {ele2.sub_total == null
+                                    ? '-'
+                                    : ele2.sub_total}
+                                </Text>
+                                <View style={{marginHorizontal: 15}}></View>
+                                <Text
+                                  style={{
+                                    ...FONTS.h5,
+                                    color: COLORS.black,
+                                    width: 200,
+                                    textAlign: 'left',
+                                  }}>
+                                  {ele2.sub_remark} ({ele2.sub_quality_type})
+                                </Text>
+                              </View>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    </View>
+                  );
+                }),
+              )}
+            </ScrollView>
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -868,12 +1115,22 @@ const ReportDisplay = () => {
           }}></View>
         <Text
           style={{
-            ...FONTS.h3,
-            color: COLORS.black,
-            marginBottom: 5,
+            fontSize: 18,
+            color: COLORS.lightblue_700,
+            textAlign: 'center',
+            textDecorationLine: 'underline',
+            marginBottom: 15,
           }}>
-          Report status :
+          Report Progress Status -
         </Text>
+        {/* <Text
+          style={{
+            fontSize: 18,
+            color: COLORS.black,
+            marginBottom: 8,
+          }}>
+          Report Progress Status:
+        </Text> */}
         {reportPath.map((ele, i) => {
           return (
             <View key={i}>
@@ -886,7 +1143,7 @@ const ReportDisplay = () => {
                         textTransform: 'capitalize',
                         color: COLORS.black,
                       }}>
-                      {ele.admin_1_name} :
+                      {ele.admin_1_name}(A1) -
                     </Text>
                     {reportData.admin_1_status === false ? (
                       <View
@@ -962,7 +1219,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           marginBottom: 5,
                         }}>
-                        Your Reverted msg{' : '}
+                        Your Reverted msg{' - '}
                         {reportData.admin_1_revert_msg}
                       </Text>
                     )}
@@ -974,7 +1231,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.admin_2_name} {' - '}
+                        {ele.admin_2_name}(A2) {' - '}
                       </Text>
                       {/* {reportData.admin_2_status == true && ( */}
                       <View
@@ -1031,7 +1288,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.verification_1_name} {' - '}
+                        {ele.verification_1_name}(V1) {' - '}
                       </Text>
                       <View
                         style={{
@@ -1072,6 +1329,55 @@ const ReportDisplay = () => {
                       </Text>
                     )}
                   </View>
+                  <View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          color: COLORS.black,
+                          textTransform: 'capitalize',
+                        }}>
+                        {ele.verification_2_name}(V2) {' - '}
+                      </Text>
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_2_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_2_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.verify_2_revert == true
+                              ? icons.revert
+                              : reportData.verify_2_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_2_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                    </View>
+                    {reportData.verify_2_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Revert Msg - {reportData.verify_2_revert_msg}
+                      </Text>
+                    )}
+                  </View>
                 </View>
               ) : ele.admin_2 === userId ? (
                 <View style={{}}>
@@ -1082,7 +1388,7 @@ const ReportDisplay = () => {
                         textTransform: 'capitalize',
                         color: COLORS.black,
                       }}>
-                      {ele.admin_2_name} :
+                      {ele.admin_2_name}(A2) -
                     </Text>
                     {reportData.admin_2_status === false ? (
                       <View
@@ -1167,7 +1473,7 @@ const ReportDisplay = () => {
                             color: COLORS.darkGray,
                             marginBottom: 5,
                           }}>
-                          Your Reverted msg{' : '}
+                          Your Reverted msg{' - '}
                           {reportData.admin_2_revert_msg}
                         </Text>
                       </View>
@@ -1180,7 +1486,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.admin_1_name} {' - '}
+                        {ele.admin_1_name}(A1) {' - '}
                       </Text>
                       {/* {reportData.admin_1_status == true && ( */}
                       <View
@@ -1238,7 +1544,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.verification_1_name} {' - '}
+                        {ele.verification_1_name}(V1) {' - '}
                       </Text>
                       <View
                         style={{
@@ -1279,6 +1585,56 @@ const ReportDisplay = () => {
                       </Text>
                     )}
                   </View>
+
+                  <View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          color: COLORS.black,
+                          textTransform: 'capitalize',
+                        }}>
+                        {ele.verification_2_name}(V2) {' - '}
+                      </Text>
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_2_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_2_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.verify_2_revert == true
+                              ? icons.revert
+                              : reportData.verify_2_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_2_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                    </View>
+                    {reportData.verify_2_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Revert Msg - {reportData.verify_2_revert_msg}
+                      </Text>
+                    )}
+                  </View>
                 </View>
               ) : null}
 
@@ -1292,7 +1648,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.admin_1_name} {' - '}
+                        {ele.admin_1_name}(A1) {' - '}
                       </Text>
                       {/* {reportData.admin_1_status == true && ( */}
                       <View
@@ -1349,7 +1705,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.admin_2_name} {' - '}
+                        {ele.admin_2_name}(A2) {' - '}
                       </Text>
                       {/* {reportData.admin_2_status == true && ( */}
                       <View
@@ -1406,7 +1762,7 @@ const ReportDisplay = () => {
                           color: COLORS.black,
                           textTransform: 'capitalize',
                         }}>
-                        {ele.verification_1_name} {' - '}
+                        {ele.verification_1_name}(V1) {' - '}
                       </Text>
                       <View
                         style={{
@@ -1447,6 +1803,112 @@ const ReportDisplay = () => {
                       </Text>
                     )}
                   </View>
+                  <View>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          ...FONTS.h4,
+                          color: COLORS.black,
+                          textTransform: 'capitalize',
+                        }}>
+                        {ele.verification_2_name}(V2) {' - '}
+                      </Text>
+                      <View
+                        style={{
+                          left: 10,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{...FONTS.h4, color: COLORS.black}}>
+                          {reportData.verify_2_revert == true
+                            ? 'Reverted'
+                            : reportData.verify_2_status === true
+                            ? 'Verified'
+                            : null}
+                        </Text>
+                        <Image
+                          source={
+                            reportData.verify_2_revert == true
+                              ? icons.revert
+                              : reportData.verify_2_status == true
+                              ? icons.verify
+                              : null
+                          }
+                          style={{
+                            left: 8,
+                            width: 16,
+                            height: 16,
+                            tintColor:
+                              reportData.verify_2_revert == true
+                                ? 'red'
+                                : 'green',
+                          }}
+                        />
+                      </View>
+                    </View>
+                    {reportData.verify_2_revert == true && (
+                      <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                        Msg - {reportData.verify_2_revert_msg}
+                      </Text>
+                    )}
+                  </View>
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      borderColor: COLORS.gray2,
+                      marginVertical: 8,
+                    }}></View>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text
+                      style={{
+                        ...FONTS.h3,
+                        color: COLORS.black,
+                        textTransform: 'capitalize',
+                      }}>
+                      Final Verification -
+                    </Text>
+                    <View style={{left: 10}}>
+                      <Button
+                        title={
+                          reportData.final_verify_status == true
+                            ? 'Verified'
+                            : 'Verify'
+                        }
+                        color={COLORS.success_600}
+                        disabled={
+                          reportData.admin_2_status == false ||
+                          reportData.final_verify_status == true
+                            ? true
+                            : false
+                        }
+                        onPress={() => fetchFinalVerifyReport()}
+                      />
+                    </View>
+                    {reportData.final_verify_status == false && (
+                      <View style={{left: 30}}>
+                        <Button
+                          title={
+                            reportData.final_verify_revert == true
+                              ? 'Reverted'
+                              : 'Revert'
+                          }
+                          color={COLORS.rose_600}
+                          disabled={
+                            reportData.admin_2_status == false ||
+                            reportData.final_verify_revert == true
+                              ? true
+                              : false
+                          }
+                          onPress={() => setFinalRevertModal(true)}
+                        />
+                      </View>
+                    )}
+                  </View>
+                  {reportData.final_verify_revert == true && (
+                    <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+                      Msg - {reportData.final_verify_revert_msg}
+                    </Text>
+                  )}
                 </View>
               ) : null}
             </View>
@@ -1512,6 +1974,7 @@ const ReportDisplay = () => {
                   borderBottomColor: COLORS.darkGray,
                 }}>
                 <TextInput
+                  style={{color: COLORS.black}}
                   placeholder="Write your message..."
                   multiline={true}
                   numberOfLines={1}
@@ -1546,10 +2009,105 @@ const ReportDisplay = () => {
     );
   }
 
+  function renderFinalRevertModal() {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={finalRevertModal}>
+        <TouchableWithoutFeedback onPress={() => setFinalRevertModal(false)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                backgroundColor: COLORS.white,
+                paddingHorizontal: SIZES.padding,
+                paddingVertical: SIZES.radius,
+                width: '90%',
+                top: '30%',
+                borderRadius: 5,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
+                <Text style={{fontSize: 20, color: COLORS.darkGray}}>
+                  Revert message
+                </Text>
+                <ImageBackground
+                  style={{
+                    backgroundColor: COLORS.white,
+                    padding: 2,
+                    elevation: 20,
+                  }}>
+                  <TouchableOpacity onPress={() => setFinalRevertModal(false)}>
+                    <Image
+                      source={icons.cross}
+                      style={{
+                        height: 25,
+                        width: 25,
+                        tintColor: COLORS.rose_600,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </ImageBackground>
+              </View>
+
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.darkGray,
+                }}>
+                <TextInput
+                  style={{color: COLORS.black}}
+                  placeholder="Write your message..."
+                  multiline={true}
+                  numberOfLines={1}
+                  onChangeText={value => {
+                    setFinalRevertMsg(value);
+                  }}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={{
+                  marginTop: SIZES.padding,
+                  alignItems: 'center',
+                }}
+                onPress={() => onFinalRevertReport()}>
+                <Text
+                  style={{
+                    ...FONTS.h3,
+                    backgroundColor: COLORS.lightblue_800,
+                    paddingHorizontal: SIZES.radius,
+                    paddingVertical: 5,
+                    borderRadius: 3,
+                    color: COLORS.white,
+                  }}>
+                  Send
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
   return (
     <View style={{margin: SIZES.radius}}>
       {renderProjectFilter()}
       {renderRevertModal()}
+      {renderFinalRevertModal()}
       {renderReportModal()}
       {onSelect == true && renderReport()}
     </View>
@@ -1568,4 +2126,5 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 });
+
 export default ReportDisplay;

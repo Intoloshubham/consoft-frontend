@@ -101,10 +101,10 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
   const formatedDate =
     date.getFullYear() +
     '/' +
-    ('0' + date.getDate()).slice(-2) +
+    ('0' + (date.getMonth() + 1)).slice(-2) +
     '/' +
-    ('0' + (date.getMonth() + 1)).slice(-2);
-
+    ('0' + date.getDate()).slice(-2);
+    
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
@@ -383,7 +383,8 @@ const AssignedWorks = ({data, AssignWorkfunction}) => {
                         borderBottomColor: COLORS.gray2,
                       }}></View>
                   ) : null}
-                  {ele.comment_status == true ? (
+                  {ele.comment_status == true &&
+                  ele.comment_reply_status == false ? (
                     <View
                       style={{
                         flexDirection: 'row',

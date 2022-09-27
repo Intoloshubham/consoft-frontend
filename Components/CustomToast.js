@@ -18,7 +18,7 @@ const CustomToast = ({isVisible, onClose, color, title, message}) => {
             style={{
               flex: 1,
               alignItems: 'center',
-              marginHorizontal: SIZES.padding * 2,
+              marginHorizontal: SIZES.padding * 1.5,
             }}>
             <View
               style={{

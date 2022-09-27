@@ -21,7 +21,7 @@ const ProjectsDetails = ({route}) => {
     {id: 3, img: icons.stock, name: 'Stock / Inventry'},
     {id: 4, img: icons.machine, name: 'Tools & Machinery'},
     {id: 5, img: icons.time_seh, name: 'Sehedule & Timeline'},
-    {id: 6, img: icons.boq, name: 'BOQ'},
+    {id: 6, img: icons.report, name: 'BOQ'},
     {id: 7, img: icons.report1, name: 'Report Settings'},
   ];
 
@@ -35,6 +35,7 @@ const ProjectsDetails = ({route}) => {
       <TouchableOpacity
         style={{
           flexDirection: 'row',
+          alignItems: 'center',
         }}
         onPress={() => {
           item.id == 1
@@ -53,15 +54,22 @@ const ProjectsDetails = ({route}) => {
             ? navigation.navigate('ReportSettings', {project_id})
             : null;
         }}>
-        <Image
-          source={item.img}
-          resizeMode="contain"
+        <View
           style={{
-            width: 20,
-            height: 20,
-            tintColor: COLORS.darkGray,
-          }}
-        />
+            padding: 5,
+            borderRadius: 20,
+            backgroundColor: COLORS.lightblue_100,
+          }}>
+          <Image
+            source={item.img}
+            resizeMode="contain"
+            style={{
+              height: 20,
+              width: 20,
+              tintColor: COLORS.lightblue_800,
+            }}
+          />
+        </View>
         <View
           style={{
             marginLeft: SIZES.radius * 1.5,
