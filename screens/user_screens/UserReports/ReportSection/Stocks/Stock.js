@@ -564,7 +564,18 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                 <Pressable
                     onPress={() => {
                         GetStockData();
-                        LayoutAnimation.easeInEaseOut();
+                        LayoutAnimation.configureNext({
+                            duration: 300,
+                            create:
+                            {
+                                type: LayoutAnimation.Types.easeInEaseOut,
+                                property: LayoutAnimation.Properties.opacity,
+                            },
+                            update:
+                            {
+                                type: LayoutAnimation.Types.easeInEaseOut,
+                            }
+                        });
                         setStockCollapse(!stockCollapse)
                     }}
 
@@ -599,7 +610,18 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                             onPress={() => {
                                 Main_drp_pro_value ? null : alert("Select Project First!")
                                 setStockCollapse(!stockCollapse);
-                                LayoutAnimation.easeInEaseOut();
+                                LayoutAnimation.configureNext({
+                                    duration: 300,
+                                    create:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                        property: LayoutAnimation.Properties.opacity,
+                                    },
+                                    update:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                    }
+                                });
                             }} style={[FONTS.h3, { color: COLORS.white2 }]}>Stock</Text>
                     </View>
                     <View style={{ alignItems: "center", alignSelf: "center" }}>
@@ -607,7 +629,18 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
                             onPressIn={onPressIn}
                             onPressOut={onPressOut}
                             onPress={() => {
-                                LayoutAnimation.easeInEaseOut();
+                                LayoutAnimation.configureNext({
+                                    duration: 300,
+                                    create:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                        property: LayoutAnimation.Properties.opacity,
+                                    },
+                                    update:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                    }
+                                });
                                 setStockCollapse(!stockCollapse)
 
                             }}>
