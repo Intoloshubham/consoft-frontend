@@ -347,6 +347,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       console.log(error, 'error');
     }
   };
+
+
   useEffect(() => {
     if (userData.company_id || saveItemsStatus || loading) {
       reportdataitem();
@@ -358,7 +360,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   ///getting latest steel Id by company Id
   const getLatestSteelId = async () => {
     const temp_id = await get_latest_steel_id(userData.company_id);
-    console.log("🚀 ~ file: Quantity.js ~ line 360 ~ getLatestSteelId ~ temp_id", temp_id)
+    // console.log("🚀 ~ file: Quantity.js ~ line 360 ~ getLatestSteelId ~ temp_id", temp_id)
     if (temp_id.data) {
       setSteelItem(temp_id.data._id);
     }
