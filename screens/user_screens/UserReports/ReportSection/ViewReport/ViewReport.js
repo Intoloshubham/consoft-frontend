@@ -21,6 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { getProjects } from '../../../../../controller/ProjectController'
 import { SIZES, FONTS, COLORS, icons, images } from '../../../../../constants'
+import Config from '../../../../../config/index.js'
 // import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {
     getManpower,
@@ -37,11 +38,15 @@ import moment from 'moment';
 
 const ViewReport = () => {
     const userData = useSelector(state => state.user);
-    const user_id = userData._id;
+    // const user_id = userData._id;
+
     const company_id = userData.company_id;
     const current_dat = moment().format("YYYY%2FMM%2FDD")
     const navigation = useNavigation();
+    const [filterDate, setFilterDate] = useState();
     // projects
+    const [user_id, setUserId] = useState(userData._id);
+    // setUserId(userData._id);
     const [onSelect, setOnSelect] = React.useState(false);
     const [openProject, setOpenProject] = React.useState(false);
     const [projectValue, setProjectValue] = React.useState([]);
@@ -50,6 +55,7 @@ const ViewReport = () => {
         setOnSelect(false);
         fetchProject();
     }, []);
+
 
     // const [filePath, setFilePath] = useState('');
 
@@ -131,6 +137,7 @@ const ViewReport = () => {
     const [revertModal, setRevertModal] = React.useState(false);
     const [revertMsg, setRevertMsg] = React.useState('');
     let rep_resp;
+    let MyDateString = current_dat;
     // get projects
     const fetchProject = async () => {
         let response = await getProjects(company_id);
@@ -150,6 +157,7 @@ const ViewReport = () => {
     const fetchManpower = async report_id => {
         setReportId(report_id);
         let response = await getManpower(report_id);
+        // console.log("🚀 ~ file: ViewReport.js ~ line 160 ~ fetchManpower ~ response", response)
         if (response.status === 200) {
             setManpower(response.data);
         }
@@ -158,29 +166,36 @@ const ViewReport = () => {
     // fetch quantity on click
     const fetchQuantity = async report_id => {
         let response = await getQuantity(report_id);
+        // console.log("🚀 ~ file: ViewReport.js ~ line 168 ~ fetchQuantity ~ response", response)
+        // response.data.map(ele => {
+        //     ele.quantityWorkItems.map(sub => {
+        //         console.log("🚀 ~ file: ViewReport.js ~ line 172 ~ fetchQuantity ~ sub", sub)
+        //     })
+        // })
+        // console.log("🚀 ~ file: ViewReport.js ~ line 168 ~ fetchQuantity ~ response", response);
         if (response.status === 200) {
             setQuantity(response.data);
         }
+        // console.log("🚀 ~ file: ViewReport.js ~ line 180 ~ fetchQuantity ~ quantity", quantity)
     };
 
     // fetch report path
     const fetchReportPath = async () => {
         const response = await getProjectReportPath(company_id, projectId);
-        // console.log("🚀 ~ file: ViewReport.js ~ line 169 ~ fetchReportPath ~ response", response)
-
-        // setProjectId(project_id);
 
         if (response.data) {
             {
                 response.data.map(async (ele, i) => {
-                    // console.log("🚀 ~ file: ViewReport.js ~ line 176 ~ response.data.map ~ ele", ele)
 
                     if (ele.verification_1 === user_id || ele.verification_2 === user_id) {
+
                         let user_id = '';
-                        rep_resp = await getReport(projectId, date, user_id);
-                        // console.log("🚀 ~ file: ViewReport.js ~ line 179 ~ response.data.map ~ rep_resp", rep_resp)
+                        rep_resp = await getReport(projectId, MyDateString, user_id);
+
                         if (rep_resp.data) {
+
                             rep_resp.data.map((item, idx) => {
+
                                 if (item._id === trackId) {
                                     setReportData({
                                         project_name: item.project_name,
@@ -310,15 +325,17 @@ const ViewReport = () => {
 
     // date
     const [date, setDate] = React.useState(new Date());
-    const MyDateString =
+    MyDateString =
         date.getFullYear() +
-        '/' +
-        ('0' + date.getDate()).slice(-2) +
-        '/' +
-        ('0' + (date.getMonth() + 1)).slice(-2);
+        '%2F' +
+        ('0' + (date.getMonth() + 1)).slice(-2) +
+        '%2F' +
+        ('0' + date.getDate()).slice(-2);
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setDate(currentDate);
+
     };
     const showMode = currentMode => {
         DateTimePickerAndroid.open({
@@ -2161,6 +2178,8 @@ const ViewReport = () => {
     }
 
 
+
+
     // report showing modal
     function renderReportModal() {
 
@@ -2214,8 +2233,12 @@ const ViewReport = () => {
             </View>
         );
 
+        // const renderFooter =()=>(
+
+        // );
+
         const footerComponent = () => (
-            <View>
+            <View style={{ flex: 1 }}>
                 {renderQuantity()}
                 {/* {user_id && renderFooter()} */}
             </View>
@@ -2350,11 +2373,12 @@ const ViewReport = () => {
                                     }}
                                     ListFooterComponent={footerComponent}
                                     maxHeight={200}
+                                    scrollEnabled
                                     ListFooterComponentStyle={{
                                         flex: 1,
                                         // borderWidth:1,
                                         height: "100%",
-                                        // marginBottom: '40%'
+                                        paddingBottom: 10
                                     }}
                                 />
                             </View>
@@ -2602,15 +2626,133 @@ const ViewReport = () => {
                         textDecorationLine: 'underline',
                         marginBottom: 5,
                     }}>
-                    Excluded Quantity
+                    Executed Quantity
                 </Text>
                 <FlatList
                     // contentContainerStyle={{maxHeight: 450}}
                     data={quantity}
                     keyExtractor={item => `${item._id}`}
                     renderItem={renderItem}
+                    ListFooterComponent={
+                        <View style={{ flex: 1 }}>
+                            <Text style={{
+                                fontSize: 18,
+                                color: COLORS.black,
+                                textAlign: 'center',
+                                textDecorationLine: 'underline',
+                                marginVertical: 5,
+                                marginBottom: 10
+                            }}>Steel Section</Text>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginRight: -42 }}>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        // fontWeight: "bold"
+                                        // textAlign: 'right',
+                                    }}>
+                                    S.no</Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        // textAlign: 'right',
+                                    }}
+                                >Nos</Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 0.6,
+                                        color: COLORS.black,
+                                        // textAlign: 'right',
+                                    }}
+                                >Size in MM</Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        // textAlign: 'right',
+                                    }}
+                                >Total</Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        // textAlign: 'right',
+                                    }}
+                                >Remark</Text>
+                            </View>
+                            <View
+                                style={{
+                                    // left: 100,
+                                    borderBottomWidth: 1,
+                                    borderColor: COLORS.darkGray2,
+                                    width: '100%',
+                                    marginVertical: 5,
+                                }}></View>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                }}>
+                                <Text
+                                    style={{
+                                        flex: 1,
+                                        ...FONTS.h4,
+                                        color: COLORS.black,
+                                    }}></Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    {/* {ele.sub_length} */}
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    {/* {ele.sub_width} */}
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 0.5,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    {/* {ele.sub_height} */}
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h4,
+                                        flex: 1,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    {/* {ele.sub_total} */}
+                                </Text>
+                                <Text
+                                    style={{
+                                        ...FONTS.h3,
+                                        flex: 1,
+                                        color: COLORS.black,
+                                        textAlign: 'right',
+                                    }}>
+                                    {/* {ele.sub_quality_type} */}
+                                </Text>
+                            </View>
+                        </View>
+                    }
                     showsVerticalScrollIndicator={false}
-                    // horizontal
                     scrollEnabled={true}
                     ItemSeparatorComponent={() => {
                         return (
@@ -2623,7 +2765,7 @@ const ViewReport = () => {
                         );
                     }}
                     ListHeaderComponent={
-                        <View>
+                        <View View >
                             <View
                                 style={{
                                     marginTop: 10,
@@ -2793,39 +2935,6 @@ const ViewReport = () => {
             {renderRevertModal()}
             {renderReportModal()}
             {onSelect == true && renderReport()}
-            <View>
-                {/* <View style={{
-                    flex: 1,
-                    padding: 10,
-                    backgroundColor: '#fff',
-                    alignItems: 'center',
-                }}>
-                    <TouchableOpacity onPress={createPDF}>
-                        <View>
-                            <Image
-                                //We are showing the Image from online
-                                source={{
-                                    uri:
-                                        'https://raw.githubusercontent.com/AboutReact/sampleresource/master/pdf.png',
-                                }}
-                                style={{
-                                    width: 150,
-                                    height: 150,
-                                    margin: 5,
-                                    resizeMode: 'stretch',
-                                }}
-                            />
-                            <Text style={{ color: 'black' }}>Create PDF</Text>
-                        </View>
-                        <Text style={{
-                            fontSize: 18,
-                            padding: 10,
-                            color: 'black',
-                            textAlign: 'center',
-                        }}>{filePath}</Text>
-                    </TouchableOpacity>
-                </View> */}
-            </View>
         </View>
     );
 }

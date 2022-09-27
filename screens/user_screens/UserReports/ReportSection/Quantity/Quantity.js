@@ -261,7 +261,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       // console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", userData._id)
       // console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", current_dat)
       const data = await Get_report_data(Main_drp_pro_value, userData._id, current_dat)
-      // console.log("🚀 ~ file: Quantity.js ~ line 230 ~ getReportData ~ data", data)
+
       if (data.status == 200) {
         setGetRepPostData(data);
       } else {
@@ -294,24 +294,23 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       setUpdateId(id);
       data.then(res => res.json())
         .then(result => {
-          // console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result.data.quality_type)
 
           if (result.data.subquantityitems.length == 0) {
             setInputs([...inputs, {
-              item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
+              item_id: result.data.item_id, nos: result.data.nos.toString(), steel_mm: result.data.steel_mm ? result.data.steel_mm.toString() : '0', num_length: result.data.num_length ? result.data.num_length.toString() : '0', num_width: result.data.num_width ? result.data.num_width.toString() : '0', num_height: result.data.num_height ? result.data.num_height.toString() : '0',
               num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name, quality_type: result.data.quality_type,
               subquantityitems: []
             }]);
           } else {
             setInputs([...inputs, {
-              item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
+              item_id: result.data.item_id, nos: result.data.nos.toString(), steel_mm: result.data.steel_mm ? result.data.steel_mm.toString() : '0', num_length: result.data.num_length ? result.data.num_length.toString() : '0', num_width: result.data.num_width ? result.data.num_width.toString() : '0', num_height: result.data.num_height ? result.data.num_height.toString() : '0',
               num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name, quality_type: result.data.quality_type,
               subquantityitems:
                 // [
                 result.data.subquantityitems.map(ele => {
                   return {
-                    sub_height: ele.sub_height.toString(), sub_length: ele.sub_length.toString(), sub_remark: ele.sub_remark, sub_total: ele.sub_total.toString(),
-                    sub_width: ele.sub_width.toString(), sub_quality_type: ele.sub_quality_type
+                    sub_nos: ele.sub_nos.toString(), sub_height: ele.sub_height ? ele.sub_height.toString() : '0', sub_length: ele.sub_length ? ele.sub_length.toString() : '0', sub_remark: ele.sub_remark, sub_total: ele.sub_total.toString(),
+                    sub_width: ele.sub_width ? ele.sub_width.toString() : '0', sub_quality_type: ele.sub_quality_type
                   }
                 })
               // ]
@@ -358,8 +357,11 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   ///getting latest steel Id by company Id
   const getLatestSteelId = async () => {
     const temp_id = await get_latest_steel_id(userData.company_id);
+    console.log("🚀 ~ file: Quantity.js ~ line 360 ~ getLatestSteelId ~ temp_id", temp_id)
+    if (temp_id.data) {
+      setSteelItem(temp_id.data._id);
+    }
     // console.log("🚀 ~ file: Quantity.js ~ line 361 ~ getLatestSteelId ~ temp_id", temp_id)
-    setSteelItem(temp_id.data._id);
   }
 
 
@@ -732,13 +734,14 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                 style={inputfromone}
                 placeholder="MM"
                 placeholderTextColor={COLORS.gray}
-                value={input.num_length}
+                value={subquantityitems.sub_steel_mm}
                 keyboardType="numeric"
                 onChangeText={text => {
-                  selectLengthkey(input.key)
+                  SubinputMm(text, index1, key);
+                  // selectLengthkey(input.key)
                   // setLengthData(text)
                   // console.log(text)
-                  inputlangth(text, key);
+                  // subst(text, key);
                 }}
               />
             </View>
@@ -836,7 +839,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             placeholder={'Nos'}
             // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
             value={subquantityitems.sub_nos}
-            onChangeText={text => { Subinputnos(text, key) }}
+            onChangeText={text => { Subinputnos(text, index1, key) }}
           />
           {/* </View> */}
         </View>
@@ -961,6 +964,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   }}
                   onChange={item => {
                     setSelectKey(input.key);
+                    getLatestSteelId();
                     setCompanyIdData(item.company_id)
                     inputselect(item, key);
                   }}
@@ -994,7 +998,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   style={inputfromone}
                   placeholder="MM"
                   placeholderTextColor={COLORS.gray}
-                  value={input.num_length}
+                  value={input.steel_mm}
                   keyboardType="numeric"
                   onChangeText={text => {
                     // selectLengthkey(input.key)
@@ -1687,7 +1691,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                 }} >
                                 <View>
                                   <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                    {index + 1}
+                                    {list.quantityWorkItems.nos}
                                   </Text>
                                 </View>
                                 <View style={{ position: "absolute", width: 1, left: 100, top: -10 }}>
@@ -1762,7 +1766,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {list.quantityWorkItems.num_height}
+                                  {list.quantityWorkItems.item_id == steelItem ? list.quantityWorkItems.steel_mm : list.quantityWorkItems.num_height}
                                 </Text>
                               </View>
                               <View
