@@ -18,11 +18,11 @@ const ProjectsDetails = ({route}) => {
     // {id: 1, img: icons.p_team, name: 'Company Team'},
     {id: 1, img: icons.p_team, name: 'Project Team'},
     {id: 2, img: icons.contr, name: 'Contractors'},
-    {id: 3, img: icons.stock, name: 'Stock / Inventry'},
-    {id: 4, img: icons.machine, name: 'Tools & Machinery'},
-    {id: 5, img: icons.time_seh, name: 'Sehedule & Timeline'},
-    {id: 6, img: icons.report, name: 'BOQ'},
-    {id: 7, img: icons.report1, name: 'Report Settings'},
+    // {id: 3, img: icons.stock, name: 'Stock / Inventry'},
+    {id: 3, img: icons.machine, name: 'Tools & Machinery'},
+    {id: 4, img: icons.time_seh, name: 'Sehedule & Timeline'},
+    {id: 5, img: icons.report, name: 'BOQ'},
+    {id: 6, img: icons.report1, name: 'Report Settings'},
   ];
 
   //get name of project from project banner screen using params
@@ -43,14 +43,12 @@ const ProjectsDetails = ({route}) => {
             : item.id == 2
             ? navigation.navigate('Contractors', {project_id})
             : item.id == 3
-            ? navigation.navigate('StocksAndInventry', {project_id})
-            : item.id == 4
             ? navigation.navigate('ToolsAndMachinery', {project_id})
-            : item.id == 5
+            : item.id == 4
             ? navigation.navigate('ProjectSeheduleTime')
-            : item.id == 6
+            : item.id == 5
             ? navigation.navigate('Boq', {project_id})
-            : item.id == 7
+            : item.id == 6
             ? navigation.navigate('ReportSettings', {project_id})
             : null;
         }}>
