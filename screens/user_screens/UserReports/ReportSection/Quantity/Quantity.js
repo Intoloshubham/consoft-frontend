@@ -20,8 +20,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from '../../ReportStyle.js';
-import { Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist,  update_quantity_data, 
-  get_quality_type,delete_Qty_Record } from '../../ReportApi.js'
+import {
+  Insert_report_data, Get_report_data, edit_report_data, check_quantity_item_exist, update_quantity_data,
+  get_quality_type, delete_Qty_Record, get_latest_steel_id
+} from '../../ReportApi.js'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -104,6 +106,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const [quant_ity, setQuantity] = useState(false);
   //key states of dynamic inputs
   const [selectKey, setSelectKey] = useState('');
+  const [steelItem, setSteelItem] = useState('');
   const [lengthKey, selectLengthkey] = useState('');
   const [widthKey, selectWidthkey] = useState('');
   const [heightKey, selectHeightkey] = useState('');
@@ -117,7 +120,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const [saveItemsStatus, setSaveItemsStatus] = useState('')
   const [updateStatus, setUpdateStatus] = useState('')
 
-  const [deleteQtyId,setDeleteQtyId]=useState('')
+  const [deleteQtyId, setDeleteQtyId] = useState('')
 
   //setting post qty data  status 
   const [postQtyData, setPostQtyData] = useState('')
@@ -138,7 +141,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
   const [inputs, setInputs] = useState([
     {
-      item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '', quality_type: ''
+      item_id: '', nos: '', steel_mm: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '', quality_type: ''
       , subquantityitems: [
         // { num_length: '', num_width: '', num_height: '', num_total: '', Remark: '', }
       ]
@@ -259,7 +262,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       // console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", userData._id)
       // console.log("🚀 ~ file: Quantity.js ~ line 229 ~ getReportData ~ data", current_dat)
       const data = await Get_report_data(Main_drp_pro_value, userData._id, current_dat)
-      // console.log("🚀 ~ file: Quantity.js ~ line 230 ~ getReportData ~ data", data)
+
       if (data.status == 200) {
         setGetRepPostData(data);
       } else {
@@ -292,24 +295,23 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       setUpdateId(id);
       data.then(res => res.json())
         .then(result => {
-          // console.log("🚀 ~ file: Quantity.js ~ line 303 ~ editReportBtn ~ result", result.data.quality_type)
 
           if (result.data.subquantityitems.length == 0) {
             setInputs([...inputs, {
-              item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
+              item_id: result.data.item_id, nos: result.data.nos.toString(), steel_mm: result.data.steel_mm ? result.data.steel_mm.toString() : '0', num_length: result.data.num_length ? result.data.num_length.toString() : '0', num_width: result.data.num_width ? result.data.num_width.toString() : '0', num_height: result.data.num_height ? result.data.num_height.toString() : '0',
               num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name, quality_type: result.data.quality_type,
               subquantityitems: []
             }]);
           } else {
             setInputs([...inputs, {
-              item_id: result.data.item_id, num_length: result.data.num_length.toString(), num_width: result.data.num_width.toString(), num_height: result.data.num_height.toString(),
+              item_id: result.data.item_id, nos: result.data.nos.toString(), steel_mm: result.data.steel_mm ? result.data.steel_mm.toString() : '0', num_length: result.data.num_length ? result.data.num_length.toString() : '0', num_width: result.data.num_width ? result.data.num_width.toString() : '0', num_height: result.data.num_height ? result.data.num_height.toString() : '0',
               num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name, quality_type: result.data.quality_type,
               subquantityitems:
                 // [
                 result.data.subquantityitems.map(ele => {
                   return {
-                    sub_height: ele.sub_height.toString(), sub_length: ele.sub_length.toString(), sub_remark: ele.sub_remark, sub_total: ele.sub_total.toString(),
-                    sub_width: ele.sub_width.toString(), sub_quality_type: ele.sub_quality_type
+                    sub_nos: ele.sub_nos.toString(), sub_height: ele.sub_height ? ele.sub_height.toString() : '0', sub_length: ele.sub_length ? ele.sub_length.toString() : '0', sub_remark: ele.sub_remark, sub_total: ele.sub_total.toString(),
+                    sub_width: ele.sub_width ? ele.sub_width.toString() : '0', sub_quality_type: ele.sub_quality_type
                   }
                 })
               // ]
@@ -324,7 +326,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
 
-  const deleteReportButton =async () => {
+  const deleteReportButton = async () => {
     const res = await delete_Qty_Record(deleteQtyId);
     // console.log("🚀 ~ file: Quantity.js ~ line 325 ~ deleteReportButton ~ res", res)
     if (res.status === 200) {
@@ -353,6 +355,15 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   }, [userData.company_id, saveItemsStatus, loading]);
 
 
+  ///getting latest steel Id by company Id
+  const getLatestSteelId = async () => {
+    const temp_id = await get_latest_steel_id(userData.company_id);
+    console.log("🚀 ~ file: Quantity.js ~ line 360 ~ getLatestSteelId ~ temp_id", temp_id)
+    if (temp_id.data) {
+      setSteelItem(temp_id.data._id);
+    }
+    // console.log("🚀 ~ file: Quantity.js ~ line 361 ~ getLatestSteelId ~ temp_id", temp_id)
+  }
 
 
 
@@ -372,11 +383,11 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
 
   const addHandler = async () => {
-
+    getLatestSteelId();
     checkQuantityItemExist();
 
     setInputs([...inputs, {
-      item_id: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '', quality_type: '',
+      item_id: '', nos: '', steel_mm: '', num_length: '', num_width: '', num_height: '', num_total: '', remark: '', unit_name: '', quality_type: '',
       subquantityitems: [
         // { num_length: '', num_width: '', num_height: '', total: '', remark: '' }
       ]
@@ -407,10 +418,12 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
     // setUnitKey(item.unit_name)
 
     const _inputselcet = [...inputs];
+
+    // console.log("🚀 ~ file: Quantity.js ~ line 412 ~ inputselect ~ _inputselcet", _inputselcet)
     _inputselcet[key].item_id = item._id;
     _inputselcet[key].unit_name = item.unit_name;
     _inputselcet[key].key = key;
-
+    // setSteelItem(item.item_id);
     // console.log("_inputselcet");
     // console.log(item.unit_name);
     // setSelectKey(_inputselcet);
@@ -432,11 +445,29 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
     // console.log(unitKey);
     setInputs(_inputsunit);
   };
+  const inputnos = (text, key) => {
+    const _inputsunit = [...inputs];
+    _inputsunit[key].nos = text;
+    _inputsunit[key].key = key;
+    // setUnitKey(key);
+    // console.log("unitKey");
+    // console.log(unitKey);
+    setInputs(_inputsunit);
+  };
   const inputlangth = (text, key) => {
     // console.log(text)
     const _inputlangth = [...inputs];
     // _inputlangth[key].num_length = filterOnlyNumericValue([text]);
     _inputlangth[key].num_length = text;
+    _inputlangth[key].key = key;
+    // console.log(text)
+    setInputs(_inputlangth);
+  };
+  const inputMm = (text, key) => {
+    // console.log(text)
+    const _inputlangth = [...inputs];
+    // _inputlangth[key].num_length = filterOnlyNumericValue([text]);
+    _inputlangth[key].steel_mm = text;
     _inputlangth[key].key = key;
     // console.log(text)
     setInputs(_inputlangth);
@@ -475,6 +506,22 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
     // setSubInputs(_subinputlangth);
     setInputs(_subinputlangth);
   };
+  const Subinputnos = (text, index1, key) => {
+    const _subinputlangth = [...inputs];
+    _subinputlangth[key].subquantityitems[index1].sub_nos = text;
+    _subinputlangth[key].subquantityitems[index1].key = key;
+    // setSubInputs(_subinputlangth);
+    setInputs(_subinputlangth);
+  };
+
+  const SubinputMm = (text, index1, key) => {
+    const _subinputlangth = [...inputs];
+    _subinputlangth[key].subquantityitems[index1].sub_steel_mm = text;
+    _subinputlangth[key].subquantityitems[index1].key = key;
+    // setSubInputs(_subinputlangth);
+    setInputs(_subinputlangth);
+  };
+
   const Subinputwidth = (text, index1, key) => {
     const _subinputwidth = [...inputs];
     _subinputwidth[key].subquantityitems[index1].sub_width = text;
@@ -634,7 +681,9 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
     addKeyref.current = takekey;
     const _inputs = [...inputs];
     _inputs[key].subquantityitems.push({
+      sub_nos: '',
       sub_length: '',
+      sub_steel_mm: '',
       sub_width: '',
       sub_height: '',
       sub_total: '',
@@ -656,7 +705,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   };
 
 
-  const add_subinput_field = (index1, key, subquantityitems) => {
+  const add_subinput_field = (index1, key, subquantityitems, input) => {
 
     return (
       <View
@@ -680,44 +729,65 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             flexWrap: "nowrap",
             justifyContent: "space-between"
           }}>
+          {input.item_id === steelItem ?
+            <View style={{ flex: 1 }}>
+              <TextInput
+                style={inputfromone}
+                placeholder="MM"
+                placeholderTextColor={COLORS.gray}
+                value={subquantityitems.sub_steel_mm}
+                keyboardType="numeric"
+                onChangeText={text => {
+                  SubinputMm(text, index1, key);
+                  // selectLengthkey(input.key)
+                  // setLengthData(text)
+                  // console.log(text)
+                  // subst(text, key);
+                }}
+              />
+            </View>
+            :
+            <>
+              <TextInput
+                style={inputfromone}
+                placeholder="L"
+                placeholderTextColor={COLORS.lightGray1}
+                value={subquantityitems.sub_length}
+                keyboardType="numeric"
+                onChangeText={text => {
+                  // console.log(subquantityitems)
+                  setSubLengthkey(subquantityitems.key)
+                  // setSubLengthData(text)
+                  Subinputlangth(text, index1, key);
+                }}
+              />
+              <TextInput
+                style={inputfromone}
+                placeholder="B"
+                placeholderTextColor={COLORS.lightGray1}
+                value={subquantityitems.sub_width}
+                keyboardType="numeric"
+                onChangeText={text => {
+                  setSubWidthkey(subquantityitems.key)
+                  // setSubWidthData(text)
+                  Subinputwidth(text, index1, key);
+                }}
+              />
+              <TextInput
+                style={inputfromone}
+                placeholder="T"
+                placeholderTextColor={COLORS.lightGray1}
+                value={subquantityitems.sub_height}
+                keyboardType="numeric"
+                onChangeText={text => {
+                  setSubHeightkey(subquantityitems.key)
+                  // setSubThicknessData(text)
+                  Subinputhight(text, index1, key);
+                }}
+              />
+            </>
 
-          <TextInput
-            style={inputfromone}
-            placeholder="L"
-            placeholderTextColor={COLORS.lightGray1}
-            value={subquantityitems.sub_length}
-            keyboardType="numeric"
-            onChangeText={text => {
-              // console.log(subquantityitems)
-              setSubLengthkey(subquantityitems.key)
-              // setSubLengthData(text)
-              Subinputlangth(text, index1, key);
-            }}
-          />
-          <TextInput
-            style={inputfromone}
-            placeholder="B"
-            placeholderTextColor={COLORS.lightGray1}
-            value={subquantityitems.sub_width}
-            keyboardType="numeric"
-            onChangeText={text => {
-              setSubWidthkey(subquantityitems.key)
-              // setSubWidthData(text)
-              Subinputwidth(text, index1, key);
-            }}
-          />
-          <TextInput
-            style={inputfromone}
-            placeholder="T"
-            placeholderTextColor={COLORS.lightGray1}
-            value={subquantityitems.sub_height}
-            keyboardType="numeric"
-            onChangeText={text => {
-              setSubHeightkey(subquantityitems.key)
-              // setSubThicknessData(text)
-              Subinputhight(text, index1, key);
-            }}
-          />
+          }
           <TextInput
             style={inputfromtwo}
             editable={false}
@@ -733,36 +803,49 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             }}
           />
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <View>
-            <TextInput
-              style={{
-                width: '450%',
-                borderWidth: 1,
-                height: 30,
-                padding: -6,
-                paddingLeft: 5,
-                // marginBottom: 5,
-                borderRadius: 5,
-                marginLeft: 5,
-                color: COLORS.black,
-                borderColor: COLORS.gray,
-                flexWrap: 'wrap',
-              }}
-              placeholder={'Remark'}
-              placeholderTextColor={COLORS.lightGray1}
-              value={subquantityitems.sub_remark}
-              onChangeText={text => {
-                SubinputRemark(text, index1, key)
-                // setSubTotalData(subquantityitems.sub_total)
-                // setSubRemarkData(text)
-              }}
-            />
-          </View>
-
+        <View style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          flexWrap: 'wrap',
+          alignItems: "center"
+        }}>
+          {/* <View > */}
+          <TextInput
+            style={{
+              width: '70%',
+              borderWidth: 1,
+              height: 30,
+              padding: -6,
+              paddingLeft: 5,
+              borderRadius: 5,
+              marginLeft: 5,
+              color: COLORS.black,
+              borderColor: COLORS.gray,
+              flexWrap: 'wrap',
+            }}
+            placeholder={'Remark'}
+            placeholderTextColor={COLORS.lightGray1}
+            value={subquantityitems.sub_remark}
+            onChangeText={text => {
+              SubinputRemark(text, index1, key)
+              // setSubTotalData(subquantityitems.sub_total)
+              // setSubRemarkData(text)
+            }}
+          />
+          <TextInput
+            style={inputfromone}
+            // editable={false}
+            selectTextOnFocus={false}
+            placeholder={'Nos'}
+            // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
+            value={subquantityitems.sub_nos}
+            onChangeText={text => { Subinputnos(text, index1, key) }}
+          />
+          {/* </View> */}
         </View>
         <View style={{ justifyContent: "center" }}>
-          <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "left", paddingHorizontal: 10 }]}>Quality Test:</Text>
+          <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "left", paddingHorizontal: 10 }]}>Binding Quality</Text>
         </View>
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           {qualityType ? qualityType.map((subQualityRadioItem, subQualityIndex) => (
@@ -850,6 +933,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
+                  marginHorizontal: 5,
+                  marginRight: -SIZES.base * 2.5
                   // alignItems: 'center',
                 }}
                 // key={key}
@@ -861,7 +946,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                     // cont_Project_list_drop,
                     isFocus && { borderColor: 'blue' },
                   ]}
-                  selectedTextStyle={{ color: COLORS.gray, }
+                  selectedTextStyle={{ color: COLORS.gray }
                   }
                   placeholderStyle={{ fontSize: 16, color: COLORS.gray, left: 5 }}
                   inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
@@ -880,21 +965,20 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   }}
                   onChange={item => {
                     setSelectKey(input.key);
+                    getLatestSteelId();
                     setCompanyIdData(item.company_id)
                     inputselect(item, key);
                   }}
                 />
                 <TextInput
                   style={inputfromtwo}
-                  // editable={false}
+                  editable={false}
                   selectTextOnFocus={false}
                   placeholder={'unit'}
                   // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
                   value={key == selectKey ? input.unit_name : input.unit_name}
                   onChangeText={text => { inputunit(text, key) }}
                 />
-
-
 
                 <TouchableOpacity
                   key={key}
@@ -909,68 +993,85 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   />
                 </TouchableOpacity>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
+              {input.item_id === steelItem ?
+
                 <TextInput
                   style={inputfromone}
-                  placeholder="Length"
+                  placeholder="MM"
                   placeholderTextColor={COLORS.gray}
-                  value={input.num_length}
+                  value={input.steel_mm}
                   keyboardType="numeric"
                   onChangeText={text => {
-                    selectLengthkey(input.key)
+                    // selectLengthkey(input.key)
                     // setLengthData(text)
                     // console.log(text)
-                    inputlangth(text, key);
+                    inputMm(text, key);
                   }}
                 />
-                <TextInput
-                  style={inputfromone}
-                  placeholder="Breadth"
-                  placeholderTextColor={COLORS.gray}
-                  value={input.num_width}
-                  keyboardType="numeric"
-                  onChangeText={text => {
-                    selectWidthkey(input.key)
-                    // setWidthData(text)
-                    inputwidth(text, key);
-                  }}
-                />
-                <TextInput
-                  style={inputfromone}
-                  placeholder="Thickness"
-                  placeholderTextColor={COLORS.gray}
-                  value={input.num_height}
-                  keyboardType="numeric"
-                  onChangeText={text => {
-                    selectHeightkey(input.key)
-                    // setThicknessData(text)
-                    // setTotalData()
 
-                    // console.log(tot)
-                    inputhight(text, key);
-                  }}
-                />
-                <TextInput
-                  style={inputfromtwo}
-                  editable={false}
-                  selectTextOnFocus={false}
-                  placeholderTextColor={COLORS.white}
-                  placeholder={'Total'}
-                  value={key == lengthKey == widthKey == heightKey ? (input.num_total = input.num_length * input.num_width * input.num_height).toString() : (input.num_total = input.num_length * input.num_width * input.num_height).toString()}
-                  keyboardType="numeric"
-                  onChangeText={value => {
-                    inputtotal(value, key);
-                  }}
-                />
-              </View>
+                : <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <TextInput
+                    style={inputfromone}
+                    placeholder="Length"
+                    placeholderTextColor={COLORS.gray}
+                    value={input.num_length}
+                    keyboardType="numeric"
+                    onChangeText={text => {
+                      selectLengthkey(input.key)
+                      // setLengthData(text)
+                      // console.log(text)
+                      inputlangth(text, key);
+                    }}
+                  />
+                  <TextInput
+                    style={inputfromone}
+                    placeholder="Breadth"
+                    placeholderTextColor={COLORS.gray}
+                    value={input.num_width}
+                    keyboardType="numeric"
+                    onChangeText={text => {
+                      selectWidthkey(input.key)
+                      // setWidthData(text)
+                      inputwidth(text, key);
+                    }}
+                  />
+                  <TextInput
+                    style={inputfromone}
+                    placeholder="Thickness"
+                    placeholderTextColor={COLORS.gray}
+                    value={input.num_height}
+                    keyboardType="numeric"
+                    onChangeText={text => {
+                      selectHeightkey(input.key)
+                      // setThicknessData(text)
+                      // setTotalData()
+
+                      // console.log(tot)
+                      inputhight(text, key);
+                    }}
+                  />
+                  <TextInput
+                    style={inputfromtwo}
+                    editable={false}
+                    selectTextOnFocus={false}
+                    placeholderTextColor={COLORS.white}
+                    placeholder={'Total'}
+                    value={key == lengthKey == widthKey == heightKey ? (input.num_total = input.num_length * input.num_width * input.num_height).toString() : (input.num_total = input.num_length * input.num_width * input.num_height).toString()}
+                    keyboardType="numeric"
+                    onChangeText={value => {
+                      inputtotal(value, key);
+                    }}
+                  />
+                </View>}
               <TextInput
+                // multiline={5}
                 style={{
-                  width: '90%',
+                  width: '70%',
                   borderWidth: 1,
                   height: 30,
                   padding: -6,
@@ -991,6 +1092,21 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   inputRemark(text, key)
                 }}
               />
+              <TextInput
+                style={inputfromone}
+                // editable={false}
+                placeholderTextColor={COLORS.gray}
+                selectTextOnFocus={false}
+                placeholder={'Nos'}
+                keyboardType="numeric"
+                // value={key==selectKey?input.select.unit_name:selectKey==unitKey?input.select.unit_name:null}
+                value={input.nos}
+                onChangeText={text => { inputnos(text, key) }}
+              />
+              <View style={{ alignSelf: 'flex-start', marginRight: SIZES.width * 0.5 }}>
+                <Text style={{ color: COLORS.darkGray, ...FONTS.h4 }}>Binding Quality:</Text>
+              </View>
+
               {qualityType ? qualityType.map((radioitem) => (
                 <QualityTypeRadioButton
                   onPress={() => onRadioBtnClick(radioitem, key)}
@@ -1005,11 +1121,12 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                 </QualityTypeRadioButton>
               )) : null}
 
+
               <View>
                 {
                   inputs[key].subquantityitems.map((subquantityitems, index1) => {
                     return (
-                      add_subinput_field(index1, key, subquantityitems)
+                      add_subinput_field(index1, key, subquantityitems, input)
                     )
                   })
 
@@ -1065,7 +1182,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   borderBottomWidth: 1,
                   justifyContent: 'space-between',
                 }}>
-                <Title>Add Quantity Data</Title>
+                <Title>Quantity Exec. Today</Title>
                 <Pressable onPress={() => {
                   inputs.splice(0, inputs.length);
                   setReportmodal(false);
@@ -1101,7 +1218,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                         alignItems: 'center',
                         paddingVertical: 1
                       }}>
-                      <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add Existing Item</Text>
+                      <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>Add On Existing Item</Text>
                       <MaterialIcons
                         name="add-box"
                         size={20}
@@ -1269,7 +1386,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             <TouchableOpacity
               onPress={() => {
                 setDeleteQtyId(__id);
-                setDeleteConfirm(true)}}
+                setDeleteConfirm(true)
+              }}
             >
               <MaterialCommunityIcons name='delete' color={COLORS.red} size={del_size} />
             </TouchableOpacity>
@@ -1346,6 +1464,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             </TouchableOpacity>
           </View>
         </Pressable>
+
       </Animated.View>
       <View
         style={{
@@ -1397,6 +1516,19 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                     </View>
                     <View
                       style={{
+                        paddingHorizontal: 5,
+                        marginRight: 2,
+                        // marginLeft: 8,
+                        // borderRightWidth: 2,
+                        justifyContent: 'center',
+                        width: 45,
+                        //  borderColor: COLORS.lightblue_200 
+                      }}
+                    >
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Nos.</Text>
+                    </View>
+                    <View
+                      style={{
                         marginLeft: 8,
                         //  borderRightWidth: 2,
                         justifyContent: 'center',
@@ -1438,7 +1570,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                         // borderColor: COLORS.lightblue_200, 
                       }}
                     >
-                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Th/ht</Text>
+                      <Text style={[FONTS.h4, { color: COLORS.black, textAlign: "center" }]}>Th/ht/mm</Text>
                     </View>
                     <View
                       style={{
@@ -1548,12 +1680,31 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
                                 </View>
                               </View>
+                              <View
+                                style={{
+                                  alignContent: "center",
+                                  alignSelf: "center",
+                                  width: 145,
+                                  position: "absolute",
+                                  left: 20,
+                                  top: 3,
+                                  //  bottom:0                             
+                                }} >
+                                <View>
+                                  <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                    {list.quantityWorkItems.nos}
+                                  </Text>
+                                </View>
+                                <View style={{ position: "absolute", width: 1, left: 100, top: -10 }}>
+                                  <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                </View>
+                              </View>
                               <View style={{
                                 alignContent: "center",
                                 alignSelf: "center",
                                 width: 145,
                                 position: "absolute",
-                                left: 85,
+                                left: 150,
                                 top: 3,
 
                                 // right: 10,
@@ -1574,7 +1725,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   alignSelf: "center",
                                   width: 50,
                                   position: "absolute",
-                                  left: 239,
+                                  left: 280,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1591,7 +1742,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   alignSelf: "center",
                                   width: 55,
                                   position: "absolute",
-                                  left: 296,
+                                  left: 340,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1608,7 +1759,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   alignSelf: "center",
                                   width: 70,
                                   position: "absolute",
-                                  left: 358,
+                                  left: 420,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1616,7 +1767,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                 }}
                               >
                                 <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
-                                  {list.quantityWorkItems.num_height}
+                                  {list.quantityWorkItems.item_id == steelItem ? list.quantityWorkItems.steel_mm : list.quantityWorkItems.num_height}
                                 </Text>
                               </View>
                               <View
@@ -1625,7 +1776,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   alignSelf: "center",
                                   width: 60,
                                   position: "absolute",
-                                  left: 437,
+                                  left: 490,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1642,7 +1793,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   alignSelf: "center",
                                   width: 50,
                                   position: "absolute",
-                                  left: 505,
+                                  left: 550,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1668,7 +1819,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   alignSelf: "center",
                                   width: SIZES.width * 0.5,
                                   position: "absolute",
-                                  left: 563,
+                                  left: 590,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1688,7 +1839,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   alignSelf: "center",
                                   width: SIZES.width * 0.5,
                                   position: "absolute",
-                                  left: 720,
+                                  left: 750,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1708,7 +1859,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   // alignSelf: "center",
                                   width: 60,
                                   position: "absolute",
-                                  left: 885,
+                                  left: 920,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1743,7 +1894,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                         width: 50,
                                         position: "absolute",
                                         top: 10,
-                                        left: 40,
+                                        left: 85,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 
@@ -1761,7 +1912,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                         width: 50,
                                         position: "absolute",
                                         top: 10,
-                                        left: 100,
+                                        left: 145,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 
@@ -1779,7 +1930,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                         width: 70,
                                         position: "absolute",
                                         top: 10,
-                                        left: 160,
+                                        left: 225,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 
@@ -1797,7 +1948,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                         width: 60,
                                         position: "absolute",
                                         top: 10,
-                                        left: 238,
+                                        left: 295,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 
@@ -1815,7 +1966,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                         // position: "absolute",
                                         // backgroundColor:"red",
                                         top: 10,
-                                        left: 368,
+                                        left: 380,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 
@@ -1831,7 +1982,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                         // position: "absolute",
                                         // backgroundColor:"red",
                                         top: 10,
-                                        left: 395,
+                                        left: 420,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 

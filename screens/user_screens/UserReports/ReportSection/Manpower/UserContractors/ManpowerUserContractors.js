@@ -166,9 +166,9 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
     data.contractor_name == '' ?
       validateFields('Contractor Field required!') :
-      data.phone_no==''?
-      validateFields('Phone number required!'):
-      validateFields('Empty fields')
+      data.phone_no == '' ?
+        validateFields('Phone number required!') :
+        null
 
 
 
@@ -972,7 +972,18 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
 
         }}
         onPress={() => {
-          LayoutAnimation.easeInEaseOut();
+          LayoutAnimation.configureNext({
+            duration: 300,
+            create:
+            {
+              type: LayoutAnimation.Types.easeInEaseOut,
+              property: LayoutAnimation.Properties.opacity,
+            },
+            update:
+            {
+              type: LayoutAnimation.Types.easeInEaseOut,
+            }
+          });
           setConReportModal(true)
         }}>
         <View style={{
@@ -1134,7 +1145,18 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
   //collapse contractor 
   const _head = (item, index) => {
 
-    LayoutAnimation.easeInEaseOut();
+    LayoutAnimation.configureNext({
+      duration: 300,
+      create:
+      {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update:
+      {
+        type: LayoutAnimation.Types.easeInEaseOut,
+      }
+    });
     const open = active == index
     return (
       <>
