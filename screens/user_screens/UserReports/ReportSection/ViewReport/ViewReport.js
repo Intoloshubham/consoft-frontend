@@ -191,7 +191,6 @@ const ViewReport = () => {
 
                         let user_id = '';
                         rep_resp = await getReport(projectId, MyDateString, user_id);
-                        console.log("🚀 ~ file: ViewReport.js ~ line 195 ~ response.data.map ~ rep_resp", rep_resp)
 
                         if (rep_resp.data) {
 
