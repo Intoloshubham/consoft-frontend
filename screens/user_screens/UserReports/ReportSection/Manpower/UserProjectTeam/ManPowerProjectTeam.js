@@ -159,7 +159,18 @@ const ManPowerProjectTeam = ({ projectTeamList, Main_drp_pro_value, loading }) =
 
     //project team list collapse 
     const _project_team = (item, index) => {
-        LayoutAnimation.easeInEaseOut();
+        LayoutAnimation.configureNext({
+            duration: 300,
+            create:
+            {
+                type: LayoutAnimation.Types.easeInEaseOut,
+                property: LayoutAnimation.Properties.opacity,
+            },
+            update:
+            {
+                type: LayoutAnimation.Types.easeInEaseOut,
+            }
+        });
         return (
             <>
                 <TouchableOpacity
