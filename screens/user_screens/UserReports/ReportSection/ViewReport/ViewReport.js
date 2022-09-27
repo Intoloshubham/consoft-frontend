@@ -2393,222 +2393,9 @@ const ViewReport = () => {
         );
     }
 
+
     // quantity report
     function renderQuantity() {
-
-        const renderItem = ({ item, index }) =>
-            item.quantityWorkItems.map((ele, i) => {
-
-                return (
-                    <View key={i}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                            }}>
-                            <Text
-                                style={{
-                                    flex: 1,
-                                    ...FONTS.h3,
-                                    color: COLORS.black,
-                                }}>
-                                {ele.item_name}
-                            </Text>
-                            <Text
-                                style={{
-                                    ...FONTS.h3,
-                                    flex: 0.5,
-                                    color: COLORS.black,
-                                    textAlign: 'right',
-                                }}>
-                                {ele.num_length}
-                            </Text>
-                            <Text
-                                style={{
-                                    ...FONTS.h3,
-                                    flex: 0.5,
-                                    color: COLORS.black,
-                                    textAlign: 'right',
-                                }}>
-                                {ele.num_width}
-                            </Text>
-                            <Text
-                                style={{
-                                    ...FONTS.h3,
-                                    flex: 0.5,
-                                    color: COLORS.black,
-                                    textAlign: 'right',
-                                }}>
-                                {ele.num_height}
-                            </Text>
-                            <Text
-                                style={{
-                                    ...FONTS.h3,
-                                    flex: 1,
-                                    color: COLORS.black,
-                                    textAlign: 'right',
-                                }}>
-                                {ele.num_total}
-                            </Text>
-                            <Text
-                                style={{
-                                    fontSize: 15,
-                                    flex: 1,
-                                    color: COLORS.black,
-                                    textAlign: 'right',
-                                }}>
-                                {ele.remark}
-                            </Text>
-                        </View>
-                        {/* {i == 0 ? (
-                  <View
-                    style={{
-                      borderBottomWidth: 1,
-                      marginVertical: index == 0 ? 10 : null,
-                      borderColor: COLORS.darkGray2,
-                    }}></View>
-                ) : null} */}
-                        <View style={{}}>
-                            {ele.subquantityitems.map((ele, i) => {
-                                return (
-                                    <View key={i}>
-                                        {i == 0 ? (
-                                            <View
-                                                style={{
-                                                    flexDirection: 'row',
-                                                }}>
-                                                <Text
-                                                    style={{
-                                                        flex: 1,
-                                                        ...FONTS.h4,
-                                                        color: COLORS.black,
-                                                    }}></Text>
-                                                <Text
-                                                    style={{
-                                                        ...FONTS.h4,
-                                                        flex: 0.5,
-                                                        color: COLORS.black,
-                                                        textAlign: 'right',
-                                                    }}>
-                                                    L
-                                                </Text>
-                                                <Text
-                                                    style={{
-                                                        ...FONTS.h4,
-                                                        flex: 0.5,
-                                                        color: COLORS.black,
-                                                        textAlign: 'right',
-                                                    }}>
-                                                    W
-                                                </Text>
-                                                <Text
-                                                    style={{
-                                                        ...FONTS.h4,
-                                                        flex: 0.5,
-                                                        color: COLORS.black,
-                                                        textAlign: 'right',
-                                                    }}>
-                                                    H
-                                                </Text>
-                                                <Text
-                                                    style={{
-                                                        ...FONTS.h4,
-                                                        flex: 1,
-                                                        color: COLORS.black,
-                                                        textAlign: 'right',
-                                                    }}>
-                                                    Total
-                                                </Text>
-                                                <Text
-                                                    style={{
-                                                        ...FONTS.h3,
-                                                        flex: 1,
-                                                        color: COLORS.black,
-                                                        textAlign: 'right',
-                                                    }}>
-                                                    Remark
-                                                </Text>
-                                            </View>
-                                        ) : null}
-                                        <View
-                                            style={{
-                                                left: 100,
-                                                borderBottomWidth: 1,
-                                                borderColor: COLORS.darkGray2,
-                                                width: '75%',
-                                                marginVertical: 5,
-                                            }}></View>
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                            }}>
-                                            <Text
-                                                style={{
-                                                    flex: 1,
-                                                    ...FONTS.h4,
-                                                    color: COLORS.black,
-                                                }}></Text>
-                                            <Text
-                                                style={{
-                                                    ...FONTS.h4,
-                                                    flex: 0.5,
-                                                    color: COLORS.black,
-                                                    textAlign: 'right',
-                                                }}>
-                                                {ele.sub_length}
-                                            </Text>
-                                            <Text
-                                                style={{
-                                                    ...FONTS.h4,
-                                                    flex: 0.5,
-                                                    color: COLORS.black,
-                                                    textAlign: 'right',
-                                                }}>
-                                                {ele.sub_width}
-                                            </Text>
-                                            <Text
-                                                style={{
-                                                    ...FONTS.h4,
-                                                    flex: 0.5,
-                                                    color: COLORS.black,
-                                                    textAlign: 'right',
-                                                }}>
-                                                {ele.sub_height}
-                                            </Text>
-                                            <Text
-                                                style={{
-                                                    ...FONTS.h4,
-                                                    flex: 1,
-                                                    color: COLORS.black,
-                                                    textAlign: 'right',
-                                                }}>
-                                                {ele.sub_total}
-                                            </Text>
-                                            <Text
-                                                style={{
-                                                    ...FONTS.h3,
-                                                    flex: 1,
-                                                    color: COLORS.black,
-                                                    textAlign: 'right',
-                                                }}>
-                                                {ele.sub_quality_type}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                );
-                            })}
-                            {i == 0 ? (
-                                <View
-                                    style={{
-                                        borderBottomWidth: 1,
-                                        marginVertical: index == 0 ? 10 : null,
-                                        borderColor: COLORS.darkGray,
-                                    }}></View>
-                            ) : null}
-                        </View>
-                    </View>
-                );
-            });
-
         return (
             <View>
                 <View
@@ -2621,224 +2408,495 @@ const ViewReport = () => {
                 <Text
                     style={{
                         fontSize: 18,
-                        color: COLORS.black,
+                        color: COLORS.lightblue_700,
                         textAlign: 'center',
                         textDecorationLine: 'underline',
-                        marginBottom: 5,
+                        marginBottom: 15,
                     }}>
                     Executed Quantity
                 </Text>
-                <FlatList
-                    // contentContainerStyle={{maxHeight: 450}}
-                    data={quantity}
-                    keyExtractor={item => `${item._id}`}
-                    renderItem={renderItem}
-                    ListFooterComponent={
-                        <View style={{ flex: 1 }}>
-                            <Text style={{
-                                fontSize: 18,
-                                color: COLORS.black,
-                                textAlign: 'center',
-                                textDecorationLine: 'underline',
-                                marginVertical: 5,
-                                marginBottom: 10
-                            }}>Steel Section</Text>
-                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginRight: -42 }}>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        // fontWeight: "bold"
-                                        // textAlign: 'right',
-                                    }}>
-                                    S.no</Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        // textAlign: 'right',
-                                    }}
-                                >Nos</Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 0.6,
-                                        color: COLORS.black,
-                                        // textAlign: 'right',
-                                    }}
-                                >Size in MM</Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        // textAlign: 'right',
-                                    }}
-                                >Total</Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        // textAlign: 'right',
-                                    }}
-                                >Remark</Text>
-                            </View>
-                            <View
+                <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+                    <View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                backgroundColor: COLORS.yellow_200,
+                                padding: 5,
+                            }}>
+                            <Text
                                 style={{
-                                    // left: 100,
-                                    borderBottomWidth: 1,
-                                    borderColor: COLORS.darkGray2,
-                                    width: '100%',
-                                    marginVertical: 5,
-                                }}></View>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 20,
+                                    textAlign: 'left',
                                 }}>
-                                <Text
-                                    style={{
-                                        flex: 1,
-                                        ...FONTS.h4,
-                                        color: COLORS.black,
-                                    }}></Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    {/* {ele.sub_length} */}
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    {/* {ele.sub_width} */}
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    {/* {ele.sub_height} */}
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h4,
-                                        flex: 1,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    {/* {ele.sub_total} */}
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 1,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    {/* {ele.sub_quality_type} */}
-                                </Text>
-                            </View>
-                        </View>
-                    }
-                    showsVerticalScrollIndicator={false}
-                    scrollEnabled={true}
-                    ItemSeparatorComponent={() => {
-                        return (
-                            <View
+                                Sn.
+                            </Text>
+                            <View style={{ marginHorizontal: 5 }}></View>
+                            <Text
                                 style={{
-                                    height: 1,
-                                    backgroundColor: COLORS.darkGray,
-                                    marginVertical: 10,
-                                }}></View>
-                        );
-                    }}
-                    ListHeaderComponent={
-                        <View View >
-                            <View
-                                style={{
-                                    marginTop: 10,
-                                    flexDirection: 'row',
-                                    marginBottom: 5,
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 60,
+                                    textAlign: 'left',
                                 }}>
-                                <Text
-                                    style={{
-                                        flex: 1,
-                                        ...FONTS.h3,
-                                        color: COLORS.black,
-                                    }}>
-                                    Items
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    L
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    W
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 0.5,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    H
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 1,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    Total
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...FONTS.h3,
-                                        flex: 1,
-                                        color: COLORS.black,
-                                        textAlign: 'right',
-                                    }}>
-                                    Remark
-                                </Text>
-                            </View>
-                            <View
+                                Items
+                            </Text>
+                            <View style={{ marginHorizontal: 10 }}></View>
+
+                            <Text
                                 style={{
-                                    borderBottomWidth: 1,
-                                    borderColor: COLORS.darkGray,
-                                    marginBottom: 10,
-                                }}></View>
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 30,
+                                    textAlign: 'right',
+                                }}>
+                                Nos
+                            </Text>
+                            <View style={{ marginHorizontal: 10 }}></View>
+                            <Text
+                                style={{
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                }}>
+                                L
+                            </Text>
+                            <View style={{ marginHorizontal: 10 }}></View>
+                            <Text
+                                style={{
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                }}>
+                                W
+                            </Text>
+                            <View style={{ marginHorizontal: 10 }}></View>
+                            <Text
+                                style={{
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                }}>
+                                H
+                            </Text>
+                            <View style={{ marginHorizontal: 10 }}></View>
+                            <Text
+                                style={{
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 30,
+                                    textAlign: 'right',
+                                }}>
+                                Unit
+                            </Text>
+                            <View style={{ marginHorizontal: 10 }}></View>
+                            <Text
+                                style={{
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                }}>
+                                MM
+                            </Text>
+                            <View style={{ marginHorizontal: 10 }}></View>
+                            <Text
+                                style={{
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 50,
+                                    textAlign: 'right',
+                                }}>
+                                Qty
+                            </Text>
+                            <View style={{ marginHorizontal: 15 }}></View>
+                            <Text
+                                style={{
+                                    ...FONTS.h4,
+                                    color: COLORS.black,
+                                    width: 200,
+                                    textAlign: 'left',
+                                }}>
+                                Remarks
+                            </Text>
                         </View>
-                    }
-                />
+                        <View
+                            style={{
+                                borderBottomWidth: 1,
+                                borderColor: COLORS.darkGray,
+                                marginBottom: 3,
+                            }}></View>
+
+                        <ScrollView nestedScrollEnabled={true}>
+                            {quantity.map((ele, index) =>
+                                ele.quantityWorkItems.map((ele1, index1) => {
+                                    return (
+                                        <View style={{}} key={index1}>
+                                            {index1 != 0 ? (
+                                                <View
+                                                    style={{
+                                                        borderBottomWidth: 1,
+                                                        borderColor: COLORS.darkGray2,
+                                                        marginVertical: 5,
+                                                    }}></View>
+                                            ) : null}
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    padding: 5,
+                                                }}>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 20,
+                                                        textAlign: 'left',
+                                                    }}>
+                                                    {index1 + 1}.
+                                                </Text>
+                                                <View style={{ marginHorizontal: 5 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 60,
+                                                        textAlign: 'left',
+                                                        textTransform: 'capitalize',
+                                                    }}>
+                                                    {ele1.item_name}
+                                                </Text>
+                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 30,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    {ele1.nos == null ? '-' : ele1.nos}
+                                                </Text>
+                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 50,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    {ele1.num_length == null ? '-' : ele1.num_length}
+                                                </Text>
+                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 50,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    {ele1.num_width == null ? '-' : ele1.num_width}
+                                                </Text>
+                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 50,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    {ele1.num_height == null ? '-' : ele1.num_height}
+                                                </Text>
+                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 30,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    {ele1.unit_name == null ? '-' : ele1.unit_name}
+                                                </Text>
+                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 50,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    {ele1.steel_mm == null ? '-' : ele1.steel_mm}
+                                                </Text>
+                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h4,
+                                                        color: COLORS.black,
+                                                        width: 50,
+                                                        textAlign: 'right',
+                                                    }}>
+                                                    {ele1.num_total == null ? '-' : ele1.num_total}
+                                                </Text>
+                                                <View style={{ marginHorizontal: 15 }}></View>
+                                                <Text
+                                                    style={{
+                                                        ...FONTS.h5,
+                                                        color: COLORS.black,
+                                                        width: 200,
+                                                        textAlign: 'left',
+                                                    }}>
+                                                    {ele1.remark}
+                                                </Text>
+                                            </View>
+                                            <View>
+                                                {ele1.subquantityitems.map((ele2, index2) => {
+                                                    return (
+                                                        <View key={index2}>
+                                                            <View
+                                                                style={{
+                                                                    width: '85%',
+                                                                    alignSelf: 'flex-end',
+                                                                    borderBottomWidth: 1,
+                                                                    borderColor: COLORS.lightblue_600,
+                                                                }}></View>
+                                                            {index2 == 0 ? (
+                                                                <View
+                                                                    style={{
+                                                                        flexDirection: 'row',
+                                                                        padding: 5,
+                                                                    }}>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 20,
+                                                                            textAlign: 'left',
+                                                                        }}></Text>
+                                                                    <View style={{ marginHorizontal: 5 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 60,
+                                                                            textAlign: 'left',
+                                                                        }}></Text>
+                                                                    <View style={{ marginHorizontal: 10 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 30,
+                                                                            textAlign: 'right',
+                                                                        }}>
+                                                                        Nos
+                                                                    </Text>
+                                                                    <View style={{ marginHorizontal: 10 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 50,
+                                                                            textAlign: 'right',
+                                                                        }}>
+                                                                        L
+                                                                    </Text>
+                                                                    <View style={{ marginHorizontal: 10 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 50,
+                                                                            textAlign: 'right',
+                                                                        }}>
+                                                                        W
+                                                                    </Text>
+                                                                    <View style={{ marginHorizontal: 10 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 50,
+                                                                            textAlign: 'right',
+                                                                        }}>
+                                                                        H
+                                                                    </Text>
+                                                                    <View style={{ marginHorizontal: 10 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 30,
+                                                                            textAlign: 'right',
+                                                                        }}>
+                                                                        Unit
+                                                                    </Text>
+                                                                    <View style={{ marginHorizontal: 10 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 50,
+                                                                            textAlign: 'right',
+                                                                        }}>
+                                                                        MM
+                                                                    </Text>
+                                                                    <View style={{ marginHorizontal: 10 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 50,
+                                                                            textAlign: 'right',
+                                                                        }}>
+                                                                        Qty
+                                                                    </Text>
+                                                                    <View style={{ marginHorizontal: 15 }}></View>
+                                                                    <Text
+                                                                        style={{
+                                                                            ...FONTS.h5,
+                                                                            color: COLORS.lightblue_700,
+                                                                            width: 200,
+                                                                            textAlign: 'left',
+                                                                        }}>
+                                                                        Remarks
+                                                                    </Text>
+                                                                </View>
+                                                            ) : null}
+                                                            <View
+                                                                style={{
+                                                                    alignSelf: 'flex-end',
+                                                                    borderBottomWidth: 1,
+                                                                    borderColor: COLORS.lightblue_700,
+                                                                    width: '85%',
+                                                                }}></View>
+                                                            <View
+                                                                key={index2}
+                                                                style={{
+                                                                    flexDirection: 'row',
+                                                                    padding: 5,
+                                                                }}>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 20,
+                                                                        textAlign: 'left',
+                                                                    }}></Text>
+                                                                <View style={{ marginHorizontal: 5 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 60,
+                                                                        textAlign: 'left',
+                                                                    }}></Text>
+                                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 30,
+                                                                        textAlign: 'right',
+                                                                    }}>
+                                                                    {ele2.sub_nos == null ? '-' : ele2.sub_nos}
+                                                                </Text>
+                                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 50,
+                                                                        textAlign: 'right',
+                                                                    }}>
+                                                                    {ele2.sub_length == null
+                                                                        ? '-'
+                                                                        : ele2.sub_length}
+                                                                </Text>
+                                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 50,
+                                                                        textAlign: 'right',
+                                                                    }}>
+                                                                    {ele2.sub_width == null
+                                                                        ? '-'
+                                                                        : ele2.sub_width}
+                                                                </Text>
+                                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 50,
+                                                                        textAlign: 'right',
+                                                                    }}>
+                                                                    {ele2.sub_height == null
+                                                                        ? '-'
+                                                                        : ele2.sub_height}
+                                                                </Text>
+                                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 30,
+                                                                        textAlign: 'right',
+                                                                    }}>
+                                                                    -
+                                                                </Text>
+                                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 50,
+                                                                        textAlign: 'right',
+                                                                    }}>
+                                                                    {ele2.sub_steel_mm == null
+                                                                        ? '-'
+                                                                        : ele2.sub_steel_mm}
+                                                                </Text>
+                                                                <View style={{ marginHorizontal: 10 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 50,
+                                                                        textAlign: 'right',
+                                                                    }}>
+                                                                    {ele2.sub_total == null
+                                                                        ? '-'
+                                                                        : ele2.sub_total}
+                                                                </Text>
+                                                                <View style={{ marginHorizontal: 15 }}></View>
+                                                                <Text
+                                                                    style={{
+                                                                        ...FONTS.h5,
+                                                                        color: COLORS.black,
+                                                                        width: 200,
+                                                                        textAlign: 'left',
+                                                                    }}>
+                                                                    {ele2.sub_remark} ({ele2.sub_quality_type})
+                                                                </Text>
+                                                            </View>
+                                                        </View>
+                                                    );
+                                                })}
+                                            </View>
+                                        </View>
+                                    );
+                                }),
+                            )}
+                        </ScrollView>
+                    </View>
+                </ScrollView>
             </View>
         );
     }
-
 
     function renderRevertModal() {
         return (
