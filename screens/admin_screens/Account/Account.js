@@ -251,6 +251,17 @@ const Account = () => {
     );
   }
 
+  function renderVersionDetails() {
+    return (
+      <View style={{marginTop: 30, alignItems: 'center'}}>
+        <Text style={{fontSize: 25, color: COLORS.darkGray}}>INTOLO INDIA</Text>
+        <Text style={{fontSize: 12, color: COLORS.darkGray2}}>
+          Version - 1.0.0
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View
       style={{
@@ -260,11 +271,12 @@ const Account = () => {
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: SIZES.radius,
-          paddingBottom: 150,
+          paddingBottom: 50,
         }}>
         {renderProfileCard()}
         {renderProfileSection1()}
         {renderProfileSection2()}
+        {/* {renderVersionDetails()} */}
       </ScrollView>
     </View>
   );
