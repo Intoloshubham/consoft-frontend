@@ -312,6 +312,9 @@ const ReportDisplay = () => {
           backgroundColor: 'white',
           padding: 10,
           elevation: 1,
+          borderLeftWidth: 5,
+          borderLeftColor:
+            item.final_verify_status == true ? COLORS.green : COLORS.yellow_400,
         }}
         onPress={() => {
           setReportModal(true);
