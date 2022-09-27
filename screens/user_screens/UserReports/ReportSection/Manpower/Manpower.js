@@ -83,13 +83,25 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
     };
     return (
         <View>
-            <Animated.View style={{                 
-                 transform: [{ scale }] }}>
+            <Animated.View style={{
+                transform: [{ scale }]
+            }}>
                 <Pressable
                     onPressIn={onPressIn}
                     onPressOut={onPressOut}
                     onPress={() => {
-                        LayoutAnimation.easeInEaseOut();
+                        LayoutAnimation.configureNext({
+                            duration: 300,
+                            create:
+                            {
+                                type: LayoutAnimation.Types.easeInEaseOut,
+                                property: LayoutAnimation.Properties.opacity,
+                            },
+                            update:
+                            {
+                                type: LayoutAnimation.Types.easeInEaseOut,
+                            }
+                        });
                         setTabCollapse(!TabCollapse)
                     }}
 
@@ -114,13 +126,25 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                         shadowOpacity: 0.3,
                         shadowRadius: 4.65,
                     }}>
-                    <View style={{ 
-                        alignItems: "center", alignSelf: "center" }}>
+                    <View style={{
+                        alignItems: "center", alignSelf: "center"
+                    }}>
                         <Text
                             onPressIn={onPressIn}
                             onPressOut={onPressOut}
                             onPress={() => {
-                                LayoutAnimation.easeInEaseOut();
+                                LayoutAnimation.configureNext({
+                                    duration: 300,
+                                    create:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                        property: LayoutAnimation.Properties.opacity,
+                                    },
+                                    update:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                    }
+                                });
                                 setTabCollapse(!TabCollapse)
                             }} style={[FONTS.h3, { color: COLORS.white }]}>Manpower</Text>
                     </View>
@@ -130,7 +154,18 @@ const Manpower = ({ projectTeamList, ProList, Main_drp_pro_value, loading }) => 
                             onPressIn={onPressIn}
                             onPressOut={onPressOut}
                             onPress={() => {
-                                LayoutAnimation.easeInEaseOut();
+                                LayoutAnimation.configureNext({
+                                    duration: 300,
+                                    create:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                        property: LayoutAnimation.Properties.opacity,
+                                    },
+                                    update:
+                                    {
+                                        type: LayoutAnimation.Types.easeInEaseOut,
+                                    }
+                                });
 
                                 setTabCollapse(!TabCollapse)
                             }}>
