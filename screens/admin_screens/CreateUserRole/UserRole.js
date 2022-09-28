@@ -22,7 +22,10 @@ import {COLORS, FONTS, SIZES, icons} from '../../../constants';
 import {postUserRole} from '../../../controller/UserRoleController';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
-import {getUserRole} from '../../../controller/UserRoleController';
+import {
+  getUserRole,
+  updateUserRole,
+} from '../../../controller/UserRoleController';
 
 const UserRole = () => {
   // COMPANY & USER DATA
@@ -38,6 +41,7 @@ const UserRole = () => {
   const company_id = companyData._id;
 
   // CUSTOM TOAST OF CRUD OPERATIONS
+  const [updateToast, setUpdateToast] = React.useState(false);
   const [submitToast, setSubmitToast] = React.useState(false);
   const [createUserModal, setCreateUserModal] = React.useState(false);
 
@@ -47,10 +51,6 @@ const UserRole = () => {
 
   //ERROR STATES
   const [userRoleError, setUserRoleError] = React.useState('');
-
-  function isEnableSubmit() {
-    return userRole != '' && userRoleError == '';
-  }
 
   // ====================================Apis ==============================
 
@@ -75,6 +75,29 @@ const UserRole = () => {
     if (response.status === 200) {
       setUserRoles(response.data);
     }
+  };
+
+  const [roleId, setRoleId] = React.useState('');
+
+  const onEdit = (id, name) => {
+    setRoleId(id);
+    setUserRole(name);
+    setCreateUserModal(true);
+  };
+
+  const onEditUserRole = async () => {
+    const formData = {user_role: userRole, company_id: company_id};
+    const response = await updateUserRole(roleId, formData);
+    if (response.status === 200) {
+      setCreateUserModal(false);
+      setUpdateToast(true);
+      getUsersRole();
+      setUserRole('');
+      setRoleId('');
+    }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 1000);
   };
 
   React.useEffect(() => {
@@ -127,6 +150,7 @@ const UserRole = () => {
               <FormInput
                 label="User role"
                 keyboardType="default"
+                value={userRole}
                 onChange={value => {
                   utils.validateText(value, setUserRoleError);
                   setUserRole(value);
@@ -157,7 +181,7 @@ const UserRole = () => {
               />
             </ScrollView>
             <TextButton
-              label="Save"
+              label={roleId != '' ? 'Update' : 'Save'}
               buttonContainerStyle={{
                 height: 45,
                 alignItems: 'center',
@@ -165,7 +189,7 @@ const UserRole = () => {
                 borderRadius: SIZES.base,
                 backgroundColor: COLORS.lightblue_700,
               }}
-              onPress={submitUserRole}
+              onPress={roleId != '' ? onEditUserRole : submitUserRole}
             />
           </View>
         </KeyboardAvoidingView>
@@ -182,7 +206,9 @@ const UserRole = () => {
           alignItems: 'center',
         }}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={{...FONTS.h4,color:COLORS.darkGray}}>{index + 1}.</Text>
+          <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
+            {index + 1}.
+          </Text>
           <Text
             style={{
               ...FONTS.h3,
@@ -193,8 +219,11 @@ const UserRole = () => {
             {item.user_role}
           </Text>
         </View>
-        {/* <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => console.log('edit')}>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => {
+              onEdit(item._id, item.user_role);
+            }}>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.green,
@@ -212,7 +241,7 @@ const UserRole = () => {
               />
             </ImageBackground>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => console.log('delete')}>
+          {/* <TouchableOpacity onPress={() => console.log('delete')}>
             <ImageBackground
               style={{
                 backgroundColor: COLORS.rose_600,
@@ -228,8 +257,8 @@ const UserRole = () => {
                 }}
               />
             </ImageBackground>
-          </TouchableOpacity>
-        </View> */}
+          </TouchableOpacity> */}
+        </View>
       </View>
     );
 
@@ -276,7 +305,11 @@ const UserRole = () => {
           backgroundColor: COLORS.lightblue_700,
           ...styles.shadow,
         }}
-        onPress={() => setCreateUserModal(true)}
+        onPress={() => {
+          setUserRole('');
+          setRoleId('');
+          setCreateUserModal(true);
+        }}
       />
       {renderAddUserRoleModal()}
       {renderUserRole()}
@@ -286,6 +319,13 @@ const UserRole = () => {
         color={COLORS.green}
         title="Submit"
         message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
       />
     </View>
   );

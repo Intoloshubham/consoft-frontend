@@ -14,7 +14,10 @@ import {
 } from 'react-native';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
-import {postCompanyTeam} from '../../../controller/CompanyController';
+import {
+  postCompanyTeam,
+  updateCompanyTeam,
+} from '../../../controller/CompanyController';
 import {
   getPrivileges,
   getUserRole,
@@ -42,8 +45,6 @@ const CompanyTeamShow = () => {
     companyData = userData;
   }
   const company_id = companyData._id;
-
-  // console.log(company_id);
 
   const [addTeamModal, setAddTeamModal] = React.useState(false);
   const [companyTeam, setCompanyTeam] = React.useState([]);
@@ -180,7 +181,7 @@ const CompanyTeamShow = () => {
     }
     setTimeout(() => {
       setSubmitToast(false);
-    }, 2000);
+    }, 1000);
   };
 
   const [userId, setUserId] = React.useState('');
@@ -195,6 +196,36 @@ const CompanyTeamShow = () => {
     userRole();
     fetchPrivilege();
     setAddTeamModal(true);
+  };
+
+  const onEditTeam = async () => {
+    const formData = {
+      role_id: roleValue,
+      name: name,
+      email: email,
+      mobile: mobile,
+      user_privilege: privilegeValue,
+      company_id: company_id,
+      assign_project: isEnabled,
+      project_id: projectValue,
+    };
+    const response = await updateCompanyTeam(formData, userId);
+    if (response.status === 200) {
+      setAddTeamModal(false);
+      setUpdateToast(true);
+      getCompanyTeam();
+      setRoleValue('');
+      setPrivilegeValue('');
+      setName('');
+      setEmail('');
+      setMobile('');
+      setUserId('');
+    } else {
+      alert(response.message);
+    }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 1000);
   };
 
   const onDelete = id => {
@@ -440,7 +471,7 @@ const CompanyTeamShow = () => {
                   borderRadius: SIZES.base,
                   backgroundColor: COLORS.lightblue_700,
                 }}
-                onPress={postTeam}
+                onPress={userId != '' ? onEditTeam : postTeam}
               />
             </View>
           </View>
@@ -459,9 +490,7 @@ const CompanyTeamShow = () => {
             justifyContent: 'space-between',
           }}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{...FONTS.h4, color: COLORS.darkGray}}>
-              {index + 1}.
-            </Text>
+            <Text style={{...FONTS.h4, color: COLORS.black}}>{index + 1}.</Text>
             <Text
               style={{
                 ...FONTS.h3,
@@ -470,16 +499,6 @@ const CompanyTeamShow = () => {
                 textTransform: 'capitalize',
               }}>
               {item.name}
-            </Text>
-            <Text style={{left: 5}}>{'  -  '}</Text>
-            <Text
-              style={{
-                ...FONTS.h5,
-                left: 5,
-                color: COLORS.darkGray,
-                textTransform: 'capitalize',
-              }}>
-              ({item.user_role}) ({item.privilege})
             </Text>
           </View>
 
@@ -500,7 +519,7 @@ const CompanyTeamShow = () => {
                   backgroundColor: COLORS.green,
                   padding: 3,
                   borderRadius: 2,
-                  right: 12,
+                  // right: 12,
                 }}>
                 <Image
                   source={icons.edit}
@@ -512,7 +531,7 @@ const CompanyTeamShow = () => {
                 />
               </ImageBackground>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 onDelete(item._id);
               }}>
@@ -531,11 +550,20 @@ const CompanyTeamShow = () => {
                   }}
                 />
               </ImageBackground>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
+        <Text
+          style={{
+            ...FONTS.h4,
+            left: 15,
+            color: COLORS.darkGray,
+            textTransform: 'capitalize',
+          }}>
+          Role - {item.user_role} ({item.privilege})
+        </Text>
         <Text style={{...FONTS.h4, left: 15, color: COLORS.darkGray}}>
-          Mobile No. {item.mobile}
+          Mobile No - {item.mobile}
         </Text>
         <Text style={{...FONTS.h4, left: 15, color: COLORS.darkGray}}>
           Email - {item.email}
@@ -604,6 +632,13 @@ const CompanyTeamShow = () => {
         color={COLORS.green}
         title="Submit"
         message="Submitted Successfully..."
+      />
+      <CustomToast
+        isVisible={updateToast}
+        onClose={() => setUpdateToast(false)}
+        color={COLORS.yellow_400}
+        title="Update"
+        message="Updated Successfully..."
       />
       <DeleteConfirmationToast
         isVisible={deleteConfirm}

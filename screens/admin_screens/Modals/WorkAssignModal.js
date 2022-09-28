@@ -400,8 +400,8 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                               <Image
                                 source={icons.minus}
                                 style={{
-                                  height: 15,
-                                  width: 15,
+                                  height: 12,
+                                  width: 12,
                                   tintColor: 'white',
                                 }}
                               />
@@ -417,8 +417,8 @@ const WorkAssignModal = ({projectId, isVisible, onClose}) => {
                             <Image
                               source={icons.plus}
                               style={{
-                                height: key == 0 ? 15 : 15,
-                                width: key == 0 ? 15 : 15,
+                                height: key == 0 ? 12 : 12,
+                                width: key == 0 ? 12 : 12,
                                 tintColor: 'white',
                               }}
                             />

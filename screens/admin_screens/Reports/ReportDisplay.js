@@ -92,7 +92,7 @@ const ReportDisplay = () => {
   const user_id = '';
   const fetchReport = async project_id => {
     setProjectId(project_id);
-    let response = await getReport(project_id, user_id);
+    let response = await getReport(project_id, MyDateString, user_id);
     setReport(response.data);
   };
 
@@ -421,6 +421,7 @@ const ReportDisplay = () => {
         </Text>
         <View style={{}}>
           {item.manpowerCategories.map((ele, i) => {
+            // manpowerCountHandler(i+1);
             return (
               <View
                 key={i}
@@ -739,7 +740,7 @@ const ReportDisplay = () => {
               {quantity.map((ele, index) =>
                 ele.quantityWorkItems.map((ele1, index1) => {
                   return (
-                    <View style={{}}>
+                    <View key={index1}>
                       {index1 != 0 ? (
                         <View
                           style={{
@@ -749,7 +750,6 @@ const ReportDisplay = () => {
                           }}></View>
                       ) : null}
                       <View
-                        key={index1}
                         style={{
                           flexDirection: 'row',
                           padding: 5,
