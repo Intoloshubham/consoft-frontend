@@ -298,19 +298,19 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
 
           if (result.data.subquantityitems.length == 0) {
             setInputs([...inputs, {
-              item_id: result.data.item_id, nos: result.data.nos.toString(), steel_mm: result.data.steel_mm ? result.data.steel_mm.toString() : '0', num_length: result.data.num_length ? result.data.num_length.toString() : '0', num_width: result.data.num_width ? result.data.num_width.toString() : '0', num_height: result.data.num_height ? result.data.num_height.toString() : '0',
+              item_id: result.data.item_id, nos: result.data.nos ? result.data.nos.toString() : "0", steel_mm: result.data.steel_mm ? result.data.steel_mm.toString() : '0', num_length: result.data.num_length ? result.data.num_length.toString() : '0', num_width: result.data.num_width ? result.data.num_width.toString() : '0', num_height: result.data.num_height ? result.data.num_height.toString() : '0',
               num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name, quality_type: result.data.quality_type,
               subquantityitems: []
             }]);
           } else {
             setInputs([...inputs, {
-              item_id: result.data.item_id, nos: result.data.nos.toString(), steel_mm: result.data.steel_mm ? result.data.steel_mm.toString() : '0', num_length: result.data.num_length ? result.data.num_length.toString() : '0', num_width: result.data.num_width ? result.data.num_width.toString() : '0', num_height: result.data.num_height ? result.data.num_height.toString() : '0',
+              item_id: result.data.item_id, nos: result.data.nos ? result.data.nos.toString() : "0", steel_mm: result.data.steel_mm ? result.data.steel_mm.toString() : '0', num_length: result.data.num_length ? result.data.num_length.toString() : '0', num_width: result.data.num_width ? result.data.num_width.toString() : '0', num_height: result.data.num_height ? result.data.num_height.toString() : '0',
               num_total: result.data.num_total.toString(), remark: result.data.remark, unit_name: result.data.unit_name, quality_type: result.data.quality_type,
               subquantityitems:
                 // [
                 result.data.subquantityitems.map(ele => {
                   return {
-                    sub_nos: ele.sub_nos.toString(), sub_height: ele.sub_height ? ele.sub_height.toString() : '0', sub_length: ele.sub_length ? ele.sub_length.toString() : '0', sub_remark: ele.sub_remark, sub_total: ele.sub_total.toString(),
+                    sub_nos: ele.sub_nos ? ele.sub_nos.toString() : "0", sub_height: ele.sub_height ? ele.sub_height.toString() : '0', sub_length: ele.sub_length ? ele.sub_length.toString() : '0', sub_remark: ele.sub_remark, sub_total: ele.sub_total.toString(),
                     sub_width: ele.sub_width ? ele.sub_width.toString() : '0', sub_quality_type: ele.sub_quality_type
                   }
                 })
@@ -347,6 +347,8 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
       console.log(error, 'error');
     }
   };
+
+
   useEffect(() => {
     if (userData.company_id || saveItemsStatus || loading) {
       reportdataitem();
@@ -358,7 +360,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   ///getting latest steel Id by company Id
   const getLatestSteelId = async () => {
     const temp_id = await get_latest_steel_id(userData.company_id);
-    console.log("🚀 ~ file: Quantity.js ~ line 360 ~ getLatestSteelId ~ temp_id", temp_id)
+    // console.log("🚀 ~ file: Quantity.js ~ line 360 ~ getLatestSteelId ~ temp_id", temp_id)
     if (temp_id.data) {
       setSteelItem(temp_id.data._id);
     }
@@ -1819,7 +1821,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                   alignSelf: "center",
                                   width: SIZES.width * 0.5,
                                   position: "absolute",
-                                  left: 590,
+                                  left: 575,
                                   top: 3,
                                   // borderWidth: 1,
                                   // borderColor: COLORS.lightblue_200,
@@ -1889,6 +1891,24 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                       marginBottom: 0,
                                     }} key={index2}>
 
+                                    <View
+                                      style={{
+                                        width: 50,
+                                        position: "absolute",
+                                        top: 10,
+                                        left: -SIZES.width * 0.33,
+                                        // borderWidth: 1,
+                                        // borderColor: COLORS.lightblue_200,
+
+                                      }}
+                                    >
+                                      <Text style={[FONTS.h4, { color: COLORS.darkGray, textAlign: "center" }]}>
+                                        {res.sub_nos}
+                                      </Text>
+                                      {/* <View style={{ position: "absolute", width: 1, left: 60, top: -59 }}>
+                                        <Divider style={{ backgroundColor: COLORS.lightGray1, height: SIZES.height, top: 5 }} />
+                                      </View> */}
+                                    </View>
                                     <View
                                       style={{
                                         width: 50,
@@ -1982,7 +2002,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                         // position: "absolute",
                                         // backgroundColor:"red",
                                         top: 10,
-                                        left: 420,
+                                        left: 425,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 
