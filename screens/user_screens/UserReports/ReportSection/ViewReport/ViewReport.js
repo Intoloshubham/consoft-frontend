@@ -187,7 +187,7 @@ const ViewReport = () => {
             {
                 response.data.map(async (ele, i) => {
 
-                    if (ele.verification_1 === user_id || ele.verification_2 === user_id  ||  ele.started_by === user_id) {
+                    if (ele.verification_1 === user_id || ele.verification_2 === user_id || ele.started_by === user_id) {
 
                         let user_id = '';
                         rep_resp = await getReport(projectId, MyDateString, user_id);
