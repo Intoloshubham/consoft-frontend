@@ -796,7 +796,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
             selectTextOnFocus={false}
             placeholderTextColor={COLORS.white}
             placeholder={'Total'}
-            value={index1 == subLengthKey == subWidthKey == subHeightKey ? (subquantityitems.sub_total = subquantityitems.sub_length * subquantityitems.sub_width * subquantityitems.sub_height).toString() : (subquantityitems.sub_total = subquantityitems.sub_length * subquantityitems.sub_width * subquantityitems.sub_height).toString()}
+            value={index1 == subLengthKey == subWidthKey == subHeightKey ? (subquantityitems.sub_total = (subquantityitems.sub_length * subquantityitems.sub_width * subquantityitems.sub_height).toFixed(2)).toString() : (subquantityitems.sub_total = (subquantityitems.sub_length * subquantityitems.sub_width * subquantityitems.sub_height).toFixed(2)).toString()}
             keyboardType="numeric"
             onChangeText={value => {
               Subinputtotal(value, index1, key);
@@ -1063,7 +1063,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                     selectTextOnFocus={false}
                     placeholderTextColor={COLORS.white}
                     placeholder={'Total'}
-                    value={key == lengthKey == widthKey == heightKey ? (input.num_total = input.num_length * input.num_width * input.num_height).toString() : (input.num_total = input.num_length * input.num_width * input.num_height).toString()}
+                    value={key == lengthKey == widthKey == heightKey ? (input.num_total = (input.num_length * input.num_width * input.num_height).toFixed(2)).toString() : (input.num_total = (input.num_length * input.num_width * input.num_height).toFixed(2)).toString()}
                     keyboardType="numeric"
                     onChangeText={value => {
                       inputtotal(value, key);
