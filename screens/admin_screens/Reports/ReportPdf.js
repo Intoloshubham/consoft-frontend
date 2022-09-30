@@ -29,6 +29,21 @@ const ReportPdf = (reportData, manpower, quantity) =>
         <div/><hr />
         <div>
             <h2 style="text-align:center; text-decoration: underline;">Exluded Quantity</h2>
+            <table style="width:100%">
+            <tr>
+              <th>Sn.</th>
+              <th>Nos</th>
+              <th>L</th>
+              <th>W</th>
+              <th>H</th>
+              <th>Unit</th>
+              <th>MM</th>
+              <th>Qty</th>
+              <th>Remarks</th>
+            </tr>
+            
+          </table>
+
         <div/>
     </div>
 </body>
