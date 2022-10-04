@@ -360,17 +360,15 @@ const ReportDisplay = () => {
       </body>
       </html>`,
       fileName: `${reportData.project_name} report`,
-      directory: 'Documents',
+      directory: 'Download',
+      base64: true,
     };
 
     let file = await RNHTMLtoPDF.convert(options);
     // alert(
     //   `Report Saved Successfully At - '/storage/emulated/0/Android/data/com.consoftapp/files/Documents/${reportData.project_name} report.pdf'`,
     // );
-
-    alert(
-      file.filePath
-    );
+    alert(file.filePath);
   };
 
   // date section
