@@ -364,8 +364,12 @@ const ReportDisplay = () => {
     };
 
     let file = await RNHTMLtoPDF.convert(options);
+    // alert(
+    //   `Report Saved Successfully At - '/storage/emulated/0/Android/data/com.consoftapp/files/Documents/${reportData.project_name} report.pdf'`,
+    // );
+
     alert(
-      `Report Saved Successfully At - '/storage/emulated/0/Android/data/com.consoftapp/files/Documents/${reportData.project_name} report.pdf'`,
+      file.filePath
     );
   };
 
