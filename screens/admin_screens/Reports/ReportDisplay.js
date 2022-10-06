@@ -30,7 +30,6 @@ import {
 import {getProjectReportPath} from '../../../controller/ReportController';
 import {getUserId} from '../../../services/asyncStorageService';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import ReportPdf from './ReportPdf';
 
 const ReportDisplay = () => {
   const companyDetail = useSelector(state => state.company);
@@ -92,7 +91,7 @@ const ReportDisplay = () => {
   const user_id = '';
   const fetchReport = async project_id => {
     setProjectId(project_id);
-    let response = await getReport(project_id, user_id);
+    let response = await getReport(project_id, MyDateString, user_id);
     setReport(response.data);
   };
 
@@ -107,7 +106,6 @@ const ReportDisplay = () => {
 
   // fetch quantity report on click
   const fetchQuantity = async report_id => {
-    // console.log(report_id)
     let response = await getQuantity(report_id);
     if (response.status === 200) {
       setQuantity(response.data);
@@ -184,17 +182,194 @@ const ReportDisplay = () => {
     fetchReport();
   }, []);
 
-  //pdf
-  // const createPDF = async () => {
-  //   let options = {
-  //     html: ReportPdf(reportData, manpower, quantity),
-  //     fileName: 'report',
-  //     directory: 'Documents',
-  //   };
+  const [newDate, setNewDate] = React.useState(new Date());
+  const MynewDateString =
+    ('0' + newDate.getDate()).slice(-2) +
+    '/' +
+    ('0' + (newDate.getMonth() + 1)).slice(-2) +
+    '/' +
+    newDate.getFullYear();
 
-  //   let file = await RNHTMLtoPDF.convert(options);
-  //   alert('Pdf Created Successfully');
-  // };
+  //pdf
+  const createPDF = async () => {
+    let options = {
+      html: `<!DOCTYPE html>
+      <html>
+      <style>
+      #main_div{
+      padding:15px;border: solid 1px #525C67; border-radius: 2px;
+      }
+      
+      #project_details{
+      display: flex;flex-direction: row;  justify-content: space-between;align-items: center;
+      }
+      
+      #manpower h2{
+      text-align:center;
+      text-decoration:underline;
+      }
+      
+      #manpower h2{
+      text-decoration:underline;
+      }
+      
+      #contractors{
+      display: flex;flex-direction: row;padding:5px;
+      }
+      
+      #quantity h2{
+      text-align:center;
+      text-decoration:underline;
+      }
+      
+      #quantity table{
+      border-collapse: collapse;
+      width: 100%;
+      }
+      
+      #quantity th, td{
+      border: 1px solid #525C67;
+      padding: 5px;
+      }
+      
+      #quantity th {
+      padding:8px;
+      text-align: left;
+      background-color: #dcfce7;
+      color: black;
+      }
+      
+      #footer{
+      display: flex;flex-direction: row;justify-content: space-between;align-items: center;margin-top:40px; padding-left:50px; padding-right:50px;
+      }
+
+      #sub_header th{
+        padding:8px;
+        text-align: left;
+        background-color: #ffedd5;
+        color: black;
+      }
+
+      </style>
+      <head>
+      <title>Project Report</title>
+      </head>
+      <body>
+      <h2 style="text-align:center; text-decoration: underline;">Daily Progress Report</h2>
+      <div id="main_div">
+      <div id="project_details">
+      <h1>${reportData.project_name}</h1>
+      <p>Date : ${reportData.date} <br>Time : ${reportData.time} </p>
+      </div>
+      <hr>
+      <div id="manpower">
+        <h2>Manpower</h2>
+        <h3 >Contractors -</h3>
+        <div id="contractors">
+        ${manpower.map(
+          (ele, index) =>
+            ` <div style="width:30%;border: solid 1px #525C67; padding:5px; margin-left:${
+              index != 0 ? '12px' : null
+            }">
+               <h3>${ele.contractor_name}</h3>
+               ${ele.manpowerCategories.map(
+                 (ele1, i) => `${i + 1} . 
+                      ${ele1.manpower_category_name} - 
+                      ${ele1.manpower_member}<br/>`,
+               )}
+            </div>`,
+        )}
+        </div>
+      </div>
+      <hr>
+      <div id="quantity">
+      <h2>Executed Quantity</h2>
+      <table>
+      <tr>
+        <th>Sn.</th>
+          <th>Items</th>
+          <th>Nos</th>
+          <th>Length</th>
+          <th>Width</th>
+          <th>Height</th>
+          <th>Unit</th>
+          <th>MM</th>
+          <th>Qty</th>
+          <th>Remark</th>
+      </tr>
+      ${quantity.map((ele, index) =>
+        ele.quantityWorkItems.map(
+          (ele1, index1) => `<tr>
+          <td>${index1 + 1}</td>
+          <td>${ele1.item_name}</td>
+          <td>${ele1.nos == null ? '-' : ele1.nos}</td>
+          <td>${ele1.num_length == null ? '-' : ele1.num_length}</td>
+          <td>${ele1.num_width == null ? '-' : ele1.num_width}</td>
+          <td>${ele1.num_height == null ? '-' : ele1.num_height}</td>
+          <td>${ele1.unit_name}</td>
+          <td>${ele1.steel_mm == null ? '-' : ele1.steel_mm}</td>
+          <td>${ele1.num_total == null ? '-' : ele1.num_total}</td>
+          <td>${ele1.remark}</td>
+      </tr>
+      ${ele1.subquantityitems.map(
+        (ele2, index2) => `
+        ${
+          index2 == 0 &&
+          `<tr id="sub_header">
+            <td></td>
+            <td></td>
+            <th>Nos</th>
+            <th>L</th>
+            <th>W</th>
+            <th>H</th>
+            <th>Unit</th>
+            <th>MM</th>
+            <th>Qty</th>
+            <th>Remarks</th>
+           </tr>`
+        }
+        <tr>
+        <td></td>
+        <td></td>
+        <td>${ele2.sub_nos}</td>
+        <td>${ele2.sub_length}</td>
+        <td>${ele2.sub_width}</td>
+        <td>${ele2.sub_height}</td>
+        <td>-</td>
+        <td>${ele2.sub_steel_mm == null ? '-' : ele2.sub_steel_mm}</td>
+        <td>${ele2.sub_total}</td>
+        <td>${ele2.sub_remark}</td>
+        </tr>
+        `,
+      )}
+      `,
+        ),
+      )}
+      </table>
+      </div>
+      <hr>
+      <div id="footer">
+      <p>Approved by - <br>(Signature)${reportPath.map(
+        (ele, i) => `<br>
+      <br>${ele.admin_1_name}(Ad-1)<br><br>${ele.admin_2_name}(Ad-2)
+      `,
+      )} </p>
+      <p>Date - ${MynewDateString}</p>
+      </div>
+      </div>
+      </body>
+      </html>`,
+      fileName: `${reportData.project_name} report`,
+      directory: 'Download',
+      base64: true,
+    };
+
+    let file = await RNHTMLtoPDF.convert(options);
+    // alert(
+    //   `Report Saved Successfully At - '/storage/emulated/0/Android/data/com.consoftapp/files/Documents/${reportData.project_name} report.pdf'`,
+    // );
+    alert(file.filePath);
+  };
 
   // date section
   const [date, setDate] = React.useState(new Date());
@@ -355,10 +530,6 @@ const ReportDisplay = () => {
             justifyContent: 'flex-start',
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            {/* <Image
-              source={icons.date}
-              style={{height: 12, width: 12, right: 5}}
-            /> */}
             <Text style={{fontSize: 12, color: COLORS.darkGray}}>
               {item.report_date}
             </Text>
@@ -366,15 +537,6 @@ const ReportDisplay = () => {
               {item.report_time}
             </Text>
           </View>
-          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={icons.time}
-              style={{height: 12, width: 12, right: 10}}
-            />
-            <Text style={{fontSize: 12, color: COLORS.darkGray}}>
-              {item.report_time}
-            </Text>
-          </View> */}
         </View>
       </TouchableOpacity>
     );
@@ -406,7 +568,7 @@ const ReportDisplay = () => {
         style={{
           borderWidth: 1,
           borderColor: COLORS.gray2,
-          padding: 10,
+          padding: 12,
           width: SIZES.width / 2.3,
         }}>
         <Text
@@ -425,28 +587,17 @@ const ReportDisplay = () => {
               <View
                 key={i}
                 style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{...FONTS.h4, color: COLORS.black}}>{i + 1}.</Text>
-                <View
+                <Text
                   style={{
-                    left: 5,
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    ...FONTS.h4,
+                    color: COLORS.black,
                   }}>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      color: COLORS.black,
-                    }}>
-                    {ele.manpower_category_name} {' - '}
-                  </Text>
-                  <Text
-                    style={{
-                      ...FONTS.h4,
-                      color: COLORS.black,
-                    }}>
-                    {ele.manpower_member}
-                  </Text>
-                </View>
+                  {i + 1}
+                  {'.  '}
+                  {ele.manpower_category_name}
+                  {' - '}
+                  {ele.manpower_member}
+                </Text>
               </View>
             );
           })}
@@ -463,7 +614,7 @@ const ReportDisplay = () => {
           }}>
           <Text
             style={{
-              flex: 1,
+              flex: 0.8,
               fontSize: 25,
               color: COLORS.lightblue_800,
               textTransform: 'capitalize',
@@ -544,7 +695,6 @@ const ReportDisplay = () => {
               top: 20,
               backgroundColor: COLORS.white,
               paddingHorizontal: SIZES.base,
-              // paddingBottom: SIZES.radius,
               height: '100%',
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
@@ -565,11 +715,11 @@ const ReportDisplay = () => {
                 />
               </TouchableOpacity>
             </View>
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={createPDF}
               style={{alignItems: 'flex-end'}}>
               <Text style={{color: COLORS.black, ...FONTS.h4}}>Print</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             <View
               style={{
                 borderWidth: 1,
@@ -739,7 +889,7 @@ const ReportDisplay = () => {
               {quantity.map((ele, index) =>
                 ele.quantityWorkItems.map((ele1, index1) => {
                   return (
-                    <View style={{}}>
+                    <View key={index1}>
                       {index1 != 0 ? (
                         <View
                           style={{
@@ -749,7 +899,6 @@ const ReportDisplay = () => {
                           }}></View>
                       ) : null}
                       <View
-                        key={index1}
                         style={{
                           flexDirection: 'row',
                           padding: 5,

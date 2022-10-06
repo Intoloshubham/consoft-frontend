@@ -1,13 +1,15 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
-import {COLORS, SIZES, FONTS} from '../../../constants';
+import {View, Text, TouchableOpacity, FlatList, Image} from 'react-native';
+import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
 import {
   getUserLeaves,
   postUserLeaves,
 } from '../../../controller/LeavesController';
+import {getUserAttendance} from '../../../controller/UserAttendanceController';
 import {CustomToast} from '../../../Components';
 import {useSelector} from 'react-redux';
+import Collapsible from 'react-native-collapsible';
 
 const Attendance = () => {
   const companyDetail = useSelector(state => state.company);
@@ -28,6 +30,21 @@ const Attendance = () => {
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
+
+  const [collapsed, setCollapsed] = React.useState(true);
+  const [collapsed1, setCollapsed1] = React.useState(true);
+
+  const [attendance, setAttendance] = React.useState('');
+
+  const toggleExpanded = () => {
+    setCollapsed(!collapsed);
+    setCollapsed1(true);
+  };
+  const toggleExpanded1 = () => {
+    setCollapsed1(!collapsed1);
+    userAttendance();
+    setCollapsed(true);
+  };
 
   const checkBoxHandler = leave_date_id => {
     let d = [...data, leave_date_id];
@@ -52,8 +69,14 @@ const Attendance = () => {
     }, 1500);
   };
 
+  const userAttendance = async () => {
+    let response = await getUserAttendance(company_id);
+    setAttendance(response.data);
+  };
+
   React.useEffect(() => {
     userLeaves();
+    userAttendance();
   }, []);
 
   function renderUserLeavesList() {
@@ -149,30 +172,140 @@ const Attendance = () => {
     return (
       <View
         style={{
+          margin: 15,
+          backgroundColor: COLORS.white,
           padding: 15,
+          elevation: 5,
         }}>
-        <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Leaves List</Text>
-        <FlatList
-          data={leaves}
-          contentContainerStyle={{
-            marginTop: SIZES.radius,
-            paddingBottom: 50,
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
-          keyExtractor={item => `${item._id}`}
-          renderItem={renderItem}
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return (
+          onPress={toggleExpanded}>
+          <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Leaves</Text>
+          <Image
+            source={icons.down_arrow}
+            style={{height: 20, width: 20, tintColor: 'black'}}
+          />
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsed}>
+          <FlatList
+            data={leaves}
+            contentContainerStyle={{
+              marginTop: SIZES.base,
+            }}
+            keyExtractor={item => `${item._id}`}
+            renderItem={renderItem}
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: COLORS.darkGray,
+                    marginVertical: 12,
+                  }}></View>
+              );
+            }}
+          />
+        </Collapsible>
+      </View>
+    );
+  }
+
+  function renderUserAttendance() {
+    const renderItem = ({item}) => (
+      <View>
+        <Text
+          style={{
+            ...FONTS.h3,
+            color: COLORS.darkGray,
+            textTransform: 'capitalize',
+          }}>
+          {item.user_name}
+        </Text>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+          }}>
+          {item.presentdates.map((ele, i) => (
+            <View
+              key={i}
+              style={{
+                marginTop: 7,
+                flexBasis: '18%',
+              }}>
               <View
                 style={{
-                  height: 1,
-                  backgroundColor: COLORS.darkGray,
-                  marginVertical: 12,
-                }}></View>
-            );
+                  backgroundColor: COLORS.success_700,
+                  padding: 2,
+                  alignItems: 'center',
+                }}>
+                <Text style={{fontSize: 9, color: COLORS.white}}>
+                  {ele.present_date}
+                </Text>
+                <Text style={{fontSize: 8, color: COLORS.white}}>
+                  In - {ele.in_time}
+                </Text>
+                <Text style={{fontSize: 8, color: COLORS.white}}>
+                  Out - {ele.out_time}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      </View>
+    );
+
+    return (
+      <View
+        style={{
+          margin: 15,
+          padding: 15,
+          backgroundColor: COLORS.white,
+          elevation: 5,
+        }}>
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
-        />
+          onPress={toggleExpanded1}>
+          <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Attendance</Text>
+          <Image
+            source={icons.down_arrow}
+            style={{height: 20, width: 20, tintColor: 'black'}}
+          />
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsed1}>
+          <FlatList
+            data={attendance}
+            contentContainerStyle={{
+              marginTop: SIZES.radius,
+            }}
+            keyExtractor={item => `${item._id}`}
+            renderItem={renderItem}
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: COLORS.gray2,
+                    marginVertical: 12,
+                  }}></View>
+              );
+            }}
+          />
+        </Collapsible>
       </View>
     );
   }
@@ -180,6 +313,7 @@ const Attendance = () => {
   return (
     <View>
       {renderUserLeavesList()}
+      {renderUserAttendance()}
       <CustomToast
         isVisible={submitToast}
         onClose={() => setSubmitToast(false)}
