@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, FlatList, Image} from 'react-native';
-import {COLORS, SIZES, FONTS, icons} from '../../../constants';
+import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
+import { COLORS, SIZES, FONTS, icons } from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
 import {
   getUserLeaves,
   postUserLeaves,
 } from '../../../controller/LeavesController';
-import {getUserAttendance} from '../../../controller/UserAttendanceController';
-import {CustomToast} from '../../../Components';
-import {useSelector} from 'react-redux';
+import { getUserAttendance } from '../../../controller/UserAttendanceController';
+import { CustomToast } from '../../../Components';
+import { useSelector } from 'react-redux';
 import Collapsible from 'react-native-collapsible';
 
 const Attendance = () => {
@@ -22,11 +22,12 @@ const Attendance = () => {
     companyData = userData;
   }
   const company_id = companyData._id;
+  console.log("🚀 ~ file: Attendance.js ~ line 16 ~ Attendance ~ companyDetail", companyData)
 
   const [leaves, setLeaves] = React.useState([]);
   const [checked, setChecked] = React.useState({});
   const [data, setData] = React.useState('');
-  const arr = {leavedates: data};
+  const arr = { leavedates: data };
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
@@ -80,7 +81,7 @@ const Attendance = () => {
   }, []);
 
   function renderUserLeavesList() {
-    const renderItem = ({item}) => (
+    const renderItem = ({ item }) => (
       <View>
         <View
           style={{
@@ -111,7 +112,7 @@ const Attendance = () => {
                 borderRadius: 2,
               }}
               onPress={() => postLeaves(item._id)}>
-              <Text style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
+              <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>
                 Approve
               </Text>
             </TouchableOpacity>
@@ -143,13 +144,13 @@ const Attendance = () => {
                     flexDirection: 'row',
                     marginBottom: 5,
                   }}>
-                  <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                  <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>
                     {index + 1}.{' '}
                   </Text>
-                  <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                  <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>
                     Leave date -{' '}
                   </Text>
-                  <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                  <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>
                     {el.leave_date}
                   </Text>
                 </View>
@@ -157,10 +158,10 @@ const Attendance = () => {
                   disabled={false}
                   value={checked[el._id]}
                   onValueChange={newValue => {
-                    setChecked({...checked, [el._id]: newValue});
+                    setChecked({ ...checked, [el._id]: newValue });
                   }}
-                  onChange={() => checkBoxHandler({leave_date_id: el._id})}
-                  style={{height: 25}}
+                  onChange={() => checkBoxHandler({ leave_date_id: el._id })}
+                  style={{ height: 25 }}
                 />
               </View>
             </View>
@@ -184,10 +185,10 @@ const Attendance = () => {
             justifyContent: 'space-between',
           }}
           onPress={toggleExpanded}>
-          <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Leaves</Text>
+          <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Leaves</Text>
           <Image
             source={icons.down_arrow}
-            style={{height: 20, width: 20, tintColor: 'black'}}
+            style={{ height: 20, width: 20, tintColor: 'black' }}
           />
         </TouchableOpacity>
         <Collapsible collapsed={collapsed}>
@@ -217,7 +218,7 @@ const Attendance = () => {
   }
 
   function renderUserAttendance() {
-    const renderItem = ({item}) => (
+    const renderItem = ({ item }) => (
       <View>
         <Text
           style={{
@@ -247,13 +248,13 @@ const Attendance = () => {
                   padding: 2,
                   alignItems: 'center',
                 }}>
-                <Text style={{fontSize: 9, color: COLORS.white}}>
+                <Text style={{ fontSize: 9, color: COLORS.white }}>
                   {ele.present_date}
                 </Text>
-                <Text style={{fontSize: 8, color: COLORS.white}}>
+                <Text style={{ fontSize: 8, color: COLORS.white }}>
                   In - {ele.in_time}
                 </Text>
-                <Text style={{fontSize: 8, color: COLORS.white}}>
+                <Text style={{ fontSize: 8, color: COLORS.white }}>
                   Out - {ele.out_time}
                 </Text>
               </View>
@@ -278,10 +279,10 @@ const Attendance = () => {
             justifyContent: 'space-between',
           }}
           onPress={toggleExpanded1}>
-          <Text style={{...FONTS.h2, color: COLORS.darkGray}}>Attendance</Text>
+          <Text style={{ ...FONTS.h2, color: COLORS.darkGray }}>Attendance</Text>
           <Image
             source={icons.down_arrow}
-            style={{height: 20, width: 20, tintColor: 'black'}}
+            style={{ height: 20, width: 20, tintColor: 'black' }}
           />
         </TouchableOpacity>
         <Collapsible collapsed={collapsed1}>
