@@ -11,15 +11,18 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import Config from '../../../config';
 import { useNavigation } from '@react-navigation/native';
-import { ProfileValue } from '../../../Components';
+import { ProfileValue, DeleteConfirmationToast, CustomToast } from '../../../Components';
 import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { userLogout } from '../../../services/userAuthApi';
+import { defaultFallbackFonts } from 'react-native-render-html';
 
 const Profile = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const userData = useSelector(state => state.user);
   const [userDetail, setUserDetail] = useState([]);
+  const [logoutConfirm, setLogoutConfirm] = React.useState(false);
+  const [logoutSuccessfully, setLogoutSuccessfully] = useState(false)
 
   // get user data
   useEffect(() => {
@@ -39,14 +42,43 @@ const Profile = () => {
       });
   }, []);
 
-  const logout = () => {
-    dispatch(userLogout());
-    navigation.navigate('Login');
-  };
+  const logoutApiData = async () => {
+    const res = await fetch(`${process.env.API_URL}logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: userData._id,
+        refresh_token: userData.refresh_token
+      }),
+    });
+    return res;
+  }
 
-  React.useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  });
+  const logout = () => {
+    const temp = logoutApiData();
+    temp.then((data) => {
+      if (data.status == 200) {
+        dispatch(userLogout());
+        setLogoutSuccessfully(true);
+        setTimeout(() => {
+          setLogoutSuccessfully(false);
+        }, 1500);
+        setTimeout(() => {
+          navigation.navigate('Login');
+          setLogoutConfirm(false);
+        }, 10);
+      }
+
+    })
+  }
+
+
+
+  // React.useEffect(() => {
+  //   LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  // }, []);
 
 
 
@@ -140,7 +172,7 @@ const Profile = () => {
         style={{
           ...styles.profileSectionContainer1,
         }}>
-        <ProfileValue icon={icons.logout} value="LogOut" onPress={logout} />
+        <ProfileValue icon={icons.logout} value="LogOut" onPress={() => setLogoutConfirm(true)} />
       </View>
     );
   }
@@ -159,6 +191,22 @@ const Profile = () => {
         {renderProfileCard()}
         {renderProfileSection2()}
       </ScrollView>
+      <DeleteConfirmationToast
+        isVisible={logoutConfirm}
+        onClose={() => setLogoutConfirm(false)}
+        title={'Are You Sure?'}
+        message={'Do you really want to Logout?'}
+        color={COLORS.rose_600}
+        icon={icons.logout}
+        onClickYes={() => logout()}
+      />
+      <CustomToast
+        isVisible={logoutSuccessfully}
+        onClose={() => setLogoutSuccessfully(false)}
+        color={COLORS.green}
+        title="Logout"
+        message="Logout Successfully..."
+      />
     </View>
   );
 };
