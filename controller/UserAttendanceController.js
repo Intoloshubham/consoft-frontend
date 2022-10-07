@@ -1,8 +1,8 @@
 import Config from '../config';
 
-const getUserAttendance = async company_id => {
+const getUserAttendance = async (user_id, company_id) => {
   try {
-    const res = await fetch(Config.API_URL + 'attendance/' + company_id, {
+    const res = await fetch(Config.API_URL + 'attendance/' + company_id + '/' + user_id, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -15,4 +15,4 @@ const getUserAttendance = async company_id => {
   }
 };
 
-export {getUserAttendance};
+export { getUserAttendance };

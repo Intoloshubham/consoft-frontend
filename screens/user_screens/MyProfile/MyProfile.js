@@ -14,6 +14,7 @@ import { HeaderBar, TextButton, FormInput } from '../../../Components';
 import { Title, Card } from 'react-native-paper';
 import { SIZES, COLORS, icons } from '../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { getUserAttendance } from '../../../controller/UserAttendanceController';
 
 import CustomCalender from './CustomCalender';
 
@@ -37,7 +38,11 @@ const MyProfile = () => {
   const [monthshow, setMonthShow] = useState([]);
   const [leavesday, setLeavesDay] = useState([]);
   const [haliddayates, setHalidayDates] = useState([]);
+  const [loginTime, setLoginTime] = useState('')
+  const [logoutTime, setLogoutTime] = useState('')
 
+
+  const [attendance, setAttendance] = React.useState('');
   // console.log(userDetail);
   // const [removedate, setRemoveDate] = useState(false)
   const [pushdate, setPushDate] = useState([]);
@@ -74,8 +79,31 @@ const MyProfile = () => {
   }, []);
 
 
+  const userAttendance = async () => {
+    let response = await getUserAttendance(userData._id, userData.company_id);
+    response.data.map((ele) => {
+      let data = ele.presentdates
+      data.map((e) => {
+        let inTime = e.in_time;
+        let outTime = e.out_time
 
 
+
+          ;
+        // console.log(Time)
+        setLoginTime(inTime)
+        setLogoutTime(outTime)
+      })
+    })
+    // setAttendance(response.data);
+  };
+
+  React.useEffect(() => {
+    // userLeaves();
+    userAttendance();
+  }, []);
+
+  // console.log(inTime)
 
   const dateClickHandler = (date, i) => {
     //  const newDate= removedate?[...leavesdate, date]:leavesdate.pop(date);
@@ -97,7 +125,7 @@ const MyProfile = () => {
     const applyleaves = {
       leavedates: pushdate,
       user_id: user_id,
-      company_id:userData.company_id
+      company_id: userData.company_id
     };
     // console.log(applyleaves)
     try {
@@ -127,7 +155,7 @@ const MyProfile = () => {
     const leavesDate = await resp.json();
     setShowLeaves(leavesDate);
   };
-  
+
   useEffect(() => {
     showleavesdata();
   }, []);
@@ -270,7 +298,7 @@ const MyProfile = () => {
           <View style={{ marginTop: 5 }}>
             {leavesday.leavedays != undefined
               ? leavesday.leavedays.map((Ldays, index) => {
-                {/* console.log(Ldays) */}
+                {/* console.log(Ldays) */ }
                 return (
                   <View
                     key={index}
@@ -593,7 +621,7 @@ const MyProfile = () => {
                                 }}>
                                 <Text
                                   style={{ fontSize: 15, fontWeight: 'bold' }}>
-                                  In-{finalTime}Out
+                                  In-{loginTime}Out-{logoutTime}
                                 </Text>
                               </View>
                             }>
@@ -618,7 +646,8 @@ const MyProfile = () => {
                                 }}>
                                 <Text
                                   style={{ fontSize: 15, fontWeight: 'bold' }}>
-                                  In-{finalTime}Out
+                                  In-{loginTime ? null : loginTime}
+                                  Out-{logoutTime ? null : logoutTime}
                                 </Text>
                               </View>
                             }>
