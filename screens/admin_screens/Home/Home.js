@@ -7,6 +7,9 @@ import {
   RefreshControl,
   Image,
   TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
+  Switch,
 } from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
@@ -19,6 +22,11 @@ import {getVerifyAndRevertWorks} from '../../../controller/AssignWorkController'
 import {getAssignWorks} from '../../../controller/AssignWorkController';
 import {SIZES, COLORS, FONTS, images} from '../../../constants';
 import {getProjectAtGlance} from '../../../controller/ReportController';
+import {
+  getCheckUserPresent,
+  postUserAttendance,
+} from '../../../controller/UserAttendanceController';
+import {getUserId} from '../../../services/asyncStorageService';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -26,6 +34,8 @@ const wait = timeout => {
 
 const Home = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
+  const [attendanceModal, setAttendanceModal] = React.useState(false);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchAssignWorks();
@@ -45,10 +55,15 @@ const Home = ({navigation}) => {
     companyData = userData;
   }
 
+  const [userId, setUserId] = React.useState('');
+  const getUser_Id = async () => {
+    const id = await getUserId();
+    setUserId(id);
+  };
+
   const [submitWork, setSubmitWork] = React.useState([]);
   const fetchSubmitWork = async () => {
     const response = await getSubmitWorks(companyData._id);
-    // console.log(response);
     if (response.status === 200) {
       setSubmitWork(response.data);
     }
@@ -61,7 +76,6 @@ const Home = ({navigation}) => {
 
   const fetchVerifyAndRevertWork = async () => {
     const response = await getVerifyAndRevertWorks(companyData._id);
-    // setVerifyAndRevert(response.data);
 
     //filter revert & verify
     const verify_data = response.data.filter(el => el.verify === true);
@@ -74,7 +88,6 @@ const Home = ({navigation}) => {
   const [assignWorkData, setAssignWorkData] = React.useState([]);
   const fetchAssignWorks = async () => {
     const response = await getAssignWorks(companyData._id);
-    // console.log(response);
     if (response.status === 200) {
       setAssignWorkData(response.data);
     }
@@ -84,10 +97,32 @@ const Home = ({navigation}) => {
   const [reportData, setReportData] = React.useState([]);
   const fetchProjectAtGlance = async () => {
     const response = await getProjectAtGlance(companyData._id);
-    // console.log(response)
     if (response.status === 200) {
       setReportData(response.data);
     }
+  };
+
+  // console.log('comid', companyData);
+
+  const onSubmitUserAttendance = async () => {
+    const formData = {
+      company_id: companyData._id,
+      user_id: userId,
+    };
+    const response = await postUserAttendance(formData);
+    console.log(response);
+    if (response.status === 200) {
+      setAttendanceModal(false);
+      alert(response.message);
+    }
+  };
+
+  const CheckUserPresentStatus = async () => {
+    const response = await getCheckUserPresent(companyData._id, userId);
+    if (response.status == 200) {
+      setAttendanceModal(true);
+    }
+    // console.log(response);
   };
 
   React.useEffect(() => {
@@ -95,8 +130,51 @@ const Home = ({navigation}) => {
     fetchVerifyAndRevertWork();
     fetchAssignWorks();
     fetchProjectAtGlance();
+    CheckUserPresentStatus();
+    getUser_Id();
   }, []);
 
+  function renderAttendanceModal() {
+    return (
+      <Modal animationType="slide" transparent={true} visible={attendanceModal}>
+        <TouchableWithoutFeedback onPress={() => setAttendanceModal(true)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                width: '90%',
+                padding: 20,
+                borderRadius: 5,
+                backgroundColor: COLORS.white,
+              }}>
+              <Text style={{...FONTS.h3, color: COLORS.darkGray}}>
+                Please, First Mark Your today's Attendance is "Compulsory"
+                Before Entering the Home Screen.
+              </Text>
+              <TouchableOpacity
+                style={{
+                  marginTop: 20,
+                  backgroundColor: 'green',
+                  paddingHorizontal: 15,
+                  paddingVertical: 7,
+                  alignSelf: 'center',
+                  borderRadius: 5,
+                }}
+                onPress={() => onSubmitUserAttendance()}>
+                <Text style={{...FONTS.h3, color: COLORS.white}}>Mark</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
   return (
     <SafeAreaView>
       <ScrollView
@@ -153,6 +231,7 @@ const Home = ({navigation}) => {
           />
           <VerifyAndRevertWork verify={verify} revert={revert} />
         </View>
+        {renderAttendanceModal()}
       </ScrollView>
     </SafeAreaView>
   );
