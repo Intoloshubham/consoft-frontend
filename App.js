@@ -32,6 +32,7 @@ import {
   UserRole,
   ReportSettings,
   BoqViewAndEdit,
+  Home,
 } from './screens/admin_screens';
 import {
   Profile,
@@ -65,6 +66,7 @@ const App = () => {
           <Stack.Screen name="CompanyPayment" component={CompanyPayment} />
           <Stack.Screen name="VerifyProductKey" component={VerifyProductKey} />
           <Stack.Screen name="Home" component={Tabs} />
+          <Stack.Screen name="Home1" component={Home} />
           <Stack.Screen
             name="VerifyAndRevertWork"
             component={VerifyAndRevertWork}
