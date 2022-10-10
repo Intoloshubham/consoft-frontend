@@ -10,7 +10,11 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
 import {SIZES, COLORS, FONTS, icons, images} from '../../../constants';
-import {ProfileValue, LineDivider} from '../../../Components';
+import {
+  ProfileValue,
+  LineDivider,
+  LogoutConfirmation,
+} from '../../../Components';
 import {useSelector, useDispatch} from 'react-redux';
 import {companyLogout} from '../../../services/companyAuthApi';
 import {userLogout} from '../../../services/userAuthApi';
@@ -36,12 +40,16 @@ const Account = () => {
   const [reportCollapsed, setReportCollapsed] = React.useState(true);
 
   //
+  const [LogoutConfirm, setLogoutConfirm] = React.useState(false);
+
+  //
   const LogoutCompany = async () => {
     const formData = {
       refresh_token: companyData.refresh_token,
     };
     const res = await postCompanyLogout(formData);
     if (res.status == 200) {
+      setLogoutConfirm(false);
       dispatch(companyLogout());
       navigation.navigate('Login');
     }
@@ -54,6 +62,7 @@ const Account = () => {
     };
     const res = await postUserLogout(formData);
     if (res.status == 200) {
+      setLogoutConfirm(false);
       dispatch(userLogout());
       navigation.navigate('Login');
     }
@@ -273,9 +282,7 @@ const Account = () => {
         <ProfileValue
           icon={icons.logout}
           value="LogOut"
-          onPress={() => {
-            companyData.user_id ? LogoutUser() : LogoutCompany();
-          }}
+          onPress={() => setLogoutConfirm(true)}
         />
       </View>
     );
@@ -284,7 +291,9 @@ const Account = () => {
   function renderVersionDetails() {
     return (
       <View style={{marginTop: 30, alignItems: 'center'}}>
-        <Text style={{fontSize: 25, color: COLORS.darkGray}}>Powered by Intenics</Text>
+        <Text style={{fontSize: 25, color: COLORS.darkGray}}>
+          Powered by Intenics
+        </Text>
         <Text style={{fontSize: 12, color: COLORS.darkGray2}}>
           Version - 1.0.0
         </Text>
@@ -308,6 +317,13 @@ const Account = () => {
         {renderProfileSection2()}
         {renderVersionDetails()}
       </ScrollView>
+      <LogoutConfirmation
+        isVisible={LogoutConfirm}
+        onClose={() => setLogoutConfirm(false)}
+        onClickLogout={() => {
+          companyData.user_id ? LogoutUser() : LogoutCompany();
+        }}
+      />
     </View>
   );
 };
