@@ -8,10 +8,17 @@ import {
   ScrollView,
   RefreshControl,
   LogBox,
+  Modal,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { icons, COLORS, SIZES, FONTS, images } from '../../../constants';
+import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { InProgressModal, DoneModal } from '../TaskModal';
+import {
+  getCheckUserPresent,
+  postUserAttendance,
+} from '../../../controller/UserAttendanceController.js';
 //saurabh
 import UserAssignWorks from './UserAssignWorks';
 
@@ -33,6 +40,8 @@ const UserDashboard = () => {
   const [doneModal, setdoneModal] = React.useState(false);
   const [inProgressModalnum, setinProgressModalNum] = React.useState(false);
   const [doneModalnum, setdoneModalNum] = React.useState(false);
+  const [attendanceModal, setAttendanceModal] = React.useState(false);
+  const userData = useSelector(state => state.user);
 
   const handleInProgressTask = () => {
     setinProgressModalNum(true);
@@ -47,9 +56,83 @@ const UserDashboard = () => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
+  const onSubmitUserAttendance = async () => {
+    const formData = {
+      company_id: userData.company_id,
+      user_id: userData._id,
+    };
+    const response = await postUserAttendance(formData);
+    // console.log(response);
+    if (response.status === 200) {
+      setAttendanceModal(false);
+      alert(response.message);
+    }
+  };
+
+  const CheckUserPresentStatus = async () => {
+    const response = await getCheckUserPresent(
+      userData.company_id,
+      userData._id,
+    );
+    if (response.status == 200) {
+      setAttendanceModal(true);
+    }
+    // console.log(response);
+  };
+
+  React.useEffect(() => {
+    if (userData._id) {
+      CheckUserPresentStatus();
+    }
+  }, []);
+
+
+
+  function renderAttendanceModal() {
+    return (
+      <Modal animationType="slide" transparent={true} visible={attendanceModal}>
+        <TouchableWithoutFeedback onPress={() => setAttendanceModal(true)}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: COLORS.transparentBlack7,
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                width: '90%',
+                padding: 20,
+                borderRadius: 5,
+                backgroundColor: COLORS.white,
+              }}>
+              <Text style={{ ...FONTS.h3, color: COLORS.darkGray }}>
+                Please, First Mark Your today's Attendance is "Compulsory"
+                Before Entering the Home Screen.
+              </Text>
+              <TouchableOpacity
+                style={{
+                  marginTop: 20,
+                  backgroundColor: 'green',
+                  paddingHorizontal: 15,
+                  paddingVertical: 7,
+                  alignSelf: 'center',
+                  borderRadius: 5,
+                }}
+                onPress={() => onSubmitUserAttendance()}>
+                <Text style={{ ...FONTS.h3, color: COLORS.white }}>Present</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
+
   return (
     <ScrollView
-
       contentContainerStyle={{
         flex: 1
       }}
@@ -104,7 +187,7 @@ const UserDashboard = () => {
           />
         )} */}
 
-     
+
         <TouchableOpacity
           style={{
             marginTop: SIZES.base,
@@ -153,6 +236,7 @@ const UserDashboard = () => {
           <DoneModal doneModal={doneModal} setdoneModal={setdoneModal} loading={loading} />
         )}
       </View>
+      {renderAttendanceModal()}
     </ScrollView>
   );
 };
