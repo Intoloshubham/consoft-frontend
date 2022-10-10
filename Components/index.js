@@ -11,6 +11,7 @@ import ItemBox from './ItemBox';
 import CustomToast from './CustomToast';
 import DeleteConfirmationToast from './DeleteConfirmationToast';
 import ListItem from './ListItem';
+import LogoutConfirmation from './LogoutConfirmation';
 
 export {
   TextButton,
@@ -26,4 +27,5 @@ export {
   CustomToast,
   DeleteConfirmationToast,
   ListItem,
+  LogoutConfirmation,
 };
