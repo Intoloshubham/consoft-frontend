@@ -26,9 +26,11 @@ import config from '../../../config';
 const MyProfile = () => {
   // const dispatch = useDispatch();
   const userData = useSelector(state => state.user);
-  // console.log(userData)
   const user_id = userData._id;
-  // console.log(user_id);
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const years = today.getFullYear();
+  // console.log(today.getFullYear())
 
   const [leavesmodal, setLeavesModal] = useState(false);
   const [leavesdate, setLeavesDate] = useState([]);
@@ -80,15 +82,12 @@ const MyProfile = () => {
 
 
   const userAttendance = async () => {
-    let response = await getUserAttendance(userData._id, userData.company_id);
+    let response = await getUserAttendance(userData.company_id, years, month, userData._id,);
     response.data.map((ele) => {
       let data = ele.presentdates
       data.map((e) => {
         let inTime = e.in_time;
         let outTime = e.out_time
-
-
-
           ;
         // console.log(Time)
         setLoginTime(inTime)
@@ -151,16 +150,23 @@ const MyProfile = () => {
   // get data api leaves apply for user
 
   const showleavesdata = async () => {
-    const resp = await fetch(process.env.API_URL + 'attendance/' + user_id);
+    const resp = await fetch(process.env.API_URL + 'attendance/' + userData.company_id +
+      '/' +
+      years +
+      '/' +
+      month +
+      '/' +
+      userData._id,);
     const leavesDate = await resp.json();
+    // console.log("🚀 ~ file: MyProfile.js ~ line 154 ~ showleavesdata ~ leavesDate", leavesDate)
     setShowLeaves(leavesDate);
   };
 
   useEffect(() => {
     showleavesdata();
-  }, []);
+  }, [showleaves]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (showleaves.data) {
       showleaves.data.map(ele => {
         // console.log(ele)
@@ -169,13 +175,14 @@ const MyProfile = () => {
     }
   }, [showleaves]);
 
-  useMemo(() => {
-    if (monthshow.months) {
-      monthshow.months.map((month, index) => {
-        setLeavesDay(month);
-      });
-    }
-  }, [showleaves]);
+  // useEffect(() => {
+  //   if (monthshow.leavedates) {
+  //     monthshow.leavedates.map((month, index) => {
+  //       console.log(month)
+  //       setLeavesDay(month);
+  //     });
+  //   }
+  // }, [showleaves]);
 
   // useMemo(() => {
   //   if (leavesday.leavedays) {
@@ -295,10 +302,11 @@ const MyProfile = () => {
               onPress={() => setLeavesModal(true)}
             />
           </View>
+          <ScrollView nestedScrollEnabled={true} maxHeight={100}>
           <View style={{ marginTop: 5 }}>
-            {leavesday.leavedays != undefined
-              ? leavesday.leavedays.map((Ldays, index) => {
-                {/* console.log(Ldays) */ }
+            {monthshow.leavedates != undefined
+              ? monthshow.leavedates.map((Ldays, index) => {
+                // console.log(Ldays)
                 return (
                   <View
                     key={index}
@@ -307,28 +315,32 @@ const MyProfile = () => {
                       flexWrap: 'wrap',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-                      {Ldays.leave_date}
-                    </Text>
-
-                    <TouchableOpacity>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 'bold',
-                          backgroundColor: 'orange',
-                          marginTop: 2,
-                          padding: 2,
-                          margin: 2,
-                        }}>
-                        Pending
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })
-              : null}
-          </View>
+                    {Ldays.approved === false ? (
+                          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                            {Ldays.leave_date}
+                          </Text>
+                        ) : null}
+                        {Ldays.approved === true ? null : (
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                backgroundColor: 'orange',
+                                marginTop: 2,
+                                padding: 2,
+                                margin: 2,
+                              }}>
+                              Pending
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    );
+                  })
+                : null}
+            </View>
+          </ScrollView>
           {/* leacves modal start  */}
         </View>
 
