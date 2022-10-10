@@ -119,7 +119,7 @@ export const userSlice = createSlice({
               if (action.payload.status === 200) {
                 state.status = STATUSES.IDLE;
                 state.token = action.payload.access_token;
-                state._id = action.payload.company_id;
+                state._id = action.payload._id;
                 state.company_id = action.payload.company_id;
                 state.company_name = action.payload.company_name;
                 state.name = action.payload.name;
