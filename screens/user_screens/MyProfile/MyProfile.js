@@ -26,9 +26,11 @@ import config from '../../../config';
 const MyProfile = () => {
   // const dispatch = useDispatch();
   const userData = useSelector(state => state.user);
-  // console.log(userData)
   const user_id = userData._id;
-  // console.log(user_id);
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const years = today.getFullYear();
+  // console.log(today.getFullYear())
 
   const [leavesmodal, setLeavesModal] = useState(false);
   const [leavesdate, setLeavesDate] = useState([]);
@@ -80,15 +82,12 @@ const MyProfile = () => {
 
 
   const userAttendance = async () => {
-    let response = await getUserAttendance(userData._id, userData.company_id);
+    let response = await getUserAttendance(userData.company_id, years, month, userData._id,);
     response.data.map((ele) => {
       let data = ele.presentdates
       data.map((e) => {
         let inTime = e.in_time;
         let outTime = e.out_time
-
-
-
           ;
         // console.log(Time)
         setLoginTime(inTime)
@@ -151,8 +150,15 @@ const MyProfile = () => {
   // get data api leaves apply for user
 
   const showleavesdata = async () => {
-    const resp = await fetch(process.env.API_URL + 'attendance/' + user_id);
+    const resp = await fetch(process.env.API_URL + 'attendance/' + userData.company_id +
+      '/' +
+      years +
+      '/' +
+      month +
+      '/' +
+      userData._id,);
     const leavesDate = await resp.json();
+    // console.log("🚀 ~ file: MyProfile.js ~ line 154 ~ showleavesdata ~ leavesDate", leavesDate)
     setShowLeaves(leavesDate);
   };
 
@@ -163,7 +169,7 @@ const MyProfile = () => {
   useMemo(() => {
     if (showleaves.data) {
       showleaves.data.map(ele => {
-        // console.log(ele)
+        // console.log("🚀 ~ file: MyProfile.js ~ line 172 ~ useMemo ~ ele", ele.leave_date)
         setMonthShow(ele);
       });
     }
@@ -172,6 +178,8 @@ const MyProfile = () => {
   useMemo(() => {
     if (monthshow.months) {
       monthshow.months.map((month, index) => {
+        console.log(month)
+        // console.log("🚀 ~ file: MyProfile.js ~ line 182 ~ monthshow.months.map ~ month", month)
         setLeavesDay(month);
       });
     }
@@ -298,7 +306,7 @@ const MyProfile = () => {
           <View style={{ marginTop: 5 }}>
             {leavesday.leavedays != undefined
               ? leavesday.leavedays.map((Ldays, index) => {
-                {/* console.log(Ldays) */ }
+                console.log(Ldays)
                 return (
                   <View
                     key={index}
