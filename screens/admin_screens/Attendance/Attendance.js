@@ -23,7 +23,6 @@ const Attendance = () => {
     companyData = userData;
   }
   const company_id = companyData._id;
-  console.log("🚀 ~ file: Attendance.js ~ line 16 ~ Attendance ~ companyDetail", companyData)
 
   const [leaves, setLeaves] = React.useState([]);
   const [checked, setChecked] = React.useState({});
