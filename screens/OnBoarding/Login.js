@@ -50,6 +50,7 @@ const Login = ({navigation}) => {
       password: userPassword,
     };
     const res = await dispatch(userLogin(UserData));
+    console.log("login",res.payload);
     if (res.payload.status === 200) {
       setSubmitToast(true);
       if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
@@ -71,7 +72,7 @@ const Login = ({navigation}) => {
       password: companyPassword,
     };
     const res = await dispatch(companyLogin(company_data));
-    // console.log(res);
+    
     if (res.payload.status === 200) {
       setSubmitToast(true);
       navigation.navigate('Home');

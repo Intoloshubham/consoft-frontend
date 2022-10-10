@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Modal,
   TouchableWithoutFeedback,
-  Switch,
 } from 'react-native';
 import ProjectsBanner from './ProjectsBanner';
 import AssignedWorks from './AssignedWorks';
@@ -107,10 +106,10 @@ const Home = ({navigation}) => {
   const onSubmitUserAttendance = async () => {
     const formData = {
       company_id: companyData._id,
-      user_id: userId,
+      user_id: companyData.user_id,
     };
     const response = await postUserAttendance(formData);
-    console.log(response);
+    // console.log(response);
     if (response.status === 200) {
       setAttendanceModal(false);
       alert(response.message);
@@ -118,7 +117,10 @@ const Home = ({navigation}) => {
   };
 
   const CheckUserPresentStatus = async () => {
-    const response = await getCheckUserPresent(companyData._id, userId);
+    const response = await getCheckUserPresent(
+      companyData._id,
+      companyData.user_id,
+    );
     if (response.status == 200) {
       setAttendanceModal(true);
     }
@@ -130,7 +132,9 @@ const Home = ({navigation}) => {
     fetchVerifyAndRevertWork();
     fetchAssignWorks();
     fetchProjectAtGlance();
-    CheckUserPresentStatus();
+    if (companyData.user_id) {
+      CheckUserPresentStatus();
+    }
     getUser_Id();
   }, []);
 
@@ -167,7 +171,7 @@ const Home = ({navigation}) => {
                   borderRadius: 5,
                 }}
                 onPress={() => onSubmitUserAttendance()}>
-                <Text style={{...FONTS.h3, color: COLORS.white}}>Mark</Text>
+                <Text style={{...FONTS.h3, color: COLORS.white}}>Present</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -175,6 +179,7 @@ const Home = ({navigation}) => {
       </Modal>
     );
   }
+
   return (
     <SafeAreaView>
       <ScrollView

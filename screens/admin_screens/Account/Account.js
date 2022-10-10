@@ -14,6 +14,10 @@ import {ProfileValue, LineDivider} from '../../../Components';
 import {useSelector, useDispatch} from 'react-redux';
 import {companyLogout} from '../../../services/companyAuthApi';
 import {userLogout} from '../../../services/userAuthApi';
+import {
+  postCompanyLogout,
+  postUserLogout,
+} from '../../../controller/LogoutController';
 
 const Account = () => {
   const companyDetail = useSelector(state => state.company);
@@ -31,14 +35,38 @@ const Account = () => {
   const [collapsed, setCollapsed] = React.useState(true);
   const [reportCollapsed, setReportCollapsed] = React.useState(true);
 
-  const logout = () => {
-    if (companyDetail._id) {
+  //
+  const LogoutCompany = async () => {
+    const formData = {
+      refresh_token: companyData.refresh_token,
+    };
+    const res = await postCompanyLogout(formData);
+    if (res.status == 200) {
       dispatch(companyLogout());
-    } else {
-      dispatch(userLogout());
+      navigation.navigate('Login');
     }
-    navigation.navigate('Login');
   };
+
+  const LogoutUser = async () => {
+    const formData = {
+      user_id: companyData.user_id,
+      refresh_token: companyData.refresh_token,
+    };
+    const res = await postUserLogout(formData);
+    if (res.status == 200) {
+      dispatch(userLogout());
+      navigation.navigate('Login');
+    }
+  };
+
+  // const logout = () => {
+  //   if (companyDetail._id) {
+  //     dispatch(companyLogout());
+  //   } else {
+  //     dispatch(userLogout());
+  //   }
+  //   navigation.navigate('Login');
+  // };
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
@@ -245,7 +273,9 @@ const Account = () => {
         <ProfileValue
           icon={icons.logout}
           value="LogOut"
-          onPress={() => logout()}
+          onPress={() => {
+            companyData.user_id ? LogoutUser() : LogoutCompany();
+          }}
         />
       </View>
     );
@@ -254,7 +284,7 @@ const Account = () => {
   function renderVersionDetails() {
     return (
       <View style={{marginTop: 30, alignItems: 'center'}}>
-        <Text style={{fontSize: 25, color: COLORS.darkGray}}>INTOLO INDIA</Text>
+        <Text style={{fontSize: 25, color: COLORS.darkGray}}>Powered by Intenics</Text>
         <Text style={{fontSize: 12, color: COLORS.darkGray2}}>
           Version - 1.0.0
         </Text>
@@ -276,7 +306,7 @@ const Account = () => {
         {renderProfileCard()}
         {renderProfileSection1()}
         {renderProfileSection2()}
-        {/* {renderVersionDetails()} */}
+        {renderVersionDetails()}
       </ScrollView>
     </View>
   );
