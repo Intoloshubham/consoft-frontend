@@ -2,6 +2,7 @@ import {Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
 
 export const COLORS = {
+  //
   lightblue_50: '#f0f9ff',
   lightblue_100: '#e0f2fe',
   lightblue_200: '#bae6fd',
@@ -12,6 +13,8 @@ export const COLORS = {
   lightblue_700: '#0369a1',
   lightblue_800: '#075985',
   lightblue_900: '#0c4a6e',
+
+  //
   yellow_50: '#fefce8',
   yellow_100: '#fef9c3',
   yellow_200: '#fef08a',
@@ -23,6 +26,7 @@ export const COLORS = {
   yellow_800: '#92400e',
   yellow_900: '#78350f',
 
+  //
   success_100: '#dcfce7',
   success_300: '#86efac',
   success_400: '#4ade80',
@@ -31,42 +35,58 @@ export const COLORS = {
   success_700: '#15803d',
   success_800: '#166534',
   success_900: '#14532d',
-  rose_600: '#e11d48',
-
-  warning_100: '#ffedd5',
-  warning_200: '#fecaca',
-  primary: '#FF6C44', //orange
-  // transparentPrimary: 'rgba(227, 120, 75, 0.4)',
 
   //
+  rose_600: '#e11d48',
+  red: '#FF1717',
   red_300: '#fca5a5',
   red_600: '#dc2626',
-  transparentPrimary: '#bae6fd',
+
+  //
+  warning_100: '#ffedd5',
+  warning_200: '#fecaca',
+
+  //
   orange: '#FFA133',
   lightOrange: '#FFA133',
   lightOrange2: '#FDDED4',
   lightOrange3: '#FFD9AD',
+
+  //
   green: '#27AE60',
   green_200: '#bbf7d0',
   green_400: '#4ade80',
-  red: '#FF1717',
-  blue: '#0064C0',
-  darkBlue: '#111A2C',
+
+  //
   darkGray: '#525C67',
   darkGray2: '#757D85',
+
+  //
   gray: '#898B9A',
   gray2: '#BBBDC1',
   gray3: '#CFD0D7',
+
+  //
   lightGray1: '#DDDDDD',
   lightGray2: '#F5F5F8',
-  white3: '#F8F8FF',
-  white2: '#FBFBFB',
-  white: '#FFFFFF',
-  black: '#000000',
-  tertiary50: '#ecfdf5',
 
+  //
+  white: '#FFFFFF',
+  white2: '#FBFBFB',
+  white3: '#F8F8FF',
+
+  //
+  black: '#000000',
+
+  //
+  primary: '#FF6C44',
+  blue: '#0064C0',
+  darkBlue: '#111A2C',
+  tertiary50: '#ecfdf5',
   teal_400: '#2dd4bf',
 
+  //
+  transparentPrimary: '#bae6fd',
   transparent: 'transparent',
   transparentBlack1: 'rgba(0, 0, 0, 0.1)',
   transparentBlack2: 'rgba(0, 0, 0, 0.2)',
