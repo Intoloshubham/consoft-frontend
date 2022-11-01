@@ -39,7 +39,7 @@ const Account = () => {
   const [collapsed, setCollapsed] = React.useState(true);
   const [reportCollapsed, setReportCollapsed] = React.useState(true);
 
-  //
+  // logout confirmation
   const [LogoutConfirm, setLogoutConfirm] = React.useState(false);
 
   //
@@ -67,15 +67,6 @@ const Account = () => {
       navigation.navigate('Login');
     }
   };
-
-  // const logout = () => {
-  //   if (companyDetail._id) {
-  //     dispatch(companyLogout());
-  //   } else {
-  //     dispatch(userLogout());
-  //   }
-  //   navigation.navigate('Login');
-  // };
 
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
