@@ -11,7 +11,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import Config from '../../../config';
 import { useNavigation } from '@react-navigation/native';
-import { ProfileValue, DeleteConfirmationToast, CustomToast } from '../../../Components';
+import { ProfileValue, DeleteConfirmationToast, LogoutConfirmation, CustomToast } from '../../../Components';
 import { SIZES, COLORS, FONTS, icons, images } from '../../../constants';
 import { userLogout } from '../../../services/userAuthApi';
 import { defaultFallbackFonts } from 'react-native-render-html';
@@ -22,10 +22,10 @@ const Profile = () => {
   const userData = useSelector(state => state.user);
   const [userDetail, setUserDetail] = useState([]);
   const [logoutConfirm, setLogoutConfirm] = React.useState(false);
-  const [logoutSuccessfully, setLogoutSuccessfully] = useState(false)
+  const [logoutSuccessfully, setLogoutSuccessfully] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // get user data
-  useEffect(() => {
+  const userDetailApi = () => {
     fetch(`${process.env.API_URL}user/${userData._id}`, {
       method: 'GET',
       headers: {
@@ -36,10 +36,17 @@ const Profile = () => {
       .then(response => response.json())
       .then(data => {
         setUserDetail(data);
+        setIsLoading(false);
       })
       .catch(error => {
         console.log(error);
       });
+  }
+
+  // get user data
+  useEffect(() => {
+    setIsLoading(true);
+    userDetailApi();
   }, []);
 
   const logoutApiData = async () => {
@@ -191,7 +198,7 @@ const Profile = () => {
         {renderProfileCard()}
         {renderProfileSection2()}
       </ScrollView>
-      <DeleteConfirmationToast
+      {/* <DeleteConfirmationToast
         isVisible={logoutConfirm}
         onClose={() => setLogoutConfirm(false)}
         title={'Are You Sure?'}
@@ -199,6 +206,13 @@ const Profile = () => {
         color={COLORS.rose_600}
         icon={icons.logout}
         onClickYes={() => logout()}
+      /> */}
+      <LogoutConfirmation
+        isVisible={logoutConfirm}
+        onClose={() => setLogoutConfirm(false)}
+        onClickLogout={() => {
+          logout();
+        }}
       />
       <CustomToast
         isVisible={logoutSuccessfully}
