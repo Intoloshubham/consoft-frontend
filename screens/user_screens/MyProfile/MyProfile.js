@@ -169,20 +169,23 @@ const MyProfile = () => {
   useEffect(() => {
     if (showleaves.data) {
       showleaves.data.map(ele => {
-        // console.log(ele)
+        // console.log("🚀 ~ file: MyProfile.js ~ line 172 ~ useMemo ~ ele", ele.leave_date)
         setMonthShow(ele);
       });
     }
   }, [showleaves]);
 
-  // useEffect(() => {
-  //   if (monthshow.leavedates) {
-  //     monthshow.leavedates.map((month, index) => {
-  //       console.log(month)
-  //       setLeavesDay(month);
-  //     });
-  //   }
-  // }, [showleaves]);
+
+  useMemo(() => {
+    if (monthshow.months) {
+      monthshow.months.map((month, index) => {
+        console.log(month)
+        // console.log("🚀 ~ file: MyProfile.js ~ line 182 ~ monthshow.months.map ~ month", month)
+        setLeavesDay(month);
+      });
+    }
+  }, [showleaves]);
+
 
   // useMemo(() => {
   //   if (leavesday.leavedays) {
@@ -304,9 +307,11 @@ const MyProfile = () => {
           </View>
           <ScrollView nestedScrollEnabled={true} maxHeight={100}>
           <View style={{ marginTop: 5 }}>
-            {monthshow.leavedates != undefined
-              ? monthshow.leavedates.map((Ldays, index) => {
-                // console.log(Ldays)
+
+            {leavesday.leavedays != undefined
+              ? leavesday.leavedays.map((Ldays, index) => {
+                console.log(Ldays)
+
                 return (
                   <View
                     key={index}
