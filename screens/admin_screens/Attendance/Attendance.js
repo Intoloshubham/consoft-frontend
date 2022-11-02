@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, FlatList, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  RefreshControl,
+  ScrollView,
+} from 'react-native';
 import {COLORS, SIZES, FONTS, icons} from '../../../constants';
 import CheckBox from '@react-native-community/checkbox';
 import {
@@ -12,6 +20,10 @@ import {useSelector} from 'react-redux';
 import Collapsible from 'react-native-collapsible';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {getUsers} from '../../../controller/UserRoleController';
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 const Attendance = () => {
   const companyDetail = useSelector(state => state.company);
@@ -29,6 +41,8 @@ const Attendance = () => {
   const [data, setData] = React.useState('');
   const arr = {leavedates: data};
 
+  // console.log(checked)
+
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
 
@@ -36,10 +50,12 @@ const Attendance = () => {
   const checkBoxHandler = leave_date_id => {
     let d = [...data, leave_date_id];
     setData(d);
+    console.log(d);
   };
 
   const userLeaves = async () => {
     let response = await getUserLeaves(company_id);
+    // console.log(response);
     if (response.status === 200) {
       setLeaves(response.data);
     }
@@ -47,9 +63,14 @@ const Attendance = () => {
 
   const postLeaves = async id => {
     let response = await postUserLeaves(id, arr);
+    console.log(response);
     if (response.status === 200) {
       setSubmitToast(true);
       userLeaves();
+    } else if (response.status == 400) {
+      alert(response.message);
+    } else {
+      alert(response.message);
     }
     setTimeout(() => {
       setSubmitToast(false);
@@ -138,6 +159,16 @@ const Attendance = () => {
     setAttendance(response.data);
   };
 
+  //
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    userLeaves();
+    setCollapsed(false);
+    // userAttendance();
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
+
   React.useEffect(() => {
     userLeaves();
     userAttendance();
@@ -180,6 +211,7 @@ const Attendance = () => {
                 Approve
               </Text>
             </TouchableOpacity>
+
             {/* <TouchableOpacity
               style={{
                 backgroundColor: COLORS.rose_600,
@@ -465,7 +497,10 @@ const Attendance = () => {
   }
 
   return (
-    <View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       {renderUserLeavesList()}
       {renderUserAttendance()}
       <CustomToast
@@ -475,7 +510,7 @@ const Attendance = () => {
         title="Approved"
         message="Approved Successfully..."
       />
-    </View>
+    </ScrollView>
   );
 };
 
