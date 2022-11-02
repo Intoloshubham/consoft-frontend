@@ -495,8 +495,8 @@ const MyProfile = () => {
 
                       <View
                         style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-end',
+                          // flexDirection: 'row',
+                          // justifyContent: 'flex-end',
                           marginTop: 5,
                         }}>
                         {/* <Button title='Today'onPress={()=>{TodayDate()}} /> */}
