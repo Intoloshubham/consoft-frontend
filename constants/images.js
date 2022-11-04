@@ -30,6 +30,7 @@ const create_company = require('../assets/images/create_company.png');
 const product_key = require('../assets/images/product_key.png');
 const Graph_paper = require('../assets/images/projects/Graph_paper.png');
 const home_banner = require('../assets/images/banner.png');
+const consoft_new = require('../assets/images/consoft_new.png');
 
 export default {
   background_01,
@@ -63,4 +64,5 @@ export default {
   Graph_paper,
   civil_eng,
   home_banner,
+  consoft_new
 };

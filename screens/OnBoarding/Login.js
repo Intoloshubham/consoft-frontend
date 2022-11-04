@@ -111,7 +111,7 @@ const Login = ({navigation}) => {
           justifyContent: 'center',
         }}>
         <Image
-          source={images.consoft_PNG}
+          source={images.consoft_new}
           resizeMode="contain"
           style={{
             height: 100,
@@ -584,7 +584,7 @@ const Login = ({navigation}) => {
                 alignItems: 'center',
               }}>
               <Image
-                source={images.consoft_PNG}
+                source={images.consoft_new}
                 resizeMode="contain"
                 style={{
                   height: 100,
