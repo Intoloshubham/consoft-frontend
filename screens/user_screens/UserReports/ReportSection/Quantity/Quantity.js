@@ -1896,7 +1896,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                                         width: 50,
                                         position: "absolute",
                                         top: 10,
-                                        left: -SIZES.width * 0.33,
+                                        left: -SIZES.width * 0.30,
                                         // borderWidth: 1,
                                         // borderColor: COLORS.lightblue_200,
 

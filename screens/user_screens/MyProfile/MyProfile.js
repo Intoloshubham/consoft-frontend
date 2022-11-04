@@ -164,9 +164,9 @@ const MyProfile = () => {
 
   useEffect(() => {
     showleavesdata();
-  }, []);
+  }, [showleaves]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (showleaves.data) {
       showleaves.data.map(ele => {
         // console.log("🚀 ~ file: MyProfile.js ~ line 172 ~ useMemo ~ ele", ele.leave_date)
@@ -174,6 +174,7 @@ const MyProfile = () => {
       });
     }
   }, [showleaves]);
+
 
   useMemo(() => {
     if (monthshow.months) {
@@ -184,6 +185,7 @@ const MyProfile = () => {
       });
     }
   }, [showleaves]);
+
 
   // useMemo(() => {
   //   if (leavesday.leavedays) {
@@ -303,10 +305,13 @@ const MyProfile = () => {
               onPress={() => setLeavesModal(true)}
             />
           </View>
+          <ScrollView nestedScrollEnabled={true} maxHeight={100}>
           <View style={{ marginTop: 5 }}>
+
             {leavesday.leavedays != undefined
               ? leavesday.leavedays.map((Ldays, index) => {
                 console.log(Ldays)
+
                 return (
                   <View
                     key={index}
@@ -315,28 +320,32 @@ const MyProfile = () => {
                       flexWrap: 'wrap',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-                      {Ldays.leave_date}
-                    </Text>
-
-                    <TouchableOpacity>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 'bold',
-                          backgroundColor: 'orange',
-                          marginTop: 2,
-                          padding: 2,
-                          margin: 2,
-                        }}>
-                        Pending
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })
-              : null}
-          </View>
+                    {Ldays.approved === false ? (
+                          <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                            {Ldays.leave_date}
+                          </Text>
+                        ) : null}
+                        {Ldays.approved === true ? null : (
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                backgroundColor: 'orange',
+                                marginTop: 2,
+                                padding: 2,
+                                margin: 2,
+                              }}>
+                              Pending
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    );
+                  })
+                : null}
+            </View>
+          </ScrollView>
           {/* leacves modal start  */}
         </View>
 
@@ -495,9 +504,9 @@ const MyProfile = () => {
 
                       <View
                         style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-end',
-                          marginTop: 5,
+//                           flexDirection: 'row',
+//                           justifyContent: 'flex-end',
+//                           marginTop: 5,
                         }}>
                         {/* <Button title='Today'onPress={()=>{TodayDate()}} /> */}
                         <Button
