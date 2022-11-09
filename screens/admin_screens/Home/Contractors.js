@@ -60,7 +60,7 @@ const Contractors = ({route}) => {
 
   // get contractors
   const fetchContractors = async () => {
-    let data = await getContractors();
+    let data = await getContractors(company_id);
     setContractors(data);
   };
 
