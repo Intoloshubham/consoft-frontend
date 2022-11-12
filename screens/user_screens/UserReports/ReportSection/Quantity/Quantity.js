@@ -69,7 +69,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
 
-  const [deleteConfirm, setDeleteConfirm] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   const animation = useRef(new Animated.Value(0)).current;
   const scale = animation.interpolate({ inputRange: [0, 1], outputRange: [1, 0.9] });

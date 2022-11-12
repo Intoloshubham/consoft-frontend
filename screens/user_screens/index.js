@@ -16,6 +16,7 @@ import TAndP from './UserReports/ReportSection/TAndP/TAndP.js';
 import ManPowerProjectTeam from './UserReports/ReportSection/Manpower/UserProjectTeam/ManPowerProjectTeam.js';
 import ManpowerUserContractors from './UserReports/ReportSection/Manpower/UserContractors/ManpowerUserContractors.js';
 import ViewReport from './UserReports/ReportSection/ViewReport/ViewReport';
+import EditQuantityItems from './UserReports/ReportSection/Quantity/EditQuantityItems.js';
 
 export {
   UserDashboard,
@@ -35,4 +36,5 @@ export {
   ManpowerUserContractors,
   UserAssignWorks,
   ViewReport,
+  EditQuantityItems
 };
