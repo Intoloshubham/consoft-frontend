@@ -214,10 +214,10 @@ const ReportDisplay = () => {
       }
       
       #contractors{
-      display: flex;flex-direction: row;padding:5px;
+      display: flex;flex-direction: row;padding:10px;
       }
       
-      #quantity h2{
+      #quantity h3{
       text-align:center;
       text-decoration:underline;
       }
@@ -255,27 +255,27 @@ const ReportDisplay = () => {
       <title>Project Report</title>
       </head>
       <body>
-      <h2 style="text-align:center; text-decoration: underline;">Daily Progress Report</h2>
+      <h2 style="text-align:center; color: #0284c7;">${companyDetail.company_name}</h2>
+      <p style="text-align:center;">Daily Progress Report</p>
       <div id="main_div">
-      <div id="project_details">
-      <h1>${reportData.project_name}</h1>
+      <div id="project_details" style="padding-top:1px; padding-bottom:1px;">
+      <h3> Project name -  ${reportData.project_name}</h3>
       <p>Date : ${reportData.date} <br>Time : ${reportData.time} </p>
       </div>
       <hr>
       <div id="manpower">
-        <h2>Manpower</h2>
-        <h3 >Contractors -</h3>
+        <h3 style=" text-align:center; text-decoration:underline;">Manpower</h3>
+        <h4 >Contractors -</h4>
         <div id="contractors">
         ${manpower.map(
           (ele, index) =>
             ` <div style="width:30%;border: solid 1px #525C67; padding:5px; margin-left:${
               index != 0 ? '12px' : null
             }">
-               <h3>${ele.contractor_name}</h3>
+               <h4>${ele.contractor_name}</h4>
                ${ele.manpowerCategories.map(
-                 (ele1, i) => `${i + 1} . 
-                      ${ele1.manpower_category_name} - 
-                      ${ele1.manpower_member}<br/>`,
+                 (ele1, i) => `${i + 1}. 
+                      ${ele1.manpower_category_name} - ${ele1.manpower_member}<br/>`,
                )}
             </div>`,
         )}
@@ -283,7 +283,7 @@ const ReportDisplay = () => {
       </div>
       <hr>
       <div id="quantity">
-      <h2>Executed Quantity</h2>
+      <h3>Executed Quantity</h3>
       <table>
       <tr>
         <th>Sn.</th>
