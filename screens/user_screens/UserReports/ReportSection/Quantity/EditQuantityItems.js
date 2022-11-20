@@ -20,6 +20,7 @@ import {
   images,
 } from '../../../../../constants';
 import {Dropdown} from 'react-native-element-dropdown';
+import {update_quantity_item} from '../../ReportApi.js';
 import {FormInput, TextButton, HeaderBar} from '../../../../../Components';
 import {useSelector} from 'react-redux';
 
@@ -29,6 +30,8 @@ const EditQuantityItems = () => {
 
   const [quantityName, setQuantityName] = useState();
   const [updateQuantityName, setUpdateQuantityName] = useState();
+
+  const [itemId, setItemId] = useState('');
 
   const userData = useSelector(state => state.user);
 
@@ -53,13 +56,30 @@ const EditQuantityItems = () => {
       const resp = await fetch(
         `${process.env.API_URL}edit-quantity-report-item/` + `${id}`,
       );
-      console.log('temp',resp)
+      console.log('temp', resp);
       const temp = await resp.json();
-      
+
       setUpdateQuantityName(temp);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const updateItemName = async () => {
+    // console.log('itemId--', itemId);
+    // const formData = {
+    //   category_name: catName,
+    //   company_id: company_id,
+    // };
+    let response = await update_quantity_item(itemId);
+    if (response.status == 200) {
+      setUpdateToast(true);
+    } else {
+      alert(response.message);
+    }
+    setTimeout(() => {
+      setUpdateToast(false);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -87,8 +107,8 @@ const EditQuantityItems = () => {
           style={{
             flex: 1,
             // backgroundColor: '#fff',
-            marginTop: '50%',
-            marginBottom: '50%',
+            // marginTop: '50%',
+            // marginBottom: '50%',
             padding: 30,
             borderTopRightRadius: 35,
             borderTopLeftRadius: 30,
@@ -173,7 +193,7 @@ const EditQuantityItems = () => {
                     borderRadius: SIZES.radius,
                     marginTop: SIZES.padding,
                   }}
-                  // onPress={() => Updatevocher()}
+                  onPress={() => updateItemName()}
                 />
               </Card.Content>
             </Card>
@@ -201,7 +221,12 @@ const EditQuantityItems = () => {
             }}>
             <TouchableOpacity
               onPress={
-                () => editQuantityItems(item._id)
+                () => {
+                  editQuantityItems(item._id);
+                  setQtyUpdateModal(true);
+                  setQuantityName(item.item_name);
+                  setItemId(item._id);
+                }
                 //   item._id,
                 //   item.item_id,
                 //   item.qty,
@@ -238,31 +263,32 @@ const EditQuantityItems = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
-      {/* <Text>Edit Quantity Items:</Text> */}
-      <HeaderBar right={true} title="Edit Quantity Items" />
-      <FlatList
-        maxHeight={500}
-        contentContainerStyle={{marginTop: SIZES.radius}}
-        scrollEnabled={true}
-        data={quantityItems}
-        keyExtractor={item => `${item._id}`}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={true}
-        ItemSeparatorComponent={() => {
-          return (
-            <View
-              style={{
-                width: '100%',
-                height: 1,
-                backgroundColor: COLORS.lightGray1,
-                marginVertical: 5,
-              }}></View>
-          );
-        }}
-      />
-      <View style={{flex: 1}}>{updateQtyItemModal()}</View>
-    </View>
+    <>
+      <View style={{flex: 1}}>
+        <HeaderBar right={true} title="Edit Quantity Items" />
+        <FlatList
+          maxHeight={500}
+          contentContainerStyle={{marginTop: SIZES.radius}}
+          scrollEnabled={true}
+          data={quantityItems}
+          keyExtractor={item => `${item._id}`}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={true}
+          ItemSeparatorComponent={() => {
+            return (
+              <View
+                style={{
+                  width: '100%',
+                  height: 1,
+                  backgroundColor: COLORS.lightGray1,
+                  marginVertical: 5,
+                }}></View>
+            );
+          }}
+        />
+      </View>
+      {updateQtyItemModal()}
+    </>
   );
 };
 
