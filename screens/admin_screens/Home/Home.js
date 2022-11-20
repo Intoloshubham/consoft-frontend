@@ -26,6 +26,7 @@ import {
   postUserAttendance,
 } from '../../../controller/UserAttendanceController';
 import {getUserId} from '../../../services/asyncStorageService';
+import {projectAtGlance} from '../../../controller/BoqController';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -95,7 +96,7 @@ const Home = ({navigation}) => {
   //=======================
   const [reportData, setReportData] = React.useState([]);
   const fetchProjectAtGlance = async () => {
-    const response = await getProjectAtGlance(companyData._id);
+    const response = await projectAtGlance(companyData._id);
     if (response.status === 200) {
       setReportData(response.data);
     }
@@ -226,10 +227,12 @@ const Home = ({navigation}) => {
           </View>
           <ProjectsBanner company={companyData._id} />
           <SubmittedWorks data={submitWork} Submitfunction={fetchSubmitWork} />
+
           <ProjectReports
             data={reportData}
             reportFunction={fetchProjectAtGlance}
           />
+
           <AssignedWorks
             data={assignWorkData}
             AssignWorkfunction={fetchAssignWorks}
