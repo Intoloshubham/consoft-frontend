@@ -50,6 +50,10 @@ import Account from './screens/admin_screens/Account/Account';
 import store from './app/store';
 import {Provider} from 'react-redux';
 
+import {LogBox} from 'react-native';
+
+LogBox.ignoreAllLogs();
+LogBox.ignoreLogs([`new NativeEventEmitter()`]);
 const Stack = createStackNavigator();
 
 const App = () => {
