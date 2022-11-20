@@ -33,6 +33,7 @@ import {
   ReportSettings,
   BoqViewAndEdit,
   Home,
+
 } from './screens/admin_screens';
 import {
   Profile,
@@ -40,6 +41,8 @@ import {
   Demo1,
   MyProfile,
   ViewReport,
+  EditQuantityItems
+
 } from './screens/user_screens';
 import Tabs from './navigation/tabs';
 import UserTabs from './navigation/user_tabs';
@@ -47,6 +50,10 @@ import Account from './screens/admin_screens/Account/Account';
 import store from './app/store';
 import {Provider} from 'react-redux';
 
+import {LogBox} from 'react-native';
+
+LogBox.ignoreAllLogs();
+LogBox.ignoreLogs([`new NativeEventEmitter()`]);
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -111,7 +118,8 @@ const App = () => {
           <Stack.Screen name="UserEndVoucher" component={UserEndVoucher} />
           <Stack.Screen name="ViewReport" component={ViewReport} />
           <Stack.Screen name="Demo1" component={Demo1} />
-          <Stack.Screen name="MyProfile" component={MyProfile} />
+          <Stack.Screen name="MyProfile" component={MyProfile} />        
+          <Stack.Screen name="EditQuantityItems" component={EditQuantityItems} />        
         </Stack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>

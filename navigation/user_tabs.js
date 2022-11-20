@@ -10,7 +10,8 @@ import {
   UserEndVoucher,
   MyProfile,
   UserReports,
-  ViewReport,
+  ViewReport
+
 } from '../screens/user_screens';
 
 const Tab = createBottomTabNavigator();
