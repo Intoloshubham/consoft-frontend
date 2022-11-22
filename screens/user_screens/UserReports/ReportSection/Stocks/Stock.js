@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react'
 import {
     View,
-    Text, FlatList,
-    StyleSheet, Image,
+    Text, 
+    Image,
     ScrollView, Modal, Animated,
-    Pressable, TextInput, KeyboardAvoidingView,
+    Pressable, TextInput, 
     Platform, LayoutAnimation, UIManager,
-    TouchableOpacity, Button, Keyboard
+    TouchableOpacity, 
 } from 'react-native'
 import styles from '../../ReportStyle.js'
 import { Title, Divider } from 'react-native-paper';
@@ -559,7 +559,6 @@ const Stock = ({ project_id, Main_drp_pro_value, loading }) => {
 
     return (
         <View>
-            {/* Stock */}
             <Animated.View style={{ transform: [{ scale }] }}>
                 <Pressable
                     onPress={() => {
