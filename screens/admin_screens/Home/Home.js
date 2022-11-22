@@ -97,6 +97,7 @@ const Home = ({navigation}) => {
   const [reportData, setReportData] = React.useState([]);
   const fetchProjectAtGlance = async () => {
     const response = await projectAtGlance(companyData._id);
+    console.log(response)
     if (response.status === 200) {
       setReportData(response.data);
     }
@@ -195,7 +196,7 @@ const Home = ({navigation}) => {
           }}>
           <View
             style={{
-              marginHorizontal: SIZES.padding,
+              marginHorizontal: SIZES.radius,
               marginVertical: SIZES.radius,
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -216,11 +217,11 @@ const Home = ({navigation}) => {
             </View>
             <TouchableOpacity>
               <Image
-                source={images.consoft_PNG}
+                source={images.consoft_pro_logo}
                 style={{
-                  height: 40,
-                  width: 80,
-                  borderRadius: 5,
+                  height: 28,
+                  width: 84,
+                  borderRadius: 2,
                 }}
               />
             </TouchableOpacity>

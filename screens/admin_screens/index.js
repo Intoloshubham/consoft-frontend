@@ -17,8 +17,8 @@ import ToolsAndMachinery from './Home/ToolsAndMachinery';
 import WorkAssignModal from './Modals/WorkAssignModal';
 import CategoryandType from './Project/CategoryandType';
 import ReportsDisplay from './Reports/ReportDisplay';
-import Items from './Stock/Items/Items';
-import ManageStock from './Stock/ManageStock/ManageStock';
+import Items from './Stock/Items';
+import ManageStock from './Stock/ManageStock';
 import Unit from './Stock/Unit/Unit';
 import Attendance from './Attendance/Attendance';
 import Suppliers from './Suppliers/Suppliers';
@@ -31,7 +31,7 @@ import VerifyWorks from './VerifyAndRevertWork.js/VerifyWorks';
 import RevertWorks from './VerifyAndRevertWork.js/RevertWorks';
 import UserRole from './CreateUserRole/UserRole';
 import ReportSettings from './Home/ReportSettings';
-import Requirement from './Requirement/Requirement';
+import Vouchers from './Vouchers/Vouchers';
 import BoqViewAndEdit from './Account/BoqViewAndEdit';
 
 export {
@@ -68,6 +68,6 @@ export {
   RevertWorks,
   UserRole,
   ReportSettings,
-  Requirement,
+  Vouchers,
   BoqViewAndEdit,
 };

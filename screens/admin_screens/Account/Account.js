@@ -200,7 +200,7 @@ const Account = () => {
               image={icons.right_arrow}
               onPress={() => navigation.navigate('Items')}
             />
-            <LineDivider />
+            {/* <LineDivider /> */}
             {/* <ProfileValue
               icon={icons.units}
               value="Unit"
