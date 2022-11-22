@@ -1178,7 +1178,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
               {item.contractor_name}
             </Text>
           </View>
-          <View style={{ right: 68, top: 2 }}>
+          <View style={{ right: 90, top: 0 }}>
             <Pressable
               onPress={() => {
                 setContractorId(item._id);
@@ -1196,7 +1196,7 @@ const ManpowerUserContractors = ({ ProList, Main_drp_pro_value, loading }) => {
             justifyContent: "space-between",
             alignSelf: "center",
             alignItems: "center",
-            left: -65
+            left: -78
           }}>
             <View
               style={{

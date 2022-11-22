@@ -49,8 +49,12 @@ const Login = ({navigation}) => {
       mobile: userMobileNo,
       password: userPassword,
     };
+    console.log('UserData===');
+    console.log(UserData);
+    console.log(process.env.API_URL);
+
     const res = await dispatch(userLogin(UserData));
-    // console.log("login",res.payload);
+    console.log('login', res);
     if (res.payload.status === 200) {
       setSubmitToast(true);
       if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {

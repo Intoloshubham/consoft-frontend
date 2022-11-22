@@ -172,7 +172,6 @@ const Profile = () => {
       </View>
     );
   }
-
   function renderProfileSection2() {
     return (
       <View
@@ -180,6 +179,12 @@ const Profile = () => {
           ...styles.profileSectionContainer1,
         }}>
         <ProfileValue icon={icons.logout} value="LogOut" onPress={() => setLogoutConfirm(true)} />
+        <ProfileValue
+          icon={icons.items}
+          value="Qty Items"
+          image={icons.right_arrow}
+          onPress={() => navigation.navigate('EditQuantityItems')}
+        />
       </View>
     );
   }
