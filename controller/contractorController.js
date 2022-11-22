@@ -1,8 +1,8 @@
 import Config from '../config';
 
-const getContractors = async () => {
+const getContractors = async (company_id) => {
   try {
-    const res = await fetch(Config.API_URL + 'contractor', {
+    const res = await fetch(Config.API_URL + 'contractor/' + company_id, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

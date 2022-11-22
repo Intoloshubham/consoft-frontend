@@ -72,6 +72,7 @@ const Boq = ({route}) => {
 
   // qty
   const [itemQty, setItemQty] = React.useState('');
+  const [itemRate, setItemRate] = React.useState('');
 
   // get unit for show
   const [unit, getUnit] = React.useState('');
@@ -155,6 +156,7 @@ const Boq = ({route}) => {
       item_id: itemsValue,
       unit_name: showUnitName,
       qty: itemQty,
+      rate: itemRate,
     };
     let data = await postBOQItem(formData);
     if (data.status === 200) {
@@ -162,6 +164,7 @@ const Boq = ({route}) => {
       fetchBoqItems();
       setItemsValue('');
       setItemQty('');
+      setItemRate('');
       setSubmitToast(true);
     } else {
       alert(data.message);
@@ -187,11 +190,12 @@ const Boq = ({route}) => {
 
   const [getId, setGetId] = React.useState('');
 
-  const editBoqItems = (item_id, id, itemQty, unitName) => {
+  const editBoqItems = (item_id, id, itemQty, unitName, rate) => {
     setGetId(id);
     setItemsValue(item_id);
     setItemQty(itemQty);
     setShowUnitName(unitName);
+    setItemRate(rate);
     setEditBoq(true);
     fetchBoqItemsList();
   };
@@ -204,6 +208,7 @@ const Boq = ({route}) => {
       item_id: itemsValue,
       unit_name: showUnitName,
       qty: itemQty,
+      rate: itemRate,
     };
     let data = await updateBoqItem(getId, formData);
     if (data.status === 200) {
@@ -211,6 +216,7 @@ const Boq = ({route}) => {
       fetchBoqItems();
       setItemsValue('');
       setItemQty('');
+      setItemRate('');
       setUpdateToast(true);
     } else {
       alert(data.message);
@@ -363,6 +369,35 @@ const Boq = ({route}) => {
                   </View>
                 }
               />
+              <FormInput
+                label="Item Rate"
+                keyboardType="numeric"
+                value={itemRate.toString()}
+                onChange={value => {
+                  setItemRate(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        itemRate == '' || itemRate != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          itemRate == ''
+                            ? COLORS.gray
+                            : itemQty != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
               <TextButton
                 label="Update"
                 buttonContainerStyle={{
@@ -429,7 +464,13 @@ const Boq = ({route}) => {
             alignItems: 'flex-end',
           }}
           onPress={() =>
-            editBoqItems(item.item_id, item._id, item.qty, item.unit_name)
+            editBoqItems(
+              item.item_id,
+              item._id,
+              item.qty,
+              item.unit_name,
+              item.rate,
+            )
           }>
           <ImageBackground
             style={{
@@ -809,6 +850,34 @@ const Boq = ({route}) => {
                           itemQty == ''
                             ? COLORS.gray
                             : itemQty != ''
+                            ? COLORS.green
+                            : COLORS.red,
+                      }}
+                    />
+                  </View>
+                }
+              />
+              <FormInput
+                label="Item Rate"
+                keyboardType="numeric"
+                onChange={value => {
+                  setItemRate(value);
+                }}
+                appendComponent={
+                  <View style={{justifyContent: 'center'}}>
+                    <Image
+                      source={
+                        itemRate == '' || itemRate != ''
+                          ? icons.correct
+                          : icons.cancel
+                      }
+                      style={{
+                        height: 20,
+                        width: 20,
+                        tintColor:
+                          itemRate == ''
+                            ? COLORS.gray
+                            : itemRate != ''
                             ? COLORS.green
                             : COLORS.red,
                       }}

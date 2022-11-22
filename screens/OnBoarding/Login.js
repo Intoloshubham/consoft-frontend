@@ -591,12 +591,12 @@ const Login = ({navigation}) => {
                 source={images.consoft_new}
                 resizeMode="contain"
                 style={{
-                  height: 100,
+                  height: 80,
                 }}
               />
               <View
                 style={{
-                  marginTop: SIZES.radius,
+                  marginTop: SIZES.padding,
                   height: 30,
                   justifyContent: 'center',
                 }}>

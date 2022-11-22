@@ -17,8 +17,19 @@ const ProjectReports = ({data, reportFunction}) => {
   const navigation = useNavigation();
   function renderProjectAtGlance() {
     const renderItem = ({item, index}) => (
-      <View style={{}}>
-        <View style={{flexDirection: 'row'}}>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+        onPress={() => {
+          navigation.navigate('ProjectsDetails', {
+            name: item.project_name,
+            project_id: item._id,
+          });
+        }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Text
             style={{
               ...FONTS.h3,
@@ -26,24 +37,23 @@ const ProjectReports = ({data, reportFunction}) => {
             }}>
             {index + 1}.{' '}
           </Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('ProjectsDetails', {
-                name: item.project_name,
-                project_id: item._id,
-              });
+          <Text
+            style={{
+              ...FONTS.h3,
+              color: COLORS.darkGray,
+              textTransform: 'capitalize',
             }}>
-            <Text
-              style={{
-                ...FONTS.h3,
-                color: COLORS.darkGray,
-                textTransform: 'capitalize',
-              }}>
-              {item.project_name}
-            </Text>
-          </TouchableOpacity>
+            {item.project_name}
+          </Text>
         </View>
-      </View>
+        <Text
+          style={{
+            ...FONTS.h3,
+            color: COLORS.black,
+          }}>
+          {item.consumed_cost_InPercent}%
+        </Text>
+      </TouchableOpacity>
     );
 
     return (
