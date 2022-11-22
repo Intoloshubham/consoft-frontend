@@ -238,13 +238,13 @@ const Account = () => {
           onPress={() => navigation.navigate('Suppliers')}
         />
         <LineDivider />
-        <ProfileValue
+        {/*<ProfileValue
           icon={icons.report}
           value="Report"
           image={icons.down_arro}
           onPress={toggleReport}
         />
-        <Collapsible collapsed={reportCollapsed} duration={300}>
+         <Collapsible collapsed={reportCollapsed} duration={300}>
           <View style={{marginLeft: SIZES.padding * 1.5}}>
             <ProfileValue
               icon={icons.itemss}
@@ -259,7 +259,7 @@ const Account = () => {
           value="Checklist"
           image={icons.right_arrow}
           onPress={() => navigation.navigate('CheckList')}
-        />
+        /> */}
       </View>
     );
   }

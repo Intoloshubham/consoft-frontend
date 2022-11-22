@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 
 const Requirement = () => {
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{flex: 1, margin: 20}}>
       <Text>Requirement</Text>
     </View>
   );

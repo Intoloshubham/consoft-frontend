@@ -70,16 +70,29 @@ const getBOQItems = async (company_id, project_id) => {
 
 const updateBoqItem = async (id, formData) => {
   try {
-    const res = await fetch(
-      Config.API_URL + 'update-manage-boq/' + id ,
-      {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+    const res = await fetch(Config.API_URL + 'update-manage-boq/' + id, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//project at a glace
+const projectAtGlance = async company_id => {
+  try {
+    const res = await fetch(Config.API_URL + 'get-boq-percent/' + company_id, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     const data = await res.json();
     return data;
   } catch (error) {
@@ -93,4 +106,5 @@ export {
   postBOQItem,
   getBOQItems,
   updateBoqItem,
+  projectAtGlance,
 };

@@ -63,7 +63,7 @@ const ToolsAndMachinery = ({route}) => {
 
   // get tools & machinery
   const fetchToolsAndMachinery = async () => {
-    let data = await getToolsAndMachinery();
+    let data = await getToolsAndMachinery(company_id);
     setToolsAndMachinery(data);
   };
 
