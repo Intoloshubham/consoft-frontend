@@ -131,8 +131,8 @@ const UserEndVoucher = () => {
                 width: '100%',
                 backgroundColor: '#fff',
                 marginTop: 80,
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
+                borderTopLeftRadius: 18,
+                borderTopRightRadius: 18,
                 padding: 22,
               }}>
               <View
@@ -410,6 +410,7 @@ const UserEndVoucher = () => {
         onPress={() => {
           getStockDataItems();
           setVoucherModal(true);
+          console.log(userCompanyData._id)
         }}
         style={{
           flexDirection: 'row',
