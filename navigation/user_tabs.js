@@ -120,7 +120,7 @@ const UserTabs = ({navigation, route}) => {
         }}
       />
       <Tab.Screen
-        name="Requirement"
+        name="Voucher"
         component={UserEndVoucher}
         options={{
           tabBarIcon: ({focused}) => (
@@ -138,7 +138,7 @@ const UserTabs = ({navigation, route}) => {
                   color: focused ? COLORS.yellow_700 : COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Requirement
+                Voucher
               </Text>
             </View>
           ),

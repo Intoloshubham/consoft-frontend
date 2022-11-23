@@ -113,6 +113,22 @@ const insert_stock_data = (quality_post_data) => {
     }
 
 }
+const insert_voucher_details = (post_data) => {
+
+    try {
+        const res = fetch(`${process.env.API_URL}voucher/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(post_data)
+        })
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+
 const insert_TAndP_report = (resp_data, CONST_FIELD) => {
 
     try {
@@ -331,6 +347,24 @@ const update_quantity_data = async (Id, inputs) => {
         console.log(error)
     }
 }
+
+const update_quantity_item =async (itemId)=>{
+    try {
+        const res=await fetch(`${process.env.API_URL}item/${itemId}`,{
+            method:'PUT',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json'
+            },
+            // body:JSON.stringify(inputs),
+        });
+        const data=await res.json();
+        
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 const update_manpower_report = async (manpower_report_id, inputs) => {
     try {
         const res = await fetch(`${process.env.API_URL}manpower-report/${manpower_report_id}`, {
@@ -422,7 +456,7 @@ export {
     insert_manpower_report, get_manpower_report, delete_manpower_data, filter_new_category_by_cont_Id, get_works_in_progress,
     Get_user_name_by_role, Insert_project_team_data, edit_manpower_report_data, update_manpower_report, get_equipment_item_name,
     save_new_equipment_item, insert_TAndP_report, get_equipment_report, edit_TAndP_report_data, update_TAndP_report_data, get_completed_task,
-    delete_Qty_Record, get_latest_steel_id
+    delete_Qty_Record, get_latest_steel_id,update_quantity_item,insert_voucher_details
 }
 
 
