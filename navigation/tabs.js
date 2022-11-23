@@ -124,6 +124,10 @@ const Tabs = () => {
               </Text>
             </View>
           ),
+          // tabBarBadge: 1,
+          // tabBarBadgeStyle: {
+          //   backgroundColor: COLORS.rose_600,
+          // },
         }}
       />
       <Tab.Screen
