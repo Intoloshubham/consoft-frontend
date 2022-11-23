@@ -39,12 +39,25 @@ export const COLORS = {
   //
   rose_600: '#e11d48',
   red: '#FF1717',
-  red_300: '#fca5a5',
-  red_600: '#dc2626',
 
+  red_50: '#fef2f2',
+  red_100: '#fee2e2',
+  red_200: '#fecaca',
+  red_300: '#fca5a5',
+  red_400: '#f87171',
+  red_500: '#ef4444',
+  red_600: '#dc2626',
+  red_700: '#b91c1c',
+  red_800: '#991b1b',
+  red_900: '#7f1d1d',
+  
   //
   warning_100: '#ffedd5',
   warning_200: '#fecaca',
+  warning_300: '#fdba74',
+  warning_400: '#fb923c',
+  warning_500: '#f97316',
+  warning_600: '#ea580c',
 
   //
   orange: '#FFA133',
