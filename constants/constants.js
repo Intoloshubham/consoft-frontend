@@ -10,6 +10,7 @@ const STATUS = {
 };
 
 const VOUCHER_TYPE = [
+
   {label: 'Purchase Request', value: '1'},
   {label: 'Received', value: '2'},
   {label: 'Purchased Return', value: '3'},
@@ -21,6 +22,7 @@ const CHECK_VOUCHER_TYPE = {
   RECEIVED_VOUCHER: 'Received',
   PURCHASED_RETURN_VOUCHER: 'Purchased Return',
   RECEIVED_RETURN_VOUCHER: 'Received Return',
+
 };
 
 export default {USER_PRIVILEGES, STATUS, VOUCHER_TYPE,CHECK_VOUCHER_TYPE};

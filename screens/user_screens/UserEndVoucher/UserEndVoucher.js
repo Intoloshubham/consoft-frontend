@@ -1,4 +1,6 @@
+
 import React, {useState, useMemo, useEffect} from 'react';
+
 import {
   View,
   Text,
@@ -9,17 +11,20 @@ import {
   Image,
   ScrollView,
   StyleSheet,
+
 } from 'react-native';
 import styles from '../UserReports/ReportStyle.js';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Title, Divider} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
+
 
 import {
   get_stock_item_name,
@@ -27,6 +32,7 @@ import {
   get_pending_voucher_details,
   get_reverted_voucher,
   get_verified_voucher,
+
 } from '../UserReports/ReportApi.js';
 import {
   COLORS,
@@ -44,7 +50,9 @@ import {
   CustomToast,
   DeleteConfirmationToast,
 } from '../../../Components';
+
 import {FlatList} from 'react-native-gesture-handler';
+
 
 const UserEndVoucher = () => {
   const {cont_Project_list_drop, inputfromtwo} = styles;
@@ -55,6 +63,7 @@ const UserEndVoucher = () => {
 
   const [itemList, setItemList] = useState([]);
   const [itemId, setItemId] = useState('');
+
   const current_dat = moment().format('YYYY%2FMM%2FDD');
 
   let MyDateString = current_dat;
@@ -74,6 +83,7 @@ const UserEndVoucher = () => {
   const [projectLists, setProjectLists] = useState([]);
   const [projectId, setProjectId] = useState('');
 
+
   const [pendingVoucher, setPendingVoucher] = useState([]);
   const [revertedVoucher, setRevertedVoucher] = useState([]);
   const [verifiedVoucher, setVerifiedVoucher] = useState([]);
@@ -82,6 +92,7 @@ const UserEndVoucher = () => {
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
+
 
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
@@ -165,11 +176,13 @@ const UserEndVoucher = () => {
         data.data.map(ele => {
           setVerifiedVoucher(ele.voucherData);
         });
+
       }
     } catch (error) {
       console.log(error);
     }
   };
+
 
   useEffect(() => {
     getPendingPurchasedVoucher();
@@ -189,12 +202,16 @@ const UserEndVoucher = () => {
       vehicle_no: vehicleNo,
     };
 
+
     const res = await insert_voucher_details(data);
+
     if (res.status == '200') {
       setSubmitToast(true);
       setTimeout(() => {
         setVoucherModal(false);
+
         setSubmitToast(false);
+
       }, 800);
     }
   };
@@ -473,7 +490,9 @@ const UserEndVoucher = () => {
                   backgroundColor: COLORS.lightblue_700,
                 }}
                 onPress={() => {
+
                   saveVoucherDetails();
+
                 }}
               />
             </View>
@@ -482,6 +501,7 @@ const UserEndVoucher = () => {
       </Modal>
     );
   };
+
   const renderItem = ({item}) => (
     <View
       style={{
@@ -651,15 +671,16 @@ const UserEndVoucher = () => {
 
   return (
     <View style={{flex: 1, borderWidth: 1, alignContent: 'space-around'}}>
+
       <Pressable
         onPress={() => {
           getStockDataItems();
           setVoucherModal(true);
-          console.log(userCompanyData._id);
         }}
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
+
           paddingVertical: SIZES.base * 0.5,
           paddingHorizontal: SIZES.base * 1.5,
           borderWidth: 1,
@@ -676,6 +697,7 @@ const UserEndVoucher = () => {
           size={25}
           color={COLORS.white}></FontAwesome5>
       </Pressable>
+
 
       <View
         style={{
@@ -818,6 +840,7 @@ const UserEndVoucher = () => {
           keyExtractor={item => item._id.toString()}
         />
       </View>
+
 
       <View>{addVoucherModal()}</View>
       <CustomToast

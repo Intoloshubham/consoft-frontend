@@ -113,6 +113,7 @@ const insert_voucher_details = post_data => {
   }
 };
 
+
 const insert_TAndP_report = (resp_data, CONST_FIELD) => {
   try {
     const resp = fetch(`${process.env.API_URL}report/${CONST_FIELD.TANDP}/`, {
@@ -323,6 +324,7 @@ const check_quantity_item_exist = async (project_id, user_id, current_date) => {
 };
 
 const update_quantity_data = async (Id, inputs) => {
+
   try {
     const res = await fetch(`${process.env.API_URL}quantity-report/${Id}`, {
       method: 'PUT',
@@ -354,6 +356,7 @@ const update_quantity_item = async itemId => {
     console.log(e);
   }
 };
+
 
 const update_manpower_report = async (manpower_report_id, inputs) => {
   try {
@@ -504,3 +507,4 @@ export {
   get_reverted_voucher,
   get_verified_voucher,
 };
+
