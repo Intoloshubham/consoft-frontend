@@ -10,17 +10,19 @@ const STATUS = {
 };
 
 const VOUCHER_TYPE = [
-  {label: 'PURCHASED_VOUCHER', value: '1'},
-  {label: 'RECEIVED_VOUCHER', value: '2'},
-  {label: 'PURCHASED_RETURN_VOUCHER', value: '3'},
-  {label: 'RECEIVED_RETURN_VOUCHER', value: '4'},
+
+  {label: 'Purchase Request', value: '1'},
+  {label: 'Received', value: '2'},
+  {label: 'Purchased Return', value: '3'},
+  {label: 'Received Return', value: '4'},
 ];
 
 const CHECK_VOUCHER_TYPE = {
-  PURCHASED_VOUCHER: 'PURCHASED_VOUCHER',
-  RECEIVED_VOUCHER: 'RECEIVED_VOUCHER',
-  PURCHASED_RETURN_VOUCHER: 'PURCHASED_RETURN_VOUCHER',
-  RECEIVED_RETURN_VOUCHER: 'RECEIVED_RETURN_VOUCHER',
+  PURCHASED_VOUCHER: 'Purchase Request',
+  RECEIVED_VOUCHER: 'Received',
+  PURCHASED_RETURN_VOUCHER: 'Purchased Return',
+  RECEIVED_RETURN_VOUCHER: 'Received Return',
+
 };
 
 export default {USER_PRIVILEGES, STATUS, VOUCHER_TYPE,CHECK_VOUCHER_TYPE};

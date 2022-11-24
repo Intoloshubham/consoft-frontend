@@ -1,4 +1,6 @@
-import React, {useState, useMemo} from 'react';
+
+import React, {useState, useMemo, useEffect} from 'react';
+
 import {
   View,
   Text,
@@ -7,18 +9,30 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ScrollView,
+  StyleSheet,
+
 } from 'react-native';
 import styles from '../UserReports/ReportStyle.js';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Title, Divider} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
+import moment from 'moment';
+
 
 import {
   get_stock_item_name,
   insert_voucher_details,
+  get_pending_voucher_details,
+  get_reverted_voucher,
+  get_verified_voucher,
+
 } from '../UserReports/ReportApi.js';
 import {
   COLORS,
@@ -37,6 +51,9 @@ import {
   DeleteConfirmationToast,
 } from '../../../Components';
 
+import {FlatList} from 'react-native-gesture-handler';
+
+
 const UserEndVoucher = () => {
   const {cont_Project_list_drop, inputfromtwo} = styles;
 
@@ -46,6 +63,10 @@ const UserEndVoucher = () => {
 
   const [itemList, setItemList] = useState([]);
   const [itemId, setItemId] = useState('');
+
+  const current_dat = moment().format('YYYY%2FMM%2FDD');
+
+  let MyDateString = current_dat;
 
   const [qty, setQty] = useState('');
   const [qtyError, setQtyError] = useState('');
@@ -62,10 +83,16 @@ const UserEndVoucher = () => {
   const [projectLists, setProjectLists] = useState([]);
   const [projectId, setProjectId] = useState('');
 
+
+  const [pendingVoucher, setPendingVoucher] = useState([]);
+  const [revertedVoucher, setRevertedVoucher] = useState([]);
+  const [verifiedVoucher, setVerifiedVoucher] = useState([]);
+
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
+
 
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
@@ -97,9 +124,75 @@ const UserEndVoucher = () => {
     }
   };
 
+  const getPendingPurchasedVoucher = async () => {
+    try {
+      const data = await get_pending_voucher_details(
+        userCompanyData.company_id,
+        MyDateString,
+      );
+
+      if (data.data.length >= 0) {
+        // setPendingVoucher(data.data);
+        data.data.map(ele => {
+          setPendingVoucher(ele.voucherData);
+        });
+      }
+
+      console.log('pendingVoucher---', pendingVoucher);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRevertedVoucher = async () => {
+    try {
+      const data = await get_reverted_voucher(
+        userCompanyData.company_id,
+        MyDateString,
+      );
+
+      if (data.data.length >= 0) {
+        // setPendingVoucher(data.data);
+        data.data.map(ele => {
+          setRevertedVoucher(ele.voucherData);
+        });
+      }
+
+      // console.log('pendingVoucher---', pendingVoucher);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getVerifiedVoucher = async () => {
+    try {
+      const data = await get_verified_voucher(
+        userCompanyData.company_id,
+        MyDateString,
+      );
+
+      if (data.data.length >= 0) {
+        // setPendingVoucher(data.data);
+        data.data.map(ele => {
+          setVerifiedVoucher(ele.voucherData);
+        });
+
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  useEffect(() => {
+    getPendingPurchasedVoucher();
+    getRevertedVoucher();
+    getVerifiedVoucher();
+  }, []);
+
   const saveVoucherDetails = async () => {
     const data = {
-      voucher_type:voucherType,
+      voucher_type: voucherType,
       company_id: userCompanyData.company_id,
       project_id: projectId,
       item_id: itemId,
@@ -108,14 +201,17 @@ const UserEndVoucher = () => {
       location: location,
       vehicle_no: vehicleNo,
     };
-    console.log("🚀 ~ file: UserEndVoucher.js ~ line 110 ~ saveVoucherDetails ~ data", data)
+
 
     const res = await insert_voucher_details(data);
-    console.log("🚀 ~ file: UserEndVoucher.js ~ line 112 ~ saveVoucherDetails ~ res", res)
+
     if (res.status == '200') {
       setSubmitToast(true);
       setTimeout(() => {
         setVoucherModal(false);
+
+        setSubmitToast(false);
+
       }, 800);
     }
   };
@@ -394,7 +490,9 @@ const UserEndVoucher = () => {
                   backgroundColor: COLORS.lightblue_700,
                 }}
                 onPress={() => {
-                  saveVoucherDetails()
+
+                  saveVoucherDetails();
+
                 }}
               />
             </View>
@@ -404,13 +502,180 @@ const UserEndVoucher = () => {
     );
   };
 
+  const renderItem = ({item}) => (
+    <View
+      style={{
+        flexDirection: 'row',
+        margin: 1,
+        borderWidth: 0.05,
+        marginVertical: SIZES.base * 0.5,
+      }}>
+      <View style={{width: 150}}>
+        <Text style={{fontSize: 16, textAlign: 'left'}}>
+          {item.voucher_type}
+        </Text>
+      </View>
+      <Divider
+        style={{
+          backgroundColor: COLORS.lightGray1,
+          padding: 0.4,
+          height: SIZES.height * 0.04,
+        }}
+      />
+      <View style={{width: 80}}>
+        <Text style={{fontSize: 16, textAlign: 'center'}}>
+          {item.item_name}
+        </Text>
+      </View>
+      <Divider
+        style={{
+          backgroundColor: COLORS.lightGray1,
+          padding: 0.4,
+          height: SIZES.height * 0.04,
+        }}
+      />
+      <View style={{width: 60}}>
+        <Text style={{fontSize: 16, textAlign: 'center'}}>{item.qty}</Text>
+      </View>
+      <Divider
+        style={{
+          backgroundColor: COLORS.lightGray1,
+          padding: 0.4,
+          height: SIZES.height * 0.04,
+        }}
+      />
+      <View style={{width: 200}}>
+        <Text style={{fontSize: 16, textAlign: 'left'}}>{item.remark}</Text>
+      </View>
+      <Divider
+        style={{
+          backgroundColor: COLORS.lightGray1,
+          padding: 0.4,
+          height: SIZES.height * 0.04,
+        }}
+      />
+      <View style={{width: 100}}>
+        <Text style={{fontSize: 16, textAlign: 'center'}}>
+          {item.voucher_date}
+        </Text>
+      </View>
+      <Divider
+        style={{
+          backgroundColor: COLORS.lightGray1,
+          padding: 0.4,
+          height: SIZES.height * 0.04,
+        }}
+      />
+      <View style={{flexDirection:'row',justifyContent:'space-evenly',paddingHorizontal:20, width:140}}> 
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity>
+            <FontAwesome name="edit" color={COLORS.blue} size={16} />
+          </TouchableOpacity>
+        </View>
+        <View style={{justifyContent: 'center'}}>
+          <TouchableOpacity>
+            <MaterialCommunityIcons
+              name="delete"
+              color={COLORS.red}
+              size={20}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+  const ListHeader = () => {
+    return (
+      <View style={[styles1.headerFooterStyle, styles1.shadow]}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={{width: 150, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Voucher Type
+            </Text>
+          </View>
+          <View style={{width: 80, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Item Name
+            </Text>
+          </View>
+          <View style={{width: 60, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Qty
+            </Text>
+          </View>
+          <View style={{width: 200, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Remark
+            </Text>
+          </View>
+          <View style={{width: 120, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Voucher Date
+            </Text>
+          </View>
+          <View style={{width: 130, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Action
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const ListFooter = () => {
+    //View to set in Footer
+    return (
+      <View style={[styles1.headerFooterStyle, styles1.shadow]}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={{width: 150, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Voucher Type
+            </Text>
+          </View>
+          <View style={{width: 80, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Item Name
+            </Text>
+          </View>
+          <View style={{width: 60, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Qty
+            </Text>
+          </View>
+          <View style={{width: 200, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Remark
+            </Text>
+          </View>
+          <View style={{width: 100, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Voucher Date
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
-    <View style={{flex: 1, alignItems: 'center'}}>
+    <View style={{flex: 1, borderWidth: 1, alignContent: 'space-around'}}>
+
       <Pressable
         onPress={() => {
           getStockDataItems();
           setVoucherModal(true);
-          console.log(userCompanyData._id)
         }}
         style={{
           flexDirection: 'row',
@@ -432,6 +697,151 @@ const UserEndVoucher = () => {
           size={25}
           color={COLORS.white}></FontAwesome5>
       </Pressable>
+
+
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          ...styles1.shadow,
+          alignItems: 'center',
+          padding: 5,
+          borderWidth: 0.2,
+          borderLeftWidth: 3,
+          borderLeftColor: COLORS.yellow_300,
+          backgroundColor:COLORS.white3,
+          marginHorizontal: 2,
+          marginTop: '10%',
+        }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            // alignItems: 'center',
+          }}>
+          <View
+            style={[
+              // styles1.shadow,
+              {padding: SIZES.base * 0.5, marginBottom: 2},
+            ]}>
+            <Text style={[FONTS.body3, {color: COLORS.gray}]}>
+              Pending Voucher
+            </Text>
+          </View>
+          <FlatList
+            data={pendingVoucher}
+            horizontal
+            contentContainerStyle={{
+              flexDirection: 'column',
+              flexWrap: 'wrap',
+              padding: 2,
+              marginHorizontal: 2,
+              // justifyContent: 'space-between',
+              // marginBottom: SIZES.height * 0.61,
+            }}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+            //Header to show above listview
+            ListHeaderComponent={ListHeader}
+            //Footer to show below listview
+            // ListFooterComponent={ListFooter}
+            // ItemSeparatorComponent={ItemSeparatorView}
+            keyExtractor={item => item._id.toString()}
+          />
+        </View>
+      </View>
+
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          ...styles1.shadow,
+          padding: 5,
+          borderWidth: 0.2,
+          marginHorizontal: 3,
+          borderLeftColor: COLORS.orange,
+          backgroundColor:COLORS.white3,
+          borderLeftWidth: 3,
+          // alignItems: 'center',
+          marginTop: '2%',
+        }}>
+        <View
+          style={[
+            // styles1.shadow,
+            {borderWidth: 0.1, padding: SIZES.base * 0.5, marginBottom: 4},
+          ]}>
+          <Text style={[FONTS.body3, {color: COLORS.gray}]}>
+            Reverted Voucher
+          </Text>
+        </View>
+        <FlatList
+          data={revertedVoucher}
+          horizontal
+          contentContainerStyle={{
+            flexDirection: 'column',
+            flexWrap: 'wrap',
+            padding: 2,
+            marginHorizontal: 2,
+            // justifyContent: 'space-between',
+            // marginBottom: SIZES.height * 0.61,
+          }}
+          showsHorizontalScrollIndicator={false}
+          renderItem={renderItem}
+          //Header to show above listview
+          ListHeaderComponent={ListHeader}
+          //Footer to show below listview
+          // ListFooterComponent={ListFooter}
+          // ItemSeparatorComponent={ItemSeparatorView}
+          keyExtractor={item => item._id.toString()}
+        />
+      </View>
+
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          ...styles1.shadow,
+          padding: 5,
+          borderWidth: 0.2,
+          marginHorizontal: 4,
+          borderLeftColor: COLORS.green_400,
+          backgroundColor:COLORS.white3,
+          borderLeftWidth: 3,
+          marginTop: '3%',
+          marginBottom: '2%',
+        }}>
+        <View
+          style={[
+            // styles1.shadow,
+            {borderWidth: 0.1, padding: SIZES.base * 0.5, marginBottom: 4},
+          ]}>
+          <Text style={[FONTS.body3, {color: COLORS.gray}]}>
+            Inprogress Voucher
+          </Text>
+        </View>
+        <FlatList
+          data={verifiedVoucher}
+          horizontal
+          contentContainerStyle={{
+            flexDirection: 'column',
+            flexWrap: 'wrap',
+            padding: 2,
+            marginHorizontal: 2,
+            // justifyContent: 'space-between',
+            // marginBottom: SIZES.height * 0.61,
+          }}
+          showsHorizontalScrollIndicator={false}
+          renderItem={renderItem}
+          //Header to show above listview
+          ListHeaderComponent={ListHeader}
+          //Footer to show below listview
+          // ListFooterComponent={ListFooter}
+          // ItemSeparatorComponent={ItemSeparatorView}
+          keyExtractor={item => item._id.toString()}
+        />
+      </View>
+
+
       <View>{addVoucherModal()}</View>
       <CustomToast
         isVisible={submitToast}
@@ -468,3 +878,29 @@ const UserEndVoucher = () => {
 };
 
 export default UserEndVoucher;
+const styles1 = StyleSheet.create({
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 1,
+  },
+  headerFooterStyle: {
+    width: '100%',
+    borderWidth: 0.1,
+    // paddingHorizontal:3
+    // paddingRight:5
+    // height: 25,
+    // backgroundColor: '#606070',
+  },
+  textStyle: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 18,
+    padding: 7,
+  },
+});
