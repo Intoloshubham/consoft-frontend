@@ -8,7 +8,7 @@ import {
   Account,
   Attendance,
   ReportsDisplay,
-  Requirement,
+  Vouchers,
 } from '../screens/admin_screens';
 
 const Tab = createBottomTabNavigator();
@@ -67,7 +67,7 @@ const Tabs = () => {
               marginHorizontal: SIZES.radius,
             }}>
             <Image
-              source={images.consoft_new}
+              source={images.consoft_pro_logo}
               resizeMode="contain"
               style={{height: 100, width: 100}}
             />
@@ -102,8 +102,8 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Requirement"
-        component={Requirement}
+        name="Vouchers"
+        component={Vouchers}
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -120,10 +120,14 @@ const Tabs = () => {
                   color: COLORS.black,
                   ...FONTS.body5,
                 }}>
-                Requirement
+                Vouchers
               </Text>
             </View>
           ),
+          // tabBarBadge: 1,
+          // tabBarBadgeStyle: {
+          //   backgroundColor: COLORS.rose_600,
+          // },
         }}
       />
       <Tab.Screen

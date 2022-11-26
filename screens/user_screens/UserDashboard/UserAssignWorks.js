@@ -541,10 +541,10 @@ const UserAssignWorks = ({loading}) => {
                     multiline={true}
                     placeholder="Comment section..."
                     placeholderTextColor={COLORS.gray}
-                    onChangeText={text =>{
-                       setTextMsg(text);
-                       setResults(text);
-                      }}
+                    onChangeText={text => {
+                      setTextMsg(text);
+                      setResults(text);
+                    }}
                     value={results}
                     // value={textMsg}
                   />
