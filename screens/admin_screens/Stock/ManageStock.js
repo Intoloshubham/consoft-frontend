@@ -2,14 +2,24 @@ import React from 'react';
 import {View, Text, FlatList} from 'react-native';
 import {HeaderBar} from '../../../Components';
 import {FONTS, SIZES, COLORS, icons, images} from '../../../constants';
+import {getStockEntry} from '../../../controller/StockController';
+import {useSelector} from 'react-redux';
 
 const ManageStock = () => {
-  const stock = [
-    {id: 1, item_name: 'plaster', qty: 1000},
-    {id: 2, item_name: 'bricks', qty: 400},
-    {id: 3, item_name: 'cement', qty: 300},
-  ];
-  const [data, setData] = React.useState(stock);
+  const companyDetail = useSelector(state => state.company);
+  const company_id = companyDetail._id;
+
+  const [stockData, setStockData] = React.useState([]);
+
+  const fetchStock = async () => {
+    const res = await getStockEntry(company_id);
+    // setStockData(res.data);
+    const data = res.data.map((ele, i) => setStockData(ele.stockData));
+  };
+
+  React.useEffect(() => {
+    fetchStock();
+  }, []);
 
   const renderStock = () => {
     const renderItem = ({item, index}) => (
@@ -21,7 +31,7 @@ const ManageStock = () => {
         <Text
           style={{
             ...FONTS.h4,
-            flex: 0.5,
+            flex: 0.4,
             color: COLORS.darkGray,
             textAlign: 'left',
           }}>
@@ -29,7 +39,7 @@ const ManageStock = () => {
         </Text>
         <Text
           style={{
-            flex: 2.5,
+            flex: 2,
             ...FONTS.h3,
             color: COLORS.darkGray,
             textAlign: 'left',
@@ -41,11 +51,20 @@ const ManageStock = () => {
         <Text
           style={{
             ...FONTS.h3,
-            flex: 1,
+            flex: 1.2,
             color: COLORS.darkGray,
             textAlign: 'left',
           }}>
           {item.qty}
+        </Text>
+        <Text
+          style={{
+            ...FONTS.h3,
+            flex: 1.2,
+            color: COLORS.darkGray,
+            textAlign: 'left',
+          }}>
+          {item.stock_date}
         </Text>
       </View>
     );
@@ -53,8 +72,8 @@ const ManageStock = () => {
     return (
       <FlatList
         contentContainerStyle={{marginHorizontal: SIZES.radius}}
-        data={data}
-        keyExtractor={item => `${item.id}`}
+        data={stockData}
+        keyExtractor={item => `${item._id}`}
         renderItem={renderItem}
         scrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -62,9 +81,7 @@ const ManageStock = () => {
           return (
             <View
               style={{
-                height: 1,
-                backgroundColor: COLORS.lightGray1,
-                marginVertical: 15,
+                marginVertical: 3,
               }}></View>
           );
         }}
@@ -77,7 +94,7 @@ const ManageStock = () => {
               <Text
                 style={{
                   ...FONTS.h3,
-                  flex: 0.5,
+                  flex: 0.4,
                   color: COLORS.darkGray,
                   textAlign: 'left',
                   fontWeight: 'bold',
@@ -86,7 +103,7 @@ const ManageStock = () => {
               </Text>
               <Text
                 style={{
-                  flex: 2.5,
+                  flex: 2,
                   ...FONTS.h3,
                   color: COLORS.darkGray,
                   textAlign: 'left',
@@ -98,19 +115,29 @@ const ManageStock = () => {
               <Text
                 style={{
                   ...FONTS.h3,
-                  flex: 1,
+                  flex: 1.2,
                   color: COLORS.darkGray,
                   textAlign: 'left',
                   fontWeight: 'bold',
                 }}>
                 Qty
               </Text>
+              <Text
+                style={{
+                  ...FONTS.h3,
+                  flex: 1.2,
+                  color: COLORS.darkGray,
+                  textAlign: 'left',
+                  fontWeight: 'bold',
+                }}>
+                Date
+              </Text>
             </View>
             <View
               style={{
                 width: '100%',
                 height: 1,
-                backgroundColor: COLORS.darkGray,
+                backgroundColor: COLORS.gray,
                 marginVertical: 5,
               }}></View>
           </View>
