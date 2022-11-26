@@ -360,7 +360,6 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   ///getting latest steel Id by company Id
   const getLatestSteelId = async () => {
     const temp_id = await get_latest_steel_id(userData.company_id);
-    // console.log("🚀 ~ file: Quantity.js ~ line 360 ~ getLatestSteelId ~ temp_id", temp_id)
     if (temp_id.data) {
       setSteelItem(temp_id.data._id);
     }
@@ -570,6 +569,7 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
   }, []);
   //  console.log(companyIdData)
   const saveItems = () => {
+
     const quantityworkitem = {
       item_name: quantityitem,
       unit_id: value,
@@ -581,9 +581,9 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
         method: 'POST',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(quantityworkitem),
+        body: JSON.stringify(quantityworkitem)
       })
         .then(response => response.json())
         .then(data => {
@@ -1356,7 +1356,6 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                     marginTop: SIZES.padding,
                   }}
                   onPress={() => {
-
                     saveItems();
                   }}
                 />
