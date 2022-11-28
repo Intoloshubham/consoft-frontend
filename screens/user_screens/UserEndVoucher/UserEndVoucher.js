@@ -138,9 +138,10 @@ const UserEndVoucher = () => {
   function RadioButton({data, onSelect}) {
     return (
       <View style={{flex: 0.7, justifyContent: 'space-evenly'}}>
-        {voucherArr.map(item => {
+        {voucherArr.map((item,i) => {
           return (
             <Pressable
+            key={i}
               style={{      
                 flexDirection: 'row',
                 alignItems: 'center',
