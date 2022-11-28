@@ -588,7 +588,7 @@ const Login = ({navigation}) => {
                 alignItems: 'center',
               }}>
               <Image
-                source={images.consoft_new}
+                source={images.consoft_pro_logo_removebg}
                 resizeMode="contain"
                 style={{
                   height: 80,
