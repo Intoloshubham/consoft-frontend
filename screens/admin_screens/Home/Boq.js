@@ -30,7 +30,7 @@ import {
   postBOQItem,
   getBOQItems,
   updateBoqItem,
-} from '../../../controller/BoqController';
+} from '../../../controller/BoqController.js';
 
 const Boq = ({route}) => {
   // get company id
