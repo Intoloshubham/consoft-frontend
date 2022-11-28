@@ -113,7 +113,6 @@ const insert_voucher_details = post_data => {
   }
 };
 
-
 const insert_TAndP_report = (resp_data, CONST_FIELD) => {
   try {
     const resp = fetch(`${process.env.API_URL}report/${CONST_FIELD.TANDP}/`, {
@@ -228,6 +227,15 @@ const edit_report_data = Id => {
     console.log(error);
   }
 };
+const edit_voucher_detail = async Id => {
+  try {
+    const res = await fetch(`${process.env.API_URL}edit-voucher/${Id}`);
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 const edit_manpower_report_data = (cont_id, curr_date) => {
   try {
     const res = fetch(
@@ -324,9 +332,25 @@ const check_quantity_item_exist = async (project_id, user_id, current_date) => {
 };
 
 const update_quantity_data = async (Id, inputs) => {
-
   try {
     const res = await fetch(`${process.env.API_URL}quantity-report/${Id}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(inputs),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}; 
+
+const update_voucher_detail = async (id, inputs) => {
+  try {
+    const res = await fetch(`${process.env.API_URL}voucher/${id}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -356,7 +380,6 @@ const update_quantity_item = async itemId => {
     console.log(e);
   }
 };
-
 
 const update_manpower_report = async (manpower_report_id, inputs) => {
   try {
@@ -406,10 +429,10 @@ const get_stock_item_name = async () => {
   } catch (error) {}
 };
 
-const get_pending_voucher_details = async (company_id, curr_date) => {
+const get_pending_voucher_details = async (company_id, curr_date,voucher_type) => {
   try {
     const res = await fetch(
-      `${process.env.API_URL}voucher/${company_id}/${curr_date}`,
+      `${process.env.API_URL}voucher/${company_id}/${curr_date}/${voucher_type}`,
     );
     const data = await res.json();
     return data;
@@ -429,6 +452,15 @@ const get_verified_voucher = async (company_id, curr_date) => {
   try {
     const res = await fetch(
       `${process.env.API_URL}verified-voucher/${company_id}/${curr_date}`,
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {}
+};
+const get_filter_voucher = async (company_id, curr_date,voucher_type) => {
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}filter-voucher/${company_id}/${curr_date}/${voucher_type}`,
     );
     const data = await res.json();
     return data;
@@ -506,5 +538,7 @@ export {
   get_pending_voucher_details,
   get_reverted_voucher,
   get_verified_voucher,
+  edit_voucher_detail,
+  update_voucher_detail,
+  get_filter_voucher
 };
-
