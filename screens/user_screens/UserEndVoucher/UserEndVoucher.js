@@ -18,6 +18,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
@@ -31,6 +32,7 @@ import {
   get_verified_voucher,
   edit_voucher_detail,
   update_voucher_detail,
+  get_filter_voucher,
 } from '../UserReports/ReportApi.js';
 import {
   COLORS,
@@ -56,6 +58,7 @@ const UserEndVoucher = () => {
 
   const [proListIsFocus, setProListIsFocus] = useState(false);
   const [voucherType, setVoucherType] = useState('');
+  const [voucherCateg, setVoucherCateg] = useState('');
   const [voucherModal, setVoucherModal] = useState(false);
   const [testVal, settestVal] = useState('');
   const [itemList, setItemList] = useState([]);
@@ -81,12 +84,13 @@ const UserEndVoucher = () => {
   const [projectId, setProjectId] = useState('');
 
   const [pendingVoucher, setPendingVoucher] = useState([]);
-  const [revertedVoucher, setRevertedVoucher] = useState([]);
-  const [verifiedVoucher, setVerifiedVoucher] = useState([]);
+
 
   const [voucherId, setVoucherId] = useState('');
 
-  const [editVoucherDetail, setEditVoucherDetail] = useState('');
+  const [voucherListModal, setVoucherListModal] = useState(false);
+
+
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
@@ -94,6 +98,14 @@ const UserEndVoucher = () => {
   const [deleteToast, setDeleteToast] = React.useState(false);
   const [toggleSubmitUpdate, setToggleSubmitUpdate] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+
+  const [userOption, setUserOption] = useState(null);
+  const voucherArr = [
+    {value: 'Purchase Request'},
+    {value: 'Received'},
+    {value: 'Purchased Return'},
+    {value: 'Received Return'},
+  ];
 
   const userCompanyData = useSelector(state => state.user);
 
@@ -123,87 +135,53 @@ const UserEndVoucher = () => {
     }
   };
 
-  const getPendingPurchasedVoucher = async () => {
+  function RadioButton({data, onSelect}) {
+    return (
+      <View style={{flex: 0.7, justifyContent: 'space-evenly'}}>
+        {voucherArr.map(item => {
+          return (
+            <Pressable
+              style={{      
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+              onPress={() => {
+                onSelect(item.value);
+                setUserOption(item.value);
+              }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  padding: 5,
+                  width: 5,
+                  backgroundColor:
+                    item.value == userOption ? COLORS.blue : COLORS.white,
+                }}></View>
+              <View style={{}}>
+                <Text style={{textAlign: 'center'}}> {item.value}</Text>
+              </View>
+            </Pressable>          
+          );
+        })}
+      </View>
+    );
+  }
+
+  const getFilteredVoucher = async () => {
     try {
-      const data = await get_pending_voucher_details(
+      const data = await get_filter_voucher(
         userCompanyData.company_id,
         MyDateString,
+        userOption,
       );
+      setPendingVoucher(data.data);
 
-      if (data.data.length >= 0) {
-        setPendingVoucher(data.data);
-        // data.data.map(ele => {
-        //   setPendingVoucher(ele.voucherData);
-        // });
-      }
-
-      // console.log('pendingVoucher---', pendingVoucher);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // function Test() {
-  //   return (
-  //     <>
-  //       <FlatList
-  //         data={pendingVoucher}
-  //         keyExtractor={item => item._id.toString()}
-  //         renderItem={({item}) => {
-  //           return (
-  //             <View>
-  //               <Text>{item._id}</Text>
-  //               {item.voucherData.map((ele, i) => {
-  //                 return (
-  //                   <View>
-  //                     <Text>{ele.voucher_type}</Text>
-  //                   </View>
-  //                 );
-  //               })}
-  //             </View>
-  //           );
-  //         }}
-  //       />
-  //     </>
-  //   );
-  // }
-
-  const getRevertedVoucher = async () => {
-    try {
-      const data = await get_reverted_voucher(
-        userCompanyData.company_id,
-        MyDateString,
-      );
-
-      if (data.data.length >= 0) {
-        // setPendingVoucher(data.data);
-        data.data.map(ele => {
-          setRevertedVoucher(ele.voucherData);
-        });
-      }
-
-      // console.log('pendingVoucher---', pendingVoucher);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getVerifiedVoucher = async () => {
-    try {
-      const data = await get_verified_voucher(
-        userCompanyData.company_id,
-        MyDateString,
-      );
 
-      if (data.data.length >= 0) {
-        setPendingVoucher(data.data);
-        // data.data.map(ele => {
-        //   setVerifiedVoucher(ele.voucherData);
-        // });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const editVoucher = async (
     id,
@@ -265,18 +243,15 @@ const UserEndVoucher = () => {
         setVoucherModal(false);
         setUpdateToast(false);
       }, 800);
-      getPendingPurchasedVoucher();
-      getRevertedVoucher();
-      getVerifiedVoucher();
+
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getPendingPurchasedVoucher();
-    getRevertedVoucher();
-    getVerifiedVoucher();
+
+    getFilteredVoucher();
   }, []);
 
   const saveVoucherDetails = async () => {
@@ -295,12 +270,9 @@ const UserEndVoucher = () => {
 
     if (res.status == '200') {
       setSubmitToast(true);
-      getPendingPurchasedVoucher();
-      getRevertedVoucher();
-      getVerifiedVoucher();
+      getFilteredVoucher();
       setTimeout(() => {
         setVoucherModal(false);
-
         setSubmitToast(false);
       }, 800);
     }
@@ -397,18 +369,14 @@ const UserEndVoucher = () => {
                   maxHeight={200}
                   labelField="label"
                   valueField="value"
-                  // value={voucherType}
                   value={testVal}
-                  // value={voucherType==constants.VOUCHER_TYPE?voucherType:"null"}
                   placeholder={'Select Voucher Type'}
                   // onFocus={() => setProListIsFocus(true)}
                   // onBlur={() => setProListIsFocus(false)}
                   onChange={item => {
                     setVoucherType(item.label);
                     settestVal(item.value);
-                    getStockDataItems();
-                    // setProListIsFocus(false);
-                    // setVoucherModal(true);
+                    getStockDataItems();                
                   }}
                 />
                 <Dropdown
@@ -443,7 +411,6 @@ const UserEndVoucher = () => {
                   // onBlur={() => setProListIsFocus(false)}
                   onChange={item => {
                     setItemId(item._id);
-                    // setProListIsFocus(false);
                     setVoucherModal(true);
                   }}
                 />
@@ -615,10 +582,10 @@ const UserEndVoucher = () => {
 
   const renderPendingItem = ({item}) => (
     <View>
-      {item.voucherData.map((ele, idx1) => {
+      {item.voucherData.map((ele, i) => {
         return (
           <View
-            key={idx1}
+            key={i}
             style={{
               flexDirection: 'row',
               margin: 1,
@@ -722,228 +689,229 @@ const UserEndVoucher = () => {
       })}
     </View>
   );
-  const renderRevertedItem = ({item}) => (
-    <View>
-      {item.voucherData.map((ele,idx2) => {
-        return (
-          <View
-          key={idx2}
-            style={{
-              flexDirection: 'row',
-              margin: 1,
-              borderWidth: 0.05,
-              marginVertical: SIZES.base * 0.5,
-            }}>
-            <View style={{width: 150}}>
-              <Text style={{fontSize: 16, textAlign: 'left'}}>
-                {ele.voucher_type}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 80}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>
-                {ele.item_name}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 60}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>
-                {ele.qty}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 200}}>
-              <Text style={{fontSize: 16, textAlign: 'left'}}>
-                {ele.remark}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 100}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>
-                {ele.voucher_date}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                paddingHorizontal: 20,
-                width: 140,
-              }}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log('proejct id--', ele.project_id);
-                    editVoucher(
-                      ele._id,
-                      ele.project_id,
-                      ele.voucher_type,
-                      ele.qty,
-                      ele.item_id,
-                      ele.remark,
-                      ele.location,
-                      ele.vehicle_no,
-                    );
-                  }}>
-                  <FontAwesome name="edit" color={COLORS.blue} size={16} />
-                </TouchableOpacity>
-              </View>
-              <View style={{justifyContent: 'center'}}>
-                <TouchableOpacity>
-                  <MaterialCommunityIcons
-                    name="delete"
-                    color={COLORS.red}
-                    size={20}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        );
-      })}
-    </View>
-  );
-  const renderInprogressItem = ({item}) => (
-    <View>
-      {item.voucherData.map((ele, idx3) => {
-        return (
-          <View
-            key={idx3}
-            style={{
-              flexDirection: 'row', 
-              margin: 1,
-              borderWidth: 0.05,
-              marginVertical: SIZES.base * 0.5,
-            }}>
-            <View style={{width: 150}}>
-              <Text style={{fontSize: 16, textAlign: 'left'}}>
-                {ele.voucher_type}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 80}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>
-                {ele.item_name}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 60}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>{ele.qty}</Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 200}}>
-              <Text style={{fontSize: 16, textAlign: 'left'}}>
-                {ele.remark}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 100}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>
-                {ele.voucher_date}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                paddingHorizontal: 20,
-                width: 140,
-              }}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log('proejct id--', ele.project_id);
-                    editVoucher(
-                      ele._id,
-                      ele.project_id,
-                      ele.voucher_type,
-                      ele.qty,
-                      ele.item_id,
-                      ele.remark,
-                      ele.location,
-                      ele.vehicle_no,
-                    );
-                  }}>
-                  <FontAwesome name="edit" color={COLORS.blue} size={16} />
-                </TouchableOpacity>
-              </View>
-              <View style={{justifyContent: 'center'}}>
-                <TouchableOpacity>
-                  <MaterialCommunityIcons
-                    name="delete"
-                    color={COLORS.red}
-                    size={20}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        );
-      })}
-    </View>
-  );
+  // const renderRevertedItem = ({item}) => (
+  //   <View>
+  //     {item.voucherData.map((ele,idx2) => {
+  //       return (
+  //         <View
+  //         key={idx2}
+  //           style={{
+  //             flexDirection: 'row',
+  //             margin: 1,
+  //             borderWidth: 0.05,
+  //             marginVertical: SIZES.base * 0.5,
+  //           }}>
+  //           <View style={{width: 150}}>
+  //             <Text style={{fontSize: 16, textAlign: 'left'}}>
+  //               {ele.voucher_type}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View style={{width: 80}}>
+  //             <Text style={{fontSize: 16, textAlign: 'center'}}>
+  //               {ele.item_name}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View style={{width: 60}}>
+  //             <Text style={{fontSize: 16, textAlign: 'center'}}>
+  //               {ele.qty}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View style={{width: 200}}>
+  //             <Text style={{fontSize: 16, textAlign: 'left'}}>
+  //               {ele.remark}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View style={{width: 100}}>
+  //             <Text style={{fontSize: 16, textAlign: 'center'}}>
+  //               {ele.voucher_date}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View
+  //             style={{
+  //               flexDirection: 'row',
+  //               justifyContent: 'space-evenly',
+  //               paddingHorizontal: 20,
+  //               width: 140,
+  //             }}>
+  //             <View style={{flexDirection: 'row', alignItems: 'center'}}>
+  //               <TouchableOpacity
+  //                 onPress={() => {
+  //                   console.log('proejct id--', ele.project_id);
+  //                   editVoucher(
+  //                     ele._id,
+  //                     ele.project_id,
+  //                     ele.voucher_type,
+  //                     ele.qty,
+  //                     ele.item_id,
+  //                     ele.remark,
+  //                     ele.location,
+  //                     ele.vehicle_no,
+  //                   );
+  //                 }}>
+  //                 <FontAwesome name="edit" color={COLORS.blue} size={16} />
+  //               </TouchableOpacity>
+  //             </View>
+  //             <View style={{justifyContent: 'center'}}>
+  //               <TouchableOpacity>
+  //                 <MaterialCommunityIcons
+  //                   name="delete"
+  //                   color={COLORS.red}
+  //                   size={20}
+  //                 />
+  //               </TouchableOpacity>
+  //             </View>
+  //           </View>
+  //         </View>
+  //       );
+  //     })}
+  //   </View>
+  // );
+
+  // const renderInprogressItem = ({item}) => (
+  //   <View>
+  //     {item.voucherData.map((ele, idx) => {
+  //       return (
+  //         <View
+  //           key={idx}
+  //           style={{
+  //             flexDirection: 'row',
+  //             margin: 1,
+  //             borderWidth: 0.05,
+  //             marginVertical: SIZES.base * 0.5,
+  //           }}>
+  //           <View style={{width: 150}}>
+  //             <Text style={{fontSize: 16, textAlign: 'left'}}>
+  //               {ele.voucher_type}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View style={{width: 80}}>
+  //             <Text style={{fontSize: 16, textAlign: 'center'}}>
+  //               {ele.item_name}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View style={{width: 60}}>
+  //             <Text style={{fontSize: 16, textAlign: 'center'}}>{ele.qty}</Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View style={{width: 200}}>
+  //             <Text style={{fontSize: 16, textAlign: 'left'}}>
+  //               {ele.remark}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View style={{width: 100}}>
+  //             <Text style={{fontSize: 16, textAlign: 'center'}}>
+  //               {ele.voucher_date}
+  //             </Text>
+  //           </View>
+  //           <Divider
+  //             style={{
+  //               backgroundColor: COLORS.lightGray1,
+  //               padding: 0.4,
+  //               height: SIZES.height * 0.04,
+  //             }}
+  //           />
+  //           <View
+  //             style={{
+  //               flexDirection: 'row',
+  //               justifyContent: 'space-evenly',
+  //               paddingHorizontal: 20,
+  //               width: 140,
+  //             }}>
+  //             <View style={{flexDirection: 'row', alignItems: 'center'}}>
+  //               <TouchableOpacity
+  //                 onPress={() => {
+  //                   console.log('proejct id--', ele.project_id);
+  //                   editVoucher(
+  //                     ele._id,
+  //                     ele.project_id,
+  //                     ele.voucher_type,
+  //                     ele.qty,
+  //                     ele.item_id,
+  //                     ele.remark,
+  //                     ele.location,
+  //                     ele.vehicle_no,
+  //                   );
+  //                 }}>
+  //                 <FontAwesome name="edit" color={COLORS.blue} size={16} />
+  //               </TouchableOpacity>
+  //             </View>
+  //             <View style={{justifyContent: 'center'}}>
+  //               <TouchableOpacity>
+  //                 <MaterialCommunityIcons
+  //                   name="delete"
+  //                   color={COLORS.red}
+  //                   size={20}
+  //                 />
+  //               </TouchableOpacity>
+  //             </View>
+  //           </View>
+  //         </View>
+  //       );
+  //     })}
+  //   </View>
+  // );
 
   const ListHeader = () => {
     return (
@@ -987,6 +955,34 @@ const UserEndVoucher = () => {
           </View>
         </View>
       </View>
+    );
+  };
+
+  const voucherSelectionModal = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={voucherListModal}
+        onRequestClose={() => {
+          setVoucherListModal(!voucherListModal);
+        }}>
+        <View style={styles1.modalView}>
+          <Text style={styles1.modalText}>Select Voucher!</Text>
+          <View style={{}}>
+            <RadioButton onSelect={value => setUserOption(value)} />
+          </View>
+
+          <Pressable
+            style={[styles1.button, styles1.buttonClose]}
+            onPress={() => {
+              getFilteredVoucher();
+              setVoucherListModal(!voucherListModal);
+            }}>
+            <Text style={styles1.textStyle}>SUBMIT</Text>
+          </Pressable>
+        </View>
+      </Modal>
     );
   };
 
@@ -1040,27 +1036,24 @@ const UserEndVoucher = () => {
         }}
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          // justifyContent: 'space-between',
 
           paddingVertical: SIZES.base * 0.5,
           paddingHorizontal: SIZES.base * 1.5,
           borderWidth: 1,
           marginTop: SIZES.base,
-          width: SIZES.width * 0.95,
+          // width: SIZES.width * 0.95,
           backgroundColor: COLORS.lightblue_500,
           alignSelf: 'center',
           borderRadius: SIZES.base * 0.5,
           borderColor: COLORS.lightblue_300,
         }}>
-        <Text style={[FONTS.body3, {color: COLORS.white2}]}>Voucher Entry</Text>
-        <FontAwesome5
-          name="hand-point-right"
-          size={25}
-          color={COLORS.white}></FontAwesome5>
+        <Text
+          style={[FONTS.body3, {color: COLORS.white2, textAlign: 'center'}]}>
+          Voucher Entry
+        </Text>
       </Pressable>
-      {/* <View>
-        <Test />
-      </View> */}
+
       <View
         style={{
           flex: 1,
@@ -1068,9 +1061,7 @@ const UserEndVoucher = () => {
           ...styles1.shadow,
           alignItems: 'center',
           padding: 5,
-          borderWidth: 0.2,
-          borderLeftWidth: 3,
-          borderLeftColor: COLORS.yellow_300,
+          borderWidth: 0.2,       
           backgroundColor: COLORS.white3,
           marginHorizontal: 2,
           marginTop: '10%',
@@ -1078,17 +1069,39 @@ const UserEndVoucher = () => {
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',
-            // alignItems: 'center',
+            justifyContent: 'center',            
           }}>
           <View
             style={[
-              // styles1.shadow,
-              {padding: SIZES.base * 0.5, marginBottom: 2},
+              {
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: SIZES.base * 0.5,
+                marginBottom: 2,
+              },
             ]}>
             <Text style={[FONTS.body3, {color: COLORS.gray}]}>
-              Pending Voucher
+              {constants.CHECK_VOUCHER_TYPE.PURCHASED_VOUCHER == userOption
+                ? 'Pending Voucher'
+                : constants.CHECK_VOUCHER_TYPE.RECEIVED_VOUCHER == userOption
+                ? 'Received Voucher'
+                : constants.CHECK_VOUCHER_TYPE.PURCHASED_RETURN_VOUCHER ==
+                  userOption
+                ? 'Purchased Return Voucher'
+                : constants.CHECK_VOUCHER_TYPE.RECEIVED_RETURN_VOUCHER ==
+                  userOption
+                ? 'Received Return Voucher'
+                : 'Voucher List'}
             </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setVoucherListModal(!voucherListModal);
+              }}>
+              <Ionicons
+                name="md-filter"
+                size={25}
+                color={COLORS.blue}></Ionicons>
+            </TouchableOpacity>
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View>
@@ -1097,22 +1110,14 @@ const UserEndVoucher = () => {
                 horizontal
                 contentContainerStyle={{
                   flexDirection: 'column',
-                  // flex:1,
-                  // flexWrap: 'wrap',
-                  // maxHeight:1000,
-                  // flexGrow:1,
+ 
                   padding: 2,
-                  marginHorizontal: 2,
-                  // justifyContent: 'space-between',
-                  // marginBottom: SIZES.height * 0.61,
+                  marginHorizontal: 2
+         
                 }}
                 showsHorizontalScrollIndicator={false}
                 renderItem={renderPendingItem}
-                //Header to show above listview
                 ListHeaderComponent={ListHeader}
-                //Footer to show below listview
-                // ListFooterComponent={ListFooter}
-                // ItemSeparatorComponent={ItemSeparatorView}
                 keyExtractor={item => item._id.toString()}
               />
             </View>
@@ -1120,7 +1125,7 @@ const UserEndVoucher = () => {
         </View>
       </View>
 
-      <View
+      {/* <View
         style={{
           flex: 1,
           justifyContent: 'center',
@@ -1167,9 +1172,9 @@ const UserEndVoucher = () => {
             />
           </View>
         </ScrollView>
-      </View>
+      </View> */}
 
-      <View
+      {/* <View
         style={{
           flex: 1,
           justifyContent: 'center',
@@ -1192,13 +1197,6 @@ const UserEndVoucher = () => {
             Inprogress Voucher
           </Text>
         </View>
-        {/* <View>
-    <ScrollView horizontal>
-      <View>
-        <ListHeader/>
-      </View>
-    </ScrollView>
-  </View> */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           StickyHeaderComponent={() => <Text>df</Text>}>
@@ -1226,9 +1224,10 @@ const UserEndVoucher = () => {
             />
           </View>
         </ScrollView>
-      </View>
+      </View> */}
 
       <View>{addVoucherModal()}</View>
+      <View>{voucherSelectionModal()}</View>
 
       <CustomToast
         isVisible={submitToast}
@@ -1278,16 +1277,65 @@ const styles1 = StyleSheet.create({
   },
   headerFooterStyle: {
     width: '100%',
-    borderWidth: 0.1,
-    // paddingHorizontal:3
-    // paddingRight:5
-    // height: 25,
-    // backgroundColor: '#606070',
+    borderWidth: 0.1
   },
   textStyle: {
     textAlign: 'center',
     color: '#fff',
     fontSize: 18,
     padding: 7,
+  },
+  centeredView: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+
+    justifyContent: 'space-between',
+    marginVertical: 200,
+    marginHorizontal: 80,
+    paddingVertical: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 6,
+    padding: 5,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+
+  label: {
+    margin: 8,
+  },
+  option: {
+    fontSize: 20,
+    color: 'white',
+    textAlign: 'center',
   },
 });

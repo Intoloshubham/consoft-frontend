@@ -1338,7 +1338,10 @@ const Quantity = ({ project_id, Main_drp_pro_value, loading }) => {
                   inputSearchStyle={{ color: COLORS.gray, height: 40, borderRadius: 5, padding: -5 }}
                   value={value}
                   searchPlaceholder="Search..."
-                  onFocus={() => setIsFocus(true)}
+                  onFocus={() => {
+                    setIsFocus(true);
+                    fetchData();
+                  }}
                   onBlur={() => setIsFocus(false)}
                   onChange={item => {
                     setvalue(item._id);

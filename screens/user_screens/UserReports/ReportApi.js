@@ -429,10 +429,10 @@ const get_stock_item_name = async () => {
   } catch (error) {}
 };
 
-const get_pending_voucher_details = async (company_id, curr_date) => {
+const get_pending_voucher_details = async (company_id, curr_date,voucher_type) => {
   try {
     const res = await fetch(
-      `${process.env.API_URL}voucher/${company_id}/${curr_date}`,
+      `${process.env.API_URL}voucher/${company_id}/${curr_date}/${voucher_type}`,
     );
     const data = await res.json();
     return data;
@@ -452,6 +452,15 @@ const get_verified_voucher = async (company_id, curr_date) => {
   try {
     const res = await fetch(
       `${process.env.API_URL}verified-voucher/${company_id}/${curr_date}`,
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {}
+};
+const get_filter_voucher = async (company_id, curr_date,voucher_type) => {
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}filter-voucher/${company_id}/${curr_date}/${voucher_type}`,
     );
     const data = await res.json();
     return data;
@@ -530,5 +539,6 @@ export {
   get_reverted_voucher,
   get_verified_voucher,
   edit_voucher_detail,
-  update_voucher_detail
+  update_voucher_detail,
+  get_filter_voucher
 };
