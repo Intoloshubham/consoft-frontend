@@ -21,6 +21,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
@@ -268,6 +269,12 @@ const UserEndVoucher = () => {
 
     if (res.status == '200') {
       setSubmitToast(true);
+      settestVal('');
+      setVehicleNo('')
+      setQty('')
+      setRemark('')
+      setLocation('')
+      setItemId('')
       getFilteredVoucher();
       setTimeout(() => {
         setVoucherModal(false);
@@ -281,6 +288,10 @@ const UserEndVoucher = () => {
       <Modal visible={voucherModal} transparent={false} animationType="slide">
         <View style={{flex: 1, backgroundColor: COLORS.transparentBlack1}}>
           <View style={{flex: 1, backgroundColor: '#000000aa'}}>
+          <KeyboardAwareScrollView
+                  contentContainerStyle={{flexGrow: 1}}
+                  keyboardShouldPersistTaps="handled"
+              style={{flex: 1}}>
             <View
               style={{
                 height: '90%',
@@ -572,6 +583,7 @@ const UserEndVoucher = () => {
                 />
               )}
             </View>
+            </KeyboardAwareScrollView>
           </View>
         </View>
       </Modal>
