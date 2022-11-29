@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  ImageBackground,
   StyleSheet,
 } from 'react-native';
 import styles from '../UserReports/ReportStyle.js';
@@ -85,12 +86,9 @@ const UserEndVoucher = () => {
 
   const [pendingVoucher, setPendingVoucher] = useState([]);
 
-
   const [voucherId, setVoucherId] = useState('');
 
   const [voucherListModal, setVoucherListModal] = useState(false);
-
-
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
@@ -138,11 +136,11 @@ const UserEndVoucher = () => {
   function RadioButton({data, onSelect}) {
     return (
       <View style={{flex: 0.7, justifyContent: 'space-evenly'}}>
-        {voucherArr.map((item,i) => {
+        {voucherArr.map((item, i) => {
           return (
             <Pressable
-            key={i}
-              style={{      
+              key={i}
+              style={{
                 flexDirection: 'row',
                 alignItems: 'center',
               }}
@@ -153,15 +151,19 @@ const UserEndVoucher = () => {
               <View
                 style={{
                   borderWidth: 1,
-                  padding: 5,
+                  borderRadius: 2,
+                  padding: 6,
                   width: 5,
+                  borderColor: COLORS.gray,
                   backgroundColor:
-                    item.value == userOption ? COLORS.blue : COLORS.white,
+                    item.value == userOption
+                      ? COLORS.lightblue_500
+                      : COLORS.white,
                 }}></View>
-              <View style={{}}>
+              <View style={{left: 10}}>
                 <Text style={{textAlign: 'center'}}> {item.value}</Text>
               </View>
-            </Pressable>          
+            </Pressable>
           );
         })}
       </View>
@@ -176,13 +178,10 @@ const UserEndVoucher = () => {
         userOption,
       );
       setPendingVoucher(data.data);
-
     } catch (error) {
       console.log(error);
     }
   };
-
-
 
   const editVoucher = async (
     id,
@@ -244,14 +243,12 @@ const UserEndVoucher = () => {
         setVoucherModal(false);
         setUpdateToast(false);
       }, 800);
-
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-
     getFilteredVoucher();
   }, []);
 
@@ -377,7 +374,7 @@ const UserEndVoucher = () => {
                   onChange={item => {
                     setVoucherType(item.label);
                     settestVal(item.value);
-                    getStockDataItems();                
+                    getStockDataItems();
                   }}
                 />
                 <Dropdown
@@ -581,115 +578,141 @@ const UserEndVoucher = () => {
     );
   };
 
-  const renderPendingItem = ({item}) => (
-    <View>
-      {item.voucherData.map((ele, i) => {
-        return (
-          <View
-            key={i}
-            style={{
-              flexDirection: 'row',
-              margin: 1,
-              borderWidth: 0.05,
-              marginVertical: SIZES.base * 0.5,
-            }}>
-            <View style={{width: 150}}>
-              <Text style={{fontSize: 16, textAlign: 'left'}}>
-                {ele.voucher_type}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 80}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>
-                {ele.item_name}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 60}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>{ele.qty}</Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 200}}>
-              <Text style={{fontSize: 16, textAlign: 'left'}}>
-                {ele.remark}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
-            <View style={{width: 100}}>
-              <Text style={{fontSize: 16, textAlign: 'center'}}>
-                {ele.voucher_date}
-              </Text>
-            </View>
-            <Divider
-              style={{
-                backgroundColor: COLORS.lightGray1,
-                padding: 0.4,
-                height: SIZES.height * 0.04,
-              }}
-            />
+  const renderPendingItem = ({item}) =>
+     (
+      <View>
+        {item.voucherData.map((ele, i) => {
+          return (
             <View
+              key={i}
               style={{
                 flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                paddingHorizontal: 20,
-                width: 140,
+                margin: 1,
+                borderWidth: 0.05,
+                marginVertical: SIZES.base * 0.5,
               }}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    editVoucher(
-                      ele._id,
-                      ele.project_id,
-                      ele.voucher_type,
-                      ele.qty,
-                      ele.item_id,
-                      ele.remark,
-                      ele.location,
-                      ele.vehicle_no,
-                    );
-                  }}>
-                  <FontAwesome name="edit" color={COLORS.blue} size={16} />
-                </TouchableOpacity>
+              <View style={{width: 150}}>
+                <Text style={{fontSize: 16, textAlign: 'left'}}>
+                  {ele.voucher_type}
+                </Text>
               </View>
-              <View style={{justifyContent: 'center'}}>
-                <TouchableOpacity>
-                  <MaterialCommunityIcons
-                    name="delete"
-                    color={COLORS.red}
-                    size={20}
-                  />
-                </TouchableOpacity>
+              <Divider
+                style={{
+                  backgroundColor: COLORS.lightGray1,
+                  padding: 0.4,
+                  height: SIZES.height * 0.04,
+                }}
+              />
+              <View style={{width: 80}}>
+                <Text style={{fontSize: 16, textAlign: 'center'}}>
+                  {ele.item_name}
+                </Text>
+              </View>
+              <Divider
+                style={{
+                  backgroundColor: COLORS.lightGray1,
+                  padding: 0.4,
+                  height: SIZES.height * 0.04,
+                }}
+              />
+              <View style={{width: 60}}>
+                <Text style={{fontSize: 16, textAlign: 'center'}}>
+                  {ele.qty}
+                </Text>
+              </View>
+              <Divider
+                style={{
+                  backgroundColor: COLORS.lightGray1,
+                  padding: 0.4,
+                  height: SIZES.height * 0.04,
+                }}
+              />
+              <View style={{width: 200}}>
+                <Text style={{fontSize: 16, textAlign: 'left'}}>
+                  {ele.remark}
+                </Text>
+              </View>
+              <Divider
+                style={{
+                  backgroundColor: COLORS.lightGray1,
+                  padding: 0.4,
+                  height: SIZES.height * 0.04,
+                }}
+              />
+              <Divider
+                style={{
+                  backgroundColor: COLORS.lightGray1,
+                  padding: 0.4,
+                  height: SIZES.height * 0.04,
+                }}
+              />
+              <View style={{width: 100}}>
+                <Text style={{fontSize: 16, textAlign: 'center'}}>
+                  {ele.verify_status == true
+                    ? 'Verified'
+                    : ele.revert_status == true
+                    ? 'Reverted'
+                    : 'Pending'}
+                </Text>
+              </View>
+              <Divider
+                style={{
+                  backgroundColor: COLORS.lightGray1,
+                  padding: 0.4,
+                  height: SIZES.height * 0.04,
+                }}
+              />
+              <View style={{width: 100}}>
+                <Text style={{fontSize: 16, textAlign: 'center'}}>
+                  {ele.voucher_date}
+                </Text>
+              </View>
+              <Divider
+                style={{
+                  backgroundColor: COLORS.lightGray1,
+                  padding: 0.4,
+                  height: SIZES.height * 0.04,
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  paddingHorizontal: 20,
+                  width: 140,
+                }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      editVoucher(
+                        ele._id,
+                        ele.project_id,
+                        ele.voucher_type,
+                        ele.qty,
+                        ele.item_id,
+                        ele.remark,
+                        ele.location,
+                        ele.vehicle_no,
+                      );
+                    }}>
+                    <FontAwesome name="edit" color={COLORS.blue} size={16} />
+                  </TouchableOpacity>
+                </View>
+                <View style={{justifyContent: 'center'}}>
+                  <TouchableOpacity>
+                    <MaterialCommunityIcons
+                      name="delete"
+                      color={COLORS.red}
+                      size={20}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        );
-      })}
-    </View>
-  );
+          );
+        })}
+      </View>
+    );
   // const renderRevertedItem = ({item}) => (
   //   <View>
   //     {item.voucherData.map((ele,idx2) => {
@@ -942,6 +965,12 @@ const UserEndVoucher = () => {
               Remark
             </Text>
           </View>
+          <View style={{width: 100, backgroundColor: 'white'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              Status
+            </Text>
+          </View>
           <View style={{width: 120, backgroundColor: 'white'}}>
             <Text
               style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
@@ -968,20 +997,61 @@ const UserEndVoucher = () => {
         onRequestClose={() => {
           setVoucherListModal(!voucherListModal);
         }}>
-        <View style={styles1.modalView}>
-          <Text style={styles1.modalText}>Select Voucher!</Text>
-          <View style={{}}>
-            <RadioButton onSelect={value => setUserOption(value)} />
-          </View>
-
-          <Pressable
-            style={[styles1.button, styles1.buttonClose]}
-            onPress={() => {
-              getFilteredVoucher();
-              setVoucherListModal(!voucherListModal);
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.transparentBlack6,
+          }}>
+          <View
+            style={{
+              position: 'absolute',
+              width: '65%',
+              padding: SIZES.padding,
+              borderRadius: 5,
+              backgroundColor: COLORS.white,
             }}>
-            <Text style={styles1.textStyle}>SUBMIT</Text>
-          </Pressable>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={{}}>Select Voucher</Text>
+              <ImageBackground
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 2,
+                  elevation: 20,
+                }}>
+                <TouchableOpacity onPress={() => setVoucherListModal(false)}>
+                  <Image
+                    source={icons.cross}
+                    style={{
+                      height: 20,
+                      width: 20,
+                      tintColor: COLORS.rose_600,
+                    }}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
+            </View>
+            <View style={{marginTop: 15}}>
+              <RadioButton onSelect={value => setUserOption(value)} />
+            </View>
+
+            <Pressable
+              style={{
+                marginTop: 30,
+                borderRadius: 6,
+                padding: 5,
+                elevation: 2,
+                backgroundColor: '#2196F3',
+              }}
+              onPress={() => {
+                getFilteredVoucher();
+                setVoucherListModal(!voucherListModal);
+              }}>
+              <Text style={styles1.textStyle}>SUBMIT</Text>
+            </Pressable>
+          </View>
         </View>
       </Modal>
     );
@@ -1062,7 +1132,7 @@ const UserEndVoucher = () => {
           ...styles1.shadow,
           alignItems: 'center',
           padding: 5,
-          borderWidth: 0.2,       
+          borderWidth: 0.2,
           backgroundColor: COLORS.white3,
           marginHorizontal: 2,
           marginTop: '10%',
@@ -1070,7 +1140,7 @@ const UserEndVoucher = () => {
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',            
+            justifyContent: 'center',
           }}>
           <View
             style={[
@@ -1083,7 +1153,7 @@ const UserEndVoucher = () => {
             ]}>
             <Text style={[FONTS.body3, {color: COLORS.gray}]}>
               {constants.CHECK_VOUCHER_TYPE.PURCHASED_VOUCHER == userOption
-                ? 'Pending Voucher'
+                ? 'Purchased Voucher'
                 : constants.CHECK_VOUCHER_TYPE.RECEIVED_VOUCHER == userOption
                 ? 'Received Voucher'
                 : constants.CHECK_VOUCHER_TYPE.PURCHASED_RETURN_VOUCHER ==
@@ -1098,10 +1168,10 @@ const UserEndVoucher = () => {
               onPress={() => {
                 setVoucherListModal(!voucherListModal);
               }}>
-              <Ionicons
-                name="md-filter"
+              <MaterialCommunityIcons
+                name="filter-menu"
                 size={25}
-                color={COLORS.blue}></Ionicons>
+                color={COLORS.blue}></MaterialCommunityIcons>
             </TouchableOpacity>
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -1111,10 +1181,9 @@ const UserEndVoucher = () => {
                 horizontal
                 contentContainerStyle={{
                   flexDirection: 'column',
- 
+
                   padding: 2,
-                  marginHorizontal: 2
-         
+                  marginHorizontal: 2,
                 }}
                 showsHorizontalScrollIndicator={false}
                 renderItem={renderPendingItem}
@@ -1278,7 +1347,7 @@ const styles1 = StyleSheet.create({
   },
   headerFooterStyle: {
     width: '100%',
-    borderWidth: 0.1
+    borderWidth: 0.1,
   },
   textStyle: {
     textAlign: 'center',
@@ -1293,14 +1362,15 @@ const styles1 = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
+    flex: 1,
 
     justifyContent: 'space-between',
-    marginVertical: 200,
+    marginVertical: 220,
     marginHorizontal: 80,
-    paddingVertical: 20,
+    paddingVertical: 30,
     backgroundColor: 'white',
     borderRadius: 10,
-    alignItems: 'center',
+    // alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -1308,19 +1378,13 @@ const styles1 = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 8,
   },
-  button: {
-    borderRadius: 6,
-    padding: 5,
-    elevation: 2,
-  },
+  button: {},
   buttonOpen: {
     backgroundColor: '#F194FF',
   },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
+
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
@@ -1328,6 +1392,7 @@ const styles1 = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
+    ...FONTS.body3,
     textAlign: 'center',
   },
 
