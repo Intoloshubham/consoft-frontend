@@ -98,7 +98,7 @@ const UserEndVoucher = () => {
   const [toggleSubmitUpdate, setToggleSubmitUpdate] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
-  const [userOption, setUserOption] = useState(null);
+  const [userOption, setUserOption] = useState('Purchase Request');
   const voucherArr = [
     {value: 'Purchase Request'},
     {value: 'Received'},
@@ -270,11 +270,11 @@ const UserEndVoucher = () => {
     if (res.status == '200') {
       setSubmitToast(true);
       settestVal('');
-      setVehicleNo('')
-      setQty('')
-      setRemark('')
-      setLocation('')
-      setItemId('')
+      setVehicleNo('');
+      setQty('');
+      setRemark('');
+      setLocation('');
+      setItemId('');
       getFilteredVoucher();
       setTimeout(() => {
         setVoucherModal(false);
@@ -288,188 +288,155 @@ const UserEndVoucher = () => {
       <Modal visible={voucherModal} transparent={false} animationType="slide">
         <View style={{flex: 1, backgroundColor: COLORS.transparentBlack1}}>
           <View style={{flex: 1, backgroundColor: '#000000aa'}}>
-          <KeyboardAwareScrollView
-                  contentContainerStyle={{flexGrow: 1}}
-                  keyboardShouldPersistTaps="handled"
+            <KeyboardAwareScrollView
+              contentContainerStyle={{flexGrow: 1}}
+              keyboardShouldPersistTaps="handled"
               style={{flex: 1}}>
-            <View
-              style={{
-                height: '90%',
-                width: '100%',
-                backgroundColor: '#fff',
-                marginTop: 80,
-                borderTopLeftRadius: 18,
-                borderTopRightRadius: 18,
-                padding: 22,
-              }}>
               <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  height: '90%',
+                  width: '100%',
+                  backgroundColor: '#fff',
+                  marginTop: 80,
+                  borderTopLeftRadius: 18,
+                  borderTopRightRadius: 18,
+                  padding: 22,
                 }}>
-                <Title>{voucherType ? voucherType : 'Select Voucher'}</Title>
-                <Pressable
-                  onPress={() => {
-                    setVoucherModal(false);
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}>
-                  <AntDesign name="close" size={24} color={COLORS.black} />
-                </Pressable>
-              </View>
-              <View style={{flex: 1}}>
-                <Dropdown
-                  style={[
-                    cont_Project_list_drop,
-                    {
+                  <Title>{voucherType ? voucherType : 'Select Voucher'}</Title>
+                  <Pressable
+                    onPress={() => {
+                      setVoucherModal(false);
+                    }}>
+                    <AntDesign name="close" size={24} color={COLORS.black} />
+                  </Pressable>
+                </View>
+                <View style={{flex: 1}}>
+                  <Dropdown
+                    style={[
+                      cont_Project_list_drop,
+                      {
+                        width: SIZES.width * 0.88,
+                        // marginTop: 0,
+                      },
+                      proListIsFocus && {
+                        borderColor: COLORS.gray2,
+                      },
+                    ]}
+                    placeholderStyle={{fontSize: 16, color: COLORS.darkGray}}
+                    selectedTextStyle={{color: COLORS.gray}}
+                    containerStyle={{
                       width: SIZES.width * 0.88,
-                      // marginTop: 0,
-                    },
-                    proListIsFocus && {
-                      borderColor: COLORS.gray2,
-                    },
-                  ]}
-                  placeholderStyle={{fontSize: 16, color: COLORS.darkGray}}
-                  selectedTextStyle={{color: COLORS.gray}}
-                  containerStyle={{
-                    width: SIZES.width * 0.88,
-                    borderRadius: SIZES.base,
-                    paddingTop: SIZES.base * 0.5,
-                    marginTop: SIZES.base,
-                  }}
-                  iconStyle={{
-                    height: 28,
-                  }}
-                  data={projectLists}
-                  maxHeight={200}
-                  labelField="project_name"
-                  valueField="project_id"
-                  placeholder={'Select Project'}
-                  value={projectId}
-                  // value={editVoucherDetail!=null?editVoucherDetail.item_id:projectId}
-                  onFocus={() => setProListIsFocus(true)}
-                  onBlur={() => setProListIsFocus(false)}
-                  onChange={item => {
-                    setProjectId(item.project_id);
-                    setProListIsFocus(false);
-                  }}
-                />
-                <Dropdown
-                  style={[
-                    cont_Project_list_drop,
-                    {
-                      width: SIZES.width * 0.88,
-                      // marginTop: 0,
-                    },
-                    proListIsFocus && {
-                      borderColor: COLORS.gray2,
-                    },
-                  ]}
-                  placeholderStyle={{fontSize: 16, color: COLORS.darkGray}}
-                  selectedTextStyle={{color: COLORS.gray}}
-                  containerStyle={{
-                    width: SIZES.width * 0.88,
-                    borderRadius: SIZES.base,
-                    paddingTop: SIZES.base * 0.5,
-                    marginTop: SIZES.base,
-                  }}
-                  iconStyle={{
-                    height: 28,
-                  }}
-                  data={constants.VOUCHER_TYPE}
-                  maxHeight={200}
-                  labelField="label"
-                  valueField="value"
-                  value={testVal}
-                  placeholder={'Select Voucher Type'}
-                  // onFocus={() => setProListIsFocus(true)}
-                  // onBlur={() => setProListIsFocus(false)}
-                  onChange={item => {
-                    setVoucherType(item.label);
-                    settestVal(item.value);
-                    getStockDataItems();
-                  }}
-                />
-                <Dropdown
-                  style={[
-                    cont_Project_list_drop,
-                    {
-                      width: SIZES.width * 0.88,
-                      // marginTop: 0,
-                    },
-                    proListIsFocus && {
-                      borderColor: COLORS.gray2,
-                    },
-                  ]}
-                  placeholderStyle={{fontSize: 16, color: COLORS.darkGray}}
-                  selectedTextStyle={{color: COLORS.gray}}
-                  containerStyle={{
-                    width: SIZES.width * 0.88,
-                    borderRadius: SIZES.base,
-                    paddingTop: SIZES.base * 0.5,
-                    // marginTop: SIZES.base,
-                  }}
-                  iconStyle={{
-                    height: 28,
-                  }}
-                  data={itemList}
-                  maxHeight={200}
-                  labelField="item_name"
-                  valueField="_id"
-                  value={itemId.toString()}
-                  placeholder={'Select Item'}
-                  // onFocus={() => setProListIsFocus(true)}
-                  // onBlur={() => setProListIsFocus(false)}
-                  onChange={item => {
-                    setItemId(item._id);
-                    setVoucherModal(true);
-                  }}
-                />
-                <FormInput
-                  placeholder="Qty"
-                  onChange={value => {
-                    utils.validateText(value, setQtyError);
-                    setQty(value);
-                  }}
-                  value={qty.toString()}
-                  keyboardType="numeric"
-                  errorMsg={qtyError}
-                  appendComponent={
-                    <View style={{justifyContent: 'center'}}>
-                      <Image
-                        source={
-                          qty == '' || (qty != '' && qtyError == '')
-                            ? icons.correct
-                            : icons.cancel
-                        }
-                        style={{
-                          height: 20,
-                          width: 20,
-                          tintColor:
-                            qty == ''
-                              ? COLORS.gray
-                              : qty != '' && qtyError == ''
-                              ? COLORS.green
-                              : COLORS.red,
-                        }}
-                      />
-                    </View>
-                  }
-                />
-                {constants.CHECK_VOUCHER_TYPE.RECEIVED_RETURN_VOUCHER ==
-                voucherType ? (
-                  <FormInput
-                    placeholder="Vehicle no"
-                    onChange={value => {
-                      utils.validateText(value, setVehicleNoError);
-                      setVehicleNo(value);
+                      borderRadius: SIZES.base,
+                      paddingTop: SIZES.base * 0.5,
+                      marginTop: SIZES.base,
                     }}
-                    value={vehicleNo}
-                    errorMsg={vehicleNoError}
+                    iconStyle={{
+                      height: 28,
+                    }}
+                    data={projectLists}
+                    maxHeight={200}
+                    labelField="project_name"
+                    valueField="project_id"
+                    placeholder={'Select Project'}
+                    value={projectId}
+                    // value={editVoucherDetail!=null?editVoucherDetail.item_id:projectId}
+                    onFocus={() => setProListIsFocus(true)}
+                    onBlur={() => setProListIsFocus(false)}
+                    onChange={item => {
+                      setProjectId(item.project_id);
+                      setProListIsFocus(false);
+                    }}
+                  />
+                  <Dropdown
+                    style={[
+                      cont_Project_list_drop,
+                      {
+                        width: SIZES.width * 0.88,
+                        // marginTop: 0,
+                      },
+                      proListIsFocus && {
+                        borderColor: COLORS.gray2,
+                      },
+                    ]}
+                    placeholderStyle={{fontSize: 16, color: COLORS.darkGray}}
+                    selectedTextStyle={{color: COLORS.gray}}
+                    containerStyle={{
+                      width: SIZES.width * 0.88,
+                      borderRadius: SIZES.base,
+                      paddingTop: SIZES.base * 0.5,
+                      marginTop: SIZES.base,
+                    }}
+                    iconStyle={{
+                      height: 28,
+                    }}
+                    data={constants.VOUCHER_TYPE}
+                    maxHeight={200}
+                    labelField="label"
+                    valueField="value"
+                    value={testVal}
+                    placeholder={'Select Voucher Type'}
+                    // onFocus={() => setProListIsFocus(true)}
+                    // onBlur={() => setProListIsFocus(false)}
+                    onChange={item => {
+                      setVoucherType(item.label);
+                      settestVal(item.value);
+                      getStockDataItems();
+                    }}
+                  />
+                  <Dropdown
+                    style={[
+                      cont_Project_list_drop,
+                      {
+                        width: SIZES.width * 0.88,
+                        // marginTop: 0,
+                      },
+                      proListIsFocus && {
+                        borderColor: COLORS.gray2,
+                      },
+                    ]}
+                    placeholderStyle={{fontSize: 16, color: COLORS.darkGray}}
+                    selectedTextStyle={{color: COLORS.gray}}
+                    containerStyle={{
+                      width: SIZES.width * 0.88,
+                      borderRadius: SIZES.base,
+                      paddingTop: SIZES.base * 0.5,
+                      // marginTop: SIZES.base,
+                    }}
+                    iconStyle={{
+                      height: 28,
+                    }}
+                    data={itemList}
+                    maxHeight={200}
+                    labelField="item_name"
+                    valueField="_id"
+                    value={itemId.toString()}
+                    placeholder={'Select Item'}
+                    // onFocus={() => setProListIsFocus(true)}
+                    // onBlur={() => setProListIsFocus(false)}
+                    onChange={item => {
+                      setItemId(item._id);
+                      setVoucherModal(true);
+                    }}
+                  />
+                  <FormInput
+                    placeholder="Qty"
+                    onChange={value => {
+                      utils.validateText(value, setQtyError);
+                      setQty(value);
+                    }}
+                    value={qty.toString()}
+                    keyboardType="numeric"
+                    errorMsg={qtyError}
                     appendComponent={
                       <View style={{justifyContent: 'center'}}>
                         <Image
                           source={
-                            vehicleNo == '' ||
-                            (vehicleNo != '' && vehicleNoError == '')
+                            qty == '' || (qty != '' && qtyError == '')
                               ? icons.correct
                               : icons.cancel
                           }
@@ -477,9 +444,9 @@ const UserEndVoucher = () => {
                             height: 20,
                             width: 20,
                             tintColor:
-                              vehicleNo == ''
+                              qty == ''
                                 ? COLORS.gray
-                                : vehicleNo != '' && vehicleNoError == ''
+                                : qty != '' && qtyError == ''
                                 ? COLORS.green
                                 : COLORS.red,
                           }}
@@ -487,23 +454,87 @@ const UserEndVoucher = () => {
                       </View>
                     }
                   />
-                ) : null}
-                {constants.CHECK_VOUCHER_TYPE.RECEIVED_VOUCHER ==
-                voucherType ? (
+                  {constants.CHECK_VOUCHER_TYPE.RECEIVED_RETURN_VOUCHER ==
+                  voucherType ? (
+                    <FormInput
+                      placeholder="Vehicle no"
+                      onChange={value => {
+                        utils.validateText(value, setVehicleNoError);
+                        setVehicleNo(value);
+                      }}
+                      value={vehicleNo}
+                      errorMsg={vehicleNoError}
+                      appendComponent={
+                        <View style={{justifyContent: 'center'}}>
+                          <Image
+                            source={
+                              vehicleNo == '' ||
+                              (vehicleNo != '' && vehicleNoError == '')
+                                ? icons.correct
+                                : icons.cancel
+                            }
+                            style={{
+                              height: 20,
+                              width: 20,
+                              tintColor:
+                                vehicleNo == ''
+                                  ? COLORS.gray
+                                  : vehicleNo != '' && vehicleNoError == ''
+                                  ? COLORS.green
+                                  : COLORS.red,
+                            }}
+                          />
+                        </View>
+                      }
+                    />
+                  ) : null}
+                  {constants.CHECK_VOUCHER_TYPE.RECEIVED_VOUCHER ==
+                  voucherType ? (
+                    <FormInput
+                      placeholder="Location"
+                      onChange={value => {
+                        utils.validateText(value, setLocationError);
+                        setLocation(value);
+                      }}
+                      value={location}
+                      errorMsg={locationError}
+                      appendComponent={
+                        <View style={{justifyContent: 'center'}}>
+                          <Image
+                            source={
+                              location == '' ||
+                              (location != '' && locationError == '')
+                                ? icons.correct
+                                : icons.cancel
+                            }
+                            style={{
+                              height: 20,
+                              width: 20,
+                              tintColor:
+                                location == ''
+                                  ? COLORS.gray
+                                  : location != '' && locationError == ''
+                                  ? COLORS.green
+                                  : COLORS.red,
+                            }}
+                          />
+                        </View>
+                      }
+                    />
+                  ) : null}
                   <FormInput
-                    placeholder="Location"
+                    placeholder="Remark"
                     onChange={value => {
-                      utils.validateText(value, setLocationError);
-                      setLocation(value);
+                      utils.validateText(value, setRemarkError);
+                      setRemark(value);
                     }}
-                    value={location}
-                    errorMsg={locationError}
+                    value={remark}
+                    errorMsg={remarkError}
                     appendComponent={
                       <View style={{justifyContent: 'center'}}>
                         <Image
                           source={
-                            location == '' ||
-                            (location != '' && locationError == '')
+                            remark == '' || (remark != '' && remarkError == '')
                               ? icons.correct
                               : icons.cancel
                           }
@@ -511,9 +542,9 @@ const UserEndVoucher = () => {
                             height: 20,
                             width: 20,
                             tintColor:
-                              location == ''
+                              remark == ''
                                 ? COLORS.gray
-                                : location != '' && locationError == ''
+                                : remark != '' && remarkError == ''
                                 ? COLORS.green
                                 : COLORS.red,
                           }}
@@ -521,68 +552,37 @@ const UserEndVoucher = () => {
                       </View>
                     }
                   />
-                ) : null}
-                <FormInput
-                  placeholder="Remark"
-                  onChange={value => {
-                    utils.validateText(value, setRemarkError);
-                    setRemark(value);
-                  }}
-                  value={remark}
-                  errorMsg={remarkError}
-                  appendComponent={
-                    <View style={{justifyContent: 'center'}}>
-                      <Image
-                        source={
-                          remark == '' || (remark != '' && remarkError == '')
-                            ? icons.correct
-                            : icons.cancel
-                        }
-                        style={{
-                          height: 20,
-                          width: 20,
-                          tintColor:
-                            remark == ''
-                              ? COLORS.gray
-                              : remark != '' && remarkError == ''
-                              ? COLORS.green
-                              : COLORS.red,
-                        }}
-                      />
-                    </View>
-                  }
-                />
+                </View>
+                {toggleSubmitUpdate ? (
+                  <TextButton
+                    label="Update"
+                    buttonContainerStyle={{
+                      height: 50,
+                      width: '100%',
+                      alignItems: 'center',
+                      borderRadius: SIZES.radius * 0.5,
+                      backgroundColor: COLORS.lightblue_700,
+                    }}
+                    onPress={() => {
+                      updateVoucherDetails(id);
+                    }}
+                  />
+                ) : (
+                  <TextButton
+                    label="Submit"
+                    buttonContainerStyle={{
+                      height: 50,
+                      width: '100%',
+                      alignItems: 'center',
+                      borderRadius: SIZES.radius * 0.5,
+                      backgroundColor: COLORS.lightblue_700,
+                    }}
+                    onPress={() => {
+                      saveVoucherDetails();
+                    }}
+                  />
+                )}
               </View>
-              {toggleSubmitUpdate ? (
-                <TextButton
-                  label="Update"
-                  buttonContainerStyle={{
-                    height: 50,
-                    width: '100%',
-                    alignItems: 'center',
-                    borderRadius: SIZES.radius * 0.5,
-                    backgroundColor: COLORS.lightblue_700,
-                  }}
-                  onPress={() => {
-                    updateVoucherDetails(id);
-                  }}
-                />
-              ) : (
-                <TextButton
-                  label="Submit"
-                  buttonContainerStyle={{
-                    height: 50,
-                    width: '100%',
-                    alignItems: 'center',
-                    borderRadius: SIZES.radius * 0.5,
-                    backgroundColor: COLORS.lightblue_700,
-                  }}
-                  onPress={() => {
-                    saveVoucherDetails();
-                  }}
-                />
-              )}
-            </View>
             </KeyboardAwareScrollView>
           </View>
         </View>
@@ -590,141 +590,140 @@ const UserEndVoucher = () => {
     );
   };
 
-  const renderPendingItem = ({item}) =>
-     (
-      <View>
-        {item.voucherData.map((ele, i) => {
-          return (
+  const renderPendingItem = ({item}) => (
+    <View>
+      {item.voucherData.map((ele, i) => {
+        return (
+          <View
+            key={i}
+            style={{
+              flexDirection: 'row',
+              margin: 1,
+              borderWidth: 0.05,
+              marginVertical: SIZES.base * 0.5,
+            }}>
+            <View style={{width: 150}}>
+              <Text style={{...FONTS.body4, textAlign: 'left'}}>
+                {ele.voucher_type}
+              </Text>
+            </View>
+            <Divider
+              style={{
+                backgroundColor: COLORS.lightGray1,
+                padding: 0.4,
+                height: SIZES.height * 0.04,
+              }}
+            />
+            <View style={{width: 80}}>
+              <Text style={{...FONTS.body4, textAlign: 'center'}}>
+                {ele.item_name}
+              </Text>
+            </View>
+            <Divider
+              style={{
+                backgroundColor: COLORS.lightGray1,
+                padding: 0.4,
+                height: SIZES.height * 0.04,
+              }}
+            />
+            <View style={{width: 60}}>
+              <Text style={{...FONTS.body4, textAlign: 'center'}}>
+                {ele.qty}
+              </Text>
+            </View>
+            <Divider
+              style={{
+                backgroundColor: COLORS.lightGray1,
+                padding: 0.4,
+                height: SIZES.height * 0.04,
+              }}
+            />
+            <View style={{width: 200}}>
+              <Text style={{...FONTS.body4, textAlign: 'left'}}>
+                {ele.remark}
+              </Text>
+            </View>
+            <Divider
+              style={{
+                backgroundColor: COLORS.lightGray1,
+                padding: 0.4,
+                height: SIZES.height * 0.04,
+              }}
+            />
+            <Divider
+              style={{
+                backgroundColor: COLORS.lightGray1,
+                padding: 0.4,
+                height: SIZES.height * 0.04,
+              }}
+            />
+            <View style={{width: 100}}>
+              <Text style={{...FONTS.body4, textAlign: 'center'}}>
+                {ele.verify_status == true
+                  ? 'Verified'
+                  : ele.revert_status == true
+                  ? 'Reverted'
+                  : 'Pending'}
+              </Text>
+            </View>
+            <Divider
+              style={{
+                backgroundColor: COLORS.lightGray1,
+                padding: 0.4,
+                height: SIZES.height * 0.04,
+              }}
+            />
+            <View style={{width: 100}}>
+              <Text style={{...FONTS.body4, textAlign: 'center'}}>
+                {ele.voucher_date}
+              </Text>
+            </View>
+            <Divider
+              style={{
+                backgroundColor: COLORS.lightGray1,
+                padding: 0.4,
+                height: SIZES.height * 0.04,
+              }}
+            />
             <View
-              key={i}
               style={{
                 flexDirection: 'row',
-                margin: 1,
-                borderWidth: 0.05,
-                marginVertical: SIZES.base * 0.5,
+                justifyContent: 'space-evenly',
+                paddingHorizontal: 20,
+                width: 140,
               }}>
-              <View style={{width: 150}}>
-                <Text style={{fontSize: 16, textAlign: 'left'}}>
-                  {ele.voucher_type}
-                </Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    editVoucher(
+                      ele._id,
+                      ele.project_id,
+                      ele.voucher_type,
+                      ele.qty,
+                      ele.item_id,
+                      ele.remark,
+                      ele.location,
+                      ele.vehicle_no,
+                    );
+                  }}>
+                  <FontAwesome name="edit" color={COLORS.blue} size={16} />
+                </TouchableOpacity>
               </View>
-              <Divider
-                style={{
-                  backgroundColor: COLORS.lightGray1,
-                  padding: 0.4,
-                  height: SIZES.height * 0.04,
-                }}
-              />
-              <View style={{width: 80}}>
-                <Text style={{fontSize: 16, textAlign: 'center'}}>
-                  {ele.item_name}
-                </Text>
-              </View>
-              <Divider
-                style={{
-                  backgroundColor: COLORS.lightGray1,
-                  padding: 0.4,
-                  height: SIZES.height * 0.04,
-                }}
-              />
-              <View style={{width: 60}}>
-                <Text style={{fontSize: 16, textAlign: 'center'}}>
-                  {ele.qty}
-                </Text>
-              </View>
-              <Divider
-                style={{
-                  backgroundColor: COLORS.lightGray1,
-                  padding: 0.4,
-                  height: SIZES.height * 0.04,
-                }}
-              />
-              <View style={{width: 200}}>
-                <Text style={{fontSize: 16, textAlign: 'left'}}>
-                  {ele.remark}
-                </Text>
-              </View>
-              <Divider
-                style={{
-                  backgroundColor: COLORS.lightGray1,
-                  padding: 0.4,
-                  height: SIZES.height * 0.04,
-                }}
-              />
-              <Divider
-                style={{
-                  backgroundColor: COLORS.lightGray1,
-                  padding: 0.4,
-                  height: SIZES.height * 0.04,
-                }}
-              />
-              <View style={{width: 100}}>
-                <Text style={{fontSize: 16, textAlign: 'center'}}>
-                  {ele.verify_status == true
-                    ? 'Verified'
-                    : ele.revert_status == true
-                    ? 'Reverted'
-                    : 'Pending'}
-                </Text>
-              </View>
-              <Divider
-                style={{
-                  backgroundColor: COLORS.lightGray1,
-                  padding: 0.4,
-                  height: SIZES.height * 0.04,
-                }}
-              />
-              <View style={{width: 100}}>
-                <Text style={{fontSize: 16, textAlign: 'center'}}>
-                  {ele.voucher_date}
-                </Text>
-              </View>
-              <Divider
-                style={{
-                  backgroundColor: COLORS.lightGray1,
-                  padding: 0.4,
-                  height: SIZES.height * 0.04,
-                }}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  paddingHorizontal: 20,
-                  width: 140,
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      editVoucher(
-                        ele._id,
-                        ele.project_id,
-                        ele.voucher_type,
-                        ele.qty,
-                        ele.item_id,
-                        ele.remark,
-                        ele.location,
-                        ele.vehicle_no,
-                      );
-                    }}>
-                    <FontAwesome name="edit" color={COLORS.blue} size={16} />
-                  </TouchableOpacity>
-                </View>
-                <View style={{justifyContent: 'center'}}>
-                  <TouchableOpacity>
-                    <MaterialCommunityIcons
-                      name="delete"
-                      color={COLORS.red}
-                      size={20}
-                    />
-                  </TouchableOpacity>
-                </View>
+              <View style={{justifyContent: 'center'}}>
+                <TouchableOpacity>
+                  <MaterialCommunityIcons
+                    name="delete"
+                    color={COLORS.red}
+                    size={20}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
-          );
-        })}
-      </View>
-    );
+          </View>
+        );
+      })}
+    </View>
+  );
   // const renderRevertedItem = ({item}) => (
   //   <View>
   //     {item.voucherData.map((ele,idx2) => {
@@ -955,45 +954,29 @@ const UserEndVoucher = () => {
         <View style={{flexDirection: 'row'}}>
           <View style={{width: 150, backgroundColor: 'white'}}>
             <Text
-              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+              style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>
               Voucher Type
             </Text>
           </View>
           <View style={{width: 80, backgroundColor: 'white'}}>
-            <Text
-              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
-              Item Name
-            </Text>
+            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Item Name</Text>
           </View>
           <View style={{width: 60, backgroundColor: 'white'}}>
-            <Text
-              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
-              Qty
-            </Text>
+            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Qty</Text>
           </View>
           <View style={{width: 200, backgroundColor: 'white'}}>
-            <Text
-              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
-              Remark
-            </Text>
+            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Remark</Text>
           </View>
           <View style={{width: 100, backgroundColor: 'white'}}>
-            <Text
-              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
-              Status
-            </Text>
+            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Status</Text>
           </View>
           <View style={{width: 120, backgroundColor: 'white'}}>
-            <Text
-              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
+            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>
               Voucher Date
             </Text>
           </View>
           <View style={{width: 130, backgroundColor: 'white'}}>
-            <Text
-              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'center'}}>
-              Action
-            </Text>
+            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Action</Text>
           </View>
         </View>
       </View>
@@ -1163,7 +1146,11 @@ const UserEndVoucher = () => {
                 marginBottom: 2,
               },
             ]}>
-            <Text style={[FONTS.body3, {color: COLORS.gray}]}>
+            <Text
+              style={[
+                FONTS.body3,
+                {fontWeight: '900', color: COLORS.darkGray},
+              ]}>
               {constants.CHECK_VOUCHER_TYPE.PURCHASED_VOUCHER == userOption
                 ? 'Purchased Voucher'
                 : constants.CHECK_VOUCHER_TYPE.RECEIVED_VOUCHER == userOption
