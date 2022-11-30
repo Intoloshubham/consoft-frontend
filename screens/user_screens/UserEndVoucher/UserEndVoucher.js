@@ -8,8 +8,10 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  ScrollView,
   ImageBackground,
+  ScrollView,
+  FlatList,
+  KeyboardAvoidingView,
   StyleSheet,
 } from 'react-native';
 import styles from '../UserReports/ReportStyle.js';
@@ -21,10 +23,10 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import utils from '../../../utils';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
   get_stock_item_name,
@@ -53,8 +55,6 @@ import {
   DeleteConfirmationToast,
 } from '../../../Components';
 
-import {FlatList} from 'react-native-gesture-handler';
-
 const UserEndVoucher = () => {
   const {cont_Project_list_drop, inputfromtwo} = styles;
 
@@ -65,6 +65,8 @@ const UserEndVoucher = () => {
   const [testVal, settestVal] = useState('');
   const [itemList, setItemList] = useState([]);
   const [itemId, setItemId] = useState('');
+
+  const [unitId, setUnitId] = useState('');
 
   const current_dat = moment().format('YYYY%2FMM%2FDD');
 
@@ -90,6 +92,7 @@ const UserEndVoucher = () => {
   const [voucherId, setVoucherId] = useState('');
 
   const [voucherListModal, setVoucherListModal] = useState(false);
+  const [allUnits, setAllUnits] = useState([]);
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
@@ -132,6 +135,12 @@ const UserEndVoucher = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const fetchData = async () => {
+    const resp = await fetch(`${process.env.API_URL}unit`);
+    const data = await resp.json();
+    setAllUnits(data);
+    // setdata(data);
   };
 
   function RadioButton({data, onSelect}) {
@@ -190,11 +199,13 @@ const UserEndVoucher = () => {
     voucher_type,
     qty,
     item_id,
+    unit_id,
     remark,
     location,
     vehicle_no,
   ) => {
     try {
+      fetchData();
       setVoucherId(id);
       setToggleSubmitUpdate(true);
       getStockDataItems();
@@ -203,6 +214,7 @@ const UserEndVoucher = () => {
       setRemark(remark);
       setItemId(item_id);
       setQty(qty);
+      setUnitId(unit_id);
       setProjectId(project_id);
       setLocation(location);
       setVehicleNo(vehicle_no);
@@ -230,6 +242,7 @@ const UserEndVoucher = () => {
       const data = {
         item_id: itemId,
         qty: qty,
+        unit_id: unitId,
         voucher_type: voucherType,
         vehicle_no: vehicleNo,
         location: location,
@@ -239,9 +252,18 @@ const UserEndVoucher = () => {
       const temp = await update_voucher_detail(voucherId, data);
       if (temp.status == 200) {
         setUpdateToast(true);
+
+        getFilteredVoucher();
       }
       setTimeout(() => {
         setVoucherModal(false);
+        settestVal('');
+        setVehicleNo('');
+        setQty('');
+        setRemark('');
+        setUnitId('');
+        setLocation('');
+        setItemId('');
         setUpdateToast(false);
       }, 800);
     } catch (error) {
@@ -259,6 +281,7 @@ const UserEndVoucher = () => {
       company_id: userCompanyData.company_id,
       project_id: projectId,
       item_id: itemId,
+      unit_id: unitId,
       qty: qty,
       remark: remark,
       location: location,
@@ -269,15 +292,16 @@ const UserEndVoucher = () => {
 
     if (res.status == '200') {
       setSubmitToast(true);
-      settestVal('');
-      setVehicleNo('');
-      setQty('');
-      setRemark('');
-      setLocation('');
-      setItemId('');
+
       getFilteredVoucher();
       setTimeout(() => {
         setVoucherModal(false);
+        settestVal('');
+        setVehicleNo('');
+        setQty('');
+        setRemark('');
+        setLocation('');
+        setItemId('');
         setSubmitToast(false);
       }, 800);
     }
@@ -420,7 +444,44 @@ const UserEndVoucher = () => {
                     // onBlur={() => setProListIsFocus(false)}
                     onChange={item => {
                       setItemId(item._id);
-                      setVoucherModal(true);
+                      // setVoucherModal(true);
+                    }}
+                  />
+                  <Dropdown
+                    style={[
+                      cont_Project_list_drop,
+                      {
+                        width: SIZES.width * 0.88,
+                        // marginTop: 0,
+                      },
+                      proListIsFocus && {
+                        borderColor: COLORS.gray2,
+                      },
+                    ]}
+                    placeholderStyle={{fontSize: 16, color: COLORS.darkGray}}
+                    selectedTextStyle={{color: COLORS.gray}}
+                    containerStyle={{
+                      width: SIZES.width * 0.88,
+                      borderRadius: SIZES.base,
+                      paddingTop: SIZES.base * 0.5,
+                      // marginTop: SIZES.base,
+                    }}
+                    iconStyle={{
+                      height: 28,
+                    }}
+                    data={allUnits}
+                    maxHeight={200}
+                    labelField="unit_name"
+                    valueField="_id"
+                    value={unitId}
+                    placeholder={'Select Unit'}
+                    // onFocus={() => setProListIsFocus(true)}
+                    // onBlur={() => setProListIsFocus(false)}
+                    onChange={item => {
+                      console.log("🚀 ~ file: UserEndVoucher.js ~ line 480 ~ addVoucherModal ~ item", item)
+                      // setItemId(item._id);
+                      setUnitId(item._id);
+                      // setVoucherModal(true);
                     }}
                   />
                   <FormInput
@@ -429,7 +490,7 @@ const UserEndVoucher = () => {
                       utils.validateText(value, setQtyError);
                       setQty(value);
                     }}
-                    value={qty.toString()}
+                    value={qty}
                     keyboardType="numeric"
                     errorMsg={qtyError}
                     appendComponent={
@@ -564,7 +625,7 @@ const UserEndVoucher = () => {
                       backgroundColor: COLORS.lightblue_700,
                     }}
                     onPress={() => {
-                      updateVoucherDetails(id);
+                      updateVoucherDetails();
                     }}
                   />
                 ) : (
@@ -603,7 +664,7 @@ const UserEndVoucher = () => {
               marginVertical: SIZES.base * 0.5,
             }}>
             <View style={{width: 150}}>
-              <Text style={{...FONTS.body4, textAlign: 'left'}}>
+              <Text style={{fontSize: 16, textAlign: 'left'}}>
                 {ele.voucher_type}
               </Text>
             </View>
@@ -615,7 +676,7 @@ const UserEndVoucher = () => {
               }}
             />
             <View style={{width: 80}}>
-              <Text style={{...FONTS.body4, textAlign: 'center'}}>
+              <Text style={{fontSize: 16, textAlign: 'center'}}>
                 {ele.item_name}
               </Text>
             </View>
@@ -627,8 +688,18 @@ const UserEndVoucher = () => {
               }}
             />
             <View style={{width: 60}}>
-              <Text style={{...FONTS.body4, textAlign: 'center'}}>
-                {ele.qty}
+              <Text style={{fontSize: 16, textAlign: 'center'}}>{ele.qty}</Text>
+            </View>
+            <Divider
+              style={{
+                backgroundColor: COLORS.lightGray1,
+                padding: 0.4,
+                height: SIZES.height * 0.04,
+              }}
+            />
+            <View style={{width: 120}}>
+              <Text style={{fontSize: 16, textAlign: 'center'}}>
+                {ele.unit_name}
               </Text>
             </View>
             <Divider
@@ -639,7 +710,7 @@ const UserEndVoucher = () => {
               }}
             />
             <View style={{width: 200}}>
-              <Text style={{...FONTS.body4, textAlign: 'left'}}>
+              <Text style={{fontSize: 16, textAlign: 'left'}}>
                 {ele.remark}
               </Text>
             </View>
@@ -658,7 +729,7 @@ const UserEndVoucher = () => {
               }}
             />
             <View style={{width: 100}}>
-              <Text style={{...FONTS.body4, textAlign: 'center'}}>
+              <Text style={{fontSize: 16, textAlign: 'center'}}>
                 {ele.verify_status == true
                   ? 'Verified'
                   : ele.revert_status == true
@@ -674,7 +745,7 @@ const UserEndVoucher = () => {
               }}
             />
             <View style={{width: 100}}>
-              <Text style={{...FONTS.body4, textAlign: 'center'}}>
+              <Text style={{fontSize: 16, textAlign: 'center'}}>
                 {ele.voucher_date}
               </Text>
             </View>
@@ -701,6 +772,7 @@ const UserEndVoucher = () => {
                       ele.voucher_type,
                       ele.qty,
                       ele.item_id,
+                      ele.unit_id,
                       ele.remark,
                       ele.location,
                       ele.vehicle_no,
@@ -954,35 +1026,96 @@ const UserEndVoucher = () => {
         <View style={{flexDirection: 'row'}}>
           <View style={{width: 150, backgroundColor: 'white'}}>
             <Text
-              style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>
+              style={{
+                ...FONTS.body3,
+                fontWeight: '600',
+                color: COLORS.darkGray,
+                textAlign: 'center',
+              }}>
               Voucher Type
             </Text>
           </View>
           <View style={{width: 80, backgroundColor: 'white'}}>
-            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Item Name</Text>
+            <Text
+              style={{
+                ...FONTS.body3,
+                fontWeight: '600',
+                color: COLORS.darkGray,
+                textAlign: 'center',
+              }}>
+              Item Name
+            </Text>
           </View>
           <View style={{width: 60, backgroundColor: 'white'}}>
-            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Qty</Text>
-          </View>
-          <View style={{width: 200, backgroundColor: 'white'}}>
-            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Remark</Text>
-          </View>
-          <View style={{width: 100, backgroundColor: 'white'}}>
-            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Status</Text>
+            <Text
+              style={{
+                ...FONTS.body3,
+                fontWeight: '600',
+                color: COLORS.darkGray,
+                textAlign: 'center',
+              }}>
+              Qty
+            </Text>
           </View>
           <View style={{width: 120, backgroundColor: 'white'}}>
-            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>
+            <Text
+              style={{
+                ...FONTS.body3,
+                fontWeight: '600',
+                color: COLORS.darkGray,
+                textAlign: 'center',
+              }}>
+              Unit Name
+            </Text>
+          </View>
+          <View style={{width: 200, backgroundColor: 'white'}}>
+            <Text
+              style={{
+                ...FONTS.body3,
+                fontWeight: '600',
+                color: COLORS.darkGray,
+                textAlign: 'center',
+              }}>
+              Remark
+            </Text>
+          </View>
+          <View style={{width: 100, backgroundColor: 'white'}}>
+            <Text
+              style={{
+                ...FONTS.body3,
+                fontWeight: '600',
+                color: COLORS.darkGray,
+                textAlign: 'center',
+              }}>
+              Status
+            </Text>
+          </View>
+          <View style={{width: 120, backgroundColor: 'white'}}>
+            <Text
+              style={{
+                ...FONTS.body3,
+                fontWeight: '600',
+                color: COLORS.darkGray,
+                textAlign: 'center',
+              }}>
               Voucher Date
             </Text>
           </View>
           <View style={{width: 130, backgroundColor: 'white'}}>
-            <Text style={{...FONTS.body3, fontWeight: '600',color:COLORS.darkGray, textAlign: 'center'}}>Action</Text>
+            <Text
+              style={{
+                ...FONTS.body3,
+                fontWeight: '600',
+                color: COLORS.darkGray,
+                textAlign: 'center',
+              }}>
+              Action
+            </Text>
           </View>
         </View>
       </View>
     );
   };
-
   const voucherSelectionModal = () => {
     return (
       <Modal
@@ -1099,6 +1232,7 @@ const UserEndVoucher = () => {
           getStockDataItems();
           setToggleSubmitUpdate(false);
           setVoucherModal(true);
+          fetchData();
         }}
         style={{
           flexDirection: 'row',
@@ -1147,12 +1281,9 @@ const UserEndVoucher = () => {
               },
             ]}>
             <Text
-              style={[
-                FONTS.body3,
-                {fontWeight: '900', color: COLORS.darkGray},
-              ]}>
+              style={[FONTS.body3, {fontWeight: '900', color: COLORS.gray}]}>
               {constants.CHECK_VOUCHER_TYPE.PURCHASED_VOUCHER == userOption
-                ? 'Purchased Voucher'
+                ? 'Pending Voucher'
                 : constants.CHECK_VOUCHER_TYPE.RECEIVED_VOUCHER == userOption
                 ? 'Received Voucher'
                 : constants.CHECK_VOUCHER_TYPE.PURCHASED_RETURN_VOUCHER ==
@@ -1180,7 +1311,6 @@ const UserEndVoucher = () => {
                 horizontal
                 contentContainerStyle={{
                   flexDirection: 'column',
-
                   padding: 2,
                   marginHorizontal: 2,
                 }}
@@ -1362,11 +1492,10 @@ const styles1 = StyleSheet.create({
   },
   modalView: {
     flex: 1,
-
     justifyContent: 'space-between',
-    marginVertical: 220,
-    marginHorizontal: 80,
-    paddingVertical: 30,
+    marginVertical: 200,
+    marginHorizontal: 40,
+    paddingVertical: 20,
     backgroundColor: 'white',
     borderRadius: 10,
     // alignItems: 'center',
@@ -1377,13 +1506,19 @@ const styles1 = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 8,
+    elevation: 5,
   },
-  button: {},
+  button: {
+    borderRadius: 6,
+    padding: 5,
+    elevation: 2,
+  },
   buttonOpen: {
     backgroundColor: '#F194FF',
   },
-
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
@@ -1391,7 +1526,6 @@ const styles1 = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    ...FONTS.body3,
     textAlign: 'center',
   },
 
