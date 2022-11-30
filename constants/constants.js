@@ -25,5 +25,7 @@ const CHECK_VOUCHER_TYPE = {
 
 };
 
+
+
 export default {USER_PRIVILEGES, STATUS, VOUCHER_TYPE,CHECK_VOUCHER_TYPE};
  
