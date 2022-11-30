@@ -262,7 +262,6 @@ const UserReports = ({ route }) => {
               <Manpower projectTeamList={projectTeamList} ProList={ProList} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }}>
-              {/* Stock component */}
               <Stock project_id={value} Main_drp_pro_value={value} loading={loading} />
             </View>
             <View style={{ marginVertical: 5 }} Main_drp_pro_value={value}>

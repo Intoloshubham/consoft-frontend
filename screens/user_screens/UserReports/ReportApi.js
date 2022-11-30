@@ -31,6 +31,27 @@ const get_latest_steel_id = async company_id => {
   const data = await res.json();
   return data;
 };
+const get_latest_painting_id = async company_id => {
+  const res = await fetch(
+    `${process.env.API_URL}painting-quantity-item/${company_id}`,
+  );
+  const data = await res.json();
+  return data;
+};
+const get_latest_floor_id = async company_id => {
+  const res = await fetch(
+    `${process.env.API_URL}floring-quantity-item/${company_id}`,
+  );
+  const data = await res.json();
+  return data;
+};
+const get_latest_plaster_id = async company_id => {
+  const res = await fetch(
+    `${process.env.API_URL}plaster-quantity-item/${company_id}`,
+  );
+  const data = await res.json();
+  return data;
+};
 
 const Insert_project_team_data = async teamData => {
   try {
@@ -187,9 +208,11 @@ const get_new_sub_category = Id => {
   }
 };
 
-const get_stock_data = async () => {
+const get_stock_data = async (company_id, curr_date) => {
   try {
-    const res = fetch(`${process.env.API_URL}stock-entry/`);
+    const res = fetch(
+      `${process.env.API_URL}all-voucher/${company_id}/${curr_date}`,
+    );
     return res;
   } catch (error) {
     console.log(error);
@@ -346,7 +369,7 @@ const update_quantity_data = async (Id, inputs) => {
   } catch (error) {
     console.log(error);
   }
-}; 
+};
 
 const update_voucher_detail = async (id, inputs) => {
   try {
@@ -429,7 +452,11 @@ const get_stock_item_name = async () => {
   } catch (error) {}
 };
 
-const get_pending_voucher_details = async (company_id, curr_date,voucher_type) => {
+const get_pending_voucher_details = async (
+  company_id,
+  curr_date,
+  voucher_type,
+) => {
   try {
     const res = await fetch(
       `${process.env.API_URL}voucher/${company_id}/${curr_date}/${voucher_type}`,
@@ -457,7 +484,7 @@ const get_verified_voucher = async (company_id, curr_date) => {
     return data;
   } catch (error) {}
 };
-const get_filter_voucher = async (company_id, curr_date,voucher_type) => {
+const get_filter_voucher = async (company_id, curr_date, voucher_type) => {
   try {
     const res = await fetch(
       `${process.env.API_URL}filter-voucher/${company_id}/${curr_date}/${voucher_type}`,
@@ -540,5 +567,8 @@ export {
   get_verified_voucher,
   edit_voucher_detail,
   update_voucher_detail,
-  get_filter_voucher
+  get_filter_voucher,
+  get_latest_floor_id,
+  get_latest_painting_id,
+  get_latest_plaster_id,
 };
