@@ -121,6 +121,7 @@ const Items = () => {
       setItemName('');
       setUpdateToast(true);
       fetchItems();
+      setItemId('');
     } else {
       alert(res.message);
     }
@@ -180,7 +181,7 @@ const Items = () => {
                 Add New Item
               </Text>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => setUnitModal(true)}
                   style={{
                     backgroundColor: COLORS.lightblue_700,
@@ -199,7 +200,7 @@ const Items = () => {
                     }}>
                     Add Unit
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <ImageBackground
                   style={{
                     backgroundColor: COLORS.white,
@@ -265,7 +266,7 @@ const Items = () => {
                 textStyle={{
                   fontSize: 15,
                   color: COLORS.black,
-                  textTransform: 'capitalize',
+                  // textTransform: 'capitalize',
                 }}
                 listParentLabelStyle={{color: COLORS.white, fontSize: 15}}
                 placeholder="Select unit"
@@ -496,7 +497,7 @@ const Items = () => {
       <FlatList
         contentContainerStyle={{
           marginHorizontal: SIZES.padding,
-          paddingBottom: 50,
+          paddingBottom: 180,
         }}
         data={Items}
         keyExtractor={item => `${item._id}`}
@@ -587,7 +588,10 @@ const Items = () => {
           marginBottom: SIZES.padding,
           borderRadius: SIZES.radius,
         }}
-        onPress={() => setItemModal(true)}
+        onPress={() => {
+          setItemId('');
+          setItemModal(true);
+        }}
       />
       {renderAddItemModal()}
       {renderAddUnitModal()}

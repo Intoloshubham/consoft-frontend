@@ -1,9 +1,15 @@
 import Config from '../config';
 
-const getPendingVoucher = async (company_id, date) => {
+const getPendingVoucher = async (company_id, date, voucher_type) => {
   try {
     const res = await fetch(
-      Config.API_URL + 'voucher/' + company_id + '/' + date,
+      Config.API_URL +
+        'voucher/' +
+        company_id +
+        '/' +
+        date +
+        '/' +
+        voucher_type,
       {
         method: 'get',
         headers: {

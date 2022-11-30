@@ -60,8 +60,13 @@ const Vouchers = () => {
     setVerifiedVoucher(res.data);
   };
 
+  const PURCHASED_VOUCHER = 'Purchase Request';
   const fetchPendingVouchers = async () => {
-    const res = await getPendingVoucher(company_id, MyDateString);
+    const res = await getPendingVoucher(
+      company_id,
+      MyDateString,
+      PURCHASED_VOUCHER,
+    );
     setPendingVoucher(res.data);
   };
 
@@ -687,7 +692,7 @@ const Vouchers = () => {
             color: COLORS.darkGray,
             textDecorationLine: 'underline',
           }}>
-          Pending Vouchers
+          Pending
         </Text>
         <FlatList
           contentContainerStyle={{marginTop: 10}}
@@ -880,7 +885,7 @@ const Vouchers = () => {
             color: COLORS.darkGray,
             textDecorationLine: 'underline',
           }}>
-          Revert Vouchers
+          Reverted
         </Text>
         <FlatList
           contentContainerStyle={{marginTop: 10}}
@@ -1073,7 +1078,7 @@ const Vouchers = () => {
             color: COLORS.darkGray,
             textDecorationLine: 'underline',
           }}>
-          All Vouchers
+          Verified
         </Text>
         <FlatList
           contentContainerStyle={{marginTop: 10}}

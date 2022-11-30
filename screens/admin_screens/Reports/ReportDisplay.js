@@ -95,6 +95,7 @@ const ReportDisplay = () => {
     setProjectId(project_id);
     let response = await getReport(project_id, MyDateString, user_id);
     setReport(response.data);
+    // console.log(response)
   };
 
   // fetch manpower report on click
@@ -215,181 +216,184 @@ const ReportDisplay = () => {
     let options = {
       html: `<!DOCTYPE html>
       <html lang="en">
-        <head>
-          <!-- Bootstrap CSS -->
-          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-          <title>Report</title>
-        </head>
-        <body>
-          <div class="text-center">
-            <h4 style="margin-bottom:1px;">${companyDetail.company_name}</h4>
-            <div class="d-flex justify-content-center">
-              <p>Mobile No - 7879299436 , Mail - Intenics@gmail.com</br>BargiHills, IT-Park, Jabalpur, Madhya Pradesh</p>
-            </div>
-          </div>
-          <div style="padding:15px;border: solid 1px #525C67; border-radius: 5px; margin-top: 0px;">
-            <div style="display: flex;flex-direction: row;  justify-content: space-between;align-items: center; margin:0px;">
-              <h5 style="margin:0px;">Project name - ${
-                reportData.project_name
-              }</h5>
-              <p style="margin:3px;">Date - ${reportData.date} </br> Time - ${
-        reportData.time
-      }</p>
-            </div>
-            <hr style="margin-top:3px; margin-bottom:3px;">
-            <div>
-              <h5 style="text-align: center; text-decoration:underline;">Manpower</h5>
-              <h6 style="text-decoration:underline;">Contractors</h6>
-              <div style="display: flex;flex-direction: row;">
-                ${manpower.map((ele, index) => {
-                  return `<div class="card" style="width: 12rem; margin-left:${
-                    index != 0 ? '12px' : null
-                  }">
-                      <div class="card-header" style="padding:5px;">
-                        ${ele.contractor_name}
-                      </div>
-                      <div class="card-body" style="padding:8px;">
-                        ${ele.manpowerCategories.map(
-                          (ele1, i) => `${i + 1}. 
-                            ${ele1.manpower_category_name} - ${
-                            ele1.manpower_member
-                          }<br/>`,
-                        )}
-                      </div>
-                    </div>`;
-                })}
+          <head>
+              <!-- Bootstrap CSS -->
+              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+              <title>Report</title>
+          </head>
+          <body>
+  
+              <div class="text-center">
+                  <h4 style="margin-bottom:1px; text-transform: capitalize;">${
+                    reportData.company_name
+                  }</h4>
+                  <div class="d-flex justify-content-center">
+                      <p>${reportData.company_mobile}, ${
+        reportData.company_email
+      }</br>Address - ${reportData.company_address}</p>
+                  </div>
               </div>
-            </div>
-            <hr style="margin-bottom:5px;">
-            <div>
-              <h5 style="text-align: center; text-decoration:underline;">Executed Quantity</h5>
-              <table class="table table-warning table-striped">
-                <thead>
-                  <tr>
-                    <th>Sn.</th>
-                    <th>Items</th>
-                    <th>Nos</th>
-                    <th>L</th>
-                    <th>W</th>
-                    <th>H</th>
-                    <th><small>Steel(mm)</small></th>
-                    <th>Qty</th>
-                    <th>Unit</th>
-                    <th>Remark</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${quantity
-                    .map((ele, index) =>
-                      ele.quantityWorkItems
-                        .map(
-                          (ele1, index1) => `<tr>
-                      <td>${index1 + 1}</td>
-                      <td>${ele1.item_name}</td>
-                      <td>${ele1.nos == null ? '-' : ele1.nos}</td>
-                      <td>${
-                        ele1.num_length == null ? '-' : ele1.num_length
-                      }</td>
-                      <td>${ele1.num_width == null ? '-' : ele1.num_width}</td>
-                      <td>${
-                        ele1.num_height == null ? '-' : ele1.num_height
-                      }</td>
-                      <td>${ele1.steel_mm == null ? '-' : ele1.steel_mm}</td>
-                      <td>${ele1.num_total == null ? '-' : ele1.num_total}</td>
-                      <td>${ele1.unit_name}</td>
-                      <td>${ele1.remark}</td>
-                  </tr>
-                  ${ele1.subquantityitems
-                    .map(
-                      (ele2, index2) => `
-                    ${
-                      index2 == 0 &&
-                      `<tr class="table-secondary">
-                        <td></td>
-                        <td></td>
-                        <th>Nos</th>
-                        <th>L</th>
-                        <th>W</th>
-                        <th>H</th>
-                        <th>Steel(MM)</th>
-                        <th>Qty</th>
-                        <th>Unit</th>
-                        <th>Remarks</th>
-                      </tr>`
-                    }
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td>${ele2.sub_nos}</td>
-                      <td>${ele2.sub_length}</td>
-                      <td>${ele2.sub_width}</td>
-                      <td>${ele2.sub_height}</td>
-                      <td>${
-                        ele2.sub_steel_mm == null ? '-' : ele2.sub_steel_mm
-                      }</td>
-                      <td>${ele2.sub_total}</td>
-                      <td>-</td>
-                      <td>${ele2.sub_remark}</td>
-                    </tr>
-                    `,
-                    )
-                    .join('')}
-                    `,
-                        )
-                        .join(''),
-                    )
-                    .join('')}
-                </tbody>
-              </table> 
-            </div>
-            <hr style="margin-bottom:5px;">
-            <div>
-              <h5 style="text-align: center; text-decoration:underline;">Today Stock</h5>
-              <table class="table table-success table-striped">
-                <thead>
-                  <tr>
-                    <th>Sn.</th>
-                    <th>Date</th>
-                    <th>Voucher type</th>
-                    <th>Item name</th>
-                    <th>Quantity</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${stock
-                    .map((ele, index) =>
-                      ele.voucherData
-                        .map(
-                          (ele1, index1) => `<tr>
-                      <td>${index1 + 1}</td>
-                      <td>${ele1.voucher_date}</td>
-                      <td>${ele1.voucher_type}</td>
-                      <td>${ele1.item_name}</td>
-                      <td>${ele1.qty}</td>
-                  </tr>
-                    `,
-                        )
-                        .join(''),
-                    )
-                    .join('')}
-                </tbody>
-              </table> 
-            </div>
-            <div style=" display: flex;flex-direction: row;justify-content: space-between;align-items: center; padding-left:30px; padding-right:30px">
+              <hr style="margin-top:2px; margin-bottom:4px;">
+  
+              <div style="padding:0px;">
+                  <div style="display: flex;flex-direction: row;  justify-content: space-between;align-items: center; margin:0px;">
+                      <h5 style="margin:0px;">Project name - ${
+                        reportData.project_name
+                      }</h5>
+                      <p style="margin:3px;">Date - ${
+                        reportData.date
+                      } </br> Time - ${reportData.time}</p>
+                  </div>
               <div>
-                <p style="margin-bottom:0px;">Approved by(Signature) </p>
-                <p style="margin-top:0px; margin-bottom:0px;">${reportPath.map(
-                  (ele, i) => `
-                ${ele.admin_1_name}(Admin-1) - <br>${ele.admin_2_name}(Admin-2) -
-                `,
-                )}</p>
+              <hr style="margin-top:3px; margin-bottom:5px;">
+  
+              <div style="display: flex;flex-direction: row;  align-items: center; justify-content: center; margin:0px;">
+                  <h5 style="text-decoration:underline;">Manpower</h5>
+                  <h5 style="margin-left: 5px;">(Total = 10)</h5>
               </div>
-              <p>Date - ${MynewDateString}</p>
-            </div>
-          </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  </body>
-</html>`,
+  
+              <h6 style="text-decoration:underline;">Contractors</h6>
+              <div class="row row-cols-3">
+                  ${manpower
+                    .map((ele, index) => {
+                      return `
+                      <div class="col mt-2">
+                          <div class="card">
+                              <div class="card-header" style="padding:3px; text-transform: capitalize;">
+                                  ${index + 1}.  ${ele.contractor_name}
+                              </div>
+                              <div class="card-body" style="padding:6px;">
+                                  ${ele.manpowerCategories
+                                    .map(
+                                      (ele1, i) => `${i + 1}. 
+                                          ${ele1.manpower_category_name} - ${
+                                        ele1.manpower_member
+                                      }<br/>`,
+                                    )
+                                    .join('')}
+                              </div>
+                          </div>
+                      </div>`;
+                    })
+                    .join('')}
+              </div>
+  
+              <hr style="margin-bottom:8px;">
+              <div style="margin-bottom:8px;">
+                  <h5 style="text-align: center; text-decoration:underline;">Executed Quantity</h5>
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>Sn.</th>
+                              <th>Items</th>
+                              <th>Nos</th>
+                              <th>L</th>
+                              <th>W</th>
+                              <th>H</th>
+                              <th><small>Steel/mm</small></th>
+                              <th>Qty</th>
+                              <th>Unit</th>
+                              <th>Remark</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        ${quantity
+                          .map((ele, index) =>
+                            ele.quantityWorkItems
+                              .map(
+                                (ele1, index1) =>
+                                  `<tr>
+                              <td>${index1 + 1}</td>
+                              <td>${ele1.item_name}</td>
+                              <td>${ele1.nos == null ? '-' : ele1.nos}</td>
+                              <td>${
+                                ele1.num_length == null ? '-' : ele1.num_length
+                              }</td>
+                              <td>${
+                                ele1.num_width == null ? '-' : ele1.num_width
+                              }</td>
+                              <td>${
+                                ele1.num_height == null ? '-' : ele1.num_height
+                              }</td>
+                              <td>${
+                                ele1.steel_mm == null ? '-' : ele1.steel_mm
+                              }</td>
+                              <td>${
+                                ele1.num_total == null ? '-' : ele1.num_total
+                              }</td>
+                              <td>${ele1.unit_name}</td>
+                              <td>${ele1.remark}</td>
+                          </tr>
+  
+                          ${ele1.subquantityitems
+                            .map(
+                              (ele2, index2) =>
+                                `<tr>
+                              <td></td>
+                              <td></td>
+                              <td>${ele2.sub_nos}</td>
+                              <td>${ele2.sub_length}</td>
+                              <td>${ele2.sub_width}</td>
+                              <td>${ele2.sub_height}</td>
+                              <td>${
+                                ele2.sub_steel_mm == null
+                                  ? '-'
+                                  : ele2.sub_steel_mm
+                              }</td>
+                              <td>${ele2.sub_total}</td>
+                              <td>-</td>
+                              <td>${ele2.sub_remark}</td>
+                          </tr> `,
+                            )
+                            .join('')}`,
+                              )
+                              .join(''),
+                          )
+                          .join('')}
+                      </tbody>
+                  </table> 
+              </div>
+  
+              <div>
+                  <h5 style="text-align: center; text-decoration:underline;">Purchase Request & Stock</h5>
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>Sn.</th>
+                              <th>Date</th>
+                              <th>Voucher type</th>
+                              <th>Item name</th>
+                              <th>Quantity</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          ${stock
+                            .map((ele, index) =>
+                              ele.voucherData
+                                .map(
+                                  (ele1, index1) =>
+                                    `<tr>
+                              <td>${index1 + 1}</td>
+                              <td>${ele1.voucher_date}</td>
+                              <td>${ele1.voucher_type}</td>
+                              <td>${ele1.item_name}</td>
+                              <td>${ele1.qty}</td>
+                          </tr>`,
+                                )
+                                .join(''),
+                            )
+                            .join('')}
+                      </tbody>
+                  </table> 
+              </div>
+  
+              <div style="padding-left:30px;" class="mt-5">
+                <p style="margin-bottom:0px;">Approved by(Signature) </p>
+                <p style="margin-top:0px; margin-bottom:0px;">${reportPath.map((ele, i) => `${ele.admin_1_name}(Admin-1) - <br>${ele.admin_2_name}(Admin-2) -`,)}</p>
+              </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </body>
+  </html>`,
       fileName: `${reportData.project_name} report`,
       directory: 'Download',
       base64: true,
@@ -533,6 +537,10 @@ const ReportDisplay = () => {
             final_verify_status: item.final_verify_status,
             final_verify_revert_msg: item.final_verify_revert_msg,
             final_verify_revert: item.final_verify_revert,
+            company_address: item.company_address,
+            company_email: item.company_email,
+            company_mobile: item.company_mobile,
+            company_name: item.company_name,
           });
           fetchManpower(item._id);
           fetchQuantity(item._id);
