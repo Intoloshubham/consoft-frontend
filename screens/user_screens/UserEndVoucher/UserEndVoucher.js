@@ -556,7 +556,7 @@ const UserEndVoucher = () => {
                     backgroundColor: COLORS.lightblue_700,
                   }}
                   onPress={() => {
-                    updateVoucherDetails(id);
+                    updateVoucherDetails();
                   }}
                 />
               ) : (
