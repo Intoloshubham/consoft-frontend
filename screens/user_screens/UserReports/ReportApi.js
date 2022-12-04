@@ -95,12 +95,39 @@ const save_new_equipment_item = async data => {
   }
 };
 
+const send_otp_verification = async (email)=>{
+  try {
+    const res = fetch(`${process.env.API_URL}forget-password`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(email)
+    });
+    return res;
+  } catch (error) {
+    console.log(error)
+  }
+}
+const verify_password_otp = async (inputs)=>{
+  try {
+    const res = fetch(`${process.env.API_URL}verify-otp`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(inputs)
+    });
+    return res;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
 const insert_manpower_report = async (manpower_post_data, CONST_FIELD) => {
   try {
     const res = fetch(`${process.env.API_URL}report/${CONST_FIELD.MANPOWER}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(manpower_post_data),
+      body: JSON.stringify(manpower_post_data)
     });
     return res;
   } catch (error) {
@@ -571,4 +598,6 @@ export {
   get_latest_floor_id,
   get_latest_painting_id,
   get_latest_plaster_id,
+  send_otp_verification,
+  verify_password_otp
 };

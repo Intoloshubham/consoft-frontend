@@ -33,6 +33,7 @@ const home_banner = require('../assets/images/banner.png');
 const consoft_new = require('../assets/images/consoft_new.png');
 const consoft_pro_logo = require('../assets/images/consoft_pro_logo.png');
 const consoft_pro_logo_removebg = require('../assets/images/consoft_pro_logo_removebg.png');
+const mail_image=require('../assets/images/mailImage.png');
 
 export default {
   background_01,
@@ -69,4 +70,5 @@ export default {
   consoft_new,
   consoft_pro_logo,
   consoft_pro_logo_removebg,
+  mail_image
 };

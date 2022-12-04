@@ -17,6 +17,7 @@ import ManPowerProjectTeam from './UserReports/ReportSection/Manpower/UserProjec
 import ManpowerUserContractors from './UserReports/ReportSection/Manpower/UserContractors/ManpowerUserContractors.js';
 import ViewReport from './UserReports/ReportSection/ViewReport/ViewReport';
 import EditQuantityItems from './UserReports/ReportSection/Quantity/EditQuantityItems.js';
+import ForgetPassword from './ForgetPassword/ForgetPassword.js';
 
 export {
   UserDashboard,
@@ -36,5 +37,6 @@ export {
   ManpowerUserContractors,
   UserAssignWorks,
   ViewReport,
-  EditQuantityItems
+  EditQuantityItems,
+  ForgetPassword
 };
