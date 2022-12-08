@@ -56,26 +56,35 @@ const ForgetPassword = ({navigation}) => {
 
   const sendVerificationCode = async () => {
     const body = {
-      email: email
+      email: email,
     };
-    const temp = await send_otp_verification(body);
+    try {
+      const temp = await send_otp_verification(body);
+      const resp = await temp.json();  
 
-    const resp = await temp.json();
-    setRespUserId(resp.data.res.user_id);
-
-    if (resp.success) {
-      setSubmitToast(true);
-      setverifyStatus(true);
-      setEmail('');
-      setTimeout(() => {
-        setSubmitToast(false);
-      }, 2000);
+        if (resp.message) {
+          setRespUserId(resp.data.res.user_id);        
+          setSubmitToast(true);
+          setverifyStatus(true);
+          setEmail('');
+          setTimeout(() => {
+            setSubmitToast(false);
+          }, 2000);
+        }else if(resp.message.status=="401"){
+          alert('Email does not exist');
+        }else{
+          console.log('Network error')
+        }
+     
+ 
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const verifyOtp = async () => {
     const body = {otp: Otp};
-    
+
     const temp = await verify_password_otp(respUserId, body);
     const resp = await temp.json();
     if (resp.success) {
@@ -85,10 +94,10 @@ const ForgetPassword = ({navigation}) => {
         setSubmitVerifyToast(false);
         setResetDiag(true);
       }, 800);
-    }else if (resp.data.isMatch==false) {
-       alert('Entered Otp is Wrong')
+    } else if (resp.data.isMatch == false) {
+      alert('Entered Otp is Wrong');
     } else {
-        console.log('Network error')
+      console.log('Network error');
     }
   };
 
@@ -96,7 +105,7 @@ const ForgetPassword = ({navigation}) => {
     if (newPassword === confirmPassword) {
       const body = {
         new_password: newPassword,
-        confirm_new_password: confirmPassword
+        confirm_new_password: confirmPassword,
       };
       const temp = await reset_password(respUserId, body);
       const resp = await temp.json();
@@ -106,12 +115,12 @@ const ForgetPassword = ({navigation}) => {
         setConfirmPassword('');
         setResetDiag(false);
         setTimeout(() => {
-          setResetStatus(false);  
-          navigation.navigate('Login');        
+          setResetStatus(false);
+          navigation.navigate('Login');
         }, 700);
       }
-    }else{
-      alert("New Password and Confirm Password do not Matched!")
+    } else {
+      alert('New Password and Confirm Password do not Matched!');
     }
   };
 
@@ -173,7 +182,7 @@ const ForgetPassword = ({navigation}) => {
                     padding: SIZES.base,
                   }}
                   // onPress={() => setResetDiag(!resetDiag)}
-                  >
+                >
                   {/* <AntDesign name="close" size={20} color={COLORS.gray} /> */}
                 </Pressable>
                 <Text style={{textAlign: 'center', ...FONTS.body2}}>
@@ -238,7 +247,7 @@ const ForgetPassword = ({navigation}) => {
                       alignItems: 'center',
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                      paddingHorizontal: SIZES.base
+                      paddingHorizontal: SIZES.base,
                     }}>
                     <TextInput
                       style={{
