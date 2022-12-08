@@ -54,31 +54,28 @@ const ForgetPassword = ({navigation}) => {
 
   const userData = useSelector(state => state.user);
 
+
   const sendVerificationCode = async () => {
     const body = {
       email: email,
     };
-    try {
-      const temp = await send_otp_verification(body);
-      const resp = await temp.json();  
 
-        if (resp.message) {
-          setRespUserId(resp.data.res.user_id);        
-          setSubmitToast(true);
-          setverifyStatus(true);
-          setEmail('');
-          setTimeout(() => {
-            setSubmitToast(false);
-          }, 2000);
-        }else if(resp.message.status=="401"){
-          alert('Email does not exist');
-        }else{
-          console.log('Network error')
-        }
-     
- 
-    } catch (error) {
-      console.log(error);
+    const temp = await send_otp_verification(body);
+
+    const resp = await temp.json();
+
+    if (resp.success == true) {
+      setRespUserId(resp.data.res.user_id);
+      setSubmitToast(true);
+      setverifyStatus(true);
+      setEmail('');
+      setTimeout(() => {
+        setSubmitToast(false);
+      }, 2000);
+    } else if (resp.message.status == '401') {
+      alert('Email does not exist');
+    } else {
+      console.log('Network error');
     }
   };
 

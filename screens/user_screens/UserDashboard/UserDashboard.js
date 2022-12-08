@@ -152,6 +152,7 @@ const UserDashboard = () => {
         style={{
           // flexDirection: 'row',
           flex:1,
+
           justifyContent: 'space-between',
           // position: 'absolute',
           // top: SIZES.height * 0.7,
@@ -193,7 +194,7 @@ const UserDashboard = () => {
 
         <TouchableOpacity
           style={{
-            marginTop: SIZES.base,
+            marginTop: SIZES.body1*5,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignSelf:'center',

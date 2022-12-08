@@ -575,7 +575,7 @@ const Stock = ({project_id, Main_drp_pro_value, loading}) => {
               paddingHorizontal: 2,
               paddingVertical: -2,
               borderRadius: 5,
-              top: -SIZES.base * 1.2,
+              top: -SIZES.base * 0.5,
             }}>
             <View>
               <Text
@@ -826,7 +826,7 @@ const Stock = ({project_id, Main_drp_pro_value, loading}) => {
           </View>
         </Pressable>
         <View style={{left: 60}}>
-          {stockCollapse ? add_stock_icon_button() : null}
+          {/* {stockCollapse ? add_stock_icon_button() : null} */}
         </View>
       </Animated.View>
 

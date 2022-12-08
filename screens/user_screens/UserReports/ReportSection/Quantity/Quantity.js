@@ -734,7 +734,7 @@ const Quantity = ({project_id, Main_drp_pro_value, loading}) => {
             paddingHorizontal: 2,
             paddingVertical: -2,
             borderRadius: 5,
-            top: -SIZES.base * 1.2,
+            top: -SIZES.base*0.5 ,
           }}>
           <View>
             <Text style={[FONTS.body5, {color: COLORS.white}]}>Add</Text>
