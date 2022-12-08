@@ -49,12 +49,10 @@ const Login = ({navigation}) => {
       mobile: userMobileNo,
       password: userPassword,
     };
-    console.log('UserData===');
-    console.log(UserData);
-    console.log(process.env.API_URL);
+
 
     const res = await dispatch(userLogin(UserData));
-    console.log('login', res);
+    
     if (res.payload.status === 200) {
       setSubmitToast(true);
       if (res.payload.user_privilege === constants.USER_PRIVILEGES.OTHER_USER) {
@@ -222,6 +220,13 @@ const Login = ({navigation}) => {
             }}
             onPress={userOnSubmit}
           />
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <TouchableOpacity style={{ color: COLORS.lightblue_100}}
+            onPress={()=>navigation.navigate('ForgetPassword')}
+            >
+              <Text>Forget Password ?</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View
           style={{

@@ -41,7 +41,8 @@ import {
   Demo1,
   MyProfile,
   ViewReport,
-  EditQuantityItems
+  EditQuantityItems,
+  ForgetPassword
 
 } from './screens/user_screens';
 import Tabs from './navigation/tabs';
@@ -116,6 +117,7 @@ const App = () => {
           <Stack.Screen name="UserDashboard" component={UserTabs} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="UserEndVoucher" component={UserEndVoucher} />
+          <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
           <Stack.Screen name="ViewReport" component={ViewReport} />
           <Stack.Screen name="Demo1" component={Demo1} />
           <Stack.Screen name="MyProfile" component={MyProfile} />        

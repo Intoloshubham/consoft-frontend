@@ -347,7 +347,7 @@ const Stock = ({project_id, Main_drp_pro_value, loading}) => {
                     <View
                       style={{
                         width: '100%',
-                        alignItems: 'flex-end',
+                        alignItems: 'flex-end'
                       }}>
                       <TouchableOpacity
                         style={{
@@ -593,6 +593,7 @@ const Stock = ({project_id, Main_drp_pro_value, loading}) => {
       </Animated.View>
     );
   };
+
   const ListHeader = () => {
     return (
       <View style={[styles1.headerFooterStyle, styles1.shadow]}>
@@ -656,6 +657,7 @@ const Stock = ({project_id, Main_drp_pro_value, loading}) => {
       </View>
     );
   };
+
   const renderStock = ({item}) => (
     <View>
       {item.voucherData.map((ele, i) => {
