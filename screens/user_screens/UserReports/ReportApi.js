@@ -107,9 +107,21 @@ const send_otp_verification = async (email)=>{
     console.log(error)
   }
 }
-const verify_password_otp = async (inputs)=>{
+const verify_password_otp = async (id,inputs)=>{
   try {
-    const res = fetch(`${process.env.API_URL}verify-otp`, {
+    const res = fetch(`${process.env.API_URL}verify-otp/${id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(inputs)
+    });
+    return res;
+  } catch (error) {
+    console.log(error)
+  }
+}
+const reset_password = async (user_Id,inputs)=>{
+  try {
+    const res = fetch(`${process.env.API_URL}reset-password/${user_Id}`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(inputs)
@@ -599,5 +611,6 @@ export {
   get_latest_painting_id,
   get_latest_plaster_id,
   send_otp_verification,
-  verify_password_otp
+  verify_password_otp,
+  reset_password
 };

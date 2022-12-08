@@ -5,7 +5,9 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Image,
+  Pressable,
   Keyboard,
+  Modal,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -13,20 +15,40 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {COLORS, SIZES, images, FONTS} from '../../../constants';
-import {send_otp_verification} from '../UserReports/ReportApi.js';
+import {COLORS, SIZES, images, FONTS, icons} from '../../../constants';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  send_otp_verification,
+  verify_password_otp,
+  reset_password,
+} from '../UserReports/ReportApi.js';
 import {useSelector} from 'react-redux';
 import {CustomToast} from '../../../Components';
 
-const ForgetPassword = () => {
+const ForgetPassword = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [Otp, setOtp] = useState('');
   const [verifyStatus, setverifyStatus] = useState(false);
+  const [respUserId, setRespUserId] = useState('');
+
+  const [resetDiag, setResetDiag] = useState(false);
 
   // CUSTOM TOAST OF CRUD OPERATIONS
   const [submitToast, setSubmitToast] = React.useState(false);
+  const [submitVerifyToast, setSubmitVerifyToast] = React.useState(false);
+  const [resetStatus, setResetStatus] = useState(false);
   const [updateToast, setUpdateToast] = React.useState(false);
   const [deleteToast, setDeleteToast] = React.useState(false);
+
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isPasswordSecure, setIsPasswordSecure] = useState(true);
+
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [newPasswordVisibility, setNewPasswordVisibility] = useState(true);
+  const [rightIcon, setRightIcon] = useState('eye');
+  const [newRightIcon, setNewRightIcon] = useState('eye');
 
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
@@ -34,11 +56,12 @@ const ForgetPassword = () => {
 
   const sendVerificationCode = async () => {
     const body = {
-      email: email,
+      email: email
     };
     const temp = await send_otp_verification(body);
 
     const resp = await temp.json();
+    setRespUserId(resp.data.res.user_id);
 
     if (resp.success) {
       setSubmitToast(true);
@@ -50,18 +73,221 @@ const ForgetPassword = () => {
     }
   };
 
-const verifyOtp = async ()=>{
-  console.log('email--',email)
-const body={    
-    email:email,
-    otp:Otp  
+  const verifyOtp = async () => {
+    const body = {otp: Otp};
+    
+    const temp = await verify_password_otp(respUserId, body);
+    const resp = await temp.json();
+    if (resp.success) {
+      setSubmitVerifyToast(true);
+      setOtp('');
+      setTimeout(() => {
+        setSubmitVerifyToast(false);
+        setResetDiag(true);
+      }, 800);
+    }else if (resp.data.isMatch==false) {
+       alert('Entered Otp is Wrong')
+    } else {
+        console.log('Network error')
+    }
+  };
 
-};
-// const temp=await verify_password_otp();
+  const resetPassword = async () => {
+    if (newPassword === confirmPassword) {
+      const body = {
+        new_password: newPassword,
+        confirm_new_password: confirmPassword
+      };
+      const temp = await reset_password(respUserId, body);
+      const resp = await temp.json();
+      if (resp.success) {
+        setResetStatus(true);
+        setNewPassword('');
+        setConfirmPassword('');
+        setResetDiag(false);
+        setTimeout(() => {
+          setResetStatus(false);  
+          navigation.navigate('Login');        
+        }, 700);
+      }
+    }else{
+      alert("New Password and Confirm Password do not Matched!")
+    }
+  };
 
-};
+  const handlePasswordVisibility = () => {
+    if (rightIcon === 'eye') {
+      setRightIcon('eye-off');
+      setPasswordVisibility(!passwordVisibility);
+    } else if (rightIcon === 'eye-off') {
+      setRightIcon('eye');
+      setPasswordVisibility(!passwordVisibility);
+    }
+  };
+  const handleNewPasswordVisibility = () => {
+    if (newRightIcon === 'eye') {
+      setNewRightIcon('eye-off');
+      setNewPasswordVisibility(!newPasswordVisibility);
+    } else if (newRightIcon === 'eye-off') {
+      setNewRightIcon('eye');
+      setNewPasswordVisibility(!newPasswordVisibility);
+    }
+  };
 
-
+  const resetPasswordDialogue = () => {
+    return (
+      <View style={{}}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={resetDiag}
+          onRequestClose={() => {
+            setResetDiag(!resetDiag);
+          }}>
+          <KeyboardAwareScrollView
+            style={{flex: 1}}
+            contentContainerStyle={{flexGrow: 1}}
+            keyboardShouldPersistTaps="handled">
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: '#000000aa',
+              }}>
+              <View
+                style={{
+                  alignSelf: 'center',
+                  marginTop: SIZES.height * 0.2,
+                  marginBottom: SIZES.height * 0.19,
+                  backgroundColor: COLORS.success_100,
+                  // backgroundColor: 'white',
+                  borderRadius: SIZES.base,
+                  height: '60%',
+                  width: '85%',
+                }}>
+                <Pressable
+                  style={{
+                    borderRadius: 4,
+                    borderColor: COLORS.white,
+                    margin: SIZES.body4,
+                    alignSelf: 'flex-end',
+                    padding: SIZES.base,
+                  }}
+                  // onPress={() => setResetDiag(!resetDiag)}
+                  >
+                  {/* <AntDesign name="close" size={20} color={COLORS.gray} /> */}
+                </Pressable>
+                <Text style={{textAlign: 'center', ...FONTS.body2}}>
+                  Forget Password ?
+                </Text>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    marginTop: SIZES.body2,
+                  }}>
+                  <Image
+                    source={images.change_pass}
+                    style={{
+                      width: 100,
+                      height: 100,
+                      tintColor: COLORS.green,
+                    }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'space-evenly',
+                    paddingVertical: SIZES.body3,
+                  }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      paddingHorizontal: SIZES.base,
+                    }}>
+                    <TextInput
+                      style={{
+                        color: COLORS.black,
+                        borderBottomWidth: 1,
+                        alignSelf: 'center',
+                        width: '90%',
+                        borderBottomColor: COLORS.lightblue_300,
+                      }}
+                      value={newPassword}
+                      placeholder={'New Password'}
+                      secureTextEntry={passwordVisibility}
+                      enablesReturnKeyAutomatically
+                      placeholderTextColor={COLORS.darkGray}
+                      onChangeText={text => {
+                        setNewPassword(text);
+                      }}
+                    />
+                    <Pressable onPress={handlePasswordVisibility}>
+                      <MaterialCommunityIcons
+                        name={rightIcon}
+                        size={22}
+                        color="#232323"
+                      />
+                    </Pressable>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      paddingHorizontal: SIZES.base
+                    }}>
+                    <TextInput
+                      style={{
+                        color: COLORS.black,
+                        borderBottomWidth: 1,
+                        alignSelf: 'center',
+                        width: '90%',
+                        borderBottomColor: COLORS.lightblue_300,
+                      }}
+                      value={confirmPassword}
+                      placeholder={'Confirm New Password'}
+                      secureTextEntry={newPasswordVisibility}
+                      placeholderTextColor={COLORS.darkGray}
+                      onChangeText={text => {
+                        setConfirmPassword(text);
+                      }}
+                    />
+                    <Pressable onPress={handleNewPasswordVisibility}>
+                      <MaterialCommunityIcons
+                        name={newRightIcon}
+                        size={22}
+                        color="#232323"
+                      />
+                    </Pressable>
+                  </View>
+                </View>
+                <View style={{flex: 1, alignItems: 'center'}}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: COLORS.lightblue_700,
+                      padding: SIZES.base,
+                      borderRadius: SIZES.base,
+                      paddingHorizontal: SIZES.body2 * 2,
+                      marginVertical: SIZES.base,
+                      elevation: 10,
+                    }}
+                    onPress={() => resetPassword()}>
+                    <Text style={{...FONTS.body3, color: COLORS.white}}>
+                      Reset
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </KeyboardAwareScrollView>
+        </Modal>
+      </View>
+    );
+  };
 
   return (
     <LinearGradient
@@ -141,6 +367,7 @@ const body={
                     setOtp(text);
                   }}
                   multiline={true}
+                  keyboardType={'number-pad'}
                   numberOfLines={2}
                 />
               ) : (
@@ -199,12 +426,28 @@ const body={
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAwareScrollView>
+      {resetPasswordDialogue()}
+
       <CustomToast
         isVisible={submitToast}
         onClose={() => setSubmitToast(false)}
         color={COLORS.lightblue_400}
         title="Submit"
         message="Otp has been sent to your email........."
+      />
+      <CustomToast
+        isVisible={submitVerifyToast}
+        onClose={() => setSubmitVerifyToast(false)}
+        color={COLORS.lightblue_400}
+        title="Submit"
+        message="Otp verified successfully!"
+      />
+      <CustomToast
+        isVisible={resetStatus}
+        onClose={() => setResetStatus(false)}
+        color={COLORS.green_400}
+        title="Submit"
+        message="Password resetted successfully!"
       />
     </LinearGradient>
   );
